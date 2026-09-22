@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-21 09:45+0000\n"
-"POT-Creation-Date: 2026-09-21 09:45+0000\n"
+"PO-Revision-Date: 2026-09-22 08:17+0000\n"
+"POT-Creation-Date: 2026-09-22 08:17+0000\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Project-Id-Version: PeakURL 1.7.0\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -88,7 +88,7 @@ msgstr "anda@perusahaan.com"
 
 #: install.php:598
 #: setup-config.php:807
-#: server/features/links/controller.php:508
+#: server/features/links/controller.php:514
 #: client/pages/auth/login/LoginPage.tsx:253
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:29
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:195
@@ -306,7 +306,7 @@ msgstr "Anda tidak dapat menurunkan peran satu-satunya akun admin yang tersisa."
 #: server/features/settings/validator.php:43
 #: server/features/settings/service.php:442
 #: server/features/settings/service.php:614
-#: server/features/links/service.php:1491
+#: server/features/links/service.php:1522
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:45
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "Perpendek, lacak, dan kendalikan setiap tautan - PeakURL"
@@ -816,86 +816,90 @@ msgstr "Pemulihan massal selesai."
 msgid "Trash emptied successfully."
 msgstr "Sampah berhasil dikosongkan."
 
-#: server/features/links/controller.php:348
+#: server/features/links/controller.php:353
+msgid "All links moved to trash."
+msgstr "Semua tautan dipindahkan ke sampah."
+
+#: server/features/links/controller.php:354
 msgid "All links deleted."
 msgstr "Semua tautan berhasil dihapus."
 
-#: server/features/links/controller.php:446
+#: server/features/links/controller.php:452
 msgid "This link has expired"
 msgstr "Tautan ini telah kedaluwarsa"
 
-#: server/features/links/controller.php:447
+#: server/features/links/controller.php:453
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "Tautan singkat yang Anda minta tidak lagi aktif karena tanggal kedaluwarsanya telah lewat."
 
-#: server/features/links/controller.php:457
+#: server/features/links/controller.php:463
 msgid "This link is unavailable"
 msgstr "Tautan ini tidak tersedia"
 
-#: server/features/links/controller.php:458
+#: server/features/links/controller.php:464
 msgid "The short link you requested is not available right now."
 msgstr "Tautan singkat yang Anda minta sedang tidak tersedia saat ini."
 
-#: server/features/links/controller.php:503
+#: server/features/links/controller.php:509
 msgid "Password required"
 msgstr "Kata sandi diperlukan"
 
-#: server/features/links/controller.php:504
+#: server/features/links/controller.php:510
 msgid "This link is protected. Enter the password to continue."
 msgstr "Tautan ini dilindungi. Masukkan kata sandi untuk melanjutkan."
 
-#: server/features/links/controller.php:511
+#: server/features/links/controller.php:517
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Masukkan kata sandi"
 
-#: server/features/links/controller.php:515
+#: server/features/links/controller.php:521
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Lanjutkan"
 
-#: server/features/links/controller.php:520
+#: server/features/links/controller.php:526
 msgid "Protected Link"
 msgstr "Tautan Terlindungi"
 
-#: server/features/links/controller.php:567
+#: server/features/links/controller.php:573
 msgid "Performing security verification"
 msgstr "Melakukan verifikasi keamanan"
 
-#: server/features/links/controller.php:568
+#: server/features/links/controller.php:574
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr "Situs web ini menggunakan layanan keamanan untuk melindungi dari bot berbahaya. Halaman ini ditampilkan saat PeakURL memverifikasi bahwa Anda bukan bot."
 
-#: server/features/links/controller.php:572
+#: server/features/links/controller.php:578
 msgid "JavaScript is required to complete this verification."
 msgstr "JavaScript diperlukan untuk menyelesaikan verifikasi ini."
 
-#: server/features/links/controller.php:575
+#: server/features/links/controller.php:581
 msgid "Security Verification"
 msgstr "Verifikasi Keamanan"
 
-#: server/features/links/controller.php:672
-#: server/features/links/controller.php:833
+#: server/features/links/controller.php:678
+#: server/features/links/controller.php:839
 msgid "Waiting for verification…"
 msgstr "Menunggu verifikasi…"
 
-#: server/features/links/controller.php:675
+#: server/features/links/controller.php:681
 msgid "Checking verification…"
 msgstr "Memeriksa verifikasi…"
 
-#: server/features/links/controller.php:678
+#: server/features/links/controller.php:684
 msgid "Starting verification…"
 msgstr "Memulai verifikasi…"
 
-#: server/features/links/controller.php:681
+#: server/features/links/controller.php:687
 msgid "Verification expired. Please try again."
 msgstr "Verifikasi kedaluwarsa. Silakan coba lagi."
 
-#: server/features/links/controller.php:684
+#: server/features/links/controller.php:690
 msgid "Verification could not be completed. Please try again."
 msgstr "Verifikasi tidak dapat diselesaikan. Silakan coba lagi."
 
-#: server/features/links/controller.php:838
+#: server/features/links/controller.php:844
 msgid "Try again"
 msgstr "Coba lagi"
 
@@ -938,13 +942,15 @@ msgid "You do not have permission to edit this link."
 msgstr "Anda tidak memiliki izin untuk mengedit tautan ini."
 
 #: server/features/links/service.php:943
-#: server/features/links/service.php:1147
+#: server/features/links/service.php:1111
+#: server/features/links/service.php:1155
+#: server/features/links/service.php:1388
 msgid "You do not have permission to permanently delete links."
 msgstr "Anda tidak memiliki izin untuk menghapus tautan secara permanen."
 
 #: server/features/links/service.php:949
-#: server/features/links/service.php:1114
-#: server/features/links/service.php:1367
+#: server/features/links/service.php:1117
+#: server/features/links/service.php:1394
 msgid "You do not have permission to delete links."
 msgstr "Anda tidak memiliki izin untuk menghapus tautan."
 
@@ -965,19 +971,23 @@ msgstr "Tautan ini sudah aktif."
 msgid "You do not have permission to restore this link."
 msgstr "Anda tidak memiliki izin untuk memulihkan tautan ini."
 
-#: server/features/links/service.php:1240
+#: server/features/links/service.php:1248
 msgid "You do not have permission to restore links."
 msgstr "Anda tidak memiliki izin untuk memulihkan tautan."
 
-#: server/features/links/service.php:1310
+#: server/features/links/service.php:1318
 msgid "You do not have permission to empty trash."
 msgstr "Anda tidak memiliki izin untuk mengosongkan tempat sampah."
 
-#: server/features/links/service.php:1800
+#: server/features/links/service.php:1379
+msgid "Invalid delete mode."
+msgstr "Mode penghapusan tidak valid."
+
+#: server/features/links/service.php:1831
 msgid "Complete the verification to open this link."
 msgstr "Selesaikan verifikasi untuk membuka tautan ini."
 
-#: server/features/links/service.php:1815
+#: server/features/links/service.php:1846
 msgid "Verification failed. Please try again."
 msgstr "Verifikasi gagal. Silakan coba lagi."
 
@@ -1627,11 +1637,11 @@ msgstr "Buka Pembaruan"
 msgid "Location analytics is not ready yet."
 msgstr "Analitik lokasi belum siap."
 
-#: server/services/admin-notices/service.php:158
-msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard."
-msgstr "Tambahkan kredensial MaxMind Anda dan unduh database GeoLite2 City untuk mengaktifkan pelaporan negara dan kota pengunjung di seluruh dasbor."
+#: server/services/admin-notices/service.php:160
+msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard. <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">Read documentation</a>."
+msgstr "Tambahkan kredensial MaxMind Anda dan unduh basis data GeoLite2 City untuk mengaktifkan pelaporan negara dan kota pengunjung di seluruh dasbor. <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">Baca dokumentasi</a>."
 
-#: server/services/admin-notices/service.php:163
+#: server/services/admin-notices/service.php:164
 msgid "Open Location Data"
 msgstr "Buka Data Lokasi"
 
@@ -1943,13 +1953,13 @@ msgid "PeakURL could not send the test email because your account email address 
 msgstr "PeakURL tidak dapat mengirim email uji coba karena alamat email akun Anda tidak valid."
 
 #: server/services/notifications.php:275
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:246
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "SMTP"
 msgstr "SMTP"
 
 #: server/services/notifications.php:276
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:233
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "PHP mail()"
 msgstr "PHP mail()"
@@ -2098,6 +2108,27 @@ msgstr "Driver tembolok yang dikonfigurasi tidak tersedia; beroperasi menggunaka
 msgid "No cache backend is currently usable; requests query the database directly."
 msgstr "Tidak ada backend tembolok yang dapat digunakan; permintaan langsung mengakses basis data."
 
+#: client/shared/formatting/formatters.ts:168
+#: client/shared/formatting/formatters.ts:195
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d detik"
+
+#: client/shared/formatting/formatters.ts:182
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d hari"
+
+#: client/shared/formatting/formatters.ts:187
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d jam"
+
+#: client/shared/formatting/formatters.ts:192
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d menit"
+
 #: client/components/ui/Loading/Loading.tsx:72
 msgid "Loading…"
 msgstr "Memuat…"
@@ -2110,17 +2141,18 @@ msgstr "Konfirmasi"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:884
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:371
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:399
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:542
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:563
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:733
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:573
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:742
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:828
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:590
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1491
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:145
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:150
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:130
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:172
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:18
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:275
@@ -2671,7 +2703,7 @@ msgstr "Alat"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:70
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:283
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:288
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:12
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:16
 #: client/pages/NotFoundPage.tsx:85
 #: client/router/pageTitle.ts:51
 #: client/router/pageTitle.ts:115
@@ -2681,8 +2713,8 @@ msgstr "Impor"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:76
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:303
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:308
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
-#: client/pages/dashboard/tools/export/ExportPage.tsx:154
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
+#: client/pages/dashboard/tools/export/ExportPage.tsx:157
 #: client/router/pageTitle.ts:119
 msgid "Export"
 msgstr "Ekspor"
@@ -2699,8 +2731,8 @@ msgstr "Aktivitas"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:322
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:327
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:253
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:255
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:260
 #: client/router/pageTitle.ts:123
 msgid "Scheduled Jobs"
 msgstr "Tugas Terjadwal"
@@ -2805,7 +2837,7 @@ msgid "Search the dashboard"
 msgstr "Cari di dasbor"
 
 #: client/pages/layout/dashboard/Search/Search.tsx:191
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:208
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
 msgid "Clear search"
 msgstr "Hapus pencarian"
 
@@ -2851,7 +2883,7 @@ msgstr "Dasbor"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:96
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 #: client/pages/dashboard/links/components/Header/Header.tsx:42
 #: client/pages/NotFoundPage.tsx:75
 msgid "All Links"
@@ -2892,7 +2924,7 @@ msgstr "Pengaturan Keamanan"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:184
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:188
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:79
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:93
 #: client/pages/dashboard/settings/Layout.tsx:31
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:998
 #: client/router/pageTitle.ts:26
@@ -3037,8 +3069,8 @@ msgstr "PeakURL sedang memuat ulang dasbor sekarang."
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:252
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:191
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:195
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:202
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:207
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:88
 msgid "Success"
 msgstr "Berhasil"
@@ -3545,8 +3577,8 @@ msgstr "Terakhir dibuat:"
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:75
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:88
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:93
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:24
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:29
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
@@ -3966,9 +3998,9 @@ msgid "No default preview image"
 msgstr "Tidak ada gambar pratinjau default"
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:889
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:759
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:768
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 msgid "Saving..."
 msgstr "Menyimpan..."
@@ -3979,27 +4011,40 @@ msgstr "Menyimpan..."
 msgid "Save Changes"
 msgstr "Simpan Perubahan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:119
 msgid "Location Database"
 msgstr "Database Lokasi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:121
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:122
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "Aktifkan analitik negara dan kota dengan database lokal MaxMind GeoLite2 City yang disimpan di folder konten persisten Anda."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:283
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:60
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:175
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:275
+#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:30
+msgid "Read documentation"
+msgstr "Baca dokumentasi"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:162
 msgid "Update Database"
 msgstr "Perbarui Database"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:147
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:290
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:163
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:318
 msgid "Download Database"
 msgstr "Unduh Database"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:154
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:61
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:196
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:201
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:332
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:34
@@ -4009,25 +4054,25 @@ msgstr "Unduh Database"
 msgid "Status"
 msgstr "Status"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Ready"
 msgstr "Siap"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:828
 msgid "Setup Required"
 msgstr "Penyiapan Diperlukan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
 msgid "Database Updated"
 msgstr "Database Diperbarui"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:166
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:83
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:111
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -4038,12 +4083,12 @@ msgstr "Database Diperbarui"
 msgid "Never"
 msgstr "Tidak pernah"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:839
 msgid "Database Size"
 msgstr "Ukuran Database"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:190
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:258
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:593
@@ -4054,81 +4099,85 @@ msgstr "Ukuran Database"
 msgid "Not available"
 msgstr "Tidak tersedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Location data unavailable"
 msgstr "Data lokasi tidak tersedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:194
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:210
 msgid "Location analytics is enabled"
 msgstr "Analitik lokasi diaktifkan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:211
 msgid "Location analytics is disabled"
 msgstr "Analitik lokasi dinonaktifkan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:215
 msgid "PeakURL is using the local GeoLite2 City database for click locations."
 msgstr "PeakURL menggunakan database lokal GeoLite2 City untuk lokasi klik."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:202
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:218
 msgid "Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
 msgstr "Simpan kredensial MaxMind Anda, lalu unduh database GeoLite2 City untuk mengaktifkan analitik negara dan kota pengunjung."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
 msgid "Dashboard management unavailable"
 msgstr "Manajemen dasbor tidak tersedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:236
 msgid "MaxMind Credentials"
 msgstr "Kredensial MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:239
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "PeakURL menyimpan nilai-nilai ini dalam keadaan terenkripsi di database sehingga dapat menyegarkan database GeoLite2 City nanti tanpa meminta lagi."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:251
+msgid "How to get credentials"
+msgstr "Cara mendapatkan kredensial"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:262
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
 msgid "Account ID"
 msgstr "ID Akun"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:245
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:273
 msgid "License Key"
 msgstr "Kunci Lisensi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:270
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "Update Credentials"
 msgstr "Perbarui Kredensial"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:317
 msgid "Refresh Database"
 msgstr "Segarkan Database"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:301
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:329
 msgid "MaxMind Account ID"
 msgstr "ID Akun MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:315
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:343
 msgid "MaxMind License Key"
 msgstr "Kunci Lisensi MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:353
 msgid "Enter a new MaxMind license key"
 msgstr "Masukkan kunci lisensi MaxMind baru"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:354
 msgid "Enter your MaxMind license key"
 msgstr "Masukkan kunci lisensi MaxMind Anda"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:334
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:362
 msgid "Saved license key:"
 msgstr "Kunci lisensi tersimpan:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:356
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:384
 msgid "Save New Credentials"
 msgstr "Simpan Kredensial Baru"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:385
 msgid "Save Credentials"
 msgstr "Simpan Kredensial"
 
@@ -4373,7 +4422,7 @@ msgid "Paste the secret key from your CAPTCHA provider."
 msgstr "Tempelkan kunci rahasia dari penyedia CAPTCHA Anda."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:177
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
@@ -4413,75 +4462,75 @@ msgstr "Perlindungan CAPTCHA"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "Wajibkan tantangan verifikasi pada halaman autentikasi dan sebelum tautan singkat publik dialihkan."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:285
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "Aktifkan perlindungan CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:316
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
 msgid "Loading CAPTCHA settings…"
 msgstr "Memuat pengaturan CAPTCHA…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:322
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:334
 msgid "Failed to load CAPTCHA settings."
 msgstr "Gagal memuat pengaturan CAPTCHA."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:340
 msgid "Provider Settings"
 msgstr "Pengaturan Penyedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "Kredensial yang disimpan disamarkan. Ubah atau hapus saat diperlukan."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:347
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "Pilih penyedia CAPTCHA dan masukkan kunci API Anda."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:345
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:391
 msgid "Provider"
 msgstr "Penyedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:353
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:397
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:365
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Site Key"
 msgstr "Kunci Situs"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:421
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:373
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:433
 msgid "Secret Key"
 msgstr "Kunci Rahasia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:400
 msgid "CAPTCHA provider"
 msgstr "Penyedia CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:415
 msgid "Paste site key"
 msgstr "Tempelkan kunci situs"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:412
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
 msgid "Leave unchanged to keep the saved site key."
 msgstr "Biarkan tidak berubah untuk mempertahankan kunci situs yang tersimpan."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:430
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:442
 msgid "Keep saved secret"
 msgstr "Pertahankan rahasia tersimpan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:443
 msgid "Paste secret key"
 msgstr "Tempelkan kunci rahasia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:483
 msgid "Change keys"
 msgstr "Ubah kunci"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:494
 msgid "Remove keys"
 msgstr "Hapus kunci"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:519
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
 msgid "Save Settings"
 msgstr "Simpan Pengaturan"
 
@@ -4542,53 +4591,49 @@ msgstr "Webhook"
 msgid "PeakURL sends signed POST requests to your endpoint when selected link events happen."
 msgstr "PeakURL mengirimkan permintaan POST bertanda tangan ke endpoint Anda saat peristiwa tautan yang dipilih terjadi."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:187
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:199
 msgid "Enable webhooks"
 msgstr "Aktifkan webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:232
 msgid "Add New Webhook"
 msgstr "Tambah Webhook Baru"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:235
 msgid "Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
 msgstr "Pilih peristiwa mana yang memicu pengiriman, lalu simpan rahasia penandatanganan di tempat yang aman saat ditampilkan."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:231
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:243
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
 msgid "Endpoint URL"
 msgstr "URL Endpoint"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:248
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
 msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route."
 msgstr "Gunakan endpoint HTTPS publik yang dapat menerima permintaan POST, seperti Zapier catch hook, URL webhook n8n, atau rute API Anda sendiri."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:272
 msgid "Events"
 msgstr "Peristiwa"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:302
-msgid "Webhook docs"
-msgstr "Dokumentasi webhook"
-
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:313
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:328
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:70
 msgid "Creating..."
 msgstr "Membuat..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:329
 msgid "Create Webhook"
 msgstr "Buat Webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:321
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:336
 msgid "Loading webhooks…"
 msgstr "Memuat webhook…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:342
 msgid "Failed to load webhooks"
 msgstr "Gagal memuat webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:359
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:374
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:56
 #: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:44
@@ -4596,141 +4641,129 @@ msgstr "Gagal memuat webhook"
 msgid "Inactive"
 msgstr "Tidak aktif"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:391
 msgid "Signing secret stored"
 msgstr "Rahasia penandatanganan disimpan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:386
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:128
 msgid "Created:"
 msgstr "Dibuat:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:402
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:409
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:503
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:514
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:529
 msgid "Delete webhook"
 msgstr "Hapus webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:427
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:442
 msgid "Copy Your Webhook Secret"
 msgstr "Salin Rahasia Webhook Anda"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:448
 msgid "This signing secret will not be shown again."
 msgstr "Rahasia penandatanganan ini tidak akan ditampilkan lagi."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:451
 msgid "Store it in your automation tool or secret manager before closing this window."
 msgstr "Simpan di alat otomatisasi atau pengelola rahasia Anda sebelum menutup jendela ini."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:474
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:498
 msgid "Secret copied"
 msgstr "Rahasia disalin"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:477
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "Salin ke papan klip"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:466
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:481
 msgid "If this secret is ever exposed, delete the webhook and create a new one."
 msgstr "Jika rahasia ini pernah bocor, hapus webhook dan buat yang baru."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:502
 msgid "Copy Secret"
 msgstr "Salin Rahasia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "Saya Sudah Menyimpannya"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:507
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:522
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "Hapus webhook untuk %s? PeakURL akan segera berhenti mengirim permintaan peristiwa bertanda tangan ke endpoint ini."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:515
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:530
 msgid "Keep webhook"
 msgstr "Pertahankan webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:41
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:40
 msgid "Connection"
 msgstr "Koneksi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:44
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:43
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:107
 msgid "Base API URL"
 msgstr "URL API Dasar"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:49
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:48
 msgid "Use this endpoint with WordPress, browser extensions, scripts, and other API clients."
 msgstr "Gunakan endpoint ini dengan WordPress, ekstensi browser, skrip, dan klien API lainnya."
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:62
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:76
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:114
 msgid "Base API URL copied to clipboard"
 msgstr "URL API Dasar disalin ke papan klip"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:66
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:80
 msgid "Copy API URL"
 msgstr "Salin URL API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:87
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:101
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
 msgid "Create New Key"
 msgstr "Buat Kunci Baru"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:102
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:116
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:96
 msgid "API Key"
 msgstr "Kunci API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:105
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:119
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:54
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:58
 msgid "Active"
 msgstr "Aktif"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:131
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:145
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:290
 msgid "Delete"
 msgstr "Hapus"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:148
 msgid "Delete API Key"
 msgstr "Hapus Kunci API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:160
 msgid "No API Keys Generated"
 msgstr "Tidak Ada Kunci API yang Dibuat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:149
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:163
 msgid "Generate an API key to access endpoints programmatically."
 msgstr "Buat kunci API untuk mengakses endpoint secara terprogram."
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:169
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:183
 msgid "Keep your API keys secure"
 msgstr "Jaga keamanan kunci API Anda"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:186
 msgid "PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed."
 msgstr "PeakURL hanya menampilkan token lengkap satu kali, pada saat pembuatan. Simpan di pengelola kata sandi atau penyimpanan rahasia, dan cabut segera jika Anda merasa kunci tersebut telah bocor."
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:189
-msgid "API documentation"
-msgstr "Dokumentasi API"
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:193
-msgid "Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints."
-msgstr "Gunakan dokumentasi publik untuk autentikasi, tautan, analitik, pengguna, webhook, dan endpoint sistem."
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:209
-msgid "API Overview"
-msgstr "Ikhtisar API"
 
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:29
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:71
@@ -4777,233 +4810,233 @@ msgstr "Jika kunci ini pernah bocor, cabut dari daftar Kunci API dan buat pengga
 msgid "Copy Key"
 msgstr "Salin Kunci"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:106
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:112
 msgid "1 Hour (3,600s) — Default"
 msgstr "1 Jam (3.600 dtk) — Default"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:107
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:113
 msgid "6 Hours (21,600s)"
 msgstr "6 Jam (21.600 dtk)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:108
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
 msgid "24 Hours (86,400s)"
 msgstr "24 Jam (86.400 dtk)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:109
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
 msgid "7 Days (604,800s)"
 msgstr "7 Hari (604.800 dtk)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:124
 msgid "Custom Duration..."
 msgstr "Durasi Kustom..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:120
 msgid "1 Minute (60s) — Default"
 msgstr "1 Menit (60 dtk) — Default"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:121
 msgid "3 Minutes (180s)"
 msgstr "3 Menit (180 dtk)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:122
 msgid "5 Minutes (300s)"
 msgstr "5 Menit (300 dtk)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:117
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:123
 msgid "15 Minutes (900s)"
 msgstr "15 Menit (900 dtk)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:165
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
 msgid "Automatic (Recommended)"
 msgstr "Otomatis (Disarankan)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:170
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:176
 msgid "Redis (In-Memory Cache)"
 msgstr "Redis (Cache Dalam Memori)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
 msgid "Redis (Unavailable — Server Unreachable)"
 msgstr "Redis (Tidak Tersedia — Server Tidak Dapat Dijangkau)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:183
 msgid "APCu (PHP Shared Memory)"
 msgstr "APCu (Memori Bersama PHP)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:178
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
 msgid "APCu (Unavailable — Extension Not Loaded)"
 msgstr "APCu (Tidak Tersedia — Ekstensi Belum Dimuat)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
 msgid "Filesystem (content/cache)"
 msgstr "Sistem Berkas (content/cache)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:191
 msgid "Filesystem (Unavailable — Directory Not Writable)"
 msgstr "Sistem Berkas (Tidak Tersedia — Direktori Tidak Dapat Ditulisi)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:196
 msgid "Disabled (Direct Database Queries)"
 msgstr "Dinonaktifkan (Kueri Database Langsung)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:878
 msgid "Redis"
 msgstr "Redis"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:201
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:207
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:880
 msgid "APCu"
 msgstr "APCu"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:203
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:209
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:882
 msgid "Filesystem"
 msgstr "Sistem Berkas"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:211
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:506
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
 msgid "Direct Database"
 msgstr "Basis Data Langsung"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:286
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:292
 msgid "Performance & Caching"
 msgstr "Performa & Cache"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:295
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "Konfigurasikan backend cache objek dan kebijakan Time-to-Live (TTL) untuk mengoptimalkan latensi pengalihan dan throughput."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:306
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:541
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1490
 msgid "Purge Cache"
 msgstr "Bersihkan Cache"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
 msgid "Active Engine"
 msgstr "Mesin Aktif"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:318
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:339
 msgid "Cache Footprint"
 msgstr "Penggunaan Memori Cache"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:346
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
 msgid "%s cached items"
 msgstr "%s item dalam cache"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:347
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
 msgid "%s cached files"
 msgstr "%s berkas dalam cache"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:329
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:356
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
 msgid "0 B"
 msgstr "0 B"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:341
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:362
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
 msgid "Default TTL"
 msgstr "TTL Default"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:372
 msgid "Cache status unavailable"
 msgstr "Status cache tidak tersedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:389
 msgid "Object cache is operational"
 msgstr "Cache objek beroperasi normal"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:370
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:391
 msgid "Fallback cache driver active"
 msgstr "Driver cache cadangan aktif"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:371
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:392
 msgid "Object cache is disabled"
 msgstr "Cache objek dinonaktifkan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:397
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "Cache objek aktif dan melayani pengalihan tautan melalui backend %s."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:383
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "Driver cache pilihan saat ini tidak tersedia. PeakURL secara otomatis beralih ke %s."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:409
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "Cache objek dinonaktifkan. Pencarian tautan dan pengalihan dilayani langsung dari database."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:400
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:421
 msgid "Cache Engine Settings"
 msgstr "Pengaturan Mesin Cache"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:425
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "Pilih backend cache pilihan Anda. PeakURL secara otomatis memilih backend operasional tercepat jika driver pilihan tidak tersedia."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:412
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:418
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:439
 msgid "Preferred Cache Driver"
 msgstr "Driver Cache Pilihan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:422
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:443
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "PeakURL memprioritaskan Redis jika dikonfigurasi, APCu jika dimuat, dan sistem berkas sebagai cadangan universal."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:430
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:438
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:451
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
 msgid "Redirect Cache TTL"
 msgstr "TTL Cache Pengalihan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:463
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "Durasi Time-to-Live (TTL) untuk menyimpan tujuan pengalihan URL pendek aktif dalam cache."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:454
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:475
 msgid "Custom Redirect TTL (seconds)"
 msgstr "TTL Pengalihan Kustom (detik)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:480
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "Masukkan masa berlaku cache tujuan pengalihan dalam detik."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:469
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:477
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
 msgid "Negative Lookup (404) TTL"
 msgstr "TTL Pencarian Negatif (404)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:481
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:502
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "Durasi Time-to-Live (TTL) untuk menyimpan tautan yang tidak ada dalam cache guna mengurangi beban database akibat pemindaian otomatis."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:493
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:514
 msgid "Custom Negative TTL (seconds)"
 msgstr "TTL Negatif Kustom (detik)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:519
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "Masukkan masa berlaku cache pencarian negatif 404 dalam detik."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:539
 msgid "Reset"
 msgstr "Atur Ulang"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:528
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:549
 msgid "Save Performance Settings"
 msgstr "Simpan Pengaturan Performa"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:537
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:558
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
 msgid "Purge Object Cache"
 msgstr "Bersihkan Cache Objek"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:538
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:559
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1487
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "Apakah Anda yakin ingin membersihkan cache objek? Semua data pengalihan, objek memori, dan berkas sementara akan segera dibatalkan. Permintaan selanjutnya akan mengambil data langsung dari database."
@@ -5029,117 +5062,117 @@ msgstr "Pengiriman Email"
 msgid "PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 msgstr "PeakURL menggunakan transport email ini untuk email pengaturan ulang kata sandi dan pemberitahuan pemulihan akun lainnya."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:195
 msgid "Mail status unavailable"
 msgstr "Status email tidak tersedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:229
 msgid "Delivery method"
 msgstr "Metode pengiriman"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
 msgid "Use the hosting server’s built-in PHP mail transport."
 msgstr "Gunakan transport email PHP bawaan dari server hosting."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:235
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:247
 msgid "Send through your own SMTP server with optional authentication."
 msgstr "Kirim melalui server SMTP Anda sendiri dengan autentikasi opsional."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:251
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
 msgid "SMTP Configuration"
 msgstr "Konfigurasi SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:255
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:267
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
 msgid "From Name"
 msgstr "Nama Pengirim"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:275
 msgid "PeakURL"
 msgstr "PeakURL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:266
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:278
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Email"
 msgstr "Email Pengirim"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:277
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:289
 msgid "noreply@yourdomain.com"
 msgstr "noreply@domainanda.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:294
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 msgid "SMTP Host"
 msgstr "Host SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:293
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:305
 msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:297
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:309
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 msgid "SMTP Port"
 msgstr "Port SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:326
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "Encryption"
 msgstr "Enkripsi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:337
 msgid "SMTP encryption"
 msgstr "Enkripsi SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:342
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
 msgid "Authentication"
 msgstr "Autentikasi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:362
 msgid "Authentication enabled"
 msgstr "Autentikasi diaktifkan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:363
 msgid "Authentication disabled"
 msgstr "Autentikasi dinonaktifkan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:391
 msgid "SMTP Username"
 msgstr "Nama Pengguna SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:402
 msgid "mailer@example.com"
 msgstr "mailer@example.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:406
 msgid "SMTP Password"
 msgstr "Kata Sandi SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:405
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
 msgid "Leave blank to keep the saved password"
 msgstr "Biarkan kosong untuk mempertahankan kata sandi tersimpan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:408
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:420
 msgid "Enter the SMTP password"
 msgstr "Masukkan kata sandi SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:413
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:425
 msgid "Saved password: %s"
 msgstr "Kata sandi tersimpan: %s"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:429
 msgid "PeakURL stores this password encrypted in the database."
 msgstr "PeakURL menyimpan kata sandi ini dalam keadaan terenkripsi di database."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:447
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
 msgid "Send Test Email"
 msgstr "Kirim Email Uji Coba"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:470
 msgid "Save Email Configuration"
 msgstr "Simpan Konfigurasi Email"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:471
 msgid "Use PHP mail()"
 msgstr "Gunakan PHP mail()"
 
@@ -5153,7 +5186,7 @@ msgstr "Kelola preferensi dan konfigurasi akun Anda"
 
 #: client/pages/dashboard/settings/Layout.tsx:45
 #: client/pages/dashboard/about/AboutPage.tsx:231
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:115
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
 msgid "Performance"
 msgstr "Performa"
 
@@ -5181,9 +5214,34 @@ msgstr "%d mencoba lagi"
 msgid "%d other"
 msgstr "%d lainnya"
 
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:110
+msgid "%d due job executed successfully."
+msgid_plural "%d due jobs executed successfully."
+msgstr[0] "%d tugas jatuh tempo berhasil dijalankan."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:132
+msgid "%d due job was skipped."
+msgid_plural "%d due jobs were skipped."
+msgstr[0] "%d tugas jatuh tempo dilewati."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:154
+msgid "%d due job failed."
+msgid_plural "%d due jobs failed."
+msgstr[0] "%d tugas jatuh tempo gagal."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:172
+msgid "%d due job scheduled for retry."
+msgid_plural "%d due jobs scheduled for retry."
+msgstr[0] "%d tugas jatuh tempo dijadwalkan untuk dicoba lagi."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:239
+msgid "%1$d due job processed: %2$s."
+msgid_plural "%1$d due jobs processed: %2$s."
+msgstr[0] "%1$d tugas jatuh tempo diproses: %2$s."
+
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:21
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:57
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:330
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
 msgid "Run Due Jobs"
 msgstr "Jalankan Tugas Jatuh Tempo"
 
@@ -5195,290 +5253,290 @@ msgstr "Jalankan tugas latar belakang yang jatuh tempo sekarang?"
 msgid "This will trigger immediate execution of any background jobs whose scheduled interval has elapsed or claim lease has expired. Jobs that are not currently due will remain on their normal schedule."
 msgstr "Tindakan ini akan memicu eksekusi segera terhadap tugas latar belakang apa pun yang interval terjadwalnya telah berlalu atau batas sewa klaimnya telah kedaluwarsa. Tugas yang belum jatuh tempo akan tetap berjalan sesuai jadwal normalnya."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:39
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:45
 msgid "No scheduled jobs registered"
 msgstr "Tidak ada tugas terjadwal yang terdaftar"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:42
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:48
 msgid "No recurring background jobs have been discovered or synced in the system registry."
 msgstr "Tidak ada tugas latar belakang berulang yang ditemukan atau disinkronkan dalam registri sistem."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:65
 msgid "Job"
 msgstr "Tugas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:64
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:546
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:555
 msgid "Schedule"
 msgstr "Jadwal"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:200
 msgid "Last Run"
 msgstr "Terakhir Dijalankan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
 msgid "Next Run"
 msgstr "Jalankan Berikutnya"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:79
 msgid "Result"
 msgstr "Hasil"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:82
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:112
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:127
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:55
 msgid "Actions"
 msgstr "Tindakan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:130
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:419
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:136
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:428
 msgid "Customized"
 msgstr "Disesuaikan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:137
 msgid "Recommended"
 msgstr "Disarankan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:179
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:189
 msgid "Executing now..."
 msgstr "Sedang mengeksekusi..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:200
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:212
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:102
 msgid "Skipped"
 msgstr "Dilewati"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:216
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:228
 msgid "View Execution History"
 msgstr "Lihat Riwayat Eksekusi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:219
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:234
 msgid "History"
 msgstr "Riwayat"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:244
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:259
 msgid "Job is currently executing..."
 msgstr "Tugas sedang dieksekusi..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:262
 msgid "Execute Job Immediately"
 msgstr "Jalankan Tugas Segera"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:254
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:477
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:269
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:484
 msgid "Running..."
 msgstr "Sedang berjalan..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:255
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:478
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:485
 msgid "Run Now"
 msgstr "Jalankan Sekarang"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:45
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
 msgid "7 Days"
 msgstr "7 Hari"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
 msgid "14 Days"
 msgstr "14 Hari"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
 msgid "30 Days (Recommended)"
 msgstr "30 Hari (Disarankan)"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
 msgid "60 Days"
 msgstr "60 Hari"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
 msgid "90 Days"
 msgstr "90 Hari"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
 msgid "180 Days"
 msgstr "180 Hari"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
 msgid "1 Year"
 msgstr "1 Tahun"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:53
 msgid "Keep Indefinitely"
 msgstr "Simpan Tanpa Batas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:56
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
 msgid "Every 5 minutes"
 msgstr "Setiap 5 menit"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:57
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
 msgid "Every 15 minutes"
 msgstr "Setiap 15 menit"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:58
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
 msgid "Every 30 minutes"
 msgstr "Setiap 30 menit"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:21
 msgid "Hourly"
 msgstr "Setiap jam"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
 msgid "Every 2 hours"
 msgstr "Setiap 2 jam"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
 msgid "Every 6 hours"
 msgstr "Setiap 6 jam"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:65
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:26
 msgid "Every 12 hours"
 msgstr "Setiap 12 jam"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:35
 msgid "Daily"
 msgstr "Harian"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:67
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:38
 msgid "Weekly"
 msgstr "Mingguan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:138
 msgid "Execution history retention setting saved successfully."
 msgstr "Pengaturan retensi riwayat eksekusi berhasil disimpan."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:144
 msgid "Failed to update history retention."
 msgstr "Gagal memperbarui retensi riwayat."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:170
 msgid "Schedule for [%s] updated successfully."
 msgstr "Jadwal untuk [%s] berhasil diperbarui."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:174
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:181
 msgid "Failed to update schedule for [%s]."
 msgstr "Gagal memperbarui jadwal untuk [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:192
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:199
 msgid "Reset [%s] to recommended default schedule."
 msgstr "[%s] telah diatur ulang ke jadwal default yang disarankan."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:203
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:210
 msgid "Failed to reset job schedule."
 msgstr "Gagal mengatur ulang jadwal tugas."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:254
 msgid "Manage Schedules & Retention"
 msgstr "Kelola Jadwal & Retensi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:257
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:619
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:628
 msgid "Site timezone: %s"
 msgstr "Zona waktu situs: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:269
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:276
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:277
 msgid "Close schedules drawer"
 msgstr "Tutup panel jadwal"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:286
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:293
 msgid "Execution History Retention"
 msgstr "Retensi Riwayat Eksekusi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:291
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:298
 msgid "Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
 msgstr "Pilih berapa lama catatan eksekusi tugas latar belakang yang telah selesai disimpan. Eksekusi yang aktif dan sedang mencoba kembali tidak akan pernah dihapus oleh pembersihan retensi."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:316
 msgid "History Retention Period"
 msgstr "Periode Retensi Riwayat"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:327
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:334
 msgid "Save Retention"
 msgstr "Simpan Retensi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:341
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:348
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
 msgid "Registered Background Tasks"
 msgstr "Tugas Latar Belakang Terdaftar"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:350
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:357
 msgid "Recommended schedules are based on PeakURL's default maintenance cadence. You can customize any job and restore its recommended schedule at any time."
 msgstr "Jadwal yang disarankan didasarkan pada ritme pemeliharaan default PeakURL. Anda dapat menyesuaikan tugas apa pun dan memulihkan jadwal yang disarankan kapan saja."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:473
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:79
 msgid "Due now"
 msgstr "Jatuh tempo sekarang"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:469
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:478
 msgid "Next: %s"
 msgstr "Berikutnya: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:517
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:791
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:459
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:526
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:800
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:466
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:532
 msgid "Close"
 msgstr "Tutup"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:520
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:529
 msgid "Configure"
 msgstr "Konfigurasikan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:577
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:586
 msgid "Recurrence cadence."
 msgstr "Ritme perulangan."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:589
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:598
 msgid "Preferred run time"
 msgstr "Waktu eksekusi yang dipilih"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:632
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
 msgid "Automatic execution"
 msgstr "Eksekusi otomatis"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:638
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:647
 msgid "Runs this job automatically when it is due."
 msgstr "Menjalankan tugas ini secara otomatis saat jatuh tempo."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:650
 msgid "Automatic execution is disabled. You can still run this job manually."
 msgstr "Eksekusi otomatis dinonaktifkan. Anda masih dapat menjalankan tugas ini secara manual."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:653
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:662
 msgid "Toggle automatic execution"
 msgstr "Alihkan eksekusi otomatis"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:710
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:818
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:719
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:827
 msgid "Reset to Recommended"
 msgstr "Atur Ulang ke yang Disarankan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:762
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:771
 msgid "Save Schedule"
 msgstr "Simpan Jadwal"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:781
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:790
 msgid "Background job schedules and retention rules are stored permanently."
 msgstr "Jadwal tugas latar belakang dan aturan retensi disimpan secara permanen."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:805
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:814
 msgid "Reset Schedule — %s"
 msgstr "Atur Ulang Jadwal — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:810
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
 msgid "Restore the recommended PeakURL schedule for [%1$s] (%2$s)? Any customized interval, preferred run time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
 msgstr "Pulihkan jadwal PeakURL yang disarankan untuk [%1$s] (%2$s)? Interval kustom, waktu eksekusi yang dipilih, dan status aktif akan dipulihkan ke rekomendasi bawaan. Riwayat eksekusi terdahulu akan tetap dipertahankan."
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:23
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:391
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:408
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:169
 msgid "Running"
 msgstr "Sedang berjalan"
@@ -5493,101 +5551,107 @@ msgid "Failed"
 msgstr "Gagal"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:116
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:369
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:386
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:160
 msgid "Scheduled"
 msgstr "Terjadwal"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:112
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:117
 msgid "Failed to clear job execution history."
 msgstr "Gagal membersihkan riwayat eksekusi tugas."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:156
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:161
 msgid "Execution History — %s"
 msgstr "Riwayat Eksekusi — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:172
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:173
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:177
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:178
 msgid "Close history drawer"
 msgstr "Tutup panel riwayat"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:185
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:190
 msgid "Job ID"
 msgstr "ID Tugas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:211
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:216
 msgid "Recurrence"
 msgstr "Perulangan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:222
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:227
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:212
 msgid "Next Due"
 msgstr "Jatuh Tempo Berikutnya"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:245
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:250
 msgid "Most Recent Failure"
 msgstr "Kegagalan Terbaru"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:271
 msgid "Recent Execution Logs"
 msgstr "Log Eksekusi Terbaru"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:272
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:279
 msgid "%d recorded"
 msgstr "%d tercatat"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:287
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:294
 msgid "Clear execution history for this job"
 msgstr "Bersihkan riwayat eksekusi untuk tugas ini"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:293
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:500
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:300
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:507
 msgid "Clear History"
 msgstr "Bersihkan Riwayat"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:306
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:313
 msgid "No execution history yet."
 msgstr "Belum ada riwayat eksekusi."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:311
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:318
 msgid "This job has not been executed yet or past execution logs have expired."
 msgstr "Tugas ini belum pernah dijalankan atau log eksekusi terdahulu telah kedaluwarsa."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:322
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:329
 msgid "Run"
 msgstr "Eksekusi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:328
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:335
 msgid "Attempt"
 msgstr "Percobaan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 msgid "Started"
 msgstr "Dimulai"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:334
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:341
 msgid "Duration"
 msgstr "Durasi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:337
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:344
 msgid "Output / Details"
 msgstr "Output / Detail"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:370
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:377
 msgid "#%d"
 msgstr "#%d"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:448
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:455
 msgid "Registry: %s"
 msgstr "Registri: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:494
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
 msgid "Clear Execution History — %s"
 msgstr "Bersihkan Riwayat Eksekusi — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:497
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:504
 msgid "Are you sure you want to clear execution history for this background job? Finished run records and output logs for this job will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "Apakah Anda yakin ingin membersihkan riwayat eksekusi untuk tugas latar belakang ini? Catatan eksekusi yang selesai dan log output untuk tugas ini akan dihapus secara permanen. Eksekusi yang sedang aktif dan mencoba kembali akan tetap dilindungi."
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:104
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:179
+msgid "Cleared %s execution history record."
+msgid_plural "Cleared %s execution history records."
+msgstr[0] "Menghapus %s rekaman riwayat eksekusi."
 
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:7
 msgid "Manual"
@@ -5601,126 +5665,261 @@ msgstr "Setiap menit"
 msgid "%1$s at %2$s"
 msgstr "%1$s pada %2$s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:114
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:116
+msgid "Session Cleanup"
+msgstr "Pembersihan Sesi"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:117
+msgid "GeoIP Database Refresh"
+msgstr "Pembaruan Basis Data GeoIP"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:118
+msgid "Expired Links Processing"
+msgstr "Pemrosesan Tautan Kedaluwarsa"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:119
+msgid "Cache Cleanup"
+msgstr "Pembersihan Tembolok"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:120
+msgid "Analytics & Trash Retention"
+msgstr "Retensi Analitik & Tempat Sampah"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:121
+msgid "PeakURL Version Check"
+msgstr "Pemeriksaan Versi PeakURL"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:122
+msgid "Webhook Delivery & Health"
+msgstr "Pengiriman & Kondisi Webhook"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:123
+msgid "Import & Export Scratch Cleanup"
+msgstr "Pembersihan Berkas Sementara Impor/Ekspor"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:124
+msgid "Link Destination Health Check"
+msgstr "Pemeriksaan Kondisi Tujuan Tautan"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:169
+msgid "Location data is not configured"
+msgstr "Data lokasi belum dikonfigurasi"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:172
+msgid "GeoIP database is already up to date"
+msgstr "Basis data GeoIP sudah diperbarui"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:180
+msgid "GeoLite2 City database refreshed at %s"
+msgstr "Basis data GeoLite2 City diperbarui pada %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:189
+msgid "No expired links due for processing."
+msgstr "Tidak ada tautan kedaluwarsa yang siap diproses."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:216
+msgid "Cache driver \"%s\" manages expiration automatically; no filesystem sweep required."
+msgstr "Pengendali tembolok \"%s\" mengelola masa berlaku secara otomatis; pembersihan sistem berkas tidak diperlukan."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:262
+msgid "Retention enforced: %1$s, %2$s."
+msgstr "Retensi diterapkan: %1$s, %2$s."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:277
+msgid "Version check complete: remote release %s found."
+msgstr "Pemeriksaan versi selesai: rilis jarak jauh %s ditemukan."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:286
+msgid "No pending webhook deliveries."
+msgstr "Tidak ada pengiriman webhook yang tertunda."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
+msgid "No active links available for health check."
+msgstr "Tidak ada tautan aktif yang tersedia untuk pemeriksaan kondisi."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:385
+msgid "GeoIP update failed: %s"
+msgstr "Pembaruan GeoIP gagal: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:394
+msgid "Version check failed: %s"
+msgstr "Pemeriksaan versi gagal: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:16
+msgid "Every %d minute"
+msgid_plural "Every %d minutes"
+msgstr[0] "Setiap %d menit"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:30
+msgid "Every %d hour"
+msgid_plural "Every %d hours"
+msgstr[0] "Setiap %d jam"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:43
+msgid "Every %d day"
+msgid_plural "Every %d days"
+msgstr[0] "Setiap %d hari"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:156
+msgid "Pruned %d expired or revoked session."
+msgid_plural "Pruned %d expired or revoked sessions."
+msgstr[0] "Membersihkan %d sesi kedaluwarsa atau dicabut."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:198
+msgid "Processed %d expired link."
+msgid_plural "Processed %d expired links."
+msgstr[0] "Memproses %d tautan kedaluwarsa."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:229
+msgid "Purged %d expired file cache item."
+msgid_plural "Purged %d expired file cache items."
+msgstr[0] "Menghapus %d item tembolok berkas kedaluwarsa."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:252
+msgid "%d trashed link purged"
+msgid_plural "%d trashed links purged"
+msgstr[0] "%d tautan sampah dibersihkan"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:256
+msgid "%d old click purged"
+msgid_plural "%d old clicks purged"
+msgstr[0] "%d klik lama dibersihkan"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:298
+msgid "Processed %1$d pending webhook delivery (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgid_plural "Processed %1$d pending webhook deliveries (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgstr[0] "Memproses %1$d pengiriman webhook yang tertunda (%2$d terkirim, %3$d dalam antrean coba lagi, %4$d gagal)."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:320
+msgid "Cleaned %d stale import/export temporary file."
+msgid_plural "Cleaned %d stale import/export temporary files."
+msgstr[0] "Membersihkan %d berkas sementara impor/ekspor lama."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:349
+msgid "Health check completed for %1$d link: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgid_plural "Health check completed for %1$d links: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgstr[0] "Pemeriksaan kesehatan selesai untuk %1$d tautan: %2$d sehat, %3$d tidak dapat dijangkau, %4$d diblokir oleh filter SSRF."
+
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:119
 msgid "Job [%s] was skipped."
 msgstr "Tugas [%s] dilewati."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:123
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:128
 msgid "Job [%s] executed successfully."
 msgstr "Tugas [%s] berhasil dijalankan."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:132
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:137
 msgid "Job [%s] execution failed."
 msgstr "Eksekusi tugas [%s] gagal."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:142
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:147
 msgid "Failed to execute [%s]."
 msgstr "Gagal menjalankan [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:168
 msgid "Failed to execute due background jobs."
 msgstr "Gagal menjalankan tugas latar belakang yang jatuh tempo."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:186
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:191
 msgid "Failed to clear execution history."
 msgstr "Gagal membersihkan riwayat eksekusi."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:229
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:234
 #: client/pages/dashboard/plugins/PluginsPage.tsx:93
 #: client/pages/dashboard/users/UsersPage.tsx:44
 msgid "Admin access required"
 msgstr "Akses admin diperlukan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:232
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:237
 msgid "Only administrator accounts with update management capabilities can view and manage scheduled background jobs."
 msgstr "Hanya akun administrator dengan kemampuan manajemen pembaruan yang dapat melihat dan mengelola tugas latar belakang terjadwal."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:249
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:254
 msgid "System Automation"
 msgstr "Otomatisasi Sistem"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:263
 msgid "Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
 msgstr "Periksa tugas latar belakang berulang, pantau kesehatan eksekusi, tinjau log eksekusi terbaru, dan picu tugas secara manual jika diizinkan."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:287
 msgid "Refresh"
 msgstr "Segarkan"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:271
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:288
 msgid "Refresh scheduled jobs status"
 msgstr "Segarkan status tugas terjadwal"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:292
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
 msgid "Configure job recurrence schedules, preferred times, and history retention"
 msgstr "Konfigurasikan jadwal perulangan tugas, waktu yang dipilih, dan retensi riwayat"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:297
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
 msgid "Manage Schedules"
 msgstr "Kelola Jadwal"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:326
 msgid "Clear execution run history for all jobs"
 msgstr "Bersihkan riwayat eksekusi untuk semua tugas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:572
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:589
 msgid "Clear All History"
 msgstr "Bersihkan Semua Riwayat"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:325
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:342
 msgid "Execute all jobs that are currently due"
 msgstr "Jalankan semua tugas yang sedang jatuh tempo"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:364
 msgid "Total Jobs"
 msgstr "Total Tugas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:360
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:377
 msgid "Registered in system"
 msgstr "Terdaftar dalam sistem"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:382
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:399
 msgid "Active recurring tasks"
 msgstr "Tugas berulang yang aktif"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:416
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:433
 msgid "Currently in progress"
 msgstr "Sedang dalam proses"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:425
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:442
 msgid "Failed / Retrying"
 msgstr "Gagal / Mencoba Kembali"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:451
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:468
 msgid "Requiring attention"
 msgstr "Memerlukan perhatian"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
 msgid "Search jobs..."
 msgstr "Cari tugas..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:495
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:512
 msgid "Failed to load scheduled jobs"
 msgstr "Gagal memuat tugas terjadwal"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:515
 msgid "Could not retrieve registered jobs from the scheduler API."
 msgstr "Tidak dapat mengambil tugas terdaftar dari API penjadwal."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:525
 msgid "Retry"
 msgstr "Coba lagi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:516
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:533
 msgid "Loading scheduled jobs..."
 msgstr "Memuat tugas terjadwal..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:568
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:585
 msgid "Clear All Execution History"
 msgstr "Bersihkan Semua Riwayat Eksekusi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:569
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:586
 msgid "Are you sure you want to clear execution history across all background jobs? Finished run records and output logs will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "Apakah Anda yakin ingin membersihkan riwayat eksekusi di semua tugas latar belakang? Catatan eksekusi yang selesai dan log output akan dihapus secara permanen. Eksekusi yang sedang aktif dan mencoba kembali akan tetap dilindungi."
 
@@ -6303,113 +6502,113 @@ msgstr "Kelola Tugas Terjadwal"
 msgid "Scheduler"
 msgstr "Penjadwal"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
 msgid "Preparing..."
 msgstr "Menyiapkan..."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:79
+#: client/pages/dashboard/tools/export/ExportPage.tsx:82
 msgid "CSV Export"
 msgstr "Ekspor CSV"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:80
+#: client/pages/dashboard/tools/export/ExportPage.tsx:83
 msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
 msgstr "Unduh file yang kompatibel dengan spreadsheet yang juga dapat diimpor kembali ke PeakURL nanti."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:83
+#: client/pages/dashboard/tools/export/ExportPage.tsx:86
 msgid "Comma-separated values (.csv)"
 msgstr "Nilai yang dipisahkan koma (.csv)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:89
+#: client/pages/dashboard/tools/export/ExportPage.tsx:92
 msgid "JSON Export"
 msgstr "Ekspor JSON"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:90
+#: client/pages/dashboard/tools/export/ExportPage.tsx:93
 msgid "Download a structured snapshot for scripts, integrations, or backups."
 msgstr "Unduh snapshot terstruktur untuk skrip, integrasi, atau cadangan."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:93
+#: client/pages/dashboard/tools/export/ExportPage.tsx:96
 msgid "JavaScript Object Notation (.json)"
 msgstr "JavaScript Object Notation (.json)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:99
+#: client/pages/dashboard/tools/export/ExportPage.tsx:102
 msgid "XML Export"
 msgstr "Ekspor XML"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:100
+#: client/pages/dashboard/tools/export/ExportPage.tsx:103
 msgid "Download a portable XML feed with the full link dataset and analytics totals."
 msgstr "Unduh umpan XML portabel dengan dataset tautan lengkap dan total analitik."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:103
+#: client/pages/dashboard/tools/export/ExportPage.tsx:106
 msgid "Extensible Markup Language (.xml)"
 msgstr "Extensible Markup Language (.xml)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:118
+#: client/pages/dashboard/tools/export/ExportPage.tsx:121
 msgid "Nothing to export"
 msgstr "Tidak ada yang diekspor"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:119
+#: client/pages/dashboard/tools/export/ExportPage.tsx:122
 msgid "No links are available for export yet."
 msgstr "Belum ada tautan yang tersedia untuk diekspor."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:126
+#: client/pages/dashboard/tools/export/ExportPage.tsx:129
 msgid "Export downloaded"
 msgstr "Ekspor diunduh"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:128
+#: client/pages/dashboard/tools/export/ExportPage.tsx:131
 msgid "Downloaded %1$s links as %2$s."
 msgstr "Mengunduh %1$s tautan sebagai %2$s."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:135
+#: client/pages/dashboard/tools/export/ExportPage.tsx:138
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:59
 msgid "Export failed"
 msgstr "Ekspor gagal"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:138
+#: client/pages/dashboard/tools/export/ExportPage.tsx:141
 msgid "PeakURL could not prepare the export right now."
 msgstr "PeakURL tidak dapat menyiapkan ekspor saat ini."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:152
+#: client/pages/dashboard/tools/export/ExportPage.tsx:155
 msgid "Data Export"
 msgstr "Ekspor Data"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:156
+#: client/pages/dashboard/tools/export/ExportPage.tsx:159
 msgid "Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
 msgstr "Ekspor himpunan data tautan pendek Anda dalam format CSV, JSON, atau XML untuk analisis offline, migrasi, atau pencadangan terprogram."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/export/ExportPage.tsx:186
 msgid "Bulk Link Export"
 msgstr "Ekspor Tautan Massal"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:175
+#: client/pages/dashboard/tools/export/ExportPage.tsx:190
 msgid "Each export includes destination URLs, custom aliases, titles, short URLs, total clicks, unique visitors, and creation dates."
 msgstr "Setiap ekspor mencakup URL tujuan, alias kustom, judul, URL pendek, total klik, pengunjung unik, dan tanggal pembuatan."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:180
+#: client/pages/dashboard/tools/export/ExportPage.tsx:195
 msgid "Exports follow your current role permissions. Administrators can export all site links, while Editors export links created by their account."
 msgstr "Ekspor mengikuti izin peran Anda saat ini. Administrator dapat mengekspor semua tautan situs, sedangkan Editor mengekspor tautan yang dibuat oleh akun mereka."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:188
+#: client/pages/dashboard/tools/export/ExportPage.tsx:203
 msgid "Exportable Links"
 msgstr "Tautan yang Dapat Diekspor"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:223
+#: client/pages/dashboard/tools/export/ExportPage.tsx:238
 msgid "API Export"
 msgstr "Ekspor API"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:226
+#: client/pages/dashboard/tools/export/ExportPage.tsx:241
 msgid "Use the API export endpoint to back up short links or integrate with automated workflows without opening the dashboard."
 msgstr "Gunakan titik akhir ekspor API untuk mencadangkan tautan pendek atau mengintegrasikan dengan alur kerja otomatis tanpa membuka dasbor."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:239
+#: client/pages/dashboard/tools/export/ExportPage.tsx:254
 msgid "Read Export Guide"
 msgstr "Baca Panduan Ekspor"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:247
+#: client/pages/dashboard/tools/export/ExportPage.tsx:262
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:22
 msgid "Example Request"
 msgstr "Contoh Permintaan"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:261
+#: client/pages/dashboard/tools/export/ExportPage.tsx:276
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:47
 msgid "Response"
 msgstr "Respons"
@@ -6426,11 +6625,11 @@ msgstr "Dokumen bantuan"
 msgid "Newsletter"
 msgstr "Buletin"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:10
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
 msgid "Data Import"
 msgstr "Impor Data"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:18
 msgid "Bulk import short links into PeakURL from CSV, JSON, or XML files, pasted URL lists, or automated API payloads."
 msgstr "Impor massal tautan pendek ke PeakURL dari file CSV, JSON, atau XML, daftar URL yang ditempel, atau payload API otomatis."
 
@@ -6944,12 +7143,12 @@ msgstr "%s dipilih"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:64
 #: client/pages/dashboard/activity/components/ActivityModals/ActivityModals.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:79
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:84
 msgid "Delete selected"
 msgstr "Hapus yang dipilih"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:72
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:89
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:95
 msgid "Delete all"
 msgstr "Hapus semua"
 
@@ -7688,47 +7887,49 @@ msgstr "Gagal menghapus tautan secara permanen"
 msgid "Failed to move links to trash"
 msgstr "Gagal memindahkan tautan ke sampah"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:83
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:88
 msgid "Delete Links Permanently"
 msgstr "Hapus Tautan Secara Permanen"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:84
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:89
 msgid "Move Links to Trash"
 msgstr "Pindahkan Tautan ke Sampah"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:108
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:113
 msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
 msgstr "Apakah Anda yakin ingin menghapus 1 tautan yang dipilih secara permanen? Tindakan ini tidak dapat dibatalkan."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:112
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:117
 msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
 msgstr "Apakah Anda yakin ingin menghapus %s tautan yang dipilih secara permanen? Tindakan ini tidak dapat dibatalkan."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:118
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:123
 msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
 msgstr "Apakah Anda yakin ingin memindahkan 1 tautan yang dipilih ke sampah? Anda dapat memulihkannya nanti."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:122
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:127
 msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
 msgstr "Apakah Anda yakin ingin memindahkan %s tautan yang dipilih ke sampah? Anda dapat memulihkannya nanti."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:131
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:136
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:116
 msgid "Only links you have permission to remove will be affected. Admin-owned links will remain unchanged."
 msgstr "Hanya tautan yang izinnya Anda miliki untuk dihapus yang akan terpengaruh. Tautan milik admin akan tetap tidak berubah."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:159
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:185
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:186
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:209
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:169
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:201
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:149
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:187
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:210
 msgid "Deleting..."
 msgstr "Menghapus..."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:165
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:192
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:175
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:208
 msgid "Delete Permanently (%s)"
 msgstr "Hapus Permanen (%s)"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:198
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:216
 msgid "Move to Trash (%s)"
 msgstr "Pindahkan ke Sampah (%s)"
 
@@ -7817,6 +8018,7 @@ msgid "Restore selected"
 msgstr "Pulihkan yang dipilih"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:56
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete permanently"
 msgstr "Hapus permanen"
 
@@ -7824,28 +8026,28 @@ msgstr "Hapus permanen"
 msgid "Empty trash"
 msgstr "Kosongkan sampah"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:108
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:114
 msgid "Select all links"
 msgstr "Pilih semua tautan"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:111
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:117
 msgid "Link"
 msgstr "Tautan"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:112
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
 msgid "Title"
 msgstr "Judul"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:113
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:119
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:133
 msgid "Destination"
 msgstr "Tujuan"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 msgid "Modified"
 msgstr "Dimodifikasi"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:36
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:52
 msgid "Created"
@@ -7889,8 +8091,9 @@ msgid "Restore Link"
 msgstr "Pulihkan Tautan"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:257
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:191
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:215
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:154
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:192
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
 msgid "Delete Permanently"
 msgstr "Hapus Permanen"
 
@@ -7927,49 +8130,20 @@ msgstr "Belum ada tautan"
 msgid "Create your first shortened link to get started"
 msgstr "Buat tautan singkat pertama Anda untuk memulai"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:163
-msgid "Links deleted"
-msgstr "Tautan dihapus"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:164
-msgid "All links have been removed."
-msgstr "Semua tautan telah dihapus."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:168
-msgid "Unable to delete links"
-msgstr "Tidak dapat menghapus tautan"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:169
-msgid "Failed to delete all links."
-msgstr "Gagal menghapus semua tautan."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 msgid "Trashed Links"
 msgstr "Tautan Dibuang"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:200
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:175
 msgid "Search links..."
 msgstr "Cari tautan..."
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:314
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:324
-msgid "Delete all links"
-msgstr "Hapus semua tautan"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:317
-msgid "Are you sure you want to delete all links across the site? This action permanently removes them."
-msgstr "Apakah Anda yakin ingin menghapus semua tautan di seluruh situs? Tindakan ini akan menghapusnya secara permanen."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:320
-msgid "Are you sure you want to move all your links to trash?"
-msgstr "Apakah Anda yakin ingin memindahkan semua tautan Anda ke tempat sampah?"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:332
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:336
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:303
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:307
 msgid "Empty Trash"
 msgstr "Kosongkan Sampah"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:333
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:304
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "Apakah Anda yakin ingin menghapus semua tautan di sampah secara permanen? Tindakan ini tidak dapat dibatalkan."
 
@@ -8134,6 +8308,56 @@ msgstr "Ubah URL panjang Anda menjadi tautan singkat yang dapat dibagikan"
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:73
 msgid "Expiration Date (Optional)"
 msgstr "Tanggal Kedaluwarsa (Opsional)"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:38
+msgid "Links deleted"
+msgstr "Tautan dihapus"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:39
+msgid "All links have been permanently deleted."
+msgstr "Semua tautan telah dihapus secara permanen."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:44
+msgid "Links moved to trash"
+msgstr "Tautan dipindahkan ke sampah"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:45
+msgid "All links have been moved to trash."
+msgstr "Semua tautan telah dipindahkan ke sampah."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:55
+msgid "Failed to permanently delete all links"
+msgstr "Gagal menghapus semua tautan secara permanen"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:56
+msgid "Failed to move all links to trash"
+msgstr "Gagal memindahkan semua tautan ke sampah"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:79
+msgid "Delete all links"
+msgstr "Hapus semua tautan"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:102
+msgid "Are you sure you want to delete all links? You can move them to trash to restore later, or delete them permanently."
+msgstr "Apakah Anda yakin ingin menghapus semua tautan? Anda dapat memindahkannya ke sampah untuk dipulihkan nanti, atau menghapusnya secara permanen."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:106
+msgid "Are you sure you want to delete all links permanently? This action cannot be undone."
+msgstr "Apakah Anda yakin ingin menghapus semua tautan secara permanen? Tindakan ini tidak dapat dibatalkan."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:109
+msgid "Are you sure you want to move all your links to the trash? You can restore them later."
+msgstr "Apakah Anda yakin ingin memindahkan semua tautan Anda ke sampah? Anda dapat memulihkannya nanti."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:171
+msgid "Moving to Trash..."
+msgstr "Memindahkan ke Sampah..."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:176
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:217
+msgid "Move to Trash"
+msgstr "Pindahkan ke Sampah"
 
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficLocationTab.tsx:176
 msgid "No link data available"
@@ -8544,6 +8768,11 @@ msgstr "Tipe Perangkat"
 msgid "Operating Systems"
 msgstr "Sistem Operasi"
 
+#: client/pages/dashboard/links/components/StatsDrawer/DeviceStats.tsx:257
+msgid "device"
+msgid_plural "devices"
+msgstr[0] "perangkat"
+
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:40
 msgid "Check out this link"
 msgstr "Lihat tautan ini"
@@ -8617,11 +8846,6 @@ msgstr "Gagal memindahkan tautan ke sampah"
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:87
 msgid "Delete Link Permanently"
 msgstr "Hapus Tautan Secara Permanen"
-
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
-msgid "Move to Trash"
-msgstr "Pindahkan ke Sampah"
 
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:111
 msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
@@ -8959,6 +9183,11 @@ msgstr "Tidak dapat menghapus pengguna"
 #: client/pages/dashboard/users/hooks/useUsersManager.ts:223
 msgid "Failed to delete user."
 msgstr "Gagal menghapus pengguna."
+
+#: client/pages/dashboard/users/hooks/useUsersManager.ts:106
+msgid "%d registered account"
+msgid_plural "%d registered accounts"
+msgstr[0] "%d akun terdaftar"
 
 #: client/pages/dashboard/users/lib/formatters.ts:25
 msgid "Can manage users, settings, and all links."

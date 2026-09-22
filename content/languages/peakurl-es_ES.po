@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-21 09:45+0000\n"
-"POT-Creation-Date: 2026-09-21 09:45+0000\n"
+"PO-Revision-Date: 2026-09-22 08:17+0000\n"
+"POT-Creation-Date: 2026-09-22 08:17+0000\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 "Project-Id-Version: PeakURL 1.7.0\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -88,7 +88,7 @@ msgstr "tu@empresa.com"
 
 #: install.php:598
 #: setup-config.php:807
-#: server/features/links/controller.php:508
+#: server/features/links/controller.php:514
 #: client/pages/auth/login/LoginPage.tsx:253
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:29
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:195
@@ -306,7 +306,7 @@ msgstr "No puedes rebajar la única cuenta de administrador restante."
 #: server/features/settings/validator.php:43
 #: server/features/settings/service.php:442
 #: server/features/settings/service.php:614
-#: server/features/links/service.php:1491
+#: server/features/links/service.php:1522
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:45
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "Acorta, mide y controla cada enlace - PeakURL"
@@ -816,86 +816,90 @@ msgstr "Restauración masiva completada."
 msgid "Trash emptied successfully."
 msgstr "Papelera vaciada con éxito."
 
-#: server/features/links/controller.php:348
+#: server/features/links/controller.php:353
+msgid "All links moved to trash."
+msgstr "Todos los enlaces se han movido a la papelera."
+
+#: server/features/links/controller.php:354
 msgid "All links deleted."
 msgstr "Todos los enlaces han sido eliminados."
 
-#: server/features/links/controller.php:446
+#: server/features/links/controller.php:452
 msgid "This link has expired"
 msgstr "Este enlace ha caducado"
 
-#: server/features/links/controller.php:447
+#: server/features/links/controller.php:453
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "El enlace corto que has solicitado ya no está activo porque su fecha de caducidad ha pasado."
 
-#: server/features/links/controller.php:457
+#: server/features/links/controller.php:463
 msgid "This link is unavailable"
 msgstr "Este enlace no está disponible"
 
-#: server/features/links/controller.php:458
+#: server/features/links/controller.php:464
 msgid "The short link you requested is not available right now."
 msgstr "El enlace corto que has solicitado no está disponible en este momento."
 
-#: server/features/links/controller.php:503
+#: server/features/links/controller.php:509
 msgid "Password required"
 msgstr "Contraseña obligatoria"
 
-#: server/features/links/controller.php:504
+#: server/features/links/controller.php:510
 msgid "This link is protected. Enter the password to continue."
 msgstr "Este enlace está protegido. Introduce la contraseña para continuar."
 
-#: server/features/links/controller.php:511
+#: server/features/links/controller.php:517
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Introduce la contraseña"
 
-#: server/features/links/controller.php:515
+#: server/features/links/controller.php:521
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Continuar"
 
-#: server/features/links/controller.php:520
+#: server/features/links/controller.php:526
 msgid "Protected Link"
 msgstr "Enlace protegido"
 
-#: server/features/links/controller.php:567
+#: server/features/links/controller.php:573
 msgid "Performing security verification"
 msgstr "Realizando verificación de seguridad"
 
-#: server/features/links/controller.php:568
+#: server/features/links/controller.php:574
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr "Este sitio web usa un servicio de seguridad para protegerse de bots maliciosos. Esta página se muestra mientras PeakURL verifica que no eres un bot."
 
-#: server/features/links/controller.php:572
+#: server/features/links/controller.php:578
 msgid "JavaScript is required to complete this verification."
 msgstr "JavaScript es obligatorio para completar esta verificación."
 
-#: server/features/links/controller.php:575
+#: server/features/links/controller.php:581
 msgid "Security Verification"
 msgstr "Verificación de seguridad"
 
-#: server/features/links/controller.php:672
-#: server/features/links/controller.php:833
+#: server/features/links/controller.php:678
+#: server/features/links/controller.php:839
 msgid "Waiting for verification…"
 msgstr "Esperando verificación…"
 
-#: server/features/links/controller.php:675
+#: server/features/links/controller.php:681
 msgid "Checking verification…"
 msgstr "Comprobando verificación…"
 
-#: server/features/links/controller.php:678
+#: server/features/links/controller.php:684
 msgid "Starting verification…"
 msgstr "Iniciando verificación…"
 
-#: server/features/links/controller.php:681
+#: server/features/links/controller.php:687
 msgid "Verification expired. Please try again."
 msgstr "La verificación ha caducado. Inténtalo de nuevo."
 
-#: server/features/links/controller.php:684
+#: server/features/links/controller.php:690
 msgid "Verification could not be completed. Please try again."
 msgstr "No se pudo completar la verificación. Inténtalo de nuevo."
 
-#: server/features/links/controller.php:838
+#: server/features/links/controller.php:844
 msgid "Try again"
 msgstr "Intentar de nuevo"
 
@@ -938,13 +942,15 @@ msgid "You do not have permission to edit this link."
 msgstr "No tienes permiso para editar este enlace."
 
 #: server/features/links/service.php:943
-#: server/features/links/service.php:1147
+#: server/features/links/service.php:1111
+#: server/features/links/service.php:1155
+#: server/features/links/service.php:1388
 msgid "You do not have permission to permanently delete links."
 msgstr "No tienes permiso para eliminar enlaces permanentemente."
 
 #: server/features/links/service.php:949
-#: server/features/links/service.php:1114
-#: server/features/links/service.php:1367
+#: server/features/links/service.php:1117
+#: server/features/links/service.php:1394
 msgid "You do not have permission to delete links."
 msgstr "No tienes permiso para eliminar enlaces."
 
@@ -965,19 +971,23 @@ msgstr "Este enlace ya está activo."
 msgid "You do not have permission to restore this link."
 msgstr "No tienes permiso para restaurar este enlace."
 
-#: server/features/links/service.php:1240
+#: server/features/links/service.php:1248
 msgid "You do not have permission to restore links."
 msgstr "No tienes permiso para restaurar enlaces."
 
-#: server/features/links/service.php:1310
+#: server/features/links/service.php:1318
 msgid "You do not have permission to empty trash."
 msgstr "No tienes permiso para vaciar la papelera."
 
-#: server/features/links/service.php:1800
+#: server/features/links/service.php:1379
+msgid "Invalid delete mode."
+msgstr "Modo de eliminación no válido."
+
+#: server/features/links/service.php:1831
 msgid "Complete the verification to open this link."
 msgstr "Completa la verificación para abrir este enlace."
 
-#: server/features/links/service.php:1815
+#: server/features/links/service.php:1846
 msgid "Verification failed. Please try again."
 msgstr "La verificación ha fallado. Inténtalo de nuevo."
 
@@ -1627,11 +1637,11 @@ msgstr "Abrir actualizaciones"
 msgid "Location analytics is not ready yet."
 msgstr "La analítica de ubicación aún no está lista."
 
-#: server/services/admin-notices/service.php:158
-msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard."
-msgstr "Añade tus credenciales de MaxMind y descarga la base de datos GeoLite2 City para habilitar los informes de país y ciudad de los visitantes en todo el panel."
+#: server/services/admin-notices/service.php:160
+msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard. <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">Read documentation</a>."
+msgstr "Añada sus credenciales de MaxMind y descargue la base de datos GeoLite2 City para habilitar los informes de país y ciudad de los visitantes en el panel. <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">Leer documentación</a>."
 
-#: server/services/admin-notices/service.php:163
+#: server/services/admin-notices/service.php:164
 msgid "Open Location Data"
 msgstr "Abrir datos de ubicación"
 
@@ -1943,13 +1953,13 @@ msgid "PeakURL could not send the test email because your account email address 
 msgstr "PeakURL no pudo enviar el correo de prueba porque la dirección de correo de tu cuenta no es válida."
 
 #: server/services/notifications.php:275
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:246
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "SMTP"
 msgstr "SMTP"
 
 #: server/services/notifications.php:276
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:233
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "PHP mail()"
 msgstr "Función PHP mail()"
@@ -2098,6 +2108,35 @@ msgstr "El controlador de caché configurado no está disponible; funcionando co
 msgid "No cache backend is currently usable; requests query the database directly."
 msgstr "Ningún backend de caché es utilizable; las solicitudes consultan directamente la base de datos."
 
+#: client/shared/formatting/formatters.ts:168
+#: client/shared/formatting/formatters.ts:195
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d segundo"
+msgstr[1] "%d de segundos"
+msgstr[2] "%d segundos"
+
+#: client/shared/formatting/formatters.ts:182
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d día"
+msgstr[1] "%d de días"
+msgstr[2] "%d días"
+
+#: client/shared/formatting/formatters.ts:187
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d hora"
+msgstr[1] "%d de horas"
+msgstr[2] "%d horas"
+
+#: client/shared/formatting/formatters.ts:192
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d minuto"
+msgstr[1] "%d de minutos"
+msgstr[2] "%d minutos"
+
 #: client/components/ui/Loading/Loading.tsx:72
 msgid "Loading…"
 msgstr "Cargando…"
@@ -2110,17 +2149,18 @@ msgstr "Confirmar"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:884
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:371
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:399
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:542
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:563
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:733
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:573
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:742
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:828
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:590
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1491
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:145
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:150
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:130
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:172
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:18
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:275
@@ -2671,7 +2711,7 @@ msgstr "Herramientas"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:70
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:283
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:288
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:12
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:16
 #: client/pages/NotFoundPage.tsx:85
 #: client/router/pageTitle.ts:51
 #: client/router/pageTitle.ts:115
@@ -2681,8 +2721,8 @@ msgstr "Importar"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:76
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:303
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:308
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
-#: client/pages/dashboard/tools/export/ExportPage.tsx:154
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
+#: client/pages/dashboard/tools/export/ExportPage.tsx:157
 #: client/router/pageTitle.ts:119
 msgid "Export"
 msgstr "Exportar"
@@ -2699,8 +2739,8 @@ msgstr "Actividad"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:322
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:327
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:253
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:255
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:260
 #: client/router/pageTitle.ts:123
 msgid "Scheduled Jobs"
 msgstr "Tareas programadas"
@@ -2805,7 +2845,7 @@ msgid "Search the dashboard"
 msgstr "Buscar en el panel"
 
 #: client/pages/layout/dashboard/Search/Search.tsx:191
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:208
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
 msgid "Clear search"
 msgstr "Borrar búsqueda"
 
@@ -2851,7 +2891,7 @@ msgstr "Panel"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:96
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 #: client/pages/dashboard/links/components/Header/Header.tsx:42
 #: client/pages/NotFoundPage.tsx:75
 msgid "All Links"
@@ -2892,7 +2932,7 @@ msgstr "Ajustes de seguridad"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:184
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:188
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:79
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:93
 #: client/pages/dashboard/settings/Layout.tsx:31
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:998
 #: client/router/pageTitle.ts:26
@@ -3037,8 +3077,8 @@ msgstr "PeakURL está recargando el panel ahora."
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:252
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:191
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:195
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:202
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:207
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:88
 msgid "Success"
 msgstr "Éxito"
@@ -3545,8 +3585,8 @@ msgstr "Última generación:"
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:75
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:88
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:93
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:24
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:29
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
@@ -3966,9 +4006,9 @@ msgid "No default preview image"
 msgstr "No hay imagen de vista previa predeterminada"
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:889
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:759
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:768
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 msgid "Saving..."
 msgstr "Guardando..."
@@ -3979,27 +4019,40 @@ msgstr "Guardando..."
 msgid "Save Changes"
 msgstr "Guardar cambios"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:119
 msgid "Location Database"
 msgstr "Base de datos de ubicaciones"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:121
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:122
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "Activa analíticas de país y ciudad con una base de datos local MaxMind GeoLite2 City almacenada en tu carpeta persistente de contenido."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:283
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:60
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:175
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:275
+#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:30
+msgid "Read documentation"
+msgstr "Leer documentación"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:162
 msgid "Update Database"
 msgstr "Actualizar base de datos"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:147
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:290
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:163
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:318
 msgid "Download Database"
 msgstr "Descargar base de datos"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:154
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:61
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:196
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:201
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:332
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:34
@@ -4009,25 +4062,25 @@ msgstr "Descargar base de datos"
 msgid "Status"
 msgstr "Estado"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Ready"
 msgstr "Listo"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:828
 msgid "Setup Required"
 msgstr "Configuración requerida"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
 msgid "Database Updated"
 msgstr "Base de datos actualizada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:166
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:83
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:111
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -4038,12 +4091,12 @@ msgstr "Base de datos actualizada"
 msgid "Never"
 msgstr "Nunca"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:839
 msgid "Database Size"
 msgstr "Tamaño de la base de datos"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:190
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:258
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:593
@@ -4054,81 +4107,85 @@ msgstr "Tamaño de la base de datos"
 msgid "Not available"
 msgstr "No disponible"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Location data unavailable"
 msgstr "Datos de ubicación no disponibles"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:194
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:210
 msgid "Location analytics is enabled"
 msgstr "La analítica de ubicación está activada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:211
 msgid "Location analytics is disabled"
 msgstr "La analítica de ubicación está desactivada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:215
 msgid "PeakURL is using the local GeoLite2 City database for click locations."
 msgstr "PeakURL está usando la base de datos local GeoLite2 City para las ubicaciones de los clics."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:202
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:218
 msgid "Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
 msgstr "Guarda tus credenciales de MaxMind y luego descarga la base de datos GeoLite2 City para activar las analíticas de país y ciudad de los visitantes."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
 msgid "Dashboard management unavailable"
 msgstr "Gestión desde el panel no disponible"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:236
 msgid "MaxMind Credentials"
 msgstr "Credenciales de MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:239
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "PeakURL almacena estos valores cifrados en la base de datos para poder actualizar más tarde la base de datos GeoLite2 City sin volver a pedirlos."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:251
+msgid "How to get credentials"
+msgstr "Cómo obtener las credenciales"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:262
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
 msgid "Account ID"
 msgstr "ID de la cuenta"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:245
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:273
 msgid "License Key"
 msgstr "Clave de licencia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:270
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "Update Credentials"
 msgstr "Actualizar credenciales"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:317
 msgid "Refresh Database"
 msgstr "Actualizar base de datos"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:301
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:329
 msgid "MaxMind Account ID"
 msgstr "ID de cuenta de MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:315
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:343
 msgid "MaxMind License Key"
 msgstr "Clave de licencia de MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:353
 msgid "Enter a new MaxMind license key"
 msgstr "Introduce una nueva clave de licencia de MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:354
 msgid "Enter your MaxMind license key"
 msgstr "Introduce tu clave de licencia de MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:334
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:362
 msgid "Saved license key:"
 msgstr "Clave de licencia guardada:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:356
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:384
 msgid "Save New Credentials"
 msgstr "Guardar nuevas credenciales"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:385
 msgid "Save Credentials"
 msgstr "Guardar credenciales"
 
@@ -4373,7 +4430,7 @@ msgid "Paste the secret key from your CAPTCHA provider."
 msgstr "Pega la clave secreta de tu proveedor de CAPTCHA."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:177
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
@@ -4413,75 +4470,75 @@ msgstr "Protección CAPTCHA"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "Requerir un desafío de verificación en las páginas de autenticación y antes de que se redirijan los enlaces cortos públicos."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:285
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "Activar protección CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:316
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
 msgid "Loading CAPTCHA settings…"
 msgstr "Cargando ajustes de CAPTCHA…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:322
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:334
 msgid "Failed to load CAPTCHA settings."
 msgstr "No se pudieron cargar los ajustes de CAPTCHA."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:340
 msgid "Provider Settings"
 msgstr "Ajustes del proveedor"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "Las credenciales guardadas están ocultas. Cámbialas o elimínalas cuando sea necesario."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:347
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "Elige un proveedor de CAPTCHA e introduce tus claves API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:345
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:391
 msgid "Provider"
 msgstr "Proveedor"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:353
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:397
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:365
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Site Key"
 msgstr "Clave del sitio"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:421
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:373
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:433
 msgid "Secret Key"
 msgstr "Clave secreta"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:400
 msgid "CAPTCHA provider"
 msgstr "Proveedor de CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:415
 msgid "Paste site key"
 msgstr "Pegar clave del sitio"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:412
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
 msgid "Leave unchanged to keep the saved site key."
 msgstr "Déjalo sin cambios para conservar la clave del sitio guardada."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:430
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:442
 msgid "Keep saved secret"
 msgstr "Conservar clave secreta guardada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:443
 msgid "Paste secret key"
 msgstr "Pegar clave secreta"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:483
 msgid "Change keys"
 msgstr "Cambiar claves"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:494
 msgid "Remove keys"
 msgstr "Eliminar claves"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:519
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
 msgid "Save Settings"
 msgstr "Guardar ajustes"
 
@@ -4542,53 +4599,49 @@ msgstr "Webhooks"
 msgid "PeakURL sends signed POST requests to your endpoint when selected link events happen."
 msgstr "PeakURL envía solicitudes POST firmadas a tu endpoint cuando se producen los eventos de enlace seleccionados."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:187
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:199
 msgid "Enable webhooks"
 msgstr "Activar webhooks"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:232
 msgid "Add New Webhook"
 msgstr "Añadir nuevo webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:235
 msgid "Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
 msgstr "Elige qué eventos deben activar un envío y guarda la clave de firma en un lugar seguro cuando se muestre."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:231
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:243
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
 msgid "Endpoint URL"
 msgstr "URL del endpoint"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:248
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
 msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route."
 msgstr "Usa un endpoint HTTPS público que pueda aceptar solicitudes POST, como un hook de Zapier Catch, una URL de webhook de n8n o tu propia ruta de API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:272
 msgid "Events"
 msgstr "Eventos"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:302
-msgid "Webhook docs"
-msgstr "Documentación de webhooks"
-
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:313
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:328
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:70
 msgid "Creating..."
 msgstr "Creando..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:329
 msgid "Create Webhook"
 msgstr "Crear webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:321
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:336
 msgid "Loading webhooks…"
 msgstr "Cargando webhooks…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:342
 msgid "Failed to load webhooks"
 msgstr "No se pudieron cargar los webhooks"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:359
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:374
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:56
 #: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:44
@@ -4596,141 +4649,129 @@ msgstr "No se pudieron cargar los webhooks"
 msgid "Inactive"
 msgstr "Inactivo"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:391
 msgid "Signing secret stored"
 msgstr "Clave de firma guardada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:386
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:128
 msgid "Created:"
 msgstr "Creado:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:402
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:409
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:503
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:514
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:529
 msgid "Delete webhook"
 msgstr "Eliminar webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:427
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:442
 msgid "Copy Your Webhook Secret"
 msgstr "Copia la clave secreta de tu webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:448
 msgid "This signing secret will not be shown again."
 msgstr "Esta clave de firma no volverá a mostrarse."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:451
 msgid "Store it in your automation tool or secret manager before closing this window."
 msgstr "Guárdala en tu herramienta de automatización o gestor de secretos antes de cerrar esta ventana."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:474
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:498
 msgid "Secret copied"
 msgstr "Clave copiada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:477
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "Copiar al portapapeles"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:466
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:481
 msgid "If this secret is ever exposed, delete the webhook and create a new one."
 msgstr "Si esta clave se expone en algún momento, elimina el webhook y crea uno nuevo."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:502
 msgid "Copy Secret"
 msgstr "Copiar clave"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "Ya la he guardado"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:507
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:522
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "¿Eliminar el webhook de %s? PeakURL dejará de enviar inmediatamente solicitudes de eventos firmadas a este endpoint."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:515
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:530
 msgid "Keep webhook"
 msgstr "Conservar webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:41
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:40
 msgid "Connection"
 msgstr "Conexión"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:44
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:43
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:107
 msgid "Base API URL"
 msgstr "URL base de la API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:49
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:48
 msgid "Use this endpoint with WordPress, browser extensions, scripts, and other API clients."
 msgstr "Usa este endpoint con WordPress, extensiones del navegador, scripts y otros clientes de la API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:62
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:76
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:114
 msgid "Base API URL copied to clipboard"
 msgstr "La URL base de la API se copió al portapapeles"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:66
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:80
 msgid "Copy API URL"
 msgstr "Copiar URL de la API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:87
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:101
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
 msgid "Create New Key"
 msgstr "Crear nueva clave"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:102
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:116
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:96
 msgid "API Key"
 msgstr "Clave API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:105
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:119
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:54
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:58
 msgid "Active"
 msgstr "Activa"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:131
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:145
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:290
 msgid "Delete"
 msgstr "Eliminar"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:148
 msgid "Delete API Key"
 msgstr "Eliminar clave API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:160
 msgid "No API Keys Generated"
 msgstr "No se han generado claves API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:149
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:163
 msgid "Generate an API key to access endpoints programmatically."
 msgstr "Genera una clave API para acceder a los endpoints mediante programación."
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:169
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:183
 msgid "Keep your API keys secure"
 msgstr "Mantén seguras tus claves API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:186
 msgid "PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed."
 msgstr "PeakURL solo muestra el token completo una vez, en el momento de su creación. Guárdalo en un gestor de contraseñas o almacén de secretos y revócalo de inmediato si crees que ha quedado expuesto."
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:189
-msgid "API documentation"
-msgstr "Documentación de la API"
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:193
-msgid "Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints."
-msgstr "Usa la documentación pública para autenticación, enlaces, analíticas, usuarios, webhooks y endpoints del sistema."
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:209
-msgid "API Overview"
-msgstr "Resumen de la API"
 
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:29
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:71
@@ -4777,233 +4818,233 @@ msgstr "Si esta clave se expone en algún momento, revócala desde la lista de c
 msgid "Copy Key"
 msgstr "Copiar clave"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:106
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:112
 msgid "1 Hour (3,600s) — Default"
 msgstr "1 hora (3.600 s) — Predeterminado"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:107
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:113
 msgid "6 Hours (21,600s)"
 msgstr "6 horas (21.600 s)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:108
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
 msgid "24 Hours (86,400s)"
 msgstr "24 horas (86.400 s)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:109
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
 msgid "7 Days (604,800s)"
 msgstr "7 días (604.800 s)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:124
 msgid "Custom Duration..."
 msgstr "Duración personalizada..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:120
 msgid "1 Minute (60s) — Default"
 msgstr "1 minuto (60 s) — Predeterminado"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:121
 msgid "3 Minutes (180s)"
 msgstr "3 minutos (180 s)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:122
 msgid "5 Minutes (300s)"
 msgstr "5 minutos (300 s)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:117
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:123
 msgid "15 Minutes (900s)"
 msgstr "15 minutos (900 s)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:165
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
 msgid "Automatic (Recommended)"
 msgstr "Automático (Recomendado)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:170
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:176
 msgid "Redis (In-Memory Cache)"
 msgstr "Redis (Caché en memoria)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
 msgid "Redis (Unavailable — Server Unreachable)"
 msgstr "Redis (No disponible — Servidor no accesible)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:183
 msgid "APCu (PHP Shared Memory)"
 msgstr "APCu (Memoria compartida PHP)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:178
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
 msgid "APCu (Unavailable — Extension Not Loaded)"
 msgstr "APCu (No disponible — Extensión no cargada)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
 msgid "Filesystem (content/cache)"
 msgstr "Sistema de archivos (content/cache)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:191
 msgid "Filesystem (Unavailable — Directory Not Writable)"
 msgstr "Sistema de archivos (No disponible — Directorio sin permisos de escritura)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:196
 msgid "Disabled (Direct Database Queries)"
 msgstr "Desactivado (Consultas directas a la base de datos)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:878
 msgid "Redis"
 msgstr "Redis"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:201
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:207
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:880
 msgid "APCu"
 msgstr "APCu"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:203
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:209
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:882
 msgid "Filesystem"
 msgstr "Sistema de archivos"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:211
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:506
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
 msgid "Direct Database"
 msgstr "Base de datos directa"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:286
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:292
 msgid "Performance & Caching"
 msgstr "Rendimiento y caché"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:295
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "Configure los motores de caché de objetos y las políticas de tiempo de vida (TTL) para optimizar la latencia y el rendimiento de las redirecciones."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:306
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:541
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1490
 msgid "Purge Cache"
 msgstr "Purgar caché"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
 msgid "Active Engine"
 msgstr "Motor activo"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:318
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:339
 msgid "Cache Footprint"
 msgstr "Uso de memoria de caché"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:346
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
 msgid "%s cached items"
 msgstr "%s elementos en caché"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:347
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
 msgid "%s cached files"
 msgstr "%s archivos en caché"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:329
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:356
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
 msgid "0 B"
 msgstr "0 B"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:341
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:362
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
 msgid "Default TTL"
 msgstr "TTL predeterminado"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:372
 msgid "Cache status unavailable"
 msgstr "Estado de la caché no disponible"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:389
 msgid "Object cache is operational"
 msgstr "La caché de objetos está operativa"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:370
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:391
 msgid "Fallback cache driver active"
 msgstr "Controlador de caché de respaldo activo"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:371
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:392
 msgid "Object cache is disabled"
 msgstr "La caché de objetos está desactivada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:397
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "La caché de objetos está activa y gestiona redirecciones a través del motor %s."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:383
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "El controlador de caché preferido no está disponible actualmente. PeakURL ha cambiado automáticamente a %s."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:409
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "La caché de objetos está desactivada. Las consultas y redirecciones se procesan directamente desde la base de datos."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:400
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:421
 msgid "Cache Engine Settings"
 msgstr "Configuración del motor de caché"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:425
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "Seleccione su motor de caché preferido. PeakURL selecciona automáticamente el motor operativo más rápido si el controlador preferido no está disponible."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:412
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:418
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:439
 msgid "Preferred Cache Driver"
 msgstr "Controlador de caché preferido"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:422
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:443
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "PeakURL prioriza Redis si está configurado, APCu si está cargado y el sistema de archivos como alternativa universal."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:430
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:438
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:451
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
 msgid "Redirect Cache TTL"
 msgstr "TTL de la caché de redirección"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:463
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "Duración de tiempo de vida (TTL) para almacenar en caché destinos de redirección activos."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:454
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:475
 msgid "Custom Redirect TTL (seconds)"
 msgstr "TTL de redirección personalizado (segundos)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:480
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "Introduzca la duración en segundos para la caché de destinos de redirección."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:469
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:477
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
 msgid "Negative Lookup (404) TTL"
 msgstr "TTL de búsqueda negativa (404)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:481
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:502
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "Duración de tiempo de vida (TTL) para almacenar en caché enlaces inexistentes y reducir la carga de la base de datos por escaneos automáticos."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:493
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:514
 msgid "Custom Negative TTL (seconds)"
 msgstr "TTL negativo personalizado (segundos)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:519
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "Introduzca la duración en segundos para la caché de búsquedas negativas 404."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:539
 msgid "Reset"
 msgstr "Restablecer"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:528
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:549
 msgid "Save Performance Settings"
 msgstr "Guardar configuración de rendimiento"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:537
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:558
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
 msgid "Purge Object Cache"
 msgstr "Purgar caché de objetos"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:538
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:559
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1487
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "¿Está seguro de que desea purgar la caché de objetos? Todos los registros de redirección, objetos en memoria y archivos temporales se invalidarán de inmediato. Las solicitudes posteriores consultarán la base de datos para reconstruir la caché."
@@ -5029,117 +5070,117 @@ msgstr "Entrega de correo electrónico"
 msgid "PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 msgstr "PeakURL usa este transporte de correo para los mensajes de restablecimiento de contraseña y otras notificaciones de recuperación de cuenta."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:195
 msgid "Mail status unavailable"
 msgstr "Estado de correo no disponible"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:229
 msgid "Delivery method"
 msgstr "Método de entrega"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
 msgid "Use the hosting server’s built-in PHP mail transport."
 msgstr "Usa el transporte integrado mail() de PHP del servidor de hosting."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:235
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:247
 msgid "Send through your own SMTP server with optional authentication."
 msgstr "Envía a través de tu propio servidor SMTP con autenticación opcional."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:251
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
 msgid "SMTP Configuration"
 msgstr "Configuración de SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:255
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:267
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
 msgid "From Name"
 msgstr "Nombre del remitente"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:275
 msgid "PeakURL"
 msgstr "PeakURL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:266
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:278
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Email"
 msgstr "Correo remitente"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:277
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:289
 msgid "noreply@yourdomain.com"
 msgstr "noreply@tudominio.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:294
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 msgid "SMTP Host"
 msgstr "Host SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:293
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:305
 msgid "smtp.example.com"
 msgstr "smtp.ejemplo.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:297
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:309
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 msgid "SMTP Port"
 msgstr "Puerto SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:326
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "Encryption"
 msgstr "Cifrado"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:337
 msgid "SMTP encryption"
 msgstr "Cifrado SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:342
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
 msgid "Authentication"
 msgstr "Autenticación"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:362
 msgid "Authentication enabled"
 msgstr "Autenticación activada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:363
 msgid "Authentication disabled"
 msgstr "Autenticación desactivada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:391
 msgid "SMTP Username"
 msgstr "Nombre de usuario SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:402
 msgid "mailer@example.com"
 msgstr "correo@ejemplo.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:406
 msgid "SMTP Password"
 msgstr "Contraseña SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:405
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
 msgid "Leave blank to keep the saved password"
 msgstr "Déjalo en blanco para mantener la contraseña guardada"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:408
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:420
 msgid "Enter the SMTP password"
 msgstr "Introduce la contraseña SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:413
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:425
 msgid "Saved password: %s"
 msgstr "Contraseña guardada: %s"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:429
 msgid "PeakURL stores this password encrypted in the database."
 msgstr "PeakURL almacena esta contraseña cifrada en la base de datos."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:447
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
 msgid "Send Test Email"
 msgstr "Enviar correo de prueba"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:470
 msgid "Save Email Configuration"
 msgstr "Guardar configuración de correo"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:471
 msgid "Use PHP mail()"
 msgstr "Usar PHP mail()"
 
@@ -5153,7 +5194,7 @@ msgstr "Gestiona las preferencias y la configuración de tu cuenta"
 
 #: client/pages/dashboard/settings/Layout.tsx:45
 #: client/pages/dashboard/about/AboutPage.tsx:231
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:115
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
 msgid "Performance"
 msgstr "Rendimiento"
 
@@ -5181,9 +5222,44 @@ msgstr "%d reintentando"
 msgid "%d other"
 msgstr "%d otras"
 
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:110
+msgid "%d due job executed successfully."
+msgid_plural "%d due jobs executed successfully."
+msgstr[0] "%d tarea vencida ejecutada con éxito."
+msgstr[1] "%d de tareas vencidas ejecutadas con éxito."
+msgstr[2] "%d tareas vencidas ejecutadas con éxito."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:132
+msgid "%d due job was skipped."
+msgid_plural "%d due jobs were skipped."
+msgstr[0] "Se omitió %d tarea vencida."
+msgstr[1] "Se omitieron %d de tareas vencidas."
+msgstr[2] "Se omitieron %d tareas vencidas."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:154
+msgid "%d due job failed."
+msgid_plural "%d due jobs failed."
+msgstr[0] "%d tarea vencida falló."
+msgstr[1] "%d de tareas vencidas fallaron."
+msgstr[2] "%d tareas vencidas fallaron."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:172
+msgid "%d due job scheduled for retry."
+msgid_plural "%d due jobs scheduled for retry."
+msgstr[0] "%d tarea vencida programada para reintento."
+msgstr[1] "%d de tareas vencidas programadas para reintento."
+msgstr[2] "%d tareas vencidas programadas para reintento."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:239
+msgid "%1$d due job processed: %2$s."
+msgid_plural "%1$d due jobs processed: %2$s."
+msgstr[0] "%1$d tarea vencida procesada: %2$s."
+msgstr[1] "%1$d de tareas vencidas procesadas: %2$s."
+msgstr[2] "%1$d tareas vencidas procesadas: %2$s."
+
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:21
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:57
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:330
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
 msgid "Run Due Jobs"
 msgstr "Ejecutar tareas pendientes"
 
@@ -5195,290 +5271,290 @@ msgstr "¿Ejecutar las tareas en segundo plano pendientes actualmente?"
 msgid "This will trigger immediate execution of any background jobs whose scheduled interval has elapsed or claim lease has expired. Jobs that are not currently due will remain on their normal schedule."
 msgstr "Esto iniciará la ejecución inmediata de cualquier tarea en segundo plano cuyo intervalo programado haya transcurrido o cuyo bloqueo haya expirado. Las tareas que no estén pendientes continuarán con su programación habitual."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:39
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:45
 msgid "No scheduled jobs registered"
 msgstr "No hay tareas programadas registradas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:42
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:48
 msgid "No recurring background jobs have been discovered or synced in the system registry."
 msgstr "No se han encontrado ni sincronizado tareas recurrentes en segundo plano en el registro del sistema."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:65
 msgid "Job"
 msgstr "Tarea"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:64
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:546
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:555
 msgid "Schedule"
 msgstr "Programación"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:200
 msgid "Last Run"
 msgstr "Última ejecución"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
 msgid "Next Run"
 msgstr "Próxima ejecución"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:79
 msgid "Result"
 msgstr "Resultado"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:82
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:112
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:127
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:55
 msgid "Actions"
 msgstr "Acciones"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:130
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:419
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:136
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:428
 msgid "Customized"
 msgstr "Personalizada"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:137
 msgid "Recommended"
 msgstr "Recomendada"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:179
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:189
 msgid "Executing now..."
 msgstr "Ejecutando ahora..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:200
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:212
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:102
 msgid "Skipped"
 msgstr "Omitida"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:216
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:228
 msgid "View Execution History"
 msgstr "Ver historial de ejecuciones"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:219
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:234
 msgid "History"
 msgstr "Historial"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:244
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:259
 msgid "Job is currently executing..."
 msgstr "La tarea se está ejecutando actualmente..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:262
 msgid "Execute Job Immediately"
 msgstr "Ejecutar tarea de inmediato"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:254
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:477
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:269
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:484
 msgid "Running..."
 msgstr "Ejecutando..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:255
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:478
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:485
 msgid "Run Now"
 msgstr "Ejecutar ahora"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:45
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
 msgid "7 Days"
 msgstr "7 días"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
 msgid "14 Days"
 msgstr "14 días"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
 msgid "30 Days (Recommended)"
 msgstr "30 días (recomendado)"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
 msgid "60 Days"
 msgstr "60 días"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
 msgid "90 Days"
 msgstr "90 días"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
 msgid "180 Days"
 msgstr "180 días"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
 msgid "1 Year"
 msgstr "1 año"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:53
 msgid "Keep Indefinitely"
 msgstr "Conservar indefinidamente"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:56
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
 msgid "Every 5 minutes"
 msgstr "Cada 5 minutos"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:57
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
 msgid "Every 15 minutes"
 msgstr "Cada 15 minutos"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:58
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
 msgid "Every 30 minutes"
 msgstr "Cada 30 minutos"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:21
 msgid "Hourly"
 msgstr "Cada hora"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
 msgid "Every 2 hours"
 msgstr "Cada 2 horas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
 msgid "Every 6 hours"
 msgstr "Cada 6 horas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:65
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:26
 msgid "Every 12 hours"
 msgstr "Cada 12 horas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:35
 msgid "Daily"
 msgstr "Diariamente"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:67
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:38
 msgid "Weekly"
 msgstr "Semanalmente"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:138
 msgid "Execution history retention setting saved successfully."
 msgstr "El ajuste de retención del historial de ejecuciones se guardó correctamente."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:144
 msgid "Failed to update history retention."
 msgstr "Error al actualizar la retención del historial."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:170
 msgid "Schedule for [%s] updated successfully."
 msgstr "La programación de [%s] se actualizó correctamente."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:174
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:181
 msgid "Failed to update schedule for [%s]."
 msgstr "Error al actualizar la programación de [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:192
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:199
 msgid "Reset [%s] to recommended default schedule."
 msgstr "Se restableció [%s] a la programación predeterminada recomendada."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:203
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:210
 msgid "Failed to reset job schedule."
 msgstr "Error al restablecer la programación de la tarea."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:254
 msgid "Manage Schedules & Retention"
 msgstr "Gestionar programaciones y retención"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:257
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:619
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:628
 msgid "Site timezone: %s"
 msgstr "Zona horaria del sitio: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:269
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:276
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:277
 msgid "Close schedules drawer"
 msgstr "Cerrar panel de programaciones"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:286
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:293
 msgid "Execution History Retention"
 msgstr "Retención del historial de ejecuciones"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:291
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:298
 msgid "Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
 msgstr "Elige cuánto tiempo se conservan los registros de ejecución de tareas en segundo plano completadas. Las ejecuciones activas y en reintento nunca se eliminan durante la limpieza."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:316
 msgid "History Retention Period"
 msgstr "Período de retención del historial"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:327
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:334
 msgid "Save Retention"
 msgstr "Guardar retención"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:341
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:348
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
 msgid "Registered Background Tasks"
 msgstr "Tareas en segundo plano registradas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:350
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:357
 msgid "Recommended schedules are based on PeakURL's default maintenance cadence. You can customize any job and restore its recommended schedule at any time."
 msgstr "Las programaciones recomendadas se basan en la frecuencia de mantenimiento predeterminada de PeakURL. Puedes personalizar cualquier tarea y restaurar su programación recomendada en cualquier momento."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:473
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:79
 msgid "Due now"
 msgstr "Pendiente ahora"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:469
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:478
 msgid "Next: %s"
 msgstr "Siguiente: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:517
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:791
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:459
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:526
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:800
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:466
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:532
 msgid "Close"
 msgstr "Cerrar"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:520
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:529
 msgid "Configure"
 msgstr "Configurar"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:577
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:586
 msgid "Recurrence cadence."
 msgstr "Frecuencia de recurrencia."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:589
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:598
 msgid "Preferred run time"
 msgstr "Hora de ejecución preferida"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:632
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
 msgid "Automatic execution"
 msgstr "Ejecución automática"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:638
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:647
 msgid "Runs this job automatically when it is due."
 msgstr "Ejecuta esta tarea automáticamente cuando llega su turno."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:650
 msgid "Automatic execution is disabled. You can still run this job manually."
 msgstr "La ejecución automática está desactivada. Todavía puedes ejecutar esta tarea manualmente."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:653
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:662
 msgid "Toggle automatic execution"
 msgstr "Alternar ejecución automática"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:710
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:818
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:719
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:827
 msgid "Reset to Recommended"
 msgstr "Restablecer a recomendada"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:762
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:771
 msgid "Save Schedule"
 msgstr "Guardar programación"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:781
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:790
 msgid "Background job schedules and retention rules are stored permanently."
 msgstr "Las programaciones de tareas en segundo plano y las reglas de retención se almacenan de forma permanente."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:805
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:814
 msgid "Reset Schedule — %s"
 msgstr "Restablecer programación — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:810
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
 msgid "Restore the recommended PeakURL schedule for [%1$s] (%2$s)? Any customized interval, preferred run time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
 msgstr "¿Restaurar la programación recomendada de PeakURL para [%1$s] (%2$s)? Cualquier intervalo personalizado, hora preferida y estado de activación se restablecerá a la recomendación integrada. El historial de ejecuciones anteriores se conservará."
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:23
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:391
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:408
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:169
 msgid "Running"
 msgstr "En ejecución"
@@ -5493,101 +5569,109 @@ msgid "Failed"
 msgstr "Fallida"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:116
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:369
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:386
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:160
 msgid "Scheduled"
 msgstr "Programada"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:112
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:117
 msgid "Failed to clear job execution history."
 msgstr "Error al vaciar el historial de ejecuciones de la tarea."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:156
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:161
 msgid "Execution History — %s"
 msgstr "Historial de ejecuciones — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:172
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:173
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:177
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:178
 msgid "Close history drawer"
 msgstr "Cerrar panel de historial"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:185
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:190
 msgid "Job ID"
 msgstr "ID de la tarea"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:211
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:216
 msgid "Recurrence"
 msgstr "Recurrencia"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:222
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:227
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:212
 msgid "Next Due"
 msgstr "Próximo vencimiento"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:245
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:250
 msgid "Most Recent Failure"
 msgstr "Fallo más reciente"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:271
 msgid "Recent Execution Logs"
 msgstr "Registros de ejecución recientes"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:272
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:279
 msgid "%d recorded"
 msgstr "%d registrados"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:287
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:294
 msgid "Clear execution history for this job"
 msgstr "Vaciar historial de ejecuciones de esta tarea"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:293
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:500
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:300
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:507
 msgid "Clear History"
 msgstr "Vaciar historial"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:306
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:313
 msgid "No execution history yet."
 msgstr "Todavía no hay historial de ejecuciones."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:311
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:318
 msgid "This job has not been executed yet or past execution logs have expired."
 msgstr "Esta tarea aún no se ha ejecutado o sus registros de ejecución anteriores han caducado."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:322
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:329
 msgid "Run"
 msgstr "Ejecución"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:328
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:335
 msgid "Attempt"
 msgstr "Intento"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 msgid "Started"
 msgstr "Iniciado"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:334
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:341
 msgid "Duration"
 msgstr "Duración"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:337
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:344
 msgid "Output / Details"
 msgstr "Salida / Detalles"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:370
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:377
 msgid "#%d"
 msgstr "#%d"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:448
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:455
 msgid "Registry: %s"
 msgstr "Registro: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:494
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
 msgid "Clear Execution History — %s"
 msgstr "Vaciar historial de ejecuciones — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:497
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:504
 msgid "Are you sure you want to clear execution history for this background job? Finished run records and output logs for this job will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "¿Seguro que deseas vaciar el historial de ejecuciones de esta tarea en segundo plano? Los registros de ejecuciones finalizadas y los registros de salida de esta tarea se eliminarán de forma permanente. Las ejecuciones activas y en reintento permanecerán protegidas."
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:104
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:179
+msgid "Cleared %s execution history record."
+msgid_plural "Cleared %s execution history records."
+msgstr[0] "Se borró %s registro del historial de ejecuciones."
+msgstr[1] "Se borraron %s de registros del historial de ejecuciones."
+msgstr[2] "Se borraron %s registros del historial de ejecuciones."
 
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:7
 msgid "Manual"
@@ -5601,126 +5685,283 @@ msgstr "Cada minuto"
 msgid "%1$s at %2$s"
 msgstr "%1$s a las %2$s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:114
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:116
+msgid "Session Cleanup"
+msgstr "Limpieza de sesiones"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:117
+msgid "GeoIP Database Refresh"
+msgstr "Actualización de la base de datos GeoIP"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:118
+msgid "Expired Links Processing"
+msgstr "Procesamiento de enlaces caducados"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:119
+msgid "Cache Cleanup"
+msgstr "Limpieza de caché"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:120
+msgid "Analytics & Trash Retention"
+msgstr "Retención de analíticas y papelera"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:121
+msgid "PeakURL Version Check"
+msgstr "Comprobación de versión de PeakURL"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:122
+msgid "Webhook Delivery & Health"
+msgstr "Entrega y estado de webhooks"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:123
+msgid "Import & Export Scratch Cleanup"
+msgstr "Limpieza de archivos temporales de importación/exportación"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:124
+msgid "Link Destination Health Check"
+msgstr "Comprobación del estado del destino del enlace"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:169
+msgid "Location data is not configured"
+msgstr "Los datos de ubicación no están configurados"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:172
+msgid "GeoIP database is already up to date"
+msgstr "La base de datos GeoIP ya está actualizada"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:180
+msgid "GeoLite2 City database refreshed at %s"
+msgstr "Base de datos GeoLite2 City actualizada en %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:189
+msgid "No expired links due for processing."
+msgstr "No hay enlaces caducados pendientes de procesamiento."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:216
+msgid "Cache driver \"%s\" manages expiration automatically; no filesystem sweep required."
+msgstr "El controlador de caché «%s» gestiona la expiración automáticamente; no se requiere limpieza del sistema de archivos."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:262
+msgid "Retention enforced: %1$s, %2$s."
+msgstr "Retención aplicada: %1$s, %2$s."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:277
+msgid "Version check complete: remote release %s found."
+msgstr "Comprobación de versión completada: se encontró la versión remota %s."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:286
+msgid "No pending webhook deliveries."
+msgstr "No hay entregas de webhooks pendientes."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
+msgid "No active links available for health check."
+msgstr "No hay enlaces activos disponibles para la comprobación de estado."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:385
+msgid "GeoIP update failed: %s"
+msgstr "Error al actualizar GeoIP: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:394
+msgid "Version check failed: %s"
+msgstr "Error en la comprobación de versión: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:16
+msgid "Every %d minute"
+msgid_plural "Every %d minutes"
+msgstr[0] "Cada %d minuto"
+msgstr[1] "Cada %d de minutos"
+msgstr[2] "Cada %d minutos"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:30
+msgid "Every %d hour"
+msgid_plural "Every %d hours"
+msgstr[0] "Cada %d hora"
+msgstr[1] "Cada %d de horas"
+msgstr[2] "Cada %d horas"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:43
+msgid "Every %d day"
+msgid_plural "Every %d days"
+msgstr[0] "Cada %d día"
+msgstr[1] "Cada %d de días"
+msgstr[2] "Cada %d días"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:156
+msgid "Pruned %d expired or revoked session."
+msgid_plural "Pruned %d expired or revoked sessions."
+msgstr[0] "Se eliminó %d sesión caducada o revocada."
+msgstr[1] "Se eliminaron %d de sesiones caducadas o revocadas."
+msgstr[2] "Se eliminaron %d sesiones caducadas o revocadas."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:198
+msgid "Processed %d expired link."
+msgid_plural "Processed %d expired links."
+msgstr[0] "Se procesó %d enlace caducado."
+msgstr[1] "Se procesaron %d de enlaces caducados."
+msgstr[2] "Se procesaron %d enlaces caducados."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:229
+msgid "Purged %d expired file cache item."
+msgid_plural "Purged %d expired file cache items."
+msgstr[0] "Se purgó %d elemento caducado de la caché de archivos."
+msgstr[1] "Se purgaron %d de elementos caducados de la caché de archivos."
+msgstr[2] "Se purgaron %d elementos caducados de la caché de archivos."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:252
+msgid "%d trashed link purged"
+msgid_plural "%d trashed links purged"
+msgstr[0] "%d enlace en la papelera purgado"
+msgstr[1] "%d de enlaces en la papelera purgados"
+msgstr[2] "%d enlaces en la papelera purgados"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:256
+msgid "%d old click purged"
+msgid_plural "%d old clicks purged"
+msgstr[0] "%d clic antiguo purgado"
+msgstr[1] "%d de clics antiguos purgados"
+msgstr[2] "%d clics antiguos purgados"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:298
+msgid "Processed %1$d pending webhook delivery (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgid_plural "Processed %1$d pending webhook deliveries (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgstr[0] "Se ha procesado %1$d entrega de webhook pendiente (%2$d entregadas, %3$d en cola para reintento, %4$d fallidas)."
+msgstr[1] "Se han procesado %1$d de entregas de webhook pendientes (%2$d entregadas, %3$d en cola para reintento, %4$d fallidas)."
+msgstr[2] "Se han procesado %1$d entregas de webhook pendientes (%2$d entregadas, %3$d en cola para reintento, %4$d fallidas)."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:320
+msgid "Cleaned %d stale import/export temporary file."
+msgid_plural "Cleaned %d stale import/export temporary files."
+msgstr[0] "Se limpió %d archivo temporal obsoleto de importación/exportación."
+msgstr[1] "Se limpiaron %d de archivos temporales obsoletos de importación/exportación."
+msgstr[2] "Se limpiaron %d archivos temporales obsoletos de importación/exportación."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:349
+msgid "Health check completed for %1$d link: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgid_plural "Health check completed for %1$d links: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgstr[0] "Comprobación de estado completada para %1$d enlace: %2$d correctos, %3$d inaccesibles, %4$d bloqueados por el filtro SSRF."
+msgstr[1] "Comprobación de estado completada para %1$d de enlaces: %2$d correctos, %3$d inaccesibles, %4$d bloqueados por el filtro SSRF."
+msgstr[2] "Comprobación de estado completada para %1$d enlaces: %2$d correctos, %3$d inaccesibles, %4$d bloqueados por el filtro SSRF."
+
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:119
 msgid "Job [%s] was skipped."
 msgstr "La tarea [%s] fue omitida."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:123
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:128
 msgid "Job [%s] executed successfully."
 msgstr "La tarea [%s] se ejecutó correctamente."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:132
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:137
 msgid "Job [%s] execution failed."
 msgstr "La ejecución de la tarea [%s] falló."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:142
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:147
 msgid "Failed to execute [%s]."
 msgstr "Error al ejecutar [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:168
 msgid "Failed to execute due background jobs."
 msgstr "Error al ejecutar las tareas en segundo plano pendientes."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:186
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:191
 msgid "Failed to clear execution history."
 msgstr "Error al vaciar el historial de ejecuciones."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:229
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:234
 #: client/pages/dashboard/plugins/PluginsPage.tsx:93
 #: client/pages/dashboard/users/UsersPage.tsx:44
 msgid "Admin access required"
 msgstr "Se requiere acceso de administrador"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:232
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:237
 msgid "Only administrator accounts with update management capabilities can view and manage scheduled background jobs."
 msgstr "Solo las cuentas de administrador con permisos de gestión de actualizaciones pueden ver y gestionar las tareas programadas en segundo plano."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:249
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:254
 msgid "System Automation"
 msgstr "Automatización del sistema"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:263
 msgid "Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
 msgstr "Inspecciona las tareas recurrentes en segundo plano, supervisa el estado de ejecución, revisa los registros de ejecuciones recientes e inicia tareas manualmente cuando tengas autorización."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:287
 msgid "Refresh"
 msgstr "Actualizar"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:271
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:288
 msgid "Refresh scheduled jobs status"
 msgstr "Actualizar el estado de las tareas programadas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:292
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
 msgid "Configure job recurrence schedules, preferred times, and history retention"
 msgstr "Configura las programaciones de recurrencia de tareas, horas preferidas y retención del historial"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:297
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
 msgid "Manage Schedules"
 msgstr "Gestionar programaciones"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:326
 msgid "Clear execution run history for all jobs"
 msgstr "Vaciar el historial de ejecuciones de todas las tareas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:572
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:589
 msgid "Clear All History"
 msgstr "Vaciar todo el historial"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:325
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:342
 msgid "Execute all jobs that are currently due"
 msgstr "Ejecutar todas las tareas que están pendientes actualmente"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:364
 msgid "Total Jobs"
 msgstr "Total de tareas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:360
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:377
 msgid "Registered in system"
 msgstr "Registradas en el sistema"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:382
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:399
 msgid "Active recurring tasks"
 msgstr "Tareas recurrentes activas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:416
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:433
 msgid "Currently in progress"
 msgstr "Actualmente en curso"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:425
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:442
 msgid "Failed / Retrying"
 msgstr "Fallidas / Reintentando"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:451
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:468
 msgid "Requiring attention"
 msgstr "Requieren atención"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
 msgid "Search jobs..."
 msgstr "Buscar tareas..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:495
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:512
 msgid "Failed to load scheduled jobs"
 msgstr "Error al cargar las tareas programadas"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:515
 msgid "Could not retrieve registered jobs from the scheduler API."
 msgstr "No se pudieron obtener las tareas registradas desde la API del programador."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:525
 msgid "Retry"
 msgstr "Reintentar"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:516
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:533
 msgid "Loading scheduled jobs..."
 msgstr "Cargando tareas programadas..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:568
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:585
 msgid "Clear All Execution History"
 msgstr "Vaciar todo el historial de ejecuciones"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:569
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:586
 msgid "Are you sure you want to clear execution history across all background jobs? Finished run records and output logs will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "¿Seguro que deseas vaciar el historial de ejecuciones de todas las tareas en segundo plano? Los registros de ejecuciones finalizadas y los registros de salida se eliminarán de forma permanente. Las ejecuciones activas y en reintento permanecerán protegidas."
 
@@ -6303,113 +6544,113 @@ msgstr "Gestionar tareas programadas"
 msgid "Scheduler"
 msgstr "Programador"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
 msgid "Preparing..."
 msgstr "Preparando..."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:79
+#: client/pages/dashboard/tools/export/ExportPage.tsx:82
 msgid "CSV Export"
 msgstr "Exportación CSV"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:80
+#: client/pages/dashboard/tools/export/ExportPage.tsx:83
 msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
 msgstr "Descarga un archivo compatible con hojas de cálculo que también podrás volver a importar en PeakURL más adelante."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:83
+#: client/pages/dashboard/tools/export/ExportPage.tsx:86
 msgid "Comma-separated values (.csv)"
 msgstr "Valores separados por comas (.csv)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:89
+#: client/pages/dashboard/tools/export/ExportPage.tsx:92
 msgid "JSON Export"
 msgstr "Exportación JSON"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:90
+#: client/pages/dashboard/tools/export/ExportPage.tsx:93
 msgid "Download a structured snapshot for scripts, integrations, or backups."
 msgstr "Descarga una instantánea estructurada para scripts, integraciones o copias de seguridad."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:93
+#: client/pages/dashboard/tools/export/ExportPage.tsx:96
 msgid "JavaScript Object Notation (.json)"
 msgstr "Notación de objetos JavaScript (.json)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:99
+#: client/pages/dashboard/tools/export/ExportPage.tsx:102
 msgid "XML Export"
 msgstr "Exportación XML"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:100
+#: client/pages/dashboard/tools/export/ExportPage.tsx:103
 msgid "Download a portable XML feed with the full link dataset and analytics totals."
 msgstr "Descarga un feed XML portable con el conjunto completo de enlaces y los totales de analíticas."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:103
+#: client/pages/dashboard/tools/export/ExportPage.tsx:106
 msgid "Extensible Markup Language (.xml)"
 msgstr "Lenguaje de marcado extensible (.xml)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:118
+#: client/pages/dashboard/tools/export/ExportPage.tsx:121
 msgid "Nothing to export"
 msgstr "No hay nada para exportar"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:119
+#: client/pages/dashboard/tools/export/ExportPage.tsx:122
 msgid "No links are available for export yet."
 msgstr "Todavía no hay enlaces disponibles para exportar."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:126
+#: client/pages/dashboard/tools/export/ExportPage.tsx:129
 msgid "Export downloaded"
 msgstr "Exportación descargada"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:128
+#: client/pages/dashboard/tools/export/ExportPage.tsx:131
 msgid "Downloaded %1$s links as %2$s."
 msgstr "Se descargaron %1$s enlaces en formato %2$s."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:135
+#: client/pages/dashboard/tools/export/ExportPage.tsx:138
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:59
 msgid "Export failed"
 msgstr "La exportación falló"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:138
+#: client/pages/dashboard/tools/export/ExportPage.tsx:141
 msgid "PeakURL could not prepare the export right now."
 msgstr "PeakURL no pudo preparar la exportación en este momento."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:152
+#: client/pages/dashboard/tools/export/ExportPage.tsx:155
 msgid "Data Export"
 msgstr "Exportación de datos"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:156
+#: client/pages/dashboard/tools/export/ExportPage.tsx:159
 msgid "Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
 msgstr "Exporta tu conjunto de enlaces cortos en formatos CSV, JSON o XML para análisis sin conexión, migración o copias de seguridad automatizadas."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/export/ExportPage.tsx:186
 msgid "Bulk Link Export"
 msgstr "Exportación masiva de enlaces"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:175
+#: client/pages/dashboard/tools/export/ExportPage.tsx:190
 msgid "Each export includes destination URLs, custom aliases, titles, short URLs, total clicks, unique visitors, and creation dates."
 msgstr "Cada exportación incluye URLs de destino, alias personalizados, títulos, URLs cortas, clics totales, visitantes únicos y fechas de creación."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:180
+#: client/pages/dashboard/tools/export/ExportPage.tsx:195
 msgid "Exports follow your current role permissions. Administrators can export all site links, while Editors export links created by their account."
 msgstr "Las exportaciones respetan los permisos de tu rol actual. Los administradores pueden exportar todos los enlaces del sitio, mientras que los editores exportan los enlaces creados por su cuenta."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:188
+#: client/pages/dashboard/tools/export/ExportPage.tsx:203
 msgid "Exportable Links"
 msgstr "Enlaces exportables"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:223
+#: client/pages/dashboard/tools/export/ExportPage.tsx:238
 msgid "API Export"
 msgstr "Exportación de API"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:226
+#: client/pages/dashboard/tools/export/ExportPage.tsx:241
 msgid "Use the API export endpoint to back up short links or integrate with automated workflows without opening the dashboard."
 msgstr "Usa el extremo de exportación de la API para hacer copias de seguridad de los enlaces cortos o integrarlos con flujos de trabajo automatizados sin abrir el panel."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:239
+#: client/pages/dashboard/tools/export/ExportPage.tsx:254
 msgid "Read Export Guide"
 msgstr "Leer la guía de exportación"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:247
+#: client/pages/dashboard/tools/export/ExportPage.tsx:262
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:22
 msgid "Example Request"
 msgstr "Solicitud de ejemplo"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:261
+#: client/pages/dashboard/tools/export/ExportPage.tsx:276
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:47
 msgid "Response"
 msgstr "Respuesta"
@@ -6426,11 +6667,11 @@ msgstr "Documentación de ayuda"
 msgid "Newsletter"
 msgstr "Boletín"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:10
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
 msgid "Data Import"
 msgstr "Importación de datos"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:18
 msgid "Bulk import short links into PeakURL from CSV, JSON, or XML files, pasted URL lists, or automated API payloads."
 msgstr "Importación masiva de enlaces cortos a PeakURL desde archivos CSV, JSON o XML, listas de URL pegadas o llamadas automáticas de API."
 
@@ -6944,12 +7185,12 @@ msgstr "%s seleccionados"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:64
 #: client/pages/dashboard/activity/components/ActivityModals/ActivityModals.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:79
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:84
 msgid "Delete selected"
 msgstr "Eliminar seleccionados"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:72
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:89
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:95
 msgid "Delete all"
 msgstr "Eliminar todo"
 
@@ -7688,47 +7929,49 @@ msgstr "Error al eliminar permanentemente los enlaces"
 msgid "Failed to move links to trash"
 msgstr "Error al mover los enlaces a la papelera"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:83
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:88
 msgid "Delete Links Permanently"
 msgstr "Eliminar enlaces permanentemente"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:84
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:89
 msgid "Move Links to Trash"
 msgstr "Mover enlaces a la papelera"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:108
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:113
 msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
 msgstr "¿Seguro que deseas eliminar permanentemente 1 enlace seleccionado? Esta acción no se puede deshacer."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:112
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:117
 msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
 msgstr "¿Seguro que deseas eliminar permanentemente los %s enlaces seleccionados? Esta acción no se puede deshacer."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:118
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:123
 msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
 msgstr "¿Seguro que deseas mover 1 enlace seleccionado a la papelera? Puedes restaurarlo más tarde."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:122
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:127
 msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
 msgstr "¿Seguro que deseas mover los %s enlaces seleccionados a la papelera? Puedes restaurarlos más tarde."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:131
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:136
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:116
 msgid "Only links you have permission to remove will be affected. Admin-owned links will remain unchanged."
 msgstr "Solo se verán afectados los enlaces que tengas permiso para eliminar. Los enlaces propiedad del administrador permanecerán sin cambios."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:159
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:185
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:186
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:209
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:169
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:201
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:149
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:187
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:210
 msgid "Deleting..."
 msgstr "Eliminando..."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:165
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:192
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:175
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:208
 msgid "Delete Permanently (%s)"
 msgstr "Eliminar permanentemente (%s)"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:198
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:216
 msgid "Move to Trash (%s)"
 msgstr "Mover a la papelera (%s)"
 
@@ -7817,6 +8060,7 @@ msgid "Restore selected"
 msgstr "Restaurar seleccionados"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:56
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete permanently"
 msgstr "Eliminar permanentemente"
 
@@ -7824,28 +8068,28 @@ msgstr "Eliminar permanentemente"
 msgid "Empty trash"
 msgstr "Vaciar papelera"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:108
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:114
 msgid "Select all links"
 msgstr "Seleccionar todos los enlaces"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:111
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:117
 msgid "Link"
 msgstr "Enlace"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:112
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
 msgid "Title"
 msgstr "Título"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:113
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:119
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:133
 msgid "Destination"
 msgstr "Destino"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 msgid "Modified"
 msgstr "Modificado"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:36
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:52
 msgid "Created"
@@ -7889,8 +8133,9 @@ msgid "Restore Link"
 msgstr "Restaurar enlace"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:257
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:191
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:215
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:154
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:192
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
 msgid "Delete Permanently"
 msgstr "Eliminar permanentemente"
 
@@ -7927,49 +8172,20 @@ msgstr "Aún no hay enlaces"
 msgid "Create your first shortened link to get started"
 msgstr "Crea tu primer enlace acortado para empezar"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:163
-msgid "Links deleted"
-msgstr "Enlaces eliminados"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:164
-msgid "All links have been removed."
-msgstr "Se han eliminado todos los enlaces."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:168
-msgid "Unable to delete links"
-msgstr "No se pudieron eliminar los enlaces"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:169
-msgid "Failed to delete all links."
-msgstr "Error al eliminar todos los enlaces."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 msgid "Trashed Links"
 msgstr "Enlaces en la papelera"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:200
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:175
 msgid "Search links..."
 msgstr "Buscar enlaces..."
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:314
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:324
-msgid "Delete all links"
-msgstr "Eliminar todos los enlaces"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:317
-msgid "Are you sure you want to delete all links across the site? This action permanently removes them."
-msgstr "¿Seguro que deseas eliminar todos los enlaces del sitio? Esta acción los elimina de forma permanente."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:320
-msgid "Are you sure you want to move all your links to trash?"
-msgstr "¿Seguro que deseas mover todos tus enlaces a la papelera?"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:332
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:336
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:303
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:307
 msgid "Empty Trash"
 msgstr "Vaciar papelera"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:333
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:304
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "¿Seguro que deseas eliminar permanentemente todos los enlaces de la papelera? Esta acción no se puede deshacer."
 
@@ -8134,6 +8350,56 @@ msgstr "Convierte tu URL larga en un enlace corto y fácil de compartir"
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:73
 msgid "Expiration Date (Optional)"
 msgstr "Fecha de caducidad (opcional)"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:38
+msgid "Links deleted"
+msgstr "Enlaces eliminados"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:39
+msgid "All links have been permanently deleted."
+msgstr "Todos los enlaces se han eliminado permanentemente."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:44
+msgid "Links moved to trash"
+msgstr "Enlaces movidos a la papelera"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:45
+msgid "All links have been moved to trash."
+msgstr "Todos los enlaces se han movido a la papelera."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:55
+msgid "Failed to permanently delete all links"
+msgstr "Error al eliminar permanentemente todos los enlaces"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:56
+msgid "Failed to move all links to trash"
+msgstr "Error al mover todos los enlaces a la papelera"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:79
+msgid "Delete all links"
+msgstr "Eliminar todos los enlaces"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:102
+msgid "Are you sure you want to delete all links? You can move them to trash to restore later, or delete them permanently."
+msgstr "¿Seguro que quieres eliminar todos los enlaces? Puedes moverlos a la papelera para restaurarlos más tarde o eliminarlos permanentemente."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:106
+msgid "Are you sure you want to delete all links permanently? This action cannot be undone."
+msgstr "¿Seguro que quieres eliminar todos los enlaces permanentemente? Esta acción no se puede deshacer."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:109
+msgid "Are you sure you want to move all your links to the trash? You can restore them later."
+msgstr "¿Seguro que quieres mover todos tus enlaces a la papelera? Puedes restaurarlos más tarde."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:171
+msgid "Moving to Trash..."
+msgstr "Moviendo a la papelera..."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:176
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:217
+msgid "Move to Trash"
+msgstr "Mover a la papelera"
 
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficLocationTab.tsx:176
 msgid "No link data available"
@@ -8544,6 +8810,13 @@ msgstr "Tipos de dispositivo"
 msgid "Operating Systems"
 msgstr "Sistemas operativos"
 
+#: client/pages/dashboard/links/components/StatsDrawer/DeviceStats.tsx:257
+msgid "device"
+msgid_plural "devices"
+msgstr[0] "dispositivo"
+msgstr[1] "de dispositivos"
+msgstr[2] "dispositivos"
+
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:40
 msgid "Check out this link"
 msgstr "Mira este enlace"
@@ -8617,11 +8890,6 @@ msgstr "Error al mover el enlace a la papelera"
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:87
 msgid "Delete Link Permanently"
 msgstr "Eliminar enlace permanentemente"
-
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
-msgid "Move to Trash"
-msgstr "Mover a la papelera"
 
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:111
 msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
@@ -8959,6 +9227,13 @@ msgstr "No se pudo eliminar al usuario"
 #: client/pages/dashboard/users/hooks/useUsersManager.ts:223
 msgid "Failed to delete user."
 msgstr "Error al eliminar el usuario."
+
+#: client/pages/dashboard/users/hooks/useUsersManager.ts:106
+msgid "%d registered account"
+msgid_plural "%d registered accounts"
+msgstr[0] "%d cuenta registrada"
+msgstr[1] "%d de cuentas registradas"
+msgstr[2] "%d cuentas registradas"
 
 #: client/pages/dashboard/users/lib/formatters.ts:25
 msgid "Can manage users, settings, and all links."

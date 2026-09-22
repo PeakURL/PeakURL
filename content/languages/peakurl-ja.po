@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-21 09:45+0000\n"
-"POT-Creation-Date: 2026-09-21 09:45+0000\n"
+"PO-Revision-Date: 2026-09-22 08:17+0000\n"
+"POT-Creation-Date: 2026-09-22 08:17+0000\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Project-Id-Version: PeakURL 1.7.0\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -88,7 +88,7 @@ msgstr "you@company.com"
 
 #: install.php:598
 #: setup-config.php:807
-#: server/features/links/controller.php:508
+#: server/features/links/controller.php:514
 #: client/pages/auth/login/LoginPage.tsx:253
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:29
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:195
@@ -306,7 +306,7 @@ msgstr "唯一残っている管理者アカウントを降格することはで
 #: server/features/settings/validator.php:43
 #: server/features/settings/service.php:442
 #: server/features/settings/service.php:614
-#: server/features/links/service.php:1491
+#: server/features/links/service.php:1522
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:45
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "すべてのリンクを短縮・追跡・管理 - PeakURL"
@@ -816,86 +816,90 @@ msgstr "一括復元が完了しました。"
 msgid "Trash emptied successfully."
 msgstr "ゴミ箱を正常に空にしました。"
 
-#: server/features/links/controller.php:348
+#: server/features/links/controller.php:353
+msgid "All links moved to trash."
+msgstr "すべてのリンクをゴミ箱に移動しました。"
+
+#: server/features/links/controller.php:354
 msgid "All links deleted."
 msgstr "すべてのリンクを削除しました。"
 
-#: server/features/links/controller.php:446
+#: server/features/links/controller.php:452
 msgid "This link has expired"
 msgstr "このリンクは有効期限が切れています"
 
-#: server/features/links/controller.php:447
+#: server/features/links/controller.php:453
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "リクエストされた短縮リンクは、有効期限が切れているため利用できなくなりました。"
 
-#: server/features/links/controller.php:457
+#: server/features/links/controller.php:463
 msgid "This link is unavailable"
 msgstr "このリンクは利用できません"
 
-#: server/features/links/controller.php:458
+#: server/features/links/controller.php:464
 msgid "The short link you requested is not available right now."
 msgstr "リクエストされた短縮リンクは現在利用できません。"
 
-#: server/features/links/controller.php:503
+#: server/features/links/controller.php:509
 msgid "Password required"
 msgstr "パスワードが必要です"
 
-#: server/features/links/controller.php:504
+#: server/features/links/controller.php:510
 msgid "This link is protected. Enter the password to continue."
 msgstr "このリンクは保護されています。続行するにはパスワードを入力してください。"
 
-#: server/features/links/controller.php:511
+#: server/features/links/controller.php:517
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "パスワードを入力"
 
-#: server/features/links/controller.php:515
+#: server/features/links/controller.php:521
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "続行"
 
-#: server/features/links/controller.php:520
+#: server/features/links/controller.php:526
 msgid "Protected Link"
 msgstr "保護されたリンク"
 
-#: server/features/links/controller.php:567
+#: server/features/links/controller.php:573
 msgid "Performing security verification"
 msgstr "セキュリティ検証を実行中"
 
-#: server/features/links/controller.php:568
+#: server/features/links/controller.php:574
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr "このウェブサイトは、悪意のあるボットから保護するためにセキュリティサービスを使用しています。PeakURL がボットでないことを検証する間、このページが表示されます。"
 
-#: server/features/links/controller.php:572
+#: server/features/links/controller.php:578
 msgid "JavaScript is required to complete this verification."
 msgstr "この検証を完了するには JavaScript が必要です。"
 
-#: server/features/links/controller.php:575
+#: server/features/links/controller.php:581
 msgid "Security Verification"
 msgstr "セキュリティ検証"
 
-#: server/features/links/controller.php:672
-#: server/features/links/controller.php:833
+#: server/features/links/controller.php:678
+#: server/features/links/controller.php:839
 msgid "Waiting for verification…"
 msgstr "検証を待機中…"
 
-#: server/features/links/controller.php:675
+#: server/features/links/controller.php:681
 msgid "Checking verification…"
 msgstr "検証を確認中…"
 
-#: server/features/links/controller.php:678
+#: server/features/links/controller.php:684
 msgid "Starting verification…"
 msgstr "検証を開始中…"
 
-#: server/features/links/controller.php:681
+#: server/features/links/controller.php:687
 msgid "Verification expired. Please try again."
 msgstr "検証の有効期限が切れました。もう一度お試しください。"
 
-#: server/features/links/controller.php:684
+#: server/features/links/controller.php:690
 msgid "Verification could not be completed. Please try again."
 msgstr "検証を完了できませんでした。もう一度お試しください。"
 
-#: server/features/links/controller.php:838
+#: server/features/links/controller.php:844
 msgid "Try again"
 msgstr "再試行"
 
@@ -938,13 +942,15 @@ msgid "You do not have permission to edit this link."
 msgstr "このリンクを編集する権限がありません。"
 
 #: server/features/links/service.php:943
-#: server/features/links/service.php:1147
+#: server/features/links/service.php:1111
+#: server/features/links/service.php:1155
+#: server/features/links/service.php:1388
 msgid "You do not have permission to permanently delete links."
 msgstr "リンクを完全に削除する権限がありません。"
 
 #: server/features/links/service.php:949
-#: server/features/links/service.php:1114
-#: server/features/links/service.php:1367
+#: server/features/links/service.php:1117
+#: server/features/links/service.php:1394
 msgid "You do not have permission to delete links."
 msgstr "リンクを削除する権限がありません。"
 
@@ -965,19 +971,23 @@ msgstr "このリンクはすでにアクティブです。"
 msgid "You do not have permission to restore this link."
 msgstr "このリンクを復元する権限がありません。"
 
-#: server/features/links/service.php:1240
+#: server/features/links/service.php:1248
 msgid "You do not have permission to restore links."
 msgstr "リンクを復元する権限がありません。"
 
-#: server/features/links/service.php:1310
+#: server/features/links/service.php:1318
 msgid "You do not have permission to empty trash."
 msgstr "ゴミ箱を空にする権限がありません。"
 
-#: server/features/links/service.php:1800
+#: server/features/links/service.php:1379
+msgid "Invalid delete mode."
+msgstr "無効な削除モードです。"
+
+#: server/features/links/service.php:1831
 msgid "Complete the verification to open this link."
 msgstr "このリンクを開くには認証を完了してください。"
 
-#: server/features/links/service.php:1815
+#: server/features/links/service.php:1846
 msgid "Verification failed. Please try again."
 msgstr "認証に失敗しました。もう一度お試しください。"
 
@@ -1627,11 +1637,11 @@ msgstr "アップデートを開く"
 msgid "Location analytics is not ready yet."
 msgstr "位置情報解析の準備がまだ整っていません。"
 
-#: server/services/admin-notices/service.php:158
-msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard."
-msgstr "MaxMind 認証情報を追加して GeoLite2 City データベースをダウンロードすると、ダッシュボード全体で訪問者の国や都市のレポートが有効になります。"
+#: server/services/admin-notices/service.php:160
+msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard. <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">Read documentation</a>."
+msgstr "MaxMind の認証情報を追加し、GeoLite2 City データベースをダウンロードして、ダッシュボードで訪問者の国や都市のレポートを有効にしてください。<a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">ドキュメントを読む</a>。"
 
-#: server/services/admin-notices/service.php:163
+#: server/services/admin-notices/service.php:164
 msgid "Open Location Data"
 msgstr "位置情報データを開く"
 
@@ -1943,13 +1953,13 @@ msgid "PeakURL could not send the test email because your account email address 
 msgstr "アカウントのメールアドレスが無効であるため、PeakURL はテストメールを送信できませんでした。"
 
 #: server/services/notifications.php:275
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:246
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "SMTP"
 msgstr "SMTP"
 
 #: server/services/notifications.php:276
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:233
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "PHP mail()"
 msgstr "PHP mail()"
@@ -2098,6 +2108,27 @@ msgstr "設定されたキャッシュドライバが利用できません。フ
 msgid "No cache backend is currently usable; requests query the database directly."
 msgstr "利用可能なキャッシュバックエンドがありません。リクエストはデータベースに直接問い合わせます。"
 
+#: client/shared/formatting/formatters.ts:168
+#: client/shared/formatting/formatters.ts:195
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d秒"
+
+#: client/shared/formatting/formatters.ts:182
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d日"
+
+#: client/shared/formatting/formatters.ts:187
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d時間"
+
+#: client/shared/formatting/formatters.ts:192
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d分"
+
 #: client/components/ui/Loading/Loading.tsx:72
 msgid "Loading…"
 msgstr "読み込み中…"
@@ -2110,17 +2141,18 @@ msgstr "確認"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:884
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:371
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:399
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:542
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:563
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:733
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:573
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:742
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:828
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:590
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1491
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:145
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:150
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:130
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:172
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:18
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:275
@@ -2671,7 +2703,7 @@ msgstr "ツール"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:70
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:283
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:288
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:12
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:16
 #: client/pages/NotFoundPage.tsx:85
 #: client/router/pageTitle.ts:51
 #: client/router/pageTitle.ts:115
@@ -2681,8 +2713,8 @@ msgstr "インポート"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:76
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:303
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:308
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
-#: client/pages/dashboard/tools/export/ExportPage.tsx:154
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
+#: client/pages/dashboard/tools/export/ExportPage.tsx:157
 #: client/router/pageTitle.ts:119
 msgid "Export"
 msgstr "エクスポート"
@@ -2699,8 +2731,8 @@ msgstr "アクティビティ"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:322
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:327
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:253
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:255
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:260
 #: client/router/pageTitle.ts:123
 msgid "Scheduled Jobs"
 msgstr "スケジュールされたジョブ"
@@ -2805,7 +2837,7 @@ msgid "Search the dashboard"
 msgstr "ダッシュボードを検索"
 
 #: client/pages/layout/dashboard/Search/Search.tsx:191
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:208
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
 msgid "Clear search"
 msgstr "検索をクリア"
 
@@ -2851,7 +2883,7 @@ msgstr "ダッシュボード"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:96
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 #: client/pages/dashboard/links/components/Header/Header.tsx:42
 #: client/pages/NotFoundPage.tsx:75
 msgid "All Links"
@@ -2892,7 +2924,7 @@ msgstr "セキュリティ設定"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:184
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:188
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:79
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:93
 #: client/pages/dashboard/settings/Layout.tsx:31
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:998
 #: client/router/pageTitle.ts:26
@@ -3037,8 +3069,8 @@ msgstr "PeakURL はダッシュボードを再読み込みしています。"
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:252
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:191
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:195
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:202
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:207
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:88
 msgid "Success"
 msgstr "成功"
@@ -3545,8 +3577,8 @@ msgstr "最終生成日時:"
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:75
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:88
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:93
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:24
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:29
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
@@ -3966,9 +3998,9 @@ msgid "No default preview image"
 msgstr "デフォルトのプレビュー画像はありません"
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:889
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:759
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:768
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 msgid "Saving..."
 msgstr "保存中..."
@@ -3979,27 +4011,40 @@ msgstr "保存中..."
 msgid "Save Changes"
 msgstr "変更を保存"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:119
 msgid "Location Database"
 msgstr "位置情報データベース"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:121
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:122
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "永続コンテンツフォルダーに保存されているローカルの MaxMind GeoLite2 City データベースを使用して、国および都市のアクセス解析を有効にします。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:283
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:60
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:175
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:275
+#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:30
+msgid "Read documentation"
+msgstr "ドキュメントを読む"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:162
 msgid "Update Database"
 msgstr "データベースを更新"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:147
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:290
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:163
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:318
 msgid "Download Database"
 msgstr "データベースをダウンロード"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:154
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:61
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:196
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:201
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:332
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:34
@@ -4009,25 +4054,25 @@ msgstr "データベースをダウンロード"
 msgid "Status"
 msgstr "ステータス"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Ready"
 msgstr "準備完了"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:828
 msgid "Setup Required"
 msgstr "セットアップが必要"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
 msgid "Database Updated"
 msgstr "データベース更新済み"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:166
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:83
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:111
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -4038,12 +4083,12 @@ msgstr "データベース更新済み"
 msgid "Never"
 msgstr "なし"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:839
 msgid "Database Size"
 msgstr "データベースサイズ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:190
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:258
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:593
@@ -4054,81 +4099,85 @@ msgstr "データベースサイズ"
 msgid "Not available"
 msgstr "利用不可"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Location data unavailable"
 msgstr "位置情報データを利用できません"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:194
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:210
 msgid "Location analytics is enabled"
 msgstr "位置情報解析は有効です"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:211
 msgid "Location analytics is disabled"
 msgstr "位置情報解析は無効です"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:215
 msgid "PeakURL is using the local GeoLite2 City database for click locations."
 msgstr "PeakURL はクリック位置の特定にローカルの GeoLite2 City データベースを使用しています。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:202
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:218
 msgid "Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
 msgstr "MaxMind 認証情報を保存し、GeoLite2 City データベースをダウンロードして、訪問者の国や都市のアクセス解析を有効にします。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
 msgid "Dashboard management unavailable"
 msgstr "ダッシュボード管理を利用できません"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:236
 msgid "MaxMind Credentials"
 msgstr "MaxMind 認証情報"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:239
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "PeakURL はこれらの値を暗号化してデータベースに保存するため、後で再確認することなく GeoLite2 City データベースを更新できます。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:251
+msgid "How to get credentials"
+msgstr "認証情報の取得方法"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:262
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
 msgid "Account ID"
 msgstr "アカウント ID"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:245
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:273
 msgid "License Key"
 msgstr "ライセンスキー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:270
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "Update Credentials"
 msgstr "認証情報を更新"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:317
 msgid "Refresh Database"
 msgstr "データベースを更新"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:301
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:329
 msgid "MaxMind Account ID"
 msgstr "MaxMind アカウント ID"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:315
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:343
 msgid "MaxMind License Key"
 msgstr "MaxMind ライセンスキー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:353
 msgid "Enter a new MaxMind license key"
 msgstr "新しい MaxMind ライセンスキーを入力"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:354
 msgid "Enter your MaxMind license key"
 msgstr "MaxMind ライセンスキーを入力"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:334
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:362
 msgid "Saved license key:"
 msgstr "保存されたライセンスキー:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:356
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:384
 msgid "Save New Credentials"
 msgstr "新しい認証情報を保存"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:385
 msgid "Save Credentials"
 msgstr "認証情報を保存"
 
@@ -4373,7 +4422,7 @@ msgid "Paste the secret key from your CAPTCHA provider."
 msgstr "CAPTCHA プロバイダーからのシークレットキーを貼り付けます。"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:177
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
@@ -4413,75 +4462,75 @@ msgstr "CAPTCHA 保護"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "認証ページおよび公開短縮リンクのリダイレクト前に検証チャレンジを要求します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:285
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "CAPTCHA 保護を有効にする"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:316
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
 msgid "Loading CAPTCHA settings…"
 msgstr "CAPTCHA 設定を読み込み中…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:322
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:334
 msgid "Failed to load CAPTCHA settings."
 msgstr "CAPTCHA 設定の読み込みに失敗しました。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:340
 msgid "Provider Settings"
 msgstr "プロバイダー設定"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "保存された認証情報はマスクされています。必要に応じて変更または削除してください。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:347
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "CAPTCHA プロバイダーを選択し、APIキーを入力してください。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:345
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:391
 msgid "Provider"
 msgstr "プロバイダー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:353
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:397
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:365
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Site Key"
 msgstr "サイトキー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:421
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:373
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:433
 msgid "Secret Key"
 msgstr "シークレットキー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:400
 msgid "CAPTCHA provider"
 msgstr "CAPTCHA プロバイダー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:415
 msgid "Paste site key"
 msgstr "サイトキーを貼り付け"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:412
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
 msgid "Leave unchanged to keep the saved site key."
 msgstr "保存されたサイトキーを維持するには変更しないでください。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:430
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:442
 msgid "Keep saved secret"
 msgstr "保存されたシークレットを保持"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:443
 msgid "Paste secret key"
 msgstr "シークレットキーを貼り付け"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:483
 msgid "Change keys"
 msgstr "キーを変更"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:494
 msgid "Remove keys"
 msgstr "キーを削除"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:519
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
 msgid "Save Settings"
 msgstr "設定を保存"
 
@@ -4542,53 +4591,49 @@ msgstr "Webhook"
 msgid "PeakURL sends signed POST requests to your endpoint when selected link events happen."
 msgstr "PeakURL は、選択したリンクイベントが発生したときにエンドポイントに署名付き POST リクエストを送信します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:187
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:199
 msgid "Enable webhooks"
 msgstr "Webhook を有効にする"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:232
 msgid "Add New Webhook"
 msgstr "新規 Webhook を追加"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:235
 msgid "Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
 msgstr "配信をトリガーするイベントを選択し、署名シークレットが表示されたら安全な場所に保存してください。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:231
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:243
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
 msgid "Endpoint URL"
 msgstr "エンドポイント URL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:248
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
 msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route."
 msgstr "Zapier キャッチフック、n8n Webhook URL、独自の API ルートなど、POST リクエストを受け入れることができる公開 HTTPS エンドポイントを使用します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:272
 msgid "Events"
 msgstr "イベント"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:302
-msgid "Webhook docs"
-msgstr "Webhook ドキュメント"
-
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:313
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:328
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:70
 msgid "Creating..."
 msgstr "作成中..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:329
 msgid "Create Webhook"
 msgstr "Webhook を作成"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:321
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:336
 msgid "Loading webhooks…"
 msgstr "Webhook を読み込み中…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:342
 msgid "Failed to load webhooks"
 msgstr "Webhook の読み込みに失敗しました"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:359
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:374
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:56
 #: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:44
@@ -4596,141 +4641,129 @@ msgstr "Webhook の読み込みに失敗しました"
 msgid "Inactive"
 msgstr "非アクティブ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:391
 msgid "Signing secret stored"
 msgstr "署名シークレットを保存しました"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:386
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:128
 msgid "Created:"
 msgstr "作成日時:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:402
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:409
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:503
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:514
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:529
 msgid "Delete webhook"
 msgstr "Webhook を削除"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:427
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:442
 msgid "Copy Your Webhook Secret"
 msgstr "Webhook シークレットをコピー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:448
 msgid "This signing secret will not be shown again."
 msgstr "この署名シークレットは二度と表示されません。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:451
 msgid "Store it in your automation tool or secret manager before closing this window."
 msgstr "このウィンドウを閉じる前に、自動化ツールまたはシークレットマネージャーに保存してください。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:474
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:498
 msgid "Secret copied"
 msgstr "シークレットをコピーしました"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:477
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "クリップボードにコピー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:466
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:481
 msgid "If this secret is ever exposed, delete the webhook and create a new one."
 msgstr "このシークレットが漏洩した場合は、Webhook を削除して新しいものを作成してください。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:502
 msgid "Copy Secret"
 msgstr "シークレットをコピー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "保存しました"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:507
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:522
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "%s の Webhook を削除しますか？PeakURL はこのエンドポイントへの署名付きイベントリクエストの送信を直ちに停止します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:515
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:530
 msgid "Keep webhook"
 msgstr "Webhook を保持"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:41
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:40
 msgid "Connection"
 msgstr "接続"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:44
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:43
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:107
 msgid "Base API URL"
 msgstr "ベース API URL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:49
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:48
 msgid "Use this endpoint with WordPress, browser extensions, scripts, and other API clients."
 msgstr "WordPress、ブラウザ拡張機能、スクリプト、その他の API クライアントでこのエンドポイントを使用します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:62
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:76
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:114
 msgid "Base API URL copied to clipboard"
 msgstr "ベース API URL をクリップボードにコピーしました"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:66
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:80
 msgid "Copy API URL"
 msgstr "API URL をコピー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:87
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:101
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
 msgid "Create New Key"
 msgstr "新しいキーを作成"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:102
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:116
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:96
 msgid "API Key"
 msgstr "APIキー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:105
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:119
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:54
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:58
 msgid "Active"
 msgstr "アクティブ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:131
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:145
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:290
 msgid "Delete"
 msgstr "削除"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:148
 msgid "Delete API Key"
 msgstr "APIキーを削除"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:160
 msgid "No API Keys Generated"
 msgstr "APIキーが生成されていません"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:149
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:163
 msgid "Generate an API key to access endpoints programmatically."
 msgstr "APIキーを生成して、プログラムからエンドポイントにアクセスします。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:169
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:183
 msgid "Keep your API keys secure"
 msgstr "APIキーを安全に保管してください"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:186
 msgid "PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed."
 msgstr "PeakURL は作成時に 1回だけ完全なトークンを表示します。パスワードマネージャーまたはシークレットストアに保存し、漏洩したと思われる場合は直ちに取り消してください。"
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:189
-msgid "API documentation"
-msgstr "API ドキュメント"
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:193
-msgid "Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints."
-msgstr "認証、リンク、アクセス解析、ユーザー、Webhook、システムエンドポイントには公開ドキュメントを参照してください。"
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:209
-msgid "API Overview"
-msgstr "API の概要"
 
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:29
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:71
@@ -4777,233 +4810,233 @@ msgstr "このキーが漏洩した場合は、APIキーリストから取り消
 msgid "Copy Key"
 msgstr "キーをコピー"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:106
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:112
 msgid "1 Hour (3,600s) — Default"
 msgstr "1 時間 (3,600 秒) — デフォルト"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:107
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:113
 msgid "6 Hours (21,600s)"
 msgstr "6 時間 (21,600 秒)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:108
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
 msgid "24 Hours (86,400s)"
 msgstr "24 時間 (86,400 秒)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:109
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
 msgid "7 Days (604,800s)"
 msgstr "7 日間 (604,800 秒)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:124
 msgid "Custom Duration..."
 msgstr "カスタム期間..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:120
 msgid "1 Minute (60s) — Default"
 msgstr "1 分 (60 秒) — デフォルト"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:121
 msgid "3 Minutes (180s)"
 msgstr "3 分 (180 秒)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:122
 msgid "5 Minutes (300s)"
 msgstr "5 分 (300 秒)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:117
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:123
 msgid "15 Minutes (900s)"
 msgstr "15 分 (900 秒)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:165
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
 msgid "Automatic (Recommended)"
 msgstr "自動 (推奨)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:170
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:176
 msgid "Redis (In-Memory Cache)"
 msgstr "Redis (インメモリキャッシュ)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
 msgid "Redis (Unavailable — Server Unreachable)"
 msgstr "Redis (利用不可 — サーバーに到達できません)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:183
 msgid "APCu (PHP Shared Memory)"
 msgstr "APCu (PHP 共有メモリ)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:178
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
 msgid "APCu (Unavailable — Extension Not Loaded)"
 msgstr "APCu (利用不可 — 拡張機能がロードされていません)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
 msgid "Filesystem (content/cache)"
 msgstr "ファイルシステム (content/cache)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:191
 msgid "Filesystem (Unavailable — Directory Not Writable)"
 msgstr "ファイルシステム (利用不可 — ディレクトリに書き込み権限がありません)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:196
 msgid "Disabled (Direct Database Queries)"
 msgstr "無効 (直接データベースクエリ)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:878
 msgid "Redis"
 msgstr "Redis"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:201
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:207
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:880
 msgid "APCu"
 msgstr "APCu"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:203
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:209
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:882
 msgid "Filesystem"
 msgstr "ファイルシステム"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:211
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:506
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
 msgid "Direct Database"
 msgstr "直接データベース"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:286
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:292
 msgid "Performance & Caching"
 msgstr "パフォーマンスとキャッシュ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:295
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "リンクのリダイレクト遅延とスループットを最適化するために、オブジェクトキャッシュのバックエンドと TTL (有効期間) ポリシーを設定します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:306
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:541
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1490
 msgid "Purge Cache"
 msgstr "キャッシュを消去"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
 msgid "Active Engine"
 msgstr "稼働中のエンジン"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:318
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:339
 msgid "Cache Footprint"
 msgstr "キャッシュメモリ使用量"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:346
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
 msgid "%s cached items"
 msgstr "%s 個のキャッシュ項目"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:347
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
 msgid "%s cached files"
 msgstr "%s 個のキャッシュファイル"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:329
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:356
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
 msgid "0 B"
 msgstr "0 B"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:341
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:362
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
 msgid "Default TTL"
 msgstr "デフォルトTTL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:372
 msgid "Cache status unavailable"
 msgstr "キャッシュステータスを利用できません"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:389
 msgid "Object cache is operational"
 msgstr "オブジェクトキャッシュは正常に稼働しています"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:370
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:391
 msgid "Fallback cache driver active"
 msgstr "フォールバックキャッシュドライバが稼働中"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:371
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:392
 msgid "Object cache is disabled"
 msgstr "オブジェクトキャッシュは無効です"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:397
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "オブジェクトキャッシュが有効で、%s バックエンドを介してリダイレクトを処理しています。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:383
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "優先キャッシュドライバは現在利用できません。PeakURL は自動的に %s に切り替えました。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:409
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "オブジェクトキャッシュは無効です。リンク検索とリダイレクトはデータベースから直接処理されます。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:400
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:421
 msgid "Cache Engine Settings"
 msgstr "キャッシュエンジン設定"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:425
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "優先するキャッシュバックエンドを選択してください。優先ドライバが利用できない場合、PeakURL は最もパフォーマンスの高い稼働中バックエンドを自動選択します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:412
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:418
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:439
 msgid "Preferred Cache Driver"
 msgstr "優先キャッシュドライバ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:422
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:443
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "PeakURL は設定済みの場合は Redis、ロードされている場合は APCu、そして汎用フォールバックとしてファイルシステムを優先します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:430
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:438
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:451
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
 msgid "Redirect Cache TTL"
 msgstr "リダイレクトキャッシュ TTL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:463
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "有効な短縮 URL のリダイレクト先をキャッシュする有効期間 (TTL)。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:454
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:475
 msgid "Custom Redirect TTL (seconds)"
 msgstr "カスタムリダイレクト TTL (秒)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:480
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "リダイレクト先キャッシュの有効期間を秒単位で入力してください。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:469
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:477
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
 msgid "Negative Lookup (404) TTL"
 msgstr "非存在検索 (404) TTL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:481
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:502
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "自動スキャンによるデータベース負荷を軽減するために、存在しないリンク検索をキャッシュする有効期間 (TTL)。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:493
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:514
 msgid "Custom Negative TTL (seconds)"
 msgstr "カスタム非存在 TTL (秒)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:519
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "404 非存在検索のキャッシュ有効期間を秒単位で入力してください。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:539
 msgid "Reset"
 msgstr "リセット"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:528
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:549
 msgid "Save Performance Settings"
 msgstr "パフォーマンス設定を保存"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:537
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:558
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
 msgid "Purge Object Cache"
 msgstr "オブジェクトキャッシュを消去"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:538
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:559
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1487
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "オブジェクトキャッシュを消去してもよろしいですか？保存されているすべてのリダイレクトレコード、メモリ内オブジェクト、一時ファイルが直ちに無効化されます。以降のリクエストはデータベースから直接取得してキャッシュを再構築します。"
@@ -5029,117 +5062,117 @@ msgstr "メール配信"
 msgid "PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 msgstr "PeakURL はパスワード再設定メールやその他のアカウント復旧通知にこのメール転送を使用します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:195
 msgid "Mail status unavailable"
 msgstr "メールステータスを利用できません"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:229
 msgid "Delivery method"
 msgstr "配信方法"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
 msgid "Use the hosting server’s built-in PHP mail transport."
 msgstr "ホスティングサーバーの組み込み PHP メール転送を使用します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:235
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:247
 msgid "Send through your own SMTP server with optional authentication."
 msgstr "オプションの認証を備えた独自の SMTP サーバー経由で送信します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:251
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
 msgid "SMTP Configuration"
 msgstr "SMTP 設定"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:255
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:267
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
 msgid "From Name"
 msgstr "送信者名"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:275
 msgid "PeakURL"
 msgstr "PeakURL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:266
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:278
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Email"
 msgstr "送信者メールアドレス"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:277
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:289
 msgid "noreply@yourdomain.com"
 msgstr "noreply@yourdomain.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:294
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 msgid "SMTP Host"
 msgstr "SMTP ホスト"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:293
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:305
 msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:297
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:309
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 msgid "SMTP Port"
 msgstr "SMTP ポート"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:326
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "Encryption"
 msgstr "暗号化"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:337
 msgid "SMTP encryption"
 msgstr "SMTP 暗号化"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:342
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
 msgid "Authentication"
 msgstr "認証"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:362
 msgid "Authentication enabled"
 msgstr "認証が有効です"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:363
 msgid "Authentication disabled"
 msgstr "認証が無効です"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:391
 msgid "SMTP Username"
 msgstr "SMTP ユーザー名"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:402
 msgid "mailer@example.com"
 msgstr "mailer@example.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:406
 msgid "SMTP Password"
 msgstr "SMTP パスワード"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:405
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
 msgid "Leave blank to keep the saved password"
 msgstr "保存されたパスワードを維持するには空白のままにします"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:408
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:420
 msgid "Enter the SMTP password"
 msgstr "SMTP パスワードを入力"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:413
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:425
 msgid "Saved password: %s"
 msgstr "保存されたパスワード: %s"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:429
 msgid "PeakURL stores this password encrypted in the database."
 msgstr "PeakURL はこのパスワードを暗号化してデータベースに保存します。"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:447
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
 msgid "Send Test Email"
 msgstr "テストメールを送信"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:470
 msgid "Save Email Configuration"
 msgstr "メール設定を保存"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:471
 msgid "Use PHP mail()"
 msgstr "PHP mail() を使用"
 
@@ -5153,7 +5186,7 @@ msgstr "アカウントの環境設定と構成を管理します"
 
 #: client/pages/dashboard/settings/Layout.tsx:45
 #: client/pages/dashboard/about/AboutPage.tsx:231
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:115
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
 msgid "Performance"
 msgstr "パフォーマンス"
 
@@ -5181,9 +5214,34 @@ msgstr "%d 件再試行中"
 msgid "%d other"
 msgstr "%d 件その他"
 
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:110
+msgid "%d due job executed successfully."
+msgid_plural "%d due jobs executed successfully."
+msgstr[0] "%d件の実行予定ジョブが正常に実行されました。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:132
+msgid "%d due job was skipped."
+msgid_plural "%d due jobs were skipped."
+msgstr[0] "%d件の実行予定ジョブがスキップされました。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:154
+msgid "%d due job failed."
+msgid_plural "%d due jobs failed."
+msgstr[0] "%d件の実行予定ジョブが失敗しました。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:172
+msgid "%d due job scheduled for retry."
+msgid_plural "%d due jobs scheduled for retry."
+msgstr[0] "%d件の実行予定ジョブが再試行としてスケジュールされました。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:239
+msgid "%1$d due job processed: %2$s."
+msgid_plural "%1$d due jobs processed: %2$s."
+msgstr[0] "%1$d件の実行予定ジョブを処理しました: %2$s。"
+
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:21
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:57
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:330
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
 msgid "Run Due Jobs"
 msgstr "期限切れジョブを実行"
 
@@ -5195,290 +5253,290 @@ msgstr "現在期限を迎えているバックグラウンドジョブを実行
 msgid "This will trigger immediate execution of any background jobs whose scheduled interval has elapsed or claim lease has expired. Jobs that are not currently due will remain on their normal schedule."
 msgstr "これにより、スケジュールされた間隔が経過したか、ロック期間が期限切れになったバックグラウンドジョブが直ちに実行されます。まだ期限を迎えていないジョブは、通常のスケジュールのままになります。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:39
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:45
 msgid "No scheduled jobs registered"
 msgstr "スケジュールされたジョブが登録されていません"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:42
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:48
 msgid "No recurring background jobs have been discovered or synced in the system registry."
 msgstr "システムレジストリ内に定期的なバックグラウンドジョブが見つからないか、同期されていません。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:65
 msgid "Job"
 msgstr "ジョブ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:64
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:546
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:555
 msgid "Schedule"
 msgstr "スケジュール"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:200
 msgid "Last Run"
 msgstr "前回の実行"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
 msgid "Next Run"
 msgstr "次回の実行"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:79
 msgid "Result"
 msgstr "結果"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:82
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:112
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:127
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:55
 msgid "Actions"
 msgstr "アクション"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:130
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:419
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:136
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:428
 msgid "Customized"
 msgstr "カスタム"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:137
 msgid "Recommended"
 msgstr "推奨"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:179
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:189
 msgid "Executing now..."
 msgstr "実行中..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:200
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:212
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:102
 msgid "Skipped"
 msgstr "スキップ済み"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:216
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:228
 msgid "View Execution History"
 msgstr "実行履歴を表示"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:219
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:234
 msgid "History"
 msgstr "履歴"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:244
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:259
 msgid "Job is currently executing..."
 msgstr "ジョブは現在実行中です..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:262
 msgid "Execute Job Immediately"
 msgstr "ジョブを今すぐ実行"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:254
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:477
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:269
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:484
 msgid "Running..."
 msgstr "実行中..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:255
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:478
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:485
 msgid "Run Now"
 msgstr "今すぐ実行"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:45
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
 msgid "7 Days"
 msgstr "7 日間"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
 msgid "14 Days"
 msgstr "14 日間"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
 msgid "30 Days (Recommended)"
 msgstr "30 日間（推奨）"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
 msgid "60 Days"
 msgstr "60 日間"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
 msgid "90 Days"
 msgstr "90 日間"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
 msgid "180 Days"
 msgstr "180 日間"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
 msgid "1 Year"
 msgstr "1 年間"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:53
 msgid "Keep Indefinitely"
 msgstr "無期限に保持"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:56
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
 msgid "Every 5 minutes"
 msgstr "5 分ごと"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:57
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
 msgid "Every 15 minutes"
 msgstr "15 分ごと"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:58
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
 msgid "Every 30 minutes"
 msgstr "30 分ごと"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:21
 msgid "Hourly"
 msgstr "1 時間ごと"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
 msgid "Every 2 hours"
 msgstr "2 時間ごと"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
 msgid "Every 6 hours"
 msgstr "6 時間ごと"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:65
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:26
 msgid "Every 12 hours"
 msgstr "12 時間ごと"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:35
 msgid "Daily"
 msgstr "毎日"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:67
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:38
 msgid "Weekly"
 msgstr "毎週"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:138
 msgid "Execution history retention setting saved successfully."
 msgstr "実行履歴の保持設定が正常に保存されました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:144
 msgid "Failed to update history retention."
 msgstr "履歴の保持期間の更新に失敗しました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:170
 msgid "Schedule for [%s] updated successfully."
 msgstr "[%s] のスケジュールが正常に更新されました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:174
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:181
 msgid "Failed to update schedule for [%s]."
 msgstr "[%s] のスケジュールの更新に失敗しました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:192
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:199
 msgid "Reset [%s] to recommended default schedule."
 msgstr "[%s] を推奨されるデフォルトスケジュールにリセットしました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:203
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:210
 msgid "Failed to reset job schedule."
 msgstr "ジョブスケジュールのリセットに失敗しました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:254
 msgid "Manage Schedules & Retention"
 msgstr "スケジュールと保持設定の管理"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:257
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:619
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:628
 msgid "Site timezone: %s"
 msgstr "サイトのタイムゾーン: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:269
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:276
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:277
 msgid "Close schedules drawer"
 msgstr "スケジュールパネルを閉じる"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:286
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:293
 msgid "Execution History Retention"
 msgstr "実行履歴の保持"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:291
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:298
 msgid "Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
 msgstr "完了したバックグラウンドジョブの実行記録を保持する期間を選択します。アクティブまたは再試行中のジョブは、クリーンアップによって削除されることはありません。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:316
 msgid "History Retention Period"
 msgstr "履歴保持期間"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:327
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:334
 msgid "Save Retention"
 msgstr "保持設定を保存"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:341
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:348
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
 msgid "Registered Background Tasks"
 msgstr "登録済みのバックグラウンドタスク"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:350
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:357
 msgid "Recommended schedules are based on PeakURL's default maintenance cadence. You can customize any job and restore its recommended schedule at any time."
 msgstr "推奨スケジュールは、PeakURL のデフォルトのメンテナンス周期に基づいています。ジョブを自由にカスタマイズし、いつでも推奨スケジュールに戻すことができます。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:473
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:79
 msgid "Due now"
 msgstr "今すぐ実行可能"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:469
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:478
 msgid "Next: %s"
 msgstr "次回: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:517
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:791
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:459
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:526
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:800
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:466
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:532
 msgid "Close"
 msgstr "閉じる"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:520
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:529
 msgid "Configure"
 msgstr "設定"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:577
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:586
 msgid "Recurrence cadence."
 msgstr "繰り返し周期。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:589
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:598
 msgid "Preferred run time"
 msgstr "優先実行時刻"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:632
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
 msgid "Automatic execution"
 msgstr "自動実行"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:638
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:647
 msgid "Runs this job automatically when it is due."
 msgstr "期限が到来したときにこのジョブを自動的に実行します。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:650
 msgid "Automatic execution is disabled. You can still run this job manually."
 msgstr "自動実行は無効になっています。このジョブは引き続き手動で実行できます。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:653
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:662
 msgid "Toggle automatic execution"
 msgstr "自動実行の切り替え"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:710
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:818
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:719
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:827
 msgid "Reset to Recommended"
 msgstr "推奨設定にリセット"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:762
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:771
 msgid "Save Schedule"
 msgstr "スケジュールを保存"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:781
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:790
 msgid "Background job schedules and retention rules are stored permanently."
 msgstr "バックグラウンドジョブのスケジュールと保持ルールは永続的に保存されます。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:805
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:814
 msgid "Reset Schedule — %s"
 msgstr "スケジュールをリセット — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:810
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
 msgid "Restore the recommended PeakURL schedule for [%1$s] (%2$s)? Any customized interval, preferred run time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
 msgstr "[%1$s] (%2$s) の推奨 PeakURL スケジュールを復元しますか？カスタマイズされた間隔、優先実行時刻、および有効化状態は、組み込みの推奨設定にリセットされます。過去の実行履歴は保持されます。"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:23
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:391
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:408
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:169
 msgid "Running"
 msgstr "実行中"
@@ -5493,101 +5551,107 @@ msgid "Failed"
 msgstr "失敗"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:116
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:369
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:386
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:160
 msgid "Scheduled"
 msgstr "スケジュール済み"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:112
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:117
 msgid "Failed to clear job execution history."
 msgstr "ジョブ実行履歴の消去に失敗しました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:156
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:161
 msgid "Execution History — %s"
 msgstr "実行履歴 — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:172
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:173
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:177
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:178
 msgid "Close history drawer"
 msgstr "履歴パネルを閉じる"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:185
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:190
 msgid "Job ID"
 msgstr "ジョブ ID"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:211
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:216
 msgid "Recurrence"
 msgstr "繰り返し"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:222
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:227
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:212
 msgid "Next Due"
 msgstr "次回期日"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:245
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:250
 msgid "Most Recent Failure"
 msgstr "最新のエラー"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:271
 msgid "Recent Execution Logs"
 msgstr "最近の実行ログ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:272
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:279
 msgid "%d recorded"
 msgstr "%d 件記録済み"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:287
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:294
 msgid "Clear execution history for this job"
 msgstr "このジョブの実行履歴を消去"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:293
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:500
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:300
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:507
 msgid "Clear History"
 msgstr "履歴を消去"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:306
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:313
 msgid "No execution history yet."
 msgstr "実行履歴はまだありません。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:311
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:318
 msgid "This job has not been executed yet or past execution logs have expired."
 msgstr "このジョブはまだ実行されていないか、過去の実行ログの有効期限が切れています。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:322
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:329
 msgid "Run"
 msgstr "実行"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:328
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:335
 msgid "Attempt"
 msgstr "試行"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 msgid "Started"
 msgstr "開始日時"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:334
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:341
 msgid "Duration"
 msgstr "所要時間"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:337
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:344
 msgid "Output / Details"
 msgstr "出力 / 詳細"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:370
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:377
 msgid "#%d"
 msgstr "#%d"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:448
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:455
 msgid "Registry: %s"
 msgstr "レジストリ: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:494
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
 msgid "Clear Execution History — %s"
 msgstr "実行履歴を消去 — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:497
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:504
 msgid "Are you sure you want to clear execution history for this background job? Finished run records and output logs for this job will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "このバックグラウンドジョブの実行履歴を消去してもよろしいですか？完了した実行記録とログは完全に削除されます。アクティブおよび再試行中のジョブは保護されます。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:104
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:179
+msgid "Cleared %s execution history record."
+msgid_plural "Cleared %s execution history records."
+msgstr[0] "%s件の実行履歴レコードを消去しました。"
 
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:7
 msgid "Manual"
@@ -5601,126 +5665,261 @@ msgstr "毎分"
 msgid "%1$s at %2$s"
 msgstr "%1$s %2$s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:114
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:116
+msgid "Session Cleanup"
+msgstr "セッションのクリーンアップ"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:117
+msgid "GeoIP Database Refresh"
+msgstr "GeoIPデータベースの更新"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:118
+msgid "Expired Links Processing"
+msgstr "期限切れリンクの処理"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:119
+msgid "Cache Cleanup"
+msgstr "キャッシュのクリーンアップ"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:120
+msgid "Analytics & Trash Retention"
+msgstr "アクセス解析とゴミ箱の保持"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:121
+msgid "PeakURL Version Check"
+msgstr "PeakURLバージョン確認"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:122
+msgid "Webhook Delivery & Health"
+msgstr "Webhook配信と稼働状況"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:123
+msgid "Import & Export Scratch Cleanup"
+msgstr "インポート/エクスポート一時ファイルのクリーンアップ"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:124
+msgid "Link Destination Health Check"
+msgstr "リンク先URLの稼働状況確認"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:169
+msgid "Location data is not configured"
+msgstr "位置情報データが設定されていません"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:172
+msgid "GeoIP database is already up to date"
+msgstr "GeoIPデータベースはすでに最新です"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:180
+msgid "GeoLite2 City database refreshed at %s"
+msgstr "GeoLite2 Cityデータベースが %s で更新されました"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:189
+msgid "No expired links due for processing."
+msgstr "処理対象の期限切れリンクはありません。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:216
+msgid "Cache driver \"%s\" manages expiration automatically; no filesystem sweep required."
+msgstr "キャッシュドライバー \"%s\" は有効期限を自動的に管理します。ファイルシステムのクリーンアップは不要です。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:262
+msgid "Retention enforced: %1$s, %2$s."
+msgstr "保持ポリシーを適用しました: %1$s、%2$s。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:277
+msgid "Version check complete: remote release %s found."
+msgstr "バージョン確認完了: リモートリリース %s が見つかりました。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:286
+msgid "No pending webhook deliveries."
+msgstr "保留中のWebhook配信はありません。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
+msgid "No active links available for health check."
+msgstr "稼働確認対象のアクティブなリンクがありません。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:385
+msgid "GeoIP update failed: %s"
+msgstr "GeoIPの更新に失敗しました: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:394
+msgid "Version check failed: %s"
+msgstr "バージョン確認失敗: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:16
+msgid "Every %d minute"
+msgid_plural "Every %d minutes"
+msgstr[0] "%d分ごと"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:30
+msgid "Every %d hour"
+msgid_plural "Every %d hours"
+msgstr[0] "%d時間ごと"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:43
+msgid "Every %d day"
+msgid_plural "Every %d days"
+msgstr[0] "%d日ごと"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:156
+msgid "Pruned %d expired or revoked session."
+msgid_plural "Pruned %d expired or revoked sessions."
+msgstr[0] "%d件の期限切れまたは失効したセッションを削除しました。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:198
+msgid "Processed %d expired link."
+msgid_plural "Processed %d expired links."
+msgstr[0] "%d件の期限切れリンクを処理しました。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:229
+msgid "Purged %d expired file cache item."
+msgid_plural "Purged %d expired file cache items."
+msgstr[0] "%d件の期限切れファイルキャッシュ項目を消去しました。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:252
+msgid "%d trashed link purged"
+msgid_plural "%d trashed links purged"
+msgstr[0] "ゴミ箱のリンクを%d件消去しました"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:256
+msgid "%d old click purged"
+msgid_plural "%d old clicks purged"
+msgstr[0] "古いクリックを%d件消去しました"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:298
+msgid "Processed %1$d pending webhook delivery (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgid_plural "Processed %1$d pending webhook deliveries (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgstr[0] "%1$d件の保留中Webhook配信を処理しました（配信完了 %2$d件、再試行待ち %3$d件、失敗 %4$d件）。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:320
+msgid "Cleaned %d stale import/export temporary file."
+msgid_plural "Cleaned %d stale import/export temporary files."
+msgstr[0] "%d件の不要なインポート/エクスポート一時ファイルをクリーンアップしました。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:349
+msgid "Health check completed for %1$d link: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgid_plural "Health check completed for %1$d links: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgstr[0] "%1$d件のリンクのヘルスチェックが完了しました: 正常 %2$d件、到達不能 %3$d件、SSRFフィルターによるブロック %4$d件。"
+
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:119
 msgid "Job [%s] was skipped."
 msgstr "ジョブ [%s] はスキップされました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:123
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:128
 msgid "Job [%s] executed successfully."
 msgstr "ジョブ [%s] が正常に実行されました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:132
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:137
 msgid "Job [%s] execution failed."
 msgstr "ジョブ [%s] の実行に失敗しました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:142
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:147
 msgid "Failed to execute [%s]."
 msgstr "[%s] の実行に失敗しました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:168
 msgid "Failed to execute due background jobs."
 msgstr "期限を迎えたバックグラウンドジョブの実行に失敗しました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:186
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:191
 msgid "Failed to clear execution history."
 msgstr "実行履歴の消去に失敗しました。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:229
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:234
 #: client/pages/dashboard/plugins/PluginsPage.tsx:93
 #: client/pages/dashboard/users/UsersPage.tsx:44
 msgid "Admin access required"
 msgstr "管理者権限が必要です"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:232
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:237
 msgid "Only administrator accounts with update management capabilities can view and manage scheduled background jobs."
 msgstr "更新管理権限を持つ管理者アカウントのみが、スケジュールされたバックグラウンドジョブを表示および管理できます。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:249
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:254
 msgid "System Automation"
 msgstr "システム自動化"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:263
 msgid "Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
 msgstr "定期的なバックグラウンドタスクを検査し、実行状態を監視し、最近のログを確認し、権限がある場合は手動でジョブをトリガーします。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:287
 msgid "Refresh"
 msgstr "更新"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:271
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:288
 msgid "Refresh scheduled jobs status"
 msgstr "スケジュールされたジョブのステータスを更新"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:292
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
 msgid "Configure job recurrence schedules, preferred times, and history retention"
 msgstr "ジョブの繰り返しスケジュール、優先時間、および履歴の保持を設定します"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:297
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
 msgid "Manage Schedules"
 msgstr "スケジュールを管理"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:326
 msgid "Clear execution run history for all jobs"
 msgstr "すべてのジョブの実行履歴を消去"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:572
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:589
 msgid "Clear All History"
 msgstr "すべての履歴を消去"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:325
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:342
 msgid "Execute all jobs that are currently due"
 msgstr "現在期限を迎えているすべてのジョブを実行"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:364
 msgid "Total Jobs"
 msgstr "ジョブ総数"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:360
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:377
 msgid "Registered in system"
 msgstr "システムに登録済み"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:382
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:399
 msgid "Active recurring tasks"
 msgstr "アクティブな定期タスク"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:416
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:433
 msgid "Currently in progress"
 msgstr "現在進行中"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:425
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:442
 msgid "Failed / Retrying"
 msgstr "失敗 / 再試行中"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:451
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:468
 msgid "Requiring attention"
 msgstr "対応が必要"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
 msgid "Search jobs..."
 msgstr "ジョブを検索..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:495
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:512
 msgid "Failed to load scheduled jobs"
 msgstr "スケジュールされたジョブの読み込みに失敗しました"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:515
 msgid "Could not retrieve registered jobs from the scheduler API."
 msgstr "スケジューラ API から登録済みジョブを取得できませんでした。"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:525
 msgid "Retry"
 msgstr "再試行"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:516
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:533
 msgid "Loading scheduled jobs..."
 msgstr "スケジュールされたジョブを読み込み中..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:568
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:585
 msgid "Clear All Execution History"
 msgstr "すべての実行履歴を消去"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:569
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:586
 msgid "Are you sure you want to clear execution history across all background jobs? Finished run records and output logs will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "すべてのバックグラウンドジョブの実行履歴を消去してもよろしいですか？完了した実行記録と出力ログは完全に削除されます。アクティブおよび再試行中のジョブは保護されます。"
 
@@ -6303,113 +6502,113 @@ msgstr "スケジュールされたジョブを管理"
 msgid "Scheduler"
 msgstr "スケジューラ"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
 msgid "Preparing..."
 msgstr "準備中..."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:79
+#: client/pages/dashboard/tools/export/ExportPage.tsx:82
 msgid "CSV Export"
 msgstr "CSV エクスポート"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:80
+#: client/pages/dashboard/tools/export/ExportPage.tsx:83
 msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
 msgstr "スプレッドシートに対応したファイルをダウンロードします。後で PeakURL に再度インポートすることも可能です。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:83
+#: client/pages/dashboard/tools/export/ExportPage.tsx:86
 msgid "Comma-separated values (.csv)"
 msgstr "カンマ区切り値 (.csv)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:89
+#: client/pages/dashboard/tools/export/ExportPage.tsx:92
 msgid "JSON Export"
 msgstr "JSON エクスポート"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:90
+#: client/pages/dashboard/tools/export/ExportPage.tsx:93
 msgid "Download a structured snapshot for scripts, integrations, or backups."
 msgstr "スクリプト、連携、バックアップ用の構造化スナップショットをダウンロードします。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:93
+#: client/pages/dashboard/tools/export/ExportPage.tsx:96
 msgid "JavaScript Object Notation (.json)"
 msgstr "JSON形式 (.json)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:99
+#: client/pages/dashboard/tools/export/ExportPage.tsx:102
 msgid "XML Export"
 msgstr "XML エクスポート"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:100
+#: client/pages/dashboard/tools/export/ExportPage.tsx:103
 msgid "Download a portable XML feed with the full link dataset and analytics totals."
 msgstr "完全なリンクデータセットとアクセス解析合計を含むポータブルな XML フィードをダウンロードします。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:103
+#: client/pages/dashboard/tools/export/ExportPage.tsx:106
 msgid "Extensible Markup Language (.xml)"
 msgstr "XML形式 (.xml)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:118
+#: client/pages/dashboard/tools/export/ExportPage.tsx:121
 msgid "Nothing to export"
 msgstr "エクスポートするものがありません"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:119
+#: client/pages/dashboard/tools/export/ExportPage.tsx:122
 msgid "No links are available for export yet."
 msgstr "エクスポート可能なリンクはまだありません。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:126
+#: client/pages/dashboard/tools/export/ExportPage.tsx:129
 msgid "Export downloaded"
 msgstr "エクスポートをダウンロードしました"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:128
+#: client/pages/dashboard/tools/export/ExportPage.tsx:131
 msgid "Downloaded %1$s links as %2$s."
 msgstr "%1$s 件のリンクを %2$s としてダウンロードしました。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:135
+#: client/pages/dashboard/tools/export/ExportPage.tsx:138
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:59
 msgid "Export failed"
 msgstr "エクスポートに失敗しました"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:138
+#: client/pages/dashboard/tools/export/ExportPage.tsx:141
 msgid "PeakURL could not prepare the export right now."
 msgstr "PeakURL は現在エクスポートを準備できませんでした。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:152
+#: client/pages/dashboard/tools/export/ExportPage.tsx:155
 msgid "Data Export"
 msgstr "データエクスポート"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:156
+#: client/pages/dashboard/tools/export/ExportPage.tsx:159
 msgid "Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
 msgstr "オフライン分析、データ移行、または自動バックアップ用に、短縮リンクのデータセットをCSV、JSON、XML形式でエクスポートします。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/export/ExportPage.tsx:186
 msgid "Bulk Link Export"
 msgstr "リンクの一括エクスポート"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:175
+#: client/pages/dashboard/tools/export/ExportPage.tsx:190
 msgid "Each export includes destination URLs, custom aliases, titles, short URLs, total clicks, unique visitors, and creation dates."
 msgstr "各エクスポートには、転送先URL、カスタムエイリアス、タイトル、短縮URL、総クリック数、ユニークビジター数、作成日時が含まれます。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:180
+#: client/pages/dashboard/tools/export/ExportPage.tsx:195
 msgid "Exports follow your current role permissions. Administrators can export all site links, while Editors export links created by their account."
 msgstr "エクスポートは現在のロール権限に従います。管理者はサイト内のすべてのリンクをエクスポートでき、編集者は自身のアカウントで作成したリンクのみをエクスポートできます。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:188
+#: client/pages/dashboard/tools/export/ExportPage.tsx:203
 msgid "Exportable Links"
 msgstr "エクスポート可能なリンク"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:223
+#: client/pages/dashboard/tools/export/ExportPage.tsx:238
 msgid "API Export"
 msgstr "API エクスポート"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:226
+#: client/pages/dashboard/tools/export/ExportPage.tsx:241
 msgid "Use the API export endpoint to back up short links or integrate with automated workflows without opening the dashboard."
 msgstr "ダッシュボードを開かずに短縮リンクをバックアップしたり、自動化ワークフローと統合したりするには、APIエクスポートエンドポイントを使用します。"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:239
+#: client/pages/dashboard/tools/export/ExportPage.tsx:254
 msgid "Read Export Guide"
 msgstr "エクスポートガイドを読む"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:247
+#: client/pages/dashboard/tools/export/ExportPage.tsx:262
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:22
 msgid "Example Request"
 msgstr "リクエスト例"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:261
+#: client/pages/dashboard/tools/export/ExportPage.tsx:276
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:47
 msgid "Response"
 msgstr "レスポンス"
@@ -6426,11 +6625,11 @@ msgstr "ヘルプドキュメント"
 msgid "Newsletter"
 msgstr "ニュースレター"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:10
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
 msgid "Data Import"
 msgstr "データインポート"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:18
 msgid "Bulk import short links into PeakURL from CSV, JSON, or XML files, pasted URL lists, or automated API payloads."
 msgstr "CSV、JSON、XMLファイル、貼り付けたURLリスト、または自動APIペイロードからPeakURLに短縮リンクを一括インポートします。"
 
@@ -6944,12 +7143,12 @@ msgstr "%s 件選択中"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:64
 #: client/pages/dashboard/activity/components/ActivityModals/ActivityModals.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:79
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:84
 msgid "Delete selected"
 msgstr "選択項目を削除"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:72
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:89
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:95
 msgid "Delete all"
 msgstr "すべて削除"
 
@@ -7688,47 +7887,49 @@ msgstr "リンクの完全削除に失敗しました"
 msgid "Failed to move links to trash"
 msgstr "リンクをゴミ箱に移動できませんでした"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:83
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:88
 msgid "Delete Links Permanently"
 msgstr "リンクを完全に削除"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:84
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:89
 msgid "Move Links to Trash"
 msgstr "リンクをゴミ箱に移動"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:108
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:113
 msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
 msgstr "選択した1件のリンクを完全に削除してもよろしいですか？この操作は取り消せません。"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:112
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:117
 msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
 msgstr "選択した%s件のリンクを完全に削除してもよろしいですか？この操作は取り消せません。"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:118
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:123
 msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
 msgstr "選択した1件のリンクをゴミ箱に移動してもよろしいですか？後で復元できます。"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:122
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:127
 msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
 msgstr "選択した%s件のリンクをゴミ箱に移動してもよろしいですか？後で復元できます。"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:131
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:136
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:116
 msgid "Only links you have permission to remove will be affected. Admin-owned links will remain unchanged."
 msgstr "削除権限があるリンクのみが対象となります。管理者が所有するリンクは変更されません。"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:159
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:185
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:186
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:209
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:169
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:201
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:149
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:187
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:210
 msgid "Deleting..."
 msgstr "削除中..."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:165
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:192
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:175
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:208
 msgid "Delete Permanently (%s)"
 msgstr "完全に削除 (%s)"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:198
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:216
 msgid "Move to Trash (%s)"
 msgstr "ゴミ箱に移動 (%s)"
 
@@ -7817,6 +8018,7 @@ msgid "Restore selected"
 msgstr "選択項目を復元"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:56
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete permanently"
 msgstr "完全に削除"
 
@@ -7824,28 +8026,28 @@ msgstr "完全に削除"
 msgid "Empty trash"
 msgstr "ゴミ箱を空にする"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:108
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:114
 msgid "Select all links"
 msgstr "すべてのリンクを選択"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:111
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:117
 msgid "Link"
 msgstr "リンク"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:112
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
 msgid "Title"
 msgstr "タイトル"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:113
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:119
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:133
 msgid "Destination"
 msgstr "遷移先"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 msgid "Modified"
 msgstr "更新日"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:36
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:52
 msgid "Created"
@@ -7889,8 +8091,9 @@ msgid "Restore Link"
 msgstr "リンクを復元"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:257
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:191
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:215
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:154
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:192
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
 msgid "Delete Permanently"
 msgstr "完全に削除"
 
@@ -7927,49 +8130,20 @@ msgstr "リンクはまだありません"
 msgid "Create your first shortened link to get started"
 msgstr "開始するには最初の短縮リンクを作成してください"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:163
-msgid "Links deleted"
-msgstr "リンクを削除しました"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:164
-msgid "All links have been removed."
-msgstr "すべてのリンクが削除されました。"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:168
-msgid "Unable to delete links"
-msgstr "リンクを削除できません"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:169
-msgid "Failed to delete all links."
-msgstr "すべてのリンクの削除に失敗しました。"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 msgid "Trashed Links"
 msgstr "ゴミ箱内のリンク"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:200
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:175
 msgid "Search links..."
 msgstr "リンクを検索..."
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:314
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:324
-msgid "Delete all links"
-msgstr "すべてのリンクを削除"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:317
-msgid "Are you sure you want to delete all links across the site? This action permanently removes them."
-msgstr "サイト全体のすべてのリンクを削除してもよろしいですか？この操作により完全に削除されます。"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:320
-msgid "Are you sure you want to move all your links to trash?"
-msgstr "すべてのリンクをゴミ箱に移動してもよろしいですか？"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:332
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:336
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:303
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:307
 msgid "Empty Trash"
 msgstr "ゴミ箱を空にする"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:333
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:304
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "ゴミ箱内のすべてのリンクを完全に削除してもよろしいですか？この操作は取り消せません。"
 
@@ -8134,6 +8308,56 @@ msgstr "長い URL を共有しやすい短縮リンクに変換します"
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:73
 msgid "Expiration Date (Optional)"
 msgstr "有効期限（オプション）"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:38
+msgid "Links deleted"
+msgstr "リンクを削除しました"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:39
+msgid "All links have been permanently deleted."
+msgstr "すべてのリンクが完全に削除されました。"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:44
+msgid "Links moved to trash"
+msgstr "リンクをゴミ箱に移動しました"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:45
+msgid "All links have been moved to trash."
+msgstr "すべてのリンクがゴミ箱に移動されました。"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:55
+msgid "Failed to permanently delete all links"
+msgstr "すべてのリンクの完全な削除に失敗しました"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:56
+msgid "Failed to move all links to trash"
+msgstr "すべてのリンクのゴミ箱への移動に失敗しました"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:79
+msgid "Delete all links"
+msgstr "すべてのリンクを削除"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:102
+msgid "Are you sure you want to delete all links? You can move them to trash to restore later, or delete them permanently."
+msgstr "すべてのリンクを削除してもよろしいですか？後で復元できるようにゴミ箱に移動するか、完全に削除することができます。"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:106
+msgid "Are you sure you want to delete all links permanently? This action cannot be undone."
+msgstr "すべてのリンクを完全に削除してもよろしいですか？この操作は取り消せません。"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:109
+msgid "Are you sure you want to move all your links to the trash? You can restore them later."
+msgstr "すべてのリンクをゴミ箱に移動してもよろしいですか？後で復元できます。"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:171
+msgid "Moving to Trash..."
+msgstr "ゴミ箱に移動中..."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:176
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:217
+msgid "Move to Trash"
+msgstr "ゴミ箱に移動"
 
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficLocationTab.tsx:176
 msgid "No link data available"
@@ -8544,6 +8768,11 @@ msgstr "デバイスの種類"
 msgid "Operating Systems"
 msgstr "オペレーティングシステム"
 
+#: client/pages/dashboard/links/components/StatsDrawer/DeviceStats.tsx:257
+msgid "device"
+msgid_plural "devices"
+msgstr[0] "デバイス"
+
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:40
 msgid "Check out this link"
 msgstr "このリンクをチェック"
@@ -8617,11 +8846,6 @@ msgstr "リンクをゴミ箱に移動できませんでした"
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:87
 msgid "Delete Link Permanently"
 msgstr "リンクを完全に削除"
-
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
-msgid "Move to Trash"
-msgstr "ゴミ箱に移動"
 
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:111
 msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
@@ -8959,6 +9183,11 @@ msgstr "ユーザーを削除できません"
 #: client/pages/dashboard/users/hooks/useUsersManager.ts:223
 msgid "Failed to delete user."
 msgstr "ユーザーの削除に失敗しました。"
+
+#: client/pages/dashboard/users/hooks/useUsersManager.ts:106
+msgid "%d registered account"
+msgid_plural "%d registered accounts"
+msgstr[0] "%d個の登録アカウント"
 
 #: client/pages/dashboard/users/lib/formatters.ts:25
 msgid "Can manage users, settings, and all links."

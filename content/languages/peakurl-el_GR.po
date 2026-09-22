@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-21 09:45+0000\n"
-"POT-Creation-Date: 2026-09-21 09:45+0000\n"
+"PO-Revision-Date: 2026-09-22 08:17+0000\n"
+"POT-Creation-Date: 2026-09-22 08:17+0000\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "Project-Id-Version: PeakURL 1.7.0\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -88,7 +88,7 @@ msgstr "you@company.com"
 
 #: install.php:598
 #: setup-config.php:807
-#: server/features/links/controller.php:508
+#: server/features/links/controller.php:514
 #: client/pages/auth/login/LoginPage.tsx:253
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:29
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:195
@@ -306,7 +306,7 @@ msgstr "Δεν μπορείτε να υποβαθμίσετε τον μοναδ�
 #: server/features/settings/validator.php:43
 #: server/features/settings/service.php:442
 #: server/features/settings/service.php:614
-#: server/features/links/service.php:1491
+#: server/features/links/service.php:1522
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:45
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "Συντομεύστε, παρακολουθήστε και ελέγξτε κάθε σύνδεσμο - PeakURL"
@@ -816,86 +816,90 @@ msgstr "Η μαζική επαναφορά ολοκληρώθηκε."
 msgid "Trash emptied successfully."
 msgstr "Ο κάδος αδειάστηκε επιτυχώς."
 
-#: server/features/links/controller.php:348
+#: server/features/links/controller.php:353
+msgid "All links moved to trash."
+msgstr "Όλοι οι σύνδεσμοι μεταφέρθηκαν στον κάδο ανακύκλωσης."
+
+#: server/features/links/controller.php:354
 msgid "All links deleted."
 msgstr "Όλοι οι σύνδεσμοι διαγράφηκαν."
 
-#: server/features/links/controller.php:446
+#: server/features/links/controller.php:452
 msgid "This link has expired"
 msgstr "Αυτός ο σύνδεσμος έχει λήξει"
 
-#: server/features/links/controller.php:447
+#: server/features/links/controller.php:453
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "Ο σύντομος σύνδεσμος που ζητήσατε δεν είναι πλέον ενεργός επειδή έχει παρέλθει η ημερομηνία λήξης του."
 
-#: server/features/links/controller.php:457
+#: server/features/links/controller.php:463
 msgid "This link is unavailable"
 msgstr "Αυτός ο σύνδεσμος δεν είναι διαθέσιμος"
 
-#: server/features/links/controller.php:458
+#: server/features/links/controller.php:464
 msgid "The short link you requested is not available right now."
 msgstr "Ο σύντομος σύνδεσμος που ζητήσατε δεν είναι διαθέσιμος αυτή τη στιγμή."
 
-#: server/features/links/controller.php:503
+#: server/features/links/controller.php:509
 msgid "Password required"
 msgstr "Απαιτείται κωδικός πρόσβασης"
 
-#: server/features/links/controller.php:504
+#: server/features/links/controller.php:510
 msgid "This link is protected. Enter the password to continue."
 msgstr "Αυτός ο σύνδεσμος είναι προστατευμένος. Εισαγάγετε τον κωδικό πρόσβασης για να συνεχίσετε."
 
-#: server/features/links/controller.php:511
+#: server/features/links/controller.php:517
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Εισαγάγετε κωδικό πρόσβασης"
 
-#: server/features/links/controller.php:515
+#: server/features/links/controller.php:521
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Συνέχεια"
 
-#: server/features/links/controller.php:520
+#: server/features/links/controller.php:526
 msgid "Protected Link"
 msgstr "Προστατευμένος σύνδεσμος"
 
-#: server/features/links/controller.php:567
+#: server/features/links/controller.php:573
 msgid "Performing security verification"
 msgstr "Εκτέλεση επαλήθευσης ασφαλείας"
 
-#: server/features/links/controller.php:568
+#: server/features/links/controller.php:574
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr "Αυτός ο ιστότοπος χρησιμοποιεί μια υπηρεσία ασφαλείας για προστασία από κακόβουλα bots. Αυτή η σελίδα εμφανίζεται ενώ το PeakURL επαληθεύει ότι δεν είστε bot."
 
-#: server/features/links/controller.php:572
+#: server/features/links/controller.php:578
 msgid "JavaScript is required to complete this verification."
 msgstr "Απαιτείται JavaScript για την ολοκλήρωση αυτής της επαλήθευσης."
 
-#: server/features/links/controller.php:575
+#: server/features/links/controller.php:581
 msgid "Security Verification"
 msgstr "Επαλήθευση ασφαλείας"
 
-#: server/features/links/controller.php:672
-#: server/features/links/controller.php:833
+#: server/features/links/controller.php:678
+#: server/features/links/controller.php:839
 msgid "Waiting for verification…"
 msgstr "Αναμονή για επαλήθευση…"
 
-#: server/features/links/controller.php:675
+#: server/features/links/controller.php:681
 msgid "Checking verification…"
 msgstr "Έλεγχος επαλήθευσης…"
 
-#: server/features/links/controller.php:678
+#: server/features/links/controller.php:684
 msgid "Starting verification…"
 msgstr "Έναρξη επαλήθευσης…"
 
-#: server/features/links/controller.php:681
+#: server/features/links/controller.php:687
 msgid "Verification expired. Please try again."
 msgstr "Η επαλήθευση έληξε. Παρακαλούμε δοκιμάστε ξανά."
 
-#: server/features/links/controller.php:684
+#: server/features/links/controller.php:690
 msgid "Verification could not be completed. Please try again."
 msgstr "Η επαλήθευση δεν ήταν δυνατό να ολοκληρωθεί. Παρακαλούμε δοκιμάστε ξανά."
 
-#: server/features/links/controller.php:838
+#: server/features/links/controller.php:844
 msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
@@ -938,13 +942,15 @@ msgid "You do not have permission to edit this link."
 msgstr "Δεν έχετε άδεια επεξεργασίας αυτού του συνδέσμου."
 
 #: server/features/links/service.php:943
-#: server/features/links/service.php:1147
+#: server/features/links/service.php:1111
+#: server/features/links/service.php:1155
+#: server/features/links/service.php:1388
 msgid "You do not have permission to permanently delete links."
 msgstr "Δεν έχετε άδεια να διαγράφετε οριστικά συνδέσμους."
 
 #: server/features/links/service.php:949
-#: server/features/links/service.php:1114
-#: server/features/links/service.php:1367
+#: server/features/links/service.php:1117
+#: server/features/links/service.php:1394
 msgid "You do not have permission to delete links."
 msgstr "Δεν έχετε άδεια διαγραφής συνδέσμων."
 
@@ -965,19 +971,23 @@ msgstr "Αυτός ο σύνδεσμος είναι ήδη ενεργός."
 msgid "You do not have permission to restore this link."
 msgstr "Δεν έχετε άδεια για την επαναφορά αυτού του συνδέσμου."
 
-#: server/features/links/service.php:1240
+#: server/features/links/service.php:1248
 msgid "You do not have permission to restore links."
 msgstr "Δεν έχετε άδεια για την επαναφορά συνδέσμων."
 
-#: server/features/links/service.php:1310
+#: server/features/links/service.php:1318
 msgid "You do not have permission to empty trash."
 msgstr "Δεν έχετε άδεια να αδειάσετε τον κάδο απορριμμάτων."
 
-#: server/features/links/service.php:1800
+#: server/features/links/service.php:1379
+msgid "Invalid delete mode."
+msgstr "Μη έγκυρη λειτουργία διαγραφής."
+
+#: server/features/links/service.php:1831
 msgid "Complete the verification to open this link."
 msgstr "Ολοκληρώστε την επαλήθευση για να ανοίξετε αυτόν τον σύνδεσμο."
 
-#: server/features/links/service.php:1815
+#: server/features/links/service.php:1846
 msgid "Verification failed. Please try again."
 msgstr "Η επαλήθευση απέτυχε. Παρακαλούμε δοκιμάστε ξανά."
 
@@ -1627,11 +1637,11 @@ msgstr "Άνοιγμα ενημερώσεων"
 msgid "Location analytics is not ready yet."
 msgstr "Τα αναλυτικά στοιχεία τοποθεσίας δεν είναι έτοιμα ακόμα."
 
-#: server/services/admin-notices/service.php:158
-msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard."
-msgstr "Προσθέστε τα διαπιστευτήριά σας MaxMind και πραγματοποιήστε λήψη της βάσης δεδομένων GeoLite2 City για να ενεργοποιήσετε αναφορές χώρας και πόλης επισκεπτών στον πίνακα ελέγχου."
+#: server/services/admin-notices/service.php:160
+msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard. <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">Read documentation</a>."
+msgstr "Προσθέστε τα διαπιστευτήριά σας στο MaxMind και πραγματοποιήστε λήψη της βάσης δεδομένων GeoLite2 City για να ενεργοποιήσετε τις αναφορές χωρών και πόλεων επισκεπτών στον πίνακα ελέγχου. <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">Διαβάστε την τεκμηρίωση</a>."
 
-#: server/services/admin-notices/service.php:163
+#: server/services/admin-notices/service.php:164
 msgid "Open Location Data"
 msgstr "Άνοιγμα δεδομένων τοποθεσίας"
 
@@ -1943,13 +1953,13 @@ msgid "PeakURL could not send the test email because your account email address 
 msgstr "Το PeakURL δεν μπόρεσε να στείλει το δοκιμαστικό email επειδή η διεύθυνση email του λογαριασμού σας δεν είναι έγκυρη."
 
 #: server/services/notifications.php:275
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:246
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "SMTP"
 msgstr "SMTP"
 
 #: server/services/notifications.php:276
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:233
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "PHP mail()"
 msgstr "PHP mail()"
@@ -2098,6 +2108,31 @@ msgstr "Ο ρυθμισμένος οδηγός cache δεν είναι διαθ�
 msgid "No cache backend is currently usable; requests query the database directly."
 msgstr "Κανένα σύστημα cache δεν είναι διαθέσιμο. Τα αιτήματα εκτελούνται απευθείας στη βάση δεδομένων."
 
+#: client/shared/formatting/formatters.ts:168
+#: client/shared/formatting/formatters.ts:195
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d δευτερόλεπτο"
+msgstr[1] "%d δευτερόλεπτα"
+
+#: client/shared/formatting/formatters.ts:182
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d ημέρα"
+msgstr[1] "%d ημέρες"
+
+#: client/shared/formatting/formatters.ts:187
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d ώρα"
+msgstr[1] "%d ώρες"
+
+#: client/shared/formatting/formatters.ts:192
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d λεπτό"
+msgstr[1] "%d λεπτά"
+
 #: client/components/ui/Loading/Loading.tsx:72
 msgid "Loading…"
 msgstr "Φόρτωση…"
@@ -2110,17 +2145,18 @@ msgstr "Επιβεβαίωση"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:884
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:371
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:399
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:542
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:563
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:733
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:573
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:742
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:828
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:590
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1491
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:145
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:150
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:130
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:172
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:18
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:275
@@ -2671,7 +2707,7 @@ msgstr "Εργαλεία"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:70
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:283
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:288
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:12
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:16
 #: client/pages/NotFoundPage.tsx:85
 #: client/router/pageTitle.ts:51
 #: client/router/pageTitle.ts:115
@@ -2681,8 +2717,8 @@ msgstr "Εισαγωγή"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:76
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:303
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:308
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
-#: client/pages/dashboard/tools/export/ExportPage.tsx:154
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
+#: client/pages/dashboard/tools/export/ExportPage.tsx:157
 #: client/router/pageTitle.ts:119
 msgid "Export"
 msgstr "Εξαγωγή"
@@ -2699,8 +2735,8 @@ msgstr "Δραστηριότητα"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:322
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:327
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:253
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:255
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:260
 #: client/router/pageTitle.ts:123
 msgid "Scheduled Jobs"
 msgstr "Προγραμματισμένες εργασίες"
@@ -2805,7 +2841,7 @@ msgid "Search the dashboard"
 msgstr "Αναζήτηση στον πίνακα ελέγχου"
 
 #: client/pages/layout/dashboard/Search/Search.tsx:191
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:208
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
 msgid "Clear search"
 msgstr "Εκκαθάριση αναζήτησης"
 
@@ -2851,7 +2887,7 @@ msgstr "Πίνακας ελέγχου"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:96
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 #: client/pages/dashboard/links/components/Header/Header.tsx:42
 #: client/pages/NotFoundPage.tsx:75
 msgid "All Links"
@@ -2892,7 +2928,7 @@ msgstr "Ρυθμίσεις ασφαλείας"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:184
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:188
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:79
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:93
 #: client/pages/dashboard/settings/Layout.tsx:31
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:998
 #: client/router/pageTitle.ts:26
@@ -3037,8 +3073,8 @@ msgstr "Το PeakURL επαναφορτώνει τον πίνακα ελέγχο
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:252
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:191
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:195
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:202
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:207
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:88
 msgid "Success"
 msgstr "Επιτυχία"
@@ -3545,8 +3581,8 @@ msgstr "Τελευταία δημιουργία:"
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:75
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:88
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:93
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:24
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:29
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
@@ -3966,9 +4002,9 @@ msgid "No default preview image"
 msgstr "Δεν υπάρχει προεπιλεγμένη εικόνα προεπισκόπησης"
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:889
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:759
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:768
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 msgid "Saving..."
 msgstr "Αποθήκευση..."
@@ -3979,27 +4015,40 @@ msgstr "Αποθήκευση..."
 msgid "Save Changes"
 msgstr "Αποθήκευση αλλαγών"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:119
 msgid "Location Database"
 msgstr "Βάση δεδομένων τοποθεσιών"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:121
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:122
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "Ενεργοποιήστε τα αναλυτικά στοιχεία χώρας και πόλης με μια τοπική βάση δεδομένων MaxMind GeoLite2 City που είναι αποθηκευμένη στον φάκελο μόνιμου περιεχομένου σας."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:283
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:60
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:175
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:275
+#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:30
+msgid "Read documentation"
+msgstr "Διαβάστε την τεκμηρίωση"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:162
 msgid "Update Database"
 msgstr "Ενημέρωση βάσης δεδομένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:147
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:290
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:163
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:318
 msgid "Download Database"
 msgstr "Λήψη βάσης δεδομένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:154
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:61
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:196
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:201
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:332
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:34
@@ -4009,25 +4058,25 @@ msgstr "Λήψη βάσης δεδομένων"
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Ready"
 msgstr "Έτοιμο"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:828
 msgid "Setup Required"
 msgstr "Απαιτείται ρύθμιση"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
 msgid "Database Updated"
 msgstr "Η βάση δεδομένων ενημερώθηκε"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:166
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:83
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:111
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -4038,12 +4087,12 @@ msgstr "Η βάση δεδομένων ενημερώθηκε"
 msgid "Never"
 msgstr "Ποτέ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:839
 msgid "Database Size"
 msgstr "Μέγεθος βάσης δεδομένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:190
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:258
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:593
@@ -4054,81 +4103,85 @@ msgstr "Μέγεθος βάσης δεδομένων"
 msgid "Not available"
 msgstr "Μη διαθέσιμο"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Location data unavailable"
 msgstr "Τα δεδομένα τοποθεσίας δεν είναι διαθέσιμα"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:194
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:210
 msgid "Location analytics is enabled"
 msgstr "Τα αναλυτικά στοιχεία τοποθεσίας είναι ενεργοποιημένα"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:211
 msgid "Location analytics is disabled"
 msgstr "Τα αναλυτικά στοιχεία τοποθεσίας είναι απενεργοποιημένα"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:215
 msgid "PeakURL is using the local GeoLite2 City database for click locations."
 msgstr "Το PeakURL χρησιμοποιεί την τοπική βάση δεδομένων GeoLite2 City για τις τοποθεσίες των κλικ."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:202
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:218
 msgid "Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
 msgstr "Αποθηκεύστε τα διαπιστευτήριά σας MaxMind και, στη συνέχεια, κατεβάστε τη βάση δεδομένων GeoLite2 City για να ενεργοποιήσετε τα αναλυτικά στοιχεία χώρας και πόλης επισκεπτών."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
 msgid "Dashboard management unavailable"
 msgstr "Η διαχείριση του πίνακα ελέγχου δεν είναι διαθέσιμη"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:236
 msgid "MaxMind Credentials"
 msgstr "Διαπιστευτήρια MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:239
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "Το PeakURL αποθηκεύει αυτές τις τιμές κρυπτογραφημένες στη βάση δεδομένων, ώστε να μπορεί να ανανεώσει τη βάση δεδομένων GeoLite2 City αργότερα χωρίς να ρωτήσει ξανά."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:251
+msgid "How to get credentials"
+msgstr "Πώς να αποκτήσετε διαπιστευτήρια"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:262
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
 msgid "Account ID"
 msgstr "ID λογαριασμού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:245
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:273
 msgid "License Key"
 msgstr "Κλειδί άδειας χρήσης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:270
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "Update Credentials"
 msgstr "Ενημέρωση διαπιστευτηρίων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:317
 msgid "Refresh Database"
 msgstr "Ανανέωση βάσης δεδομένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:301
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:329
 msgid "MaxMind Account ID"
 msgstr "Αναγνωριστικό λογαριασμού MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:315
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:343
 msgid "MaxMind License Key"
 msgstr "Κλειδί άδειας χρήσης MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:353
 msgid "Enter a new MaxMind license key"
 msgstr "Εισαγάγετε ένα νέο κλειδί άδειας χρήσης MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:354
 msgid "Enter your MaxMind license key"
 msgstr "Εισαγάγετε το κλειδί άδειας χρήσης σας MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:334
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:362
 msgid "Saved license key:"
 msgstr "Αποθηκευμένο κλειδί άδειας χρήσης:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:356
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:384
 msgid "Save New Credentials"
 msgstr "Αποθήκευση νέων διαπιστευτηρίων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:385
 msgid "Save Credentials"
 msgstr "Αποθήκευση διαπιστευτηρίων"
 
@@ -4373,7 +4426,7 @@ msgid "Paste the secret key from your CAPTCHA provider."
 msgstr "Επικολλήστε το μυστικό κλειδί από τον πάροχο CAPTCHA σας."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:177
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
@@ -4413,75 +4466,75 @@ msgstr "Προστασία CAPTCHA"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "Απαίτηση δοκιμασίας επαλήθευσης στις σελίδες ελέγχου ταυτότητας και πριν από την ανακατεύθυνση δημόσιων σύντομων συνδέσμων."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:285
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "Ενεργοποίηση προστασίας CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:316
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
 msgid "Loading CAPTCHA settings…"
 msgstr "Φόρτωση ρυθμίσεων CAPTCHA…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:322
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:334
 msgid "Failed to load CAPTCHA settings."
 msgstr "Αποτυχία φόρτωσης των ρυθμίσεων CAPTCHA."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:340
 msgid "Provider Settings"
 msgstr "Ρυθμίσεις παρόχου"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "Τα αποθηκευμένα διαπιστευτήρια είναι καλυμμένα. Αλλάξτε τα ή αφαιρέστε τα όταν χρειάζεται."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:347
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "Επιλέξτε έναν πάροχο CAPTCHA και εισαγάγετε τα κλειδιά API σας."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:345
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:391
 msgid "Provider"
 msgstr "Πάροχος"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:353
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:397
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:365
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Site Key"
 msgstr "Κλειδί ιστότοπου"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:421
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:373
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:433
 msgid "Secret Key"
 msgstr "Μυστικό κλειδί"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:400
 msgid "CAPTCHA provider"
 msgstr "Πάροχος CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:415
 msgid "Paste site key"
 msgstr "Επικόλληση κλειδιού ιστότοπου"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:412
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
 msgid "Leave unchanged to keep the saved site key."
 msgstr "Αφήστε αμετάβλητο για να διατηρήσετε το αποθηκευμένο κλειδί ιστότοπου."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:430
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:442
 msgid "Keep saved secret"
 msgstr "Διατήρηση αποθηκευμένου μυστικού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:443
 msgid "Paste secret key"
 msgstr "Επικόλληση μυστικού κλειδιού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:483
 msgid "Change keys"
 msgstr "Αλλαγή κλειδιών"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:494
 msgid "Remove keys"
 msgstr "Διαγραφή les clés"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:519
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
 msgid "Save Settings"
 msgstr "Αποθήκευση ρυθμίσεων"
 
@@ -4542,53 +4595,49 @@ msgstr "Webhooks"
 msgid "PeakURL sends signed POST requests to your endpoint when selected link events happen."
 msgstr "Το PeakURL στέλνει υπογεγραμμένα αιτήματα POST στο τελικό σημείο σας όταν συμβαίνουν επιλεγμένα συμβάντα συνδέσμων."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:187
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:199
 msgid "Enable webhooks"
 msgstr "Ενεργοποίηση webhooks"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:232
 msgid "Add New Webhook"
 msgstr "Προσθήκη νέου webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:235
 msgid "Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
 msgstr "Επιλέξτε ποια συμβάντα θα πρέπει να ενεργοποιούν την παράδοση και, στη συνέχεια, αποθηκεύστε το μυστικό υπογραφής σε ασφαλές μέρος όταν εμφανιστεί."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:231
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:243
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
 msgid "Endpoint URL"
 msgstr "URL τελικού σημείου (Endpoint URL)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:248
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
 msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route."
 msgstr "Χρησιμοποιήστε ένα δημόσιο τελικό σημείο HTTPS που μπορεί να δέχεται αιτήματα POST, όπως ένα catch hook του Zapier, ένα URL webhook του n8n ή τη δική σας διαδρομή API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:272
 msgid "Events"
 msgstr "Συμβάντα"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:302
-msgid "Webhook docs"
-msgstr "Τεκμηρίωση webhook"
-
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:313
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:328
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:70
 msgid "Creating..."
 msgstr "Δημιουργία..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:329
 msgid "Create Webhook"
 msgstr "Δημιουργία webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:321
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:336
 msgid "Loading webhooks…"
 msgstr "Φόρτωση webhooks…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:342
 msgid "Failed to load webhooks"
 msgstr "Αποτυχία κατά την load webhooks."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:359
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:374
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:56
 #: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:44
@@ -4596,141 +4645,129 @@ msgstr "Αποτυχία κατά την load webhooks."
 msgid "Inactive"
 msgstr "Ανενεργό"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:391
 msgid "Signing secret stored"
 msgstr "Το μυστικό υπογραφής αποθηκεύτηκε"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:386
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:128
 msgid "Created:"
 msgstr "Δημιουργίαd:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:402
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:409
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:503
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:514
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:529
 msgid "Delete webhook"
 msgstr "Διαγραφή webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:427
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:442
 msgid "Copy Your Webhook Secret"
 msgstr "Αντιγράψτε το μυστικό του webhook σας"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:448
 msgid "This signing secret will not be shown again."
 msgstr "Αυτό το μυστικό υπογραφής δεν θα εμφανιστεί ξανά."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:451
 msgid "Store it in your automation tool or secret manager before closing this window."
 msgstr "Αποθηκεύστε το στο εργαλείο αυτοματισμού ή στον διαχειριστή μυστικών σας προτού κλείσετε αυτό το παράθυρο."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:474
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:498
 msgid "Secret copied"
 msgstr "Το μυστικό αντιγράφηκε"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:477
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "Αντιγραφή στο πρόχειρο"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:466
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:481
 msgid "If this secret is ever exposed, delete the webhook and create a new one."
 msgstr "Εάν αυτό το μυστικό εκτεθεί ποτέ, διαγράψτε το webhook και δημιουργήστε ένα νέο."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:502
 msgid "Copy Secret"
 msgstr "Αντιγραφή μυστικού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "Το έχω αποθηκεύσει"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:507
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:522
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "Διαγραφή του webhook για το %s; Το PeakURL θα σταματήσει αμέσως να στέλνει υπογεγραμμένα αιτήματα συμβάντων σε αυτό το τελικό σημείο."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:515
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:530
 msgid "Keep webhook"
 msgstr "Διατήρηση webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:41
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:40
 msgid "Connection"
 msgstr "Σύνδεση"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:44
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:43
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:107
 msgid "Base API URL"
 msgstr "Βασικό URL API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:49
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:48
 msgid "Use this endpoint with WordPress, browser extensions, scripts, and other API clients."
 msgstr "Χρησιμοποιήστε αυτό το τελικό σημείο με το WordPress, επεκτάσεις προγράμματος περιήγησης, σενάρια (scripts) και άλλους πελάτες API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:62
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:76
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:114
 msgid "Base API URL copied to clipboard"
 msgstr "Το βασικό URL API αντιγράφηκε στο πρόχειρο"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:66
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:80
 msgid "Copy API URL"
 msgstr "Αντιγραφή URL API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:87
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:101
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
 msgid "Create New Key"
 msgstr "Δημιουργία νέου κλειδιού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:102
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:116
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:96
 msgid "API Key"
 msgstr "Κλειδί API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:105
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:119
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:54
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:58
 msgid "Active"
 msgstr "Ενεργός"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:131
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:145
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:290
 msgid "Delete"
 msgstr "Διαγραφή"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:148
 msgid "Delete API Key"
 msgstr "Διαγραφή κλειδιού API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:160
 msgid "No API Keys Generated"
 msgstr "Δεν έχουν δημιουργηθεί κλειδιά API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:149
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:163
 msgid "Generate an API key to access endpoints programmatically."
 msgstr "Δημιουργήστε ένα κλειδί API για πρόσβαση στα τελικά σημεία μέσω προγραμματισμού."
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:169
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:183
 msgid "Keep your API keys secure"
 msgstr "Διατηρήστε τα κλειδιά API σας ασφαλή"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:186
 msgid "PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed."
 msgstr "Το PeakURL εμφανίζει το πλήρες διακριτικό μόνο μία φορά, κατά τη στιγμή της δημιουργίας. Αποθηκεύστε το σε έναν διαχειριστή κωδικών πρόσβασης ή χώρο αποθήκευσης μυστικών και ανακαλέστε το αμέσως εάν πιστεύετε ότι έχει εκτεθεί."
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:189
-msgid "API documentation"
-msgstr "Τεκμηρίωση API"
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:193
-msgid "Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints."
-msgstr "Χρησιμοποιήστε τη δημόσια τεκμηρίωση για τον έλεγχο ταυτότητας, τους συνδέσμους, τα αναλυτικά στοιχεία, τους χρήστες, τα webhooks και τα τελικά σημεία του συστήματος."
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:209
-msgid "API Overview"
-msgstr "Επισκόπηση API"
 
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:29
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:71
@@ -4777,233 +4814,233 @@ msgstr "Εάν αυτό το κλειδί εκτεθεί ποτέ, ανακαλ�
 msgid "Copy Key"
 msgstr "Αντιγραφή κλειδιού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:106
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:112
 msgid "1 Hour (3,600s) — Default"
 msgstr "1 Ώρα (3.600 δευτ.) — Προεπιλογή"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:107
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:113
 msgid "6 Hours (21,600s)"
 msgstr "6 Ώρες (21.600 δευτ.)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:108
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
 msgid "24 Hours (86,400s)"
 msgstr "24 Ώρες (86.400 δευτ.)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:109
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
 msgid "7 Days (604,800s)"
 msgstr "7 Ημέρες (604.800 δευτ.)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:124
 msgid "Custom Duration..."
 msgstr "Προσαρμοσμένη διάρκεια..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:120
 msgid "1 Minute (60s) — Default"
 msgstr "1 Λεπτό (60 δευτ.) — Προεπιλογή"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:121
 msgid "3 Minutes (180s)"
 msgstr "3 Λεπτά (180 δευτ.)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:122
 msgid "5 Minutes (300s)"
 msgstr "5 Λεπτά (300 δευτ.)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:117
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:123
 msgid "15 Minutes (900s)"
 msgstr "15 Λεπτά (900 δευτ.)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:165
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
 msgid "Automatic (Recommended)"
 msgstr "Αυτόματο (Συνιστάται)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:170
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:176
 msgid "Redis (In-Memory Cache)"
 msgstr "Redis (Προσωρινή μνήμη RAM)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
 msgid "Redis (Unavailable — Server Unreachable)"
 msgstr "Redis (Μη διαθέσιμο — Ο διακομιστής δεν είναι προσβάσιμος)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:183
 msgid "APCu (PHP Shared Memory)"
 msgstr "APCu (Κοινόχρηστη μνήμη PHP)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:178
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
 msgid "APCu (Unavailable — Extension Not Loaded)"
 msgstr "APCu (Μη διαθέσιμο — Η επέκταση δεν έχει φορτωθεί)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
 msgid "Filesystem (content/cache)"
 msgstr "Σύστημα αρχείων (content/cache)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:191
 msgid "Filesystem (Unavailable — Directory Not Writable)"
 msgstr "Σύστημα αρχείων (Μη διαθέσιμο — Ο κατάλογος δεν είναι εγγράψιμος)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:196
 msgid "Disabled (Direct Database Queries)"
 msgstr "Απενεργοποιημένο (Απευθείας ερωτήματα βάσης δεδομένων)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:878
 msgid "Redis"
 msgstr "Redis"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:201
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:207
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:880
 msgid "APCu"
 msgstr "APCu"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:203
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:209
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:882
 msgid "Filesystem"
 msgstr "Σύστημα αρχείων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:211
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:506
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
 msgid "Direct Database"
 msgstr "Απευθείας βάση δεδομένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:286
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:292
 msgid "Performance & Caching"
 msgstr "Απόδοση & Προσωρινή μνήμη"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:295
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "Διαμορφώστε μηχανισμούς προσωρινής μνήμης αντικειμένων και πολιτικές TTL για να βελτιστοποιήσετε την ταχύτητα ανακατεύθυνσης συνδέσμων."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:306
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:541
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1490
 msgid "Purge Cache"
 msgstr "Εκκαθάριση προσωρινής μνήμης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
 msgid "Active Engine"
 msgstr "Ενεργή μηχανή"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:318
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:339
 msgid "Cache Footprint"
 msgstr "Χρήση μνήμης cache"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:346
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
 msgid "%s cached items"
 msgstr "%s αποθηκευμένα στοιχεία"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:347
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
 msgid "%s cached files"
 msgstr "%s αποθηκευμένα αρχεία προσωρινής μνήμης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:329
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:356
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
 msgid "0 B"
 msgstr "0 B"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:341
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:362
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
 msgid "Default TTL"
 msgstr "Προεπιλεγμένο TTL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:372
 msgid "Cache status unavailable"
 msgstr "Η κατάσταση προσωρινής μνήμης δεν είναι διαθέσιμη"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:389
 msgid "Object cache is operational"
 msgstr "Η προσωρινή μνήμη αντικειμένων λειτουργεί κανονικά"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:370
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:391
 msgid "Fallback cache driver active"
 msgstr "Ενεργό εφεδρικό πρόγραμμα οδήγησης προσωρινής μνήμης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:371
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:392
 msgid "Object cache is disabled"
 msgstr "Η προσωρινή μνήμη αντικειμένων είναι απενεργοποιημένη"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:397
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "Η προσωρινή μνήμη αντικειμένων είναι ενεργή και εξυπηρετεί ανακατευθύνσεις μέσω του μηχανισμού %s."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:383
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "Το προτιμώμενο πρόγραμμα οδήγησης προσωρινής μνήμης δεν είναι διαθέσιμο αυτή τη στιγμή. Το PeakURL μεταφέρθηκε αυτόματα στο %s."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:409
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "Η προσωρινή μνήμη αντικειμένων είναι απενεργοποιημένη. Οι αναζητήσεις και οι ανακατευθύνσεις εξυπηρετούνται απευθείας από τη βάση δεδομένων."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:400
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:421
 msgid "Cache Engine Settings"
 msgstr "Ρυθμίσεις μηχανής προσωρινής μνήμης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:425
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "Επιλέξτε τον προτιμώμενο μηχανισμό προσωρινής μνήμης. Το PeakURL επιλέγει αυτόματα τον ταχύτερο λειτουργικό μηχανισμό εάν το προτιμώμενο πρόγραμμα οδήγησης δεν είναι διαθέσιμο."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:412
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:418
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:439
 msgid "Preferred Cache Driver"
 msgstr "Προτιμώμενο πρόγραμμα οδήγησης προσωρινής μνήμης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:422
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:443
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "Το PeakURL δίνει προτεραιότητα στο Redis (αν έχει ρυθμιστεί), στο APCu (αν έχει φορτωθεί) και στο σύστημα αρχείων ως καθολική εφεδρεία."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:430
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:438
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:451
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
 msgid "Redirect Cache TTL"
 msgstr "TTL προσωρινής μνήμης ανακατεύθυνσης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:463
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "Διάρκεια Time-to-Live (TTL) για την αποθήκευση στην προσωρινή μνήμη ενεργών προορισμών σύντομων URL."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:454
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:475
 msgid "Custom Redirect TTL (seconds)"
 msgstr "Προσαρμοσμένο TTL ανακατεύθυνσης (δευτερόλεπτα)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:480
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "Εισαγάγετε τη διάρκεια ζωής της προσωρινής μνήμης για προορισμούς ανακατεύθυνσης σε δευτερόλεπτα."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:469
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:477
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
 msgid "Negative Lookup (404) TTL"
 msgstr "TTL αρνητικής αναζήτησης (404)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:481
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:502
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "Διάρκεια Time-to-Live (TTL) για την αποθήκευση ανύπαρκτων συνδέσμων ώστε να μειωθεί ο φόρτος της βάσης δεδομένων από αυτόματες σαρώσεις."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:493
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:514
 msgid "Custom Negative TTL (seconds)"
 msgstr "Προσαρμοσμένο αρνητικό TTL (δευτερόλεπτα)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:519
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "Εισαγάγετε τη διάρκεια ζωής της προσωρινής μνήμης για αρνητικές αναζητήσεις 404 σε δευτερόλεπτα."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:539
 msgid "Reset"
 msgstr "Επαναφορά"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:528
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:549
 msgid "Save Performance Settings"
 msgstr "Αποθήκευση ρυθμίσεων απόδοσης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:537
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:558
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
 msgid "Purge Object Cache"
 msgstr "Εκκαθάριση προσωρινής μνήμης αντικειμένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:538
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:559
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1487
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "Είστε βέβαιοι ότι θέλετε να εκκαθαρίσετε την προσωρινή μνήμη αντικειμένων; Όλες οι εγγραφές ανακατεύθυνσης, τα αντικείμενα στη μνήμη και τα προσωρινά αρχεία θα ακυρωθούν αμέσως. Τα επόμενα αιτήματα θα ανακτήσουν δεδομένα απευθείας από τη βάση δεδομένων."
@@ -5029,117 +5066,117 @@ msgstr "Παράδοση email"
 msgid "PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 msgstr "Το PeakURL χρησιμοποιεί αυτήν τη μεταφορά αλληλογραφίας για μηνύματα επαναφοράς κωδικού πρόσβασης και άλλες ειδοποιήσεις ανάκτησης λογαριασμού."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:195
 msgid "Mail status unavailable"
 msgstr "Η κατάσταση αλληλογραφίας δεν είναι διαθέσιμη"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:229
 msgid "Delivery method"
 msgstr "Μέθοδος παράδοσης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
 msgid "Use the hosting server’s built-in PHP mail transport."
 msgstr "Χρησιμοποιήστε την ενσωματωμένη μεταφορά αλληλογραφίας PHP του διακομιστή φιλοξενίας."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:235
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:247
 msgid "Send through your own SMTP server with optional authentication."
 msgstr "Αποστολή μέσω του δικού σας διακομιστή SMTP με προαιρετικό έλεγχο ταυτότητας."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:251
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
 msgid "SMTP Configuration"
 msgstr "Διαμόρφωση SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:255
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:267
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
 msgid "From Name"
 msgstr "Όνομα αποστολέα"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:275
 msgid "PeakURL"
 msgstr "PeakURL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:266
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:278
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Email"
 msgstr "Email αποστολέα"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:277
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:289
 msgid "noreply@yourdomain.com"
 msgstr "noreply@yourdomain.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:294
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 msgid "SMTP Host"
 msgstr "Κεντρικός υπολογιστής SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:293
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:305
 msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:297
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:309
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 msgid "SMTP Port"
 msgstr "Θύρα SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:326
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "Encryption"
 msgstr "Κρυπτογράφηση"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:337
 msgid "SMTP encryption"
 msgstr "Κρυπτογράφηση SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:342
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
 msgid "Authentication"
 msgstr "Έλεγχος ταυτότητας"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:362
 msgid "Authentication enabled"
 msgstr "Ο έλεγχος ταυτότητας είναι ενεργοποιημένος"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:363
 msgid "Authentication disabled"
 msgstr "Ο έλεγχος ταυτότητας είναι απενεργοποιημένος"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:391
 msgid "SMTP Username"
 msgstr "Όνομα χρήστη SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:402
 msgid "mailer@example.com"
 msgstr "mailer@example.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:406
 msgid "SMTP Password"
 msgstr "Κωδικός πρόσβασης SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:405
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
 msgid "Leave blank to keep the saved password"
 msgstr "Αφήστε κενό για να διατηρήσετε τον αποθηκευμένο κωδικό πρόσβασης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:408
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:420
 msgid "Enter the SMTP password"
 msgstr "Εισαγάγετε τον κωδικό πρόσβασης SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:413
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:425
 msgid "Saved password: %s"
 msgstr "Αποθηκευμένος κωδικός πρόσβασης: %s"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:429
 msgid "PeakURL stores this password encrypted in the database."
 msgstr "Το PeakURL αποθηκεύει αυτόν τον κωδικό πρόσβασης κρυπτογραφημένο στη βάση δεδομένων."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:447
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
 msgid "Send Test Email"
 msgstr "Αποστολή δοκιμαστικού email"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:470
 msgid "Save Email Configuration"
 msgstr "Αποθήκευση διαμόρφωσης email"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:471
 msgid "Use PHP mail()"
 msgstr "Χρήση PHP mail()"
 
@@ -5153,7 +5190,7 @@ msgstr "Διαχειριστείτε τις προτιμήσεις και τις
 
 #: client/pages/dashboard/settings/Layout.tsx:45
 #: client/pages/dashboard/about/AboutPage.tsx:231
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:115
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
 msgid "Performance"
 msgstr "Απόδοση"
 
@@ -5181,9 +5218,39 @@ msgstr "%d σε επανάληψη"
 msgid "%d other"
 msgstr "%d άλλες"
 
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:110
+msgid "%d due job executed successfully."
+msgid_plural "%d due jobs executed successfully."
+msgstr[0] "%d προγραμματισμένη εργασία εκτελέστηκε με επιτυχία."
+msgstr[1] "%d προγραμματισμένες εργασίες εκτελέστηκαν με επιτυχία."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:132
+msgid "%d due job was skipped."
+msgid_plural "%d due jobs were skipped."
+msgstr[0] "%d προγραμματισμένη εργασία παραλείφθηκε."
+msgstr[1] "%d προγραμματισμένες εργασίες παραλείφθηκαν."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:154
+msgid "%d due job failed."
+msgid_plural "%d due jobs failed."
+msgstr[0] "%d προγραμματισμένη εργασία απέτυχε."
+msgstr[1] "%d προγραμματισμένες εργασίες απέτυχαν."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:172
+msgid "%d due job scheduled for retry."
+msgid_plural "%d due jobs scheduled for retry."
+msgstr[0] "%d προγραμματισμένη εργασία έχει προγραμματιστεί για επανάληψη."
+msgstr[1] "%d προγραμματισμένες εργασίες έχουν προγραμματιστεί για επανάληψη."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:239
+msgid "%1$d due job processed: %2$s."
+msgid_plural "%1$d due jobs processed: %2$s."
+msgstr[0] "Επεξεργάστηκε %1$d προγραμματισμένη εργασία: %2$s."
+msgstr[1] "Επεξεργάστηκαν %1$d προγραμματισμένες εργασίες: %2$s."
+
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:21
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:57
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:330
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
 msgid "Run Due Jobs"
 msgstr "Εκτέλεση ληξιπρόθεσμων εργασιών"
 
@@ -5195,290 +5262,290 @@ msgstr "Εκτέλεση των εργασιών παρασκηνίου που �
 msgid "This will trigger immediate execution of any background jobs whose scheduled interval has elapsed or claim lease has expired. Jobs that are not currently due will remain on their normal schedule."
 msgstr "Αυτό θα προκαλέσει άμεση εκτέλεση οποιωνδήποτε εργασιών παρασκηνίου των οποίων το προγραμματισμένο διάστημα έχει παρέλθει ή έχει λήξει η μίσθωση. Οι εργασίες που δεν λήγουν αυτή τη στιγμή θα παραμείνουν στο κανονικό τους πρόγραμμα."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:39
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:45
 msgid "No scheduled jobs registered"
 msgstr "Δεν έχουν καταχωρηθεί προγραμματισμένες εργασίες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:42
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:48
 msgid "No recurring background jobs have been discovered or synced in the system registry."
 msgstr "Δεν έχουν εντοπιστεί ή συγχρονιστεί επαναλαμβανόμενες εργασίες παρασκηνίου στο μητρώο του συστήματος."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:65
 msgid "Job"
 msgstr "Εργασία"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:64
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:546
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:555
 msgid "Schedule"
 msgstr "Χρονοδιάγραμμα"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:200
 msgid "Last Run"
 msgstr "Τελευταία εκτέλεση"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
 msgid "Next Run"
 msgstr "Επόμενη εκτέλεση"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:79
 msgid "Result"
 msgstr "Αποτέλεσμα"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:82
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:112
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:127
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:55
 msgid "Actions"
 msgstr "Ενέργειες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:130
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:419
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:136
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:428
 msgid "Customized"
 msgstr "Προσαρμοσμένο"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:137
 msgid "Recommended"
 msgstr "Συνιστώμενο"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:179
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:189
 msgid "Executing now..."
 msgstr "Εκτελείται τώρα..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:200
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:212
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:102
 msgid "Skipped"
 msgstr "Παραλείφθηκε"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:216
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:228
 msgid "View Execution History"
 msgstr "Προβολή ιστορικού εκτελέσεων"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:219
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:234
 msgid "History"
 msgstr "Ιστορικό"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:244
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:259
 msgid "Job is currently executing..."
 msgstr "Η εργασία εκτελείται αυτήν τη στιγμή..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:262
 msgid "Execute Job Immediately"
 msgstr "Άμεση εκτέλεση εργασίας"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:254
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:477
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:269
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:484
 msgid "Running..."
 msgstr "Εκτελείται..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:255
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:478
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:485
 msgid "Run Now"
 msgstr "Εκτέλεση τώρα"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:45
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
 msgid "7 Days"
 msgstr "7 ημέρες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
 msgid "14 Days"
 msgstr "14 ημέρες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
 msgid "30 Days (Recommended)"
 msgstr "30 ημέρες (Συνιστάται)"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
 msgid "60 Days"
 msgstr "60 ημέρες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
 msgid "90 Days"
 msgstr "90 ημέρες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
 msgid "180 Days"
 msgstr "180 ημέρες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
 msgid "1 Year"
 msgstr "1 έτος"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:53
 msgid "Keep Indefinitely"
 msgstr "Διατήρηση επ' αόριστον"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:56
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
 msgid "Every 5 minutes"
 msgstr "Κάθε 5 λεπτά"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:57
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
 msgid "Every 15 minutes"
 msgstr "Κάθε 15 λεπτά"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:58
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
 msgid "Every 30 minutes"
 msgstr "Κάθε 30 λεπτά"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:21
 msgid "Hourly"
 msgstr "Κάθε ώρα"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
 msgid "Every 2 hours"
 msgstr "Κάθε 2 ώρες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
 msgid "Every 6 hours"
 msgstr "Κάθε 6 ώρες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:65
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:26
 msgid "Every 12 hours"
 msgstr "Κάθε 12 ώρες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:35
 msgid "Daily"
 msgstr "Καθημερινά"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:67
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:38
 msgid "Weekly"
 msgstr "Εβδομαδιαία"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:138
 msgid "Execution history retention setting saved successfully."
 msgstr "Η ρύθμιση διατήρησης ιστορικού εκτελέσεων αποθηκεύτηκε με επιτυχία."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:144
 msgid "Failed to update history retention."
 msgstr "Αποτυχία ενημέρωσης διατήρησης ιστορικού."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:170
 msgid "Schedule for [%s] updated successfully."
 msgstr "Το χρονοδιάγραμμα για το [%s] ενημερώθηκε με επιτυχία."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:174
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:181
 msgid "Failed to update schedule for [%s]."
 msgstr "Αποτυχία ενημέρωσης χρονοδιαγράμματος για το [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:192
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:199
 msgid "Reset [%s] to recommended default schedule."
 msgstr "Επαναφορά του [%s] στο συνιστώμενο προεπιλεγμένο χρονοδιάγραμμα."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:203
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:210
 msgid "Failed to reset job schedule."
 msgstr "Αποτυχία επαναφοράς χρονοδιαγράμματος εργασίας."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:254
 msgid "Manage Schedules & Retention"
 msgstr "Διαχείριση χρονοδιαγραμμάτων & διατήρησης"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:257
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:619
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:628
 msgid "Site timezone: %s"
 msgstr "Ζώνη ώρας ιστοτόπου: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:269
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:276
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:277
 msgid "Close schedules drawer"
 msgstr "Κλείσιμο πλαισίου χρονοδιαγραμμάτων"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:286
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:293
 msgid "Execution History Retention"
 msgstr "Διατήρηση ιστορικού εκτελέσεων"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:291
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:298
 msgid "Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
 msgstr "Επιλέξτε για πόσο καιρό διατηρούνται οι εγγραφές εκτέλεσης των ολοκληρωμένων εργασιών. Οι ενεργές εκτελέσεις και αυτές που επαναλαμβάνονται δεν καταργούνται ποτέ κατά την εκκαθάριση."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:316
 msgid "History Retention Period"
 msgstr "Περίοδος διατήρησης ιστορικού"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:327
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:334
 msgid "Save Retention"
 msgstr "Αποθήκευση διατήρησης"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:341
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:348
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
 msgid "Registered Background Tasks"
 msgstr "Καταχωρημένες εργασίες παρασκηνίου"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:350
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:357
 msgid "Recommended schedules are based on PeakURL's default maintenance cadence. You can customize any job and restore its recommended schedule at any time."
 msgstr "Τα συνιστώμενα προγράμματα βασίζονται στον προεπιλεγμένο ρυθμό συντήρησης του PeakURL. Μπορείτε να προσαρμόσετε οποιαδήποτε εργασία και να επαναφέρετε το συνιστώμενο πρόγραμμά της ανά πάσα στιγμή."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:473
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:79
 msgid "Due now"
 msgstr "Λήγει τώρα"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:469
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:478
 msgid "Next: %s"
 msgstr "Επόμενη: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:517
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:791
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:459
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:526
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:800
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:466
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:532
 msgid "Close"
 msgstr "Κλείσιμο"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:520
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:529
 msgid "Configure"
 msgstr "Διαμόρφωση"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:577
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:586
 msgid "Recurrence cadence."
 msgstr "Ρυθμός επανάληψης."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:589
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:598
 msgid "Preferred run time"
 msgstr "Προτιμώμενη ώρα εκτέλεσης"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:632
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
 msgid "Automatic execution"
 msgstr "Αυτόματη εκτέλεση"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:638
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:647
 msgid "Runs this job automatically when it is due."
 msgstr "Εκτελεί αυτήν την εργασία αυτόματα όταν έρθει η ώρα της."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:650
 msgid "Automatic execution is disabled. You can still run this job manually."
 msgstr "Η αυτόματη εκτέλεση είναι απενεργοποιημένη. Μπορείτε να εκτελέσετε αυτήν την εργασία χειροκίνητα."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:653
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:662
 msgid "Toggle automatic execution"
 msgstr "Εναλλαγή αυτόματης εκτέλεσης"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:710
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:818
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:719
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:827
 msgid "Reset to Recommended"
 msgstr "Επαναφορά στο συνιστώμενο"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:762
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:771
 msgid "Save Schedule"
 msgstr "Αποθήκευση χρονοδιαγράμματος"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:781
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:790
 msgid "Background job schedules and retention rules are stored permanently."
 msgstr "Τα χρονοδιαγράμματα εργασιών και οι κανόνες διατήρησης αποθηκεύονται μόνιμα."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:805
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:814
 msgid "Reset Schedule — %s"
 msgstr "Επαναφορά χρονοδιαγράμματος — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:810
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
 msgid "Restore the recommended PeakURL schedule for [%1$s] (%2$s)? Any customized interval, preferred run time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
 msgstr "Επαναφορά του συνιστώμενου χρονοδιαγράμματος PeakURL για [%1$s] (%2$s); Οποιοδήποτε προσαρμοσμένο διάστημα, προτιμώμενη ώρα εκτέλεσης και κατάσταση ενεργοποίησης θα επανέλθουν στην ενσωματωμένη σύσταση. Το ιστορικό προηγούμενων εκτελέσεων θα διατηρηθεί."
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:23
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:391
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:408
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:169
 msgid "Running"
 msgstr "Εκτελείται"
@@ -5493,101 +5560,108 @@ msgid "Failed"
 msgstr "Απέτυχε"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:116
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:369
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:386
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:160
 msgid "Scheduled"
 msgstr "Προγραμματίστηκε"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:112
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:117
 msgid "Failed to clear job execution history."
 msgstr "Αποτυχία εκκαθάρισης ιστορικού εκτέλεσης της εργασίας."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:156
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:161
 msgid "Execution History — %s"
 msgstr "Ιστορικό εκτελέσεων — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:172
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:173
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:177
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:178
 msgid "Close history drawer"
 msgstr "Κλείσιμο πλαισίου ιστορικού"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:185
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:190
 msgid "Job ID"
 msgstr "Αναγνωριστικό εργασίας"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:211
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:216
 msgid "Recurrence"
 msgstr "Επανάληψη"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:222
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:227
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:212
 msgid "Next Due"
 msgstr "Επόμενη λήξη"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:245
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:250
 msgid "Most Recent Failure"
 msgstr "Πιο πρόσφατη αποτυχία"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:271
 msgid "Recent Execution Logs"
 msgstr "Πρόσφατα αρχεία καταγραφής εκτέλεσης"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:272
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:279
 msgid "%d recorded"
 msgstr "%d καταγράφηκαν"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:287
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:294
 msgid "Clear execution history for this job"
 msgstr "Εκκαθάριση ιστορικού εκτελέσεων για αυτήν την εργασία"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:293
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:500
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:300
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:507
 msgid "Clear History"
 msgstr "Εκκαθάριση ιστορικού"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:306
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:313
 msgid "No execution history yet."
 msgstr "Δεν υπάρχει ακόμη ιστορικό εκτέλεσης."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:311
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:318
 msgid "This job has not been executed yet or past execution logs have expired."
 msgstr "Αυτή η εργασία δεν έχει εκτελεστεί ακόμα ή τα αρχεία καταγραφής έχουν λήξει."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:322
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:329
 msgid "Run"
 msgstr "Εκτέλεση"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:328
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:335
 msgid "Attempt"
 msgstr "Προσπάθεια"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 msgid "Started"
 msgstr "Ξεκίνησε"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:334
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:341
 msgid "Duration"
 msgstr "Διάρκεια"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:337
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:344
 msgid "Output / Details"
 msgstr "Έξοδος / Λεπτομέρειες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:370
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:377
 msgid "#%d"
 msgstr "#%d"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:448
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:455
 msgid "Registry: %s"
 msgstr "Μητρώο: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:494
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
 msgid "Clear Execution History — %s"
 msgstr "Εκκαθάριση ιστορικού εκτελέσεων — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:497
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:504
 msgid "Are you sure you want to clear execution history for this background job? Finished run records and output logs for this job will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "Είστε βέβαιοι ότι θέλετε να εκκαθαρίσετε το ιστορικό εκτελέσεων για αυτήν την εργασία παρασκηνίου; Οι ολοκληρωμένες εγγραφές και τα αρχεία καταγραφής εξόδου θα διαγραφούν οριστικά. Οι ενεργές εκτελέσεις και οι εκτελέσεις σε επανάληψη θα παραμείνουν προστατευμένες."
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:104
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:179
+msgid "Cleared %s execution history record."
+msgid_plural "Cleared %s execution history records."
+msgstr[0] "Εκκαθαρίστηκε %s εγγραφή ιστορικού εκτέλεσης."
+msgstr[1] "Εκκαθαρίστηκαν %s εγγραφές ιστορικού εκτέλεσης."
 
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:7
 msgid "Manual"
@@ -5601,126 +5675,272 @@ msgstr "Κάθε λεπτό"
 msgid "%1$s at %2$s"
 msgstr "%1$s στις %2$s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:114
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:116
+msgid "Session Cleanup"
+msgstr "Εκκαθάριση συνεδριών"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:117
+msgid "GeoIP Database Refresh"
+msgstr "Ανανέωση βάσης δεδομένων GeoIP"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:118
+msgid "Expired Links Processing"
+msgstr "Επεξεργασία ληγμένων συνδέσμων"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:119
+msgid "Cache Cleanup"
+msgstr "Εκκαθάριση μνήμης cache"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:120
+msgid "Analytics & Trash Retention"
+msgstr "Διατήρηση αναλυτικών στοιχείων & κάδου"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:121
+msgid "PeakURL Version Check"
+msgstr "Έλεγχος έκδοσης PeakURL"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:122
+msgid "Webhook Delivery & Health"
+msgstr "Παράδοση και κατάσταση webhook"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:123
+msgid "Import & Export Scratch Cleanup"
+msgstr "Εκκαθάριση προσωρινών αρχείων εισαγωγής/εξαγωγής"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:124
+msgid "Link Destination Health Check"
+msgstr "Έλεγχος κατάστασης προορισμού συνδέσμων"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:169
+msgid "Location data is not configured"
+msgstr "Τα δεδομένα τοποθεσίας δεν έχουν ρυθμιστεί"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:172
+msgid "GeoIP database is already up to date"
+msgstr "Η βάση δεδομένων GeoIP είναι ήδη ενημερωμένη"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:180
+msgid "GeoLite2 City database refreshed at %s"
+msgstr "Η βάση δεδομένων GeoLite2 City ανανεώθηκε στο %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:189
+msgid "No expired links due for processing."
+msgstr "Δεν υπάρχουν ληγμένοι σύνδεσμοι προς επεξεργασία."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:216
+msgid "Cache driver \"%s\" manages expiration automatically; no filesystem sweep required."
+msgstr "Το πρόγραμμα οδήγησης cache \"%s\" διαχειρίζεται τη λήξη αυτόματα. Δεν απαιτείται εκκαθάριση του συστήματος αρχείων."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:262
+msgid "Retention enforced: %1$s, %2$s."
+msgstr "Επιβολή διατήρησης: %1$s, %2$s."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:277
+msgid "Version check complete: remote release %s found."
+msgstr "Ο έλεγχος έκδοσης ολοκληρώθηκε: βρέθηκε η απομακρυσμένη έκδοση %s."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:286
+msgid "No pending webhook deliveries."
+msgstr "Δεν υπάρχουν εκκρεμείς παραδόσεις webhook."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
+msgid "No active links available for health check."
+msgstr "Δεν υπάρχουν ενεργοί σύνδεσμοι διαθέσιμοι για έλεγχο κατάστασης."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:385
+msgid "GeoIP update failed: %s"
+msgstr "Η ενημέρωση του GeoIP απέτυχε: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:394
+msgid "Version check failed: %s"
+msgstr "Ο έλεγχος έκδοσης απέτυχε: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:16
+msgid "Every %d minute"
+msgid_plural "Every %d minutes"
+msgstr[0] "Κάθε %d λεπτό"
+msgstr[1] "Κάθε %d λεπτά"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:30
+msgid "Every %d hour"
+msgid_plural "Every %d hours"
+msgstr[0] "Κάθε %d ώρα"
+msgstr[1] "Κάθε %d ώρες"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:43
+msgid "Every %d day"
+msgid_plural "Every %d days"
+msgstr[0] "Κάθε %d ημέρα"
+msgstr[1] "Κάθε %d ημέρες"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:156
+msgid "Pruned %d expired or revoked session."
+msgid_plural "Pruned %d expired or revoked sessions."
+msgstr[0] "Εκκαθαρίστηκε %d ληγμένη ή ανακληθείσα συνεδρία."
+msgstr[1] "Εκκαθαρίστηκαν %d ληγμένες ή ανακληθείσες συνεδρίες."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:198
+msgid "Processed %d expired link."
+msgid_plural "Processed %d expired links."
+msgstr[0] "Επεξεργάστηκε %d ληγμένος σύνδεσμος."
+msgstr[1] "Επεξεργάστηκαν %d ληγμένοι σύνδεσμοι."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:229
+msgid "Purged %d expired file cache item."
+msgid_plural "Purged %d expired file cache items."
+msgstr[0] "Εκκαθαρίστηκε %d ληγμένο στοιχείο cache αρχείων."
+msgstr[1] "Εκκαθαρίστηκαν %d ληγμένα στοιχεία cache αρχείων."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:252
+msgid "%d trashed link purged"
+msgid_plural "%d trashed links purged"
+msgstr[0] "Εκκαθαρίστηκε %d διαγραμμένος σύνδεσμος από τον κάδο"
+msgstr[1] "Εκκαθαρίστηκαν %d διαγραμμένοι σύνδεσμοι από τον κάδο"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:256
+msgid "%d old click purged"
+msgid_plural "%d old clicks purged"
+msgstr[0] "Εκκαθαρίστηκε %d παλιό κλικ"
+msgstr[1] "Εκκαθαρίστηκαν %d παλιά κλικ"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:298
+msgid "Processed %1$d pending webhook delivery (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgid_plural "Processed %1$d pending webhook deliveries (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgstr[0] "Επεξεργάστηκε %1$d εκκρεμής παράδοση webhook (%2$d παραδόθηκαν, %3$d σε ουρά επανάληψης, %4$d απέτυχαν)."
+msgstr[1] "Επεξεργάστηκαν %1$d εκκρεμείς παραδόσεις webhook (%2$d παραδόθηκαν, %3$d σε ουρά επανάληψης, %4$d απέτυχαν)."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:320
+msgid "Cleaned %d stale import/export temporary file."
+msgid_plural "Cleaned %d stale import/export temporary files."
+msgstr[0] "Εκκαθαρίστηκε %d παλιό προσωρινό αρχείο εισαγωγής/εξαγωγής."
+msgstr[1] "Εκκαθαρίστηκαν %d παλιά προσωρινά αρχεία εισαγωγής/εξαγωγής."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:349
+msgid "Health check completed for %1$d link: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgid_plural "Health check completed for %1$d links: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgstr[0] "Ο έλεγχος κατάστασης ολοκληρώθηκε για %1$d σύνδεσμο: %2$d υγιείς, %3$d μη προσβάσιμοι, %4$d αποκλείστηκαν από το φίλτρο SSRF."
+msgstr[1] "Ο έλεγχος κατάστασης ολοκληρώθηκε για %1$d συνδέσμους: %2$d υγιείς, %3$d μη προσβάσιμοι, %4$d αποκλείστηκαν από το φίλτρο SSRF."
+
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:119
 msgid "Job [%s] was skipped."
 msgstr "Η εργασία [%s] παραλείφθηκε."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:123
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:128
 msgid "Job [%s] executed successfully."
 msgstr "Η εργασία [%s] εκτελέστηκε με επιτυχία."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:132
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:137
 msgid "Job [%s] execution failed."
 msgstr "Η εκτέλεση της εργασίας [%s] απέτυχε."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:142
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:147
 msgid "Failed to execute [%s]."
 msgstr "Αποτυχία εκτέλεσης του [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:168
 msgid "Failed to execute due background jobs."
 msgstr "Αποτυχία εκτέλεσης των ληξιπρόθεσμων εργασιών παρασκηνίου."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:186
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:191
 msgid "Failed to clear execution history."
 msgstr "Αποτυχία εκκαθάρισης ιστορικού εκτελέσεων."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:229
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:234
 #: client/pages/dashboard/plugins/PluginsPage.tsx:93
 #: client/pages/dashboard/users/UsersPage.tsx:44
 msgid "Admin access required"
 msgstr "Απαιτείται πρόσβαση διαχειριστή"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:232
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:237
 msgid "Only administrator accounts with update management capabilities can view and manage scheduled background jobs."
 msgstr "Μόνο λογαριασμοί διαχειριστών με δυνατότητες διαχείρισης ενημερώσεων μπορούν να βλέπουν και να διαχειρίζονται προγραμματισμένες εργασίες παρασκηνίου."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:249
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:254
 msgid "System Automation"
 msgstr "Αυτοματισμός συστήματος"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:263
 msgid "Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
 msgstr "Επιθεωρήστε τις επαναλαμβανόμενες εργασίες παρασκηνίου, παρακολουθήστε την κατάσταση εκτέλεσης, ελέγξτε τα πρόσφατα αρχεία καταγραφής και ενεργοποιήστε χειροκίνητα εργασίες εφόσον έχετε εξουσιοδότηση."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:287
 msgid "Refresh"
 msgstr "Ανανέωση"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:271
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:288
 msgid "Refresh scheduled jobs status"
 msgstr "Ανανέωση κατάστασης προγραμματισμένων εργασιών"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:292
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
 msgid "Configure job recurrence schedules, preferred times, and history retention"
 msgstr "Διαμόρφωση προγραμμάτων επανάληψης εργασιών, προτιμώμενων ωρών και διατήρησης ιστορικού"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:297
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
 msgid "Manage Schedules"
 msgstr "Διαχείριση χρονοδιαγραμμάτων"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:326
 msgid "Clear execution run history for all jobs"
 msgstr "Εκκαθάριση ιστορικού εκτελέσεων για όλες τις εργασίες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:572
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:589
 msgid "Clear All History"
 msgstr "Εκκαθάριση όλου του ιστορικού"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:325
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:342
 msgid "Execute all jobs that are currently due"
 msgstr "Εκτέλεση όλων των εργασιών που λήγουν τώρα"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:364
 msgid "Total Jobs"
 msgstr "Σύνολο εργασιών"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:360
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:377
 msgid "Registered in system"
 msgstr "Καταχωρημένες στο σύστημα"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:382
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:399
 msgid "Active recurring tasks"
 msgstr "Ενεργές επαναλαμβανόμενες εργασίες"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:416
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:433
 msgid "Currently in progress"
 msgstr "Σε εξέλιξη αυτήν τη στιγμή"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:425
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:442
 msgid "Failed / Retrying"
 msgstr "Αποτυχία / Σε επανάληψη"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:451
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:468
 msgid "Requiring attention"
 msgstr "Απαιτείται προσοχή"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
 msgid "Search jobs..."
 msgstr "Αναζήτηση εργασιών..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:495
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:512
 msgid "Failed to load scheduled jobs"
 msgstr "Αποτυχία φόρτωσης προγραμματισμένων εργασιών"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:515
 msgid "Could not retrieve registered jobs from the scheduler API."
 msgstr "Δεν ήταν δυνατή η ανάκτηση καταχωρημένων εργασιών από το API του χρονοπρογραμματιστή."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:525
 msgid "Retry"
 msgstr "Δοκιμάστε ξανά"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:516
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:533
 msgid "Loading scheduled jobs..."
 msgstr "Φόρτωση προγραμματισμένων εργασιών..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:568
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:585
 msgid "Clear All Execution History"
 msgstr "Εκκαθάριση όλου του ιστορικού εκτελέσεων"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:569
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:586
 msgid "Are you sure you want to clear execution history across all background jobs? Finished run records and output logs will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "Είστε βέβαιοι ότι θέλετε να εκκαθαρίσετε το ιστορικό εκτελέσεων για όλες τις εργασίες παρασκηνίου; Οι ολοκληρωμένες εγγραφές και τα αρχεία καταγραφής εξόδου θα διαγραφούν οριστικά. Οι ενεργές εκτελέσεις και οι εκτελέσεις σε επανάληψη θα παραμείνουν προστατευμένες."
 
@@ -6303,113 +6523,113 @@ msgstr "Διαχείριση προγραμματισμένων εργασιών
 msgid "Scheduler"
 msgstr "Χρονοπρογραμματιστής"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
 msgid "Preparing..."
 msgstr "Προετοιμασία..."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:79
+#: client/pages/dashboard/tools/export/ExportPage.tsx:82
 msgid "CSV Export"
 msgstr "Εξαγωγή CSV"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:80
+#: client/pages/dashboard/tools/export/ExportPage.tsx:83
 msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
 msgstr "Πραγματοποιήστε λήψη ενός αρχείου φιλικού προς υπολογιστικά φύλλα που μπορεί επίσης να εισαχθεί ξανά στο PeakURL αργότερα."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:83
+#: client/pages/dashboard/tools/export/ExportPage.tsx:86
 msgid "Comma-separated values (.csv)"
 msgstr "Τιμές διαχωρισμένες με κόμμα (.csv)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:89
+#: client/pages/dashboard/tools/export/ExportPage.tsx:92
 msgid "JSON Export"
 msgstr "Εξαγωγή JSON"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:90
+#: client/pages/dashboard/tools/export/ExportPage.tsx:93
 msgid "Download a structured snapshot for scripts, integrations, or backups."
 msgstr "Πραγματοποιήστε λήψη ενός δομημένου στιγμιότυπου για σενάρια (scripts), ενσωματώσεις ή αντίγραφα ασφαλείας."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:93
+#: client/pages/dashboard/tools/export/ExportPage.tsx:96
 msgid "JavaScript Object Notation (.json)"
 msgstr "JavaScript Object Notation (.json)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:99
+#: client/pages/dashboard/tools/export/ExportPage.tsx:102
 msgid "XML Export"
 msgstr "Εξαγωγή XML"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:100
+#: client/pages/dashboard/tools/export/ExportPage.tsx:103
 msgid "Download a portable XML feed with the full link dataset and analytics totals."
 msgstr "Πραγματοποιήστε λήψη μιας φορητής ροής XML με το πλήρες σύνολο δεδομένων συνδέσμων και τα σύνολα αναλυτικών στοιχείων."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:103
+#: client/pages/dashboard/tools/export/ExportPage.tsx:106
 msgid "Extensible Markup Language (.xml)"
 msgstr "Επεκτάσιμη Γλώσσα Σήμανσης (.xml)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:118
+#: client/pages/dashboard/tools/export/ExportPage.tsx:121
 msgid "Nothing to export"
 msgstr "Τίποτα προς εξαγωγή"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:119
+#: client/pages/dashboard/tools/export/ExportPage.tsx:122
 msgid "No links are available for export yet."
 msgstr "Δεν υπάρχουν ακόμη διαθέσιμοι σύνδεσμοι για εξαγωγή."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:126
+#: client/pages/dashboard/tools/export/ExportPage.tsx:129
 msgid "Export downloaded"
 msgstr "Η εξαγωγή ελήφθη"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:128
+#: client/pages/dashboard/tools/export/ExportPage.tsx:131
 msgid "Downloaded %1$s links as %2$s."
 msgstr "Ελήφθησαν %1$s σύνδεσμοι ως %2$s."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:135
+#: client/pages/dashboard/tools/export/ExportPage.tsx:138
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:59
 msgid "Export failed"
 msgstr "Η εξαγωγή απέτυχε"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:138
+#: client/pages/dashboard/tools/export/ExportPage.tsx:141
 msgid "PeakURL could not prepare the export right now."
 msgstr "Το PeakURL δεν μπόρεσε να προετοιμάσει την εξαγωγή αυτή τη στιγμή."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:152
+#: client/pages/dashboard/tools/export/ExportPage.tsx:155
 msgid "Data Export"
 msgstr "Εξαγωγή Δεδομένων"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:156
+#: client/pages/dashboard/tools/export/ExportPage.tsx:159
 msgid "Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
 msgstr "Εξάγετε το σύνολο δεδομένων των σύντομων συνδέσμων σας σε μορφές CSV, JSON ή XML για ανάλυση εκτός σύνδεσης, μετεγκατάσταση ή προγραμματιστικά αντίγραφα ασφαλείας."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/export/ExportPage.tsx:186
 msgid "Bulk Link Export"
 msgstr "Μαζική εξαγωγή συνδέσμων"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:175
+#: client/pages/dashboard/tools/export/ExportPage.tsx:190
 msgid "Each export includes destination URLs, custom aliases, titles, short URLs, total clicks, unique visitors, and creation dates."
 msgstr "Κάθε εξαγωγή περιλαμβάνει διευθύνσεις URL προορισμού, προσαρμοσμένα ψευδώνυμα, τίτλους, σύντομα URL, συνολικά κλικ, μοναδικούς επισκέπτες και ημερομηνίες δημιουργίας."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:180
+#: client/pages/dashboard/tools/export/ExportPage.tsx:195
 msgid "Exports follow your current role permissions. Administrators can export all site links, while Editors export links created by their account."
 msgstr "Οι εξαγωγές ακολουθούν τα δικαιώματα του τρέχοντος ρόλου σας. Οι διαχειριστές μπορούν να εξάγουν όλους τους συνδέσμους, ενώ οι συντάκτες εξάγουν συνδέσμους που δημιουργήθηκαν από τον λογαριασμό τους."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:188
+#: client/pages/dashboard/tools/export/ExportPage.tsx:203
 msgid "Exportable Links"
 msgstr "Εξαγώγιμοι σύνδεσμοι"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:223
+#: client/pages/dashboard/tools/export/ExportPage.tsx:238
 msgid "API Export"
 msgstr "Εξαγωγή μέσω API"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:226
+#: client/pages/dashboard/tools/export/ExportPage.tsx:241
 msgid "Use the API export endpoint to back up short links or integrate with automated workflows without opening the dashboard."
 msgstr "Χρησιμοποιήστε το τελικό σημείο εξαγωγής API για να δημιουργήσετε αντίγραφα ασφαλείας σύντομων συνδέσμων ή να ενσωματώσετε αυτοματοποιημένες ροές εργασίας χωρίς να ανοίξετε τον πίνακα ελέγχου."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:239
+#: client/pages/dashboard/tools/export/ExportPage.tsx:254
 msgid "Read Export Guide"
 msgstr "Οδηγός εξαγωγής"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:247
+#: client/pages/dashboard/tools/export/ExportPage.tsx:262
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:22
 msgid "Example Request"
 msgstr "Παράδειγμα αιτήματος"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:261
+#: client/pages/dashboard/tools/export/ExportPage.tsx:276
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:47
 msgid "Response"
 msgstr "Απόκριση"
@@ -6426,11 +6646,11 @@ msgstr "Έγγραφα βοήθειας"
 msgid "Newsletter"
 msgstr "Ενημερωτικό δελτίο"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:10
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
 msgid "Data Import"
 msgstr "Εισαγωγή Δεδομένων"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:18
 msgid "Bulk import short links into PeakURL from CSV, JSON, or XML files, pasted URL lists, or automated API payloads."
 msgstr "Μαζική εισαγωγή συντόμευσης συνδέσμων στο PeakURL από αρχεία CSV, JSON ή XML, επικολλημένες λίστες URL ή αυτοματοποιημένα φορτία API."
 
@@ -6944,12 +7164,12 @@ msgstr "Επιλέχθηκαν %s"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:64
 #: client/pages/dashboard/activity/components/ActivityModals/ActivityModals.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:79
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:84
 msgid "Delete selected"
 msgstr "Διαγραφή επιλεγμένων"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:72
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:89
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:95
 msgid "Delete all"
 msgstr "Διαγραφή όλων"
 
@@ -7688,47 +7908,49 @@ msgstr "Αποτυχία οριστικής διαγραφής συνδέσμω�
 msgid "Failed to move links to trash"
 msgstr "Αποτυχία μεταφοράς συνδέσμων στον κάδο"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:83
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:88
 msgid "Delete Links Permanently"
 msgstr "Οριστική διαγραφή συνδέσμων"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:84
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:89
 msgid "Move Links to Trash"
 msgstr "Μεταφορά συνδέσμων στον κάδο"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:108
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:113
 msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά 1 επιλεγμένο σύνδεσμο; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:112
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:117
 msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά %s επιλεγμένους συνδέσμους; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:118
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:123
 msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
 msgstr "Είστε βέβαιοι ότι θέλετε να μεταφέρετε 1 επιλεγμένο σύνδεσμο στον κάδο; Μπορείτε να τον επαναφέρετε αργότερα."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:122
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:127
 msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
 msgstr "Είστε βέβαιοι ότι θέλετε να μεταφέρετε %s επιλεγμένους συνδέσμους στον κάδο; Μπορείτε να τους επαναφέρετε αργότερα."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:131
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:136
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:116
 msgid "Only links you have permission to remove will be affected. Admin-owned links will remain unchanged."
 msgstr "Μόνο οι σύνδεσμοι που έχετε άδεια να καταργήσετε θα επηρεαστούν. Οι σύνδεσμοι που ανήκουν σε διαχειριστές θα παραμείνουν αμετάβλητοι."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:159
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:185
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:186
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:209
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:169
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:201
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:149
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:187
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:210
 msgid "Deleting..."
 msgstr "Διαγραφή..."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:165
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:192
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:175
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:208
 msgid "Delete Permanently (%s)"
 msgstr "Οριστική διαγραφή (%s)"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:198
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:216
 msgid "Move to Trash (%s)"
 msgstr "Μεταφορά στον κάδο (%s)"
 
@@ -7817,6 +8039,7 @@ msgid "Restore selected"
 msgstr "Επαναφορά επιλεγμένων"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:56
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete permanently"
 msgstr "Οριστική διαγραφή"
 
@@ -7824,28 +8047,28 @@ msgstr "Οριστική διαγραφή"
 msgid "Empty trash"
 msgstr "Άδειασμα κάδου"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:108
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:114
 msgid "Select all links"
 msgstr "Επιλογή όλων των συνδέσμων"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:111
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:117
 msgid "Link"
 msgstr "Σύνδεσμος"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:112
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
 msgid "Title"
 msgstr "Τίτλος"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:113
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:119
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:133
 msgid "Destination"
 msgstr "Προορισμός"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 msgid "Modified"
 msgstr "Τροποποιήθηκε"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:36
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:52
 msgid "Created"
@@ -7889,8 +8112,9 @@ msgid "Restore Link"
 msgstr "Επαναφορά συνδέσμου"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:257
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:191
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:215
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:154
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:192
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
 msgid "Delete Permanently"
 msgstr "Οριστική διαγραφή"
 
@@ -7927,49 +8151,20 @@ msgstr "Δεν υπάρχουν σύνδεσμοι ακόμα"
 msgid "Create your first shortened link to get started"
 msgstr "Δημιουργήστε τον πρώτο σας σύντομο σύνδεσμο για να ξεκινήσετε"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:163
-msgid "Links deleted"
-msgstr "Οι σύνδεσμοι διαγράφηκαν"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:164
-msgid "All links have been removed."
-msgstr "Όλοι οι σύνδεσμοι έχουν καταργηθεί."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:168
-msgid "Unable to delete links"
-msgstr "Δεν ήταν δυνατή η διαγραφή των συνδέσμων."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:169
-msgid "Failed to delete all links."
-msgstr "Αποτυχία διαγραφής όλων των συνδέσμων."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 msgid "Trashed Links"
 msgstr "Διαγραμμένοι σύνδεσμοι"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:200
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:175
 msgid "Search links..."
 msgstr "Αναζήτηση συνδέσμων..."
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:314
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:324
-msgid "Delete all links"
-msgstr "Διαγραφή όλων των συνδέσμων"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:317
-msgid "Are you sure you want to delete all links across the site? This action permanently removes them."
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε όλους τους συνδέσμους σε ολόκληρο τον ιστότοπο; Αυτή η ενέργεια τους αφαιρεί οριστικά."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:320
-msgid "Are you sure you want to move all your links to trash?"
-msgstr "Είστε βέβαιοι ότι θέλετε να μετακινήσετε όλους τους συνδέσμους σας στον κάδο απορριμμάτων;"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:332
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:336
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:303
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:307
 msgid "Empty Trash"
 msgstr "Άδειασμα κάδου"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:333
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:304
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά όλους τους συνδέσμους στον κάδο; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
 
@@ -8134,6 +8329,56 @@ msgstr "Μετατρέψτε το μακρύ URL σας σε έναν σύντο
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:73
 msgid "Expiration Date (Optional)"
 msgstr "Ημερομηνία λήξης (Προαιρετικό)"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:38
+msgid "Links deleted"
+msgstr "Οι σύνδεσμοι διαγράφηκαν"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:39
+msgid "All links have been permanently deleted."
+msgstr "Όλοι οι σύνδεσμοι διαγράφηκαν οριστικά."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:44
+msgid "Links moved to trash"
+msgstr "Οι σύνδεσμοι μεταφέρθηκαν στον κάδο"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:45
+msgid "All links have been moved to trash."
+msgstr "Όλοι οι σύνδεσμοι έχουν μεταφερθεί στον κάδο ανακύκλωσης."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:55
+msgid "Failed to permanently delete all links"
+msgstr "Αποτυχία οριστικής διαγραφής όλων των συνδέσμων"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:56
+msgid "Failed to move all links to trash"
+msgstr "Αποτυχία μεταφοράς όλων των συνδέσμων στον κάδο"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:79
+msgid "Delete all links"
+msgstr "Διαγραφή όλων των συνδέσμων"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:102
+msgid "Are you sure you want to delete all links? You can move them to trash to restore later, or delete them permanently."
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε όλους τους συνδέσμους; Μπορείτε να τους μεταφέρετε στον κάδο για να τους επαναφέρετε αργότερα ή να τους διαγράψετε οριστικά."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:106
+msgid "Are you sure you want to delete all links permanently? This action cannot be undone."
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε οριστικά όλους τους συνδέσμους; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:109
+msgid "Are you sure you want to move all your links to the trash? You can restore them later."
+msgstr "Είστε βέβαιοι ότι θέλετε να μεταφέρετε όλους τους συνδέσμους σας στον κάδο; Μπορείτε να τους επαναφέρετε αργότερα."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:171
+msgid "Moving to Trash..."
+msgstr "Μετακίνηση στον κάδο..."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:176
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:217
+msgid "Move to Trash"
+msgstr "Μεταφορά στον κάδο"
 
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficLocationTab.tsx:176
 msgid "No link data available"
@@ -8544,6 +8789,12 @@ msgstr "Τύποι συσκευών"
 msgid "Operating Systems"
 msgstr "Λειτουργικά συστήματα"
 
+#: client/pages/dashboard/links/components/StatsDrawer/DeviceStats.tsx:257
+msgid "device"
+msgid_plural "devices"
+msgstr[0] "συσκευή"
+msgstr[1] "συσκευές"
+
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:40
 msgid "Check out this link"
 msgstr "Δείτε αυτόν τον σύνδεσμο"
@@ -8617,11 +8868,6 @@ msgstr "Αποτυχία μεταφοράς συνδέσμου στον κάδο
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:87
 msgid "Delete Link Permanently"
 msgstr "Οριστική διαγραφή συνδέσμου"
-
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
-msgid "Move to Trash"
-msgstr "Μεταφορά στον κάδο"
 
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:111
 msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
@@ -8959,6 +9205,12 @@ msgstr "Δεν είναι δυνατή η διαγραφή χρήστη"
 #: client/pages/dashboard/users/hooks/useUsersManager.ts:223
 msgid "Failed to delete user."
 msgstr "Αποτυχία διαγραφής χρήστη."
+
+#: client/pages/dashboard/users/hooks/useUsersManager.ts:106
+msgid "%d registered account"
+msgid_plural "%d registered accounts"
+msgstr[0] "%d εγγεγραμμένος λογαριασμός"
+msgstr[1] "%d εγγεγραμμένοι λογαριασμοί"
 
 #: client/pages/dashboard/users/lib/formatters.ts:25
 msgid "Can manage users, settings, and all links."

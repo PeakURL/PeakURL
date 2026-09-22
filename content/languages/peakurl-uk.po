@@ -6,8 +6,8 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-21 09:45+0000\n"
-"POT-Creation-Date: 2026-09-21 09:45+0000\n"
+"PO-Revision-Date: 2026-09-22 08:17+0000\n"
+"POT-Creation-Date: 2026-09-22 08:17+0000\n"
 "Plural-Forms: nplurals=3; plural=n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : 2;\n"
 "Project-Id-Version: PeakURL 1.7.0\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
@@ -88,7 +88,7 @@ msgstr "you@company.com"
 
 #: install.php:598
 #: setup-config.php:807
-#: server/features/links/controller.php:508
+#: server/features/links/controller.php:514
 #: client/pages/auth/login/LoginPage.tsx:253
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:29
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:195
@@ -306,7 +306,7 @@ msgstr "Ви не можете понизити роль єдиного облі
 #: server/features/settings/validator.php:43
 #: server/features/settings/service.php:442
 #: server/features/settings/service.php:614
-#: server/features/links/service.php:1491
+#: server/features/links/service.php:1522
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:45
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "Скорочуйте, відстежуйте та контролюйте кожне посилання — PeakURL"
@@ -816,86 +816,90 @@ msgstr "Масове відновлення завершено."
 msgid "Trash emptied successfully."
 msgstr "Кошик успішно очищено."
 
-#: server/features/links/controller.php:348
+#: server/features/links/controller.php:353
+msgid "All links moved to trash."
+msgstr "Усі посилання переміщено в кошик."
+
+#: server/features/links/controller.php:354
 msgid "All links deleted."
 msgstr "Усі посилання видалено."
 
-#: server/features/links/controller.php:446
+#: server/features/links/controller.php:452
 msgid "This link has expired"
 msgstr "Термін дії цього посилання минув"
 
-#: server/features/links/controller.php:447
+#: server/features/links/controller.php:453
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "Запитуване коротке посилання більше не активне, оскільки термін його дії минув."
 
-#: server/features/links/controller.php:457
+#: server/features/links/controller.php:463
 msgid "This link is unavailable"
 msgstr "Це посилання недоступне"
 
-#: server/features/links/controller.php:458
+#: server/features/links/controller.php:464
 msgid "The short link you requested is not available right now."
 msgstr "Запитуване коротке посилання зараз недоступне."
 
-#: server/features/links/controller.php:503
+#: server/features/links/controller.php:509
 msgid "Password required"
 msgstr "Потрібен пароль"
 
-#: server/features/links/controller.php:504
+#: server/features/links/controller.php:510
 msgid "This link is protected. Enter the password to continue."
 msgstr "Це посилання захищене паролем. Введіть пароль, щоб продовжити."
 
-#: server/features/links/controller.php:511
+#: server/features/links/controller.php:517
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Введіть пароль"
 
-#: server/features/links/controller.php:515
+#: server/features/links/controller.php:521
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Продовжити"
 
-#: server/features/links/controller.php:520
+#: server/features/links/controller.php:526
 msgid "Protected Link"
 msgstr "Захищене посилання"
 
-#: server/features/links/controller.php:567
+#: server/features/links/controller.php:573
 msgid "Performing security verification"
 msgstr "Виконується перевірка безпеки"
 
-#: server/features/links/controller.php:568
+#: server/features/links/controller.php:574
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr "Цей вебсайт використовує службу безпеки для захисту від шкідливих ботів. Ця сторінка відображається, поки PeakURL перевіряє, що ви не бот."
 
-#: server/features/links/controller.php:572
+#: server/features/links/controller.php:578
 msgid "JavaScript is required to complete this verification."
 msgstr "Для завершення цієї перевірки потрібен JavaScript."
 
-#: server/features/links/controller.php:575
+#: server/features/links/controller.php:581
 msgid "Security Verification"
 msgstr "Перевірка безпеки"
 
-#: server/features/links/controller.php:672
-#: server/features/links/controller.php:833
+#: server/features/links/controller.php:678
+#: server/features/links/controller.php:839
 msgid "Waiting for verification…"
 msgstr "Очікування перевірки…"
 
-#: server/features/links/controller.php:675
+#: server/features/links/controller.php:681
 msgid "Checking verification…"
 msgstr "Триває перевірка…"
 
-#: server/features/links/controller.php:678
+#: server/features/links/controller.php:684
 msgid "Starting verification…"
 msgstr "Початок перевірки…"
 
-#: server/features/links/controller.php:681
+#: server/features/links/controller.php:687
 msgid "Verification expired. Please try again."
 msgstr "Час перевірки вичерпано. Будь ласка, спробуйте ще раз."
 
-#: server/features/links/controller.php:684
+#: server/features/links/controller.php:690
 msgid "Verification could not be completed. Please try again."
 msgstr "Не вдалося завершити перевірку. Будь ласка, спробуйте ще раз."
 
-#: server/features/links/controller.php:838
+#: server/features/links/controller.php:844
 msgid "Try again"
 msgstr "Спробувати знову"
 
@@ -938,13 +942,15 @@ msgid "You do not have permission to edit this link."
 msgstr "У вас немає дозволу на редагування цього посилання."
 
 #: server/features/links/service.php:943
-#: server/features/links/service.php:1147
+#: server/features/links/service.php:1111
+#: server/features/links/service.php:1155
+#: server/features/links/service.php:1388
 msgid "You do not have permission to permanently delete links."
 msgstr "У вас немає дозволу на остаточне видалення посилань."
 
 #: server/features/links/service.php:949
-#: server/features/links/service.php:1114
-#: server/features/links/service.php:1367
+#: server/features/links/service.php:1117
+#: server/features/links/service.php:1394
 msgid "You do not have permission to delete links."
 msgstr "У вас немає дозволу на видалення посилань."
 
@@ -965,19 +971,23 @@ msgstr "Це посилання вже активне."
 msgid "You do not have permission to restore this link."
 msgstr "У вас немає дозволу на відновлення цього посилання."
 
-#: server/features/links/service.php:1240
+#: server/features/links/service.php:1248
 msgid "You do not have permission to restore links."
 msgstr "У вас немає дозволу на відновлення посилань."
 
-#: server/features/links/service.php:1310
+#: server/features/links/service.php:1318
 msgid "You do not have permission to empty trash."
 msgstr "У вас немає дозволу на очищення кошика."
 
-#: server/features/links/service.php:1800
+#: server/features/links/service.php:1379
+msgid "Invalid delete mode."
+msgstr "Недійсний режим видалення."
+
+#: server/features/links/service.php:1831
 msgid "Complete the verification to open this link."
 msgstr "Пройдіть перевірку, щоб відкрити це посилання."
 
-#: server/features/links/service.php:1815
+#: server/features/links/service.php:1846
 msgid "Verification failed. Please try again."
 msgstr "Перевірка не вдалася. Спробуйте ще раз."
 
@@ -1627,11 +1637,11 @@ msgstr "Відкрити оновлення"
 msgid "Location analytics is not ready yet."
 msgstr "Аналітика розташування ще не готова."
 
-#: server/services/admin-notices/service.php:158
-msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard."
-msgstr "Додайте облікові дані MaxMind і завантажте базу даних GeoLite2 City, щоб увімкнути звіти про країни та міста відвідувачів на панелі керування."
+#: server/services/admin-notices/service.php:160
+msgid "Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard. <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">Read documentation</a>."
+msgstr "Додайте свої облікові дані MaxMind і завантажте базу даних GeoLite2 City, щоб увімкнути звіти про країни та міста відвідувачів на панелі керування. <a href=\"%1$s\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"underline hover:opacity-100\">Читати документацію</a>."
 
-#: server/services/admin-notices/service.php:163
+#: server/services/admin-notices/service.php:164
 msgid "Open Location Data"
 msgstr "Відкрити дані розташування"
 
@@ -1943,13 +1953,13 @@ msgid "PeakURL could not send the test email because your account email address 
 msgstr "PeakURL не вдалося надіслати тестовий лист, оскільки адреса електронної пошти вашого облікового запису недійсна."
 
 #: server/services/notifications.php:275
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:246
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "SMTP"
 msgstr "SMTP"
 
 #: server/services/notifications.php:276
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:233
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:464
 msgid "PHP mail()"
 msgstr "PHP mail()"
@@ -2098,6 +2108,35 @@ msgstr "Налаштований драйвер кешу недоступний;
 msgid "No cache backend is currently usable; requests query the database directly."
 msgstr "Жоден бекенд кешування недоступний; запити спрямовуються безпосередньо до бази даних."
 
+#: client/shared/formatting/formatters.ts:168
+#: client/shared/formatting/formatters.ts:195
+msgid "%d second"
+msgid_plural "%d seconds"
+msgstr[0] "%d секунда"
+msgstr[1] "%d секунди"
+msgstr[2] "%d секунд"
+
+#: client/shared/formatting/formatters.ts:182
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d день"
+msgstr[1] "%d дні"
+msgstr[2] "%d днів"
+
+#: client/shared/formatting/formatters.ts:187
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d година"
+msgstr[1] "%d години"
+msgstr[2] "%d годин"
+
+#: client/shared/formatting/formatters.ts:192
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d хвилина"
+msgstr[1] "%d хвилини"
+msgstr[2] "%d хвилин"
+
 #: client/components/ui/Loading/Loading.tsx:72
 msgid "Loading…"
 msgstr "Завантаження…"
@@ -2110,17 +2149,18 @@ msgstr "Підтвердити"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:884
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:371
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:399
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:542
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:563
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:733
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:573
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:742
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:828
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:590
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1491
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:145
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:150
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:130
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:172
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:18
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:275
@@ -2671,7 +2711,7 @@ msgstr "Інструменти"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:70
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:283
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:288
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:12
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:16
 #: client/pages/NotFoundPage.tsx:85
 #: client/router/pageTitle.ts:51
 #: client/router/pageTitle.ts:115
@@ -2681,8 +2721,8 @@ msgstr "Імпорт"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:76
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:303
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:308
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
-#: client/pages/dashboard/tools/export/ExportPage.tsx:154
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
+#: client/pages/dashboard/tools/export/ExportPage.tsx:157
 #: client/router/pageTitle.ts:119
 msgid "Export"
 msgstr "Експорт"
@@ -2699,8 +2739,8 @@ msgstr "Активність"
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:85
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:322
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:327
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:253
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:255
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:260
 #: client/router/pageTitle.ts:123
 msgid "Scheduled Jobs"
 msgstr "Заплановані завдання"
@@ -2805,7 +2845,7 @@ msgid "Search the dashboard"
 msgstr "Пошук на панелі керування"
 
 #: client/pages/layout/dashboard/Search/Search.tsx:191
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:208
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
 msgid "Clear search"
 msgstr "Очистити пошук"
 
@@ -2851,7 +2891,7 @@ msgstr "Панель керування"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:96
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 #: client/pages/dashboard/links/components/Header/Header.tsx:42
 #: client/pages/NotFoundPage.tsx:75
 msgid "All Links"
@@ -2892,7 +2932,7 @@ msgstr "Налаштування безпеки"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:184
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:188
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:79
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:93
 #: client/pages/dashboard/settings/Layout.tsx:31
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:998
 #: client/router/pageTitle.ts:26
@@ -3037,8 +3077,8 @@ msgstr "PeakURL перезавантажує панель керування."
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:252
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:191
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:195
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:202
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:207
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:88
 msgid "Success"
 msgstr "Успішно"
@@ -3545,8 +3585,8 @@ msgstr "Востаннє згенеровано:"
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:75
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:88
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:93
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:123
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:24
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:29
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:689
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:693
@@ -3966,9 +4006,9 @@ msgid "No default preview image"
 msgstr "Стандартне зображення попереднього перегляду не налаштовано"
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:889
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:759
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:768
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 msgid "Saving..."
 msgstr "Збереження..."
@@ -3979,27 +4019,40 @@ msgstr "Збереження..."
 msgid "Save Changes"
 msgstr "Зберегти зміни"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:119
 msgid "Location Database"
 msgstr "База даних розташування"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:121
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:122
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "Увімкніть аналітику за країнами та містами за допомогою локальної бази даних MaxMind GeoLite2 City у папці постійного вмісту."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:283
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:60
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:175
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:275
+#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:30
+msgid "Read documentation"
+msgstr "Читати документацію"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:162
 msgid "Update Database"
 msgstr "Оновити базу даних"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:147
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:290
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:163
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:318
 msgid "Download Database"
 msgstr "Завантажити базу даних"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:154
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:61
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:196
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:201
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:332
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:34
@@ -4009,25 +4062,25 @@ msgstr "Завантажити базу даних"
 msgid "Status"
 msgstr "Стан"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Ready"
 msgstr "Готово"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:828
 msgid "Setup Required"
 msgstr "Потрібне налаштування"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:831
 msgid "Database Updated"
 msgstr "Базу даних оновлено"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:166
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:83
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:111
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -4038,12 +4091,12 @@ msgstr "Базу даних оновлено"
 msgid "Never"
 msgstr "Ніколи"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:839
 msgid "Database Size"
 msgstr "Розмір бази даних"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:174
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:190
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:61
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:258
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:593
@@ -4054,81 +4107,85 @@ msgstr "Розмір бази даних"
 msgid "Not available"
 msgstr "Недоступно"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Location data unavailable"
 msgstr "Дані розташування недоступні"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:194
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:210
 msgid "Location analytics is enabled"
 msgstr "Аналітику розташування ввімкнено"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:211
 msgid "Location analytics is disabled"
 msgstr "Аналітику розташування вимкнено"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:215
 msgid "PeakURL is using the local GeoLite2 City database for click locations."
 msgstr "PeakURL використовує локальну базу даних GeoLite2 City для визначення розташування переходів."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:202
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:218
 msgid "Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
 msgstr "Збережіть облікові дані MaxMind, а потім завантажте базу даних GeoLite2 City, щоб увімкнути аналітику країн і міст відвідувачів."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
 msgid "Dashboard management unavailable"
 msgstr "Керування через панель недоступне"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:236
 msgid "MaxMind Credentials"
 msgstr "Облікові дані MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:239
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "PeakURL зберігає ці значення в базі даних у зашифрованому вигляді, щоб оновлювати базу даних GeoLite2 City пізніше без повторного запиту."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:234
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:251
+msgid "How to get credentials"
+msgstr "Як отримати облікові дані"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:262
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:854
 msgid "Account ID"
 msgstr "Ідентифікатор облікового запису"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:245
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:273
 msgid "License Key"
 msgstr "Ліцензійний ключ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:270
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "Update Credentials"
 msgstr "Оновити облікові дані"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:317
 msgid "Refresh Database"
 msgstr "Оновити базу даних"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:301
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:329
 msgid "MaxMind Account ID"
 msgstr "Ідентифікатор облікового запису MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:315
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:343
 msgid "MaxMind License Key"
 msgstr "Ліцензійний ключ MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:353
 msgid "Enter a new MaxMind license key"
 msgstr "Введіть новий ліцензійний ключ MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:354
 msgid "Enter your MaxMind license key"
 msgstr "Введіть ваш ліцензійний ключ MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:334
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:362
 msgid "Saved license key:"
 msgstr "Збережений ліцензійний ключ:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:356
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:384
 msgid "Save New Credentials"
 msgstr "Зберегти нові облікові дані"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:385
 msgid "Save Credentials"
 msgstr "Зберегти облікові дані"
 
@@ -4373,7 +4430,7 @@ msgid "Paste the secret key from your CAPTCHA provider."
 msgstr "Вставте секретний ключ від вашого постачальника CAPTCHA."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:177
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:180
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
@@ -4413,75 +4470,75 @@ msgstr "Захист CAPTCHA"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "Вимагати перевірку на сторінках автентифікації та перед перенаправленням публічних коротких посилань."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:285
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "Увімкнути захист CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:316
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
 msgid "Loading CAPTCHA settings…"
 msgstr "Завантаження налаштувань CAPTCHA…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:322
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:334
 msgid "Failed to load CAPTCHA settings."
 msgstr "Не вдалося завантажити налаштування CAPTCHA."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:328
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:340
 msgid "Provider Settings"
 msgstr "Налаштування постачальника"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "Збережені облікові дані маскуються. Змініть або видаліть їх за потреби."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:347
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "Виберіть постачальника CAPTCHA та введіть свої ключі API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:345
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:357
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:391
 msgid "Provider"
 msgstr "Постачальник"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:353
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:397
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:365
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Site Key"
 msgstr "Ключ сайту (Site Key)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:421
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:373
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:433
 msgid "Secret Key"
 msgstr "Секретний ключ (Secret Key)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:400
 msgid "CAPTCHA provider"
 msgstr "Постачальник CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:415
 msgid "Paste site key"
 msgstr "Вставте ключ сайту"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:412
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
 msgid "Leave unchanged to keep the saved site key."
 msgstr "Залиште без змін, щоб зберегти поточний ключ сайту."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:430
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:442
 msgid "Keep saved secret"
 msgstr "Зберегти поточний секретний ключ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:443
 msgid "Paste secret key"
 msgstr "Вставте секретний ключ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:483
 msgid "Change keys"
 msgstr "Змінити ключі"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:494
 msgid "Remove keys"
 msgstr "Видалити ключі"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:519
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
 msgid "Save Settings"
 msgstr "Зберегти налаштування"
 
@@ -4542,53 +4599,49 @@ msgstr "Вебхуки"
 msgid "PeakURL sends signed POST requests to your endpoint when selected link events happen."
 msgstr "PeakURL надсилає підписані POST-запити на вашу кінцеву точку, коли відбуваються вибрані події з посиланнями."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:187
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:199
 msgid "Enable webhooks"
 msgstr "Увімкнути вебхуки"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:232
 msgid "Add New Webhook"
 msgstr "Додати новий вебхук"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:223
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:235
 msgid "Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
 msgstr "Виберіть події, які мають викликати надсилання, а потім збережіть секрет підпису в надійному місці, коли його буде показано."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:231
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:243
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
 msgid "Endpoint URL"
 msgstr "URL кінцевої точки"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:248
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
 msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route."
 msgstr "Використовуйте публічний ендпоінт HTTPS, який приймає POST-запити: Zapier Catch Hook, webhook n8n або власний маршрут API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:272
 msgid "Events"
 msgstr "Події"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:302
-msgid "Webhook docs"
-msgstr "Документація з вебхуків"
-
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:313
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:328
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:70
 msgid "Creating..."
 msgstr "Створення..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:329
 msgid "Create Webhook"
 msgstr "Створити вебхук"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:321
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:336
 msgid "Loading webhooks…"
 msgstr "Завантаження вебхуків…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:342
 msgid "Failed to load webhooks"
 msgstr "Не вдалося завантажити вебхуки"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:359
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:374
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:56
 #: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:44
@@ -4596,141 +4649,129 @@ msgstr "Не вдалося завантажити вебхуки"
 msgid "Inactive"
 msgstr "Неактивний"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:391
 msgid "Signing secret stored"
 msgstr "Секрет підпису збережено"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:386
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:128
 msgid "Created:"
 msgstr "Створено:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:402
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:409
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:503
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:514
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:529
 msgid "Delete webhook"
 msgstr "Видалити вебхук"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:427
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:442
 msgid "Copy Your Webhook Secret"
 msgstr "Скопіюйте секрет вашого вебхука"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:448
 msgid "This signing secret will not be shown again."
 msgstr "Цей секрет підпису більше ніколи не буде показано."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:451
 msgid "Store it in your automation tool or secret manager before closing this window."
 msgstr "Збережіть його в інструменті автоматизації або менеджері паролів перед закриттям цього вікна."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:474
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:498
 msgid "Secret copied"
 msgstr "Секрет скопійовано"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:477
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "Скопіювати в буфер обміну"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:466
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:481
 msgid "If this secret is ever exposed, delete the webhook and create a new one."
 msgstr "Якщо цей секрет буде скомпрометовано, видаліть вебхук і створіть новий."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:502
 msgid "Copy Secret"
 msgstr "Скопіювати секрет"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "Я зберіг це"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:507
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:522
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "Видалити вебхук для %s? PeakURL негайно припинить надсилати підписані запити подій на цей ендпоінт."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:515
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:530
 msgid "Keep webhook"
 msgstr "Залишити вебхук"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:41
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:40
 msgid "Connection"
 msgstr "Підключення"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:44
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:43
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:107
 msgid "Base API URL"
 msgstr "Базовий URL API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:49
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:48
 msgid "Use this endpoint with WordPress, browser extensions, scripts, and other API clients."
 msgstr "Використовуйте цей ендпоінт із WordPress, розширеннями браузера, скриптами та іншими клієнтами API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:62
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:76
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:114
 msgid "Base API URL copied to clipboard"
 msgstr "Базовий URL API скопійовано в буфер обміну"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:66
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:80
 msgid "Copy API URL"
 msgstr "Скопіювати URL API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:87
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:101
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
 msgid "Create New Key"
 msgstr "Створити новий ключ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:102
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:116
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:96
 msgid "API Key"
 msgstr "Ключ API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:105
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:119
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:54
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:58
 msgid "Active"
 msgstr "Активний"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:131
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:145
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:290
 msgid "Delete"
 msgstr "Видалити"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:134
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:148
 msgid "Delete API Key"
 msgstr "Видалити ключ API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:146
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:160
 msgid "No API Keys Generated"
 msgstr "Ключів API не створено"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:149
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:163
 msgid "Generate an API key to access endpoints programmatically."
 msgstr "Створіть ключ API для програмного доступу до ендпоінтів."
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:169
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:183
 msgid "Keep your API keys secure"
 msgstr "Зберігайте ключі API у безпеці"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:172
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:186
 msgid "PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed."
 msgstr "PeakURL показує повний токен лише один раз під час створення. Збережіть його в менеджері паролів або сховищі секретів і негайно відкличте в разі витоку."
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:189
-msgid "API documentation"
-msgstr "Документація API"
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:193
-msgid "Use the public docs for authentication, links, analytics, users, webhooks, and system endpoints."
-msgstr "Використовуйте публічну документацію для роботи з кінцевими точками автентифікації, посилань, аналітики, користувачів, вебхуків і системи."
-
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:209
-msgid "API Overview"
-msgstr "Огляд API"
 
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:29
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:71
@@ -4777,233 +4818,233 @@ msgstr "Якщо цей ключ буде скомпрометовано, від
 msgid "Copy Key"
 msgstr "Скопіювати ключ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:106
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:112
 msgid "1 Hour (3,600s) — Default"
 msgstr "1 година (3600 с) — За замовчуванням"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:107
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:113
 msgid "6 Hours (21,600s)"
 msgstr "6 годин (21 600 с)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:108
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
 msgid "24 Hours (86,400s)"
 msgstr "24 години (86 400 с)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:109
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
 msgid "7 Days (604,800s)"
 msgstr "7 днів (604 800 с)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:110
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:118
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:124
 msgid "Custom Duration..."
 msgstr "Інша тривалість..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:114
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:120
 msgid "1 Minute (60s) — Default"
 msgstr "1 хвилина (60 с) — За замовчуванням"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:115
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:121
 msgid "3 Minutes (180s)"
 msgstr "3 хвилини (180 с)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:116
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:122
 msgid "5 Minutes (300s)"
 msgstr "5 хвилин (300 с)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:117
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:123
 msgid "15 Minutes (900s)"
 msgstr "15 хвилин (900 с)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:165
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
 msgid "Automatic (Recommended)"
 msgstr "Автоматично (Рекомендовано)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:170
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:176
 msgid "Redis (In-Memory Cache)"
 msgstr "Redis (Кеш у пам'яті)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
 msgid "Redis (Unavailable — Server Unreachable)"
 msgstr "Redis (Недоступно — сервер недосяжний)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:177
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:183
 msgid "APCu (PHP Shared Memory)"
 msgstr "APCu (Спільна пам'ять PHP)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:178
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
 msgid "APCu (Unavailable — Extension Not Loaded)"
 msgstr "APCu (Недоступно — розширення не завантажено)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:184
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
 msgid "Filesystem (content/cache)"
 msgstr "Файлова система (content/cache)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:185
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:191
 msgid "Filesystem (Unavailable — Directory Not Writable)"
 msgstr "Файлова система (Недоступно — каталог захищений від запису)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:190
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:196
 msgid "Disabled (Direct Database Queries)"
 msgstr "Вимкнено (Прямі запити до бази даних)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:878
 msgid "Redis"
 msgstr "Redis"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:201
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:207
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:880
 msgid "APCu"
 msgstr "APCu"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:203
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:209
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:882
 msgid "Filesystem"
 msgstr "Файлова система"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:205
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:211
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:506
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:884
 msgid "Direct Database"
 msgstr "Пряме звернення до БД"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:286
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:292
 msgid "Performance & Caching"
 msgstr "Продуктивність і кешування"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:289
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:295
 msgid "Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
 msgstr "Налаштуйте бекенди об'єктного кешування та політики часу життя (TTL) для оптимізації затримки перенаправлення посилань і пропускної здатності."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:306
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:541
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:327
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:562
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:930
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1490
 msgid "Purge Cache"
 msgstr "Очистити кеш"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
 msgid "Active Engine"
 msgstr "Активний рушій"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:318
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:339
 msgid "Cache Footprint"
 msgstr "Використання пам'яті кешем"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:346
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:917
 msgid "%s cached items"
 msgstr "%s кешованих елементів"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:326
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:347
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:918
 msgid "%s cached files"
 msgstr "%s кешованих файлів"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:329
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:335
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:356
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:911
 msgid "0 B"
 msgstr "0 Б"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:341
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:362
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:935
 msgid "Default TTL"
 msgstr "TTL за замовчуванням"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:372
 msgid "Cache status unavailable"
 msgstr "Статус кешу недоступний"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:389
 msgid "Object cache is operational"
 msgstr "Об'єктний кеш працює"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:370
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:391
 msgid "Fallback cache driver active"
 msgstr "Активний резервний драйвер кешу"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:371
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:392
 msgid "Object cache is disabled"
 msgstr "Об'єктний кеш вимкнено"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:397
 msgid "Object caching is active and serving link redirects via the %s backend."
 msgstr "Об'єктне кешування активне та обслуговує перенаправлення через бекенд %s."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:383
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
 msgid "The preferred cache driver is currently unavailable. PeakURL has automatically fallen back to %s."
 msgstr "Бажаний драйвер кешу наразі недоступний. PeakURL автоматично перейшов на %s."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:409
 msgid "Object caching is disabled. Link lookups and redirects are served directly from the database."
 msgstr "Об'єктне кешування вимкнено. Пошук посилань і перенаправлення обробляються безпосередньо з бази даних."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:400
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:421
 msgid "Cache Engine Settings"
 msgstr "Налаштування рушія кешу"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:404
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:425
 msgid "Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 msgstr "Виберіть бажаний бекенд кешування. PeakURL автоматично обирає найшвидший робочий бекенд, якщо бажаний драйвер недоступний."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:412
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:418
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:433
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:439
 msgid "Preferred Cache Driver"
 msgstr "Бажаний драйвер кешу"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:422
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:443
 msgid "PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 msgstr "PeakURL надає пріоритет Redis (якщо налаштовано), APCu (якщо завантажено) та файловому сховищу як універсальному резерву."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:430
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:438
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:451
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
 msgid "Redirect Cache TTL"
 msgstr "TTL кешу перенаправлення"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:463
 msgid "Time-to-Live duration for caching active short URL redirect destinations."
 msgstr "Час життя (TTL) для кешування активних цільових адрес коротких посилань."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:454
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:475
 msgid "Custom Redirect TTL (seconds)"
 msgstr "Користувацький TTL перенаправлення (секунди)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:480
 msgid "Enter the redirect destination cache lifetime in seconds."
 msgstr "Введіть час життя кешу для цільових перенаправлень у секундах."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:469
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:477
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:490
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
 msgid "Negative Lookup (404) TTL"
 msgstr "TTL негативних запитів (404)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:481
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:502
 msgid "Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 msgstr "Час життя (TTL) для кешування неіснуючих посилань для зниження навантаження на базу даних від автоматичних сканувань."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:493
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:514
 msgid "Custom Negative TTL (seconds)"
 msgstr "Користувацький негативний TTL (секунди)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:498
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:519
 msgid "Enter the 404 negative lookup cache lifetime in seconds."
 msgstr "Введіть час життя кешу для негативних 404-запитів у секундах."
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:518
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:539
 msgid "Reset"
 msgstr "Скинути"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:528
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:549
 msgid "Save Performance Settings"
 msgstr "Зберегти налаштування продуктивності"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:537
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:558
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1486
 msgid "Purge Object Cache"
 msgstr "Очистити об'єктний кеш"
 
-#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:538
+#: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:559
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1487
 msgid "Are you sure you want to purge the object cache? All cached redirect records, in-memory objects, and temporary cache files will be immediately invalidated. Subsequent requests will query the database to rebuild the cache."
 msgstr "Ви впевнені, що хочете очистити об'єктний кеш? Усі збережені записи перенаправлень, об'єкти в пам'яті та тимчасові файли кешу будуть негайно анульовані. Наступні запити звертатимуться до бази даних для відновлення кешу."
@@ -5029,117 +5070,117 @@ msgstr "Доставка пошти"
 msgid "PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
 msgstr "PeakURL використовує цей поштовий транспорт для листів скидання пароля та інших сповіщень відновлення облікового запису."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:195
 msgid "Mail status unavailable"
 msgstr "Стан пошти недоступний"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:217
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:229
 msgid "Delivery method"
 msgstr "Спосіб доставки"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:234
 msgid "Use the hosting server’s built-in PHP mail transport."
 msgstr "Використовувати вбудований поштовий транспорт PHP mail() на сервері хостингу."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:235
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:247
 msgid "Send through your own SMTP server with optional authentication."
 msgstr "Надсилати через власний сервер SMTP з додатковою автентифікацією."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:251
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
 msgid "SMTP Configuration"
 msgstr "Конфігурація SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:255
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:267
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:795
 msgid "From Name"
 msgstr "Ім'я відправника"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:263
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:275
 msgid "PeakURL"
 msgstr "PeakURL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:266
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:278
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:794
 msgid "From Email"
 msgstr "Email відправника"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:277
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:289
 msgid "noreply@yourdomain.com"
 msgstr "noreply@yourdomain.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:294
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:797
 msgid "SMTP Host"
 msgstr "Хост SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:293
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:305
 msgid "smtp.example.com"
 msgstr "smtp.example.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:297
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:309
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:801
 msgid "SMTP Port"
 msgstr "Порт SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:326
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:805
 msgid "Encryption"
 msgstr "Шифрування"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:337
 msgid "SMTP encryption"
 msgstr "Шифрування SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:342
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:809
 msgid "Authentication"
 msgstr "Автентифікація"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:350
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:362
 msgid "Authentication enabled"
 msgstr "Автентифікацію ввімкнено"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:363
 msgid "Authentication disabled"
 msgstr "Автентифікацію вимкнено"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:379
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:391
 msgid "SMTP Username"
 msgstr "Ім'я користувача SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:402
 msgid "mailer@example.com"
 msgstr "mailer@example.com"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:406
 msgid "SMTP Password"
 msgstr "Пароль SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:405
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
 msgid "Leave blank to keep the saved password"
 msgstr "Залиште порожнім, щоб зберегти наявний пароль"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:408
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:420
 msgid "Enter the SMTP password"
 msgstr "Введіть пароль SMTP"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:413
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:425
 msgid "Saved password: %s"
 msgstr "Збережений пароль: %s"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:429
 msgid "PeakURL stores this password encrypted in the database."
 msgstr "PeakURL зберігає цей пароль у зашифрованому вигляді в базі даних."
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:447
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
 msgid "Send Test Email"
 msgstr "Надіслати тестовий лист"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:470
 msgid "Save Email Configuration"
 msgstr "Зберегти конфігурацію пошти"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:459
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:471
 msgid "Use PHP mail()"
 msgstr "Використовувати PHP mail()"
 
@@ -5153,7 +5194,7 @@ msgstr "Керуйте параметрами та конфігураціями 
 
 #: client/pages/dashboard/settings/Layout.tsx:45
 #: client/pages/dashboard/about/AboutPage.tsx:231
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:115
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
 msgid "Performance"
 msgstr "Ефективність"
 
@@ -5181,9 +5222,44 @@ msgstr "%d повторюється"
 msgid "%d other"
 msgstr "%d інших"
 
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:110
+msgid "%d due job executed successfully."
+msgid_plural "%d due jobs executed successfully."
+msgstr[0] "%d заплановане завдання успішно виконано."
+msgstr[1] "%d запланованих завдання успішно виконано."
+msgstr[2] "%d запланованих завдань успішно виконано."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:132
+msgid "%d due job was skipped."
+msgid_plural "%d due jobs were skipped."
+msgstr[0] "%d заплановане завдання було пропущено."
+msgstr[1] "%d запланованих завдання було пропущено."
+msgstr[2] "%d запланованих завдань було пропущено."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:154
+msgid "%d due job failed."
+msgid_plural "%d due jobs failed."
+msgstr[0] "%d заплановане завдання завершилося помилкою."
+msgstr[1] "%d запланованих завдання завершилися помилкою."
+msgstr[2] "%d запланованих завдань завершилося помилкою."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:172
+msgid "%d due job scheduled for retry."
+msgid_plural "%d due jobs scheduled for retry."
+msgstr[0] "%d заплановане завдання заплановано на повтор."
+msgstr[1] "%d запланованих завдання заплановано на повтор."
+msgstr[2] "%d запланованих завдань заплановано на повтор."
+
+#: client/pages/dashboard/tools/scheduled-jobs/summary.ts:239
+msgid "%1$d due job processed: %2$s."
+msgid_plural "%1$d due jobs processed: %2$s."
+msgstr[0] "Оброблено %1$d заплановане завдання: %2$s."
+msgstr[1] "Оброблено %1$d запланованих завдання: %2$s."
+msgstr[2] "Оброблено %1$d запланованих завдань: %2$s."
+
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:21
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:57
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:330
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
 msgid "Run Due Jobs"
 msgstr "Запустити належні завдання"
 
@@ -5195,290 +5271,290 @@ msgstr "Виконати готові до запуску фонові завд�
 msgid "This will trigger immediate execution of any background jobs whose scheduled interval has elapsed or claim lease has expired. Jobs that are not currently due will remain on their normal schedule."
 msgstr "Це призведе до негайного виконання всіх фонових завдань, запланований інтервал яких минув або термін блокування яких закінчився. Завдання, час яких ще не настав, залишаться у своєму звичайному розкладі."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:39
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:45
 msgid "No scheduled jobs registered"
 msgstr "Немає зареєстрованих запланованих завдань"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:42
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:48
 msgid "No recurring background jobs have been discovered or synced in the system registry."
 msgstr "У системному реєстрі не знайдено та не синхронізовано періодичних фонових завдань."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:65
 msgid "Job"
 msgstr "Завдання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:64
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:546
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:555
 msgid "Schedule"
 msgstr "Розклад"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:200
 msgid "Last Run"
 msgstr "Останній запуск"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
 msgid "Next Run"
 msgstr "Наступний запуск"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:73
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:79
 msgid "Result"
 msgstr "Результат"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:76
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:82
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:112
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:127
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:55
 msgid "Actions"
 msgstr "Дії"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:130
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:419
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:136
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:428
 msgid "Customized"
 msgstr "Налаштовано"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:137
 msgid "Recommended"
 msgstr "Рекомендовано"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:179
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:189
 msgid "Executing now..."
 msgstr "Виконується зараз..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:200
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:212
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:102
 msgid "Skipped"
 msgstr "Пропущено"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:216
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:228
 msgid "View Execution History"
 msgstr "Переглянути історію виконання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:219
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:234
 msgid "History"
 msgstr "Історія"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:244
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:259
 msgid "Job is currently executing..."
 msgstr "Завдання наразі виконується..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:262
 msgid "Execute Job Immediately"
 msgstr "Виконати завдання негайно"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:254
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:477
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:269
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:484
 msgid "Running..."
 msgstr "Виконується..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:255
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:478
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:485
 msgid "Run Now"
 msgstr "Запустити зараз"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:45
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
 msgid "7 Days"
 msgstr "7 днів"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
 msgid "14 Days"
 msgstr "14 днів"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
 msgid "30 Days (Recommended)"
 msgstr "30 днів (рекомендовано)"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
 msgid "60 Days"
 msgstr "60 днів"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
 msgid "90 Days"
 msgstr "90 днів"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
 msgid "180 Days"
 msgstr "180 днів"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
 msgid "1 Year"
 msgstr "1 рік"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:53
 msgid "Keep Indefinitely"
 msgstr "Зберігати нескінченно"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:56
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
 msgid "Every 5 minutes"
 msgstr "Кожні 5 хвилин"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:57
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
 msgid "Every 15 minutes"
 msgstr "Кожні 15 хвилин"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:58
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
 msgid "Every 30 minutes"
 msgstr "Кожні 30 хвилин"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:21
 msgid "Hourly"
 msgstr "Щогодини"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
 msgid "Every 2 hours"
 msgstr "Кожні 2 години"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
 msgid "Every 6 hours"
 msgstr "Кожні 6 годин"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:65
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:26
 msgid "Every 12 hours"
 msgstr "Кожні 12 годин"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:35
 msgid "Daily"
 msgstr "Щодня"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:67
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:38
 msgid "Weekly"
 msgstr "Щотижня"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:131
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:138
 msgid "Execution history retention setting saved successfully."
 msgstr "Налаштування зберігання історії виконання успішно збережено."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:137
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:144
 msgid "Failed to update history retention."
 msgstr "Не вдалося оновити зберігання історії."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:170
 msgid "Schedule for [%s] updated successfully."
 msgstr "Розклад для [%s] успішно оновлено."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:174
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:181
 msgid "Failed to update schedule for [%s]."
 msgstr "Не вдалося оновити розклад для [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:192
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:199
 msgid "Reset [%s] to recommended default schedule."
 msgstr "Скинуто [%s] до рекомендованого розкладу за замовчуванням."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:203
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:210
 msgid "Failed to reset job schedule."
 msgstr "Не вдалося скинути розклад завдання."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:247
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:254
 msgid "Manage Schedules & Retention"
 msgstr "Керування розкладами та зберіганням"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:257
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:619
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:628
 msgid "Site timezone: %s"
 msgstr "Часовий пояс сайту: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:269
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:276
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:277
 msgid "Close schedules drawer"
 msgstr "Закрити панель розкладів"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:286
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:293
 msgid "Execution History Retention"
 msgstr "Зберігання історії виконання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:291
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:298
 msgid "Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
 msgstr "Виберіть, як довго зберігати записи про завершені фонові завдання. Активні запуски та запуски з повторними спробами ніколи не видаляються під час очищення."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:316
 msgid "History Retention Period"
 msgstr "Період зберігання історії"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:327
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:334
 msgid "Save Retention"
 msgstr "Зберегти параметри зберігання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:341
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:348
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
 msgid "Registered Background Tasks"
 msgstr "Зареєстровані фонові завдання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:350
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:357
 msgid "Recommended schedules are based on PeakURL's default maintenance cadence. You can customize any job and restore its recommended schedule at any time."
 msgstr "Рекомендовані розклади базуються на стандартному циклі обслуговування PeakURL. Ви можете налаштувати будь-яке завдання та відновити його рекомендований розклад у будь-який час."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:464
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:473
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:79
 msgid "Due now"
 msgstr "Потрібно виконати зараз"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:469
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:478
 msgid "Next: %s"
 msgstr "Далі: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:517
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:791
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:459
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:526
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:800
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:466
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:532
 msgid "Close"
 msgstr "Закрити"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:520
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:529
 msgid "Configure"
 msgstr "Налаштувати"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:577
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:586
 msgid "Recurrence cadence."
 msgstr "Періодичність повторення."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:589
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:598
 msgid "Preferred run time"
 msgstr "Бажаний час запуску"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:632
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
 msgid "Automatic execution"
 msgstr "Автоматичне виконання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:638
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:647
 msgid "Runs this job automatically when it is due."
 msgstr "Автоматично запускає це завдання, коли настає його час."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:650
 msgid "Automatic execution is disabled. You can still run this job manually."
 msgstr "Автоматичне виконання вимкнено. Ви все одно можете запустити це завдання вручну."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:653
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:662
 msgid "Toggle automatic execution"
 msgstr "Перемкнути автоматичне виконання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:710
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:818
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:719
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:827
 msgid "Reset to Recommended"
 msgstr "Скинути до рекомендованого"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:762
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:771
 msgid "Save Schedule"
 msgstr "Зберегти розклад"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:781
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:790
 msgid "Background job schedules and retention rules are stored permanently."
 msgstr "Розклади завдань і правила зберігання зберігаються назавжди."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:805
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:814
 msgid "Reset Schedule — %s"
 msgstr "Скинути розклад — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:810
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
 msgid "Restore the recommended PeakURL schedule for [%1$s] (%2$s)? Any customized interval, preferred run time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
 msgstr "Відновити рекомендований розклад PeakURL для [%1$s] (%2$s)? Будь-який налаштований інтервал, бажаний час запуску та стан увімкнення буде скинуто до вбудованої рекомендації. Попередня історія виконання збережеться."
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:23
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:391
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:408
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:169
 msgid "Running"
 msgstr "Виконується"
@@ -5493,101 +5569,109 @@ msgid "Failed"
 msgstr "Не вдалося"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:116
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:369
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:386
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:160
 msgid "Scheduled"
 msgstr "Заплановано"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:112
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:117
 msgid "Failed to clear job execution history."
 msgstr "Не вдалося очистити історію виконання завдання."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:156
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:161
 msgid "Execution History — %s"
 msgstr "Історія виконання — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:172
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:173
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:177
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:178
 msgid "Close history drawer"
 msgstr "Закрити панель історії"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:185
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:190
 msgid "Job ID"
 msgstr "ID завдання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:211
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:216
 msgid "Recurrence"
 msgstr "Повторення"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:222
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:227
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:212
 msgid "Next Due"
 msgstr "Наступний термін"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:245
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:250
 msgid "Most Recent Failure"
 msgstr "Остання помилка"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:264
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:271
 msgid "Recent Execution Logs"
 msgstr "Недавні журнали виконання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:272
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:279
 msgid "%d recorded"
 msgstr "%d записано"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:287
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:294
 msgid "Clear execution history for this job"
 msgstr "Очистити історію виконання для цього завдання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:293
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:500
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:300
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:507
 msgid "Clear History"
 msgstr "Очистити історію"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:306
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:313
 msgid "No execution history yet."
 msgstr "Історії виконання поки немає."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:311
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:318
 msgid "This job has not been executed yet or past execution logs have expired."
 msgstr "Це завдання ще не виконувалося, або термін дії минулих журналів закінчився."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:322
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:329
 msgid "Run"
 msgstr "Запуск"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:328
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:335
 msgid "Attempt"
 msgstr "Спроба"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 msgid "Started"
 msgstr "Розпочато"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:334
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:341
 msgid "Duration"
 msgstr "Тривалість"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:337
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:344
 msgid "Output / Details"
 msgstr "Вивід / Подробиці"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:370
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:377
 msgid "#%d"
 msgstr "#%d"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:448
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:455
 msgid "Registry: %s"
 msgstr "Реєстр: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:494
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:501
 msgid "Clear Execution History — %s"
 msgstr "Очистити історію виконання — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:497
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:504
 msgid "Are you sure you want to clear execution history for this background job? Finished run records and output logs for this job will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "Ви впевнені, що хочете очистити історію виконання для цього фонового завдання? Записи завершених запусків і журнали виводу для цього завдання будуть назавжди видалені. Активні та повторювані запуски залишаться захищеними."
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:104
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:179
+msgid "Cleared %s execution history record."
+msgid_plural "Cleared %s execution history records."
+msgstr[0] "Очищено %s запис історії виконання."
+msgstr[1] "Очищено %s записи історії виконання."
+msgstr[2] "Очищено %s записів історії виконання."
 
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:7
 msgid "Manual"
@@ -5601,126 +5685,283 @@ msgstr "Щохвилини"
 msgid "%1$s at %2$s"
 msgstr "%1$s о %2$s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:114
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:116
+msgid "Session Cleanup"
+msgstr "Очищення сесій"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:117
+msgid "GeoIP Database Refresh"
+msgstr "Оновлення бази даних GeoIP"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:118
+msgid "Expired Links Processing"
+msgstr "Обробка прострочених посилань"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:119
+msgid "Cache Cleanup"
+msgstr "Очищення кешу"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:120
+msgid "Analytics & Trash Retention"
+msgstr "Збереження аналітики та кошика"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:121
+msgid "PeakURL Version Check"
+msgstr "Перевірка версії PeakURL"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:122
+msgid "Webhook Delivery & Health"
+msgstr "Доставка вебхуків та стан"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:123
+msgid "Import & Export Scratch Cleanup"
+msgstr "Очищення тимчасових файлів імпорту/експорту"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:124
+msgid "Link Destination Health Check"
+msgstr "Перевірка доступності цільових посилань"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:169
+msgid "Location data is not configured"
+msgstr "Дані про місцезнаходження не налаштовані"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:172
+msgid "GeoIP database is already up to date"
+msgstr "База даних GeoIP уже оновлена"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:180
+msgid "GeoLite2 City database refreshed at %s"
+msgstr "Базу даних GeoLite2 City оновлено в %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:189
+msgid "No expired links due for processing."
+msgstr "Немає прострочених посилань для обробки."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:216
+msgid "Cache driver \"%s\" manages expiration automatically; no filesystem sweep required."
+msgstr "Драйвер кешу «%s» керує закінченням терміну дії автоматично; сканування файлової системи не потрібне."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:262
+msgid "Retention enforced: %1$s, %2$s."
+msgstr "Застосовано правило зберігання: %1$s, %2$s."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:277
+msgid "Version check complete: remote release %s found."
+msgstr "Перевірку версії завершено: знайдено віддалений реліз %s."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:286
+msgid "No pending webhook deliveries."
+msgstr "Немає очікуваних доставок вебхуків."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
+msgid "No active links available for health check."
+msgstr "Немає активних посилань для перевірки стану."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:385
+msgid "GeoIP update failed: %s"
+msgstr "Помилка оновлення GeoIP: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:394
+msgid "Version check failed: %s"
+msgstr "Помилка перевірки версії: %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:16
+msgid "Every %d minute"
+msgid_plural "Every %d minutes"
+msgstr[0] "Що %d хвилину"
+msgstr[1] "Кожні %d хвилини"
+msgstr[2] "Кожні %d хвилин"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:30
+msgid "Every %d hour"
+msgid_plural "Every %d hours"
+msgstr[0] "Що %d годину"
+msgstr[1] "Кожні %d години"
+msgstr[2] "Кожні %d годин"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:43
+msgid "Every %d day"
+msgid_plural "Every %d days"
+msgstr[0] "Що %d день"
+msgstr[1] "Кожні %d дні"
+msgstr[2] "Кожні %d днів"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:156
+msgid "Pruned %d expired or revoked session."
+msgid_plural "Pruned %d expired or revoked sessions."
+msgstr[0] "Видалено %d прострочену або відкликану сесію."
+msgstr[1] "Видалено %d прострочені або відкликані сесії."
+msgstr[2] "Видалено %d прострочених або відкликаних сесій."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:198
+msgid "Processed %d expired link."
+msgid_plural "Processed %d expired links."
+msgstr[0] "Оброблено %d прострочене посилання."
+msgstr[1] "Оброблено %d прострочених посилання."
+msgstr[2] "Оброблено %d прострочених посилань."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:229
+msgid "Purged %d expired file cache item."
+msgid_plural "Purged %d expired file cache items."
+msgstr[0] "Видалено %d застарілий елемент файлового кешу."
+msgstr[1] "Видалено %d застарілих елементи файлового кешу."
+msgstr[2] "Видалено %d застарілих елементів файлового кешу."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:252
+msgid "%d trashed link purged"
+msgid_plural "%d trashed links purged"
+msgstr[0] "Видалено %d посилання з кошика"
+msgstr[1] "Видалено %d посилання з кошика"
+msgstr[2] "Видалено %d посилань з кошика"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:256
+msgid "%d old click purged"
+msgid_plural "%d old clicks purged"
+msgstr[0] "Видалено %d старий перехід"
+msgstr[1] "Видалено %d старі переходи"
+msgstr[2] "Видалено %d старих переходів"
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:298
+msgid "Processed %1$d pending webhook delivery (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgid_plural "Processed %1$d pending webhook deliveries (%2$d delivered, %3$d queued for retry, %4$d failed)."
+msgstr[0] "Оброблено %1$d очікувану доставку вебхука (%2$d доставлено, %3$d у черзі на повтор, %4$d не вдалося)."
+msgstr[1] "Оброблено %1$d очікувані доставки вебхуків (%2$d доставлено, %3$d у черзі на повтор, %4$d не вдалося)."
+msgstr[2] "Оброблено %1$d очікуваних доставок вебхуків (%2$d доставлено, %3$d у черзі на повтор, %4$d не вдалося)."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:320
+msgid "Cleaned %d stale import/export temporary file."
+msgid_plural "Cleaned %d stale import/export temporary files."
+msgstr[0] "Очищено %d застарілий тимчасовий файл імпорту/експорту."
+msgstr[1] "Очищено %d застарілих тимчасових файли імпорту/експорту."
+msgstr[2] "Очищено %d застарілих тимчасових файлів імпорту/експорту."
+
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:349
+msgid "Health check completed for %1$d link: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgid_plural "Health check completed for %1$d links: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter."
+msgstr[0] "Перевірку стану завершено для %1$d посилання: %2$d справних, %3$d недоступних, %4$d заблоковано фільтром SSRF."
+msgstr[1] "Перевірку стану завершено для %1$d посилань: %2$d справних, %3$d недоступних, %4$d заблоковано фільтром SSRF."
+msgstr[2] "Перевірку стану завершено для %1$d посилань: %2$d справних, %3$d недоступних, %4$d заблоковано фільтром SSRF."
+
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:119
 msgid "Job [%s] was skipped."
 msgstr "Завдання [%s] було пропущено."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:123
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:128
 msgid "Job [%s] executed successfully."
 msgstr "Завдання [%s] успішно виконано."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:132
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:137
 msgid "Job [%s] execution failed."
 msgstr "Виконання завдання [%s] не вдалося."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:142
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:147
 msgid "Failed to execute [%s]."
 msgstr "Не вдалося виконати [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:163
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:168
 msgid "Failed to execute due background jobs."
 msgstr "Не вдалося виконати фонові завдання, готові до запуску."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:186
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:191
 msgid "Failed to clear execution history."
 msgstr "Не вдалося очистити історію виконання."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:229
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:234
 #: client/pages/dashboard/plugins/PluginsPage.tsx:93
 #: client/pages/dashboard/users/UsersPage.tsx:44
 msgid "Admin access required"
 msgstr "Потрібні права адміністратора"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:232
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:237
 msgid "Only administrator accounts with update management capabilities can view and manage scheduled background jobs."
 msgstr "Лише облікові записи адміністраторів із правами керування оновленнями можуть переглядати та керувати запланованими фоновими завданнями."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:249
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:254
 msgid "System Automation"
 msgstr "Автоматизація системи"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:258
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:263
 msgid "Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
 msgstr "Перевіряйте періодичні фонові завдання, контролюйте стан виконання, переглядайте останні журнали та запускайте завдання вручну за наявності дозволу."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:270
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:287
 msgid "Refresh"
 msgstr "Оновити"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:271
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:288
 msgid "Refresh scheduled jobs status"
 msgstr "Оновити стан запланованих завдань"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:292
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
 msgid "Configure job recurrence schedules, preferred times, and history retention"
 msgstr "Налаштування розкладів повторення завдань, бажаного часу та зберігання історії"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:297
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
 msgid "Manage Schedules"
 msgstr "Керування розкладами"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:309
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:326
 msgid "Clear execution run history for all jobs"
 msgstr "Очистити історію виконання для всіх завдань"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:314
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:572
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:331
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:589
 msgid "Clear All History"
 msgstr "Очистити всю історію"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:325
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:342
 msgid "Execute all jobs that are currently due"
 msgstr "Виконати всі завдання, готові до запуску"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:364
 msgid "Total Jobs"
 msgstr "Усього завдань"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:360
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:377
 msgid "Registered in system"
 msgstr "Зареєстровано в системі"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:382
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:399
 msgid "Active recurring tasks"
 msgstr "Активні періодичні завдання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:416
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:433
 msgid "Currently in progress"
 msgstr "Зараз у процесі"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:425
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:442
 msgid "Failed / Retrying"
 msgstr "Не вдалося / Повтор"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:451
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:468
 msgid "Requiring attention"
 msgstr "Потребують уваги"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
 msgid "Search jobs..."
 msgstr "Пошук завдань..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:495
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:512
 msgid "Failed to load scheduled jobs"
 msgstr "Не вдалося завантажити заплановані завдання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:515
 msgid "Could not retrieve registered jobs from the scheduler API."
 msgstr "Не вдалося отримати зареєстровані завдання з API планувальника."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:508
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:525
 msgid "Retry"
 msgstr "Повторити"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:516
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:533
 msgid "Loading scheduled jobs..."
 msgstr "Завантаження запланованих завдань..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:568
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:585
 msgid "Clear All Execution History"
 msgstr "Очистити всю історію виконання"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:569
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:586
 msgid "Are you sure you want to clear execution history across all background jobs? Finished run records and output logs will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "Ви впевнені, що хочете очистити історію виконання для всіх фонових завдань? Записи завершених запусків і журнали виводу будуть видалені назавжди. Активні та повторювані запуски залишаться захищеними."
 
@@ -6303,113 +6544,113 @@ msgstr "Керування запланованими завданнями"
 msgid "Scheduler"
 msgstr "Планувальник"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:58
+#: client/pages/dashboard/tools/export/ExportPage.tsx:59
 msgid "Preparing..."
 msgstr "Підготовка..."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:79
+#: client/pages/dashboard/tools/export/ExportPage.tsx:82
 msgid "CSV Export"
 msgstr "Експорт CSV"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:80
+#: client/pages/dashboard/tools/export/ExportPage.tsx:83
 msgid "Download a spreadsheet-friendly file that can also be imported back into PeakURL later."
 msgstr "Завантажте файл для електронних таблиць, який також можна імпортувати назад у PeakURL пізніше."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:83
+#: client/pages/dashboard/tools/export/ExportPage.tsx:86
 msgid "Comma-separated values (.csv)"
 msgstr "Значення, розділені комами (.csv)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:89
+#: client/pages/dashboard/tools/export/ExportPage.tsx:92
 msgid "JSON Export"
 msgstr "Експорт JSON"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:90
+#: client/pages/dashboard/tools/export/ExportPage.tsx:93
 msgid "Download a structured snapshot for scripts, integrations, or backups."
 msgstr "Завантажте структурований знімок для скриптів, інтеграцій або резервних копій."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:93
+#: client/pages/dashboard/tools/export/ExportPage.tsx:96
 msgid "JavaScript Object Notation (.json)"
 msgstr "Нотація об'єктів JavaScript (.json)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:99
+#: client/pages/dashboard/tools/export/ExportPage.tsx:102
 msgid "XML Export"
 msgstr "Експорт XML"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:100
+#: client/pages/dashboard/tools/export/ExportPage.tsx:103
 msgid "Download a portable XML feed with the full link dataset and analytics totals."
 msgstr "Завантажте переносний XML-фід із повним набором даних посилань і показниками аналітики."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:103
+#: client/pages/dashboard/tools/export/ExportPage.tsx:106
 msgid "Extensible Markup Language (.xml)"
 msgstr "Розширювана мова розмітки (.xml)"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:118
+#: client/pages/dashboard/tools/export/ExportPage.tsx:121
 msgid "Nothing to export"
 msgstr "Немає даних для експорту"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:119
+#: client/pages/dashboard/tools/export/ExportPage.tsx:122
 msgid "No links are available for export yet."
 msgstr "Посилання для експорту поки що недоступні."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:126
+#: client/pages/dashboard/tools/export/ExportPage.tsx:129
 msgid "Export downloaded"
 msgstr "Експорт завантажено"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:128
+#: client/pages/dashboard/tools/export/ExportPage.tsx:131
 msgid "Downloaded %1$s links as %2$s."
 msgstr "Завантажено %1$s посилань у форматі %2$s."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:135
+#: client/pages/dashboard/tools/export/ExportPage.tsx:138
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:59
 msgid "Export failed"
 msgstr "Помилка експорту"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:138
+#: client/pages/dashboard/tools/export/ExportPage.tsx:141
 msgid "PeakURL could not prepare the export right now."
 msgstr "PeakURL не вдалося підготувати експорт зараз."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:152
+#: client/pages/dashboard/tools/export/ExportPage.tsx:155
 msgid "Data Export"
 msgstr "Експорт даних"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:156
+#: client/pages/dashboard/tools/export/ExportPage.tsx:159
 msgid "Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
 msgstr "Експортуйте набір даних коротких посилань у форматах CSV, JSON або XML для офлайн-аналізу, міграції або програмного резервного копіювання."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:171
+#: client/pages/dashboard/tools/export/ExportPage.tsx:186
 msgid "Bulk Link Export"
 msgstr "Масовий експорт посилань"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:175
+#: client/pages/dashboard/tools/export/ExportPage.tsx:190
 msgid "Each export includes destination URLs, custom aliases, titles, short URLs, total clicks, unique visitors, and creation dates."
 msgstr "Кожен експорт містить цільові URL, власні аліаси, заголовки, короткі URL, загальну кількість кліків, унікальних відвідувачів та дати створення."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:180
+#: client/pages/dashboard/tools/export/ExportPage.tsx:195
 msgid "Exports follow your current role permissions. Administrators can export all site links, while Editors export links created by their account."
 msgstr "Експорт враховує дозволи вашої поточної ролі. Адміністратори можуть експортувати всі посилання сайту, тоді як Редактори експортують лише посилання, створені їхнім обліковим записом."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:188
+#: client/pages/dashboard/tools/export/ExportPage.tsx:203
 msgid "Exportable Links"
 msgstr "Посилання для експорту"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:223
+#: client/pages/dashboard/tools/export/ExportPage.tsx:238
 msgid "API Export"
 msgstr "Експорт через API"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:226
+#: client/pages/dashboard/tools/export/ExportPage.tsx:241
 msgid "Use the API export endpoint to back up short links or integrate with automated workflows without opening the dashboard."
 msgstr "Використовуйте кінцеву точку експорту API для резервного копіювання коротких посилань або інтеграції з автоматизованими процесами без відкриття панелі керування."
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:239
+#: client/pages/dashboard/tools/export/ExportPage.tsx:254
 msgid "Read Export Guide"
 msgstr "Читати посібник з експорту"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:247
+#: client/pages/dashboard/tools/export/ExportPage.tsx:262
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:22
 msgid "Example Request"
 msgstr "Приклад запиту"
 
-#: client/pages/dashboard/tools/export/ExportPage.tsx:261
+#: client/pages/dashboard/tools/export/ExportPage.tsx:276
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:47
 msgid "Response"
 msgstr "Відповідь"
@@ -6426,11 +6667,11 @@ msgstr "Довідкова документація"
 msgid "Newsletter"
 msgstr "Розсилка"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:10
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
 msgid "Data Import"
 msgstr "Імпорт даних"
 
-#: client/pages/dashboard/tools/import/components/layout/Header.tsx:14
+#: client/pages/dashboard/tools/import/components/layout/Header.tsx:18
 msgid "Bulk import short links into PeakURL from CSV, JSON, or XML files, pasted URL lists, or automated API payloads."
 msgstr "Масовий імпорт коротких посилань у PeakURL із файлів CSV, JSON або XML, вставлених списків URL або автоматичних запитів API."
 
@@ -6944,12 +7185,12 @@ msgstr "Вибрано: %s"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:64
 #: client/pages/dashboard/activity/components/ActivityModals/ActivityModals.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:79
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:84
 msgid "Delete selected"
 msgstr "Видалити вибрані"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:72
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:89
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:95
 msgid "Delete all"
 msgstr "Видалити всі"
 
@@ -7688,47 +7929,49 @@ msgstr "Не вдалося видалити посилання назавжди
 msgid "Failed to move links to trash"
 msgstr "Не вдалося перемістити посилання в кошик"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:83
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:88
 msgid "Delete Links Permanently"
 msgstr "Видалити посилання назавжди"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:84
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:89
 msgid "Move Links to Trash"
 msgstr "Перемістити посилання в кошик"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:108
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:113
 msgid "Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
 msgstr "Ви дійсно бажаєте видалити назавжди 1 вибране посилання? Цю дію неможливо скасувати."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:112
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:117
 msgid "Are you sure you want to delete %s selected links permanently? This action cannot be undone."
 msgstr "Ви дійсно бажаєте видалити назавжди %s вибраних посилань? Цю дію неможливо скасувати."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:118
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:123
 msgid "Are you sure you want to move 1 selected link to the trash? You can restore it later."
 msgstr "Ви дійсно бажаєте перемістити 1 вибране посилання в кошик? Ви зможете відновити його пізніше."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:122
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:127
 msgid "Are you sure you want to move %s selected links to the trash? You can restore them later."
 msgstr "Ви дійсно бажаєте перемістити %s вибраних посилань в кошик? Ви зможете відновити їх пізніше."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:131
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:136
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:116
 msgid "Only links you have permission to remove will be affected. Admin-owned links will remain unchanged."
 msgstr "Це вплине лише на посилання, які ви маєте дозвіл видаляти. Посилання, які належать адміністратору, залишаться без змін."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:159
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:185
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:186
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:209
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:169
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:201
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:149
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:187
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:210
 msgid "Deleting..."
 msgstr "Видалення..."
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:165
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:192
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:175
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:208
 msgid "Delete Permanently (%s)"
 msgstr "Видалити назавжди (%s)"
 
-#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:198
+#: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:216
 msgid "Move to Trash (%s)"
 msgstr "Перемістити в кошик (%s)"
 
@@ -7817,6 +8060,7 @@ msgid "Restore selected"
 msgstr "Відновити вибрані"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:56
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:83
 msgid "Delete permanently"
 msgstr "Видалити назавжди"
 
@@ -7824,28 +8068,28 @@ msgstr "Видалити назавжди"
 msgid "Empty trash"
 msgstr "Очистити кошик"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:108
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:114
 msgid "Select all links"
 msgstr "Вибрати всі посилання"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:111
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:117
 msgid "Link"
 msgstr "Посилання"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:112
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
 msgid "Title"
 msgstr "Назва"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:113
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:119
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:133
 msgid "Destination"
 msgstr "Цільовий URL"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 msgid "Modified"
 msgstr "Змінено"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:36
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:52
 msgid "Created"
@@ -7889,8 +8133,9 @@ msgid "Restore Link"
 msgstr "Відновити посилання"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:257
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:191
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:215
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:154
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:192
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
 msgid "Delete Permanently"
 msgstr "Видалити назавжди"
 
@@ -7927,49 +8172,20 @@ msgstr "Посилань ще немає"
 msgid "Create your first shortened link to get started"
 msgstr "Створіть своє перше скорочене посилання, щоб розпочати"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:163
-msgid "Links deleted"
-msgstr "Посилання видалено"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:164
-msgid "All links have been removed."
-msgstr "Усі посилання видалено."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:168
-msgid "Unable to delete links"
-msgstr "Не вдалося видалити посилання"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:169
-msgid "Failed to delete all links."
-msgstr "Не вдалося видалити всі посилання."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
 msgid "Trashed Links"
 msgstr "Посилання у кошику"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:200
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:175
 msgid "Search links..."
 msgstr "Пошук посилань..."
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:314
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:324
-msgid "Delete all links"
-msgstr "Видалити всі посилання"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:317
-msgid "Are you sure you want to delete all links across the site? This action permanently removes them."
-msgstr "Ви впевнені, що хочете видалити всі посилання на всьому сайті? Ця дія видалить їх назавжди."
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:320
-msgid "Are you sure you want to move all your links to trash?"
-msgstr "Ви впевнені, що хочете перемістити всі свої посилання до кошика?"
-
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:332
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:336
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:303
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:307
 msgid "Empty Trash"
 msgstr "Очистити кошик"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:333
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:304
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "Ви дійсно бажаєте видалити назавжди всі посилання в кошику? Цю дію неможливо скасувати."
 
@@ -8134,6 +8350,56 @@ msgstr "Перетворіть довгий URL на коротке посила
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:73
 msgid "Expiration Date (Optional)"
 msgstr "Термін дії (необов'язково)"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:38
+msgid "Links deleted"
+msgstr "Посилання видалено"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:39
+msgid "All links have been permanently deleted."
+msgstr "Усі посилання було остаточно видалено."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:44
+msgid "Links moved to trash"
+msgstr "Посилання переміщено в кошик"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:45
+msgid "All links have been moved to trash."
+msgstr "Усі посилання було переміщено в кошик."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:55
+msgid "Failed to permanently delete all links"
+msgstr "Не вдалося остаточно видалити всі посилання"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:56
+msgid "Failed to move all links to trash"
+msgstr "Не вдалося перемістити всі посилання в кошик"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:79
+msgid "Delete all links"
+msgstr "Видалити всі посилання"
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:102
+msgid "Are you sure you want to delete all links? You can move them to trash to restore later, or delete them permanently."
+msgstr "Ви дійсно бажаєте видалити всі посилання? Ви можете перемістити їх у кошик, щоб відновити пізніше, або видалити їх назавжди."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:106
+msgid "Are you sure you want to delete all links permanently? This action cannot be undone."
+msgstr "Ви дійсно бажаєте видалити назавжди всі посилання? Цю дію неможливо скасувати."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:109
+msgid "Are you sure you want to move all your links to the trash? You can restore them later."
+msgstr "Ви дійсно бажаєте перемістити всі ваші посилання в кошик? Ви зможете відновити їх пізніше."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:171
+msgid "Moving to Trash..."
+msgstr "Переміщення в кошик..."
+
+#: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:176
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
+#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:217
+msgid "Move to Trash"
+msgstr "Перемістити в кошик"
 
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficLocationTab.tsx:176
 msgid "No link data available"
@@ -8544,6 +8810,13 @@ msgstr "Типи пристроїв"
 msgid "Operating Systems"
 msgstr "Операційні системи"
 
+#: client/pages/dashboard/links/components/StatsDrawer/DeviceStats.tsx:257
+msgid "device"
+msgid_plural "devices"
+msgstr[0] "пристрій"
+msgstr[1] "пристрої"
+msgstr[2] "пристроїв"
+
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:40
 msgid "Check out this link"
 msgstr "Перегляньте це посилання"
@@ -8617,11 +8890,6 @@ msgstr "Не вдалося перемістити посилання в кош�
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:87
 msgid "Delete Link Permanently"
 msgstr "Видалити посилання назавжди"
-
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:88
-#: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
-msgid "Move to Trash"
-msgstr "Перемістити в кошик"
 
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:111
 msgid "Are you sure you want to delete this link permanently? This action cannot be undone."
@@ -8959,6 +9227,13 @@ msgstr "Не вдалося видалити користувача"
 #: client/pages/dashboard/users/hooks/useUsersManager.ts:223
 msgid "Failed to delete user."
 msgstr "Не вдалося видалити користувача."
+
+#: client/pages/dashboard/users/hooks/useUsersManager.ts:106
+msgid "%d registered account"
+msgid_plural "%d registered accounts"
+msgstr[0] "%d зареєстрований обліковий запис"
+msgstr[1] "%d зареєстровані облікові записи"
+msgstr[2] "%d зареєстрованих облікових записів"
 
 #: client/pages/dashboard/users/lib/formatters.ts:25
 msgid "Can manage users, settings, and all links."

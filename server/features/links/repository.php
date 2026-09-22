@@ -742,6 +742,29 @@ class Repository {
 	}
 
 	/**
+	 * Transition an active link that has expired to status 'expired'.
+	 *
+	 * @param string $id Link record ID.
+	 * @return bool True if updated.
+	 * @since 1.7.0
+	 */
+	public function mark_link_expired( string $id ): bool {
+		$now = Date::now();
+
+		return $this->db->update(
+			'urls',
+			array(
+				'status'     => 'expired',
+				'updated_at' => $now,
+			),
+			array(
+				'id'     => $id,
+				'status' => 'active',
+			)
+		) > 0;
+	}
+
+	/**
 	 * Retrieve stale trashed links for automatic retention purging.
 	 *
 	 * @param string $cutoff      Cutoff timestamp.

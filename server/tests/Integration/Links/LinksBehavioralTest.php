@@ -624,6 +624,11 @@ class LinksBehavioralTest extends TestCase {
 			'password_value'  => $password_hash,
 		);
 
+		$this->repository->expects( $this->once() )
+			->method( 'mark_link_expired' )
+			->with( 'url_expired_prot' )
+			->willReturn( true );
+
 		$this->repository->method( 'find_link_access_row' )
 			->willReturnCallback(
 				function ( string $code ) use ( $future_protected_row, $expired_protected_row ) {

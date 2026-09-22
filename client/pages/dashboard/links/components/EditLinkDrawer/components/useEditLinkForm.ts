@@ -54,11 +54,17 @@ export function useEditLinkForm(
 	const socialImagePreviewRef = useRef("");
 	const [updateUrl, { isLoading }] = useUpdateUrlMutation();
 
-	const statusOptions: SelectOption<LinkStatus>[] = [
-		{ value: "active", label: __("Active") },
-		{ value: "inactive", label: __("Inactive") },
-		{ value: "expired", label: __("Expired") },
-	];
+	const statusOptions: SelectOption<LinkStatus>[] =
+		link.status === "expired"
+			? [
+					{ value: "expired", label: __("Expired"), disabled: true },
+					{ value: "active", label: __("Active") },
+					{ value: "inactive", label: __("Inactive") },
+				]
+			: [
+					{ value: "active", label: __("Active") },
+					{ value: "inactive", label: __("Inactive") },
+				];
 	const shortUrl = getShortUrl(link);
 	const storedSocialImageUrl = link.socialPreview?.imageUrl || "";
 	const socialPreviewUrl = removeSocialImage

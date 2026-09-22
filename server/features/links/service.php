@@ -382,7 +382,12 @@ class Service {
 			);
 		}
 
-		if ( $this->validator->is_public_link_expired( $url ) ) {
+		if ( $this->validator->is_public_link_expired( $url ) || 'expired' === (string) ( $url['status'] ?? '' ) ) {
+			if ( 'expired' !== (string) ( $url['status'] ?? '' ) && ! empty( $url['id'] ) ) {
+				$this->data->mark_link_expired( (string) $url['id'] );
+				$this->invalidate_link_cache( $url );
+			}
+
 			return array(
 				'status' => 'expired',
 				'url'    => $url,
@@ -1611,7 +1616,9 @@ class Service {
 			'domain'         => null,
 			'clicks'         => (int) ( $row['click_count'] ?? 0 ),
 			'uniqueClicks'   => (int) ( $row['unique_click_count'] ?? 0 ),
-			'status'         => (string) ( $row['status'] ?? 'active' ),
+			'status'         => ( 'active' === (string) ( $row['status'] ?? 'active' ) && $this->validator->is_public_link_expired( $row ) )
+				? 'expired'
+				: (string) ( $row['status'] ?? 'active' ),
 			'hasPassword'    => '' !== trim(
 				(string) ( $row['password_value'] ?? '' ),
 			),

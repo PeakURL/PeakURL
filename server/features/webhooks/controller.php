@@ -125,6 +125,58 @@ class Controller extends BaseController {
 	}
 
 	/**
+	 * Get the authoritative webhook event catalogue.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON envelope with event catalogue.
+	 * @since 1.7.1
+	 */
+	public function events( Request $request ): array {
+		return $this->success_response(
+			$this->webhooks_service->get_event_catalogue( $request ),
+			__( 'Webhook events loaded.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Rotate the signing secret for an existing webhook.
+	 *
+	 * Returns the newly generated secret once.
+	 *
+	 * @param Request $request Incoming HTTP request with route param `id`.
+	 * @return array<string, mixed> JSON envelope with updated webhook and new secret.
+	 * @since 1.7.1
+	 */
+	public function rotate_secret( Request $request ): array {
+		return $this->success_response(
+			$this->webhooks_service->rotate_secret(
+				$request,
+				$this->route_param( $request, 'id' ),
+			),
+			__( 'Webhook secret rotated.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * List paginated delivery history for a webhook endpoint.
+	 *
+	 * @param Request $request Incoming HTTP request with route param `id`.
+	 * @return array<string, mixed> JSON envelope with deliveries and pagination meta.
+	 * @since 1.7.1
+	 */
+	public function deliveries( Request $request ): array {
+		$result = $this->webhooks_service->list_deliveries(
+			$request,
+			$this->route_param( $request, 'id' ),
+		);
+
+		return $this->success_response(
+			$result,
+			__( 'Webhook deliveries loaded.', 'peakurl' ),
+		);
+	}
+
+	/**
 	 * Delete a webhook by ID.
 	 *
 	 * Returns 404 if the webhook does not exist or does not

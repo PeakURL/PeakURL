@@ -84,7 +84,8 @@
 	}
 
 	.notification-container {
-		@apply fixed top-4 z-50 w-full max-w-sm space-y-3 pointer-events-none;
+		@apply fixed top-4 w-full max-w-sm space-y-3 pointer-events-none;
+		z-index: 100;
 		inset-inline-end: 1rem;
 	}
 

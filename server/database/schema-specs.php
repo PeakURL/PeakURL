@@ -311,7 +311,19 @@ class SchemaSpecs {
 			),
 			'webhooks'           => array(
 				array(
+					'name'       => 'label',
+					'definition' => "VARCHAR(255) NOT NULL DEFAULT ''",
+				),
+				array(
 					'name'       => 'is_active',
+					'definition' => 'TINYINT(1) NOT NULL DEFAULT 1',
+				),
+				array(
+					'name'       => 'secret_hint',
+					'definition' => 'VARCHAR(64) DEFAULT NULL',
+				),
+				array(
+					'name'       => 'verify_ssl',
 					'definition' => 'TINYINT(1) NOT NULL DEFAULT 1',
 				),
 			),
@@ -429,6 +441,10 @@ class SchemaSpecs {
 					'definition' => 'VARCHAR(40) NOT NULL',
 				),
 				array(
+					'name'       => 'event_id',
+					'definition' => "VARCHAR(40) NOT NULL DEFAULT ''",
+				),
+				array(
 					'name'       => 'event',
 					'definition' => 'VARCHAR(64) NOT NULL',
 				),
@@ -457,12 +473,24 @@ class SchemaSpecs {
 					'definition' => 'DATETIME DEFAULT NULL',
 				),
 				array(
+					'name'       => 'completed_at',
+					'definition' => 'DATETIME DEFAULT NULL',
+				),
+				array(
+					'name'       => 'duration_ms',
+					'definition' => 'INT UNSIGNED DEFAULT NULL',
+				),
+				array(
 					'name'       => 'last_error',
 					'definition' => 'TEXT DEFAULT NULL',
 				),
 				array(
 					'name'       => 'response_code',
 					'definition' => 'INT UNSIGNED DEFAULT NULL',
+				),
+				array(
+					'name'       => 'claim_token',
+					'definition' => 'VARCHAR(64) DEFAULT NULL',
 				),
 				array(
 					'name'       => 'created_at',
@@ -639,6 +667,21 @@ class SchemaSpecs {
 					'name'    => 'idx_webhook_deliveries_webhook_id',
 					'type'    => 'index',
 					'columns' => '(webhook_id)',
+				),
+				array(
+					'name'    => 'idx_webhook_deliveries_claim_token',
+					'type'    => 'index',
+					'columns' => '(claim_token)',
+				),
+				array(
+					'name'    => 'idx_webhook_deliveries_status_completed_at',
+					'type'    => 'index',
+					'columns' => '(status, completed_at)',
+				),
+				array(
+					'name'    => 'idx_webhook_deliveries_status_updated_at',
+					'type'    => 'index',
+					'columns' => '(status, updated_at)',
 				),
 			),
 		);

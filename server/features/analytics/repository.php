@@ -1499,7 +1499,19 @@ class Repository {
 		\do_action( 'link_clicked', $url, $click_payload, $request );
 
 		if ( $this->webhooks ) {
-			$this->webhooks->dispatch_link_event( 'link.clicked', $url, null, null, $click_payload );
+			$this->webhooks->dispatch_link_event(
+				'link.clicked',
+				array(
+					'id'             => (string) ( $url['id'] ?? '' ),
+					'alias'          => (string) ( $url['alias'] ?? '' ),
+					'destinationUrl' => (string) ( $url['destination_url'] ?? '' ),
+					'title'          => trim( (string) ( $url['title'] ?? '' ) ),
+					'userId'         => (string) ( $url['user_id'] ?? '' ),
+				),
+				null,
+				null,
+				$click_payload
+			);
 		}
 	}
 

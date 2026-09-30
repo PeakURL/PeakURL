@@ -357,7 +357,7 @@ class LinksBehavioralTest extends TestCase {
 
 		$this->webhooks_service->expects( $this->once() )
 			->method( 'dispatch_link_event' )
-			->with( 'link.deleted', $trashed_row, $admin_user );
+			->with( 'link.deleted', $this->links_service->format_url( $trashed_row ), $admin_user );
 
 		$delete_request = new Request( 'DELETE', '/api/v1/urls/link_perm_1', array(), array() );
 		$delete_request->set_route_params( array( 'id' => 'link_perm_1' ) );
@@ -649,5 +649,119 @@ class LinksBehavioralTest extends TestCase {
 		$request_expired = new Request( 'GET', '/prot-expired', array(), array() );
 		$res_expired     = $this->links_service->get_link_access( 'prot-expired', $request_expired );
 		$this->assertSame( 'expired', $res_expired['status'] );
+	}
+
+	public function test_link_update_dispatches_canonical_webhook_payload_and_semantic_status_events(): void {
+		$admin_user = array(
+			'id'       => 'user_1',
+			'username' => 'admin',
+			'role'     => 'admin',
+		);
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+
+		$existing_row = array(
+			'id'              => 'link_canon_1',
+			'user_id'         => 'user_1',
+			'short_code'      => 'canon-code',
+			'alias'           => 'canon-alias',
+			'title'           => 'Initial Title',
+			'destination_url' => 'https://example.com/initial',
+			'status'          => 'active',
+			'password_value'  => null,
+			'expires_at'      => null,
+			'created_at'      => '2026-09-01 10:00:00',
+			'updated_at'      => '2026-09-01 10:00:00',
+		);
+		$this->repository->method( 'get_link_by_id' )->with( 'link_canon_1' )->willReturn( $existing_row );
+
+		$updated_row = array_merge(
+			$existing_row,
+			array(
+				'title'           => 'Updated Title',
+				'destination_url' => 'https://example.com/updated',
+				'status'          => 'inactive',
+			)
+		);
+		$this->repository->method( 'find_url_row' )->with( 'link_canon_1' )->willReturn( $updated_row );
+
+		$dispatched_events = array();
+		$this->webhooks_service->expects( $this->exactly( 2 ) )
+			->method( 'dispatch_link_event' )
+			->willReturnCallback(
+				function ( string $event, array $link_data, ?array $user, ?array $previous ) use ( &$dispatched_events ): array {
+					$dispatched_events[ $event ] = array(
+						'current'  => $link_data,
+						'user'     => $user,
+						'previous' => $previous,
+					);
+					return array();
+				}
+			);
+
+		$request = new Request( 'PUT', '/api/v1/urls/link_canon_1', array(), array( 'status' => 'inactive' ) );
+		$request->set_route_params( array( 'id' => 'link_canon_1' ) );
+		$this->links_controller->update( $request );
+
+		// 1. link.updated must receive canonical formatted link shape
+		$this->assertArrayHasKey( 'link.updated', $dispatched_events );
+		$updated_event = $dispatched_events['link.updated'];
+		$this->assertSame( 'canon-alias', $updated_event['current']['alias'] );
+		$this->assertSame( 'https://example.com/updated', $updated_event['current']['destinationUrl'] );
+		$this->assertSame( 'https://peakurl.dev/canon-alias', $updated_event['current']['shortUrl'] );
+		$this->assertSame( 'inactive', $updated_event['current']['status'] );
+		$this->assertSame( 'active', $updated_event['previous']['status'] );
+		$this->assertSame( 'https://example.com/initial', $updated_event['previous']['destinationUrl'] );
+
+		// 2. Transition from active to inactive must emit link.deactivated (not link.activated or link.expired)
+		$this->assertArrayHasKey( 'link.deactivated', $dispatched_events );
+		$this->assertArrayNotHasKey( 'link.activated', $dispatched_events );
+		$this->assertArrayNotHasKey( 'link.expired', $dispatched_events );
+	}
+
+	public function test_link_status_transitions_are_semantically_precise(): void {
+		$admin_user = array(
+			'id'       => 'user_1',
+			'username' => 'admin',
+			'role'     => 'admin',
+		);
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+
+		// Inactive -> Active emits link.activated
+		$inactive_row = array(
+			'id'              => 'link_toggle_1',
+			'user_id'         => 'user_1',
+			'short_code'      => 'toggle',
+			'alias'           => 'toggle',
+			'title'           => 'Toggle',
+			'destination_url' => 'https://example.com',
+			'status'          => 'inactive',
+			'password_value'  => null,
+			'expires_at'      => null,
+			'created_at'      => '2026-09-01 10:00:00',
+			'updated_at'      => '2026-09-01 10:00:00',
+		);
+		$this->repository->method( 'get_link_by_id' )->with( 'link_toggle_1' )->willReturn( $inactive_row );
+
+		$active_row = array_merge( $inactive_row, array( 'status' => 'active' ) );
+		$this->repository->method( 'find_url_row' )->with( 'link_toggle_1' )->willReturn( $active_row );
+
+		$dispatched = array();
+		$this->webhooks_service->expects( $this->exactly( 2 ) )
+			->method( 'dispatch_link_event' )
+			->willReturnCallback(
+				function ( string $event, array $link_data, ?array $user, ?array $previous ) use ( &$dispatched ): array {
+					$dispatched[] = $event;
+					return array();
+				}
+			);
+
+		$request = new Request( 'PUT', '/api/v1/urls/link_toggle_1', array(), array( 'status' => 'active' ) );
+		$request->set_route_params( array( 'id' => 'link_toggle_1' ) );
+		$this->links_controller->update( $request );
+
+		$this->assertContains( 'link.updated', $dispatched );
+		$this->assertContains( 'link.activated', $dispatched );
+		$this->assertNotContains( 'link.deactivated', $dispatched );
+		$this->assertNotContains( 'link.expired', $dispatched );
 	}
 }

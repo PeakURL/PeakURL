@@ -99,7 +99,10 @@ export { webhookApi } from "./webhook";
 export {
 	useCreateWebhookMutation,
 	useDeleteWebhookMutation,
+	useGetWebhookDeliveriesQuery,
+	useGetWebhookEventsQuery,
 	useGetWebhooksQuery,
+	useRotateWebhookSecretMutation,
 	useTestWebhookMutation,
 	useUpdateWebhookMutation,
 } from "./webhook";

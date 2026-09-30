@@ -1,6 +1,18 @@
 import type { NotificationContextValue } from "@/components";
 
-export type { CreatedWebhook, WebhookSummary } from "@/api";
+export type { NotificationContextValue };
+
+export type {
+	CreatedWebhook,
+	RotateSecretResult,
+	WebhookDeliveriesResponse,
+	WebhookDeliveryItem,
+	WebhookDeliveryStatus,
+	WebhookEventCatalogItem,
+	WebhookHealthSummary,
+	WebhookSummary,
+	WebhookTestResult,
+} from "@/api";
 
 /**
  * Webhook event option shown in the integrations form.
@@ -11,17 +23,12 @@ export interface WebhookEventOption {
 
 	/** Human-readable label shown in the checkbox list. */
 	label: string;
-}
 
-/**
- * Editable form state for the integrations webhook form.
- */
-export interface WebhookFormState {
-	/** Destination endpoint URL for outbound deliveries. */
-	url: string;
+	/** Concise description of when the event triggers. */
+	description?: string;
 
-	/** Event identifiers selected for the webhook. */
-	events: string[];
+	/** Event group classification (e.g. link, api_key, user). */
+	group: string;
 }
 
 /**

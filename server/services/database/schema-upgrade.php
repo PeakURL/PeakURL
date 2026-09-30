@@ -170,6 +170,10 @@ class Upgrade {
 				$this->repair_api_keys( $changes );
 			}
 
+			if ( 'webhooks' === $table_name ) {
+				$this->repair_webhooks( $changes );
+			}
+
 			$this->add_missing_indexes(
 				$table_name,
 				$index_specs[ $table_name ] ?? array(),
@@ -248,6 +252,77 @@ class Upgrade {
 				MODIFY COLUMN ' . Sql::quote_identifier( 'key_last_four' ) . ' CHAR(4) NOT NULL',
 			);
 			$changes[] = __( 'Repaired hashed API key column constraints.', 'peakurl' );
+		}
+	}
+
+	/**
+	 * Populate missing webhook labels from endpoint hostnames.
+	 *
+	 * Reads any webhook rows where label is empty or null,
+	 * derives an initial label from the endpoint hostname, and stores it.
+	 *
+	 * @param array<int, string> $changes Applied repair labels.
+	 * @return void
+	 * @since 1.7.1
+	 */
+	private function repair_webhooks( array &$changes ): void {
+		$connection = $this->context->get_connection();
+
+		if ( ! $connection->table_exists( 'webhooks' ) ) {
+			return;
+		}
+
+		$table_name = $this->context->get_table_identifier( 'webhooks' );
+		$pdo        = $this->context->get_pdo();
+
+		$statement      = $pdo->query(
+			'SELECT id, url, label FROM ' . $table_name . " WHERE label IS NULL OR label = ''"
+		);
+		$unlabeled_rows = $statement ? $statement->fetchAll( \PDO::FETCH_ASSOC ) : array();
+
+		if ( empty( $unlabeled_rows ) ) {
+			return;
+		}
+
+		$update_statement = $pdo->prepare(
+			'UPDATE ' . $table_name . ' SET label = :label WHERE id = :id'
+		);
+
+		$in_transaction = $pdo->inTransaction();
+		if ( ! $in_transaction ) {
+			$pdo->beginTransaction();
+		}
+
+		try {
+			foreach ( $unlabeled_rows as $row ) {
+				$id    = (string) ( $row['id'] ?? '' );
+				$url   = (string) ( $row['url'] ?? '' );
+				$host  = (string) ( parse_url( $url, PHP_URL_HOST ) ?? '' );
+				$label = '' !== trim( $host ) ? trim( $host ) : 'Webhook';
+
+				$update_statement->execute(
+					array(
+						':label' => $label,
+						':id'    => $id,
+					)
+				);
+			}
+
+			if ( ! $in_transaction ) {
+				$pdo->commit();
+			}
+
+			$changes[] = sprintf(
+				/* translators: %s: prefixed table name. */
+				__( 'Populated missing labels for existing %s rows.', 'peakurl' ),
+				$this->context->get_table_name( 'webhooks' )
+			);
+		} catch ( \Throwable $exception ) {
+			if ( ! $in_transaction && $pdo->inTransaction() ) {
+				$pdo->rollBack();
+			}
+
+			throw $exception;
 		}
 	}
 

@@ -22,6 +22,7 @@ use PeakURL\Core\Auth\Authorization;
 use PeakURL\Services\SocialPreview;
 use PeakURL\Http\Request;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Features\Webhooks\Service as WebhooksService;
 use ReflectionClass;
 
 class UsersContractsTest extends TestCase {
@@ -76,7 +77,8 @@ class UsersContractsTest extends TestCase {
 			$validator,
 			$roles,
 			$authorization,
-			$social_preview
+			$social_preview,
+			$this->createMock( WebhooksService::class )
 		);
 
 		$request = new Request( 'PUT', '/api/v1/users/me', array(), array() );
@@ -127,7 +129,8 @@ class UsersContractsTest extends TestCase {
 			$validator,
 			$roles,
 			$authorization,
-			$social_preview
+			$social_preview,
+			$this->createMock( WebhooksService::class )
 		);
 
 		$request = new Request( 'DELETE', '/api/v1/users/admin_user', array(), array() );
@@ -167,7 +170,8 @@ class UsersContractsTest extends TestCase {
 			$validator,
 			$roles,
 			$authorization,
-			$social_preview
+			$social_preview,
+			$this->createMock( WebhooksService::class )
 		);
 
 		$request = new Request( 'DELETE', '/api/v1/users/non_existent', array(), array() );
@@ -232,7 +236,8 @@ class UsersContractsTest extends TestCase {
 			$validator,
 			$roles,
 			$authorization,
-			$social_preview
+			$social_preview,
+			$this->createMock( WebhooksService::class )
 		);
 
 		$request = new Request( 'POST', '/api/v1/users', array(), array() );
@@ -306,7 +311,8 @@ class UsersContractsTest extends TestCase {
 			$validator,
 			$roles,
 			$authorization,
-			$social_preview
+			$social_preview,
+			$this->createMock( WebhooksService::class )
 		);
 
 		$request = new Request( 'GET', '/api/v1/users', array(), array() );

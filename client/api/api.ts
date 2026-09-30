@@ -603,5 +603,28 @@ export const API_ROUTES = {
 		 */
 		testById: (id: ApiPathPart) =>
 			apiPath("webhooks", encodeApiParam(id), "test"),
+
+		/**
+		 * Relative API path: `webhooks/events`.
+		 *
+		 * Returns the authoritative event catalogue with descriptions.
+		 */
+		events: apiPath("webhooks", "events"),
+
+		/**
+		 * Relative API path: `webhooks/{id}/rotate-secret`.
+		 *
+		 * Rotates signing secret and returns the new one-time secret.
+		 */
+		rotateSecret: (id: ApiPathPart) =>
+			apiPath("webhooks", encodeApiParam(id), "rotate-secret"),
+
+		/**
+		 * Relative API path: `webhooks/{id}/deliveries`.
+		 *
+		 * Lists paginated delivery history for a webhook.
+		 */
+		deliveries: (id: ApiPathPart) =>
+			apiPath("webhooks", encodeApiParam(id), "deliveries"),
 	},
 } as const;

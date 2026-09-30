@@ -141,9 +141,12 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 CREATE TABLE IF NOT EXISTS webhooks (
     id VARCHAR(40) NOT NULL PRIMARY KEY,
     user_id BIGINT UNSIGNED NOT NULL,
+    label VARCHAR(255) NOT NULL,
     url TEXT NOT NULL,
     events LONGTEXT NOT NULL,
     secret VARCHAR(255) NOT NULL,
+    secret_hint VARCHAR(64) DEFAULT NULL,
+    verify_ssl TINYINT(1) NOT NULL DEFAULT 1,
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
@@ -196,6 +199,7 @@ CREATE TABLE IF NOT EXISTS cron_runs (
 CREATE TABLE IF NOT EXISTS webhook_deliveries (
     id VARCHAR(40) NOT NULL PRIMARY KEY,
     webhook_id VARCHAR(40) NOT NULL,
+    event_id VARCHAR(40) NOT NULL DEFAULT '',
     event VARCHAR(64) NOT NULL,
     payload LONGTEXT NOT NULL,
     status VARCHAR(32) NOT NULL DEFAULT 'pending',
@@ -203,12 +207,18 @@ CREATE TABLE IF NOT EXISTS webhook_deliveries (
     max_attempts INT UNSIGNED NOT NULL DEFAULT 3,
     next_attempt_at DATETIME NOT NULL,
     last_attempt_at DATETIME DEFAULT NULL,
+    completed_at DATETIME DEFAULT NULL,
+    duration_ms INT UNSIGNED DEFAULT NULL,
     last_error TEXT DEFAULT NULL,
     response_code INT UNSIGNED DEFAULT NULL,
+    claim_token VARCHAR(64) DEFAULT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     KEY idx_webhook_deliveries_pending (status, next_attempt_at),
     KEY idx_webhook_deliveries_webhook_id (webhook_id),
+    KEY idx_webhook_deliveries_claim_token (claim_token),
+    KEY idx_webhook_deliveries_status_completed_at (status, completed_at),
+    KEY idx_webhook_deliveries_status_updated_at (status, updated_at),
     CONSTRAINT fk_webhook_deliveries_webhook_id FOREIGN KEY (webhook_id) REFERENCES webhooks (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

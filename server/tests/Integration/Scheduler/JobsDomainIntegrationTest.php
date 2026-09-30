@@ -88,13 +88,23 @@ class JobsDomainIntegrationTest extends TestCase {
 			$config
 		);
 
+		$validator = new class() extends WebhooksValidator {
+			protected function get_destination_ip( string $host ): ?string {
+				if ( in_array( $host, array( 'example.com', 'test.destination.org', 'destination.org' ), true ) ) {
+					return '93.184.216.34';
+				}
+				return parent::get_destination_ip( $host );
+			}
+		};
+
 		$this->webhooks_service = new WebhooksService(
 			$this->db,
-			new WebhooksValidator(),
+			$validator,
 			$this->auth_service,
 			$roles,
 			$authorization,
-			$config
+			$config,
+			$crypto
 		);
 
 		$analytics_repo = new AnalyticsRepository(
@@ -201,13 +211,15 @@ class JobsDomainIntegrationTest extends TestCase {
 	}
 
 	public function test_webhook_delivery_job_processes_deliveries_and_records_results(): void {
-		$webhook_id = Str::random_id( 16 );
-		$user_id    = 1;
-		$now        = Date::now();
+		$webhook_id       = Str::random_id( 16 );
+		$user_id          = 1;
+		$now              = Date::now();
+		$crypto           = new Crypto( Configuration::get_current() );
+		$encrypted_secret = $crypto->encrypt( 'sec123' );
 
 		$this->pdo->exec(
-			"INSERT INTO {$this->table_prefix}webhooks (id, user_id, url, secret, events, is_active, created_at, updated_at)
-			VALUES ('{$webhook_id}', {$user_id}, 'https://example.com/webhook', 'sec123', '[\"link.created\"]', 1, '{$now}', '{$now}')"
+			"INSERT INTO {$this->table_prefix}webhooks (id, user_id, label, url, secret, events, is_active, created_at, updated_at)
+			VALUES ('{$webhook_id}', {$user_id}, 'Test Webhook', 'https://example.com/webhook', '{$encrypted_secret}', '[\"link.created\"]', 1, '{$now}', '{$now}')"
 		);
 
 		$delivery_id = $this->webhooks_service->queue_delivery(
@@ -223,7 +235,6 @@ class JobsDomainIntegrationTest extends TestCase {
 				return array(
 					'statusCode' => 200,
 					'error'      => null,
-					'response'   => '{"status":"ok"}',
 				);
 			}
 		);

@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import type { LucideIcon } from "lucide-react";
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from "lucide-react";
 
@@ -208,7 +209,11 @@ export function NotificationContainer({
 	notifications = [],
 	onRemoveNotification,
 }: NotificationContainerProps) {
-	return (
+	if (typeof document === "undefined") {
+		return null;
+	}
+
+	return createPortal(
 		<div className="notification-container">
 			{/* pointer-events-none on container to let clicks pass through, but pointer-events-auto on notifications */}
 			{notifications.map((notification) => (
@@ -219,6 +224,7 @@ export function NotificationContainer({
 					/>
 				</div>
 			))}
-		</div>
+		</div>,
+		document.body
 	);
 }

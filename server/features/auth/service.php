@@ -22,6 +22,7 @@ use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Core\Security\Security;
 use PeakURL\Features\Analytics\Visitor;
+use PeakURL\Features\Webhooks\Service as WebhooksService;
 use PeakURL\Http\Request;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Database\Connection;
@@ -134,6 +135,14 @@ class Service {
 	private array $config;
 
 	/**
+	 * Optional webhooks domain service.
+	 *
+	 * @var WebhooksService|null
+	 * @since 1.7.1
+	 */
+	private ?WebhooksService $webhooks_service = null;
+
+	/**
 	 * Create an AuthService instance from runtime configuration and database connection.
 	 *
 	 * @param array<string, mixed> $config     Runtime configuration.
@@ -207,6 +216,17 @@ class Service {
 		$this->authorization = $authorization;
 		$this->geoip         = $geoip;
 		$this->config        = $config;
+	}
+
+	/**
+	 * Set webhooks domain service for lifecycle events.
+	 *
+	 * @param WebhooksService|null $webhooks_service Webhooks service.
+	 * @return void
+	 * @since 1.7.1
+	 */
+	public function set_webhooks_service( ?WebhooksService $webhooks_service ): void {
+		$this->webhooks_service = $webhooks_service;
 	}
 
 	/**
@@ -418,6 +438,10 @@ class Service {
 		$user = $this->users_api->get_user( $user_id );
 
 		\do_action( 'user_register', $this->format_user( $user ), $request );
+
+		if ( null !== $this->webhooks_service && $user ) {
+			$this->webhooks_service->dispatch_user_event( 'user.created', $user );
+		}
 
 		return $this->format_user( $user, $request );
 	}
@@ -832,10 +856,26 @@ class Service {
 			__( 'You do not have permission to manage API keys.', 'peakurl' ),
 		);
 
-		return $this->credentials->insert_api_key(
+		$key = $this->credentials->insert_api_key(
 			(string) $user['id'],
 			$this->validator->sanitize_key_label( $label ),
 		);
+
+		if ( null !== $this->webhooks_service ) {
+			$this->webhooks_service->dispatch_api_key_event(
+				'api_key.created',
+				array(
+					'id'         => (string) $key['id'],
+					'label'      => (string) $key['label'],
+					'prefix'     => (string) $key['prefix'],
+					'last_four'  => (string) $key['lastFour'],
+					'created_at' => (string) $key['createdAt'],
+				),
+				$user['id']
+			);
+		}
+
+		return $key;
 	}
 
 	/**
@@ -854,7 +894,26 @@ class Service {
 			__( 'You do not have permission to manage API keys.', 'peakurl' ),
 		);
 
-		return $this->credentials->revoke_api_key( (string) $user['id'], $id );
+		$key_data = $this->credentials->get_api_key( (string) $user['id'], $id );
+
+		$revoked = $this->credentials->revoke_api_key( (string) $user['id'], $id );
+
+		if ( $revoked && $key_data && null !== $this->webhooks_service ) {
+			$this->webhooks_service->dispatch_api_key_event(
+				'api_key.revoked',
+				array(
+					'id'         => (string) $key_data['id'],
+					'label'      => (string) $key_data['label'],
+					'prefix'     => (string) $key_data['key_prefix'],
+					'last_four'  => (string) $key_data['key_last_four'],
+					'created_at' => (string) $key_data['created_at'],
+					'revoked_at' => Date::now(),
+				),
+				$user['id']
+			);
+		}
+
+		return $revoked;
 	}
 
 	/**

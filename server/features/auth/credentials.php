@@ -113,6 +113,25 @@ class Credentials {
 	}
 
 	/**
+	 * Fetch a single API key record by ID and user ID for metadata capture.
+	 *
+	 * @param string $user_id User row ID.
+	 * @param string $key_id  API key row ID.
+	 * @return array<string, mixed>|null API key row or null if not found.
+	 * @since 1.7.1
+	 */
+	public function get_api_key( string $user_id, string $key_id ): ?array {
+		return $this->db->get_row_by(
+			'api_keys',
+			array(
+				'id'      => $key_id,
+				'user_id' => $user_id,
+			),
+			array( 'id', 'user_id', 'label', 'key_prefix', 'key_last_four', 'created_at' )
+		);
+	}
+
+	/**
 	 * Revoke an API key.
 	 *
 	 * @param string $user_id User row ID.

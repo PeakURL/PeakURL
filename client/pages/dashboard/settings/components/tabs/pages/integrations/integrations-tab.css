@@ -1,42 +1,37 @@
 @layer components {
 	.integrations-tab {
-		@apply space-y-5;
+		@apply space-y-6;
 	}
 
-	.integrations-tab-intro {
-		@apply rounded-lg border border-stroke bg-surface p-5;
-	}
-
+	/* Intro Header Section */
 	.integrations-tab-intro-row {
-		@apply flex items-center gap-3;
+		@apply flex items-center gap-3.5;
 	}
 
 	.integrations-tab-intro-icon {
-		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-500/10;
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent;
 	}
 
 	.integrations-tab-intro-icon-glyph {
-		@apply h-5 w-5 text-primary-600 dark:text-primary-400;
+		@apply h-5 w-5 text-accent;
 	}
 
-	.integrations-tab-intro-title {
-		@apply text-base font-semibold text-heading;
+	.integrations-tab-intro-copy {
+		@apply space-y-0.5 text-start min-w-0 flex-1;
 	}
 
-	.integrations-tab-intro-description {
-		@apply mt-0.5 text-sm text-text-muted;
-	}
-
+	/* Panel container (ensures Captcha and other sections render as full fieldsets) */
 	.integrations-tab-panel {
-		@apply rounded-lg border border-stroke bg-surface p-5;
+		@apply flex min-w-0 flex-col gap-5 rounded-xl bg-surface p-5 shadow-sm ring-1 ring-inset ring-stroke sm:p-6;
+		border: none;
 	}
 
 	.integrations-tab-panel-header {
-		@apply mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between;
+		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between pb-2;
 	}
 
 	.integrations-tab-panel-copy {
-		text-align: start;
+		@apply space-y-1 text-start min-w-0 flex-1;
 	}
 
 	.integrations-tab-panel-title {
@@ -44,57 +39,417 @@
 	}
 
 	.integrations-tab-panel-description {
-		@apply mt-1 max-w-2xl text-sm leading-6 text-text-muted;
+		@apply text-sm leading-6 text-text-muted max-w-2xl;
+	}
+
+	.integrations-tab-badge {
+		@apply inline-flex items-center rounded-full border border-stroke bg-surface-alt px-2.5 py-0.5 text-xs font-medium text-text-muted;
 	}
 
 	.integrations-tab-docs-link {
-		@apply inline-flex items-center gap-2 text-sm font-medium text-accent hover:underline;
+		@apply inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:underline;
 	}
 
 	.integrations-tab-status-pill {
-		@apply inline-flex w-fit items-center rounded-full border border-stroke bg-surface-alt px-3 py-1 text-xs font-medium text-text-muted;
+		@apply inline-flex w-fit items-center gap-1 rounded-full border border-stroke bg-surface-alt px-2.5 py-0.5 text-xs font-medium text-text-muted;
 	}
 
-	.integrations-tab-form {
-		@apply mb-6 rounded-lg border border-stroke bg-surface-alt p-4;
+	/* Webhook List & Card */
+	.integrations-tab-list {
+		@apply space-y-2.5;
 	}
 
-	.integrations-tab-captcha-form {
-		@apply mb-0;
+	.integrations-tab-webhook-card {
+		@apply rounded-xl border border-stroke bg-surface px-4 py-3 sm:py-3.5 transition-all hover:border-stroke-strong shadow-2xs;
 	}
 
-	.integrations-tab-form-title {
-		@apply mb-3 text-sm font-semibold text-heading;
+	.integrations-tab-webhook-header {
+		@apply flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between;
 	}
 
-	.integrations-tab-form-title-compact {
-		@apply mb-1.5;
+	.integrations-tab-webhook-main {
+		@apply flex flex-col gap-1.5 min-w-0 flex-1;
 	}
 
-	.integrations-tab-form-description {
-		@apply mb-4 text-sm leading-6 text-text-muted;
+	.integrations-tab-webhook-title-row {
+		@apply flex items-center gap-2 min-w-0;
 	}
 
-	.integrations-tab-form-description-compact {
-		@apply mb-0;
+	.integrations-tab-webhook-title {
+		@apply text-sm sm:text-base font-semibold text-heading truncate m-0;
 	}
 
-	.integrations-tab-form-grid {
-		@apply grid grid-cols-1 gap-3 md:grid-cols-2;
+	.integrations-tab-webhook-url-row {
+		@apply flex items-center gap-1.5 min-w-0 max-w-full;
 	}
 
-	.integrations-tab-captcha-fields {
-		@apply gap-4 lg:grid-cols-3;
+	.integrations-tab-webhook-dot {
+		@apply h-2 w-2 rounded-full shrink-0;
 	}
 
-	.integrations-tab-field-help {
-		@apply mt-1.5 text-xs leading-5 text-text-muted;
+	.integrations-tab-webhook-url {
+		@apply font-mono text-xs text-text-muted truncate select-all;
+		direction: ltr;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
 	}
 
-	.integrations-tab-captcha-provider {
-		@apply min-w-0;
+	.integrations-tab-icon-button {
+		@apply rounded p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading shrink-0;
 	}
 
+	.integrations-tab-webhook-badges {
+		@apply flex flex-wrap items-center gap-1.5 mt-0.5;
+	}
+
+	.integrations-tab-webhook-actions {
+		@apply flex items-center gap-1 shrink-0 self-end sm:self-center;
+	}
+
+	.integrations-tab-action-btn {
+		@apply h-7! text-xs! px-2! py-0! gap-1!;
+	}
+
+	.integrations-tab-delete-btn {
+		@apply h-7 w-7 inline-flex items-center justify-center rounded-lg border border-stroke text-text-muted hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:hover:border-red-900/40 dark:hover:bg-red-950/20 dark:hover:text-red-400 transition-colors;
+	}
+
+	.integrations-tab-webhook-footer {
+		@apply mt-2.5 pt-2 border-t border-stroke/40 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between text-xs text-text-muted;
+	}
+
+	.integrations-tab-webhook-events {
+		@apply flex flex-wrap items-center gap-1.5;
+	}
+
+	.integrations-tab-event-pill {
+		@apply inline-flex items-center rounded bg-surface-alt px-1.5 py-0.5 font-mono text-[10px] text-text-muted border border-stroke/60 font-medium;
+		direction: ltr;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	.integrations-tab-webhook-meta {
+		@apply flex flex-wrap items-center gap-2 text-xs text-text-muted;
+	}
+
+	/* Empty State */
+	.integrations-tab-empty-card {
+		@apply flex flex-col items-center justify-center rounded-xl border border-dashed border-stroke bg-surface-alt/40 p-8 sm:p-12 text-center;
+	}
+
+	.integrations-tab-empty-icon {
+		@apply flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 text-accent mb-4;
+	}
+
+	.integrations-tab-empty-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.integrations-tab-empty-description {
+		@apply text-xs sm:text-sm text-text-muted max-w-md mt-1.5 leading-relaxed;
+	}
+
+	/* Field layout and labels */
+	.integrations-tab-field-group {
+		@apply space-y-2;
+	}
+
+	.integrations-tab-field-label {
+		@apply block text-sm font-semibold text-heading;
+		text-align: start;
+	}
+
+	.integrations-tab-field-desc {
+		@apply text-xs text-text-muted leading-relaxed;
+		text-align: start;
+	}
+
+	/* Quick Action Buttons for Events */
+	.integrations-tab-quick-button {
+		@apply rounded-md border border-stroke bg-surface px-2.5 py-1 text-xs font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
+	}
+
+	.integrations-tab-quick-button-active {
+		@apply border-accent/40 bg-accent/10 text-accent font-semibold;
+	}
+
+	/* Webhook Event Groupings */
+	.webhook-events-groups-container {
+		@apply space-y-4;
+	}
+
+	.webhook-events-group {
+		@apply space-y-2;
+	}
+
+	.webhook-events-group + .webhook-events-group {
+		@apply pt-3 border-t border-stroke/50;
+	}
+
+	.webhook-events-group-header {
+		@apply flex items-center justify-between gap-2 py-0.5;
+	}
+
+	.webhook-events-group-title {
+		@apply text-xs font-semibold text-heading;
+	}
+
+	.webhook-events-group-action {
+		@apply text-xs font-medium text-accent hover:underline cursor-pointer bg-transparent border-0 p-0;
+	}
+
+	/* Compact 2-Column Grouped Event List */
+	.webhook-events-list {
+		@apply grid grid-cols-1 gap-px rounded-lg border border-stroke/70 bg-stroke/40 overflow-hidden sm:grid-cols-2;
+	}
+
+	.webhook-event-row {
+		@apply flex items-start gap-3 bg-surface px-3.5 py-2.5 cursor-pointer select-none transition-colors hover:bg-surface-alt/60;
+		text-align: start;
+	}
+
+	@media (min-width: 640px) {
+		.webhook-event-row:nth-child(odd):last-child {
+			grid-column: span 2 / span 2;
+		}
+	}
+
+	.webhook-event-name {
+		@apply block text-xs font-semibold text-heading leading-tight;
+	}
+
+	.webhook-event-desc {
+		@apply text-[11px] text-text-muted leading-normal mt-0.5;
+	}
+
+	.integrations-tab-event-checkbox {
+		@apply h-4 w-4 rounded border-stroke text-accent focus:ring-accent shrink-0 mt-0.5;
+	}
+
+	/* Option Card (SSL, Active) */
+	.integrations-tab-option-card {
+		@apply flex items-center justify-between rounded-lg border border-stroke bg-surface p-3.5 transition-colors hover:border-stroke-strong;
+		text-align: start;
+	}
+
+	.integrations-tab-option-icon {
+		@apply flex h-7 w-7 shrink-0 items-center justify-center rounded-md;
+	}
+
+	.integrations-tab-option-icon-active {
+		@apply bg-green-500/10 text-green-600 dark:bg-green-500/20 dark:text-green-400;
+	}
+
+	.integrations-tab-option-icon-warning {
+		@apply bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400;
+	}
+
+	/* Signing Secret Display Card in Settings */
+	.integrations-tab-secret-card {
+		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-stroke bg-surface p-3.5;
+		text-align: start;
+	}
+
+	.integrations-tab-secret-card-content {
+		@apply flex items-start gap-3 min-w-0;
+	}
+
+	.integrations-tab-secret-code {
+		@apply font-mono bg-surface-alt px-2 py-0.5 rounded border border-stroke/50 text-text-muted text-xs inline-block;
+		direction: ltr;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	/* Form Footer Actions */
+	.integrations-tab-footer-actions {
+		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-stroke;
+	}
+
+	.integrations-tab-delete-button {
+		@apply border-red-200! text-red-600! hover:border-red-300! hover:bg-red-50! hover:text-red-700! dark:border-red-900/50! dark:text-red-400! dark:hover:border-red-800! dark:hover:bg-red-900/20! dark:hover:text-red-300!;
+	}
+
+	/* Health Badges */
+	.integrations-tab-item-health-pill {
+		@apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+	}
+
+	.integrations-tab-item-health-pill-success {
+		@apply bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400;
+	}
+
+	.integrations-tab-item-health-pill-warning {
+		@apply bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400;
+	}
+
+	.integrations-tab-item-health-pill-danger {
+		@apply bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400;
+	}
+
+	.integrations-tab-item-health-pill-neutral {
+		@apply bg-surface-alt text-text-muted;
+	}
+
+	.integrations-tab-item-health-pill-info {
+		@apply bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400;
+	}
+
+	/* ─── Webhook Delivery Slide-Over Drawer (Matching Links Drawer & Scheduled Jobs) ─── */
+	.webhook-drawer-layout {
+		@apply pointer-events-none fixed inset-y-0 flex max-w-full;
+	}
+
+	.webhook-drawer-layout-ltr {
+		@apply right-0 pl-0 sm:pl-16;
+	}
+
+	.webhook-drawer-layout-rtl {
+		@apply left-0 pr-0 sm:pr-16;
+	}
+
+	.webhook-form-drawer-panel {
+		@apply pointer-events-auto flex h-full w-screen max-w-2xl transform flex-col overflow-hidden bg-surface shadow-2xl transition-transform duration-500 ease-out;
+	}
+
+	.webhook-form-drawer-panel[data-closed] {
+		@apply ease-in;
+	}
+
+	.webhook-drawer-panel {
+		@apply pointer-events-auto flex h-full w-screen max-w-3xl lg:max-w-4xl transform flex-col overflow-hidden bg-surface shadow-2xl transition-transform duration-500 ease-out;
+	}
+
+	.webhook-drawer-panel[data-closed] {
+		@apply ease-in;
+	}
+
+	.webhook-drawer-header {
+		@apply flex items-start justify-between gap-4 border-b border-stroke bg-surface-alt px-4 py-5 sm:px-6;
+	}
+
+	.webhook-drawer-title-icon {
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent;
+	}
+
+	.webhook-drawer-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.webhook-drawer-subtitle {
+		@apply text-xs text-text-muted font-mono mt-0.5 truncate;
+		direction: ltr;
+		unicode-bidi: -moz-plaintext;
+		unicode-bidi: plaintext;
+	}
+
+	.webhook-drawer-header-btn {
+		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-surface hover:text-heading disabled:opacity-50;
+	}
+
+	.webhook-drawer-content {
+		@apply min-h-0 flex-1 overflow-y-auto p-4 sm:p-6 space-y-6;
+	}
+
+	.webhook-drawer-meta-grid {
+		@apply grid grid-cols-2 gap-3.5 sm:grid-cols-4 rounded-xl border border-stroke bg-surface-alt/60 p-4;
+	}
+
+	.webhook-drawer-meta-card {
+		@apply flex flex-col text-start;
+	}
+
+	.webhook-drawer-meta-label {
+		@apply text-[11px] font-medium text-text-muted uppercase tracking-wider;
+	}
+
+	.webhook-drawer-meta-value {
+		@apply mt-0.5 text-xs font-semibold text-heading;
+	}
+
+	.webhook-drawer-loading {
+		@apply flex items-center justify-center gap-2.5 py-16 text-sm text-text-muted;
+	}
+
+	.webhook-drawer-empty {
+		@apply py-14 text-center rounded-xl border border-dashed border-stroke bg-surface-alt/40 px-4;
+	}
+
+	.webhook-drawer-empty-icon {
+		@apply mx-auto mb-3 h-9 w-9 text-text-muted;
+	}
+
+	.webhook-drawer-empty-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.webhook-drawer-empty-copy {
+		@apply text-xs text-text-muted max-w-sm mx-auto mt-1 leading-relaxed;
+	}
+
+	.webhook-drawer-table-wrap {
+		@apply overflow-x-auto rounded-xl border border-stroke;
+	}
+
+	.webhook-drawer-table {
+		@apply min-w-full text-start text-xs border-collapse;
+	}
+
+	.webhook-drawer-table th {
+		@apply bg-surface-alt px-3.5 py-2.5 text-[11px] font-semibold text-text-muted uppercase tracking-wider border-b border-stroke/60 text-start;
+	}
+
+	.webhook-drawer-table td {
+		@apply border-b border-stroke/30 px-3.5 py-2.5 text-xs text-heading align-middle text-start;
+	}
+
+	.webhook-drawer-row-failed {
+		@apply bg-red-500/5;
+	}
+
+	.webhook-drawer-error-box {
+		@apply mt-1.5 max-w-md rounded bg-red-50 p-2.5 text-xs text-red-800 dark:bg-red-950/40 dark:text-red-300;
+	}
+
+	.webhook-drawer-pagination {
+		@apply flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pt-2;
+	}
+
+	.webhook-drawer-pagination-info {
+		@apply text-xs text-text-muted;
+	}
+
+	.webhook-drawer-footer {
+		@apply flex items-center justify-between border-t border-stroke bg-surface-alt px-4 py-3 sm:px-6;
+	}
+
+	.integrations-delivery-badge {
+		@apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium;
+		font-size: 11px;
+	}
+
+	.integrations-delivery-badge-success {
+		@apply bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400;
+	}
+
+	.integrations-delivery-badge-warning {
+		@apply bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400;
+	}
+
+	.integrations-delivery-badge-danger {
+		@apply bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400;
+	}
+
+	.integrations-delivery-badge-info {
+		@apply bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400;
+	}
+
+	.integrations-delivery-badge-neutral {
+		@apply bg-surface-alt text-text-muted;
+	}
+
+	/* Switch component (used by Captcha) */
 	.integrations-tab-switch {
 		@apply inline-flex items-center gap-3 text-sm font-medium text-heading;
 	}
@@ -112,15 +467,44 @@
 	}
 
 	.integrations-tab-switch-thumb {
-		@apply absolute left-px top-px h-5 w-5 rounded-full bg-white shadow transition-transform;
+		@apply absolute left-px rtl:left-auto rtl:right-px top-px h-5 w-5 rounded-full bg-white shadow transition-transform;
 	}
 
 	.integrations-tab-switch-thumb-active {
-		@apply translate-x-5;
+		@apply translate-x-5 rtl:-translate-x-5;
 	}
 
 	.integrations-tab-switch-thumb-inactive {
 		@apply translate-x-0;
+	}
+
+	/* Captcha Settings Styles */
+	.integrations-tab-form {
+		@apply rounded-xl border border-stroke bg-surface-alt/40 p-5 mt-2 space-y-4;
+	}
+
+	.integrations-tab-captcha-form {
+		@apply mb-0;
+	}
+
+	.integrations-tab-form-title {
+		@apply text-sm font-semibold text-heading;
+	}
+
+	.integrations-tab-form-description {
+		@apply text-xs leading-relaxed text-text-muted mt-0.5;
+	}
+
+	.integrations-tab-form-grid {
+		@apply grid grid-cols-1 gap-4;
+	}
+
+	.integrations-tab-captcha-fields {
+		@apply gap-4 sm:grid-cols-2 lg:grid-cols-3;
+	}
+
+	.integrations-tab-captcha-provider {
+		@apply min-w-0;
 	}
 
 	.integrations-tab-captcha-secret {
@@ -128,16 +512,15 @@
 	}
 
 	.integrations-tab-captcha-summary {
-		@apply rounded-lg border border-stroke bg-surface p-4;
+		@apply rounded-lg border border-stroke bg-surface p-4 space-y-3;
 	}
 
 	.integrations-tab-captcha-summary-grid {
-		@apply grid grid-cols-1 gap-4 md:grid-cols-3;
+		@apply grid grid-cols-1 gap-4 sm:grid-cols-3;
 	}
 
 	.integrations-tab-captcha-summary-item {
-		@apply min-w-0;
-		text-align: start;
+		@apply min-w-0 text-start;
 	}
 
 	.integrations-tab-captcha-summary-label {
@@ -149,7 +532,7 @@
 	}
 
 	.integrations-tab-captcha-summary-code {
-		@apply w-fit rounded bg-surface-alt px-2 py-0.5 font-mono font-medium text-text-muted;
+		@apply w-fit rounded bg-surface-alt px-2 py-0.5 font-mono text-xs font-medium text-text-muted;
 		direction: ltr;
 		text-align: inherit;
 		unicode-bidi: -moz-plaintext;
@@ -157,12 +540,11 @@
 	}
 
 	.integrations-tab-captcha-summary-note {
-		@apply mt-3 text-xs leading-5 text-text-muted;
-		text-align: start;
+		@apply text-xs leading-5 text-text-muted text-start;
 	}
 
 	.integrations-tab-captcha-footer {
-		@apply mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+		@apply mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-3 border-t border-stroke/70;
 	}
 
 	.integrations-tab-captcha-footer-actions {
@@ -173,148 +555,7 @@
 		@apply border-red-200! text-red-600! hover:border-red-300! hover:bg-red-50! hover:text-red-700! dark:border-red-900/50! dark:text-red-400! dark:hover:border-red-800! dark:hover:bg-red-900/20! dark:hover:text-red-300!;
 	}
 
-	.integrations-tab-endpoint-help {
-		@apply mt-2 space-y-1.5 text-xs leading-5 text-text-muted;
-	}
-
-	.integrations-tab-endpoint-code {
-		@apply block w-fit max-w-full rounded bg-surface px-1.5 py-0.5 text-heading;
-		font-size: 11px;
-		direction: ltr;
-		text-align: start;
-		unicode-bidi: -moz-plaintext;
-		unicode-bidi: plaintext;
-	}
-
-	.integrations-tab-field-label {
-		@apply block text-sm font-semibold text-heading;
-		text-align: start;
-	}
-
-	.integrations-tab-events-grid {
-		@apply grid grid-cols-2 gap-3;
-	}
-
-	.integrations-tab-event-option {
-		@apply flex cursor-pointer select-none items-center gap-3 rounded-lg border border-stroke bg-surface p-3 text-sm text-text-muted transition-colors hover:border-accent/50 hover:bg-accent/5;
-	}
-
-	.integrations-tab-event-option-checked {
-		@apply border-accent bg-accent/5 text-heading;
-	}
-
-	.integrations-tab-event-checkbox {
-		@apply h-4 w-4 rounded border-stroke text-accent focus:ring-accent focus:ring-offset-surface;
-	}
-
-	.integrations-tab-event-label {
-		@apply font-medium;
-	}
-
-	.integrations-tab-form-actions {
-		@apply mt-6 flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between;
-	}
-
-	.integrations-tab-form-actions > * {
-		@apply w-full sm:w-auto justify-center;
-	}
-
-	.integrations-tab-form-actions-rtl {
-		@apply justify-start;
-	}
-
-	.integrations-tab-status-copy {
-		@apply text-sm text-text-muted;
-	}
-
-	.integrations-tab-status-copy-error {
-		@apply text-red-600 dark:text-red-400;
-	}
-
-	.integrations-tab-empty {
-		@apply rounded-lg border border-dashed border-stroke bg-surface-alt py-8 text-center;
-	}
-
-	.integrations-tab-empty-icon {
-		@apply mx-auto mb-3 h-8 w-8 text-text-muted;
-	}
-
-	.integrations-tab-empty-title {
-		@apply mb-1 text-sm font-medium text-heading;
-	}
-
-	.integrations-tab-empty-copy {
-		@apply text-xs text-text-muted;
-	}
-
-	.integrations-tab-list {
-		@apply flex flex-col gap-4;
-	}
-
-	.integrations-tab-item {
-		@apply rounded-xl border border-stroke bg-surface mt-5 p-5 shadow-sm transition-all hover:border-accent/20 hover:shadow-md;
-	}
-
-	.integrations-tab-item-row {
-		@apply flex items-start justify-between gap-6;
-	}
-
-	.integrations-tab-item-content {
-		@apply min-w-0 flex-1 space-y-3;
-		text-align: start;
-	}
-
-	.integrations-tab-item-url {
-		@apply flex items-center truncate text-base font-semibold text-heading;
-		direction: ltr;
-		text-align: start;
-		unicode-bidi: -moz-plaintext;
-		unicode-bidi: plaintext;
-	}
-
-	.integrations-tab-item-events {
-		@apply flex flex-wrap gap-2;
-	}
-
-	.integrations-tab-item-event-pill {
-		@apply rounded-md bg-accent/10 px-2.5 py-1 text-xs font-medium text-accent dark:bg-accent/20;
-	}
-
-	.integrations-tab-item-state-pill {
-		@apply rounded bg-surface-alt px-2 py-0.5 text-xs text-text-muted;
-	}
-
-	.integrations-tab-item-secret {
-		@apply mt-3 flex items-center gap-2;
-	}
-
-	.integrations-tab-item-secret-value {
-		@apply truncate font-mono text-xs text-text-muted;
-		direction: ltr;
-		text-align: start;
-		unicode-bidi: -moz-plaintext;
-		unicode-bidi: plaintext;
-	}
-
-	.integrations-tab-item-secret-copy {
-		@apply text-xs text-text-muted;
-	}
-
-	.integrations-tab-item-created {
-		@apply mt-2 text-xs text-text-muted;
-	}
-
-	.integrations-tab-item-created-value {
-		@apply inline-block;
-		direction: ltr;
-		unicode-bidi: -moz-plaintext;
-		unicode-bidi: plaintext;
-	}
-
-	.integrations-tab-item-delete {
-		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-60 dark:hover:bg-red-900/20;
-	}
-
+	/* Secret Modal Styles */
 	.integrations-tab-secret-modal {
 		@apply space-y-5;
 	}
@@ -358,5 +599,38 @@
 
 	.integrations-tab-secret-actions-rtl {
 		@apply justify-start;
+	}
+
+	/* Test Result Box */
+	.integrations-test-result-box {
+		@apply rounded-xl border p-4 space-y-3;
+	}
+
+	.integrations-test-result-success {
+		@apply border-green-200 bg-green-50/50 dark:border-green-800/40 dark:bg-green-950/20;
+	}
+
+	.integrations-test-result-failure {
+		@apply border-red-200 bg-red-50/50 dark:border-red-800/40 dark:bg-red-950/20;
+	}
+
+	.integrations-test-result-header {
+		@apply flex items-center justify-between;
+	}
+
+	.integrations-test-result-title {
+		@apply flex items-center gap-2 font-semibold text-sm;
+	}
+
+	.integrations-test-result-meta {
+		@apply grid grid-cols-2 gap-2 text-xs;
+	}
+
+	.integrations-test-result-label {
+		@apply text-text-muted block;
+	}
+
+	.integrations-test-result-value {
+		@apply font-mono font-medium text-heading block;
 	}
 }

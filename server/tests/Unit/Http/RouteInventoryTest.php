@@ -296,6 +296,11 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'manage_webhooks',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
+		'GET /api/v1/webhooks/events'                      => array(
+			'area'       => 'Webhooks',
+			'capability' => 'manage_webhooks',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
 		'POST /api/v1/webhooks'                            => array(
 			'area'       => 'Webhooks',
 			'capability' => 'manage_webhooks',
@@ -307,6 +312,16 @@ class RouteInventoryTest extends TestCase {
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/webhooks/{id}/test'                  => array(
+			'area'       => 'Webhooks',
+			'capability' => 'manage_webhooks',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
+		'POST /api/v1/webhooks/{id}/rotate-secret'         => array(
+			'area'       => 'Webhooks',
+			'capability' => 'manage_webhooks',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
+		'GET /api/v1/webhooks/{id}/deliveries'             => array(
 			'area'       => 'Webhooks',
 			'capability' => 'manage_webhooks',
 			'coverage'   => array( 'contract', 'auth' ),

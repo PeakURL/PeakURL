@@ -62,9 +62,10 @@ class WebhookDeliveryJob implements JobHandlerInterface {
 	 * {@inheritDoc}
 	 */
 	public function execute( ExecutionContext $context ): ExecutionResult {
-		$result = $this->webhooks_service->process_pending_deliveries( 50 );
+		$result  = $this->webhooks_service->process_pending_deliveries( WebhooksService::DEFAULT_BATCH_SIZE );
+		$cleaned = $this->webhooks_service->cleanup_delivery_history();
 
-		if ( 0 === $result['processed'] ) {
+		if ( 0 === $result['processed'] && 0 === $cleaned ) {
 			return ExecutionResult::success( 'No pending webhook deliveries.' );
 		}
 
@@ -83,6 +84,12 @@ class WebhookDeliveryJob implements JobHandlerInterface {
 				$result['retried'],
 				$result['failed']
 			);
+
+		if ( $cleaned > 0 ) {
+			$message .= sprintf( ' Cleaned %d webhook delivery history records past retention.', $cleaned );
+		}
+
+		$result['cleaned'] = $cleaned;
 
 		return ExecutionResult::success(
 			$message,

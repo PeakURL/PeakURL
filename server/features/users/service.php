@@ -19,6 +19,7 @@ use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Service as AuthService;
+use PeakURL\Features\Webhooks\Service as WebhooksService;
 use PeakURL\Http\Request;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\SocialPreview;
@@ -101,6 +102,14 @@ class Service {
 	private SocialPreview $social_preview;
 
 	/**
+	 * Webhooks domain service.
+	 *
+	 * @var WebhooksService
+	 * @since 1.7.1
+	 */
+	private WebhooksService $webhooks_service;
+
+	/**
 	 * Create a new Users domain service instance.
 	 *
 	 * @param PeakURL_DB       $db                Database service.
@@ -111,6 +120,7 @@ class Service {
 	 * @param Roles            $roles             Roles registry.
 	 * @param Authorization    $authorization     Authorization service.
 	 * @param SocialPreview    $social_preview    Social preview service.
+	 * @param WebhooksService  $webhooks_service  Webhooks domain service.
 	 * @since 1.0.0
 	 */
 	public function __construct(
@@ -121,7 +131,8 @@ class Service {
 		Validator $validator,
 		Roles $roles,
 		Authorization $authorization,
-		SocialPreview $social_preview
+		SocialPreview $social_preview,
+		WebhooksService $webhooks_service
 	) {
 		$this->db                = $db;
 		$this->users_api         = $users_api;
@@ -131,6 +142,7 @@ class Service {
 		$this->roles             = $roles;
 		$this->authorization     = $authorization;
 		$this->social_preview    = $social_preview;
+		$this->webhooks_service  = $webhooks_service;
 	}
 
 	/**
@@ -272,8 +284,18 @@ class Service {
 			$this->auth_service->send_password_changed( $user_row );
 		}
 
+		$updated_user = $this->users_api->get_user( $user_id );
+
+		if ( $updated_user ) {
+			$this->webhooks_service->dispatch_user_event(
+				'user.updated',
+				$updated_user,
+				$user_row
+			);
+		}
+
 		return $this->format_user(
-			$this->users_api->get_user( $user_id ),
+			$updated_user,
 			$request,
 		);
 	}
@@ -368,6 +390,8 @@ class Service {
 					'user' => $this->get_user_activity_meta( $user ),
 				),
 			);
+
+			$this->webhooks_service->dispatch_user_event( 'user.created', $user );
 		}
 
 		return $this->format_user( $user );
@@ -502,6 +526,12 @@ class Service {
 					'user' => $this->get_user_activity_meta( $updated_user ),
 				),
 			);
+
+			$this->webhooks_service->dispatch_user_event(
+				'user.updated',
+				$updated_user,
+				$user
+			);
 		}
 
 		return $this->format_user( $updated_user );
@@ -581,6 +611,10 @@ class Service {
 		$this->social_preview->delete_link_images(
 			$link_cleanup['image_paths'],
 		);
+
+		if ( $user ) {
+			$this->webhooks_service->dispatch_user_event( 'user.deleted', $user );
+		}
 
 		return true;
 	}

@@ -112,7 +112,8 @@ $webhooks_service = new WebhooksService(
 	$auth_service,
 	$roles,
 	$authorization,
-	$config
+	$config,
+	$crypto
 );
 
 $update_manager = new UpdateManager( $config, $settings_api, $db );

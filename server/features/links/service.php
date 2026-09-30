@@ -386,6 +386,8 @@ class Service {
 			if ( 'expired' !== (string) ( $url['status'] ?? '' ) && ! empty( $url['id'] ) ) {
 				$this->data->mark_link_expired( (string) $url['id'] );
 				$this->invalidate_link_cache( $url );
+				\do_action( 'link_expired', $url );
+				$this->webhooks_service->dispatch_link_event( 'link.expired', $this->format_url( array_merge( $url, array( 'status' => 'expired' ) ) ) );
 			}
 
 			return array(
@@ -911,7 +913,22 @@ class Service {
 		 */
 		\do_action( 'link_updated', $url, $existing, $request, $user );
 
-		$this->webhooks_service->dispatch_link_event( 'link.updated', $url, $user, $existing );
+		$formatted_existing = $this->format_url( $existing );
+		$formatted_url      = $this->format_url( $url );
+		$this->webhooks_service->dispatch_link_event( 'link.updated', $formatted_url, $user, $formatted_existing );
+
+		$prev_status = (string) ( $existing['status'] ?? 'active' );
+		$new_status  = (string) ( $formatted_url['status'] ?? 'active' );
+
+		if ( $prev_status !== $new_status ) {
+			if ( 'active' === $new_status && in_array( $prev_status, array( 'inactive', 'paused' ), true ) ) {
+				$this->webhooks_service->dispatch_link_event( 'link.activated', $formatted_url, $user, $formatted_existing );
+			} elseif ( in_array( $new_status, array( 'inactive', 'paused' ), true ) && 'active' === $prev_status ) {
+				$this->webhooks_service->dispatch_link_event( 'link.deactivated', $formatted_url, $user, $formatted_existing );
+			} elseif ( 'expired' === $new_status && 'expired' !== $prev_status ) {
+				$this->webhooks_service->dispatch_link_event( 'link.expired', $formatted_url, $user, $formatted_existing );
+			}
+		}
 
 		return $url;
 	}
@@ -986,7 +1003,7 @@ class Service {
 
 				\do_action( 'link_trashed', $row, $request, $user );
 
-				$this->webhooks_service->dispatch_link_event( 'link.deleted', $row, $user );
+				$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $row ), $user );
 			}
 
 			return $updated;
@@ -1015,7 +1032,7 @@ class Service {
 
 			\do_action( 'link_deleted', $row, $request, $user );
 
-			$this->webhooks_service->dispatch_link_event( 'link.deleted', $row, $user );
+			$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $row ), $user );
 		}
 
 		return $deleted;
@@ -1089,7 +1106,10 @@ class Service {
 
 		\do_action( 'link_restored', $row, $request, $user );
 
-		return $this->format_url( $row );
+		$formatted_url = $this->format_url( $row );
+		$this->webhooks_service->dispatch_link_event( 'link.restored', $formatted_url, $user );
+
+		return $formatted_url;
 	}
 
 	/**
@@ -1192,7 +1212,7 @@ class Service {
 
 				\do_action( 'link_trashed', $row, $request, $user );
 
-				$this->webhooks_service->dispatch_link_event( 'link.deleted', $row, $user );
+				$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $row ), $user );
 			}
 
 			return count( $trashed_ids );
@@ -1225,7 +1245,7 @@ class Service {
 
 			\do_action( 'link_deleted', $deleted_row, $request, $user );
 
-			$this->webhooks_service->dispatch_link_event( 'link.deleted', $deleted_row, $user );
+			$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $deleted_row ), $user );
 		}
 
 		return $deleted_count;
@@ -1302,6 +1322,9 @@ class Service {
 			$this->invalidate_link_cache( $row );
 
 			\do_action( 'link_restored', $row, $request, $user );
+
+			$row['status'] = 'active';
+			$this->webhooks_service->dispatch_link_event( 'link.restored', $this->format_url( $row ), $user );
 		}
 
 		return count( $restored_ids );
@@ -1358,7 +1381,7 @@ class Service {
 
 			\do_action( 'link_deleted', $deleted_row, $request, $user );
 
-			$this->webhooks_service->dispatch_link_event( 'link.deleted', $deleted_row, $user );
+			$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $deleted_row ), $user );
 		}
 
 		return $deleted_count;
@@ -1439,7 +1462,7 @@ class Service {
 
 				\do_action( 'link_deleted', $deleted_row, $request, $user );
 
-				$this->webhooks_service->dispatch_link_event( 'link.deleted', $deleted_row, $user );
+				$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $deleted_row ), $user );
 			}
 
 			return $deleted_count;
@@ -1491,7 +1514,7 @@ class Service {
 
 			\do_action( 'link_trashed', $row, $request, $user );
 
-			$this->webhooks_service->dispatch_link_event( 'link.deleted', $row, $user );
+			$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $row ), $user );
 		}
 
 		return count( $trashed_ids );
@@ -1586,47 +1609,51 @@ class Service {
 		$alias     = trim( (string) ( $row['alias'] ?? '' ) );
 		$short_key = '' !== $alias
 			? $alias
-			: trim( (string) ( $row['short_code'] ?? '' ) );
-		$short_url = '';
+			: trim( (string) ( $row['short_code'] ?? $row['shortCode'] ?? '' ) );
+		$short_url = (string) ( $row['shortUrl'] ?? '' );
 
-		if ( '' !== $site_url && '' !== $short_key ) {
+		if ( '' === $short_url && '' !== $site_url && '' !== $short_key ) {
 			$short_url = $site_url . '/' . ltrim( $short_key, '/' );
 		}
 
 		return array(
-			'id'             => (string) $row['id'],
-			'userId'         => (string) ( $row['user_id'] ?? '' ),
-			'shortCode'      => (string) $row['short_code'],
-			'alias'          => (string) $row['alias'],
+			'id'             => (string) ( $row['id'] ?? '' ),
+			'userId'         => (string) ( $row['user_id'] ?? $row['userId'] ?? '' ),
+			'shortCode'      => (string) ( $row['short_code'] ?? $row['shortCode'] ?? '' ),
+			'alias'          => (string) ( $row['alias'] ?? '' ),
 			'shortUrl'       => $short_url,
 			'title'          => trim( (string) ( $row['title'] ?? '' ) ),
-			'destinationUrl' => (string) $row['destination_url'],
+			'destinationUrl' => (string) ( $row['destination_url'] ?? $row['destinationUrl'] ?? '' ),
 			'socialPreview'  => array(
-				'title'            => trim( (string) ( $row['social_title'] ?? '' ) ),
-				'description'      => trim( (string) ( $row['social_description'] ?? '' ) ),
-				'imageUrl'         => '' !== trim( (string) ( $row['social_image_url'] ?? '' ) )
-					? trim( (string) $row['social_image_url'] )
+				'title'            => trim( (string) ( $row['social_title'] ?? $row['socialPreview']['title'] ?? '' ) ),
+				'description'      => trim( (string) ( $row['social_description'] ?? $row['socialPreview']['description'] ?? '' ) ),
+				'imageUrl'         => '' !== trim( (string) ( $row['social_image_url'] ?? $row['socialPreview']['imageUrl'] ?? '' ) )
+					? trim( (string) ( $row['social_image_url'] ?? $row['socialPreview']['imageUrl'] ) )
 					: $this->social_preview->get_link_image_url(
 						(string) ( $row['social_image_path'] ?? '' ),
 					),
-				'externalImageUrl' => '' !== trim( (string) ( $row['social_image_url'] ?? '' ) )
-					? trim( (string) $row['social_image_url'] )
+				'externalImageUrl' => '' !== trim( (string) ( $row['social_image_url'] ?? $row['socialPreview']['externalImageUrl'] ?? '' ) )
+					? trim( (string) ( $row['social_image_url'] ?? $row['socialPreview']['externalImageUrl'] ) )
 					: null,
 			),
 			'domain'         => null,
-			'clicks'         => (int) ( $row['click_count'] ?? 0 ),
-			'uniqueClicks'   => (int) ( $row['unique_click_count'] ?? 0 ),
+			'clicks'         => (int) ( $row['click_count'] ?? $row['clicks'] ?? 0 ),
+			'uniqueClicks'   => (int) ( $row['unique_click_count'] ?? $row['uniqueClicks'] ?? 0 ),
 			'status'         => ( 'active' === (string) ( $row['status'] ?? 'active' ) && $this->validator->is_public_link_expired( $row ) )
 				? 'expired'
 				: (string) ( $row['status'] ?? 'active' ),
-			'hasPassword'    => '' !== trim(
+			'hasPassword'    => ! empty( $row['hasPassword'] ) || '' !== trim(
 				(string) ( $row['password_value'] ?? '' ),
 			),
-			'expiresAt'      => $row['expires_at']
+			'expiresAt'      => ! empty( $row['expires_at'] )
 				? Date::to_iso( (string) $row['expires_at'] )
-				: null,
-			'createdAt'      => Date::to_iso( (string) $row['created_at'] ),
-			'updatedAt'      => Date::to_iso( (string) $row['updated_at'] ),
+				: ( $row['expiresAt'] ?? null ),
+			'createdAt'      => ! empty( $row['created_at'] )
+				? Date::to_iso( (string) $row['created_at'] )
+				: (string) ( $row['createdAt'] ?? Date::to_iso( Date::now() ) ),
+			'updatedAt'      => ! empty( $row['updated_at'] )
+				? Date::to_iso( (string) $row['updated_at'] )
+				: (string) ( $row['updatedAt'] ?? Date::to_iso( Date::now() ) ),
 		);
 	}
 
@@ -2098,6 +2125,7 @@ class Service {
 			$link['status'] = 'expired';
 			$this->invalidate_link_cache( $link );
 			\do_action( 'link_expired', $link );
+			$this->webhooks_service->dispatch_link_event( 'link.expired', $this->format_url( $link ) );
 		}
 
 		return count( $due_links );

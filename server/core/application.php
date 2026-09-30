@@ -102,17 +102,17 @@ class Application {
 		$this->connection = $connection;
 		$this->config     = $config;
 
-		$db          = new PeakURL_DB( $connection );
-		$schema_path = Environment::get_instance()->get_database_schema_path();
-		$schema      = new DatabaseSchema( $connection, $schema_path );
-		$content_dir = (string) ( $config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
+		$db             = new PeakURL_DB( $connection );
+		$schema_path    = Environment::get_instance()->get_database_schema_path();
+		$crypto_service = new Crypto( $config );
+		$schema         = new DatabaseSchema( $connection, $schema_path );
+		$content_dir    = (string) ( $config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
 
 		$settings_api  = new SettingsApi( $db );
 		$users_api     = new UsersApi( $db );
 		$links_api     = new LinksApi( $db, null, $settings_api );
 		$cache_service = CacheManager::resolve( $config, $content_dir );
 		$links_api->set_cache( $cache_service );
-		$crypto_service         = new Crypto( $config );
 		$this->i18n_service     = new I18n( $config, $settings_api );
 		$geoip_service          = new Geoip( $config, $settings_api, $crypto_service );
 		$mailer_service         = new Mailer( $config, $settings_api, $crypto_service );
@@ -123,10 +123,10 @@ class Application {
 		$roles                  = new Roles();
 		$authorization          = new Authorization( $roles );
 
-		$auth_credentials     = new AuthCredentials( $db );
-		$auth_validator       = new AuthValidator();
-		$totp                 = new Totp();
-		$auth_service         = new AuthService(
+		$auth_credentials = new AuthCredentials( $db );
+		$auth_validator   = new AuthValidator();
+		$totp             = new Totp();
+		$auth_service     = new AuthService(
 			$db,
 			$users_api,
 			$auth_credentials,
@@ -139,14 +139,16 @@ class Application {
 			$geoip_service,
 			$config
 		);
-		$webhooks_service     = new WebhooksService(
+		$webhooks_service = new WebhooksService(
 			$db,
 			new WebhooksValidator(),
 			$auth_service,
 			$roles,
 			$authorization,
-			$config
+			$config,
+			$crypto_service
 		);
+		$auth_service->set_webhooks_service( $webhooks_service );
 		$analytics_repository = new AnalyticsRepository(
 			$db,
 			$settings_api,
@@ -174,7 +176,8 @@ class Application {
 			new UsersValidator(),
 			$roles,
 			$authorization,
-			$social_preview_service
+			$social_preview_service,
+			$webhooks_service
 		);
 		$links_repository     = new LinksRepository(
 			$db,
@@ -660,9 +663,12 @@ class Application {
 		$this->add_routes(
 			array(
 				array( 'get', '/webhooks', array( $webhooks, 'index' ) ),
+				array( 'get', '/webhooks/events', array( $webhooks, 'events' ) ),
 				array( 'post', '/webhooks', array( $webhooks, 'create' ) ),
 				array( 'post', '/webhooks/test', array( $webhooks, 'test' ) ),
 				array( 'post', '/webhooks/{id}/test', array( $webhooks, 'test' ) ),
+				array( 'post', '/webhooks/{id}/rotate-secret', array( $webhooks, 'rotate_secret' ) ),
+				array( 'get', '/webhooks/{id}/deliveries', array( $webhooks, 'deliveries' ) ),
 				array( 'put', '/webhooks/{id}', array( $webhooks, 'update' ) ),
 				array( 'delete', '/webhooks/{id}', array( $webhooks, 'delete' ) ),
 			)

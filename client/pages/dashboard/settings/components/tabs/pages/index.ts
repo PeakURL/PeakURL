@@ -12,7 +12,6 @@ export type {
 	CreatedWebhook,
 	IntegrationsTabProps,
 	WebhookEventOption,
-	WebhookFormState,
 	WebhookSummary,
 } from "./integrations";
 export type {

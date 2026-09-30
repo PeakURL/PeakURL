@@ -10,6 +10,7 @@ import type {
 	CaptchaStatus,
 	CreateUrlPayload,
 	CreateUrlResponse,
+	CreateWebhookPayload,
 	CreatedWebhook,
 	CountryMetric,
 	DashboardDeviceData,
@@ -46,9 +47,26 @@ import type {
 	WebhookSummary,
 	WebhookTestResult,
 	TestWebhookPayload,
+	GetWebhookDeliveriesParams,
+	RotateSecretResult,
+	WebhookDeliveriesResponse,
+	WebhookDeliveryItem,
+	WebhookEventCatalogItem,
+	WebhookHealthSummary,
 } from "@/api";
 
-export type { TestWebhookPayload, UpdateWebhookPayload, WebhookTestResult };
+export type {
+	CreateWebhookPayload,
+	TestWebhookPayload,
+	UpdateWebhookPayload,
+	WebhookTestResult,
+	GetWebhookDeliveriesParams,
+	RotateSecretResult,
+	WebhookDeliveriesResponse,
+	WebhookDeliveryItem,
+	WebhookEventCatalogItem,
+	WebhookHealthSummary,
+};
 
 /**
  * Single release note returned from the API.
@@ -525,17 +543,6 @@ export interface CurrentPasswordPayload {
 export interface VerifyTwoFactorPayload {
 	/** Six-digit verification token entered by the user. */
 	token: string;
-}
-
-/**
- * Request payload used when creating an outbound webhook.
- */
-export interface CreateWebhookPayload {
-	/** Destination endpoint URL. */
-	url: string;
-
-	/** Event identifiers subscribed by the webhook. */
-	events: string[];
 }
 
 /**

@@ -5,8 +5,12 @@ import type {
 	ApiDataResponse,
 	CreateWebhookPayload,
 	CreatedWebhook,
+	GetWebhookDeliveriesParams,
+	RotateSecretResult,
 	TestWebhookPayload,
 	UpdateWebhookPayload,
+	WebhookDeliveriesResponse,
+	WebhookEventCatalogItem,
 	WebhookSummary,
 	WebhookTestResult,
 } from "./types";
@@ -23,6 +27,12 @@ export const webhookApi = baseApi.injectEndpoints({
 			transformResponse: (response: ApiDataResponse<WebhookSummary[]>) =>
 				response.data ?? [],
 			providesTags: WEBHOOK_TAGS,
+		}),
+		getWebhookEvents: build.query<WebhookEventCatalogItem[], void>({
+			query: () => API_ROUTES.webhooks.events,
+			transformResponse: (
+				response: ApiDataResponse<WebhookEventCatalogItem[]>
+			) => response.data ?? [],
 		}),
 		createWebhook: build.mutation<
 			ApiDataResponse<CreatedWebhook>,
@@ -46,6 +56,16 @@ export const webhookApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: WEBHOOK_TAGS,
 		}),
+		rotateWebhookSecret: build.mutation<
+			ApiDataResponse<RotateSecretResult>,
+			string
+		>({
+			query: (id) => ({
+				url: API_ROUTES.webhooks.rotateSecret(id),
+				method: "POST",
+			}),
+			invalidatesTags: WEBHOOK_TAGS,
+		}),
 		testWebhook: build.mutation<
 			ApiDataResponse<WebhookTestResult>,
 			TestWebhookPayload | string
@@ -58,6 +78,26 @@ export const webhookApi = baseApi.injectEndpoints({
 					body,
 				};
 			},
+			invalidatesTags: WEBHOOK_TAGS,
+		}),
+		getWebhookDeliveries: build.query<
+			WebhookDeliveriesResponse,
+			GetWebhookDeliveriesParams
+		>({
+			query: ({ id, page = 1, perPage = 15 }) => ({
+				url: API_ROUTES.webhooks.deliveries(id),
+				params: {
+					page,
+					per_page: perPage,
+				},
+			}),
+			transformResponse: (
+				response: ApiDataResponse<WebhookDeliveriesResponse>
+			) =>
+				response.data ?? {
+					items: [],
+					meta: { page: 1, perPage: 15, total: 0, totalPages: 0 },
+				},
 		}),
 		deleteWebhook: build.mutation<void, string>({
 			query: (id) => ({
@@ -71,8 +111,11 @@ export const webhookApi = baseApi.injectEndpoints({
 
 export const {
 	useGetWebhooksQuery,
+	useGetWebhookEventsQuery,
 	useCreateWebhookMutation,
 	useUpdateWebhookMutation,
+	useRotateWebhookSecretMutation,
 	useTestWebhookMutation,
+	useGetWebhookDeliveriesQuery,
 	useDeleteWebhookMutation,
 } = webhookApi;

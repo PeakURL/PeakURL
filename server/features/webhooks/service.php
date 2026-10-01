@@ -837,13 +837,13 @@ class Service {
 	/**
 	 * Build the canonical JSON event envelope for webhooks.
 	 *
-	 * Envelope strictly contains id, type, created_at, and data.
+	 * Structured standard envelope contains success, statusCode, message, event, id, type, timestamp, created_at, and data.
 	 *
 	 * @param string               $event_type Webhook event identifier.
 	 * @param array<string, mixed> $data       Event data block.
 	 * @param string|null          $event_id   Optional event identifier.
 	 * @param int|null             $timestamp  Optional UNIX timestamp.
-	 * @return array{id: string, type: string, created_at: string, data: array<string, mixed>}
+	 * @return array<string, mixed> Standardized webhook event envelope.
 	 * @since 1.7.1
 	 */
 	private function create_event_payload(
@@ -855,8 +855,13 @@ class Service {
 		$event_timestamp = $timestamp ?? time();
 
 		return array(
+			'success'    => true,
+			'statusCode' => 200,
+			'message'    => 'Webhook event dispatched.',
+			'event'      => $event_type,
 			'id'         => $event_id ?? $this->create_event_id(),
 			'type'       => $event_type,
+			'timestamp'  => $event_timestamp,
 			'created_at' => gmdate( 'Y-m-d\TH:i:s\Z', $event_timestamp ),
 			'data'       => $data,
 		);

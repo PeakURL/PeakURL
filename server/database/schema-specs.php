@@ -438,11 +438,11 @@ class SchemaSpecs {
 			'webhook_deliveries' => array(
 				array(
 					'name'       => 'webhook_id',
-					'definition' => 'VARCHAR(40) NOT NULL',
+					'definition' => 'VARCHAR(64) NOT NULL',
 				),
 				array(
 					'name'       => 'event_id',
-					'definition' => "VARCHAR(40) NOT NULL DEFAULT ''",
+					'definition' => "VARCHAR(64) NOT NULL DEFAULT ''",
 				),
 				array(
 					'name'       => 'event',

@@ -4,6 +4,7 @@ export type { NotificationContextValue };
 
 export type {
 	CreatedWebhook,
+	RetryWebhookDeliveryParams,
 	RotateSecretResult,
 	WebhookDeliveriesResponse,
 	WebhookDeliveryItem,

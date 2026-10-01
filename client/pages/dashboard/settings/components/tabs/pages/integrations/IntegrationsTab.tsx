@@ -737,6 +737,8 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 					setIsDeliveryDrawerOpen(false);
 					setDeliveryWebhook(null);
 				}}
+				notification={notification}
+				eventLabelMap={eventLabelMap}
 			/>
 
 			{/* Secret Display Modal (Shown once upon creation or secret rotation) */}

@@ -626,5 +626,19 @@ export const API_ROUTES = {
 		 */
 		deliveries: (id: ApiPathPart) =>
 			apiPath("webhooks", encodeApiParam(id), "deliveries"),
+
+		/**
+		 * Relative API path: `webhooks/{id}/deliveries/{deliveryId}/retry`.
+		 *
+		 * Re-queues an existing failed delivery for retry.
+		 */
+		retryDelivery: (id: ApiPathPart, deliveryId: ApiPathPart) =>
+			apiPath(
+				"webhooks",
+				encodeApiParam(id),
+				"deliveries",
+				encodeApiParam(deliveryId),
+				"retry"
+			),
 	},
 } as const;

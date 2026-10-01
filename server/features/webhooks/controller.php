@@ -177,6 +177,28 @@ class Controller extends BaseController {
 	}
 
 	/**
+	 * Manually retry a failed webhook delivery.
+	 *
+	 * Re-queues the original delivery back into the Scheduled Jobs pipeline.
+	 *
+	 * @param Request $request Incoming HTTP request with route params `id` and `delivery_id`.
+	 * @return array<string, mixed> JSON envelope with queued delivery details.
+	 * @since 1.7.1
+	 */
+	public function retry_delivery( Request $request ): array {
+		$result = $this->webhooks_service->retry_failed_delivery(
+			$request,
+			$this->route_param( $request, 'id' ),
+			$this->route_param( $request, 'delivery_id' ),
+		);
+
+		return $this->success_response(
+			$result,
+			__( 'Delivery queued for retry.', 'peakurl' ),
+		);
+	}
+
+	/**
 	 * Delete a webhook by ID.
 	 *
 	 * Returns 404 if the webhook does not exist or does not

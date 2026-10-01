@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
 	Dialog,
 	DialogBackdrop,
@@ -13,6 +13,7 @@ import {
 	ExternalLink,
 	History,
 	RefreshCw,
+	RotateCcw,
 	ShieldAlert,
 	ShieldCheck,
 	X,
@@ -20,13 +21,19 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components";
-import { useGetWebhookDeliveriesQuery } from "@/state/slices/api";
+import {
+	useGetWebhookDeliveriesQuery,
+	useGetWebhookEventsQuery,
+	useRetryWebhookDeliveryMutation,
+} from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { formatLocalizedDateTime } from "@/shared/dates";
+import { getErrorMessage } from "@/shared/errors";
 import { cn } from "@/shared/formatting";
 
 import type {
+	NotificationContextValue,
 	WebhookDeliveryItem,
 	WebhookDeliveryStatus,
 	WebhookSummary,
@@ -36,6 +43,8 @@ interface WebhookDeliveryDrawerProps {
 	webhook: WebhookSummary | null;
 	isOpen: boolean;
 	onClose: () => void;
+	notification?: Pick<NotificationContextValue, "error" | "success"> | null;
+	eventLabelMap?: Map<string, string>;
 }
 
 const PAGE_SIZE = 10;
@@ -90,15 +99,54 @@ function DeliveryStatusBadge({
 	}
 }
 
+function getEventLabel(event: string, labelMap?: Map<string, string>): string {
+	if (event === "webhook.test") {
+		return __("Webhook Test Ping");
+	}
+
+	const label = labelMap?.get(event);
+	if (label) {
+		return label;
+	}
+
+	return __("Event");
+}
+
 export function WebhookDeliveryDrawer({
 	webhook,
 	isOpen,
 	onClose,
+	notification,
+	eventLabelMap,
 }: WebhookDeliveryDrawerProps) {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
 	const [page, setPage] = useState(1);
 	const [expandedErrorId, setExpandedErrorId] = useState<string | null>(null);
+	const [retryingDeliveryId, setRetryingDeliveryId] = useState<string | null>(
+		null
+	);
+
+	const { data: webhookEventsCatalog } = useGetWebhookEventsQuery(undefined, {
+		skip: !isOpen,
+	});
+
+	const labelMap = useMemo(() => {
+		const map = new Map<string, string>();
+		if (eventLabelMap && eventLabelMap.size > 0) {
+			eventLabelMap.forEach((label, id) => {
+				map.set(id, label);
+			});
+		} else if (
+			webhookEventsCatalog &&
+			Array.isArray(webhookEventsCatalog)
+		) {
+			webhookEventsCatalog.forEach((item) => {
+				map.set(item.id, item.label);
+			});
+		}
+		return map;
+	}, [eventLabelMap, webhookEventsCatalog]);
 
 	// Cache the active webhook so closing animations stay smooth without jumping even if parent clears the webhook
 	const [cachedWebhook, setCachedWebhook] = useState(webhook);
@@ -126,6 +174,34 @@ export function WebhookDeliveryDrawer({
 				skip: !isOpen || !webhookId,
 			}
 		);
+
+	const [retryDelivery] = useRetryWebhookDeliveryMutation();
+
+	const handleRetryDelivery = async (deliveryId: string) => {
+		if (!webhookId || retryingDeliveryId) {
+			return;
+		}
+
+		setRetryingDeliveryId(deliveryId);
+		try {
+			await retryDelivery({ id: webhookId, deliveryId }).unwrap();
+			notification?.success?.(
+				__("Success"),
+				__("Delivery queued for retry.")
+			);
+			refetch();
+		} catch (err) {
+			notification?.error?.(
+				__("Error"),
+				getErrorMessage(
+					err,
+					__("Failed to queue webhook delivery for retry.")
+				)
+			);
+		} finally {
+			setRetryingDeliveryId(null);
+		}
+	};
 
 	const deliveries = data?.items ?? [];
 	const meta = data?.meta ?? {
@@ -356,6 +432,9 @@ export function WebhookDeliveryDrawer({
 															{__("Attempts")}
 														</th>
 														<th>{__("Date")}</th>
+														<th className="text-end">
+															{__("Actions")}
+														</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -369,6 +448,11 @@ export function WebhookDeliveryDrawer({
 															const isExpanded =
 																expandedErrorId ===
 																item.id;
+															const eventLabel =
+																getEventLabel(
+																	item.event,
+																	labelMap
+																);
 
 															return (
 																<tr
@@ -394,7 +478,7 @@ export function WebhookDeliveryDrawer({
 																		<div className="flex flex-col gap-0.5">
 																			<span className="font-semibold text-xs text-heading">
 																				{
-																					item.event
+																					eventLabel
 																				}
 																			</span>
 																			<span className="font-mono text-[10px] text-text-muted">
@@ -516,6 +600,40 @@ export function WebhookDeliveryDrawer({
 																					</div>
 																				)}
 																			</div>
+																		)}
+																	</td>
+																	<td className="text-end">
+																		{isFailed ? (
+																			<Button
+																				variant="secondary"
+																				size="xs"
+																				icon={
+																					RotateCcw
+																				}
+																				loading={
+																					retryingDeliveryId ===
+																					item.id
+																				}
+																				disabled={Boolean(
+																					retryingDeliveryId
+																				)}
+																				onClick={() =>
+																					handleRetryDelivery(
+																						item.id
+																					)
+																				}
+																				title={__(
+																					"Retry Delivery"
+																				)}
+																			>
+																				{__(
+																					"Retry Delivery"
+																				)}
+																			</Button>
+																		) : (
+																			<span className="text-text-muted text-xs">
+																				—
+																			</span>
 																		)}
 																	</td>
 																</tr>

@@ -526,7 +526,6 @@ class Service {
 					'response_code'   => 0,
 					'last_error'      => $send_error->getMessage(),
 					'claim_token'     => null,
-					'payload'         => '',
 					'updated_at'      => Date::now(),
 				),
 				array(
@@ -552,7 +551,7 @@ class Service {
 				'response_code'   => $status_code,
 				'last_error'      => $result['error'],
 				'claim_token'     => null,
-				'payload'         => '', // Clear payload after delivery completion.
+				'payload'         => $is_success ? '' : (string) json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ),
 				'updated_at'      => Date::now(),
 			),
 			array(
@@ -1811,7 +1810,6 @@ class Service {
 						'completed_at'    => Date::now(),
 						'last_error'      => 'Webhook endpoint no longer exists.',
 						'claim_token'     => null,
-						'payload'         => '',
 						'updated_at'      => Date::now(),
 					),
 					array(
@@ -1835,7 +1833,6 @@ class Service {
 						'completed_at'    => Date::now(),
 						'last_error'      => 'Webhook is inactive.',
 						'claim_token'     => null,
-						'payload'         => '',
 						'updated_at'      => Date::now(),
 					),
 					array(
@@ -1876,7 +1873,6 @@ class Service {
 						'completed_at'    => Date::now(),
 						'last_error'      => $error_msg,
 						'claim_token'     => null,
-						'payload'         => '',
 						'updated_at'      => Date::now(),
 					),
 					array(
@@ -1932,7 +1928,6 @@ class Service {
 						'duration_ms'     => $duration_ms,
 						'response_code'   => $status_code,
 						'claim_token'     => null,
-						'payload'         => '', // Clear payload on terminal failure.
 						'updated_at'      => Date::now(),
 					),
 					array(
@@ -2044,6 +2039,81 @@ class Service {
 				'total'      => $total,
 				'totalPages' => (int) ceil( $total / $per_page ),
 			),
+		);
+	}
+
+	/**
+	 * Manually re-queue an existing terminal failed delivery back into the delivery pipeline.
+	 *
+	 * Preserves the original delivery ID, event ID, event type, and payload, resetting
+	 * the attempt counter to 0 so the delivery can enter a fresh attempt cycle.
+	 *
+	 * @param Request $request     Incoming HTTP request for authorization.
+	 * @param string  $webhook_id  Target webhook ID.
+	 * @param string  $delivery_id Target delivery ID.
+	 * @return array<string, mixed> Queued delivery record.
+	 * @throws ApiException When webhook or delivery is not found, unauthorized, or not in failed state.
+	 * @since 1.7.1
+	 */
+	public function retry_failed_delivery( Request $request, string $webhook_id, string $delivery_id ): array {
+		$webhook = $this->get_accessible_webhook( $request, $webhook_id );
+
+		$delivery = $this->db->get_row_by(
+			'webhook_deliveries',
+			array(
+				'id' => $delivery_id,
+			)
+		);
+
+		if ( ! $delivery ) {
+			throw new ApiException( __( 'Webhook delivery not found.', 'peakurl' ), 404 );
+		}
+
+		if ( (string) $delivery['webhook_id'] !== (string) $webhook['id'] ) {
+			throw new ApiException( __( 'Webhook delivery does not belong to this webhook.', 'peakurl' ), 404 );
+		}
+
+		if ( 'failed' !== (string) $delivery['status'] ) {
+			throw new ApiException( __( 'Only failed webhook deliveries can be retried.', 'peakurl' ), 400 );
+		}
+
+		$now     = Date::now();
+		$updated = $this->db->update(
+			'webhook_deliveries',
+			array(
+				'status'          => 'pending',
+				'attempts'        => 0,
+				'next_attempt_at' => $now,
+				'completed_at'    => null,
+				'claim_token'     => null,
+				'updated_at'      => $now,
+			),
+			array(
+				'id'         => $delivery_id,
+				'webhook_id' => (string) $webhook['id'],
+				'status'     => 'failed',
+			)
+		);
+
+		if ( $updated <= 0 ) {
+			throw new ApiException( __( 'Failed to queue webhook delivery for retry.', 'peakurl' ), 400 );
+		}
+
+		return array(
+			'id'            => (string) $delivery['id'],
+			'webhookId'     => (string) $delivery['webhook_id'],
+			'eventId'       => (string) ( $delivery['event_id'] ?? '' ),
+			'event'         => (string) $delivery['event'],
+			'status'        => 'pending',
+			'attempts'      => 0,
+			'maxAttempts'   => (int) ( $delivery['max_attempts'] ?? self::DEFAULT_MAX_DELIVERY_ATTEMPTS ),
+			'nextAttemptAt' => Date::to_iso( $now ),
+			'lastAttemptAt' => ! empty( $delivery['last_attempt_at'] ) ? Date::to_iso( (string) $delivery['last_attempt_at'] ) : null,
+			'completedAt'   => null,
+			'durationMs'    => isset( $delivery['duration_ms'] ) ? (int) $delivery['duration_ms'] : null,
+			'responseCode'  => isset( $delivery['response_code'] ) ? (int) $delivery['response_code'] : null,
+			'lastError'     => $delivery['last_error'] ?? null,
+			'createdAt'     => Date::to_iso( (string) $delivery['created_at'] ),
 		);
 	}
 

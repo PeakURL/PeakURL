@@ -141,3 +141,11 @@ export interface GetWebhookDeliveriesParams {
 	page?: number;
 	perPage?: number;
 }
+
+/**
+ * Request parameters for retrying a failed webhook delivery.
+ */
+export interface RetryWebhookDeliveryParams {
+	id: string;
+	deliveryId: string;
+}

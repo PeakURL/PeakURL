@@ -669,6 +669,7 @@ class Application {
 				array( 'post', '/webhooks/{id}/test', array( $webhooks, 'test' ) ),
 				array( 'post', '/webhooks/{id}/rotate-secret', array( $webhooks, 'rotate_secret' ) ),
 				array( 'get', '/webhooks/{id}/deliveries', array( $webhooks, 'deliveries' ) ),
+				array( 'post', '/webhooks/{id}/deliveries/{delivery_id}/retry', array( $webhooks, 'retry_delivery' ) ),
 				array( 'put', '/webhooks/{id}', array( $webhooks, 'update' ) ),
 				array( 'delete', '/webhooks/{id}', array( $webhooks, 'delete' ) ),
 			)

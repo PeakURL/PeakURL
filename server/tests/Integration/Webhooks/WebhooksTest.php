@@ -831,7 +831,7 @@ class WebhooksTest extends TestCase {
 		$this->assertSame( 1, (int) $perm_row['attempts'] );
 		$this->assertNull( $perm_row['claim_token'] );
 		$this->assertNotNull( $perm_row['completed_at'] );
-		$this->assertSame( '', $perm_row['payload'] );
+		$this->assertNotEmpty( $perm_row['payload'], 'Payload must be preserved on terminal failure for manual replay.' );
 	}
 
 	public function test_security_ssrf_rejects_unresolvable_private_and_rebinding_destinations(): void {

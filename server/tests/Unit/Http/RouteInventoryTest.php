@@ -326,6 +326,11 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'manage_webhooks',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
+		'POST /api/v1/webhooks/{id}/deliveries/{delivery_id}/retry' => array(
+			'area'       => 'Webhooks',
+			'capability' => 'manage_webhooks',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
 		'PUT /api/v1/webhooks/{id}'                        => array(
 			'area'       => 'Webhooks',
 			'capability' => 'manage_webhooks',

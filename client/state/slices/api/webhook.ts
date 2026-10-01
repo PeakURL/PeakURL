@@ -6,10 +6,12 @@ import type {
 	CreateWebhookPayload,
 	CreatedWebhook,
 	GetWebhookDeliveriesParams,
+	RetryWebhookDeliveryParams,
 	RotateSecretResult,
 	TestWebhookPayload,
 	UpdateWebhookPayload,
 	WebhookDeliveriesResponse,
+	WebhookDeliveryItem,
 	WebhookEventCatalogItem,
 	WebhookSummary,
 	WebhookTestResult,
@@ -99,6 +101,16 @@ export const webhookApi = baseApi.injectEndpoints({
 					meta: { page: 1, perPage: 15, total: 0, totalPages: 0 },
 				},
 		}),
+		retryWebhookDelivery: build.mutation<
+			ApiDataResponse<WebhookDeliveryItem>,
+			RetryWebhookDeliveryParams
+		>({
+			query: ({ id, deliveryId }) => ({
+				url: API_ROUTES.webhooks.retryDelivery(id, deliveryId),
+				method: "POST",
+			}),
+			invalidatesTags: WEBHOOK_TAGS,
+		}),
 		deleteWebhook: build.mutation<void, string>({
 			query: (id) => ({
 				url: API_ROUTES.webhooks.byId(id),
@@ -117,5 +129,6 @@ export const {
 	useRotateWebhookSecretMutation,
 	useTestWebhookMutation,
 	useGetWebhookDeliveriesQuery,
+	useRetryWebhookDeliveryMutation,
 	useDeleteWebhookMutation,
 } = webhookApi;

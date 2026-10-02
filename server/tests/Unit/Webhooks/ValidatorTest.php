@@ -32,6 +32,18 @@ class ValidatorTest extends TestCase {
 			'link.activated',
 			'link.deactivated',
 			'link.expired',
+			'link.health.checked',
+			'link.health.changed',
+			'link.health.recovered',
+			'link.health.degraded',
+			'link.health.broken',
+			'link.health.unreachable',
+			'link.health.dns_error',
+			'link.health.tls_error',
+			'link.health.timeout',
+			'link.health.http_error',
+			'link.health.redirect_loop',
+			'link.health.ssrf_blocked',
 			'api_key.created',
 			'api_key.revoked',
 			'user.created',
@@ -44,9 +56,11 @@ class ValidatorTest extends TestCase {
 
 	public function test_get_event_catalogue_contains_all_supported_events_with_metadata(): void {
 		$catalogue = Validator::get_event_catalogue();
-		$this->assertCount( 13, $catalogue );
+		$this->assertCount( 25, $catalogue );
 
 		$ids = array_column( $catalogue, 'id' );
+		$this->assertSame( count( $ids ), count( array_unique( $ids ) ) );
+
 		$this->assertContains( 'link.created', $ids );
 		$this->assertContains( 'link.updated', $ids );
 		$this->assertContains( 'link.clicked', $ids );
@@ -55,6 +69,18 @@ class ValidatorTest extends TestCase {
 		$this->assertContains( 'link.activated', $ids );
 		$this->assertContains( 'link.deactivated', $ids );
 		$this->assertContains( 'link.expired', $ids );
+		$this->assertContains( 'link.health.checked', $ids );
+		$this->assertContains( 'link.health.changed', $ids );
+		$this->assertContains( 'link.health.recovered', $ids );
+		$this->assertContains( 'link.health.degraded', $ids );
+		$this->assertContains( 'link.health.broken', $ids );
+		$this->assertContains( 'link.health.unreachable', $ids );
+		$this->assertContains( 'link.health.dns_error', $ids );
+		$this->assertContains( 'link.health.tls_error', $ids );
+		$this->assertContains( 'link.health.timeout', $ids );
+		$this->assertContains( 'link.health.http_error', $ids );
+		$this->assertContains( 'link.health.redirect_loop', $ids );
+		$this->assertContains( 'link.health.ssrf_blocked', $ids );
 		$this->assertContains( 'api_key.created', $ids );
 		$this->assertContains( 'api_key.revoked', $ids );
 		$this->assertContains( 'user.created', $ids );

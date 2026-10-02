@@ -170,7 +170,8 @@ class SchedulerFactory {
 				new LinkHealthCheckJob(
 					$db,
 					$health_checker,
-					25
+					25,
+					$webhooks_service
 				)
 			)
 		);

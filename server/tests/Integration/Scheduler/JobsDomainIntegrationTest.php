@@ -342,7 +342,7 @@ class JobsDomainIntegrationTest extends TestCase {
 		);
 
 		$checker = new HealthChecker( new HealthResolver(), new HealthProbe( new HealthContext( array() ) ), 1.0 );
-		$job     = new LinkHealthCheckJob( $this->db, $checker, 10 );
+		$job     = new LinkHealthCheckJob( $this->db, $checker, 10, $this->webhooks_service );
 		$context = new ExecutionContext( 'peakurl_link_health_check', 'run_test_7', 1, false, $now );
 		$result  = $job->execute( $context );
 

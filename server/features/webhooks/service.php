@@ -835,6 +835,232 @@ class Service {
 	}
 
 	/**
+	 * Determine all applicable link health webhook events based on the authoritative transition matrix.
+	 *
+	 * Every successfully completed health check produces 'link.health.checked'.
+	 * Status transitions produce 'link.health.changed'.
+	 * Entering 'healthy' from a non-healthy state produces 'link.health.recovered'.
+	 * Entering 'slow' produces 'link.health.degraded'.
+	 * Entering a broken status produces 'link.health.broken' and the exact status event.
+	 * Entering 'ssrf_blocked' produces 'link.health.ssrf_blocked'.
+	 *
+	 * @param string|null $previous_status Previous health status string or null for first check.
+	 * @param string      $current_status  Current health status string.
+	 * @return array<int, string> Ordered list of applicable webhook event identifiers.
+	 * @since 1.7.1
+	 */
+	public static function determine_health_events( ?string $previous_status, string $current_status ): array {
+		$broken_statuses = array(
+			'unreachable',
+			'dns_error',
+			'tls_error',
+			'timeout',
+			'http_error',
+			'redirect_loop',
+		);
+
+		$events = array( 'link.health.checked' );
+
+		// Status transition (not first-ever check, and status actually changed).
+		if ( null !== $previous_status && $previous_status !== $current_status ) {
+			$events[] = 'link.health.changed';
+		}
+
+		// Transition into healthy from an existing non-healthy status.
+		if ( 'healthy' === $current_status ) {
+			if ( null !== $previous_status && 'healthy' !== $previous_status ) {
+				$events[] = 'link.health.recovered';
+			}
+			return $events;
+		}
+
+		// Transition into slow (degraded) from a different state (or first-ever check).
+		if ( 'slow' === $current_status ) {
+			if ( $previous_status !== $current_status ) {
+				$events[] = 'link.health.degraded';
+			}
+			return $events;
+		}
+
+		// Transition into a broken status from a different state.
+		if ( in_array( $current_status, $broken_statuses, true ) ) {
+			if ( $previous_status !== $current_status ) {
+				$events[] = 'link.health.broken';
+				$events[] = 'link.health.' . $current_status;
+			}
+			return $events;
+		}
+
+		// Transition into ssrf_blocked from a different state (security policy, not broken).
+		if ( 'ssrf_blocked' === $current_status ) {
+			if ( $previous_status !== $current_status ) {
+				$events[] = 'link.health.ssrf_blocked';
+			}
+			return $events;
+		}
+
+		return $events;
+	}
+
+	/**
+	 * Build payload and dispatch a single link health event to webhooks.
+	 *
+	 * @param string                    $event           Webhook event identifier (e.g. 'link.health.checked').
+	 * @param array<string, mixed>      $link_data       Link database row or metadata array.
+	 * @param array<string, mixed>      $current_health  Current health snapshot data.
+	 * @param array<string, mixed>|null $previous_health Optional previous health snapshot.
+	 * @param array<string, mixed>|null $user            Optional user record for ownership override.
+	 * @return array<int, array<string, mixed>> Delivery results.
+	 * @since 1.7.1
+	 */
+	public function dispatch_link_health_event(
+		string $event,
+		array $link_data,
+		array $current_health,
+		?array $previous_health = null,
+		?array $user = null
+	): array {
+		try {
+			$owner_id = $user['id'] ?? $link_data['user_id'] ?? null;
+			$targets  = $this->get_subscribed_webhooks( $event, $owner_id );
+
+			if ( empty( $targets ) ) {
+				return array();
+			}
+
+			$data = $this->get_link_health_event_data(
+				$event,
+				$link_data,
+				$current_health,
+				$previous_health
+			);
+
+			return $this->dispatch_webhook_event_to_targets(
+				$targets,
+				$event,
+				$data
+			);
+		} catch ( \Throwable $exception ) {
+			error_log( 'PeakURL Webhook Link Health Event Dispatch Error: ' . $exception->getMessage() );
+			return array();
+		}
+	}
+
+	/**
+	 * Determine and dispatch all applicable health webhook events for a completed health check.
+	 *
+	 * Evaluates the authoritative health transition matrix and dispatches each
+	 * applicable event type with its own unique event ID.
+	 *
+	 * @param array<string, mixed>      $link_data       Link database row or metadata.
+	 * @param array<string, mixed>      $current_health  Current health snapshot data.
+	 * @param array<string, mixed>|null $previous_health Previous health snapshot data or null.
+	 * @param array<string, mixed>|null $user            Optional user record.
+	 * @return array<string, array<int, array<string, mixed>>> Dispatched deliveries keyed by event identifier.
+	 * @since 1.7.1
+	 */
+	public function dispatch_link_health_check(
+		array $link_data,
+		array $current_health,
+		?array $previous_health = null,
+		?array $user = null
+	): array {
+		$prev_status = isset( $previous_health['status'] ) ? (string) $previous_health['status'] : null;
+		$curr_status = (string) ( $current_health['status'] ?? '' );
+
+		$events = self::determine_health_events( $prev_status, $curr_status );
+
+		$results = array();
+		foreach ( $events as $event ) {
+			$results[ $event ] = $this->dispatch_link_health_event(
+				$event,
+				$link_data,
+				$current_health,
+				$previous_health,
+				$user
+			);
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Build safe normalized event data block for link health events.
+	 *
+	 * Excludes all sensitive internals (credentials, lock tokens, resolved IPs, cURL details).
+	 *
+	 * @param string                    $event           Webhook event identifier.
+	 * @param array<string, mixed>      $link_data       Link array or database row.
+	 * @param array<string, mixed>      $current_health  Current health snapshot.
+	 * @param array<string, mixed>|null $previous_health Optional previous health snapshot.
+	 * @return array<string, mixed> Normalized health event data block.
+	 * @since 1.7.1
+	 */
+	private function get_link_health_event_data(
+		string $event,
+		array $link_data,
+		array $current_health,
+		?array $previous_health = null
+	): array {
+		$short_code = (string) ( $link_data['alias'] ?? $link_data['short_code'] ?? '' );
+		$id         = (string) ( $link_data['id'] ?? '' );
+		$dest_url   = (string) ( $link_data['destinationUrl'] ?? $link_data['destination_url'] ?? '' );
+		$short_url  = (string) ( $link_data['shortUrl'] ?? $link_data['short_url'] ?? '' );
+
+		if ( '' === $short_url && '' !== $short_code ) {
+			$short_url = $this->get_webhook_site_url( rawurlencode( $short_code ) );
+		}
+
+		$formatted_health = $this->format_health_snapshot( $current_health );
+		$data             = array(
+			'id'             => $id,
+			'alias'          => $short_code,
+			'shortUrl'       => $short_url,
+			'destinationUrl' => $dest_url,
+			'health'         => $formatted_health,
+		);
+
+		// Include previousHealth for changed, high-level transition, and status-specific events.
+		if ( 'link.health.checked' !== $event ) {
+			$data['previousHealth'] = $this->format_health_snapshot( $previous_health );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Format and sanitize a link health snapshot for webhooks.
+	 *
+	 * @param array<string, mixed>|null $snapshot Raw or database health snapshot.
+	 * @return array<string, mixed>|null Formatted snapshot or null if empty.
+	 * @since 1.7.1
+	 */
+	private function format_health_snapshot( ?array $snapshot ): ?array {
+		if ( empty( $snapshot ) || ! is_array( $snapshot ) ) {
+			return null;
+		}
+
+		$checked_at = (string) ( $snapshot['checkedAt'] ?? $snapshot['checked_at'] ?? '' );
+
+		return array(
+			'status'         => (string) ( $snapshot['status'] ?? '' ),
+			'checkedAt'      => '' !== $checked_at ? Date::to_iso( $checked_at ) : Date::to_iso( Date::now() ),
+			'responseCode'   => isset( $snapshot['responseCode'] )
+				? ( null !== $snapshot['responseCode'] ? (int) $snapshot['responseCode'] : null )
+				: ( isset( $snapshot['response_code'] ) && null !== $snapshot['response_code'] && '' !== $snapshot['response_code']
+					? (int) $snapshot['response_code']
+					: null ),
+			'responseTimeMs' => isset( $snapshot['responseTimeMs'] )
+				? ( null !== $snapshot['responseTimeMs'] ? (int) $snapshot['responseTimeMs'] : null )
+				: ( isset( $snapshot['response_time_ms'] ) && null !== $snapshot['response_time_ms'] && '' !== $snapshot['response_time_ms']
+					? (int) $snapshot['response_time_ms']
+					: null ),
+			'errorMessage'   => Str::nullable( $snapshot['errorMessage'] ?? $snapshot['error_message'] ?? null ),
+			'redirectCount'  => (int) ( $snapshot['redirectCount'] ?? $snapshot['redirect_count'] ?? 0 ),
+		);
+	}
+
+	/**
 	 * Build the canonical JSON event envelope for webhooks.
 	 *
 	 * Structured standard envelope contains success, statusCode, message, event, id, type, timestamp, created_at, and data.

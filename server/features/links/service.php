@@ -504,9 +504,37 @@ class Service {
 		$dest_url = trim( (string) ( $row['destination_url'] ?? '' ) );
 		$result   = $this->health_checker->check( $dest_url );
 
+		// Re-read authoritative link row to ensure destination did not change and link remains active.
+		$current_row = $this->data->find_url_row( (string) $row['id'] );
+		if ( ! $current_row || 'active' !== (string) ( $current_row['status'] ?? '' ) ) {
+			throw new ApiException(
+				__( 'That short link does not exist or is no longer active.', 'peakurl' ),
+				404
+			);
+		}
+
+		$current_destination = trim( (string) ( $current_row['destination_url'] ?? '' ) );
+		if ( $current_destination !== $dest_url ) {
+			throw new ApiException(
+				__( 'The link destination changed while the health check was running.', 'peakurl' ),
+				409
+			);
+		}
+
+		// Capture previous health snapshot before save; fail closed if database read fails.
+		try {
+			$previous_map    = $this->data->get_link_health_by_ids( array( (string) $current_row['id'] ) );
+			$previous_health = $previous_map[ (string) $current_row['id'] ] ?? null;
+		} catch ( \Throwable $e ) {
+			throw new ApiException(
+				__( 'Could not record link health snapshot.', 'peakurl' ),
+				500
+			);
+		}
+
 		$now         = Date::now();
 		$health_data = array(
-			'link_id'          => (string) $row['id'],
+			'link_id'          => (string) $current_row['id'],
 			'status'           => (string) $result['status'],
 			'checked_at'       => $now,
 			'response_code'    => $result['response_code'],
@@ -517,13 +545,25 @@ class Service {
 			'updated_at'       => $now,
 		);
 
-		$saved = $this->data->save_link_health( (string) $row['id'], $health_data );
+		try {
+			$saved = $this->data->save_link_health( (string) $current_row['id'], $health_data );
+		} catch ( \Throwable $e ) {
+			$saved = false;
+		}
+
 		if ( ! $saved ) {
 			throw new ApiException(
 				__( 'Could not record link health snapshot.', 'peakurl' ),
 				500
 			);
 		}
+
+		$this->webhooks_service->dispatch_link_health_check(
+			$current_row,
+			$health_data,
+			is_array( $previous_health ) ? $previous_health : null,
+			$user
+		);
 
 		return $this->format_health( $health_data );
 	}

@@ -14,6 +14,7 @@ use PeakURL\Core\Scheduler\ExecutionContext;
 use PeakURL\Core\Scheduler\ExecutionResult;
 use PeakURL\Core\Scheduler\JobHandlerInterface;
 use PeakURL\Features\Links\Health\Checker;
+use PeakURL\Features\Webhooks\Service as WebhooksService;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Utils\Date;
 
@@ -58,21 +59,32 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 	private Checker $checker;
 
 	/**
+	 * Webhooks domain service.
+	 *
+	 * @var WebhooksService
+	 * @since 1.7.1
+	 */
+	private WebhooksService $webhooks_service;
+
+	/**
 	 * Create a new link health check job.
 	 *
-	 * @param PeakURL_DB $db          Database wrapper.
-	 * @param Checker    $checker     Shared destination health checker.
-	 * @param int        $batch_limit Number of links to sample per run (default 25).
+	 * @param PeakURL_DB      $db               Database wrapper.
+	 * @param Checker         $checker          Shared destination health checker.
+	 * @param int             $batch_limit      Number of links to sample per run (default 25).
+	 * @param WebhooksService $webhooks_service Webhooks domain service.
 	 * @since 1.7.0
 	 */
 	public function __construct(
 		PeakURL_DB $db,
 		Checker $checker,
-		int $batch_limit = 25
+		int $batch_limit,
+		WebhooksService $webhooks_service
 	) {
-		$this->db          = $db;
-		$this->checker     = $checker;
-		$this->batch_limit = max( 1, min( 100, $batch_limit ) );
+		$this->db               = $db;
+		$this->checker          = $checker;
+		$this->batch_limit      = max( 1, min( 100, $batch_limit ) );
+		$this->webhooks_service = $webhooks_service;
 	}
 
 	/**
@@ -119,6 +131,7 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 		);
 
 		$persistence_failures = 0;
+		$checked_count        = 0;
 
 		foreach ( $links as $link ) {
 			$link_id  = (string) ( $link['id'] ?? '' );
@@ -131,43 +144,23 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 			$result = $this->checker->check( $dest_url );
 			$status = (string) $result['status'];
 
+			$skip_reason = null;
+			$outcome     = $this->record_health_snapshot_and_dispatch( $link, $dest_url, $result, $skip_reason );
+
+			if ( 'failed' === $outcome ) {
+				++$persistence_failures;
+				continue;
+			}
+
+			if ( 'skipped' === $outcome ) {
+				continue;
+			}
+
+			++$checked_count;
 			if ( isset( $category_counts[ $status ] ) ) {
 				++$category_counts[ $status ];
 			} else {
 				++$category_counts['unreachable'];
-			}
-
-			// Persist single snapshot per link in link_health (never touches urls.status or urls.destination_url).
-			$now = Date::now();
-			try {
-				$upserted = $this->db->upsert(
-					'link_health',
-					array(
-						'link_id'          => $link_id,
-						'status'           => $status,
-						'checked_at'       => $now,
-						'response_code'    => $result['response_code'],
-						'response_time_ms' => $result['response_time_ms'],
-						'error_message'    => $result['error_message'],
-						'redirect_count'   => (int) ( $result['redirect_count'] ?? 0 ),
-						'created_at'       => $now,
-						'updated_at'       => $now,
-					),
-					array(
-						'status',
-						'checked_at',
-						'response_code',
-						'response_time_ms',
-						'error_message',
-						'redirect_count',
-						'updated_at',
-					)
-				);
-				if ( false === $upserted || ! is_int( $upserted ) || $upserted < 0 ) {
-					++$persistence_failures;
-				}
-			} catch ( \Throwable $e ) {
-				++$persistence_failures;
 			}
 		}
 
@@ -391,41 +384,110 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 			);
 		}
 
-		$result = $this->checker->check( $dest_url );
+		$result      = $this->checker->check( $dest_url );
+		$skip_reason = null;
 
-		// Re-read authoritative link row to ensure destination did not change during check.
-		$current_link = $this->db->get_row_by( 'urls', array( 'id' => $link_id ) );
+		$outcome = $this->record_health_snapshot_and_dispatch( $link, $dest_url, $result, $skip_reason );
+
+		if ( 'skipped' === $outcome ) {
+			return ExecutionResult::skipped(
+				$skip_reason ?? sprintf( 'Target link [%s] check was skipped.', $link_id )
+			);
+		}
+
+		if ( 'failed' === $outcome ) {
+			return ExecutionResult::failure(
+				$skip_reason ?? sprintf( 'Failed to persist health snapshot for link [%s].', $link_id )
+			);
+		}
+
+		$status = (string) $result['status'];
+
+		return ExecutionResult::success(
+			sprintf( 'Destination health check completed for link [%s]: %s.', $link_id, $status ),
+			array(
+				'linkId'         => $link_id,
+				'status'         => $status,
+				'responseCode'   => $result['response_code'],
+				'responseTimeMs' => $result['response_time_ms'],
+			)
+		);
+	}
+
+	/**
+	 * Persist a health check snapshot and dispatch associated webhook events.
+	 *
+	 * Performs authoritative stale checks before persisting. If the link was deleted,
+	 * deactivated, or had its destination changed during probe execution, the result
+	 * is safely discarded with zero webhook events emitted.
+	 *
+	 * @param array<string, mixed> $link        Initial link database row.
+	 * @param string               $dest_url    Destination URL that was probed.
+	 * @param array<string, mixed> $result      Inspection outcome from Checker.
+	 * @param string|null          $skip_reason Output skip or failure reason.
+	 * @return string Outcome: 'persisted', 'skipped', or 'failed'.
+	 * @since 1.7.1
+	 */
+	private function record_health_snapshot_and_dispatch(
+		array $link,
+		string $dest_url,
+		array $result,
+		?string &$skip_reason = null
+	): string {
+		$link_id = (string) ( $link['id'] ?? '' );
+		if ( '' === $link_id ) {
+			$skip_reason = 'Empty link identifier.';
+			return 'skipped';
+		}
+
+		// 1. Re-read authoritative link row to ensure destination did not change and link remains active.
+		try {
+			$current_link = $this->db->get_row_by( 'urls', array( 'id' => $link_id ) );
+		} catch ( \Throwable $e ) {
+			$skip_reason = sprintf( 'Database read failure checking authoritative link state for [%s]: %s', $link_id, $e->getMessage() );
+			return 'failed';
+		}
 
 		if ( empty( $current_link ) || 'active' !== (string) ( $current_link['status'] ?? '' ) ) {
-			return ExecutionResult::skipped(
-				sprintf( 'Link [%s] was deleted or deactivated while health check was running; result discarded.', $link_id )
-			);
+			$skip_reason = sprintf( 'Link [%s] was deleted or deactivated while health check was running; result discarded.', $link_id );
+			return 'skipped';
 		}
 
 		$current_destination = trim( (string) ( $current_link['destination_url'] ?? '' ) );
 		if ( $current_destination !== $dest_url ) {
-			return ExecutionResult::skipped(
-				sprintf( 'Destination changed while health check was running for link [%s]; result discarded.', $link_id )
-			);
+			$skip_reason = sprintf( 'Destination changed while health check was running for link [%s]; result discarded.', $link_id );
+			return 'skipped';
+		}
+
+		// 2. Capture previous link_health snapshot before upserting new record.
+		// Fail closed: if reading previous snapshot fails/throws, do not persist or dispatch.
+		$previous_health = null;
+		try {
+			$previous_health = $this->db->get_row_by( 'link_health', array( 'link_id' => $link_id ) );
+		} catch ( \Throwable $e ) {
+			$skip_reason = sprintf( 'Failed reading previous health snapshot for link [%s]: %s', $link_id, $e->getMessage() );
+			return 'failed';
 		}
 
 		$status = (string) $result['status'];
 		$now    = Date::now();
 
+		$health_data = array(
+			'link_id'          => $link_id,
+			'status'           => $status,
+			'checked_at'       => $now,
+			'response_code'    => $result['response_code'],
+			'response_time_ms' => $result['response_time_ms'],
+			'error_message'    => $result['error_message'],
+			'redirect_count'   => (int) ( $result['redirect_count'] ?? 0 ),
+			'created_at'       => $now,
+			'updated_at'       => $now,
+		);
+
 		try {
 			$upserted = $this->db->upsert(
 				'link_health',
-				array(
-					'link_id'          => $link_id,
-					'status'           => $status,
-					'checked_at'       => $now,
-					'response_code'    => $result['response_code'],
-					'response_time_ms' => $result['response_time_ms'],
-					'error_message'    => $result['error_message'],
-					'redirect_count'   => (int) ( $result['redirect_count'] ?? 0 ),
-					'created_at'       => $now,
-					'updated_at'       => $now,
-				),
+				$health_data,
 				array(
 					'status',
 					'checked_at',
@@ -438,24 +500,21 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 			);
 
 			if ( false === $upserted || ! is_int( $upserted ) || $upserted < 0 ) {
-				return ExecutionResult::failure(
-					sprintf( 'Failed to persist health snapshot for link [%s].', $link_id )
-				);
+				$skip_reason = sprintf( 'Failed upserting health snapshot for link [%s].', $link_id );
+				return 'failed';
 			}
-		} catch ( \Throwable $e ) {
-			return ExecutionResult::failure(
-				sprintf( 'Failed to persist health snapshot for link [%s]: %s', $link_id, $e->getMessage() )
-			);
-		}
 
-		return ExecutionResult::success(
-			sprintf( 'Destination health check completed for link [%s]: %s.', $link_id, $status ),
-			array(
-				'linkId'         => $link_id,
-				'status'         => $status,
-				'responseCode'   => $result['response_code'],
-				'responseTimeMs' => $result['response_time_ms'],
-			)
-		);
+			// 3. Dispatch webhook events only after successful persistence.
+			$this->webhooks_service->dispatch_link_health_check(
+				$current_link,
+				$health_data,
+				is_array( $previous_health ) ? $previous_health : null
+			);
+
+			return 'persisted';
+		} catch ( \Throwable $e ) {
+			$skip_reason = sprintf( 'Exception persisting health snapshot for link [%s]: %s', $link_id, $e->getMessage() );
+			return 'failed';
+		}
 	}
 }

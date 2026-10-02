@@ -12,17 +12,23 @@ namespace PeakURL\Tests\Integration\Links;
 
 use PHPUnit\Framework\TestCase;
 use PeakURL\Core\Application;
+use PeakURL\Core\Auth\Authorization;
+use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Core\Scheduler\ExecutionContext;
 use PeakURL\Database\SchedulerRepository;
+use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Links\Health\Checker;
 use PeakURL\Features\Links\Health\Context;
 use PeakURL\Features\Links\Health\Probe;
 use PeakURL\Features\Links\Health\Resolver;
 use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
+use PeakURL\Features\Webhooks\Service as WebhooksService;
+use PeakURL\Features\Webhooks\Validator as WebhooksValidator;
 use PeakURL\Http\Request;
 use PeakURL\Http\Router;
+use PeakURL\Services\Crypto;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Utils\Date;
@@ -113,6 +119,23 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		$resolver = new Resolver( $dns );
 		$probe    = new Probe( new Context( Configuration::get_current() ), $prober );
 		return new Checker( $resolver, $probe, $timeout, $max_redirects, $slow_threshold_ms );
+	}
+
+	private function create_webhooks_service(): WebhooksService {
+		$config        = Configuration::get_current();
+		$roles         = new Roles();
+		$authorization = new Authorization( $roles );
+		$auth_service  = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'       => 1,
+					'username' => 'admin_hlth',
+					'role'     => 'admin',
+				)
+			);
+		$crypto = new Crypto( $config );
+		return new WebhooksService( $this->db, new WebhooksValidator(), $auth_service, $roles, $authorization, $config, $crypto );
 	}
 
 	private function create_app_with_checker( Checker $checker ): Application {
@@ -323,7 +346,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 
 			// RUN 1 with batch_limit = 2.
 			// Priority: never checked (Link A) > oldest checked (Link B).
-			$job_run_1 = new LinkHealthCheckJob( $this->db, $mock_checker, 2 );
+			$job_run_1 = new LinkHealthCheckJob( $this->db, $mock_checker, 2, $this->create_webhooks_service() );
 			$context_1 = new ExecutionContext( 'peakurl_link_health_check', 'run_batch_1', 1, false, $now_dt );
 			$result_1  = $job_run_1->execute( $context_1 );
 

@@ -122,6 +122,27 @@ class ProbeTest extends TestCase {
 		$this->assertTrue( $options[ CURLOPT_NOBODY ] );
 	}
 
+	public function test_curl_options_for_get_fallback_enables_get_and_disables_nobody_and_proxy(): void {
+		$probe   = new Probe();
+		$options = $probe->curl_options(
+			'https://example.com/test',
+			'example.com',
+			443,
+			'93.184.216.34',
+			2500,
+			'GET'
+		);
+
+		$this->assertTrue( $options[ CURLOPT_HTTPGET ] );
+		$this->assertFalse( $options[ CURLOPT_NOBODY ] );
+		$this->assertFalse( $options[ CURLOPT_HEADER ] );
+		$this->assertFalse( $options[ CURLOPT_RETURNTRANSFER ] );
+		$this->assertFalse( $options[ CURLOPT_FOLLOWLOCATION ] );
+		$this->assertTrue( $options[ CURLOPT_SSL_VERIFYPEER ] );
+		$this->assertSame( '', $options[ CURLOPT_PROXY ] );
+		$this->assertSame( array( 'example.com:443:93.184.216.34' ), $options[ CURLOPT_RESOLVE ] );
+	}
+
 	public function test_curl_options_timeout_respects_remaining_budget(): void {
 		$probe    = new Probe();
 		$options1 = $probe->curl_options(
@@ -198,7 +219,8 @@ class ProbeTest extends TestCase {
 				string $host,
 				int $port,
 				string $pinned_ip,
-				int $timeout_ms
+				int $timeout_ms,
+				string $method = 'HEAD'
 			): array {
 				// Inject an invalid cURL option to cause curl_setopt_array() to return false.
 				return array(

@@ -288,6 +288,7 @@ class Checker {
 			// Try all validated public addresses within the remaining timeout budget.
 			$probe_result     = null;
 			$candidate_errors = array();
+			$pinned_ip        = null;
 
 			foreach ( $candidate_ips as $candidate_ip ) {
 				$elapsed_ms           = (int) round( ( $this->monotonic_time_ns() - $start_time ) / 1e6 );
@@ -316,10 +317,42 @@ class Checker {
 				// Stop on first successful probe (no connection error code and has HTTP status code).
 				if ( 0 === (int) ( $probe['error_code'] ?? 0 ) && null !== $probe['response_code'] ) {
 					$probe_result = $probe;
+					$pinned_ip    = $candidate_ip;
 					break;
 				}
 
 				$candidate_errors[] = $probe;
+			}
+
+			// Controlled GET fallback when HEAD returns 404 or 405.
+			if ( null !== $probe_result && null !== $pinned_ip && 0 === (int) ( $probe_result['error_code'] ?? 0 ) ) {
+				$head_code = (int) $probe_result['response_code'];
+				if ( 404 === $head_code || 405 === $head_code ) {
+					$elapsed_ms           = (int) round( ( $this->monotonic_time_ns() - $start_time ) / 1e6 );
+					$remaining_timeout_ms = $total_budget_ms - $elapsed_ms;
+
+					if ( $remaining_timeout_ms <= 0 ) {
+						return array(
+							'status'           => self::STATUS_TIMEOUT,
+							'response_code'    => $head_code,
+							'response_time_ms' => $elapsed_ms,
+							'error_message'    => __( 'Request timed out.', 'peakurl' ),
+							'redirect_count'   => $redirect_count,
+						);
+					}
+
+					$get_probe = $this->probe->probe(
+						$current_url,
+						$host,
+						$port,
+						$pinned_ip,
+						$remaining_timeout_ms,
+						'GET'
+					);
+
+					$accumulated_probe_ms += (int) ( $get_probe['duration_ms'] ?? 0 );
+					$probe_result          = $get_probe;
+				}
 			}
 
 			if ( null === $probe_result ) {

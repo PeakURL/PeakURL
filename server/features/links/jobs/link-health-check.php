@@ -79,6 +79,12 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 	 * {@inheritDoc}
 	 */
 	public function execute( ExecutionContext $context ): ExecutionResult {
+		$link_id = self::parse_link_id( $context );
+
+		if ( '' !== $link_id ) {
+			return $this->execute_targeted( $link_id );
+		}
+
 		// Rotating sweep: never-checked links first (checked_at IS NULL), then oldest checked_at, with deterministic tie-breaker.
 		$links = $this->db->get_results(
 			'SELECT u.id, u.destination_url
@@ -305,5 +311,151 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 		}
 
 		return implode( ', ', $parts );
+	}
+
+	/**
+	 * Parse the canonical link ID from an execution context or targeted job identifier.
+	 *
+	 * Supports formats:
+	 * - Context with $payload['link_id']
+	 * - peakurl_link_health_check:<link_id>
+	 * - peakurl_link_health_check:<link_id>:next
+	 *
+	 * @param ExecutionContext|string $source Context or job ID string.
+	 * @return string Link identifier or empty string if not targeted.
+	 * @since 1.7.1
+	 */
+	public static function parse_link_id( $source ): string {
+		if ( $source instanceof ExecutionContext ) {
+			$payload = $source->get_payload();
+			if ( ! empty( $payload['link_id'] ) && is_string( $payload['link_id'] ) ) {
+				$raw_id = trim( $payload['link_id'] );
+				if ( str_contains( $raw_id, ':' ) ) {
+					$parts = explode( ':', $raw_id );
+					return trim( $parts[0] );
+				}
+				return $raw_id;
+			}
+			$source = $source->get_job_id();
+		}
+
+		$job_id = is_string( $source ) ? trim( $source ) : '';
+		if ( ! str_contains( $job_id, ':' ) ) {
+			return '';
+		}
+
+		$parts = explode( ':', $job_id );
+		if ( count( $parts ) >= 2 && 'peakurl_link_health_check' === $parts[0] ) {
+			return trim( $parts[1] );
+		}
+
+		return '';
+	}
+
+	/**
+	 * Execute targeted destination health check for a single link.
+	 *
+	 * Authoritatively loads the current destination URL from the urls table
+	 * at execution time. Skips safely without error if the link has been
+	 * deleted or is not active. If the destination changed while the check was
+	 * running, discards the stale result and skips safely.
+	 *
+	 * @param string $link_id Link identifier.
+	 * @return ExecutionResult Execution outcome.
+	 * @since 1.7.1
+	 */
+	public function execute_targeted( string $link_id ): ExecutionResult {
+		$link_id = trim( $link_id );
+		if ( '' === $link_id ) {
+			return ExecutionResult::skipped( 'Empty link identifier.' );
+		}
+
+		$link = $this->db->get_row_by( 'urls', array( 'id' => $link_id ) );
+
+		if ( empty( $link ) ) {
+			return ExecutionResult::skipped(
+				sprintf( 'Link [%s] was deleted before health check could execute.', $link_id )
+			);
+		}
+
+		if ( 'active' !== (string) ( $link['status'] ?? '' ) ) {
+			return ExecutionResult::skipped(
+				sprintf( 'Link [%s] is not active (status: %s).', $link_id, (string) ( $link['status'] ?? 'unknown' ) )
+			);
+		}
+
+		$dest_url = trim( (string) ( $link['destination_url'] ?? '' ) );
+		if ( '' === $dest_url ) {
+			return ExecutionResult::skipped(
+				sprintf( 'Link [%s] has an empty destination URL.', $link_id )
+			);
+		}
+
+		$result = $this->checker->check( $dest_url );
+
+		// Re-read authoritative link row to ensure destination did not change during check.
+		$current_link = $this->db->get_row_by( 'urls', array( 'id' => $link_id ) );
+
+		if ( empty( $current_link ) || 'active' !== (string) ( $current_link['status'] ?? '' ) ) {
+			return ExecutionResult::skipped(
+				sprintf( 'Link [%s] was deleted or deactivated while health check was running; result discarded.', $link_id )
+			);
+		}
+
+		$current_destination = trim( (string) ( $current_link['destination_url'] ?? '' ) );
+		if ( $current_destination !== $dest_url ) {
+			return ExecutionResult::skipped(
+				sprintf( 'Destination changed while health check was running for link [%s]; result discarded.', $link_id )
+			);
+		}
+
+		$status = (string) $result['status'];
+		$now    = Date::now();
+
+		try {
+			$upserted = $this->db->upsert(
+				'link_health',
+				array(
+					'link_id'          => $link_id,
+					'status'           => $status,
+					'checked_at'       => $now,
+					'response_code'    => $result['response_code'],
+					'response_time_ms' => $result['response_time_ms'],
+					'error_message'    => $result['error_message'],
+					'redirect_count'   => (int) ( $result['redirect_count'] ?? 0 ),
+					'created_at'       => $now,
+					'updated_at'       => $now,
+				),
+				array(
+					'status',
+					'checked_at',
+					'response_code',
+					'response_time_ms',
+					'error_message',
+					'redirect_count',
+					'updated_at',
+				)
+			);
+
+			if ( false === $upserted || ! is_int( $upserted ) || $upserted < 0 ) {
+				return ExecutionResult::failure(
+					sprintf( 'Failed to persist health snapshot for link [%s].', $link_id )
+				);
+			}
+		} catch ( \Throwable $e ) {
+			return ExecutionResult::failure(
+				sprintf( 'Failed to persist health snapshot for link [%s]: %s', $link_id, $e->getMessage() )
+			);
+		}
+
+		return ExecutionResult::success(
+			sprintf( 'Destination health check completed for link [%s]: %s.', $link_id, $status ),
+			array(
+				'linkId'         => $link_id,
+				'status'         => $status,
+				'responseCode'   => $result['response_code'],
+				'responseTimeMs' => $result['response_time_ms'],
+			)
+		);
 	}
 }

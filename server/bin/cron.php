@@ -186,6 +186,7 @@ $scheduler = SchedulerFactory::create(
 	$links_service,
 	$analytics_service
 );
+$links_service->set_scheduler( $scheduler );
 
 // ── Command line argument parsing ─────────────────────────────────
 

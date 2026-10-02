@@ -18,6 +18,7 @@ use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Scheduler\Scheduler;
 use PeakURL\Core\Security\Security;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Service as AuthService;
@@ -147,6 +148,14 @@ class Service {
 	private Checker $health_checker;
 
 	/**
+	 * Background job scheduler instance.
+	 *
+	 * @var Scheduler|null
+	 * @since 1.7.1
+	 */
+	private ?Scheduler $scheduler = null;
+
+	/**
 	 * Create a new Link service instance.
 	 *
 	 * @param Repository           $data              Repository handler.
@@ -221,6 +230,52 @@ class Service {
 	 */
 	public function get_validator(): Validator {
 		return $this->validator;
+	}
+
+	/**
+	 * Set the background job scheduler.
+	 *
+	 * @param Scheduler $scheduler Background scheduler instance.
+	 * @return void
+	 * @since 1.7.1
+	 */
+	public function set_scheduler( Scheduler $scheduler ): void {
+		$this->scheduler = $scheduler;
+	}
+
+	/**
+	 * Get the background job scheduler if configured.
+	 *
+	 * @return Scheduler|null
+	 * @since 1.7.1
+	 */
+	public function get_scheduler(): ?Scheduler {
+		return $this->scheduler;
+	}
+
+	/**
+	 * Schedule a targeted background health check for a link.
+	 *
+	 * Uses PeakURL's database-backed Scheduled Jobs layer. Never makes an outbound
+	 * network request synchronously from the create/update request path.
+	 *
+	 * @param string $link_id Link identifier.
+	 * @return void
+	 * @since 1.7.1
+	 */
+	public function schedule_health_check( string $link_id ): void {
+		if ( null !== $this->scheduler ) {
+			try {
+				$this->scheduler->enqueue_job(
+					'peakurl_link_health_check',
+					array( 'link_id' => $link_id )
+				);
+			} catch ( \Throwable $e ) {
+				// Background scheduling must never fail the link create/update request, but failure is observable.
+				error_log( sprintf( 'PeakURL link health scheduling failed for link [%s]: %s', $link_id, $e->getMessage() ) );
+				\do_action( 'peakurl_link_health_scheduling_failed', $link_id, $e->getMessage() );
+			}
+		}
 	}
 
 	/**
@@ -474,82 +529,6 @@ class Service {
 	}
 
 	/**
-	 * Validate destination health at write-time.
-	 *
-	 * Blocks saving when the destination is definitely broken or rejected by security filters.
-	 * Allows healthy, slow, and non-definitive HTTP statuses (e.g. 401, 403, 429, 500) to save.
-	 *
-	 * @param string $destination_url Cleaned destination URL.
-	 * @return array{
-	 *     status: string,
-	 *     response_code: ?int,
-	 *     response_time_ms: ?int,
-	 *     error_message: ?string,
-	 *     redirect_count: int
-	 * } Health check inspection snapshot.
-	 *
-	 * @throws ApiException When destination is definitely broken or unsafe (422).
-	 * @since 1.7.1
-	 */
-	private function validate_destination_health( string $destination_url ): array {
-		$result = $this->health_checker->check( $destination_url );
-		$status = (string) $result['status'];
-		$code   = isset( $result['response_code'] ) ? (int) $result['response_code'] : null;
-
-		$is_hard_block = false;
-		$error_message = '';
-
-		switch ( $status ) {
-			case Checker::STATUS_SSRF_BLOCKED:
-				$is_hard_block = true;
-				$error_message = __( 'The destination URL is blocked by security policy.', 'peakurl' );
-				break;
-
-			case Checker::STATUS_DNS_ERROR:
-				$is_hard_block = true;
-				$error_message = __( 'The destination domain could not be resolved.', 'peakurl' );
-				break;
-
-			case Checker::STATUS_TLS_ERROR:
-				$is_hard_block = true;
-				$error_message = __( 'The destination has an invalid or untrusted SSL/TLS certificate.', 'peakurl' );
-				break;
-
-			case Checker::STATUS_TIMEOUT:
-				$is_hard_block = true;
-				$error_message = __( 'The destination URL took too long to respond.', 'peakurl' );
-				break;
-
-			case Checker::STATUS_UNREACHABLE:
-				$is_hard_block = true;
-				$error_message = __( 'The destination URL could not be reached.', 'peakurl' );
-				break;
-
-			case Checker::STATUS_REDIRECT_LOOP:
-				$is_hard_block = true;
-				$error_message = __( 'The destination URL resulted in a redirect loop or exceeded maximum redirects.', 'peakurl' );
-				break;
-
-			case Checker::STATUS_HTTP_ERROR:
-				if ( 404 === $code || 410 === $code ) {
-					$is_hard_block = true;
-					$error_message = sprintf(
-						/* translators: %d: HTTP status code */
-						__( 'The destination URL returned a %d Not Found response.', 'peakurl' ),
-						$code
-					);
-				}
-				break;
-		}
-
-		if ( $is_hard_block ) {
-			throw new ApiException( $error_message, 422 );
-		}
-
-		return $result;
-	}
-
-	/**
 	 * Return the destination redirect URL for a short code.
 	 *
 	 * @param string  $id      Short code or alias.
@@ -733,9 +712,6 @@ class Service {
 		$destination_url           = $this->validator->clean_destination( $raw_destination );
 		$payload['destinationUrl'] = $destination_url;
 
-		// Pre-save destination health check: hard-blocks definitive failures before side effects.
-		$health_result = $this->validate_destination_health( $destination_url );
-
 		$social_image_file = $request->get_file( 'socialImage' );
 		$social_image_url  = $this->validator->normalize_link_social_image_url(
 			$payload['socialImageUrl'] ?? null,
@@ -778,24 +754,13 @@ class Service {
 			throw $exception;
 		}
 
-		// Persist successful health snapshot immediately after link creation.
-		$link_id     = (string) $row['id'];
-		$now         = Date::now();
-		$health_data = array(
-			'link_id'          => $link_id,
-			'status'           => (string) $health_result['status'],
-			'checked_at'       => $now,
-			'response_code'    => $health_result['response_code'],
-			'response_time_ms' => $health_result['response_time_ms'],
-			'error_message'    => $health_result['error_message'],
-			'redirect_count'   => (int) ( $health_result['redirect_count'] ?? 0 ),
-			'created_at'       => $now,
-			'updated_at'       => $now,
-		);
-		$saved       = $this->data->save_link_health( $link_id, $health_data );
+		$link_id = (string) $row['id'];
+
+		// Asynchronously schedule targeted health check without blocking user response.
+		$this->schedule_health_check( $link_id );
 
 		$url           = $this->format_url( $row );
-		$url['health'] = $saved ? $this->format_health( $health_data ) : null;
+		$url['health'] = null;
 
 		$link_title = ! empty( $url['title'] ) ? $url['title'] : '/' . ( $url['alias'] ?? $url['shortCode'] ?? '' );
 
@@ -943,15 +908,12 @@ class Service {
 		);
 
 		$destination_changed = false;
-		$new_health_result   = null;
 
 		if ( array_key_exists( 'destinationUrl', $payload ) ) {
 			$cleaned_dest = $this->validator->clean_destination( $payload['destinationUrl'] );
 			$current_dest = (string) ( $existing['destination_url'] ?? '' );
 			if ( $cleaned_dest !== $current_dest ) {
 				$destination_changed = true;
-				// Run pre-save destination health check BEFORE any side-effect.
-				$new_health_result = $this->validate_destination_health( $cleaned_dest );
 			}
 			$payload['destinationUrl'] = $cleaned_dest;
 		}
@@ -1140,26 +1102,12 @@ class Service {
 
 		$updated_row = $this->data->find_url_row( $id );
 
-		$health_data = null;
-		if ( $destination_changed && null !== $new_health_result ) {
-			$now         = Date::now();
-			$health_data = array(
-				'link_id'          => $id,
-				'status'           => (string) $new_health_result['status'],
-				'checked_at'       => $now,
-				'response_code'    => $new_health_result['response_code'],
-				'response_time_ms' => $new_health_result['response_time_ms'],
-				'error_message'    => $new_health_result['error_message'],
-				'redirect_count'   => (int) ( $new_health_result['redirect_count'] ?? 0 ),
-				'created_at'       => $now,
-				'updated_at'       => $now,
-			);
+		if ( $destination_changed ) {
+			// Invalidate/clear old health snapshot from link_health.
+			$this->data->delete_link_health( $id );
 
-			$saved = $this->data->save_link_health( $id, $health_data );
-			if ( ! $saved ) {
-				$this->data->delete_link_health( $id );
-				$health_data = null;
-			}
+			// Asynchronously schedule targeted health check without blocking user response.
+			$this->schedule_health_check( $id );
 		}
 
 		$this->analytics_service->record_activity(
@@ -1177,7 +1125,10 @@ class Service {
 		$url = $this->format_url( $updated_row );
 
 		if ( $destination_changed ) {
-			$url['health'] = null !== $health_data ? $this->format_health( $health_data ) : null;
+			$url['health'] = null;
+		} else {
+			$health_row    = $this->data->get_link_health( $id );
+			$url['health'] = $this->format_health( $health_row );
 		}
 
 		$this->invalidate_link_cache( $existing );

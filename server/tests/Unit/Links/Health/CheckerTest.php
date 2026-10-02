@@ -391,4 +391,313 @@ class CheckerTest extends TestCase {
 		$this->assertSame( Checker::STATUS_HTTP_ERROR, $result['status'] );
 		$this->assertSame( 403, $result['response_code'] );
 	}
+
+	public function test_head_200_does_not_trigger_get_fallback(): void {
+		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$methods  = array();
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
+				$methods[] = $method;
+				return array(
+					'response_code' => 200,
+					'duration_ms'   => 50,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => null,
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://example.com/direct-ok' );
+
+		$this->assertSame( Checker::STATUS_HEALTHY, $result['status'] );
+		$this->assertSame( 200, $result['response_code'] );
+		$this->assertSame( array( 'HEAD' ), $methods );
+	}
+
+	public function test_head_301_follows_redirect_without_get_fallback(): void {
+		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$methods  = array();
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
+				$methods[] = $method;
+				if ( str_contains( $url, 'redir' ) ) {
+					return array(
+						'response_code' => 301,
+						'duration_ms'   => 50,
+						'error_code'    => 0,
+						'error_message' => '',
+						'redirect_url'  => 'https://example.com/final',
+					);
+				}
+				return array(
+					'response_code' => 200,
+					'duration_ms'   => 50,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => null,
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://example.com/redir' );
+
+		$this->assertSame( Checker::STATUS_HEALTHY, $result['status'] );
+		$this->assertSame( 200, $result['response_code'] );
+		$this->assertSame( 1, $result['redirect_count'] );
+		$this->assertSame( array( 'HEAD', 'HEAD' ), $methods );
+	}
+
+	public function test_head_404_with_get_200_returns_healthy_200(): void {
+		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$methods  = array();
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
+				$methods[] = $method;
+				if ( 'HEAD' === $method ) {
+					return array(
+						'response_code' => 404,
+						'duration_ms'   => 40,
+						'error_code'    => 0,
+						'error_message' => '',
+						'redirect_url'  => null,
+					);
+				}
+				return array(
+					'response_code' => 200,
+					'duration_ms'   => 60,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => null,
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://example.com/spa-route' );
+
+		$this->assertSame( Checker::STATUS_HEALTHY, $result['status'] );
+		$this->assertSame( 200, $result['response_code'] );
+		$this->assertNull( $result['error_message'] );
+		$this->assertSame( array( 'HEAD', 'GET' ), $methods );
+	}
+
+	public function test_n8n_express_spa_regression_head_404_with_get_200(): void {
+		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$methods  = array();
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
+				$methods[] = $method;
+				if ( 'HEAD' === $method ) {
+					return array(
+						'response_code' => 404,
+						'duration_ms'   => 50,
+						'error_code'    => 0,
+						'error_message' => '',
+						'redirect_url'  => null,
+					);
+				}
+				return array(
+					'response_code' => 200,
+					'duration_ms'   => 70,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => null,
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://n8n.techsysforge.com/workflow/example' );
+
+		$this->assertSame( Checker::STATUS_HEALTHY, $result['status'] );
+		$this->assertSame( 200, $result['response_code'] );
+		$this->assertSame( array( 'HEAD', 'GET' ), $methods );
+	}
+
+	public function test_head_200_only_calls_head_method(): void {
+		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$methods  = array();
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
+				$methods[] = $method;
+				return array(
+					'response_code' => 200,
+					'duration_ms'   => 35,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => null,
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://example.com/healthy' );
+
+		$this->assertSame( Checker::STATUS_HEALTHY, $result['status'] );
+		$this->assertSame( 200, $result['response_code'] );
+		$this->assertSame( array( 'HEAD' ), $methods );
+	}
+
+	public function test_head_405_with_get_200_returns_healthy_200(): void {
+		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$methods  = array();
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
+				$methods[] = $method;
+				if ( 'HEAD' === $method ) {
+					return array(
+						'response_code' => 405,
+						'duration_ms'   => 40,
+						'error_code'    => 0,
+						'error_message' => '',
+						'redirect_url'  => null,
+					);
+				}
+				return array(
+					'response_code' => 200,
+					'duration_ms'   => 60,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => null,
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://example.com/no-head' );
+
+		$this->assertSame( Checker::STATUS_HEALTHY, $result['status'] );
+		$this->assertSame( 200, $result['response_code'] );
+		$this->assertSame( array( 'HEAD', 'GET' ), $methods );
+	}
+
+	public function test_head_404_with_get_404_returns_http_error_404(): void {
+		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$methods  = array();
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
+				$methods[] = $method;
+				return array(
+					'response_code' => 404,
+					'duration_ms'   => 40,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => null,
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://example.com/really-missing' );
+
+		$this->assertSame( Checker::STATUS_HTTP_ERROR, $result['status'] );
+		$this->assertSame( 404, $result['response_code'] );
+		$this->assertSame( array( 'HEAD', 'GET' ), $methods );
+	}
+
+	public function test_head_405_with_get_500_returns_http_error_500(): void {
+		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$methods  = array();
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
+				$methods[] = $method;
+				if ( 'HEAD' === $method ) {
+					return array(
+						'response_code' => 405,
+						'duration_ms'   => 40,
+						'error_code'    => 0,
+						'error_message' => '',
+						'redirect_url'  => null,
+					);
+				}
+				return array(
+					'response_code' => 500,
+					'duration_ms'   => 60,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => null,
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://example.com/server-error' );
+
+		$this->assertSame( Checker::STATUS_HTTP_ERROR, $result['status'] );
+		$this->assertSame( 500, $result['response_code'] );
+		$this->assertSame( array( 'HEAD', 'GET' ), $methods );
+	}
+
+	public function test_head_404_with_get_timeout_returns_timeout_status(): void {
+		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$methods  = array();
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
+				$methods[] = $method;
+				if ( 'HEAD' === $method ) {
+					return array(
+						'response_code' => 404,
+						'duration_ms'   => 40,
+						'error_code'    => 0,
+						'error_message' => '',
+						'redirect_url'  => null,
+					);
+				}
+				return array(
+					'response_code' => null,
+					'duration_ms'   => 2900,
+					'error_code'    => 28,
+					'error_message' => 'Operation timed out',
+					'redirect_url'  => null,
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://example.com/get-times-out' );
+
+		$this->assertSame( Checker::STATUS_TIMEOUT, $result['status'] );
+		$this->assertNull( $result['response_code'] );
+		$this->assertSame( array( 'HEAD', 'GET' ), $methods );
+	}
+
+	public function test_head_404_with_get_redirect_to_private_ip_is_ssrf_blocked(): void {
+		$resolver = new Resolver(
+			static function ( string $host ): array {
+				if ( 'example.com' === $host ) {
+					return array( '93.184.216.34' );
+				}
+				// 10.0.0.1 has no public address.
+				return array();
+			}
+		);
+		$probe    = new Probe(
+			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ): array {
+				if ( 'HEAD' === $method ) {
+					return array(
+						'response_code' => 404,
+						'duration_ms'   => 40,
+						'error_code'    => 0,
+						'error_message' => '',
+						'redirect_url'  => null,
+					);
+				}
+				return array(
+					'response_code' => 302,
+					'duration_ms'   => 50,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => 'http://10.0.0.1/admin',
+				);
+			}
+		);
+
+		$checker = new Checker( $resolver, $probe );
+		$result  = $checker->check( 'https://example.com/sneaky-redirect' );
+
+		$this->assertSame( Checker::STATUS_SSRF_BLOCKED, $result['status'] );
+	}
 }

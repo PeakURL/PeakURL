@@ -21,6 +21,7 @@ use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Scheduler\Scheduler;
 use PeakURL\Core\Scheduler\SchedulerFactory;
 use PeakURL\Core\Security\Security;
 use PeakURL\Features\Analytics\Controller as AnalyticsController;
@@ -90,6 +91,9 @@ class Application {
 
 	/** @var array<string, mixed> Merged runtime configuration. */
 	private array $config;
+
+	/** @var Scheduler Background job scheduler instance. */
+	private Scheduler $scheduler;
 
 	/**
 	 * Initialize the application, create services, and register routes.
@@ -246,7 +250,9 @@ class Application {
 			$links_service,
 			$analytics_service
 		);
-		$system_service   = new SystemService(
+		$links_service->set_scheduler( $scheduler );
+		$this->scheduler = $scheduler;
+		$system_service  = new SystemService(
 			$db,
 			$connection,
 			$auth_service,
@@ -281,6 +287,16 @@ class Application {
 	 */
 	public function get_router(): Router {
 		return $this->router;
+	}
+
+	/**
+	 * Return the background job scheduler instance.
+	 *
+	 * @return Scheduler
+	 * @since 1.7.1
+	 */
+	public function get_scheduler(): Scheduler {
+		return $this->scheduler;
 	}
 
 	/**

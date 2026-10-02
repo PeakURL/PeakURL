@@ -94,6 +94,7 @@ class Probe {
 	 * @param int    $port       Target port.
 	 * @param string $pinned_ip  Validated IP address to pin.
 	 * @param int    $timeout_ms Remaining timeout budget in milliseconds.
+	 * @param string $method     HTTP method: 'HEAD' (default) or 'GET'.
 	 * @return array<int, mixed> cURL options.
 	 * @since 1.7.1
 	 */
@@ -102,22 +103,28 @@ class Probe {
 		string $host,
 		int $port,
 		string $pinned_ip,
-		int $timeout_ms
+		int $timeout_ms,
+		string $method = 'HEAD'
 	): array {
+		$is_get  = 'GET' === strtoupper( $method );
 		$options = array(
 			CURLOPT_URL               => $url,
-			CURLOPT_HEADER            => true,
-			CURLOPT_NOBODY            => true,
+			CURLOPT_HEADER            => ! $is_get,
+			CURLOPT_NOBODY            => ! $is_get,
 			CURLOPT_TIMEOUT_MS        => max( 1, $timeout_ms ),
 			CURLOPT_CONNECTTIMEOUT_MS => max( 1, $timeout_ms ),
 			CURLOPT_NOSIGNAL          => 1,
 			CURLOPT_FOLLOWLOCATION    => false,
-			CURLOPT_RETURNTRANSFER    => true,
+			CURLOPT_RETURNTRANSFER    => ! $is_get,
 			CURLOPT_SSL_VERIFYPEER    => true,
 			CURLOPT_SSL_VERIFYHOST    => 2,
 			CURLOPT_USERAGENT         => 'PeakURL-HealthCheck/1.0',
 			CURLOPT_PROXY             => '',
 		);
+
+		if ( $is_get ) {
+			$options[ CURLOPT_HTTPGET ] = true;
+		}
 
 		$unbracketed_host = ( str_starts_with( $host, '[' ) && str_ends_with( $host, ']' ) )
 			? substr( $host, 1, -1 )
@@ -138,6 +145,7 @@ class Probe {
 	 * @param int    $port       Target port.
 	 * @param string $pinned_ip  Pre-validated IP address.
 	 * @param int    $timeout_ms Remaining timeout budget in milliseconds.
+	 * @param string $method     HTTP method: 'HEAD' (default) or 'GET'.
 	 * @return array{
 	 *     response_code: ?int,
 	 *     duration_ms: int,
@@ -152,7 +160,8 @@ class Probe {
 		string $host,
 		int $port,
 		string $pinned_ip,
-		int $timeout_ms
+		int $timeout_ms,
+		string $method = 'HEAD'
 	): array {
 		if ( null !== $this->http_prober && is_callable( $this->http_prober ) ) {
 			return call_user_func(
@@ -161,7 +170,8 @@ class Probe {
 				$timeout_ms,
 				$pinned_ip,
 				$host,
-				$port
+				$port,
+				$method
 			);
 		}
 
@@ -170,12 +180,13 @@ class Probe {
 			$host,
 			$port,
 			$pinned_ip,
-			$timeout_ms
+			$timeout_ms,
+			$method
 		);
 	}
 
 	/**
-	 * Probe target using cURL with NOBODY (HEAD) request and CURLOPT_RESOLVE pinning.
+	 * Probe target using cURL with NOBODY (HEAD) or bounded streaming GET request.
 	 *
 	 * Surfaces a runtime configuration exception if the cURL extension is missing.
 	 *
@@ -184,6 +195,7 @@ class Probe {
 	 * @param int    $port       Target port.
 	 * @param string $pinned_ip  Validated public IP.
 	 * @param int    $timeout_ms Remaining timeout budget in ms.
+	 * @param string $method     HTTP method: 'HEAD' (default) or 'GET'.
 	 * @return array{
 	 *     response_code: ?int,
 	 *     duration_ms: int,
@@ -200,7 +212,8 @@ class Probe {
 		string $host,
 		int $port,
 		string $pinned_ip,
-		int $timeout_ms
+		int $timeout_ms,
+		string $method = 'HEAD'
 	): array {
 		if ( ! extension_loaded( 'curl' ) || ! function_exists( 'curl_init' ) ) {
 			throw new \RuntimeException( 'The PHP cURL extension is required for destination health checks.' );
@@ -217,13 +230,33 @@ class Probe {
 			);
 		}
 
+		$is_get  = 'GET' === strtoupper( $method );
 		$options = $this->curl_options(
 			$url,
 			$host,
 			$port,
 			$pinned_ip,
-			$timeout_ms
+			$timeout_ms,
+			$method
 		);
+
+		$raw_headers = '';
+		$body_bytes  = 0;
+		$max_bytes   = 65536; // 64KB body ceiling for GET fallback.
+
+		if ( $is_get ) {
+			$options[ CURLOPT_HEADERFUNCTION ] = static function ( $ch, string $header_line ) use ( &$raw_headers ): int {
+				$raw_headers .= $header_line;
+				return strlen( $header_line );
+			};
+			$options[ CURLOPT_WRITEFUNCTION ]  = static function ( $ch, string $data ) use ( &$body_bytes, $max_bytes ): int {
+				$body_bytes += strlen( $data );
+				if ( $body_bytes > $max_bytes ) {
+					return 0; // Abort body stream once ceiling is exceeded.
+				}
+				return strlen( $data );
+			};
+		}
 
 		try {
 			$configured = curl_setopt_array( $curl_handle, $options );
@@ -243,14 +276,24 @@ class Probe {
 			);
 		}
 
-		$raw_headers = curl_exec( $curl_handle );
+		$res         = curl_exec( $curl_handle );
 		$curl_errno  = curl_errno( $curl_handle );
 		$curl_error  = curl_error( $curl_handle );
 		$http_code   = curl_getinfo( $curl_handle, CURLINFO_HTTP_CODE );
 		$duration_ms = (int) round( (float) curl_getinfo( $curl_handle, CURLINFO_TOTAL_TIME ) * 1000 );
 		curl_close( $curl_handle );
 
-		$redirect_url = is_string( $raw_headers ) ? self::extract_location_header( $raw_headers ) : null;
+		if ( ! $is_get && is_string( $res ) ) {
+			$raw_headers = $res;
+		}
+
+		// When body ceiling was reached on GET, cURL throws error 23, but headers and HTTP status were already captured.
+		if ( $is_get && 23 === $curl_errno && $http_code > 0 ) {
+			$curl_errno = 0;
+			$curl_error = '';
+		}
+
+		$redirect_url = '' !== $raw_headers ? self::extract_location_header( $raw_headers ) : null;
 
 		return array(
 			'response_code' => $http_code > 0 ? (int) $http_code : null,

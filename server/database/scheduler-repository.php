@@ -98,6 +98,159 @@ class SchedulerRepository {
 	}
 
 	/**
+	 * Enqueue or update a targeted one-off or scheduled background job.
+	 *
+	 * Idempotently creates or re-enables the job record without duplicating rows.
+	 *
+	 * @param string      $job_id           Unique job identifier.
+	 * @param string      $title            Human-readable job title.
+	 * @param int         $interval_seconds Recurring interval (0 for one-off).
+	 * @param string|null $run_at           Target execution timestamp (UTC).
+	 * @param int         $max_attempts     Max retry attempts.
+	 * @param int         $retry_delay      Initial retry delay in seconds.
+	 * @return string The effective enqueued job identifier.
+	 * @since 1.7.1
+	 */
+	public function enqueue_job(
+		string $job_id,
+		string $title,
+		int $interval_seconds = 0,
+		?string $run_at = null,
+		int $max_attempts = 3,
+		int $retry_delay = 60
+	): string {
+		$now      = Date::now();
+		$next_run = $run_at ?? $now;
+
+		$is_next_target = str_ends_with( $job_id, ':next' );
+		$primary_id     = $is_next_target ? substr( $job_id, 0, -5 ) : $job_id;
+		$next_id        = $primary_id . ':next';
+
+		$did_begin = false;
+		if ( ! $this->db->in_transaction() ) {
+			$this->db->begin_transaction();
+			$did_begin = true;
+		}
+
+		try {
+			// 1. Atomically lock and inspect primary job state.
+			$primary_row = $this->db->get_row(
+				'SELECT * FROM cron_jobs WHERE id = :id FOR UPDATE',
+				array( 'id' => $primary_id )
+			);
+
+			$primary_is_running = ! empty( $primary_row )
+				&& 'running' === (string) ( $primary_row['status'] ?? '' )
+				&& ( empty( $primary_row['lock_expires_at'] ) || strtotime( (string) $primary_row['lock_expires_at'] ) >= strtotime( $now . ' UTC' ) );
+
+			// 2. If primary is not running, also lock and inspect :next to prevent concurrent overlap.
+			$next_row = null;
+			if ( ! $primary_is_running ) {
+				$next_row = $this->db->get_row(
+					'SELECT * FROM cron_jobs WHERE id = :id FOR UPDATE',
+					array( 'id' => $next_id )
+				);
+			}
+
+			$next_is_running = ! empty( $next_row )
+				&& 'running' === (string) ( $next_row['status'] ?? '' )
+				&& ( empty( $next_row['lock_expires_at'] ) || strtotime( (string) $next_row['lock_expires_at'] ) >= strtotime( $now . ' UTC' ) );
+
+			if ( $primary_is_running ) {
+				// Primary is executing: enqueue into :next slot, held in non-runnable 'waiting' state until primary finishes.
+				$target_id = $next_id;
+				$sql       = 'INSERT INTO cron_jobs (
+					id, title, schedule_interval, status, next_run_at, attempts, max_attempts, retry_delay, is_enabled, created_at, updated_at
+				) VALUES (
+					:id, :title, :schedule_interval, :waiting_status, :next_run, 0, :max_attempts, :retry_delay, 0, :created_at, :updated_at
+				) ON DUPLICATE KEY UPDATE
+					title = VALUES(title),
+					next_run_at = VALUES(next_run_at),
+					status = IF(status = :running_status, status, :waiting_status2),
+					attempts = 0,
+					is_enabled = IF(status = :running_status2, is_enabled, 0),
+					updated_at = VALUES(updated_at)';
+
+				$this->db->query(
+					$sql,
+					array(
+						'id'                => $target_id,
+						'title'             => $title,
+						'schedule_interval' => $interval_seconds,
+						'waiting_status'    => 'waiting',
+						'waiting_status2'   => 'waiting',
+						'next_run'          => $next_run,
+						'max_attempts'      => $max_attempts,
+						'retry_delay'       => $retry_delay,
+						'created_at'        => $now,
+						'updated_at'        => $now,
+						'running_status'    => 'running',
+						'running_status2'   => 'running',
+					)
+				);
+			} elseif ( $next_is_running ) {
+				// :next is executing: mark :next for follow-up upon completion so primary does not run concurrently.
+				$target_id = $next_id;
+				$this->db->query(
+					'UPDATE cron_jobs
+					SET title = :title,
+						next_run_at = :next_run,
+						attempts = 0,
+						updated_at = :now
+					WHERE id = :id',
+					array(
+						'id'       => $target_id,
+						'title'    => $title,
+						'next_run' => $next_run,
+						'now'      => $now,
+					)
+				);
+			} else {
+				// Neither is running: activate primary slot.
+				$target_id = $primary_id;
+				$sql       = 'INSERT INTO cron_jobs (
+					id, title, schedule_interval, status, next_run_at, attempts, max_attempts, retry_delay, is_enabled, created_at, updated_at
+				) VALUES (
+					:id, :title, :schedule_interval, :idle_status, :next_run, 0, :max_attempts, :retry_delay, 1, :created_at, :updated_at
+				) ON DUPLICATE KEY UPDATE
+					title = VALUES(title),
+					next_run_at = VALUES(next_run_at),
+					status = :idle_status2,
+					attempts = 0,
+					is_enabled = 1,
+					updated_at = VALUES(updated_at)';
+
+				$this->db->query(
+					$sql,
+					array(
+						'id'                => $target_id,
+						'title'             => $title,
+						'schedule_interval' => $interval_seconds,
+						'idle_status'       => 'idle',
+						'idle_status2'      => 'idle',
+						'next_run'          => $next_run,
+						'max_attempts'      => $max_attempts,
+						'retry_delay'       => $retry_delay,
+						'created_at'        => $now,
+						'updated_at'        => $now,
+					)
+				);
+			}
+
+			if ( $did_begin ) {
+				$this->db->commit();
+			}
+
+			return $target_id;
+		} catch ( \Throwable $e ) {
+			if ( $did_begin ) {
+				$this->db->roll_back();
+			}
+			throw $e;
+		}
+	}
+
+	/**
 	 * Retrieve all due or stale-claimed background jobs.
 	 *
 	 * @param string|null $now Optional MySQL datetime timestamp for testing.
@@ -109,6 +262,7 @@ class SchedulerRepository {
 
 		$sql = 'SELECT * FROM cron_jobs
 			WHERE is_enabled = 1
+			AND status != :waiting_status
 			AND (
 				( status != :running_status AND next_run_at <= :now_time_due )
 				OR
@@ -119,6 +273,7 @@ class SchedulerRepository {
 		$results = $this->db->get_results(
 			$sql,
 			array(
+				'waiting_status'      => 'waiting',
 				'running_status'      => 'running',
 				'now_time_due'        => $now_time,
 				'running_status_lock' => 'running',
@@ -158,68 +313,123 @@ class SchedulerRepository {
 		}
 		$lock_expires = gmdate( 'Y-m-d H:i:s', $base_epoch + max( 30, $lease_seconds ) );
 
-		if ( $force ) {
-			$sql = 'UPDATE cron_jobs
-				SET status = :status_running,
-					locked_at = :locked_at,
-					lock_token = :lock_token,
-					lock_expires_at = :lock_expires,
-					attempts = attempts + 1,
-					updated_at = :updated_at
-				WHERE id = :job_id
-				AND is_enabled = 1
-				AND (
-					status != :status_check
-					OR ( status = :status_check_stale AND lock_expires_at IS NOT NULL AND lock_expires_at < :now_stale )
-				)';
+		$is_next_target = str_ends_with( $job_id, ':next' );
+		$primary_id     = $is_next_target ? substr( $job_id, 0, -5 ) : $job_id;
+		$next_id        = $primary_id . ':next';
 
-			$affected = $this->db->query(
-				$sql,
-				array(
-					'status_running'     => 'running',
-					'locked_at'          => $now_time,
-					'lock_token'         => $lock_token,
-					'lock_expires'       => $lock_expires,
-					'updated_at'         => $now_time,
-					'job_id'             => $job_id,
-					'status_check'       => 'running',
-					'status_check_stale' => 'running',
-					'now_stale'          => $now_time,
-				)
-			);
-		} else {
-			$sql = 'UPDATE cron_jobs
-				SET status = :status_running,
-					locked_at = :locked_at,
-					lock_token = :lock_token,
-					lock_expires_at = :lock_expires,
-					attempts = attempts + 1,
-					updated_at = :updated_at
-				WHERE id = :job_id
-				AND is_enabled = 1
-				AND (
-					( status != :status_check AND next_run_at <= :now_due )
-					OR ( status = :status_check_stale AND lock_expires_at IS NOT NULL AND lock_expires_at < :now_stale )
-				)';
-
-			$affected = $this->db->query(
-				$sql,
-				array(
-					'status_running'     => 'running',
-					'locked_at'          => $now_time,
-					'lock_token'         => $lock_token,
-					'lock_expires'       => $lock_expires,
-					'updated_at'         => $now_time,
-					'job_id'             => $job_id,
-					'status_check'       => 'running',
-					'now_due'            => $now_time,
-					'status_check_stale' => 'running',
-					'now_stale'          => $now_time,
-				)
-			);
+		$did_begin = false;
+		if ( ! $this->db->in_transaction() ) {
+			$this->db->begin_transaction();
+			$did_begin = true;
 		}
 
-		return 1 === $affected;
+		try {
+			// Deterministically lock primary and :next rows in alphabetical order.
+			$locked_rows = $this->db->get_results(
+				'SELECT * FROM cron_jobs WHERE id IN (:id1, :id2) ORDER BY id ASC FOR UPDATE',
+				array(
+					'id1' => $primary_id,
+					'id2' => $next_id,
+				)
+			);
+
+			$other_id  = $is_next_target ? $primary_id : $next_id;
+			$other_row = null;
+			foreach ( $locked_rows as $row ) {
+				if ( (string) $row['id'] === $other_id ) {
+					$other_row = $row;
+					break;
+				}
+			}
+
+			// Mutual exclusivity guard: if the related slot is actively running with an unexpired lease, reject claim.
+			if ( ! empty( $other_row ) && 'running' === (string) ( $other_row['status'] ?? '' ) ) {
+				$expires          = (string) ( $other_row['lock_expires_at'] ?? '' );
+				$is_other_running = '' === $expires || strtotime( $expires . ' UTC' ) >= $base_epoch;
+				if ( $is_other_running ) {
+					if ( $did_begin ) {
+						$this->db->commit();
+					}
+					return false;
+				}
+			}
+
+			if ( $force ) {
+				$sql = 'UPDATE cron_jobs
+					SET status = :status_running,
+						locked_at = :locked_at,
+						lock_token = :lock_token,
+						lock_expires_at = :lock_expires,
+						attempts = attempts + 1,
+						updated_at = :updated_at
+					WHERE id = :job_id
+					AND is_enabled = 1
+					AND status != :waiting_status
+					AND (
+						status != :status_check
+						OR ( status = :status_check_stale AND lock_expires_at IS NOT NULL AND lock_expires_at < :now_stale )
+					)';
+
+				$affected = $this->db->query(
+					$sql,
+					array(
+						'status_running'     => 'running',
+						'locked_at'          => $now_time,
+						'lock_token'         => $lock_token,
+						'lock_expires'       => $lock_expires,
+						'updated_at'         => $now_time,
+						'job_id'             => $job_id,
+						'waiting_status'     => 'waiting',
+						'status_check'       => 'running',
+						'status_check_stale' => 'running',
+						'now_stale'          => $now_time,
+					)
+				);
+			} else {
+				$sql = 'UPDATE cron_jobs
+					SET status = :status_running,
+						locked_at = :locked_at,
+						lock_token = :lock_token,
+						lock_expires_at = :lock_expires,
+						attempts = attempts + 1,
+						updated_at = :updated_at
+					WHERE id = :job_id
+					AND is_enabled = 1
+					AND status != :waiting_status
+					AND (
+						( status != :status_check AND next_run_at <= :now_due )
+						OR ( status = :status_check_stale AND lock_expires_at IS NOT NULL AND lock_expires_at < :now_stale )
+					)';
+
+				$affected = $this->db->query(
+					$sql,
+					array(
+						'status_running'     => 'running',
+						'locked_at'          => $now_time,
+						'lock_token'         => $lock_token,
+						'lock_expires'       => $lock_expires,
+						'updated_at'         => $now_time,
+						'job_id'             => $job_id,
+						'waiting_status'     => 'waiting',
+						'status_check'       => 'running',
+						'now_due'            => $now_time,
+						'status_check_stale' => 'running',
+						'now_stale'          => $now_time,
+					)
+				);
+			}
+
+			if ( $did_begin ) {
+				$this->db->commit();
+			}
+
+			return 1 === $affected;
+		} catch ( \Throwable $e ) {
+			if ( $did_begin ) {
+				$this->db->roll_back();
+			}
+			throw $e;
+		}
 	}
 
 	/**
@@ -274,11 +484,21 @@ class SchedulerRepository {
 		?string $output_summary = null,
 		?string $now = null
 	): void {
-		$now_time = $now ?? Date::now();
+		$now_time    = $now ?? Date::now();
+		$job_row     = $this->get_job( $job_id );
+		$is_one_off  = empty( $job_row ) || (int) ( $job_row['schedule_interval'] ?? 0 ) <= 0;
+		$re_enqueued = $is_one_off && (
+			0 === (int) ( $job_row['attempts'] ?? -1 )
+			|| ( ! empty( $job_row['locked_at'] ) && ! empty( $job_row['updated_at'] ) && strtotime( (string) $job_row['updated_at'] ) > strtotime( (string) $job_row['locked_at'] ) )
+		);
 
-		$this->db->query(
+		$status     = $re_enqueued ? 'idle' : ( $is_one_off ? 'success' : 'idle' );
+		$is_enabled = ( $re_enqueued || ! $is_one_off ) ? 1 : 0;
+		$next_run   = $re_enqueued ? $now_time : $next_run_at;
+
+		$affected = $this->db->query(
 			'UPDATE cron_jobs
-			SET status = :idle_status,
+			SET status = :status,
 				locked_at = NULL,
 				lock_token = NULL,
 				lock_expires_at = NULL,
@@ -287,14 +507,16 @@ class SchedulerRepository {
 				last_finished_at = :last_finished,
 				last_error = NULL,
 				next_run_at = :next_run,
+				is_enabled = :is_enabled,
 				updated_at = :updated_at
 			WHERE id = :job_id
 			AND lock_token = :lock_token',
 			array(
-				'idle_status'   => 'idle',
+				'status'        => $status,
 				'last_run'      => $started_at,
 				'last_finished' => $now_time,
-				'next_run'      => $next_run_at,
+				'next_run'      => $next_run,
+				'is_enabled'    => $is_enabled,
 				'updated_at'    => $now_time,
 				'job_id'        => $job_id,
 				'lock_token'    => $lock_token,
@@ -313,6 +535,10 @@ class SchedulerRepository {
 			),
 			array( 'id' => $run_id )
 		);
+
+		if ( $affected > 0 ) {
+			$this->promote_next_job_if_waiting( $job_id, $now_time );
+		}
 	}
 
 	/**
@@ -339,11 +565,21 @@ class SchedulerRepository {
 		?string $output_summary = null,
 		?string $now = null
 	): void {
-		$now_time = $now ?? Date::now();
+		$now_time    = $now ?? Date::now();
+		$job_row     = $this->get_job( $job_id );
+		$is_one_off  = empty( $job_row ) || (int) ( $job_row['schedule_interval'] ?? 0 ) <= 0;
+		$re_enqueued = $is_one_off && (
+			0 === (int) ( $job_row['attempts'] ?? -1 )
+			|| ( ! empty( $job_row['locked_at'] ) && ! empty( $job_row['updated_at'] ) && strtotime( (string) $job_row['updated_at'] ) > strtotime( (string) $job_row['locked_at'] ) )
+		);
 
-		$this->db->query(
+		$status     = $re_enqueued ? 'idle' : ( $is_one_off ? 'skipped' : 'idle' );
+		$is_enabled = ( $re_enqueued || ! $is_one_off ) ? 1 : 0;
+		$next_run   = $re_enqueued ? $now_time : $next_run_at;
+
+		$affected = $this->db->query(
 			'UPDATE cron_jobs
-			SET status = :idle_status,
+			SET status = :status,
 				locked_at = NULL,
 				lock_token = NULL,
 				lock_expires_at = NULL,
@@ -352,14 +588,16 @@ class SchedulerRepository {
 				last_finished_at = :last_finished,
 				last_error = NULL,
 				next_run_at = :next_run,
+				is_enabled = :is_enabled,
 				updated_at = :updated_at
 			WHERE id = :job_id
 			AND lock_token = :lock_token',
 			array(
-				'idle_status'   => 'idle',
+				'status'        => $status,
 				'last_run'      => $started_at,
 				'last_finished' => $now_time,
-				'next_run'      => $next_run_at,
+				'next_run'      => $next_run,
+				'is_enabled'    => $is_enabled,
 				'updated_at'    => $now_time,
 				'job_id'        => $job_id,
 				'lock_token'    => $lock_token,
@@ -381,6 +619,10 @@ class SchedulerRepository {
 			),
 			array( 'id' => $run_id )
 		);
+
+		if ( $affected > 0 ) {
+			$this->promote_next_job_if_waiting( $job_id, $now_time );
+		}
 	}
 
 	/**
@@ -410,28 +652,42 @@ class SchedulerRepository {
 		?string $now = null
 	): void {
 		$now_time    = $now ?? Date::now();
-		$next_status = $is_terminal ? 'failed' : 'idle';
-		$run_status  = $is_terminal ? 'failed' : 'retrying';
+		$job_row     = $this->get_job( $job_id );
+		$is_one_off  = empty( $job_row ) || (int) ( $job_row['schedule_interval'] ?? 0 ) <= 0;
+		$re_enqueued = $is_one_off && (
+			0 === (int) ( $job_row['attempts'] ?? -1 )
+			|| ( ! empty( $job_row['locked_at'] ) && ! empty( $job_row['updated_at'] ) && strtotime( (string) $job_row['updated_at'] ) > strtotime( (string) $job_row['locked_at'] ) )
+		);
 
-		$this->db->query(
+		$next_status = $re_enqueued ? 'idle' : ( $is_terminal ? 'failed' : 'idle' );
+		$run_status  = $is_terminal ? 'failed' : 'retrying';
+		$is_enabled  = ( $re_enqueued || ! ( $is_terminal && $is_one_off ) ) ? 1 : 0;
+		$next_run    = $re_enqueued ? $now_time : $next_run_at;
+		$attempts    = $re_enqueued ? 0 : (int) ( $job_row['attempts'] ?? 0 );
+
+		$affected = $this->db->query(
 			'UPDATE cron_jobs
 			SET status = :next_status,
 				locked_at = NULL,
 				lock_token = NULL,
 				lock_expires_at = NULL,
+				attempts = :attempts,
 				last_run_at = :last_run,
 				last_finished_at = :last_finished,
 				last_error = :error_message,
 				next_run_at = :next_run,
+				is_enabled = :is_enabled,
 				updated_at = :updated_at
 			WHERE id = :job_id
 			AND lock_token = :lock_token',
 			array(
 				'next_status'   => $next_status,
+				'attempts'      => $attempts,
 				'last_run'      => $started_at,
 				'last_finished' => $now_time,
 				'error_message' => $error_message,
-				'next_run'      => $next_run_at,
+				'next_run'      => $next_run,
+				'is_enabled'    => $is_enabled,
 				'updated_at'    => $now_time,
 				'job_id'        => $job_id,
 				'lock_token'    => $lock_token,
@@ -447,6 +703,45 @@ class SchedulerRepository {
 				'error_message' => $error_message,
 			),
 			array( 'id' => $run_id )
+		);
+
+		if ( $affected > 0 ) {
+			$this->promote_next_job_if_waiting( $job_id, $now_time );
+		}
+	}
+
+	/**
+	 * Promote a waiting :next follow-up job to runnable after primary finishes.
+	 *
+	 * @param string $job_id   Completed job identifier.
+	 * @param string $now_time Current UTC timestamp.
+	 * @return void
+	 * @since 1.7.1
+	 */
+	private function promote_next_job_if_waiting( string $job_id, string $now_time ): void {
+		if ( str_ends_with( $job_id, ':next' ) ) {
+			return;
+		}
+
+		$next_id = $job_id . ':next';
+
+		$this->db->query(
+			'UPDATE cron_jobs
+			SET status = :idle_status,
+				is_enabled = 1,
+				attempts = 0,
+				next_run_at = IF(next_run_at > :now_time, next_run_at, :now_time2),
+				updated_at = :now_time3
+			WHERE id = :next_id
+			AND status = :waiting_status',
+			array(
+				'idle_status'    => 'idle',
+				'now_time'       => $now_time,
+				'now_time2'      => $now_time,
+				'now_time3'      => $now_time,
+				'next_id'        => $next_id,
+				'waiting_status' => 'waiting',
+			)
 		);
 	}
 

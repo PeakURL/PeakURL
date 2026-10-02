@@ -52,7 +52,16 @@ class JobRegistry {
 	 * @since 1.7.0
 	 */
 	public function get( string $id ): ?JobDefinition {
-		return $this->jobs[ $id ] ?? null;
+		if ( isset( $this->jobs[ $id ] ) ) {
+			return $this->jobs[ $id ];
+		}
+
+		if ( str_contains( $id, ':' ) ) {
+			$base_id = explode( ':', $id, 2 )[0];
+			return $this->jobs[ $base_id ] ?? null;
+		}
+
+		return null;
 	}
 
 	/**
@@ -63,7 +72,16 @@ class JobRegistry {
 	 * @since 1.7.0
 	 */
 	public function has( string $id ): bool {
-		return isset( $this->jobs[ $id ] );
+		if ( isset( $this->jobs[ $id ] ) ) {
+			return true;
+		}
+
+		if ( str_contains( $id, ':' ) ) {
+			$base_id = explode( ':', $id, 2 )[0];
+			return isset( $this->jobs[ $base_id ] );
+		}
+
+		return false;
 	}
 
 	/**

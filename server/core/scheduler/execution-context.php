@@ -63,13 +63,22 @@ class ExecutionContext {
 	private string $started_at;
 
 	/**
+	 * Context execution payload dictionary.
+	 *
+	 * @var array<string, mixed>
+	 * @since 1.7.1
+	 */
+	private array $payload;
+
+	/**
 	 * Create a new execution context.
 	 *
-	 * @param string $job_id     Unique job identifier.
-	 * @param string $run_id     Unique run identifier.
-	 * @param int    $attempt    Current attempt number.
-	 * @param bool   $is_manual  True if triggered manually.
-	 * @param string $started_at MySQL datetime start time.
+	 * @param string               $job_id     Unique job identifier.
+	 * @param string               $run_id     Unique run identifier.
+	 * @param int                  $attempt    Current attempt number.
+	 * @param bool                 $is_manual  True if triggered manually.
+	 * @param string               $started_at MySQL datetime start time.
+	 * @param array<string, mixed> $payload    Optional execution context payload data.
 	 * @since 1.7.0
 	 */
 	public function __construct(
@@ -77,13 +86,15 @@ class ExecutionContext {
 		string $run_id,
 		int $attempt,
 		bool $is_manual,
-		string $started_at
+		string $started_at,
+		array $payload = array()
 	) {
 		$this->job_id     = $job_id;
 		$this->run_id     = $run_id;
 		$this->attempt    = $attempt;
 		$this->is_manual  = $is_manual;
 		$this->started_at = $started_at;
+		$this->payload    = $payload;
 	}
 
 	/**
@@ -146,5 +157,15 @@ class ExecutionContext {
 	 */
 	public function get_started_at(): string {
 		return $this->started_at;
+	}
+
+	/**
+	 * Get the execution context payload data.
+	 *
+	 * @return array<string, mixed>
+	 * @since 1.7.1
+	 */
+	public function get_payload(): array {
+		return $this->payload;
 	}
 }

@@ -178,19 +178,95 @@ class Scheduler {
 	 * @throws \InvalidArgumentException When the job ID is not registered.
 	 * @since 1.7.0
 	 */
-	public function run_job( string $job_id, bool $force = true, ?string $now = null ): ExecutionResult {
-		$definition = $this->registry->get( $job_id );
+	public function run_job( string $job_id, bool $force = true, ?string $now = null, array $payload = array() ): ExecutionResult {
+		$target_id = $job_id;
+		if ( ! empty( $payload['link_id'] ) && ! str_contains( $job_id, ':' ) ) {
+			$target_id = $job_id . ':' . (string) $payload['link_id'];
+		}
+
+		$definition = $this->registry->get( $target_id );
 
 		if ( null === $definition ) {
 			throw new \InvalidArgumentException(
-				sprintf( 'Unknown background job identifier: %s', $job_id )
+				sprintf( 'Unknown background job identifier: %s', $target_id )
 			);
 		}
 
 		$this->sync();
-		$job_row = $this->repository->get_job( $job_id );
+		$job_row = $this->repository->get_job( $target_id );
 
-		return $this->execute_job( $definition, $job_row, $force, $now );
+		return $this->execute_job( $definition, $job_row, $force, $now, $payload, $target_id );
+	}
+
+	/**
+	 * Enqueue a one-off background job for asynchronous execution.
+	 *
+	 * Supports targeted execution with optional payload data (e.g. ['link_id' => $id]).
+	 * If the job identifier or payload defines a target, constructs a colon-delimited
+	 * identifier (e.g. 'job_id:target_id') for atomic per-target deduplication.
+	 *
+	 * @param string               $job_id  Job identifier or base_id:target_id.
+	 * @param array<string, mixed> $payload Optional context payload (e.g. ['link_id' => 'xyz']).
+	 * @param string|null          $run_at  Optional execution timestamp (defaults to now).
+	 * @return string The enqueued job ID.
+	 *
+	 * @throws \InvalidArgumentException When the job ID cannot be resolved by JobRegistry.
+	 * @since 1.7.1
+	 */
+	public function enqueue_job( string $job_id, array $payload = array(), ?string $run_at = null ): string {
+		$target_id = $job_id;
+		if ( ! empty( $payload['link_id'] ) && ! str_contains( $job_id, ':' ) ) {
+			$target_id = $job_id . ':' . (string) $payload['link_id'];
+		}
+
+		$definition = $this->registry->get( $target_id );
+		if ( null === $definition ) {
+			throw new \InvalidArgumentException(
+				sprintf( 'Unknown background job identifier: %s', $target_id )
+			);
+		}
+
+		$retry = $definition->get_retry_policy();
+		$title = $definition->get_title();
+		if ( str_contains( $target_id, ':' ) ) {
+			$parts  = explode( ':', $target_id, 2 );
+			$title .= ' (' . $parts[1] . ')';
+		}
+
+		return $this->repository->enqueue_job(
+			$target_id,
+			$title,
+			0,
+			$run_at,
+			$retry->get_max_attempts(),
+			$retry->get_initial_delay()
+		);
+	}
+
+	/**
+	 * Determine whether a background job exists in registry or in persisted cron_jobs.
+	 *
+	 * @param string $job_id Job identifier.
+	 * @return bool True if registered or persisted.
+	 * @since 1.7.1
+	 */
+	public function has_job( string $job_id ): bool {
+		if ( $this->registry->has( $job_id ) ) {
+			return true;
+		}
+
+		return null !== $this->repository->get_job( $job_id );
+	}
+
+	/**
+	 * Retrieve a persisted background job row by ID.
+	 *
+	 * @param string $job_id Job identifier.
+	 * @return array<string, mixed>|null Persisted job row or null.
+	 * @since 1.7.1
+	 */
+	public function get_persisted_job( string $job_id ): ?array {
+		return $this->repository->get_job( $job_id );
 	}
 
 	/**
@@ -271,10 +347,12 @@ class Scheduler {
 	/**
 	 * Execute a single claimed job definition with locking and result handling.
 	 *
-	 * @param JobDefinition             $definition Job definition.
-	 * @param array<string, mixed>|null $job_row    Database row state if available.
-	 * @param bool                      $force      Whether this is an unconstrained manual run.
-	 * @param string|null               $now        Optional MySQL datetime timestamp override.
+	 * @param JobDefinition             $definition    Job definition.
+	 * @param array<string, mixed>|null $job_row       Database row state if available.
+	 * @param bool                      $force         Whether this is an unconstrained manual run.
+	 * @param string|null               $now           Optional MySQL datetime timestamp override.
+	 * @param array<string, mixed>      $payload       Optional execution context payload data.
+	 * @param string|null               $custom_job_id Explicit job identifier override.
 	 * @return ExecutionResult Outcome.
 	 * @since 1.7.0
 	 */
@@ -282,9 +360,11 @@ class Scheduler {
 		JobDefinition $definition,
 		?array $job_row,
 		bool $force,
-		?string $now
+		?string $now,
+		array $payload = array(),
+		?string $custom_job_id = null
 	): ExecutionResult {
-		$job_id     = $definition->get_id();
+		$job_id     = $custom_job_id ?? ( (string) ( $job_row['id'] ?? '' ) !== '' ? (string) $job_row['id'] : $definition->get_id() );
 		$lock_token = Str::random_id();
 
 		if ( $definition->prevents_overlap() ) {
@@ -306,7 +386,15 @@ class Scheduler {
 		$now_time        = $now ?? Date::now();
 		$current_attempt = (int) ( ( $job_row['attempts'] ?? 0 ) + 1 );
 		$run_id          = $this->repository->record_run_start( $job_id, $current_attempt, $now_time );
-		$context         = new ExecutionContext( $job_id, $run_id, $current_attempt, $force, $now_time );
+
+		if ( empty( $payload ) && str_contains( $job_id, ':' ) ) {
+			$parts              = explode( ':', $job_id );
+			$target_val         = $parts[1] ?? '';
+			$payload['link_id'] = $target_val;
+			$payload['target']  = $target_val;
+		}
+
+		$context = new ExecutionContext( $job_id, $run_id, $current_attempt, $force, $now_time, $payload );
 
 		$this->log( sprintf( 'Executing job [%s] (Attempt %d, Run ID: %s)...', $job_id, $current_attempt, $run_id ) );
 

@@ -20,6 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Controller as LinksController;
 use PeakURL\Features\Links\Health\Checker as HealthChecker;
+use PeakURL\Features\Links\Health\Context as HealthContext;
 use PeakURL\Features\Links\Health\Probe as HealthProbe;
 use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Features\Links\Repository as LinksRepository;
@@ -64,7 +65,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		// Real role and authorization instances to test the actual application boundary.
 		$this->roles          = new Roles();
 		$this->authorization  = new Authorization( $this->roles );
-		$this->health_checker = new HealthChecker( new HealthResolver(), new HealthProbe() );
+		$this->health_checker = new HealthChecker( new HealthResolver(), new HealthProbe( new HealthContext( array() ) ) );
 
 		$this->links_service = new LinksService(
 			$this->repository,

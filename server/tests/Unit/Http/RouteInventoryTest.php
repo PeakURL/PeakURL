@@ -567,8 +567,9 @@ class RouteInventoryTest extends TestCase {
 			}
 		};
 
+		$health_context    = new \PeakURL\Features\Links\Health\Context( $config );
 		$health_resolver   = new \PeakURL\Features\Links\Health\Resolver();
-		$health_probe      = new \PeakURL\Features\Links\Health\Probe();
+		$health_probe      = new \PeakURL\Features\Links\Health\Probe( $health_context );
 		$health_checker    = new \PeakURL\Features\Links\Health\Checker( $health_resolver, $health_probe );
 		$this->application = new Application( $connection, $config, $health_checker );
 	}

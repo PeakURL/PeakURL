@@ -17,6 +17,7 @@ use PeakURL\Core\Errors\ApiException;
 use PeakURL\Core\Scheduler\ExecutionContext;
 use PeakURL\Database\SchedulerRepository;
 use PeakURL\Features\Links\Health\Checker;
+use PeakURL\Features\Links\Health\Context;
 use PeakURL\Features\Links\Health\Probe;
 use PeakURL\Features\Links\Health\Resolver;
 use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
@@ -110,7 +111,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		int $slow_threshold_ms = 1500
 	): Checker {
 		$resolver = new Resolver( $dns );
-		$probe    = new Probe( $prober );
+		$probe    = new Probe( new Context( Configuration::get_current() ), $prober );
 		return new Checker( $resolver, $probe, $timeout, $max_redirects, $slow_threshold_ms );
 	}
 
@@ -1799,8 +1800,9 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		$this->assertSame( $lock_token, $primary_row['lock_token'] );
 
 		// 5. Worker completes primary execution -> releases lock and promotes :next to runnable.
-		$run_id_primary = $repo->record_run_start( $primary_id, 1, $now );
-		$repo->record_success( $primary_id, $run_id_primary, $lock_token, $now, $now, 45, 'Primary check passed.' );
+		$finish_now     = Date::now();
+		$run_id_primary = $repo->record_run_start( $primary_id, 1, $finish_now );
+		$repo->record_success( $primary_id, $run_id_primary, $lock_token, $now, $finish_now, 45, 'Primary check passed.' );
 
 		$primary_after = $this->db->get_row_by( 'cron_jobs', array( 'id' => $primary_id ) );
 		$this->assertSame( 'success', $primary_after['status'] );
@@ -1813,12 +1815,12 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		$this->assertSame( 1, (int) $next_promoted['is_enabled'], ':next must become enabled when primary completes.' );
 
 		// :next is now discoverable and claimable.
-		$due_jobs_after = $repo->get_due_jobs( $now );
+		$due_jobs_after = $repo->get_due_jobs( $finish_now );
 		$due_ids_after  = array_column( $due_jobs_after, 'id' );
 		$this->assertContains( $secondary_id1, $due_ids_after, ':next must be due after primary finishes.' );
 
 		$worker2_token = Str::random_id( 16 );
-		$this->assertTrue( $repo->claim_job( $secondary_id1, $worker2_token, 300, false, $now ), ':next must be claimable by worker 2.' );
+		$this->assertTrue( $repo->claim_job( $secondary_id1, $worker2_token, 300, false, $finish_now ), ':next must be claimable by worker 2.' );
 
 		// 6. JobRegistry and LinkHealthCheckJob can parse link_id from :next ID.
 		$this->assertTrue( $scheduler->get_registry()->has( $secondary_id1 ) );
@@ -1854,19 +1856,21 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		$this->assertFalse( $repo->claim_job( $next_id, $token_w2, 300, true, $now ), 'Worker 2 must not force-claim :next while primary is running.' );
 
 		// Primary finishes execution and releases its lock.
-		$run_id_primary = $repo->record_run_start( $primary_id, 1, $now );
-		$repo->record_success( $primary_id, $run_id_primary, $token_w1, $now, $now, 40, 'Primary check passed.' );
+		$finish_now     = Date::now();
+		$run_id_primary = $repo->record_run_start( $primary_id, 1, $finish_now );
+		$repo->record_success( $primary_id, $run_id_primary, $token_w1, $now, $finish_now, 40, 'Primary check passed.' );
 
 		// :next is now runnable. Worker 2 claims :next.
-		$this->assertTrue( $repo->claim_job( $next_id, $token_w2, 300, false, $now ), 'Worker 2 must be able to claim :next after primary completes.' );
+		$this->assertTrue( $repo->claim_job( $next_id, $token_w2, 300, false, $finish_now ), 'Worker 2 must be able to claim :next after primary completes.' );
 
 		// While Worker 2 is executing :next, Worker 1 cannot claim primary (neither normal nor forced).
-		$this->assertFalse( $repo->claim_job( $primary_id, $token_w1, 300, false, $now ), 'Worker 1 must not normal-claim primary while :next is running.' );
-		$this->assertFalse( $repo->claim_job( $primary_id, $token_w1, 300, true, $now ), 'Worker 1 must not force-claim primary while :next is running.' );
+		$this->assertFalse( $repo->claim_job( $primary_id, $token_w1, 300, false, $finish_now ), 'Worker 1 must not normal-claim primary while :next is running.' );
+		$this->assertFalse( $repo->claim_job( $primary_id, $token_w1, 300, true, $finish_now ), 'Worker 1 must not force-claim primary while :next is running.' );
 
 		// Worker 2 completes :next and releases lock.
-		$run_id_next = $repo->record_run_start( $next_id, 1, $now );
-		$repo->record_success( $next_id, $run_id_next, $token_w2, $now, $now, 35, 'Follow-up check passed.' );
+		$finish_next = Date::now();
+		$run_id_next = $repo->record_run_start( $next_id, 1, $finish_next );
+		$repo->record_success( $next_id, $run_id_next, $token_w2, $finish_now, $finish_next, 35, 'Follow-up check passed.' );
 
 		// Neither is running now.
 		$primary_row = $repo->get_job( $primary_id );
@@ -1894,7 +1898,8 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		// 1. Enqueue primary and claim by Worker 1.
 		$primary_id = $scheduler->enqueue_job( 'peakurl_link_health_check', array( 'link_id' => $link_id ) );
 		$token_w1   = 'tok_w1_' . Str::random_id( 8 );
-		$this->assertTrue( $repo1->claim_job( $primary_id, $token_w1, 300, false, $now ) );
+		$now_claim  = Date::now();
+		$this->assertTrue( $repo1->claim_job( $primary_id, $token_w1, 300, false, $now_claim ) );
 
 		// 2. Enqueue while running creates :next (status = waiting).
 		$next_id = $scheduler->enqueue_job( 'peakurl_link_health_check', array( 'link_id' => $link_id ) );
@@ -1902,15 +1907,16 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 
 		// 3. Worker 2 on Connection 2 attempts normal and forced claims on :next while primary is active -> MUST fail.
 		$token_w2 = 'tok_w2_' . Str::random_id( 8 );
-		$this->assertFalse( $repo2->claim_job( $next_id, $token_w2, 300, false, $now ), 'Worker 2 must not claim :next while primary is running.' );
-		$this->assertFalse( $repo2->claim_job( $next_id, $token_w2, 300, true, $now ), 'Worker 2 must not force-claim :next while primary is running.' );
+		$this->assertFalse( $repo2->claim_job( $next_id, $token_w2, 300, false, $now_claim ), 'Worker 2 must not claim :next while primary is running.' );
+		$this->assertFalse( $repo2->claim_job( $next_id, $token_w2, 300, true, $now_claim ), 'Worker 2 must not force-claim :next while primary is running.' );
 
 		// 4. Primary completes cleanly on Connection 1 -> releases lock and promotes :next.
-		$run_id_primary = $repo1->record_run_start( $primary_id, 1, $now );
-		$repo1->record_success( $primary_id, $run_id_primary, $token_w1, $now, $now, 45, 'Primary success.' );
+		$finish_now     = Date::now();
+		$run_id_primary = $repo1->record_run_start( $primary_id, 1, $finish_now );
+		$repo1->record_success( $primary_id, $run_id_primary, $token_w1, $now_claim, $finish_now, 45, 'Primary success.' );
 
 		// 5. Worker 2 on Connection 2 now successfully claims :next.
-		$this->assertTrue( $repo2->claim_job( $next_id, $token_w2, 300, false, $now ), 'Worker 2 must be able to claim :next after primary completes.' );
+		$this->assertTrue( $repo2->claim_job( $next_id, $token_w2, 300, false, $finish_now ), 'Worker 2 must be able to claim :next after primary completes.' );
 
 		// 6. While Worker 2 owns :next, Worker 1 on Connection 1 cannot claim primary (normal or forced).
 		$this->assertFalse( $repo1->claim_job( $primary_id, $token_w1, 300, false, $now ), 'Worker 1 must not claim primary while :next is running.' );
@@ -2068,8 +2074,9 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		$this->assertSame( 0, (int) $next_row_after['attempts'], ':next attempts must be 0.' );
 
 		// Verify :next is immediately claimable and runnable by a worker.
-		$token_w2 = 'token_w2_' . Str::random_id( 8 );
-		$this->assertTrue( $repo->claim_job( $next_id, $token_w2, 300, false, $now ), ':next must be claimable immediately.' );
+		$now_claim = Date::now();
+		$token_w2  = 'token_w2_' . Str::random_id( 8 );
+		$this->assertTrue( $repo->claim_job( $next_id, $token_w2, 300, false, $now_claim ), ':next must be claimable immediately.' );
 
 		// 4. Test re-enqueue while :next is running followed by retryable failure.
 		// Worker 2 has claimed :next above (it is currently running).

@@ -38,6 +38,7 @@ class AnalyticsDatabaseTest extends TestCase {
 
 		$this->assertFalse( $ref->hasMethod( 'query_all' ) );
 		$this->assertFalse( $ref->hasMethod( 'query_value' ) );
+		$this->assertFalse( $ref->hasMethod( 'prepare' ) );
 	}
 
 	public function test_link_location_executes_authorization_without_type_error(): void {

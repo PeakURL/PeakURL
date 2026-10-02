@@ -13,15 +13,27 @@ namespace PeakURL\Tests\Unit\Links\Health;
 use PHPUnit\Framework\TestCase;
 use PeakURL\Features\Links\Health\Checker;
 use PeakURL\Features\Links\Health\Resolver;
+use PeakURL\Features\Links\Health\Context;
 use PeakURL\Features\Links\Health\Probe;
 
 class CheckerTest extends TestCase {
+
+	private Context $context;
+
+	protected function setUp(): void {
+		parent::setUp();
+		$this->context = new Context( array() );
+	}
+
+	private function create_probe( ?callable $http_prober = null ): Probe {
+		return new Probe( $this->context, $http_prober );
+	}
 
 	public function test_healthy_response_classification(): void {
 		$resolver = new Resolver(
 			static fn() => array( '93.184.216.34' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static fn() => array(
 				'response_code' => 200,
 				'duration_ms'   => 120,
@@ -44,7 +56,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '93.184.216.34' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static fn() => array(
 				'response_code' => 200,
 				'duration_ms'   => 1600,
@@ -65,7 +77,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '93.184.216.34' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static fn() => array(
 				'response_code' => 404,
 				'duration_ms'   => 80,
@@ -87,7 +99,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array()
 		);
-		$probe    = new Probe();
+		$probe    = $this->create_probe();
 		$checker  = new Checker( $resolver, $probe );
 
 		$result = $checker->check( 'https://unresolvable-domain-xyz.com' );
@@ -100,7 +112,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '93.184.216.34' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static fn() => array(
 				'response_code' => null,
 				'duration_ms'   => 100,
@@ -121,7 +133,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '93.184.216.34' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static fn() => array(
 				'response_code' => null,
 				'duration_ms'   => 3000,
@@ -142,7 +154,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '93.184.216.34' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static fn() => array(
 				'response_code' => null,
 				'duration_ms'   => 50,
@@ -162,7 +174,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '10.0.0.1' )
 		);
-		$probe    = new Probe();
+		$probe    = $this->create_probe();
 		$checker  = new Checker( $resolver, $probe );
 
 		$this->assertSame( Checker::STATUS_SSRF_BLOCKED, $checker->check( 'http://127.0.0.1' )['status'] );
@@ -179,7 +191,7 @@ class CheckerTest extends TestCase {
 		);
 
 		$hop   = 0;
-		$probe = new Probe(
+		$probe = $this->create_probe(
 			static function ( string $url ) use ( &$hop ): array {
 				++$hop;
 				return array(
@@ -205,7 +217,7 @@ class CheckerTest extends TestCase {
 		);
 
 		$hop   = 0;
-		$probe = new Probe(
+		$probe = $this->create_probe(
 			static function () use ( &$hop ): array {
 				++$hop;
 				return array(
@@ -230,7 +242,7 @@ class CheckerTest extends TestCase {
 		$resolver      = new Resolver(
 			static fn() => array( '198.51.100.1', '198.51.100.2' )
 		);
-		$probe         = new Probe(
+		$probe         = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip ) use ( &$attempted_ips ): array {
 				$attempted_ips[] = $pinned_ip;
 				if ( '198.51.100.1' === $pinned_ip ) {
@@ -270,7 +282,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '93.184.216.34' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $remaining_ms ) use ( &$virtual_now_ms, &$received_timeouts ): array {
 				$received_timeouts[] = $remaining_ms;
 				$virtual_now_ms     += 1200; // Advance clock by 1200 ms
@@ -299,7 +311,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '198.51.100.1', '198.51.100.2' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip ): array {
 				if ( '198.51.100.1' === $pinned_ip ) {
 					return array(
@@ -332,7 +344,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '198.51.100.1', '198.51.100.2' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip ): array {
 				if ( '198.51.100.1' === $pinned_ip ) {
 					return array(
@@ -364,7 +376,7 @@ class CheckerTest extends TestCase {
 		$resolver = new Resolver(
 			static fn() => array( '198.51.100.1', '198.51.100.2' )
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip ): array {
 				if ( '198.51.100.1' === $pinned_ip ) {
 					return array(
@@ -395,7 +407,7 @@ class CheckerTest extends TestCase {
 	public function test_head_200_does_not_trigger_get_fallback(): void {
 		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$methods  = array();
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
 				$methods[] = $method;
 				return array(
@@ -419,7 +431,7 @@ class CheckerTest extends TestCase {
 	public function test_head_301_follows_redirect_without_get_fallback(): void {
 		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$methods  = array();
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
 				$methods[] = $method;
 				if ( str_contains( $url, 'redir' ) ) {
@@ -453,7 +465,7 @@ class CheckerTest extends TestCase {
 	public function test_head_404_with_get_200_returns_healthy_200(): void {
 		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$methods  = array();
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
 				$methods[] = $method;
 				if ( 'HEAD' === $method ) {
@@ -487,7 +499,7 @@ class CheckerTest extends TestCase {
 	public function test_n8n_express_spa_regression_head_404_with_get_200(): void {
 		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$methods  = array();
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
 				$methods[] = $method;
 				if ( 'HEAD' === $method ) {
@@ -520,7 +532,7 @@ class CheckerTest extends TestCase {
 	public function test_head_200_only_calls_head_method(): void {
 		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$methods  = array();
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
 				$methods[] = $method;
 				return array(
@@ -544,7 +556,7 @@ class CheckerTest extends TestCase {
 	public function test_head_405_with_get_200_returns_healthy_200(): void {
 		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$methods  = array();
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
 				$methods[] = $method;
 				if ( 'HEAD' === $method ) {
@@ -577,7 +589,7 @@ class CheckerTest extends TestCase {
 	public function test_head_404_with_get_404_returns_http_error_404(): void {
 		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$methods  = array();
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
 				$methods[] = $method;
 				return array(
@@ -601,7 +613,7 @@ class CheckerTest extends TestCase {
 	public function test_head_405_with_get_500_returns_http_error_500(): void {
 		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$methods  = array();
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
 				$methods[] = $method;
 				if ( 'HEAD' === $method ) {
@@ -634,7 +646,7 @@ class CheckerTest extends TestCase {
 	public function test_head_404_with_get_timeout_returns_timeout_status(): void {
 		$resolver = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$methods  = array();
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ) use ( &$methods ): array {
 				$methods[] = $method;
 				if ( 'HEAD' === $method ) {
@@ -674,7 +686,7 @@ class CheckerTest extends TestCase {
 				return array();
 			}
 		);
-		$probe    = new Probe(
+		$probe    = $this->create_probe(
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port, string $method = 'HEAD' ): array {
 				if ( 'HEAD' === $method ) {
 					return array(

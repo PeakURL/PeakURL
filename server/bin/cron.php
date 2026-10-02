@@ -36,6 +36,7 @@ use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Credentials as AuthCredentials;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Links\Health\Checker as HealthChecker;
+use PeakURL\Features\Links\Health\Context as HealthContext;
 use PeakURL\Features\Links\Health\Probe as HealthProbe;
 use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Features\Links\Repository as LinksRepository;
@@ -147,8 +148,9 @@ $links_repo        = new LinksRepository(
 	$links_api,
 	$authorization
 );
+$health_context    = new HealthContext( $config );
 $health_resolver   = new HealthResolver();
-$health_probe      = new HealthProbe();
+$health_probe      = new HealthProbe( $health_context );
 $health_checker    = new HealthChecker( $health_resolver, $health_probe );
 $links_service     = new LinksService(
 	$links_repo,

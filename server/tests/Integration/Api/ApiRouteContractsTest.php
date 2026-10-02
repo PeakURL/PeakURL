@@ -134,8 +134,9 @@ class ApiRouteContractsTest extends TestCase {
 
 		\add_filter( 'site_url', fn() => 'https://peakurl.dev' );
 
+		$health_context  = new \PeakURL\Features\Links\Health\Context( $config );
 		$health_resolver = new \PeakURL\Features\Links\Health\Resolver();
-		$health_probe    = new \PeakURL\Features\Links\Health\Probe();
+		$health_probe    = new \PeakURL\Features\Links\Health\Probe( $health_context );
 		$health_checker  = new \PeakURL\Features\Links\Health\Checker( $health_resolver, $health_probe );
 
 		$this->app    = new Application( $connection, $config, $health_checker );

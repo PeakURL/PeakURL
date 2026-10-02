@@ -16,6 +16,7 @@ use PeakURL\Core\Application;
 use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Security\Security;
 use PeakURL\Features\Links\Health\Checker as HealthChecker;
+use PeakURL\Features\Links\Health\Context as HealthContext;
 use PeakURL\Features\Links\Health\Probe as HealthProbe;
 use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Services\Database\Connection;
@@ -124,8 +125,9 @@ load_i18n( $config, $connection );
 do_action( 'init' );
 
 header( 'Content-Language: ' . get_html_lang_attribute() );
+$health_context  = new HealthContext( $config );
 $health_resolver = new HealthResolver();
-$health_probe    = new HealthProbe();
+$health_probe    = new HealthProbe( $health_context );
 $health_checker  = new HealthChecker( $health_resolver, $health_probe );
 $application     = new Application( $connection, $config, $health_checker );
 $application->run();

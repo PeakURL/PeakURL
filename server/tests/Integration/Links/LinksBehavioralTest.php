@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PeakURL\Features\Links\Controller as LinksController;
 use PeakURL\Features\Links\Health\Checker;
+use PeakURL\Features\Links\Health\Context;
 use PeakURL\Features\Links\Health\Probe;
 use PeakURL\Features\Links\Health\Resolver;
 use PeakURL\Features\Links\Repository as LinksRepository;
@@ -104,6 +105,7 @@ class LinksBehavioralTest extends TestCase {
 
 		$resolver            = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$probe               = new Probe(
+			new Context( $config ),
 			static fn() => array(
 				'response_code' => 200,
 				'duration_ms'   => 50,

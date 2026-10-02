@@ -29,6 +29,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Probe {
 
 	/**
+	 * Health service context.
+	 *
+	 * @var Context
+	 * @since 1.7.1
+	 */
+	private Context $context;
+
+	/**
 	 * Optional custom HTTP prober callable for deterministic testing.
 	 *
 	 * @var callable|null
@@ -39,10 +47,12 @@ class Probe {
 	/**
 	 * Create a new destination health probe transport.
 	 *
+	 * @param Context       $context     Link health context.
 	 * @param callable|null $http_prober Optional HTTP prober mock callback for testing.
 	 * @since 1.7.1
 	 */
-	public function __construct( ?callable $http_prober = null ) {
+	public function __construct( Context $context, ?callable $http_prober = null ) {
+		$this->context     = $context;
 		$this->http_prober = $http_prober;
 	}
 
@@ -118,7 +128,7 @@ class Probe {
 			CURLOPT_RETURNTRANSFER    => ! $is_get,
 			CURLOPT_SSL_VERIFYPEER    => true,
 			CURLOPT_SSL_VERIFYHOST    => 2,
-			CURLOPT_USERAGENT         => 'PeakURL-HealthCheck/1.0',
+			CURLOPT_USERAGENT         => 'PeakURL/' . $this->context->get_version(),
 			CURLOPT_PROXY             => '',
 		);
 

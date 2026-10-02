@@ -29,6 +29,7 @@ use PeakURL\Http\Router;
 use PeakURL\Http\JsonResponse;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Links\Health\Checker;
+use PeakURL\Features\Links\Health\Context;
 use PeakURL\Features\Links\Health\Probe;
 use PeakURL\Features\Links\Health\Resolver;
 use PDO;
@@ -97,6 +98,7 @@ class LinksDatabasePersistenceTest extends TestCase {
 
 		$resolver            = new Resolver( static fn() => array( '93.184.216.34' ) );
 		$probe               = new Probe(
+			new Context( $config ),
 			static fn() => array(
 				'response_code' => 200,
 				'duration_ms'   => 50,

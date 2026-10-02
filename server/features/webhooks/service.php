@@ -1415,22 +1415,20 @@ class Service {
 			);
 		}
 
-		$placeholders = implode( ',', array_fill( 0, count( $webhook_ids ), '?' ) );
-		$since        = gmdate( 'Y-m-d H:i:s', time() - 86400 );
+		$in_clause = $this->db->in_placeholders( $webhook_ids, 'webhook_id' );
+		$since     = gmdate( 'Y-m-d H:i:s', time() - 86400 );
 
 		// 1. Grouped 24-hour completed delivery counts per webhook and status.
 		// Excludes in-flight pending and processing records, filtering strictly on completion timestamp.
 		$count_sql = "SELECT webhook_id, status, COUNT(*) AS count_val
 			FROM webhook_deliveries
-			WHERE webhook_id IN ({$placeholders})
-			AND completed_at >= ?
+			WHERE webhook_id IN ({$in_clause['sql']})
+			AND completed_at >= :since
 			AND status IN ('delivered', 'failed')
 			GROUP BY webhook_id, status";
 
-		$count_params = array_merge( $webhook_ids, array( $since ) );
-		$stmt         = $this->db->prepare( $count_sql );
-		$stmt->execute( $count_params );
-		$count_rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+		$count_params = array_merge( $in_clause['params'], array( 'since' => $since ) );
+		$count_rows   = $this->db->get_results( $count_sql, $count_params );
 
 		if ( is_array( $count_rows ) ) {
 			foreach ( $count_rows as $count_row ) {
@@ -1457,15 +1455,13 @@ class Service {
 				INNER JOIN (
 					SELECT webhook_id, MAX(created_at) AS max_created
 					FROM webhook_deliveries
-					WHERE webhook_id IN ({$placeholders})
+					WHERE webhook_id IN ({$in_clause['sql']})
 					GROUP BY webhook_id
 				) latest_created ON d1.webhook_id = latest_created.webhook_id AND d1.created_at = latest_created.max_created
 				GROUP BY d1.webhook_id
 			) latest_row ON d.id = latest_row.max_id";
 
-		$stmt_latest = $this->db->prepare( $latest_sql );
-		$stmt_latest->execute( $webhook_ids );
-		$latest_rows = $stmt_latest->fetchAll( \PDO::FETCH_ASSOC );
+		$latest_rows = $this->db->get_results( $latest_sql, $in_clause['params'] );
 
 		if ( is_array( $latest_rows ) ) {
 			foreach ( $latest_rows as $latest_row ) {
@@ -1746,13 +1742,13 @@ class Service {
 			ORDER BY next_attempt_at ASC
 			LIMIT {$batch_limit}";
 
-		$stmt = $this->db->prepare( $sql );
-		$stmt->execute(
+		$this->db->query(
+			$sql,
 			array(
-				':claim_token'  => $token,
-				':now'          => $now,
-				':now_check'    => $now,
-				':stale_cutoff' => $stale_cutoff,
+				'claim_token'  => $token,
+				'now'          => $now,
+				'now_check'    => $now,
+				'stale_cutoff' => $stale_cutoff,
 			)
 		);
 
@@ -2146,9 +2142,9 @@ class Service {
 			ORDER BY completed_at ASC
 			LIMIT {$limit}";
 
-		$stmt = $this->db->prepare( $sql );
-		$stmt->execute( array( ':cutoff' => $cutoff ) );
-
-		return (int) $stmt->rowCount();
+		return $this->db->query(
+			$sql,
+			array( 'cutoff' => $cutoff )
+		);
 	}
 }

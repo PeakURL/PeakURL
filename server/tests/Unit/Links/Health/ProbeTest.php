@@ -11,9 +11,32 @@ declare(strict_types=1);
 namespace PeakURL\Tests\Unit\Links\Health;
 
 use PHPUnit\Framework\TestCase;
+use PeakURL\Core\Config\Constants;
+use PeakURL\Features\Links\Health\Context;
 use PeakURL\Features\Links\Health\Probe;
 
 class ProbeTest extends TestCase {
+
+	private Context $context;
+
+	protected function setUp(): void {
+		parent::setUp();
+		$this->context = new Context( array( Constants::VERSION => '9.9.9-test' ) );
+	}
+
+	public function test_curl_options_contains_standard_user_agent(): void {
+		$probe   = new Probe( $this->context );
+		$options = $probe->curl_options(
+			'https://example.com/test',
+			'example.com',
+			443,
+			'93.184.216.34',
+			2500
+		);
+
+		$this->assertArrayHasKey( CURLOPT_USERAGENT, $options );
+		$this->assertSame( 'PeakURL/9.9.9-test', $options[ CURLOPT_USERAGENT ] );
+	}
 
 	public function test_host_mapping_formats_ipv4_entry(): void {
 		$entry = Probe::host_mapping( 'example.com', 443, '93.184.216.34' );
@@ -31,7 +54,7 @@ class ProbeTest extends TestCase {
 	}
 
 	public function test_curl_options_enforces_tls_verification(): void {
-		$probe   = new Probe();
+		$probe   = new Probe( $this->context );
 		$options = $probe->curl_options(
 			'https://example.com/test',
 			'example.com',
@@ -45,7 +68,7 @@ class ProbeTest extends TestCase {
 	}
 
 	public function test_curl_options_disables_redirect_following(): void {
-		$probe   = new Probe();
+		$probe   = new Probe( $this->context );
 		$options = $probe->curl_options(
 			'https://example.com/test',
 			'example.com',
@@ -58,7 +81,7 @@ class ProbeTest extends TestCase {
 	}
 
 	public function test_curl_options_explicitly_disables_proxy(): void {
-		$probe   = new Probe();
+		$probe   = new Probe( $this->context );
 		$options = $probe->curl_options(
 			'https://example.com/test',
 			'example.com',
@@ -72,7 +95,7 @@ class ProbeTest extends TestCase {
 	}
 
 	public function test_curl_options_omits_resolve_for_ipv4_and_ipv6_literals(): void {
-		$probe = new Probe();
+		$probe = new Probe( $this->context );
 
 		// IPv4 literal
 		$ipv4_options = $probe->curl_options(
@@ -96,7 +119,7 @@ class ProbeTest extends TestCase {
 	}
 
 	public function test_curl_options_includes_resolve_for_hostnames(): void {
-		$probe   = new Probe();
+		$probe   = new Probe( $this->context );
 		$options = $probe->curl_options(
 			'https://example.com/test',
 			'example.com',
@@ -110,7 +133,7 @@ class ProbeTest extends TestCase {
 	}
 
 	public function test_curl_options_disables_body_storage(): void {
-		$probe   = new Probe();
+		$probe   = new Probe( $this->context );
 		$options = $probe->curl_options(
 			'https://example.com/test',
 			'example.com',
@@ -123,7 +146,7 @@ class ProbeTest extends TestCase {
 	}
 
 	public function test_curl_options_for_get_fallback_enables_get_and_disables_nobody_and_proxy(): void {
-		$probe   = new Probe();
+		$probe   = new Probe( $this->context );
 		$options = $probe->curl_options(
 			'https://example.com/test',
 			'example.com',
@@ -144,7 +167,7 @@ class ProbeTest extends TestCase {
 	}
 
 	public function test_curl_options_timeout_respects_remaining_budget(): void {
-		$probe    = new Probe();
+		$probe    = new Probe( $this->context );
 		$options1 = $probe->curl_options(
 			'https://example.com/test',
 			'example.com',
@@ -187,6 +210,7 @@ class ProbeTest extends TestCase {
 	public function test_probe_delegates_to_custom_prober_when_injected(): void {
 		$called = false;
 		$probe  = new Probe(
+			$this->context,
 			static function ( string $url, int $timeout_ms, string $pinned_ip, string $host, int $port ) use ( &$called ): array {
 				$called = true;
 				return array(
@@ -213,7 +237,7 @@ class ProbeTest extends TestCase {
 	}
 
 	public function test_curl_probe_fails_closed_when_transport_configuration_fails(): void {
-		$probe = new class() extends Probe {
+		$probe = new class( $this->context ) extends Probe {
 			public function curl_options(
 				string $url,
 				string $host,

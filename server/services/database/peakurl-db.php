@@ -72,17 +72,6 @@ class PeakURL_DB {
 	}
 
 	/**
-	 * Prepare a prefixed SQL statement.
-	 *
-	 * @param string $sql Raw SQL string.
-	 * @return PDOStatement Prepared statement.
-	 * @since 1.0.0
-	 */
-	public function prepare( string $sql ): PDOStatement {
-		return $this->connection_manager->prepare( $sql );
-	}
-
-	/**
 	 * Escape a LIKE fragment so user input stays literal.
 	 *
 	 * @param string $text Raw search fragment.
@@ -767,7 +756,7 @@ class PeakURL_DB {
 		string $sql,
 		array $params = array()
 	): PDOStatement {
-		$statement = $this->prepare( $sql );
+		$statement = $this->connection_manager->prepare( $sql );
 		$statement->execute( $params );
 
 		return $statement;

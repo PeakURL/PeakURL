@@ -55,6 +55,7 @@ export {
 	useBulkCreateUrlMutation,
 	useBulkDeleteUrlMutation,
 	useBulkRestoreUrlsMutation,
+	useCheckLinkHealthMutation,
 	useDeleteAllUrlsMutation,
 	useCreateUrlMutation,
 	useDeleteUrlMutation,

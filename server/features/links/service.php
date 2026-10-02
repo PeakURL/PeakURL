@@ -21,6 +21,7 @@ use PeakURL\Core\Errors\ApiException;
 use PeakURL\Core\Security\Security;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Service as AuthService;
+use PeakURL\Features\Links\Health\Checker;
 use PeakURL\Features\Webhooks\Service as WebhooksService;
 use PeakURL\Http\Request;
 use PeakURL\Services\Captcha;
@@ -138,6 +139,14 @@ class Service {
 	private Creator $creator;
 
 	/**
+	 * Destination health checker service.
+	 *
+	 * @var Checker
+	 * @since 1.7.1
+	 */
+	private Checker $health_checker;
+
+	/**
 	 * Create a new Link service instance.
 	 *
 	 * @param Repository           $data              Repository handler.
@@ -151,6 +160,7 @@ class Service {
 	 * @param Roles                $roles             Roles registry.
 	 * @param Authorization        $authorization     Authorization helper.
 	 * @param array<string, mixed> $config            Runtime config map.
+	 * @param Checker              $health_checker    Destination health checker service.
 	 * @since 1.0.0
 	 */
 	public function __construct(
@@ -164,7 +174,8 @@ class Service {
 		Captcha $captcha,
 		Roles $roles,
 		Authorization $authorization,
-		array $config
+		array $config,
+		Checker $health_checker
 	) {
 		$this->data              = $data;
 		$this->validator         = $validator;
@@ -178,6 +189,7 @@ class Service {
 		$this->authorization     = $authorization;
 		$this->config            = $config;
 		$this->creator           = new Creator( $data, $validator, $social_preview );
+		$this->health_checker    = $health_checker;
 	}
 
 	/**
@@ -269,8 +281,23 @@ class Service {
 			$meta['lastPeriodUniqueClicks'] = $aggregates['lastPeriodUniqueClicks'];
 		}
 
+		$row_ids    = array_map( 'strval', array_column( $rows, 'id' ) );
+		$health_map = ! empty( $row_ids ) ? $this->data->get_link_health_by_ids( $row_ids ) : array();
+
+		$items = array_map(
+			function ( array $row ) use ( $health_map ): array {
+				$formatted           = $this->format_url( $row );
+				$id                  = (string) ( $row['id'] ?? '' );
+				$formatted['health'] = isset( $health_map[ $id ] )
+					? $this->format_health( $health_map[ $id ] )
+					: null;
+				return $formatted;
+			},
+			$rows
+		);
+
 		return array(
-			'items' => $this->format_url_list( $rows ),
+			'items' => $items,
 			'meta'  => $meta,
 		);
 	}
@@ -330,7 +357,196 @@ class Service {
 			);
 		}
 
-		return $row ? $this->format_url( $row ) : null;
+		if ( ! $row ) {
+			return null;
+		}
+
+		$formatted           = $this->format_url( $row );
+		$health_row          = $this->data->get_link_health( (string) $row['id'] );
+		$formatted['health'] = $this->format_health( $health_row );
+
+		return $formatted;
+	}
+
+	/**
+	 * Format a link health database row into an API health payload.
+	 *
+	 * @param array<string, mixed>|null $row Raw database row.
+	 * @return array<string, mixed>|null Formatted health payload or null.
+	 * @since 1.7.1
+	 */
+	public function format_health( ?array $row ): ?array {
+		if ( empty( $row ) || ! is_array( $row ) ) {
+			return null;
+		}
+
+		$status         = (string) ( $row['status'] ?? '' );
+		$valid_statuses = array(
+			Checker::STATUS_HEALTHY,
+			Checker::STATUS_SLOW,
+			Checker::STATUS_UNREACHABLE,
+			Checker::STATUS_DNS_ERROR,
+			Checker::STATUS_TLS_ERROR,
+			Checker::STATUS_TIMEOUT,
+			Checker::STATUS_HTTP_ERROR,
+			Checker::STATUS_REDIRECT_LOOP,
+			Checker::STATUS_SSRF_BLOCKED,
+		);
+
+		if ( ! in_array( $status, $valid_statuses, true ) ) {
+			return null;
+		}
+
+		return array(
+			'status'         => $status,
+			'checkedAt'      => ! empty( $row['checked_at'] )
+				? Date::to_iso( (string) $row['checked_at'] )
+				: null,
+			'responseCode'   => null !== ( $row['response_code'] ?? null )
+				? (int) $row['response_code']
+				: null,
+			'responseTimeMs' => null !== ( $row['response_time_ms'] ?? null )
+				? (int) $row['response_time_ms']
+				: null,
+			'errorMessage'   => ! empty( $row['error_message'] )
+				? (string) $row['error_message']
+				: null,
+			'redirectCount'  => (int) ( $row['redirect_count'] ?? 0 ),
+		);
+	}
+
+	/**
+	 * Manually check destination health for a specific link.
+	 *
+	 * Enforces 'view_links' capability, probes the destination URL safely,
+	 * persists the result snapshot to link_health, and returns the health payload.
+	 * Never modifies urls.status or urls.destination_url.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @param string  $id      Link ID or identifier.
+	 * @return array<string, mixed> Formatted health payload.
+	 *
+	 * @throws ApiException When unauthenticated, unauthorized, or link not found.
+	 * @since 1.7.1
+	 */
+	public function check_link_health( Request $request, string $id ): array {
+		$user = $this->auth_service->get_current_user( $request );
+		$row  = $this->data->find_url_row( $id );
+
+		if ( ! $row ) {
+			throw new ApiException(
+				__( 'That short link does not exist.', 'peakurl' ),
+				404
+			);
+		}
+
+		$this->authorization->validate_capability(
+			$user,
+			'view_links',
+			__( 'You do not have permission to check link health.', 'peakurl' ),
+		);
+
+		$dest_url = trim( (string) ( $row['destination_url'] ?? '' ) );
+		$result   = $this->health_checker->check( $dest_url );
+
+		$now         = Date::now();
+		$health_data = array(
+			'link_id'          => (string) $row['id'],
+			'status'           => (string) $result['status'],
+			'checked_at'       => $now,
+			'response_code'    => $result['response_code'],
+			'response_time_ms' => $result['response_time_ms'],
+			'error_message'    => $result['error_message'],
+			'redirect_count'   => (int) ( $result['redirect_count'] ?? 0 ),
+			'created_at'       => $now,
+			'updated_at'       => $now,
+		);
+
+		$saved = $this->data->save_link_health( (string) $row['id'], $health_data );
+		if ( ! $saved ) {
+			throw new ApiException(
+				__( 'Could not record link health snapshot.', 'peakurl' ),
+				500
+			);
+		}
+
+		return $this->format_health( $health_data );
+	}
+
+	/**
+	 * Validate destination health at write-time.
+	 *
+	 * Blocks saving when the destination is definitely broken or rejected by security filters.
+	 * Allows healthy, slow, and non-definitive HTTP statuses (e.g. 401, 403, 429, 500) to save.
+	 *
+	 * @param string $destination_url Cleaned destination URL.
+	 * @return array{
+	 *     status: string,
+	 *     response_code: ?int,
+	 *     response_time_ms: ?int,
+	 *     error_message: ?string,
+	 *     redirect_count: int
+	 * } Health check inspection snapshot.
+	 *
+	 * @throws ApiException When destination is definitely broken or unsafe (422).
+	 * @since 1.7.1
+	 */
+	private function validate_destination_health( string $destination_url ): array {
+		$result = $this->health_checker->check( $destination_url );
+		$status = (string) $result['status'];
+		$code   = isset( $result['response_code'] ) ? (int) $result['response_code'] : null;
+
+		$is_hard_block = false;
+		$error_message = '';
+
+		switch ( $status ) {
+			case Checker::STATUS_SSRF_BLOCKED:
+				$is_hard_block = true;
+				$error_message = __( 'The destination URL is blocked by security policy.', 'peakurl' );
+				break;
+
+			case Checker::STATUS_DNS_ERROR:
+				$is_hard_block = true;
+				$error_message = __( 'The destination domain could not be resolved.', 'peakurl' );
+				break;
+
+			case Checker::STATUS_TLS_ERROR:
+				$is_hard_block = true;
+				$error_message = __( 'The destination has an invalid or untrusted SSL/TLS certificate.', 'peakurl' );
+				break;
+
+			case Checker::STATUS_TIMEOUT:
+				$is_hard_block = true;
+				$error_message = __( 'The destination URL took too long to respond.', 'peakurl' );
+				break;
+
+			case Checker::STATUS_UNREACHABLE:
+				$is_hard_block = true;
+				$error_message = __( 'The destination URL could not be reached.', 'peakurl' );
+				break;
+
+			case Checker::STATUS_REDIRECT_LOOP:
+				$is_hard_block = true;
+				$error_message = __( 'The destination URL resulted in a redirect loop or exceeded maximum redirects.', 'peakurl' );
+				break;
+
+			case Checker::STATUS_HTTP_ERROR:
+				if ( 404 === $code || 410 === $code ) {
+					$is_hard_block = true;
+					$error_message = sprintf(
+						/* translators: %d: HTTP status code */
+						__( 'The destination URL returned a %d Not Found response.', 'peakurl' ),
+						$code
+					);
+				}
+				break;
+		}
+
+		if ( $is_hard_block ) {
+			throw new ApiException( $error_message, 422 );
+		}
+
+		return $result;
 	}
 
 	/**
@@ -505,12 +721,21 @@ class Service {
 			__( 'You do not have permission to create links.', 'peakurl' ),
 		);
 
-		$payload           = $this->filter_link_payload(
+		$payload = $this->filter_link_payload(
 			'pre_create_link',
 			$payload,
 			$request,
 			$user,
 		);
+
+		// Clean and normalize destination URL before any side-effects.
+		$raw_destination           = (string) ( $payload['destinationUrl'] ?? '' );
+		$destination_url           = $this->validator->clean_destination( $raw_destination );
+		$payload['destinationUrl'] = $destination_url;
+
+		// Pre-save destination health check: hard-blocks definitive failures before side effects.
+		$health_result = $this->validate_destination_health( $destination_url );
+
 		$social_image_file = $request->get_file( 'socialImage' );
 		$social_image_url  = $this->validator->normalize_link_social_image_url(
 			$payload['socialImageUrl'] ?? null,
@@ -553,7 +778,24 @@ class Service {
 			throw $exception;
 		}
 
-		$url = $this->format_url( $row );
+		// Persist successful health snapshot immediately after link creation.
+		$link_id     = (string) $row['id'];
+		$now         = Date::now();
+		$health_data = array(
+			'link_id'          => $link_id,
+			'status'           => (string) $health_result['status'],
+			'checked_at'       => $now,
+			'response_code'    => $health_result['response_code'],
+			'response_time_ms' => $health_result['response_time_ms'],
+			'error_message'    => $health_result['error_message'],
+			'redirect_count'   => (int) ( $health_result['redirect_count'] ?? 0 ),
+			'created_at'       => $now,
+			'updated_at'       => $now,
+		);
+		$saved       = $this->data->save_link_health( $link_id, $health_data );
+
+		$url           = $this->format_url( $row );
+		$url['health'] = $saved ? $this->format_health( $health_data ) : null;
 
 		$link_title = ! empty( $url['title'] ) ? $url['title'] : '/' . ( $url['alias'] ?? $url['shortCode'] ?? '' );
 
@@ -699,6 +941,20 @@ class Service {
 			$request,
 			$user,
 		);
+
+		$destination_changed = false;
+		$new_health_result   = null;
+
+		if ( array_key_exists( 'destinationUrl', $payload ) ) {
+			$cleaned_dest = $this->validator->clean_destination( $payload['destinationUrl'] );
+			$current_dest = (string) ( $existing['destination_url'] ?? '' );
+			if ( $cleaned_dest !== $current_dest ) {
+				$destination_changed = true;
+				// Run pre-save destination health check BEFORE any side-effect.
+				$new_health_result = $this->validate_destination_health( $cleaned_dest );
+			}
+			$payload['destinationUrl'] = $cleaned_dest;
+		}
 
 		$updates = array();
 		$params  = array();
@@ -884,6 +1140,28 @@ class Service {
 
 		$updated_row = $this->data->find_url_row( $id );
 
+		$health_data = null;
+		if ( $destination_changed && null !== $new_health_result ) {
+			$now         = Date::now();
+			$health_data = array(
+				'link_id'          => $id,
+				'status'           => (string) $new_health_result['status'],
+				'checked_at'       => $now,
+				'response_code'    => $new_health_result['response_code'],
+				'response_time_ms' => $new_health_result['response_time_ms'],
+				'error_message'    => $new_health_result['error_message'],
+				'redirect_count'   => (int) ( $new_health_result['redirect_count'] ?? 0 ),
+				'created_at'       => $now,
+				'updated_at'       => $now,
+			);
+
+			$saved = $this->data->save_link_health( $id, $health_data );
+			if ( ! $saved ) {
+				$this->data->delete_link_health( $id );
+				$health_data = null;
+			}
+		}
+
 		$this->analytics_service->record_activity(
 			'link_updated',
 			'Updated link ' . ( $params['alias'] ?? $existing['alias'] ) . '.',
@@ -897,6 +1175,10 @@ class Service {
 		);
 
 		$url = $this->format_url( $updated_row );
+
+		if ( $destination_changed ) {
+			$url['health'] = null !== $health_data ? $this->format_health( $health_data ) : null;
+		}
 
 		$this->invalidate_link_cache( $existing );
 		$this->invalidate_link_cache( $updated_row );
@@ -1605,7 +1887,6 @@ class Service {
 		if ( null === $site_url ) {
 			$site_url = rtrim( \get_site_url(), '/' );
 		}
-
 		$alias     = trim( (string) ( $row['alias'] ?? '' ) );
 		$short_key = '' !== $alias
 			? $alias

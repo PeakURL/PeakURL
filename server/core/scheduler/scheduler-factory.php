@@ -17,6 +17,7 @@ use PeakURL\Features\Analytics\Jobs\AnalyticsRetentionJob;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Jobs\SessionCleanupJob;
 use PeakURL\Features\Auth\Service as AuthService;
+use PeakURL\Features\Links\Health\Checker;
 use PeakURL\Features\Links\Jobs\ExpiredLinksJob;
 use PeakURL\Features\Links\Jobs\ImportExportJob;
 use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
@@ -53,6 +54,7 @@ class SchedulerFactory {
 	 * @param Geoip                 $geoip_service     GeoIP service.
 	 * @param WebhooksService       $webhooks_service  Webhooks service.
 	 * @param UpdateManager         $update_manager    Update manager.
+	 * @param Checker               $health_checker    Destination health checker service.
 	 * @param callable|null         $logger            Optional progress logger callback.
 	 * @param LinksApi|null         $links_api         Optional links query API.
 	 * @param AuthService|null      $auth_service      Optional auth domain service.
@@ -69,6 +71,7 @@ class SchedulerFactory {
 		Geoip $geoip_service,
 		WebhooksService $webhooks_service,
 		UpdateManager $update_manager,
+		Checker $health_checker,
 		?callable $logger = null,
 		?LinksApi $links_api = null,
 		?AuthService $auth_service = null,
@@ -164,7 +167,11 @@ class SchedulerFactory {
 				'peakurl_link_health_check',
 				'Link Destination Health Check',
 				86400,
-				new LinkHealthCheckJob( $db )
+				new LinkHealthCheckJob(
+					$db,
+					$health_checker,
+					25
+				)
 			)
 		);
 

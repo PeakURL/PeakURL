@@ -134,7 +134,11 @@ class ApiRouteContractsTest extends TestCase {
 
 		\add_filter( 'site_url', fn() => 'https://peakurl.dev' );
 
-		$this->app    = new Application( $connection, $config );
+		$health_resolver = new \PeakURL\Features\Links\Health\Resolver();
+		$health_probe    = new \PeakURL\Features\Links\Health\Probe();
+		$health_checker  = new \PeakURL\Features\Links\Health\Checker( $health_resolver, $health_probe );
+
+		$this->app    = new Application( $connection, $config, $health_checker );
 		$this->router = $this->app->get_router();
 	}
 
@@ -208,7 +212,7 @@ class ApiRouteContractsTest extends TestCase {
 		$inventory = RouteInventoryTest::ROUTE_INVENTORY;
 
 		// Verify complete route inventory size
-		$this->assertCount( 96, $inventory, 'Authoritative inventory must contain exactly 96 registered routes.' );
+		$this->assertCount( 97, $inventory, 'Authoritative inventory must contain exactly 97 registered routes.' );
 
 		$public_routes    = array();
 		$protected_routes = array();
@@ -237,7 +241,7 @@ class ApiRouteContractsTest extends TestCase {
 		}
 
 		$this->assertCount( 17, $public_routes, 'Expected exactly 17 public routes.' );
-		$this->assertCount( 79, $protected_routes, 'Expected exactly 79 protected routes.' );
+		$this->assertCount( 80, $protected_routes, 'Expected exactly 80 protected routes.' );
 		$this->assertCount( 48, $admin_routes, 'Expected exactly 48 admin-only routes.' );
 	}
 
@@ -248,9 +252,9 @@ class ApiRouteContractsTest extends TestCase {
 		);
 
 		$this->assertCount(
-			79,
+			80,
 			$protected_routes,
-			'Authoritative inventory must contain exactly 79 protected routes.'
+			'Authoritative inventory must contain exactly 80 protected routes.'
 		);
 
 		foreach ( array_keys( $protected_routes ) as $route_key ) {

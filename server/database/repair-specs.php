@@ -57,7 +57,7 @@ class RepairSpecs {
 	 * @return array<int, array<string, string>>
 	 * @since 1.0.14
 	 */
-	public static function orphan_cleanup_queries(): array {
+	public static function cleanup_queries(): array {
 		return array(
 			array(
 				'label' => __( 'Removed orphaned API keys.', 'peakurl' ),
@@ -123,6 +123,13 @@ class RepairSpecs {
 					FROM webhook_deliveries AS wd
 					LEFT JOIN webhooks AS w ON wd.webhook_id = w.id
 					WHERE w.id IS NULL',
+			),
+			array(
+				'label' => __( 'Removed orphaned link health records.', 'peakurl' ),
+				'sql'   => 'DELETE lh
+					FROM link_health AS lh
+					LEFT JOIN urls AS url ON lh.link_id = url.id
+					WHERE url.id IS NULL',
 			),
 		);
 	}

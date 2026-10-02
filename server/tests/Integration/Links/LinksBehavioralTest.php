@@ -20,9 +20,12 @@ namespace PeakURL\Tests\Integration\Links;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Controller as LinksController;
+use PeakURL\Features\Links\Health\Checker;
+use PeakURL\Features\Links\Health\Probe;
+use PeakURL\Features\Links\Health\Resolver;
 use PeakURL\Features\Links\Repository as LinksRepository;
+use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Validator as LinksValidator;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
@@ -99,6 +102,18 @@ class LinksBehavioralTest extends TestCase {
 		$this->authorization = new Authorization( $this->roles );
 		$this->validator     = new LinksValidator();
 
+		$resolver            = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$probe               = new Probe(
+			static fn() => array(
+				'response_code' => 200,
+				'duration_ms'   => 50,
+				'error_code'    => 0,
+				'error_message' => '',
+				'redirect_url'  => null,
+			)
+		);
+		$mock_health_checker = new Checker( $resolver, $probe );
+
 		$this->links_service = new LinksService(
 			$this->repository,
 			$this->validator,
@@ -110,7 +125,8 @@ class LinksBehavioralTest extends TestCase {
 			$this->captcha,
 			$this->roles,
 			$this->authorization,
-			array( 'site_url' => 'https://peakurl.dev' )
+			array( 'site_url' => 'https://peakurl.dev' ),
+			$mock_health_checker
 		);
 
 		$this->links_controller = new LinksController( $this->links_service );

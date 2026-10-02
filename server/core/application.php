@@ -31,6 +31,7 @@ use PeakURL\Features\Auth\Credentials as AuthCredentials;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Auth\Validator as AuthValidator;
 use PeakURL\Features\Links\Controller as LinksController;
+use PeakURL\Features\Links\Health\Checker;
 use PeakURL\Features\Links\Repository as LinksRepository;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Validator as LinksValidator;
@@ -93,11 +94,16 @@ class Application {
 	/**
 	 * Initialize the application, create services, and register routes.
 	 *
-	 * @param Connection           $connection Database connection manager.
-	 * @param array<string, mixed> $config     Merged runtime configuration.
+	 * @param Connection $connection     Database connection manager.
+	 * @param array      $config         Merged runtime configuration.
+	 * @param Checker    $health_checker Destination health checker.
 	 * @since 1.0.0
 	 */
-	public function __construct( Connection $connection, array $config ) {
+	public function __construct(
+		Connection $connection,
+		array $config,
+		Checker $health_checker
+	) {
 		$this->router     = new Router();
 		$this->connection = $connection;
 		$this->config     = $config;
@@ -196,7 +202,8 @@ class Application {
 			$captcha_service,
 			$roles,
 			$authorization,
-			$config
+			$config,
+			$health_checker
 		);
 		$analytics_repository->set_link_formatter( array( $links_service, 'format_url' ) );
 		$settings_service = new SettingsService(
@@ -232,6 +239,7 @@ class Application {
 			$geoip_service,
 			$webhooks_service,
 			$update_manager,
+			$health_checker,
 			null,
 			$links_api,
 			$auth_service,
@@ -619,6 +627,7 @@ class Application {
 				array( 'post', '/urls/bulk', array( $urls, 'bulk_create' ) ),
 				array( 'post', '/urls/restore', array( $urls, 'bulk_restore' ) ),
 				array( 'post', '/urls/{id}/restore', array( $urls, 'restore' ) ),
+				array( 'post', '/urls/{id}/health-check', array( $urls, 'health_check' ) ),
 				array( array( 'post', 'put' ), '/urls/{id}', array( $urls, 'update' ) ),
 				array( 'delete', '/urls', array( $urls, 'clear' ) ),
 				array( 'delete', '/urls/trash', array( $urls, 'empty_trash' ) ),

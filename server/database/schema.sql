@@ -222,3 +222,18 @@ CREATE TABLE IF NOT EXISTS webhook_deliveries (
     CONSTRAINT fk_webhook_deliveries_webhook_id FOREIGN KEY (webhook_id) REFERENCES webhooks (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS link_health (
+    link_id VARCHAR(40) NOT NULL PRIMARY KEY,
+    status VARCHAR(32) NOT NULL,
+    checked_at DATETIME NOT NULL,
+    response_code INT DEFAULT NULL,
+    response_time_ms INT DEFAULT NULL,
+    error_message TEXT DEFAULT NULL,
+    redirect_count INT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    KEY idx_link_health_status (status),
+    KEY idx_link_health_checked_at (checked_at),
+    CONSTRAINT fk_link_health_link_id FOREIGN KEY (link_id) REFERENCES urls (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+

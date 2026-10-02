@@ -44,6 +44,7 @@ class SchemaSpecs {
 			'cron_jobs',
 			'cron_runs',
 			'webhook_deliveries',
+			'link_health',
 		);
 	}
 
@@ -501,6 +502,40 @@ class SchemaSpecs {
 					'definition' => 'DATETIME NOT NULL',
 				),
 			),
+			'link_health'        => array(
+				array(
+					'name'       => 'status',
+					'definition' => 'VARCHAR(32) NOT NULL',
+				),
+				array(
+					'name'       => 'checked_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'response_code',
+					'definition' => 'INT DEFAULT NULL',
+				),
+				array(
+					'name'       => 'response_time_ms',
+					'definition' => 'INT DEFAULT NULL',
+				),
+				array(
+					'name'       => 'error_message',
+					'definition' => 'TEXT DEFAULT NULL',
+				),
+				array(
+					'name'       => 'redirect_count',
+					'definition' => 'INT NOT NULL DEFAULT 0',
+				),
+				array(
+					'name'       => 'created_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+				array(
+					'name'       => 'updated_at',
+					'definition' => 'DATETIME NOT NULL',
+				),
+			),
 		);
 	}
 
@@ -684,6 +719,18 @@ class SchemaSpecs {
 					'columns' => '(status, updated_at)',
 				),
 			),
+			'link_health'        => array(
+				array(
+					'name'    => 'idx_link_health_status',
+					'type'    => 'index',
+					'columns' => '(status)',
+				),
+				array(
+					'name'    => 'idx_link_health_checked_at',
+					'type'    => 'index',
+					'columns' => '(checked_at)',
+				),
+			),
 		);
 	}
 
@@ -745,6 +792,12 @@ class SchemaSpecs {
 				array(
 					'name'       => 'fk_webhook_deliveries_webhook_id',
 					'definition' => 'FOREIGN KEY (webhook_id) REFERENCES webhooks (id) ON DELETE CASCADE',
+				),
+			),
+			'link_health'        => array(
+				array(
+					'name'       => 'fk_link_health_link_id',
+					'definition' => 'FOREIGN KEY (link_id) REFERENCES urls (id) ON DELETE CASCADE',
 				),
 			),
 		);

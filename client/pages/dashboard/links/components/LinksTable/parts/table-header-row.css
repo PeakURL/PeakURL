@@ -16,6 +16,10 @@
 		@apply w-12 pl-4 pr-2 align-middle;
 	}
 
+	.links-table-header-cell-health {
+		@apply text-start whitespace-nowrap;
+	}
+
 	.links-table-header-cell-performance {
 		@apply text-center;
 	}

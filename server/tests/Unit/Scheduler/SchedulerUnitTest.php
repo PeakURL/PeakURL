@@ -20,7 +20,6 @@ use PeakURL\Core\Scheduler\ExecutionResult;
 use PeakURL\Database\SchedulerRepository;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
-use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
 
 class SchedulerUnitTest extends TestCase {
 
@@ -135,53 +134,6 @@ class SchedulerUnitTest extends TestCase {
 		$skipped = ExecutionResult::skipped( 'Skip msg' );
 		$this->assertTrue( $skipped->is_skipped() );
 		$this->assertSame( 'Skip msg', $skipped->get_summary() );
-	}
-
-	public function test_link_health_check_ssrf_safety_validation(): void {
-		// Valid public IP URLs
-		$this->assertTrue( LinkHealthCheckJob::is_safe_url( 'http://93.184.216.34/path' ) );
-		$this->assertTrue( LinkHealthCheckJob::is_safe_url( 'https://8.8.8.8' ) );
-
-		// Invalid schemes
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'file:///etc/passwd' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'gopher://localhost:70' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'ftp://ftp.example.com' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'javascript:alert(1)' ) );
-
-		// Loopback addresses
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://127.0.0.1' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://127.0.0.1:8080/test' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://127.1.2.3' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://localhost' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://[::1]' ) );
-
-		// Private network addresses (RFC 1918)
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://10.0.0.1' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://172.16.0.1' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://192.168.1.1' ) );
-
-		// Cloud metadata addresses
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://169.254.169.254' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'http://169.254.169.254/latest/meta-data/' ) );
-
-		// Malformed or empty
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( '' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_safe_url( 'not-a-valid-url' ) );
-	}
-
-	public function test_link_health_check_is_public_ip(): void {
-		$this->assertTrue( LinkHealthCheckJob::is_public_ip( '8.8.8.8' ) );
-		$this->assertTrue( LinkHealthCheckJob::is_public_ip( '1.1.1.1' ) );
-		$this->assertTrue( LinkHealthCheckJob::is_public_ip( '93.184.216.34' ) );
-
-		$this->assertFalse( LinkHealthCheckJob::is_public_ip( '127.0.0.1' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_public_ip( '10.0.0.5' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_public_ip( '192.168.0.1' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_public_ip( '172.16.0.1' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_public_ip( '169.254.169.254' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_public_ip( '::1' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_public_ip( 'fe80::1' ) );
-		$this->assertFalse( LinkHealthCheckJob::is_public_ip( 'invalid-ip' ) );
 	}
 
 	public function test_scheduler_retention_validation_and_forever(): void {

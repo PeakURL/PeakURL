@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { Search, X } from "lucide-react";
 
-import { ConfirmDialog } from "@/components";
+import { ConfirmDialog, useNotification } from "@/components";
 import { __ } from "@/i18n";
 import { useAdminAccess } from "@/hooks";
 import { copyToClipboard } from "@/shared/browser";
+import { getErrorMessage } from "@/shared/errors";
 import { formatCount, formatNumber } from "@/shared/formatting";
 import { getShortUrl } from "@/shared/links";
+import { useCheckLinkHealthMutation } from "@/state/slices/api";
 
 import StatsDrawer from "../StatsDrawer";
 import QRCodeModal from "../QRCodeModal";
@@ -16,6 +18,7 @@ import EditLinkDrawer from "../EditLinkDrawer";
 import DeleteLinkModal from "../DeleteLinkModal";
 import BulkDeleteModal from "../BulkDeleteModal";
 import DeleteAllModal from "../DeleteAllModal";
+import HealthDetailModal from "../HealthDetailModal";
 import TableHeaderRow from "./parts/TableHeaderRow";
 import LinkRow from "./parts/LinkRow";
 import EmptyState from "./parts/EmptyState";
@@ -46,10 +49,25 @@ const LinksTable = ({
 	const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
 	const [deleteAllModalOpen, setDeleteAllModalOpen] = useState(false);
 	const [emptyTrashModalOpen, setEmptyTrashModalOpen] = useState(false);
+	const [healthModalOpen, setHealthModalOpen] = useState(false);
+	const [healthModalLinkId, setHealthModalLinkId] = useState<string | null>(
+		null
+	);
+	const [checkingHealthId, setCheckingHealthId] = useState<string | null>(
+		null
+	);
 	const [selectedLink, setSelectedLink] = useState<LinkRecord | null>(null);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
 	const { canDeleteLinks, canTrashLinks, user } = useAdminAccess();
+	const [checkLinkHealth] = useCheckLinkHealthMutation();
+	const notification = useNotification();
+
+	const healthModalLink = healthModalLinkId
+		? (links.find(
+				(linkItem: LinkRecord) => linkItem.id === healthModalLinkId
+			) ?? null)
+		: null;
 
 	useEffect(() => {
 		if (!statsShortId) return;
@@ -110,6 +128,26 @@ const LinksTable = ({
 	const handleQRCode = (link: LinkRecord) => {
 		setSelectedLink(link);
 		setQrModalOpen(true);
+	};
+
+	const handleCheckHealth = async (id: string) => {
+		if (checkingHealthId) return;
+		setCheckingHealthId(id);
+		try {
+			await checkLinkHealth(id).unwrap();
+			notification.success(__("Health check completed."));
+		} catch (err) {
+			notification.error(
+				getErrorMessage(err, __("Failed to check link health."))
+			);
+		} finally {
+			setCheckingHealthId(null);
+		}
+	};
+
+	const handleOpenHealthModal = (link: LinkRecord) => {
+		setHealthModalLinkId(link.id);
+		setHealthModalOpen(true);
 	};
 
 	const handleSelectAll = (e: ChangeEvent<HTMLInputElement>) => {
@@ -240,6 +278,14 @@ const LinksTable = ({
 									onCopy={handleCopy}
 									copiedId={copiedId}
 									onOpenStats={handleOpenStats}
+									onOpenHealthModal={handleOpenHealthModal}
+									onCheckHealth={handleCheckHealth}
+									isCheckingHealth={
+										checkingHealthId === link.id
+									}
+									isAnyCheckingHealth={Boolean(
+										checkingHealthId
+									)}
 									onEdit={handleEdit}
 									onDelete={handleDelete}
 									onRestore={onRestore}
@@ -268,6 +314,18 @@ const LinksTable = ({
 				open={qrModalOpen}
 				setOpen={setQrModalOpen}
 				link={selectedLink}
+			/>
+			<HealthDetailModal
+				open={healthModalOpen && Boolean(healthModalLink)}
+				setOpen={(isOpen) => {
+					setHealthModalOpen(isOpen);
+					if (!isOpen) {
+						setHealthModalLinkId(null);
+					}
+				}}
+				link={healthModalLink}
+				onCheckNow={handleCheckHealth}
+				isChecking={checkingHealthId === healthModalLink?.id}
 			/>
 			<EditLinkDrawer
 				open={editDrawerOpen}

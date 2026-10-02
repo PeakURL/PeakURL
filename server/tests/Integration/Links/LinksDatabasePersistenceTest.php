@@ -28,6 +28,9 @@ use PeakURL\Http\Request;
 use PeakURL\Http\Router;
 use PeakURL\Http\JsonResponse;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Features\Links\Health\Checker;
+use PeakURL\Features\Links\Health\Probe;
+use PeakURL\Features\Links\Health\Resolver;
 use PDO;
 
 class LinksDatabasePersistenceTest extends TestCase {
@@ -92,7 +95,19 @@ class LinksDatabasePersistenceTest extends TestCase {
 			('test_editor_key_id', 9999, 'Editor Test Key', '{$editor_key_hash}', 'test_editor_db', '2345', NOW())"
 		);
 
-		$this->app    = new Application( $connection, $config );
+		$resolver            = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$probe               = new Probe(
+			static fn() => array(
+				'response_code' => 200,
+				'duration_ms'   => 50,
+				'error_code'    => 0,
+				'error_message' => '',
+				'redirect_url'  => null,
+			)
+		);
+		$mock_health_checker = new Checker( $resolver, $probe );
+
+		$this->app    = new Application( $connection, $config, $mock_health_checker );
 		$this->router = $this->app->get_router();
 	}
 

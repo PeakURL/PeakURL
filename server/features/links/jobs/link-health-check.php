@@ -13,7 +13,9 @@ namespace PeakURL\Features\Links\Jobs;
 use PeakURL\Core\Scheduler\ExecutionContext;
 use PeakURL\Core\Scheduler\ExecutionResult;
 use PeakURL\Core\Scheduler\JobHandlerInterface;
+use PeakURL\Features\Links\Health\Checker;
 use PeakURL\Services\Database\PeakURL_DB;
+use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * LinkHealthCheckJob — samples active link destinations and tests reachability.
+ * LinkHealthCheckJob — samples active link destinations and tests reachability with rotating coverage.
  *
  * Enforces strict SSRF protections: blocks internal network targets, private IP
  * ranges (RFC 1918), loopback (127.0.0.1/::1), and cloud metadata services
@@ -48,109 +50,46 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 	private int $batch_limit;
 
 	/**
-	 * Request timeout in seconds.
+	 * Destination health checker service.
 	 *
-	 * @var float
-	 * @since 1.7.0
+	 * @var Checker
+	 * @since 1.7.1
 	 */
-	private float $timeout_seconds;
+	private Checker $checker;
 
 	/**
 	 * Create a new link health check job.
 	 *
-	 * @param PeakURL_DB $db              Database wrapper.
-	 * @param int        $batch_limit     Number of links to sample per run (default 25).
-	 * @param float      $timeout_seconds HTTP request timeout in seconds (default 3.0).
+	 * @param PeakURL_DB $db          Database wrapper.
+	 * @param Checker    $checker     Shared destination health checker.
+	 * @param int        $batch_limit Number of links to sample per run (default 25).
 	 * @since 1.7.0
 	 */
 	public function __construct(
 		PeakURL_DB $db,
-		int $batch_limit = 25,
-		float $timeout_seconds = 3.0
+		Checker $checker,
+		int $batch_limit = 25
 	) {
-		$this->db              = $db;
-		$this->batch_limit     = max( 1, min( 100, $batch_limit ) );
-		$this->timeout_seconds = max( 1.0, min( 10.0, $timeout_seconds ) );
-	}
-
-	/**
-	 * Validate a URL against SSRF vulnerabilities.
-	 *
-	 * Blocks private IP ranges, loopback, cloud metadata endpoints, and non-HTTP schemes.
-	 *
-	 * @param string $url URL to inspect.
-	 * @return bool True if destination is safe to request.
-	 * @since 1.7.0
-	 */
-	public static function is_safe_url( string $url ): bool {
-		$parts = parse_url( $url );
-		if ( false === $parts || ! is_array( $parts ) ) {
-			return false;
-		}
-
-		$scheme = strtolower( (string) ( $parts['scheme'] ?? '' ) );
-		if ( 'http' !== $scheme && 'https' !== $scheme ) {
-			return false;
-		}
-
-		$host = strtolower( trim( (string) ( $parts['host'] ?? '' ) ) );
-		if ( '' === $host || 'localhost' === $host || str_ends_with( $host, '.local' ) ) {
-			return false;
-		}
-
-		// Direct IP check or DNS resolution.
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Probing DNS resolution safely.
-		$ips = filter_var( $host, FILTER_VALIDATE_IP ) ? array( $host ) : @gethostbynamel( $host );
-
-		if ( empty( $ips ) || ! is_array( $ips ) ) {
-			return false;
-		}
-
-		foreach ( $ips as $ip ) {
-			if ( ! self::is_public_ip( $ip ) ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * Determine whether an IP address is a publicly routable Internet address.
-	 *
-	 * Rejects private, reserved, loopback, and link-local ranges.
-	 *
-	 * @param string $ip IPv4 or IPv6 address.
-	 * @return bool True if public and routable.
-	 * @since 1.7.0
-	 */
-	public static function is_public_ip( string $ip ): bool {
-		$valid = filter_var(
-			$ip,
-			FILTER_VALIDATE_IP,
-			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
-		);
-
-		if ( false === $valid ) {
-			return false;
-		}
-
-		// Explicit check for cloud metadata (169.254.x.x) and loopback.
-		if ( str_starts_with( $ip, '127.' ) || str_starts_with( $ip, '169.254.' ) || '0.0.0.0' === $ip || '::1' === $ip ) {
-			return false;
-		}
-
-		return true;
+		$this->db          = $db;
+		$this->checker     = $checker;
+		$this->batch_limit = max( 1, min( 100, $batch_limit ) );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function execute( ExecutionContext $context ): ExecutionResult {
+		// Rotating sweep: never-checked links first (checked_at IS NULL), then oldest checked_at, with deterministic tie-breaker.
 		$links = $this->db->get_results(
-			'SELECT id, destination_url FROM urls
-			WHERE status = :active_status
-			ORDER BY updated_at ASC
+			'SELECT u.id, u.destination_url
+			FROM urls u
+			LEFT JOIN link_health lh ON lh.link_id = u.id
+			WHERE u.status = :active_status
+			ORDER BY
+				CASE WHEN lh.checked_at IS NULL THEN 0 ELSE 1 END ASC,
+				lh.checked_at ASC,
+				u.updated_at ASC,
+				u.id ASC
 			LIMIT ' . $this->batch_limit,
 			array(
 				'active_status' => 'active',
@@ -161,101 +100,210 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 			return ExecutionResult::success( 'No active links available for health check.' );
 		}
 
-		$healthy_count = 0;
-		$blocked_count = 0;
-		$failed_count  = 0;
+		$category_counts = array(
+			'healthy'       => 0,
+			'slow'          => 0,
+			'http_error'    => 0,
+			'dns_error'     => 0,
+			'tls_error'     => 0,
+			'timeout'       => 0,
+			'unreachable'   => 0,
+			'redirect_loop' => 0,
+			'ssrf_blocked'  => 0,
+		);
+
+		$persistence_failures = 0;
 
 		foreach ( $links as $link ) {
+			$link_id  = (string) ( $link['id'] ?? '' );
 			$dest_url = trim( (string) ( $link['destination_url'] ?? '' ) );
 
-			if ( ! self::is_safe_url( $dest_url ) ) {
-				++$blocked_count;
+			if ( '' === $link_id ) {
 				continue;
 			}
 
-			if ( $this->check_destination_url( $dest_url ) ) {
-				++$healthy_count;
+			$result = $this->checker->check( $dest_url );
+			$status = (string) $result['status'];
+
+			if ( isset( $category_counts[ $status ] ) ) {
+				++$category_counts[ $status ];
 			} else {
-				++$failed_count;
+				++$category_counts['unreachable'];
+			}
+
+			// Persist single snapshot per link in link_health (never touches urls.status or urls.destination_url).
+			$now = Date::now();
+			try {
+				$upserted = $this->db->upsert(
+					'link_health',
+					array(
+						'link_id'          => $link_id,
+						'status'           => $status,
+						'checked_at'       => $now,
+						'response_code'    => $result['response_code'],
+						'response_time_ms' => $result['response_time_ms'],
+						'error_message'    => $result['error_message'],
+						'redirect_count'   => (int) ( $result['redirect_count'] ?? 0 ),
+						'created_at'       => $now,
+						'updated_at'       => $now,
+					),
+					array(
+						'status',
+						'checked_at',
+						'response_code',
+						'response_time_ms',
+						'error_message',
+						'redirect_count',
+						'updated_at',
+					)
+				);
+				if ( false === $upserted || ! is_int( $upserted ) || $upserted < 0 ) {
+					++$persistence_failures;
+				}
+			} catch ( \Throwable $e ) {
+				++$persistence_failures;
 			}
 		}
 
 		$total_links = count( $links );
-		$message     = 1 === $total_links
+		$breakdown   = $this->format_category_breakdown( $category_counts );
+
+		if ( $persistence_failures === $total_links && $total_links > 0 ) {
+			return ExecutionResult::failure(
+				sprintf(
+					/* translators: %d: count of links */
+					__( 'Failed to record health snapshots for all %d checked links.', 'peakurl' ),
+					$total_links
+				)
+			);
+		}
+
+		$message = 1 === $total_links
 			? sprintf(
-				'Health check completed for %1$d link: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter.',
+				/* translators: 1: total links, 2: category breakdown string. */
+				__( 'Health check completed for %1$d link: %2$s.', 'peakurl' ),
 				$total_links,
-				$healthy_count,
-				$failed_count,
-				$blocked_count
+				$breakdown
 			)
 			: sprintf(
-				'Health check completed for %1$d links: %2$d healthy, %3$d unreachable, %4$d blocked by SSRF filter.',
+				/* translators: 1: total links, 2: category breakdown string. */
+				__( 'Health check completed for %1$d links: %2$s.', 'peakurl' ),
 				$total_links,
-				$healthy_count,
-				$failed_count,
-				$blocked_count
+				$breakdown
 			);
+
+		if ( $persistence_failures > 0 ) {
+			$message .= ' ' . sprintf(
+				/* translators: %d: count of persistence failures */
+				__( '(%d persistence failures)', 'peakurl' ),
+				$persistence_failures
+			);
+		}
 
 		return ExecutionResult::success(
 			$message,
 			array(
-				'checked'     => $total_links,
-				'healthy'     => $healthy_count,
-				'unreachable' => $failed_count,
-				'blockedSsrf' => $blocked_count,
+				'checked'             => $total_links,
+				'persistenceFailures' => $persistence_failures,
+				'healthy'             => $category_counts['healthy'],
+				'slow'                => $category_counts['slow'],
+				'httpError'           => $category_counts['http_error'],
+				'dnsError'            => $category_counts['dns_error'],
+				'tlsError'            => $category_counts['tls_error'],
+				'timeout'             => $category_counts['timeout'],
+				'unreachable'         => $category_counts['unreachable'],
+				'redirectLoop'        => $category_counts['redirect_loop'],
+				'blockedSsrf'         => $category_counts['ssrf_blocked'],
 			)
 		);
 	}
 
 	/**
-	 * Perform a bounded HTTP probe on the target URL.
+	 * Format human-readable category count breakdown string.
 	 *
-	 * @param string $url Target URL.
-	 * @return bool True if destination responded with 2xx/3xx.
-	 * @since 1.7.0
+	 * @param array<string, int> $counts Category counts.
+	 * @return string Formatted breakdown string.
+	 * @since 1.7.1
 	 */
-	private function check_destination_url( string $url ): bool {
-		if ( function_exists( 'curl_init' ) ) {
-			$ch = curl_init( $url );
-			curl_setopt_array(
-				$ch,
-				array(
-					CURLOPT_NOBODY         => true,
-					CURLOPT_TIMEOUT        => (int) ceil( $this->timeout_seconds ),
-					CURLOPT_CONNECTTIMEOUT => (int) ceil( $this->timeout_seconds ),
-					CURLOPT_FOLLOWLOCATION => false,
-					CURLOPT_RETURNTRANSFER => true,
-					CURLOPT_SSL_VERIFYPEER => true,
-					CURLOPT_USERAGENT      => 'PeakURL-HealthCheck/1.0',
-				)
+	private function format_category_breakdown( array $counts ): string {
+		$parts = array();
+
+		if ( $counts['healthy'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d is count. */
+				__( '%d healthy', 'peakurl' ),
+				$counts['healthy']
 			);
-
-			$exec = curl_exec( $ch );
-			$code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-			curl_close( $ch );
-
-			return false !== $exec && $code >= 200 && $code < 400;
 		}
 
-		// Stream context fallback.
-		$context = stream_context_create(
-			array(
-				'http' => array(
-					'method'        => 'HEAD',
-					'timeout'       => $this->timeout_seconds,
-					'ignore_errors' => true,
-					'user_agent'    => 'PeakURL-HealthCheck/1.0',
-				),
-			)
-		);
-
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Probing remote headers safely.
-		$headers = @get_headers( $url, false, $context );
-		if ( false === $headers || empty( $headers[0] ) ) {
-			return false;
+		if ( $counts['slow'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d is count. */
+				__( '%d slow', 'peakurl' ),
+				$counts['slow']
+			);
 		}
 
-		return (bool) preg_match( '/^HTTP\/\S+\s+(2\d\d|3\d\d)/i', $headers[0] );
+		if ( $counts['http_error'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d is count. */
+				_n( '%d HTTP error', '%d HTTP errors', $counts['http_error'], 'peakurl' ),
+				$counts['http_error']
+			);
+		}
+
+		if ( $counts['dns_error'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d is count. */
+				_n( '%d DNS error', '%d DNS errors', $counts['dns_error'], 'peakurl' ),
+				$counts['dns_error']
+			);
+		}
+
+		if ( $counts['tls_error'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d is count. */
+				_n( '%d TLS error', '%d TLS errors', $counts['tls_error'], 'peakurl' ),
+				$counts['tls_error']
+			);
+		}
+
+		if ( $counts['timeout'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d is count. */
+				_n( '%d timeout', '%d timeouts', $counts['timeout'], 'peakurl' ),
+				$counts['timeout']
+			);
+		}
+
+		if ( $counts['unreachable'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d is count. */
+				__( '%d unreachable', 'peakurl' ),
+				$counts['unreachable']
+			);
+		}
+
+		if ( $counts['redirect_loop'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d is count. */
+				_n( '%d redirect loop', '%d redirect loops', $counts['redirect_loop'], 'peakurl' ),
+				$counts['redirect_loop']
+			);
+		}
+
+		if ( $counts['ssrf_blocked'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d is count. */
+				__( '%d blocked', 'peakurl' ),
+				$counts['ssrf_blocked']
+			);
+		}
+
+		if ( empty( $parts ) ) {
+			return __( '0 checked', 'peakurl' );
+		}
+
+		return implode( ', ', $parts );
 	}
 }

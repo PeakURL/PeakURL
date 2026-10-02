@@ -36,6 +36,10 @@ export interface LinkRowProps {
 	onCopy: (link: LinkRecord) => Promise<void> | void;
 	copiedId: string | null;
 	onOpenStats: (link: LinkRecord) => void;
+	onOpenHealthModal?: (link: LinkRecord) => void;
+	onCheckHealth?: (id: string) => Promise<void> | void;
+	isCheckingHealth?: boolean;
+	isAnyCheckingHealth?: boolean;
 	onEdit: (link: LinkRecord) => void;
 	onDelete: (link: LinkRecord) => void;
 	onRestore?: (link: LinkRecord) => void;

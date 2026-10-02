@@ -9,6 +9,7 @@ import { createFormData } from "./formData";
 import type {
 	BulkCreateResponse,
 	BulkCreateUrlsPayload,
+	CheckLinkHealthResponse,
 	CreateUrlPayload,
 	CreateUrlResponse,
 	GetUrlsExportQueryArgs,
@@ -308,6 +309,16 @@ export const urlsApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: URL_LIST_CHANGE_TAGS,
 		}),
+		checkLinkHealth: build.mutation<CheckLinkHealthResponse, string>({
+			query: (id) => ({
+				url: API_ROUTES.urls.healthCheck(id),
+				method: "POST",
+			}),
+			invalidatesTags: (_result, _error, id) => [
+				urlTag(id),
+				URL_LIST_TAG,
+			],
+		}),
 	}),
 });
 
@@ -324,4 +335,5 @@ export const {
 	useDeleteUrlMutation,
 	useBulkDeleteUrlMutation,
 	useDeleteAllUrlsMutation,
+	useCheckLinkHealthMutation,
 } = urlsApi;

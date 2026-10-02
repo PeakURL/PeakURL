@@ -1,4 +1,9 @@
-import type { LinkStatus, LinksSortBy, LinksSortOrder } from "@/api";
+import type {
+	LinkRecord,
+	LinkStatus,
+	LinksSortBy,
+	LinksSortOrder,
+} from "@/api";
 
 export type {
 	LinkRecord,
@@ -244,4 +249,15 @@ export interface EditLinkDrawerProps {
 	open: boolean;
 	setOpen: (open: boolean) => void;
 	link: EditableLink | null;
+}
+
+/**
+ * Props for the health detail modal.
+ */
+export interface HealthDetailModalProps {
+	open: boolean;
+	setOpen: (open: boolean) => void;
+	link: LinkRecord | null;
+	onCheckNow?: (id: string) => Promise<void> | void;
+	isChecking?: boolean;
 }

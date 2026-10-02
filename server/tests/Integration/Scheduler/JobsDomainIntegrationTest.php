@@ -23,6 +23,9 @@ use PeakURL\Features\Auth\Credentials as AuthCredentials;
 use PeakURL\Features\Auth\Jobs\SessionCleanupJob;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Auth\Validator as AuthValidator;
+use PeakURL\Features\Links\Health\Checker as HealthChecker;
+use PeakURL\Features\Links\Health\Probe as HealthProbe;
+use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Features\Links\Jobs\ExpiredLinksJob;
 use PeakURL\Features\Links\Jobs\ImportExportJob;
 use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
@@ -145,7 +148,8 @@ class JobsDomainIntegrationTest extends TestCase {
 			new Captcha( $config, $this->settings_api, $crypto ),
 			$roles,
 			$authorization,
-			$config
+			$config,
+			new HealthChecker( new HealthResolver(), new HealthProbe() )
 		);
 
 		$this->cleanup_test_data();
@@ -336,7 +340,8 @@ class JobsDomainIntegrationTest extends TestCase {
 			VALUES ('{$link_id}', 1, '{$code}', '{$code}', 'SSRF Test', 'http://127.0.0.1:8080/admin', 'active', '{$now}', '{$now}')"
 		);
 
-		$job     = new LinkHealthCheckJob( $this->db, 10, 1.0 );
+		$checker = new HealthChecker( new HealthResolver(), new HealthProbe(), 1.0 );
+		$job     = new LinkHealthCheckJob( $this->db, $checker, 10 );
 		$context = new ExecutionContext( 'peakurl_link_health_check', 'run_test_7', 1, false, $now );
 		$result  = $job->execute( $context );
 

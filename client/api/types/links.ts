@@ -16,6 +16,32 @@ export type LinksSortBy =
 export type LinksSortOrder = "asc" | "desc";
 
 /**
+ * Explicit health check status values.
+ */
+export type LinkHealthStatus =
+	| "healthy"
+	| "slow"
+	| "unreachable"
+	| "dns_error"
+	| "tls_error"
+	| "timeout"
+	| "http_error"
+	| "redirect_loop"
+	| "ssrf_blocked";
+
+/**
+ * Single destination health inspection snapshot.
+ */
+export interface LinkHealth {
+	status: LinkHealthStatus;
+	checkedAt: string | null;
+	responseCode: number | null;
+	responseTimeMs: number | null;
+	errorMessage: string | null;
+	redirectCount: number;
+}
+
+/**
  * Canonical short-link record returned by URL endpoints.
  */
 export interface LinkRecord {
@@ -40,6 +66,7 @@ export interface LinkRecord {
 	updatedAt?: string | null;
 	expiresAt?: string | null;
 	hasPassword?: boolean;
+	health?: LinkHealth | null;
 }
 
 /**
@@ -117,4 +144,12 @@ export interface CreateUrlPayload {
  */
 export interface CreateUrlResponse {
 	data?: LinkRecord;
+}
+
+/**
+ * Endpoint response returned after manual link health check.
+ */
+export interface CheckLinkHealthResponse {
+	data?: LinkHealth;
+	message?: string;
 }

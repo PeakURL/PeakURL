@@ -9,12 +9,17 @@ import {
 	Lock,
 	Clock,
 	Link2,
+	RefreshCw,
 } from "lucide-react";
 
 import { __, sprintf } from "@/i18n";
 import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
 import { getLinkDisplayTitle, getLinkExpirationState } from "@/shared/links";
 
+import {
+	formatHealthDuration,
+	getHealthStatusDisplay,
+} from "../../health-status";
 import type { LinkRowProps } from "../types";
 
 function LinkRow({
@@ -24,6 +29,10 @@ function LinkRow({
 	onCopy,
 	copiedId,
 	onOpenStats,
+	onOpenHealthModal,
+	onCheckHealth,
+	isCheckingHealth = false,
+	isAnyCheckingHealth = false,
 	onEdit,
 	onDelete,
 	onRestore,
@@ -69,6 +78,32 @@ function LinkRow({
 			: "active" === link.status
 				? "bg-success"
 				: "bg-stroke";
+
+	const health = link.health;
+	const healthStatus = health?.status;
+	const healthStatusDisplay = getHealthStatusDisplay(healthStatus);
+	const healthStatusLabel = healthStatusDisplay.label;
+	const healthStatusColorClass = healthStatusDisplay.textClass;
+	const healthStatusDotClass = healthStatusDisplay.dotClass;
+
+	const checkedRelativeTime = health?.checkedAt
+		? formatRelativeTime(health.checkedAt, {
+				style: "compact",
+				numeric: "always",
+			})
+		: null;
+
+	let healthSubline = "";
+	if (health && checkedRelativeTime) {
+		const durationText = formatHealthDuration(health.responseTimeMs);
+		if (healthStatus === "slow" && durationText) {
+			healthSubline = `${durationText} · ${checkedRelativeTime}`;
+		} else if (healthStatus === "http_error" && health.responseCode) {
+			healthSubline = `${health.responseCode} · ${checkedRelativeTime}`;
+		} else {
+			healthSubline = checkedRelativeTime;
+		}
+	}
 
 	return (
 		<tr
@@ -166,6 +201,63 @@ function LinkRow({
 							</span>
 						)}
 					</div>
+				</div>
+			</td>
+			<td className="links-row-cell links-row-cell-health">
+				<div className="links-row-health">
+					<button
+						type="button"
+						className="links-row-health-info"
+						onClick={() => onOpenHealthModal?.(link)}
+						title={__("View health details")}
+						aria-label={__("View destination health details")}
+					>
+						{healthStatus ? (
+							<>
+								<span className="links-row-health-badge">
+									<span
+										className={`links-row-health-dot ${healthStatusDotClass}`}
+									/>
+									<span
+										className={`font-medium ${healthStatusColorClass}`}
+									>
+										{healthStatusLabel}
+									</span>
+								</span>
+								{healthSubline ? (
+									<span className="links-row-health-subline">
+										{healthSubline}
+									</span>
+								) : null}
+							</>
+						) : (
+							<span className="links-row-health-badge text-text-muted">
+								<span>— {__("Not checked")}</span>
+							</span>
+						)}
+					</button>
+					{!isTrashed && onCheckHealth && (
+						<button
+							type="button"
+							onClick={(e) => {
+								e.stopPropagation();
+								onCheckHealth(link.id);
+							}}
+							disabled={isCheckingHealth || isAnyCheckingHealth}
+							className="links-row-health-check"
+							title={__("Check Now")}
+							aria-label={__("Check link health now")}
+						>
+							<RefreshCw
+								size={12}
+								className={`shrink-0 ${
+									isCheckingHealth
+										? "animate-spin text-accent"
+										: ""
+								}`}
+							/>
+						</button>
+					)}
 				</div>
 			</td>
 			<td className="links-row-cell links-row-cell-performance">

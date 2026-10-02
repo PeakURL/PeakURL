@@ -5,6 +5,9 @@ export { default as TableFooter } from "./TableFooter";
 export { default as Pagination } from "./Pagination";
 export { default as StatsDrawer } from "./StatsDrawer";
 export { default as LinksSkeleton } from "./LinksSkeleton";
+export { default as HealthDetailModal } from "./HealthDetailModal";
+export { getHealthStatusDisplay } from "./health-status";
+export type { HealthStatusDisplay } from "./health-status";
 export type {
 	LinkRecord,
 	LinksSortBy,

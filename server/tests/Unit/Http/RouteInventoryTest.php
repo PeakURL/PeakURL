@@ -207,6 +207,11 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'edit_links',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
+		'POST /api/v1/urls/{id}/health-check'              => array(
+			'area'       => 'Links',
+			'capability' => 'view_links',
+			'coverage'   => array( 'contract', 'e2e' ),
+		),
 		'POST /api/v1/urls/{id}'                           => array(
 			'area'       => 'Links',
 			'capability' => 'edit_links',
@@ -562,7 +567,10 @@ class RouteInventoryTest extends TestCase {
 			}
 		};
 
-		$this->application = new Application( $connection, $config );
+		$health_resolver   = new \PeakURL\Features\Links\Health\Resolver();
+		$health_probe      = new \PeakURL\Features\Links\Health\Probe();
+		$health_checker    = new \PeakURL\Features\Links\Health\Checker( $health_resolver, $health_probe );
+		$this->application = new Application( $connection, $config, $health_checker );
 	}
 
 	public function test_all_registered_application_routes_are_in_inventory(): void {

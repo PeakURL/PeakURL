@@ -787,4 +787,112 @@ class Repository {
 			)
 		);
 	}
+
+	/**
+	 * Retrieve a single link health snapshot by link ID.
+	 *
+	 * @param string $link_id Link ID.
+	 * @return array<string, mixed>|null Health row or null.
+	 * @since 1.7.1
+	 */
+	public function get_link_health( string $link_id ): ?array {
+		return $this->db->get_row_by(
+			'link_health',
+			array( 'link_id' => $link_id )
+		);
+	}
+
+	/**
+	 * Retrieve health records for multiple link IDs in a single batch query.
+	 *
+	 * @param array<int, string> $link_ids List of link IDs.
+	 * @return array<string, array<string, mixed>> Health rows indexed by link_id.
+	 * @since 1.7.1
+	 */
+	public function get_link_health_by_ids( array $link_ids ): array {
+		$link_ids = Query::string_ids( $link_ids );
+		if ( empty( $link_ids ) ) {
+			return array();
+		}
+
+		$placeholders = $this->db->in_placeholders( $link_ids, 'link_health_id' );
+		$rows         = $this->db->get_results(
+			'SELECT * FROM link_health WHERE link_id IN (' . $placeholders['sql'] . ')',
+			$placeholders['params']
+		);
+
+		if ( empty( $rows ) || ! is_array( $rows ) ) {
+			return array();
+		}
+
+		$map = array();
+		foreach ( $rows as $row ) {
+			$id = (string) ( $row['link_id'] ?? '' );
+			if ( '' !== $id ) {
+				$map[ $id ] = $row;
+			}
+		}
+
+		return $map;
+	}
+
+	/**
+	 * Save or update link health inspection snapshot.
+	 *
+	 * @param string               $link_id Link ID.
+	 * @param array<string, mixed> $data    Health snapshot data.
+	 * @return bool True on success.
+	 * @since 1.7.1
+	 */
+	public function save_link_health( string $link_id, array $data ): bool {
+		$now             = Date::now();
+		$data['link_id'] = $link_id;
+
+		if ( empty( $data['created_at'] ) ) {
+			$data['created_at'] = $now;
+		}
+		if ( empty( $data['updated_at'] ) ) {
+			$data['updated_at'] = $now;
+		}
+
+		try {
+			$affected = $this->db->upsert(
+				'link_health',
+				$data,
+				array(
+					'status',
+					'checked_at',
+					'response_code',
+					'response_time_ms',
+					'error_message',
+					'redirect_count',
+					'updated_at',
+				)
+			);
+
+			return false !== $affected && is_int( $affected ) && $affected >= 0;
+		} catch ( \Throwable $e ) {
+			return false;
+		}
+	}
+
+	/**
+	 * Delete health inspection snapshot for a specific link.
+	 *
+	 * @param string $link_id Link ID.
+	 * @return bool True on success.
+	 * @since 1.7.1
+	 */
+	public function delete_link_health( string $link_id ): bool {
+		try {
+			$affected = $this->db->delete(
+				'link_health',
+				array( 'link_id' => $link_id )
+			);
+
+			return false !== $affected && is_int( $affected ) && $affected >= 0;
+		} catch ( \Throwable $e ) {
+			return false;
+		}
+	}
 }

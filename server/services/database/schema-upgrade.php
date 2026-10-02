@@ -424,7 +424,7 @@ class Upgrade {
 	 * @since 1.0.14
 	 */
 	private function remove_orphans( array &$changes ): void {
-		foreach ( RepairSpecs::orphan_cleanup_queries() as $query ) {
+		foreach ( RepairSpecs::cleanup_queries() as $query ) {
 			$affected_rows = (int) $this->context->get_pdo()->exec(
 				$this->context->get_connection()->prefix_sql( (string) $query['sql'] ),
 			);

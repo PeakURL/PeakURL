@@ -96,6 +96,34 @@
 		@apply h-8 w-px bg-stroke;
 	}
 
+	.links-row-cell-health {
+		@apply align-middle whitespace-nowrap;
+	}
+
+	.links-row-health {
+		@apply inline-flex items-start gap-1.5;
+	}
+
+	.links-row-health-info {
+		@apply flex flex-col text-start cursor-pointer select-none rounded px-1.5 py-0.5 -mx-1.5 -my-0.5 transition-colors hover:bg-surface-alt/75 bg-transparent border-0 focus:outline-none focus-visible:ring-1 focus-visible:ring-accent min-w-0;
+	}
+
+	.links-row-health-badge {
+		@apply inline-flex items-center gap-1.5 text-xs font-medium leading-none;
+	}
+
+	.links-row-health-dot {
+		@apply h-1.5 w-1.5 rounded-full shrink-0;
+	}
+
+	.links-row-health-subline {
+		@apply block text-[11px] leading-tight text-text-muted mt-0.5 text-center;
+	}
+
+	.links-row-health-check {
+		@apply flex h-5 w-5 shrink-0 items-center justify-center rounded text-text-muted transition-all hover:bg-accent/10 hover:text-accent disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-accent -mt-0.5;
+	}
+
 	.links-row-cell-performance {
 		@apply text-center;
 	}

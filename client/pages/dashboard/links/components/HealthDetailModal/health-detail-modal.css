@@ -1,0 +1,33 @@
+@layer components {
+	.health-detail-grid {
+		@apply grid grid-cols-2 gap-3 rounded-lg border border-stroke bg-surface-alt/50 p-4;
+	}
+
+	.health-detail-item {
+		@apply flex flex-col gap-1;
+	}
+
+	.health-detail-label {
+		@apply text-xs font-medium text-text-muted;
+	}
+
+	.health-detail-value {
+		@apply text-sm font-medium text-heading;
+	}
+
+	.health-detail-status {
+		@apply inline-flex items-center gap-1.5;
+	}
+
+	.health-detail-dot {
+		@apply h-2 w-2 rounded-full;
+	}
+
+	.health-detail-destination {
+		@apply rounded-lg border border-stroke bg-surface p-3 font-mono text-xs text-text-muted;
+	}
+
+	.health-detail-reason {
+		@apply col-span-2 rounded border border-error/20 bg-error/5 p-2.5 text-xs text-error;
+	}
+}

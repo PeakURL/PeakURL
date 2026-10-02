@@ -29,7 +29,7 @@ function TableHeaderRow({
 						aria-label={__("Deselect all links")}
 					/>
 				</th>
-				<th colSpan={6} className="links-table-header-cell-actions">
+				<th colSpan={7} className="links-table-header-cell-actions">
 					<div className="links-table-header-actions-group">
 						<span className="links-table-selection-count">
 							{sprintf(__("%s selected"), String(selectedCount))}
@@ -117,6 +117,9 @@ function TableHeaderRow({
 			<th className="links-table-header-cell">{__("Link")}</th>
 			<th className="links-table-header-cell">{__("Title")}</th>
 			<th className="links-table-header-cell">{__("Destination")}</th>
+			<th className="links-table-header-cell links-table-header-cell-health">
+				{__("Health")}
+			</th>
 			<th className="links-table-header-cell links-table-header-cell-performance">
 				{__("Performance")}
 			</th>

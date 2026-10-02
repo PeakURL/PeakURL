@@ -270,6 +270,23 @@ class Controller extends BaseController {
 	}
 
 	/**
+	 * Manually check and record destination health for a short link.
+	 *
+	 * @param Request $request Request with route 'id'.
+	 * @return array<string, mixed> Health check response.
+	 * @since 1.7.1
+	 */
+	public function health_check( Request $request ): array {
+		$id     = $this->route_param( $request, 'id' );
+		$health = $this->links_service->check_link_health( $request, $id );
+
+		return $this->success_response(
+			$health,
+			__( 'Health check completed.', 'peakurl' ),
+		);
+	}
+
+	/**
 	 * Bulk delete URLs by ID array.
 	 *
 	 * @param Request $request Request with 'ids' body parameter.

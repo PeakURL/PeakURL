@@ -19,6 +19,9 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Controller as LinksController;
+use PeakURL\Features\Links\Health\Checker as HealthChecker;
+use PeakURL\Features\Links\Health\Probe as HealthProbe;
+use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Features\Links\Repository as LinksRepository;
 use PeakURL\Features\Links\Validator as LinksValidator;
 use PeakURL\Features\Auth\Service as AuthService;
@@ -38,6 +41,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 	private MockObject&AuthService $auth_service;
 	private MockObject&AnalyticsService $analytics_service;
 	private MockObject&WebhooksService $webhooks_service;
+	private HealthChecker $health_checker;
 	private MockObject&SocialPreview $social_preview;
 	private MockObject&Captcha $captcha;
 	private MockObject&SettingsApi $settings_api;
@@ -58,8 +62,9 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->settings_api      = $this->createMock( SettingsApi::class );
 
 		// Real role and authorization instances to test the actual application boundary.
-		$this->roles         = new Roles();
-		$this->authorization = new Authorization( $this->roles );
+		$this->roles          = new Roles();
+		$this->authorization  = new Authorization( $this->roles );
+		$this->health_checker = new HealthChecker( new HealthResolver(), new HealthProbe() );
 
 		$this->links_service = new LinksService(
 			$this->repository,
@@ -72,7 +77,8 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			$this->captcha,
 			$this->roles,
 			$this->authorization,
-			array( 'site_url' => 'https://peakurl.dev' )
+			array( 'site_url' => 'https://peakurl.dev' ),
+			$this->health_checker
 		);
 
 		$this->links_controller = new LinksController( $this->links_service );
@@ -233,7 +239,8 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			$this->captcha,
 			$restricted_roles,
 			$restricted_auth,
-			array( 'site_url' => 'https://peakurl.dev' )
+			array( 'site_url' => 'https://peakurl.dev' ),
+			$this->health_checker
 		);
 		$restricted_controller = new LinksController( $restricted_service );
 
@@ -275,7 +282,8 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			$this->captcha,
 			$restricted_roles,
 			$restricted_auth,
-			array( 'site_url' => 'https://peakurl.dev' )
+			array( 'site_url' => 'https://peakurl.dev' ),
+			$this->health_checker
 		);
 		$restricted_controller = new LinksController( $restricted_service );
 
@@ -336,7 +344,8 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			$this->captcha,
 			$restricted_roles,
 			$restricted_auth,
-			array( 'site_url' => 'https://peakurl.dev' )
+			array( 'site_url' => 'https://peakurl.dev' ),
+			$this->health_checker
 		);
 		$restricted_controller = new LinksController( $restricted_service );
 
@@ -554,7 +563,8 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			$this->captcha,
 			$restricted_roles,
 			$restricted_auth,
-			array( 'site_url' => 'https://peakurl.dev' )
+			array( 'site_url' => 'https://peakurl.dev' ),
+			$this->health_checker
 		);
 		$restricted_controller = new LinksController( $restricted_service );
 

@@ -13,9 +13,12 @@
 declare(strict_types=1);
 
 use PeakURL\Core\Application;
-use PeakURL\Services\Database\Connection;
 use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Security\Security;
+use PeakURL\Features\Links\Health\Checker as HealthChecker;
+use PeakURL\Features\Links\Health\Probe as HealthProbe;
+use PeakURL\Features\Links\Health\Resolver as HealthResolver;
+use PeakURL\Services\Database\Connection;
 
 $is_public_dir = 'public' === basename( __DIR__ );
 $release_root  = $is_public_dir ? dirname( __DIR__, 2 ) : dirname( __DIR__ );
@@ -121,5 +124,8 @@ load_i18n( $config, $connection );
 do_action( 'init' );
 
 header( 'Content-Language: ' . get_html_lang_attribute() );
-$application = new Application( $connection, $config );
+$health_resolver = new HealthResolver();
+$health_probe    = new HealthProbe();
+$health_checker  = new HealthChecker( $health_resolver, $health_probe );
+$application     = new Application( $connection, $config, $health_checker );
 $application->run();

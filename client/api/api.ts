@@ -522,6 +522,14 @@ export const API_ROUTES = {
 		export: apiPath("urls", "export"),
 
 		/**
+		 * Relative API path: `urls/{id}/health-check`.
+		 *
+		 * Manually checks and records destination health for one short link.
+		 */
+		healthCheck: (id: ApiPathPart) =>
+			apiPath("urls", encodeApiParam(id), "health-check"),
+
+		/**
 		 * Relative API path: `urls`.
 		 *
 		 * Lists or creates short links.

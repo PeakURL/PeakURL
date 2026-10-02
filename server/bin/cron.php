@@ -35,7 +35,9 @@ use PeakURL\Features\Analytics\Repository as AnalyticsRepository;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Credentials as AuthCredentials;
 use PeakURL\Features\Auth\Service as AuthService;
-use PeakURL\Features\Auth\Validator as AuthValidator;
+use PeakURL\Features\Links\Health\Checker as HealthChecker;
+use PeakURL\Features\Links\Health\Probe as HealthProbe;
+use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Features\Links\Repository as LinksRepository;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Validator as LinksValidator;
@@ -145,6 +147,9 @@ $links_repo        = new LinksRepository(
 	$links_api,
 	$authorization
 );
+$health_resolver   = new HealthResolver();
+$health_probe      = new HealthProbe();
+$health_checker    = new HealthChecker( $health_resolver, $health_probe );
 $links_service     = new LinksService(
 	$links_repo,
 	new LinksValidator(),
@@ -156,7 +161,8 @@ $links_service     = new LinksService(
 	$captcha,
 	$roles,
 	$authorization,
-	$config
+	$config,
+	$health_checker
 );
 $analytics_repo->set_link_formatter( array( $links_service, 'format_url' ) );
 
@@ -173,6 +179,7 @@ $scheduler = SchedulerFactory::create(
 	$geoip,
 	$webhooks_service,
 	$update_manager,
+	$health_checker,
 	$logger,
 	$links_api,
 	$auth_service,

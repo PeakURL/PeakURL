@@ -456,6 +456,8 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			const domain = mapApiCronStatus(null);
 			expect(domain.jobs).toEqual([]);
 			expect(domain.jobsCount).toBe(0);
+			expect(domain.retentionDays).toBe(0);
+			expect(domain.timezone).toBe("UTC");
 		});
 
 		test("strictly maps jobs_count from wire payload without falling back to jobs length", () => {
@@ -466,40 +468,74 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 						title: "Job A",
 						status: "idle",
 						attempts: 0,
+						retention_days: null,
+						retention_is_customized: false,
+						effective_retention_days: 30,
 					},
 					{
 						id: "job_b",
 						title: "Job B",
 						status: "idle",
 						attempts: 0,
+						retention_days: null,
+						retention_is_customized: false,
+						effective_retention_days: 30,
 					},
 				],
 				jobs_count: 9,
+				retention_days: 30,
 			};
 
 			const domain = mapApiCronStatus(partialPayload);
 			expect(domain.jobs).toHaveLength(2);
 			expect(domain.jobsCount).toBe(9);
+			expect(domain.retentionDays).toBe(30);
 		});
 
 		test("preserves zero jobs_count without fabricating from jobs array", () => {
 			const zeroPayload: ApiCronStatusResponse = {
 				jobs: [],
 				jobs_count: 0,
+				retention_days: 30,
 			};
 
 			const domain = mapApiCronStatus(zeroPayload);
 			expect(domain.jobsCount).toBe(0);
+			expect(domain.retentionDays).toBe(30);
 		});
 
-		test("transforms timezone and retention_days accurately", () => {
+		test("maps authoritative global retention_days directly from backend API without fallbacks", () => {
+			// 1. Inherited standard global retention: 30 days
+			const status30 = mapApiCronStatus({
+				jobs: [],
+				jobs_count: 0,
+				retention_days: 30,
+			});
+			expect(status30.retentionDays).toBe(30);
+
+			// 2. Changed global retention: 60 days
+			const status60 = mapApiCronStatus({
+				jobs: [],
+				jobs_count: 0,
+				retention_days: 60,
+			});
+			expect(status60.retentionDays).toBe(60);
+
+			// 3. Changed global retention: 0 days (indefinite)
+			const status0 = mapApiCronStatus({
+				jobs: [],
+				jobs_count: 0,
+				retention_days: 0,
+			});
+			expect(status0.retentionDays).toBe(0);
+
+			// 4. Timezone and explicit days preserved accurately
 			const rawPayload: ApiCronStatusResponse = {
 				jobs: [],
 				jobs_count: 0,
 				timezone: "America/New_York",
 				retention_days: 14,
 			};
-
 			const domain = mapApiCronStatus(rawPayload);
 			expect(domain.timezone).toBe("America/New_York");
 			expect(domain.retentionDays).toBe(14);

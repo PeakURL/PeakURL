@@ -305,13 +305,22 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 export function mapApiCronStatus(
 	apiStatus?: ApiCronStatusResponse | null
 ): CronStatusResponse {
-	const apiJobs = apiStatus?.jobs ?? [];
+	if (!apiStatus) {
+		return {
+			jobs: [],
+			jobsCount: 0,
+			retentionDays: 0,
+			timezone: "UTC",
+		};
+	}
+
+	const apiJobs = apiStatus.jobs ?? [];
 	const jobs = Array.isArray(apiJobs)
 		? apiJobs.map((apiJob) => mapApiCronJob(apiJob))
 		: [];
-	const jobsCount = Number(apiStatus?.jobs_count ?? 0);
-	const retentionDays = Number(apiStatus?.retention_days ?? 30);
-	const timezone = String(apiStatus?.timezone || "UTC");
+	const jobsCount = Number(apiStatus.jobs_count ?? jobs.length);
+	const retentionDays = Number(apiStatus.retention_days);
+	const timezone = String(apiStatus.timezone || "UTC");
 
 	return {
 		jobs,

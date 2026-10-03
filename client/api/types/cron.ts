@@ -79,7 +79,7 @@ export interface ApiCronJob {
 export interface ApiCronStatusResponse {
 	jobs: ApiCronJob[];
 	jobs_count: number;
-	retention_days?: number;
+	retention_days: number;
 	timezone?: string;
 }
 

@@ -616,7 +616,7 @@ class Scheduler {
 
 		$pruned = $this->repository->prune_history( $days );
 		if ( $pruned > 0 ) {
-			$this->log( sprintf( 'Pruned %d stale cron execution history rows (global retention: %d days).', $pruned, $days ) );
+			$this->log( sprintf( 'Pruned %d stale cron execution history rows according to retention policies.', $pruned ) );
 		}
 
 		return $pruned;

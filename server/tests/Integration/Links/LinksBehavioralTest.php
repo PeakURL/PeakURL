@@ -201,6 +201,47 @@ class LinksBehavioralTest extends TestCase {
 		);
 	}
 
+	public function test_link_creation_accepts_custom_aliases_with_dots_and_underscores(): void {
+		$admin_user = array(
+			'id'       => 'user_1',
+			'username' => 'admin',
+			'role'     => 'admin',
+		);
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'short_code_exists' )->willReturn( false );
+
+		$captured_row = null;
+		$this->repository->expects( $this->once() )
+			->method( 'insert_url' )
+			->willReturnCallback(
+				function ( array $row ) use ( &$captured_row ): string {
+					$captured_row = $row;
+					return (string) $row['id'];
+				}
+			);
+
+		$this->repository->method( 'find_url_row' )
+			->willReturnCallback(
+				function () use ( &$captured_row ) {
+					return $captured_row;
+				}
+			);
+
+		$payload = array(
+			'destinationUrl' => 'https://example.com/releases/v1.2.1...v1.2.2',
+			'alias'          => 'v1.2.1...v1.2.2',
+		);
+
+		$request  = new Request( 'POST', '/api/v1/urls', array(), $payload );
+		$response = $this->links_controller->create( $request );
+
+		$this->assertSame( 201, $response['status'] );
+		$this->assertSame( 'v1.2.1...v1.2.2', $response['body']['data']['alias'] );
+		$this->assertSame( 'https://peakurl.dev/v1.2.1...v1.2.2', $response['body']['data']['shortUrl'] );
+		$this->assertNotNull( $captured_row );
+		$this->assertSame( 'v1.2.1...v1.2.2', $captured_row['alias'] );
+	}
+
 	public function test_link_update_mutates_fields_and_records_activity(): void {
 		$admin_user = array(
 			'id'       => 'user_1',

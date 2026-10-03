@@ -68,7 +68,7 @@ class Controller extends BaseController {
 	private function get_stats_code( string $id ): ?string {
 		$matches = array();
 
-		if ( 1 !== preg_match( '/^([a-z0-9-]+)\+$/i', trim( $id ), $matches ) ) {
+		if ( 1 !== preg_match( '/^([a-z0-9._-]+)\+$/i', trim( $id ), $matches ) ) {
 			return null;
 		}
 

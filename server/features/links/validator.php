@@ -48,14 +48,14 @@ class Validator {
 	}
 
 	/**
-	 * Sanitise a short code or alias while preserving letter case.
+	 * Sanitise a short code or alias while preserving letter case, underscores, and dots.
 	 *
 	 * @param string $value Raw code input.
 	 * @return string Sanitised code.
 	 * @since 1.0.0
 	 */
 	public function sanitize_code( string $value ): string {
-		$sanitized = preg_replace( '/[^A-Za-z0-9-]/', '', trim( $value ) );
+		$sanitized = preg_replace( '/[^A-Za-z0-9._-]/', '', trim( $value ) );
 
 		return is_string( $sanitized ) ? $sanitized : '';
 	}
@@ -70,7 +70,7 @@ class Validator {
 	public function is_reserved_code( string $code ): bool {
 		return in_array(
 			strtolower( trim( $code ) ),
-			array( 'api', 'dashboard', 'login' ),
+			array( 'api', 'dashboard', 'login', 'forgot-password', 'reset-password' ),
 			true,
 		);
 	}
@@ -83,7 +83,7 @@ class Validator {
 	 * @param callable|null $exists_check  Callback returning true if short code already exists.
 	 * @return void
 	 *
-	 * @throws ApiException When the alias is reserved or already used.
+	 * @throws ApiException When the alias is reserved, malformed, or already used.
 	 * @since 1.0.0
 	 */
 	public function validate_alias(
@@ -91,6 +91,34 @@ class Validator {
 		string $current_alias = '',
 		?callable $exists_check = null
 	): void {
+		if ( '' === $alias ) {
+			throw new ApiException(
+				__( 'A short code or alias cannot be empty.', 'peakurl' ),
+				422,
+			);
+		}
+
+		if ( ! preg_match( '/^[A-Za-z0-9](?:.*[A-Za-z0-9])?$/', $alias ) ) {
+			throw new ApiException(
+				__( 'Aliases must begin and end with a letter or number.', 'peakurl' ),
+				422,
+			);
+		}
+
+		if ( preg_match( '/\.(php|phtml|sh|bash|exe|bat|cgi|pl|py|env|sql|htaccess|ini|conf)$/i', $alias ) ) {
+			throw new ApiException(
+				__( 'Aliases cannot end with executable script extensions.', 'peakurl' ),
+				422,
+			);
+		}
+
+		if ( defined( 'ABSPATH' ) && file_exists( ABSPATH . $alias ) ) {
+			throw new ApiException(
+				__( 'That short code is reserved by an existing system file.', 'peakurl' ),
+				422,
+			);
+		}
+
 		if ( $this->is_reserved_code( $alias ) ) {
 			throw new ApiException(
 				__( 'That short code is reserved by the application.', 'peakurl' ),

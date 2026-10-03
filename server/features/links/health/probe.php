@@ -275,7 +275,7 @@ class Probe {
 		}
 
 		if ( false === $configured ) {
-			curl_close( $curl_handle );
+			unset( $curl_handle );
 
 			return array(
 				'response_code' => null,
@@ -291,7 +291,7 @@ class Probe {
 		$curl_error  = curl_error( $curl_handle );
 		$http_code   = curl_getinfo( $curl_handle, CURLINFO_HTTP_CODE );
 		$duration_ms = (int) round( (float) curl_getinfo( $curl_handle, CURLINFO_TOTAL_TIME ) * 1000 );
-		curl_close( $curl_handle );
+		unset( $curl_handle );
 
 		if ( ! $is_get && is_string( $res ) ) {
 			$raw_headers = $res;

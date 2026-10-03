@@ -22,38 +22,10 @@
 
 declare(strict_types=1);
 
-use PeakURL\Api\LinksApi;
-use PeakURL\Api\SettingsApi;
-use PeakURL\Api\UsersApi;
-use PeakURL\Core\Auth\Authorization;
-use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Configuration;
-use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
-use PeakURL\Core\Scheduler\SchedulerFactory;
-use PeakURL\Features\Analytics\Repository as AnalyticsRepository;
-use PeakURL\Features\Analytics\Service as AnalyticsService;
-use PeakURL\Features\Auth\Credentials as AuthCredentials;
-use PeakURL\Features\Auth\Service as AuthService;
-use PeakURL\Features\Links\Health\Checker as HealthChecker;
-use PeakURL\Features\Links\Health\Context as HealthContext;
-use PeakURL\Features\Links\Health\Probe as HealthProbe;
-use PeakURL\Features\Links\Health\Resolver as HealthResolver;
-use PeakURL\Features\Links\Repository as LinksRepository;
-use PeakURL\Features\Links\Service as LinksService;
-use PeakURL\Features\Links\Validator as LinksValidator;
-use PeakURL\Features\Webhooks\Service as WebhooksService;
-use PeakURL\Features\Webhooks\Validator as WebhooksValidator;
-use PeakURL\Services\Cache\CacheManager;
-use PeakURL\Services\Captcha;
-use PeakURL\Services\Crypto;
+use PeakURL\Core\Scheduler\BackgroundRunnerFactory;
 use PeakURL\Services\Database\Connection;
-use PeakURL\Services\Database\PeakURL_DB;
-use PeakURL\Services\Geoip;
-use PeakURL\Services\Notifications;
-use PeakURL\Services\SocialPreview;
-use PeakURL\Services\Totp;
-use PeakURL\Services\Update\Manager as UpdateManager;
 
 $is_server_subdir = 'server' === basename( dirname( __DIR__ ) );
 $release_root     = $is_server_subdir ? dirname( __DIR__, 2 ) : dirname( __DIR__ );
@@ -85,110 +57,14 @@ try {
 }
 
 $connection = new Connection( $config );
-$db         = new PeakURL_DB( $connection );
-
-$content_dir   = (string) ( $config[ Constants::CONTENT_DIR ] ?? $environment->get_content_path() );
-$settings_api  = new SettingsApi( $db );
-$cache_service = CacheManager::resolve( $config, $content_dir );
-$crypto        = new Crypto( $config );
-$geoip         = new Geoip( $config, $settings_api, $crypto );
-$roles         = new Roles();
-$authorization = new Authorization( $roles );
-
-$auth_service = new AuthService(
-	$db,
-	new UsersApi( $db ),
-	new AuthCredentials( $db ),
-	new AuthValidator(),
-	new Totp(),
-	new Notifications(),
-	$crypto,
-	$roles,
-	$authorization,
-	$geoip,
-	$config
-);
-
-$webhooks_service = new WebhooksService(
-	$db,
-	new WebhooksValidator(),
-	$auth_service,
-	$roles,
-	$authorization,
-	$config,
-	$crypto
-);
-
-$update_manager = new UpdateManager( $config, $settings_api, $db );
-
-$social_preview    = new SocialPreview( $config, $settings_api );
-$captcha           = new Captcha( $config, $settings_api, $crypto );
-$links_api         = new LinksApi( $db, $cache_service );
-$analytics_repo    = new AnalyticsRepository(
-	$db,
-	$settings_api,
-	$geoip,
-	$roles,
-	$authorization,
-	$webhooks_service,
-	null,
-	$config
-);
-$analytics_service = new AnalyticsService(
-	$analytics_repo,
-	$db,
-	$auth_service,
-	$roles,
-	$authorization,
-	$config,
-	$links_api
-);
-$links_repo        = new LinksRepository(
-	$db,
-	$links_api,
-	$authorization
-);
-$health_context    = new HealthContext( $config );
-$health_resolver   = new HealthResolver();
-$health_probe      = new HealthProbe( $health_context );
-$health_checker    = new HealthChecker( $health_resolver, $health_probe );
-$links_service     = new LinksService(
-	$links_repo,
-	new LinksValidator(),
-	$settings_api,
-	$auth_service,
-	$analytics_service,
-	$webhooks_service,
-	$social_preview,
-	$captcha,
-	$roles,
-	$authorization,
-	$config,
-	$health_checker
-);
-$analytics_repo->set_link_formatter( array( $links_service, 'format_url' ) );
 
 $logger = function ( string $message ): void {
 	$timestamp = gmdate( 'Y-m-d H:i:s' );
 	fwrite( STDOUT, sprintf( "[%s UTC] %s\n", $timestamp, $message ) );
 };
 
-$scheduler = SchedulerFactory::create(
-	$db,
-	$config,
-	$settings_api,
-	$cache_service,
-	$geoip,
-	$webhooks_service,
-	$update_manager,
-	$health_checker,
-	$logger,
-	$links_api,
-	$auth_service,
-	$links_service,
-	$analytics_service
-);
-$links_service->set_scheduler( $scheduler );
+$background_runner = BackgroundRunnerFactory::create( $connection, $config, $logger );
+$scheduler         = $background_runner->get_scheduler();
 
 // ── Command line argument parsing ─────────────────────────────────
 

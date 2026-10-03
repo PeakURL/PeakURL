@@ -22,9 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WebhookDeliveryJob — checks active webhook configurations and delivers background queues.
+ * WebhookDeliveryJob — recovery and maintenance background worker for webhooks.
  *
- * Ensures webhook delivery retries do not block the URL redirect resolution hot path.
+ * Serves as the periodic safety and recovery mechanism: re-dispatches due retries,
+ * reclaims interrupted deliveries and stale claims, processes missed immediate triggers,
+ * and purges terminal delivery history past the retention window.
  *
  * @since 1.7.0
  */

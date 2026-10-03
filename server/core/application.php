@@ -21,6 +21,7 @@ use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Scheduler\BackgroundRunner;
 use PeakURL\Core\Scheduler\Scheduler;
 use PeakURL\Core\Scheduler\SchedulerFactory;
 use PeakURL\Core\Security\Security;
@@ -33,6 +34,9 @@ use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Auth\Validator as AuthValidator;
 use PeakURL\Features\Links\Controller as LinksController;
 use PeakURL\Features\Links\Health\Checker;
+use PeakURL\Features\Links\Health\Context as HealthContext;
+use PeakURL\Features\Links\Health\Probe as HealthProbe;
+use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Features\Links\Repository as LinksRepository;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Validator as LinksValidator;
@@ -95,22 +99,34 @@ class Application {
 	/** @var Scheduler Background job scheduler instance. */
 	private Scheduler $scheduler;
 
+	/** @var BackgroundRunner Background execution runner instance. */
+	private BackgroundRunner $background_runner;
+
 	/**
 	 * Initialize the application, create services, and register routes.
 	 *
-	 * @param Connection $connection     Database connection manager.
-	 * @param array      $config         Merged runtime configuration.
-	 * @param Checker    $health_checker Destination health checker.
+	 * @param Connection           $connection     Database connection manager.
+	 * @param array<string, mixed> $config         Merged runtime configuration.
+	 * @param Checker|null         $health_checker Optional destination health checker.
+	 * @param callable|null        $logger         Optional logging callback for CLI progress.
 	 * @since 1.0.0
 	 */
 	public function __construct(
 		Connection $connection,
 		array $config,
-		Checker $health_checker
+		?Checker $health_checker = null,
+		?callable $logger = null
 	) {
 		$this->router     = new Router();
 		$this->connection = $connection;
 		$this->config     = $config;
+
+		if ( null === $health_checker ) {
+			$health_context  = new HealthContext( $config );
+			$health_resolver = new HealthResolver();
+			$health_probe    = new HealthProbe( $health_context );
+			$health_checker  = new Checker( $health_resolver, $health_probe );
+		}
 
 		$db             = new PeakURL_DB( $connection );
 		$schema_path    = Environment::get_instance()->get_database_schema_path();
@@ -244,15 +260,23 @@ class Application {
 			$webhooks_service,
 			$update_manager,
 			$health_checker,
-			null,
+			$logger,
 			$links_api,
 			$auth_service,
 			$links_service,
 			$analytics_service
 		);
 		$links_service->set_scheduler( $scheduler );
-		$this->scheduler = $scheduler;
-		$system_service  = new SystemService(
+		$this->scheduler   = $scheduler;
+		$background_runner = new BackgroundRunner(
+			$scheduler,
+			$webhooks_service,
+			$settings_api
+		);
+		$webhooks_service->set_background_runner( $background_runner );
+		$links_service->set_background_runner( $background_runner );
+		$this->background_runner = $background_runner;
+		$system_service          = new SystemService(
 			$db,
 			$connection,
 			$auth_service,
@@ -297,6 +321,16 @@ class Application {
 	 */
 	public function get_scheduler(): Scheduler {
 		return $this->scheduler;
+	}
+
+	/**
+	 * Return the background runner instance.
+	 *
+	 * @return BackgroundRunner
+	 * @since 1.7.1
+	 */
+	public function get_background_runner(): BackgroundRunner {
+		return $this->background_runner;
 	}
 
 	/**
@@ -373,6 +407,7 @@ class Application {
 		}
 
 		$this->send_response( $response, $request );
+		$this->background_runner->dispatch_post_response();
 	}
 
 	/**

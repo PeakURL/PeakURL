@@ -18,6 +18,7 @@ use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Scheduler\BackgroundRunner;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Http\Request;
 use PeakURL\Services\Crypto;
@@ -169,6 +170,14 @@ class Service {
 	}
 
 	/**
+	 * Background runner for immediate post-response dispatch.
+	 *
+	 * @var BackgroundRunner|null
+	 * @since 1.7.1
+	 */
+	private ?BackgroundRunner $background_runner = null;
+
+	/**
 	 * Set a custom HTTP sender callback for delivery attempts (useful for testing).
 	 *
 	 * @param (callable(array<string, mixed>, array<string, mixed>, float): array<string, mixed>)|null $sender Custom sender callable.
@@ -177,6 +186,17 @@ class Service {
 	 */
 	public function set_http_sender( ?callable $sender ): void {
 		$this->http_sender = $sender;
+	}
+
+	/**
+	 * Set the background runner instance for immediate async dispatch.
+	 *
+	 * @param BackgroundRunner|null $runner Background runner instance.
+	 * @return void
+	 * @since 1.7.1
+	 */
+	public function set_background_runner( ?BackgroundRunner $runner ): void {
+		$this->background_runner = $runner;
 	}
 
 	/**
@@ -710,6 +730,10 @@ class Service {
 				'durationMs' => 0,
 				'error'      => null,
 			);
+		}
+
+		if ( ! empty( $queued_results ) && null !== $this->background_runner ) {
+			$this->background_runner->enqueue_webhooks();
 		}
 
 		return $queued_results;
@@ -1589,7 +1613,7 @@ class Service {
 		$http_code = (int) curl_getinfo( $curl_handle, CURLINFO_HTTP_CODE );
 		$error     = curl_error( $curl_handle );
 
-		curl_close( $curl_handle );
+		unset( $curl_handle );
 
 		return array(
 			'statusCode' => $http_code,
@@ -2324,6 +2348,10 @@ class Service {
 
 		if ( $updated <= 0 ) {
 			throw new ApiException( __( 'Failed to queue webhook delivery for retry.', 'peakurl' ), 400 );
+		}
+
+		if ( null !== $this->background_runner ) {
+			$this->background_runner->enqueue_webhooks();
 		}
 
 		return array(

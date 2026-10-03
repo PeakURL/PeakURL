@@ -193,6 +193,56 @@ class SettingsApi {
 	}
 
 	/**
+	 * Attempt to atomically acquire a time-based lock for a given option key.
+	 *
+	 * Uses an atomic UPDATE with a timestamp threshold to admit exactly one worker
+	 * per lock interval across concurrent requests.
+	 *
+	 * @param string $setting_key Setting key used for the lock.
+	 * @param int    $interval    Cooldown interval in seconds.
+	 * @return bool True if the lock was acquired, false if held by another process.
+	 * @since 1.7.1
+	 */
+	public function acquire_option_lock( string $setting_key, int $interval ): bool {
+		if ( ! $this->table_exists() ) {
+			return false;
+		}
+
+		$now       = time();
+		$threshold = $now - $interval;
+		$now_str   = (string) $now;
+		$now_date  = gmdate( 'Y-m-d H:i:s', $now );
+
+		$this->db->query(
+			"INSERT IGNORE INTO settings (setting_key, setting_value, autoload, updated_at)
+			 VALUES (:key, '0', 0, :now_date)",
+			array(
+				'key'      => $setting_key,
+				'now_date' => $now_date,
+			)
+		);
+
+		$affected = $this->db->query(
+			"UPDATE settings
+			 SET setting_value = :now_val, updated_at = :now_date
+			 WHERE setting_key = :key
+			   AND (
+			       CAST(setting_value AS UNSIGNED) <= :threshold
+			       OR setting_value = ''
+			       OR setting_value IS NULL
+			   )",
+			array(
+				'key'       => $setting_key,
+				'now_val'   => $now_str,
+				'now_date'  => $now_date,
+				'threshold' => $threshold,
+			)
+		);
+
+		return $affected > 0;
+	}
+
+	/**
 	 * Determine whether the settings table is available.
 	 *
 	 * @return bool

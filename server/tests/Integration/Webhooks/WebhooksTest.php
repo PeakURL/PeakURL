@@ -1090,7 +1090,14 @@ class WebhooksTest extends TestCase {
 			),
 			$pipes
 		);
-		usleep( 150000 );
+		for ( $i = 0; $i < 20; $i++ ) {
+			$conn = @fsockopen( '127.0.0.1', $port, $errno, $errstr, 0.1 );
+			if ( is_resource( $conn ) ) {
+				fclose( $conn );
+				break;
+			}
+			usleep( 50000 );
+		}
 
 		$mock_validator = new class() extends WebhooksValidator {
 			public function validate_destination( string $url ): ?string {

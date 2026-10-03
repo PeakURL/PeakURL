@@ -18,6 +18,7 @@ use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Scheduler\BackgroundRunner;
 use PeakURL\Core\Scheduler\Scheduler;
 use PeakURL\Core\Security\Security;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
@@ -233,6 +234,14 @@ class Service {
 	}
 
 	/**
+	 * Background runner for immediate post-response dispatch.
+	 *
+	 * @var BackgroundRunner|null
+	 * @since 1.7.1
+	 */
+	private ?BackgroundRunner $background_runner = null;
+
+	/**
 	 * Set the background job scheduler.
 	 *
 	 * @param Scheduler $scheduler Background scheduler instance.
@@ -241,6 +250,17 @@ class Service {
 	 */
 	public function set_scheduler( Scheduler $scheduler ): void {
 		$this->scheduler = $scheduler;
+	}
+
+	/**
+	 * Set the background runner instance for immediate async dispatch.
+	 *
+	 * @param BackgroundRunner|null $runner Background runner instance.
+	 * @return void
+	 * @since 1.7.1
+	 */
+	public function set_background_runner( ?BackgroundRunner $runner ): void {
+		$this->background_runner = $runner;
 	}
 
 	/**
@@ -266,10 +286,14 @@ class Service {
 	public function schedule_health_check( string $link_id ): void {
 		if ( null !== $this->scheduler ) {
 			try {
-				$this->scheduler->enqueue_job(
+				$target_id = $this->scheduler->enqueue_job(
 					'peakurl_link_health_check',
 					array( 'link_id' => $link_id )
 				);
+
+				if ( null !== $this->background_runner ) {
+					$this->background_runner->enqueue_targeted_job( $target_id );
+				}
 			} catch ( \Throwable $e ) {
 				// Background scheduling must never fail the link create/update request, but failure is observable.
 				error_log( sprintf( 'PeakURL link health scheduling failed for link [%s]: %s', $link_id, $e->getMessage() ) );
@@ -1873,11 +1897,7 @@ class Service {
 			return array();
 		}
 
-		static $site_url = null;
-
-		if ( null === $site_url ) {
-			$site_url = rtrim( \get_site_url(), '/' );
-		}
+		$site_url  = rtrim( \get_site_url(), '/' );
 		$alias     = trim( (string) ( $row['alias'] ?? '' ) );
 		$short_key = '' !== $alias
 			? $alias

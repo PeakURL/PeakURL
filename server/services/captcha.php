@@ -509,7 +509,7 @@ class Captcha {
 		);
 
 		$response = curl_exec( $handle );
-		curl_close( $handle );
+		unset( $handle );
 
 		return is_string( $response ) ? $response : '';
 	}

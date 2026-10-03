@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Database;
 
+use PeakURL\Core\Config\Constants;
 use PeakURL\Database\RepairSpecs;
 use PeakURL\Database\SchemaSpecs;
 use PeakURL\Utils\Date;
@@ -274,6 +275,36 @@ class Upgrade {
 
 		$table_name = $this->context->get_table_identifier( 'webhooks' );
 		$pdo        = $this->context->get_pdo();
+
+		$database_name = (string) ( $connection->get_config()[ Constants::DB_DATABASE ] ?? '' );
+		$wh_table_name = $this->context->get_table_name( 'webhooks' );
+		$id_length     = (int) $this->context->get_var(
+			'SELECT character_maximum_length
+			FROM information_schema.columns
+			WHERE table_schema = :table_schema
+			AND table_name = :table_name
+			AND column_name = \'id\'
+			LIMIT 1',
+			array(
+				'table_schema' => $database_name,
+				'table_name'   => $wh_table_name,
+			)
+		);
+
+		if ( $id_length > 0 && $id_length < 64 ) {
+			$wh_table  = $this->context->get_table_identifier( 'webhooks' );
+			$del_table = $this->context->get_table_identifier( 'webhook_deliveries' );
+
+			$pdo->exec( 'SET FOREIGN_KEY_CHECKS = 0' );
+			$pdo->exec( 'ALTER TABLE ' . $wh_table . ' MODIFY COLUMN ' . Sql::quote_identifier( 'id' ) . ' VARCHAR(64) NOT NULL' );
+			if ( $connection->table_exists( 'webhook_deliveries' ) ) {
+				$pdo->exec( 'ALTER TABLE ' . $del_table . ' MODIFY COLUMN ' . Sql::quote_identifier( 'id' ) . ' VARCHAR(64) NOT NULL' );
+				$pdo->exec( 'ALTER TABLE ' . $del_table . ' MODIFY COLUMN ' . Sql::quote_identifier( 'webhook_id' ) . ' VARCHAR(64) NOT NULL' );
+				$pdo->exec( 'ALTER TABLE ' . $del_table . ' MODIFY COLUMN ' . Sql::quote_identifier( 'event_id' ) . ' VARCHAR(64) NOT NULL DEFAULT \'\'' );
+			}
+			$pdo->exec( 'SET FOREIGN_KEY_CHECKS = 1' );
+			$changes[] = __( 'Widened webhook identifier columns to VARCHAR(64).', 'peakurl' );
+		}
 
 		$statement      = $pdo->query(
 			'SELECT id, url, label FROM ' . $table_name . " WHERE label IS NULL OR label = ''"

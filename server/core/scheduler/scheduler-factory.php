@@ -19,7 +19,7 @@ use PeakURL\Features\Auth\Jobs\SessionCleanupJob;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Links\Health\Checker;
 use PeakURL\Features\Links\Jobs\ExpiredLinksJob;
-use PeakURL\Features\Links\Jobs\ImportExportJob;
+use PeakURL\Features\Links\Jobs\ImportExportCleanupJob;
 use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\System\Jobs\CacheCleanupJob;
@@ -154,10 +154,10 @@ class SchedulerFactory {
 		// 8. Import/export scratch cleanup (Hourly).
 		$registry->register(
 			new JobDefinition(
-				'peakurl_import_export',
+				'peakurl_import_export_cleanup',
 				'Import & Export Scratch Cleanup',
 				3600,
-				new ImportExportJob( $config )
+				new ImportExportCleanupJob( $config )
 			)
 		);
 

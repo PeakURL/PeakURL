@@ -93,6 +93,7 @@ function createGeneralSettingsBody({
 	landingPageMode,
 	landingPageUrl,
 	trashRetentionDays,
+	analyticsRetentionDays,
 	faviconFile,
 	removeFavicon,
 	socialPreviewFile,
@@ -109,6 +110,7 @@ function createGeneralSettingsBody({
 			| "landingPageMode"
 			| "landingPageUrl"
 			| "trashRetentionDays"
+			| "analyticsRetentionDays"
 	  > {
 	if (
 		hasGeneralSettingsUpload({
@@ -120,6 +122,7 @@ function createGeneralSettingsBody({
 			landingPageMode,
 			landingPageUrl,
 			trashRetentionDays,
+			analyticsRetentionDays,
 			faviconFile,
 			removeFavicon,
 			socialPreviewFile,
@@ -138,6 +141,10 @@ function createGeneralSettingsBody({
 				trashRetentionDays !== undefined
 					? String(trashRetentionDays)
 					: undefined,
+			analyticsRetentionDays:
+				analyticsRetentionDays !== undefined
+					? String(analyticsRetentionDays)
+					: undefined,
 			favicon: faviconFile || undefined,
 			removeFavicon: removeFavicon ? "1" : "0",
 			socialPreviewImage: socialPreviewFile || undefined,
@@ -154,6 +161,7 @@ function createGeneralSettingsBody({
 		landingPageMode,
 		landingPageUrl,
 		trashRetentionDays,
+		analyticsRetentionDays,
 	};
 }
 

@@ -175,6 +175,10 @@ class Upgrade {
 				$this->repair_webhooks( $changes );
 			}
 
+			if ( 'cron_jobs' === $table_name ) {
+				$this->repair_cron_jobs( $changes );
+			}
+
 			$this->add_missing_indexes(
 				$table_name,
 				$index_specs[ $table_name ] ?? array(),
@@ -354,6 +358,35 @@ class Upgrade {
 			}
 
 			throw $exception;
+		}
+	}
+
+	/**
+	 * Repair cron_jobs table by purging obsolete scheduled background jobs.
+	 *
+	 * Purges the legacy 1.7.0 'peakurl_import_export' job identifier which was
+	 * superseded in 1.7.1 by 'peakurl_import_export_cleanup'.
+	 *
+	 * @param array<int, string> $changes Applied repair labels.
+	 * @return void
+	 * @since 1.7.1
+	 */
+	private function repair_cron_jobs( array &$changes ): void {
+		$connection = $this->context->get_connection();
+
+		if ( ! $connection->table_exists( 'cron_jobs' ) ) {
+			return;
+		}
+
+		$table_name = $this->context->get_table_identifier( 'cron_jobs' );
+		$pdo        = $this->context->get_pdo();
+
+		$deleted = $pdo->exec(
+			'DELETE FROM ' . $table_name . ' WHERE id = \'peakurl_import_export\''
+		);
+
+		if ( false !== $deleted && $deleted > 0 ) {
+			$changes[] = __( 'Removed obsolete peakurl_import_export background job.', 'peakurl' );
 		}
 	}
 

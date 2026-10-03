@@ -221,6 +221,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			landingPageMode: nextLandingPageMode,
 			landingPageUrl: nextLandingPageUrl,
 			trashRetentionDays: nextTrashRetentionDays,
+			analyticsRetentionDays: nextAnalyticsRetentionDays,
 			...profileForm
 		} = generalForm || {};
 		const currentSiteName = (
@@ -240,6 +241,8 @@ const Content = ({ activeTab }: ContentProps) => {
 			generalSettingsResponse?.data?.landingPageUrl || "";
 		const currentTrashRetentionDays =
 			generalSettingsResponse?.data?.trashRetentionDays ?? 30;
+		const currentAnalyticsRetentionDays =
+			generalSettingsResponse?.data?.analyticsRetentionDays ?? 0;
 		const saveProfile = hasProfileChanges(user, profileForm);
 		const saveSiteName =
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
@@ -270,6 +273,10 @@ const Content = ({ activeTab }: ContentProps) => {
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
 			nextTrashRetentionDays !== undefined &&
 			nextTrashRetentionDays !== currentTrashRetentionDays;
+		const saveAnalyticsRetention =
+			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
+			nextAnalyticsRetentionDays !== undefined &&
+			nextAnalyticsRetentionDays !== currentAnalyticsRetentionDays;
 		const saveGeneral =
 			saveSiteName ||
 			saveSiteTagline ||
@@ -279,6 +286,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			saveSocialPreview ||
 			saveLandingPage ||
 			saveTrashRetention ||
+			saveAnalyticsRetention ||
 			Boolean(faviconFile) ||
 			Boolean(removeFavicon);
 
@@ -313,6 +321,7 @@ const Content = ({ activeTab }: ContentProps) => {
 					landingPageMode: nextLandingPageMode,
 					landingPageUrl: nextLandingPageUrl,
 					trashRetentionDays: nextTrashRetentionDays,
+					analyticsRetentionDays: nextAnalyticsRetentionDays,
 				}).unwrap();
 
 				updatePeakURLData({

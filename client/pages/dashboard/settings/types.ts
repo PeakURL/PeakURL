@@ -99,6 +99,7 @@ export interface GeneralFormPayload extends GeneralFormState {
 	landingPageMode?: "login" | "url" | "html";
 	landingPageUrl?: string;
 	trashRetentionDays?: number;
+	analyticsRetentionDays?: number;
 }
 
 export interface ContentProps {

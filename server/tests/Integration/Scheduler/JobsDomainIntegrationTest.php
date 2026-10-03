@@ -28,15 +28,18 @@ use PeakURL\Features\Links\Health\Context as HealthContext;
 use PeakURL\Features\Links\Health\Probe as HealthProbe;
 use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Features\Links\Jobs\ExpiredLinksJob;
-use PeakURL\Features\Links\Jobs\ImportExportJob;
+use PeakURL\Features\Links\Jobs\ImportExportCleanupJob;
 use PeakURL\Features\Links\Jobs\LinkHealthCheckJob;
 use PeakURL\Features\Links\Repository as LinksRepository;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Validator as LinksValidator;
 use PeakURL\Features\System\Jobs\CacheCleanupJob;
+use PeakURL\Features\System\Jobs\GeoipUpdateJob;
+use PeakURL\Features\System\Jobs\VersionCheckJob;
 use PeakURL\Features\Webhooks\Jobs\WebhookDeliveryJob;
 use PeakURL\Features\Webhooks\Service as WebhooksService;
 use PeakURL\Features\Webhooks\Validator as WebhooksValidator;
+use PeakURL\Services\Cache\Drivers\FileCache;
 use PeakURL\Services\Cache\Drivers\NullCache;
 use PeakURL\Services\Captcha;
 use PeakURL\Services\Crypto;
@@ -46,6 +49,7 @@ use PeakURL\Services\Geoip;
 use PeakURL\Services\Notifications;
 use PeakURL\Services\SocialPreview;
 use PeakURL\Services\Totp;
+use PeakURL\Services\Update\Manager as UpdateManager;
 use PeakURL\Utils\Date;
 use PeakURL\Utils\Str;
 use PDO;
@@ -60,23 +64,25 @@ class JobsDomainIntegrationTest extends TestCase {
 	private LinksService $links_service;
 	private AnalyticsService $analytics_service;
 	private WebhooksService $webhooks_service;
+	private Geoip $geoip_service;
 	private string $table_prefix;
 
 	protected function setUp(): void {
 		parent::setUp();
 
-		$config             = Configuration::get_current();
-		$this->connection   = Connection::get_instance( $config );
-		$this->pdo          = $this->connection->get_connection();
-		$this->db           = new PeakURL_DB( $this->connection );
-		$this->table_prefix = $this->connection->get_table_prefix();
-		$this->settings_api = new SettingsApi( $this->db );
-		$crypto             = new Crypto( $config );
-		$geoip              = new Geoip( $config, $this->settings_api, $crypto );
-		$roles              = new Roles();
-		$authorization      = new Authorization( $roles );
-		$cache              = new NullCache();
-		$links_api          = new LinksApi( $this->db, $cache );
+		$config              = Configuration::get_current();
+		$this->connection    = Connection::get_instance( $config );
+		$this->pdo           = $this->connection->get_connection();
+		$this->db            = new PeakURL_DB( $this->connection );
+		$this->table_prefix  = $this->connection->get_table_prefix();
+		$this->settings_api  = new SettingsApi( $this->db );
+		$crypto              = new Crypto( $config );
+		$geoip               = new Geoip( $config, $this->settings_api, $crypto );
+		$this->geoip_service = $geoip;
+		$roles               = new Roles();
+		$authorization       = new Authorization( $roles );
+		$cache               = new NullCache();
+		$links_api           = new LinksApi( $this->db, $cache );
 
 		$this->auth_service = new AuthService(
 			$this->db,
@@ -306,29 +312,182 @@ class JobsDomainIntegrationTest extends TestCase {
 		$this->assertStringContainsString( 'no filesystem sweep required', (string) $result->get_summary() );
 	}
 
-	public function test_import_export_job_cleans_scratch_files_safely(): void {
-		$scratch_base = sys_get_temp_dir() . '/peakurl_test_content_' . bin2hex( random_bytes( 4 ) );
-		$export_dir   = $scratch_base . '/exports';
-		mkdir( $export_dir, 0777, true );
+	public function test_cache_cleanup_job_purges_expired_file_cache_and_preserves_active(): void {
+		$cache_base = sys_get_temp_dir() . '/peakurl_test_cache_' . bin2hex( random_bytes( 4 ) );
+		mkdir( $cache_base, 0777, true );
 
-		$stale_file = $export_dir . '/stale_export.csv';
-		file_put_contents( $stale_file, 'test,data' );
-		touch( $stale_file, time() - ( 48 * 3600 ) );
+		$file_cache = new FileCache( $cache_base, $cache_base );
+		$file_cache->set( 'active_key', 'active_value', 3600 );
 
-		$fresh_file = $export_dir . '/fresh_export.csv';
-		file_put_contents( $fresh_file, 'test,data' );
+		// Manually create an expired cache file.
+		$expired_file = $cache_base . '/expired_item.cache';
+		file_put_contents(
+			$expired_file,
+			peakurl_json_encode(
+				array(
+					'value'      => 'expired_value',
+					'expires_at' => time() - 3600,
+				)
+			)
+		);
 
-		$job     = new ImportExportJob( array( \PeakURL\Core\Config\Constants::CONTENT_DIR => $scratch_base ) );
-		$context = new ExecutionContext( 'peakurl_import_export', 'run_test_6', 1, false, Date::now() );
+		// Create protected security file.
+		$htaccess_file = $cache_base . '/.htaccess';
+		file_put_contents( $htaccess_file, 'Deny from all' );
+
+		$job     = new CacheCleanupJob( $file_cache );
+		$context = new ExecutionContext( 'peakurl_cache_cleanup', 'run_test_file_cache', 1, false, Date::now() );
 		$result  = $job->execute( $context );
 
 		$this->assertTrue( $result->is_success() );
-		$this->assertFileDoesNotExist( $stale_file );
-		$this->assertFileExists( $fresh_file );
+		$this->assertStringContainsString( 'expired file cache item', (string) $result->get_summary() );
+		$this->assertFileDoesNotExist( $expired_file );
+		$this->assertFileExists( $htaccess_file );
+		$this->assertSame( 'active_value', $file_cache->get( 'active_key' ) );
 
-		@unlink( $fresh_file );
+		// Clean up.
+		$file_cache->clear();
+		@unlink( $htaccess_file );
+		@rmdir( $cache_base );
+	}
+
+	public function test_import_export_cleanup_job_cleans_scratch_files_and_preserves_protected(): void {
+		$scratch_base = sys_get_temp_dir() . '/peakurl_test_content_' . bin2hex( random_bytes( 4 ) );
+		$export_dir   = $scratch_base . '/exports';
+		$tmp_dir      = $scratch_base . '/uploads/tmp';
+		mkdir( $export_dir, 0777, true );
+		mkdir( $tmp_dir, 0777, true );
+
+		$stale_export = $export_dir . '/stale_export.csv';
+		file_put_contents( $stale_export, 'test,data' );
+		touch( $stale_export, time() - ( 48 * 3600 ) );
+
+		$fresh_export = $export_dir . '/fresh_export.csv';
+		file_put_contents( $fresh_export, 'test,data' );
+
+		$stale_upload = $tmp_dir . '/stale_chunk.tmp';
+		file_put_contents( $stale_upload, 'chunk,bytes' );
+		touch( $stale_upload, time() - ( 30 * 3600 ) );
+
+		$htaccess_file = $export_dir . '/.htaccess';
+		file_put_contents( $htaccess_file, 'Deny from all' );
+
+		$index_file = $tmp_dir . '/index.html';
+		file_put_contents( $index_file, '' );
+
+		$job     = new ImportExportCleanupJob( array( \PeakURL\Core\Config\Constants::CONTENT_DIR => $scratch_base ) );
+		$context = new ExecutionContext( 'peakurl_import_export_cleanup', 'run_test_6', 1, false, Date::now() );
+		$result  = $job->execute( $context );
+
+		$this->assertTrue( $result->is_success() );
+		$this->assertSame( 2, (int) ( $result->get_metadata()['cleanedFiles'] ?? 0 ) );
+		$this->assertFileDoesNotExist( $stale_export );
+		$this->assertFileDoesNotExist( $stale_upload );
+		$this->assertFileExists( $fresh_export );
+		$this->assertFileExists( $htaccess_file );
+		$this->assertFileExists( $index_file );
+
+		@unlink( $fresh_export );
+		@unlink( $htaccess_file );
+		@unlink( $index_file );
 		@rmdir( $export_dir );
+		@rmdir( $tmp_dir );
+		@rmdir( $scratch_base . '/uploads' );
 		@rmdir( $scratch_base );
+	}
+
+	public function test_analytics_retention_job_preserves_clicks_by_default_indefinite(): void {
+		$old_time   = gmdate( 'Y-m-d H:i:s', time() - ( 40 * 86400 ) );
+		$now        = Date::now();
+		$active_id  = Str::random_id( 16 );
+		$active_cd  = 'ret_act_' . bin2hex( random_bytes( 4 ) );
+		$trashed_id = Str::random_id( 16 );
+		$trashed_cd = 'ret_trsh_' . bin2hex( random_bytes( 4 ) );
+
+		// Insert active link.
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}urls (id, user_id, short_code, alias, title, destination_url, status, created_at, updated_at)
+			VALUES ('{$active_id}', 1, '{$active_cd}', '{$active_cd}', 'Active Link', 'https://example.com', 'active', '{$old_time}', '{$old_time}')"
+		);
+
+		// Insert trashed link older than 30-day retention default.
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}urls (id, user_id, short_code, alias, title, destination_url, status, created_at, updated_at)
+			VALUES ('{$trashed_id}', 1, '{$trashed_cd}', '{$trashed_cd}', 'Retention Default Test', 'https://example.com', 'trashed', '{$old_time}', '{$old_time}')"
+		);
+
+		// Insert old click associated with active link.
+		$click_id = 'clk_test_' . bin2hex( random_bytes( 8 ) );
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}clicks (id, url_id, clicked_at)
+			VALUES ('{$click_id}', '{$active_id}', '{$old_time}')"
+		);
+
+		// Ensure analytics_retention_days is not configured (0 = default indefinite).
+		$this->settings_api->delete_options( array( 'analytics_retention_days' ) );
+
+		$job     = new AnalyticsRetentionJob( $this->db, $this->settings_api, $this->links_service, $this->analytics_service );
+		$context = new ExecutionContext( 'peakurl_analytics_retention', 'run_test_def', 1, false, $now );
+		$result  = $job->execute( $context );
+
+		$this->assertTrue( $result->is_success() );
+
+		// Verify trashed link was purged because trash_retention_days defaults to 30.
+		$trash_row = $this->db->get_row_by( 'urls', array( 'id' => $trashed_id ), array( 'id' ) );
+		$this->assertNull( $trash_row );
+
+		// Verify active link remains intact.
+		$act_row = $this->db->get_row_by( 'urls', array( 'id' => $active_id ), array( 'id' ) );
+		$this->assertNotNull( $act_row );
+
+		// Verify old click was KEPT because analytics click retention is 0 (indefinite).
+		$clk_row = $this->db->get_row_by( 'clicks', array( 'id' => $click_id ), array( 'id' ) );
+		$this->assertNotNull( $clk_row );
+
+		// Clean up active link and click.
+		$this->pdo->exec( "DELETE FROM {$this->table_prefix}urls WHERE id = '{$active_id}'" );
+	}
+
+	public function test_version_check_job_fetches_and_persists_manifest(): void {
+		$mock_updater = $this->createMock( UpdateManager::class );
+		$mock_updater->expects( $this->once() )
+			->method( 'fetch_manifest' )
+			->willReturn(
+				array(
+					'version'      => '1.7.99',
+					'download_url' => 'https://example.com/peakurl-1.7.99.zip',
+				)
+			);
+
+		$job     = new VersionCheckJob( $this->settings_api, $mock_updater );
+		$context = new ExecutionContext( 'peakurl_version_check', 'run_test_vcheck', 1, false, Date::now() );
+		$result  = $job->execute( $context );
+
+		$this->assertTrue( $result->is_success() );
+		$this->assertStringContainsString( '1.7.99', (string) $result->get_summary() );
+
+		$cached_json = (string) $this->settings_api->get_option( 'update_last_result_json' );
+		$this->assertStringContainsString( '1.7.99', $cached_json );
+		$this->assertNotNull( $this->settings_api->get_option( 'update_last_checked_at' ) );
+		$this->assertNull( $this->settings_api->get_option( 'update_last_error' ) );
+
+		// Test failure handling preserves previous cached manifest.
+		$failing_updater = $this->createMock( UpdateManager::class );
+		$failing_updater->expects( $this->once() )
+			->method( 'fetch_manifest' )
+			->willThrowException( new \RuntimeException( 'Connection timed out' ) );
+
+		$fail_job    = new VersionCheckJob( $this->settings_api, $failing_updater );
+		$fail_result = $fail_job->execute( $context );
+
+		$this->assertTrue( $fail_result->is_failure() );
+		$this->assertStringContainsString( 'Connection timed out', (string) $fail_result->get_error() );
+		// Previous cached json is preserved!
+		$this->assertSame( $cached_json, (string) $this->settings_api->get_option( 'update_last_result_json' ) );
+		$this->assertSame( 'Connection timed out', (string) $this->settings_api->get_option( 'update_last_error' ) );
+
+		// Clean up.
+		$this->settings_api->delete_options( array( 'update_last_result_json', 'update_last_checked_at', 'update_last_error' ) );
 	}
 
 	public function test_link_health_check_job_evaluates_links_and_filters_ssrf(): void {

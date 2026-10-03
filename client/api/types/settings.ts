@@ -135,6 +135,9 @@ export interface SiteSettings {
 	/** Trash auto-delete retention period in days (0 for never). */
 	trashRetentionDays?: number;
 
+	/** Analytics click records retention period in days (0 for keep indefinitely). */
+	analyticsRetentionDays?: number;
+
 	/** Absolute path to the content directory. */
 	contentDirectory?: string;
 }

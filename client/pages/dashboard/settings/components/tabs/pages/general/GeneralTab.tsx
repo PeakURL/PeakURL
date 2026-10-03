@@ -78,6 +78,8 @@ function GeneralTab({
 	const [trashRetentionDays, setTrashRetentionDays] = useState<number>(
 		siteSettings?.trashRetentionDays ?? 30
 	);
+	const [analyticsRetentionDays, setAnalyticsRetentionDays] =
+		useState<number>(siteSettings?.analyticsRetentionDays ?? 0);
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 	const socialPreviewInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -106,7 +108,9 @@ function GeneralTab({
 		prevSiteSettings?.landingPageMode !== siteSettings?.landingPageMode ||
 		prevSiteSettings?.landingPageUrl !== siteSettings?.landingPageUrl ||
 		prevSiteSettings?.trashRetentionDays !==
-			siteSettings?.trashRetentionDays
+			siteSettings?.trashRetentionDays ||
+		prevSiteSettings?.analyticsRetentionDays !==
+			siteSettings?.analyticsRetentionDays
 	) {
 		setPrevSiteSettings(siteSettings);
 		setSiteLanguage(siteSettings?.siteLanguage || "en_US");
@@ -119,6 +123,7 @@ function GeneralTab({
 		setLandingPageMode(siteSettings?.landingPageMode || "html");
 		setLandingPageUrl(siteSettings?.landingPageUrl || "");
 		setTrashRetentionDays(siteSettings?.trashRetentionDays ?? 30);
+		setAnalyticsRetentionDays(siteSettings?.analyticsRetentionDays ?? 0);
 		setFaviconFile(null);
 		setRemoveFavicon(false);
 		setSocialPreviewFile(null);
@@ -147,6 +152,7 @@ function GeneralTab({
 			landingPageMode,
 			landingPageUrl,
 			trashRetentionDays,
+			analyticsRetentionDays,
 			socialPreviewFile,
 			removeSocialPreviewImage,
 			faviconFile,
@@ -188,7 +194,15 @@ function GeneralTab({
 		{ value: "30", label: __("30 days (Default)") },
 		{ value: "60", label: __("60 days") },
 		{ value: "90", label: __("90 days") },
-		{ value: "0", label: __("Never (Keep indefinitely)") },
+		{ value: "0", label: __("Indefinite") },
+	];
+	const analyticsRetentionOptions: SelectOption<string>[] = [
+		{ value: "0", label: __("Indefinite (Default)") },
+		{ value: "30", label: __("30 days") },
+		{ value: "60", label: __("60 days") },
+		{ value: "90", label: __("90 days") },
+		{ value: "180", label: __("180 days (6 months)") },
+		{ value: "365", label: __("365 days (1 year)") },
 	];
 	const landingPageModeOptions: SelectOption<"login" | "url" | "html">[] = [
 		{ value: "html", label: __("Default (Landing Page)") },
@@ -512,6 +526,28 @@ function GeneralTab({
 											isUpdating
 										}
 										ariaLabel={__("Trash retention period")}
+									/>
+								</div>
+								<div className="settings-general-field">
+									<label className="settings-section-label">
+										{__("Analytics Click Retention Period")}
+									</label>
+									<Select
+										value={String(analyticsRetentionDays)}
+										onChange={(val) =>
+											setAnalyticsRetentionDays(
+												Number(val)
+											)
+										}
+										options={analyticsRetentionOptions}
+										disabled={
+											isLoadingSiteSettings ||
+											!siteSettings?.canManageSiteSettings ||
+											isUpdating
+										}
+										ariaLabel={__(
+											"Analytics click retention period"
+										)}
 									/>
 								</div>
 							</div>

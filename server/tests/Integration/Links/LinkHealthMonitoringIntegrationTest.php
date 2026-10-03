@@ -1825,7 +1825,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		// 5. Worker completes primary execution -> releases lock and promotes :next to runnable.
 		$finish_now     = Date::now();
 		$run_id_primary = $repo->record_run_start( $primary_id, 1, $finish_now );
-		$repo->record_success( $primary_id, $run_id_primary, $lock_token, $now, $finish_now, 45, 'Primary check passed.' );
+		$repo->record_success( $primary_id, $run_id_primary, $lock_token, $now, $finish_now, 45, 'Primary check passed.', $finish_now );
 
 		$primary_after = $this->db->get_row_by( 'cron_jobs', array( 'id' => $primary_id ) );
 		$this->assertSame( 'success', $primary_after['status'] );
@@ -1881,7 +1881,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		// Primary finishes execution and releases its lock.
 		$finish_now     = Date::now();
 		$run_id_primary = $repo->record_run_start( $primary_id, 1, $finish_now );
-		$repo->record_success( $primary_id, $run_id_primary, $token_w1, $now, $finish_now, 40, 'Primary check passed.' );
+		$repo->record_success( $primary_id, $run_id_primary, $token_w1, $now, $finish_now, 40, 'Primary check passed.', $finish_now );
 
 		// :next is now runnable. Worker 2 claims :next.
 		$this->assertTrue( $repo->claim_job( $next_id, $token_w2, 300, false, $finish_now ), 'Worker 2 must be able to claim :next after primary completes.' );
@@ -1936,7 +1936,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		// 4. Primary completes cleanly on Connection 1 -> releases lock and promotes :next.
 		$finish_now     = Date::now();
 		$run_id_primary = $repo1->record_run_start( $primary_id, 1, $finish_now );
-		$repo1->record_success( $primary_id, $run_id_primary, $token_w1, $now_claim, $finish_now, 45, 'Primary success.' );
+		$repo1->record_success( $primary_id, $run_id_primary, $token_w1, $now_claim, $finish_now, 45, 'Primary success.', $finish_now );
 
 		// 5. Worker 2 on Connection 2 now successfully claims :next.
 		$this->assertTrue( $repo2->claim_job( $next_id, $token_w2, 300, false, $finish_now ), 'Worker 2 must be able to claim :next after primary completes.' );

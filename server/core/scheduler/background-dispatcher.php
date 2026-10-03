@@ -71,7 +71,7 @@ class BackgroundDispatcher {
 	/**
 	 * Check whether due background tasks exist and worker lock can be acquired.
 	 *
-	 * Performs a lightweight indexed check against cron_jobs and webhook_deliveries.
+	 * Performs lightweight indexed existence checks against cron_jobs and webhook_deliveries.
 	 * If work is due, atomically acquires the visit worker lock to ensure exactly
 	 * one background worker is started for the execution window.
 	 *

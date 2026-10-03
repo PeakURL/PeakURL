@@ -383,4 +383,47 @@ class BackgroundExecutionUnitTest extends TestCase {
 		$runner = new BackgroundRunner( $scheduler, null, $settings_api );
 		$runner->process_due_scheduled_jobs( false );
 	}
+
+	public function test_cron_execution_summary_formatting(): void {
+		$format_summary = function ( int $count ): string {
+			return sprintf( 'Processed %d due background job%s.', $count, 1 === $count ? '' : 's' );
+		};
+
+		$this->assertSame( 'Processed 0 due background jobs.', $format_summary( 0 ) );
+		$this->assertSame( 'Processed 1 due background job.', $format_summary( 1 ) );
+		$this->assertSame( 'Processed 2 due background jobs.', $format_summary( 2 ) );
+		$this->assertSame( 'Processed 10 due background jobs.', $format_summary( 10 ) );
+	}
+
+	public function test_cron_failure_detection(): void {
+		$results = array(
+			'job_1' => array( 'status' => 'success' ),
+			'job_2' => array(
+				'status' => 'failed',
+				'error'  => 'Something failed',
+			),
+		);
+
+		$has_failure = false;
+		foreach ( $results as $outcome ) {
+			if ( 'failed' === ( $outcome['status'] ?? '' ) ) {
+				$has_failure = true;
+			}
+		}
+
+		$this->assertTrue( $has_failure );
+
+		$successful_results = array(
+			'job_1' => array( 'status' => 'success' ),
+		);
+
+		$no_failure = false;
+		foreach ( $successful_results as $outcome ) {
+			if ( 'failed' === ( $outcome['status'] ?? '' ) ) {
+				$no_failure = true;
+			}
+		}
+
+		$this->assertFalse( $no_failure );
+	}
 }

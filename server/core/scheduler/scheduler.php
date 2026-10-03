@@ -165,7 +165,7 @@ class Scheduler {
 	}
 
 	/**
-	 * Run a specific job immediately by ID (for manual run-now and targeted CLI execution).
+	 * Run a specific job immediately by ID (for manual dashboard run-now and targeted execution).
 	 *
 	 * Validates the job ID against the registry, rejects unknown IDs safely,
 	 * respects exclusive process locking, and writes execution history.

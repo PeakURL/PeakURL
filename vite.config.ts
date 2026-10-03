@@ -33,7 +33,7 @@ const escapeRegexSegment = (value: string): string =>
 
 const fallbackProxyPattern = `^/(?!${excludedProxyPaths
 	.map((segment) => `${escapeRegexSegment(segment)}(?:/|$)`)
-	.join("|")})[a-z0-9-]+(?:\\+)?/?$`;
+	.join("|")})[a-z0-9._-]+(?:\\+)?/?$`;
 
 // https://vite.dev/config/
 export default defineConfig({

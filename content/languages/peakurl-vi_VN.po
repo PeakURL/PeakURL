@@ -6,10 +6,10 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-22 08:17+0000\n"
-"POT-Creation-Date: 2026-09-22 08:17+0000\n"
+"PO-Revision-Date: 2026-10-03 20:18+0000\n"
+"POT-Creation-Date: 2026-10-03 20:18+0000\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"Project-Id-Version: PeakURL 1.7.0\n"
+"Project-Id-Version: PeakURL 1.7.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
@@ -49,7 +49,7 @@ msgid "Site info"
 msgstr "Thông tin trang web"
 
 #: install.php:581
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:445
 msgid "Site title"
 msgstr "Tiêu đề trang web"
 
@@ -63,7 +63,7 @@ msgstr "Quản trị viên"
 
 #: install.php:589
 #: setup-config.php:803
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:362
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:376
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:175
 msgid "Username"
 msgstr "Tên người dùng"
@@ -88,7 +88,7 @@ msgstr "you@company.com"
 
 #: install.php:598
 #: setup-config.php:807
-#: server/features/links/controller.php:514
+#: server/features/links/controller.php:531
 #: client/pages/auth/login/LoginPage.tsx:253
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:29
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:195
@@ -122,7 +122,7 @@ msgid "Welcome - %s"
 msgstr "Chào mừng - %s"
 
 #: setup-config.php:641
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:463
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:477
 msgid "Site language"
 msgstr "Ngôn ngữ trang web"
 
@@ -257,11 +257,15 @@ msgstr "Đã xóa các lượt chạy cron mồ côi."
 msgid "Removed orphaned webhook deliveries."
 msgstr "Đã xóa các lượt gửi webhook mồ côi."
 
-#: server/core/application.php:327
+#: server/database/repair-specs.php:128
+msgid "Removed orphaned link health records."
+msgstr "Đã xóa các bản ghi tình trạng liên kết mồ côi."
+
+#: server/core/application.php:388
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "Đã xảy ra lỗi máy chủ nội bộ. Vui lòng thử lại hoặc liên hệ bộ phận hỗ trợ nếu sự cố vẫn tiếp diễn."
 
-#: server/core/application.php:470
+#: server/core/application.php:532
 #: server/services/install/screen.php:142
 msgid "Request origin is not allowed."
 msgstr "Nguồn gốc yêu cầu không được phép."
@@ -305,8 +309,8 @@ msgstr "Bạn không thể hạ cấp tài khoản quản trị viên duy nhất
 
 #: server/features/settings/validator.php:43
 #: server/features/settings/service.php:442
-#: server/features/settings/service.php:614
-#: server/features/links/service.php:1522
+#: server/features/settings/service.php:619
+#: server/features/links/service.php:1848
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:45
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "Rút gọn, theo dõi và làm chủ mọi liên kết - PeakURL"
@@ -384,7 +388,7 @@ msgstr "Đã gửi email thử nghiệm."
 msgid "Admin access is required."
 msgstr "Yêu cầu quyền truy cập quản trị viên."
 
-#: server/features/settings/service.php:712
+#: server/features/settings/service.php:717
 msgid "Save a complete mail configuration before sending a test email."
 msgstr "Lưu cấu hình thư hoàn chỉnh trước khi gửi email thử nghiệm."
 
@@ -521,110 +525,110 @@ msgstr "Đã thu hồi các phiên khác."
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "Xác thực CAPTCHA thất bại. Vui lòng thử lại."
 
-#: server/features/auth/service.php:298
+#: server/features/auth/service.php:318
 msgid "User account could not be loaded."
 msgstr "Không thể tải tài khoản người dùng."
 
-#: server/features/auth/service.php:314
+#: server/features/auth/service.php:334
 msgid "Current password is incorrect."
 msgstr "Mật khẩu hiện tại không chính xác."
 
-#: server/features/auth/service.php:334
+#: server/features/auth/service.php:354
 msgid "Two-factor authentication is not enabled for this account."
 msgstr "Xác thực hai yếu tố chưa được bật cho tài khoản này."
 
-#: server/features/auth/service.php:385
-#: server/features/users/service.php:333
+#: server/features/auth/service.php:405
+#: server/features/users/service.php:355
 msgid "Email address is already registered."
 msgstr "Địa chỉ email đã được đăng ký."
 
-#: server/features/auth/service.php:391
-#: server/features/users/service.php:339
-#: server/features/users/service.php:432
+#: server/features/auth/service.php:411
+#: server/features/users/service.php:361
+#: server/features/users/service.php:456
 msgid "Username is already taken."
 msgstr "Tên người dùng đã được sử dụng."
 
-#: server/features/auth/service.php:438
+#: server/features/auth/service.php:462
 msgid "Invalid verification token."
 msgstr "Mã xác minh không hợp lệ."
 
-#: server/features/auth/service.php:455
+#: server/features/auth/service.php:479
 msgid "Verification token is invalid or has expired."
 msgstr "Mã xác minh không hợp lệ hoặc đã hết hạn."
 
-#: server/features/auth/service.php:495
+#: server/features/auth/service.php:519
 msgid "Email address is required."
 msgstr "Địa chỉ email là bắt buộc."
 
-#: server/features/auth/service.php:542
+#: server/features/auth/service.php:566
 msgid "Email or username and password are required."
 msgstr "Yêu cầu cung cấp email hoặc tên người dùng cùng mật khẩu."
 
-#: server/features/auth/service.php:564
+#: server/features/auth/service.php:588
 msgid "Invalid email, username, or password."
 msgstr "Email, tên người dùng hoặc mật khẩu không hợp lệ."
 
-#: server/features/auth/service.php:586
+#: server/features/auth/service.php:610
 msgid "Invalid two-factor code."
 msgstr "Mã xác thực hai yếu tố không hợp lệ."
 
-#: server/features/auth/service.php:631
+#: server/features/auth/service.php:655
 msgid "Two-factor authentication code is required."
 msgstr "Mã xác thực hai yếu tố là bắt buộc."
 
-#: server/features/auth/service.php:753
+#: server/features/auth/service.php:777
 msgid "Password reset token is invalid or has expired."
 msgstr "Mã đặt lại mật khẩu không hợp lệ hoặc đã hết hạn."
 
-#: server/features/auth/service.php:832
-#: server/features/auth/service.php:854
+#: server/features/auth/service.php:856
+#: server/features/auth/service.php:894
 msgid "You do not have permission to manage API keys."
 msgstr "Bạn không có quyền quản lý khóa API."
 
-#: server/features/auth/service.php:872
-#: server/features/auth/service.php:910
-#: server/features/auth/service.php:954
-#: server/features/auth/service.php:1024
-#: server/features/auth/service.php:1066
-#: server/features/auth/service.php:1095
-#: server/features/auth/service.php:1121
+#: server/features/auth/service.php:931
+#: server/features/auth/service.php:969
+#: server/features/auth/service.php:1013
+#: server/features/auth/service.php:1083
+#: server/features/auth/service.php:1125
 #: server/features/auth/service.php:1154
+#: server/features/auth/service.php:1180
+#: server/features/auth/service.php:1213
 msgid "You do not have permission to manage account security."
 msgstr "Bạn không có quyền quản lý bảo mật tài khoản."
 
-#: server/features/auth/service.php:959
+#: server/features/auth/service.php:1018
 msgid "Verification token is required."
 msgstr "Mã token xác thực là bắt buộc."
 
-#: server/features/auth/service.php:969
+#: server/features/auth/service.php:1028
 msgid "No two-factor setup is pending for this account."
 msgstr "Không có thiết lập xác thực hai yếu tố nào đang chờ xử lý cho tài khoản này."
 
-#: server/features/auth/service.php:975
+#: server/features/auth/service.php:1034
 msgid "Invalid verification code."
 msgstr "Mã xác thực không hợp lệ."
 
-#: server/features/auth/service.php:1030
+#: server/features/auth/service.php:1089
 msgid "Current password is required to disable two-factor authentication."
 msgstr "Cần có mật khẩu hiện tại để tắt xác thực hai yếu tố."
 
-#: server/features/auth/service.php:1072
+#: server/features/auth/service.php:1131
 msgid "Current password is required to regenerate backup codes."
 msgstr "Cần có mật khẩu hiện tại để tạo lại mã dự phòng."
 
-#: server/features/auth/service.php:1101
+#: server/features/auth/service.php:1160
 msgid "Current password is required to download backup codes."
 msgstr "Cần có mật khẩu hiện tại để tải xuống mã dự phòng."
 
-#: server/features/auth/service.php:1161
+#: server/features/auth/service.php:1220
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL không thể xác định phiên hiện tại."
 
-#: server/features/auth/service.php:1218
+#: server/features/auth/service.php:1277
 msgid "Authentication required."
 msgstr "Yêu cầu xác thực."
 
-#: server/features/auth/service.php:1238
+#: server/features/auth/service.php:1297
 msgid "Administrator privileges required."
 msgstr "Yêu cầu đặc quyền quản trị viên."
 
@@ -709,13 +713,13 @@ msgstr "PeakURL không thể tải tệp kê khai cập nhật."
 #: server/features/system/service.php:680
 #: server/features/system/service.php:724
 #: server/features/system/service.php:768
-#: server/features/system/service.php:869
+#: server/features/system/service.php:884
 msgid "Scheduler service is not configured."
 msgstr "Dịch vụ bộ lên lịch chưa được định cấu hình."
 
 #: server/features/system/service.php:644
 #: server/features/system/service.php:791
-#: server/features/system/service.php:892
+#: server/features/system/service.php:907
 msgid "Unknown background job identifier: %s"
 msgstr "Định danh tác vụ nền không xác định: %s"
 
@@ -728,7 +732,7 @@ msgid "Retention days must be a non-negative integer."
 msgstr "Số ngày lưu giữ phải là số nguyên không âm."
 
 #: server/features/system/service.php:782
-#: server/features/system/service.php:883
+#: server/features/system/service.php:898
 msgid "Missing background job identifier."
 msgstr "Thiếu định danh tác vụ nền."
 
@@ -744,24 +748,44 @@ msgstr "Khoảng thời gian lặp lại phải là số nguyên ít nhất 300 
 msgid "Preferred time must be in 24-hour format (HH:MM)."
 msgstr "Thời gian ưu tiên phải ở định dạng 24 giờ (HH:MM)."
 
+#: server/features/system/service.php:845
+msgid "Retention days must be null or a non-negative integer."
+msgstr "Số ngày lưu giữ phải là null hoặc một số nguyên không âm."
+
 #: server/features/links/validator.php:45
 msgid "A valid destination URL is required."
 msgstr "Yêu cầu URL đích hợp lệ."
 
 #: server/features/links/validator.php:96
+msgid "A short code or alias cannot be empty."
+msgstr "Mã rút gọn hoặc bí danh không được để trống."
+
+#: server/features/links/validator.php:103
+msgid "Aliases must begin and end with a letter or number."
+msgstr "Bí danh phải bắt đầu và kết thúc bằng một chữ cái hoặc số."
+
+#: server/features/links/validator.php:110
+msgid "Aliases cannot end with executable script extensions."
+msgstr "Bí danh không được kết thúc bằng phần mở rộng tệp tập lệnh thực thi."
+
+#: server/features/links/validator.php:117
+msgid "That short code is reserved by an existing system file."
+msgstr "Mã rút gọn đó đã được bảo lưu bởi một tệp hệ thống hiện có."
+
+#: server/features/links/validator.php:124
 msgid "That short code is reserved by the application."
 msgstr "Mã rút gọn đó đã được ứng dụng dành riêng."
 
-#: server/features/links/validator.php:106
+#: server/features/links/validator.php:134
 msgid "That short code is already in use."
 msgstr "Mã rút gọn đó đã được sử dụng."
 
-#: server/features/links/validator.php:156
+#: server/features/links/validator.php:184
 msgid "PeakURL could not hash the protected-link password."
 msgstr "PeakURL không thể băm mật khẩu của liên kết được bảo vệ."
 
-#: server/features/links/validator.php:225
-#: server/features/links/validator.php:229
+#: server/features/links/validator.php:253
+#: server/features/links/validator.php:257
 msgid "Invalid date value provided."
 msgstr "Giá trị ngày được cung cấp không hợp lệ."
 
@@ -804,196 +828,351 @@ msgstr "Đã xóa URL."
 msgid "Link restored successfully."
 msgstr "Đã khôi phục liên kết thành công."
 
-#: server/features/links/controller.php:291
+#: server/features/links/controller.php:285
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:141
+msgid "Health check completed."
+msgstr "Kiểm tra tình trạng đã hoàn tất."
+
+#: server/features/links/controller.php:308
 msgid "Bulk delete complete."
 msgstr "Hoàn tất xóa hàng loạt."
 
-#: server/features/links/controller.php:312
+#: server/features/links/controller.php:329
 msgid "Bulk restore complete."
 msgstr "Khôi phục hàng loạt hoàn tất."
 
-#: server/features/links/controller.php:330
+#: server/features/links/controller.php:347
 msgid "Trash emptied successfully."
 msgstr "Đã dọn sạch thùng rác thành công."
 
-#: server/features/links/controller.php:353
+#: server/features/links/controller.php:370
 msgid "All links moved to trash."
 msgstr "Tất cả liên kết đã được chuyển vào thùng rác."
 
-#: server/features/links/controller.php:354
+#: server/features/links/controller.php:371
 msgid "All links deleted."
 msgstr "Đã xóa tất cả liên kết."
 
-#: server/features/links/controller.php:452
+#: server/features/links/controller.php:469
 msgid "This link has expired"
 msgstr "Liên kết này đã hết hạn"
 
-#: server/features/links/controller.php:453
+#: server/features/links/controller.php:470
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "Liên kết rút gọn bạn yêu cầu không còn hoạt động vì đã quá ngày hết hạn."
 
-#: server/features/links/controller.php:463
+#: server/features/links/controller.php:480
 msgid "This link is unavailable"
 msgstr "Liên kết này không khả dụng"
 
-#: server/features/links/controller.php:464
+#: server/features/links/controller.php:481
 msgid "The short link you requested is not available right now."
 msgstr "Liên kết rút gọn bạn yêu cầu hiện không khả dụng."
 
-#: server/features/links/controller.php:509
+#: server/features/links/controller.php:526
 msgid "Password required"
 msgstr "Yêu cầu mật khẩu"
 
-#: server/features/links/controller.php:510
+#: server/features/links/controller.php:527
 msgid "This link is protected. Enter the password to continue."
 msgstr "Liên kết này được bảo vệ. Hãy nhập mật khẩu để tiếp tục."
 
-#: server/features/links/controller.php:517
+#: server/features/links/controller.php:534
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Nhập mật khẩu"
 
-#: server/features/links/controller.php:521
+#: server/features/links/controller.php:538
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Tiếp tục"
 
-#: server/features/links/controller.php:526
+#: server/features/links/controller.php:543
 msgid "Protected Link"
 msgstr "Liên kết được bảo vệ"
 
-#: server/features/links/controller.php:573
+#: server/features/links/controller.php:590
 msgid "Performing security verification"
 msgstr "Đang thực hiện xác thực bảo mật"
 
-#: server/features/links/controller.php:574
+#: server/features/links/controller.php:591
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr "Trang web này sử dụng dịch vụ bảo mật để bảo vệ chống lại các bot độc hại. Trang này hiển thị trong khi PeakURL xác minh bạn không phải là bot."
 
-#: server/features/links/controller.php:578
+#: server/features/links/controller.php:595
 msgid "JavaScript is required to complete this verification."
 msgstr "Cần có JavaScript để hoàn tất quá trình xác thực này."
 
-#: server/features/links/controller.php:581
+#: server/features/links/controller.php:598
 msgid "Security Verification"
 msgstr "Xác thực bảo mật"
 
-#: server/features/links/controller.php:678
-#: server/features/links/controller.php:839
+#: server/features/links/controller.php:695
+#: server/features/links/controller.php:856
 msgid "Waiting for verification…"
 msgstr "Đang chờ xác thực…"
 
-#: server/features/links/controller.php:681
+#: server/features/links/controller.php:698
 msgid "Checking verification…"
 msgstr "Đang kiểm tra xác thực…"
 
-#: server/features/links/controller.php:684
+#: server/features/links/controller.php:701
 msgid "Starting verification…"
 msgstr "Đang bắt đầu xác thực…"
 
-#: server/features/links/controller.php:687
+#: server/features/links/controller.php:704
 msgid "Verification expired. Please try again."
 msgstr "Xác thực đã hết hạn. Vui lòng thử lại."
 
-#: server/features/links/controller.php:690
+#: server/features/links/controller.php:707
 msgid "Verification could not be completed. Please try again."
 msgstr "Không thể hoàn tất xác thực. Vui lòng thử lại."
 
-#: server/features/links/controller.php:844
+#: server/features/links/controller.php:861
 msgid "Try again"
 msgstr "Thử lại"
 
-#: server/features/links/service.php:329
+#: server/features/links/service.php:436
 msgid "You do not have permission to view this link."
 msgstr "Bạn không có quyền xem liên kết này."
 
-#: server/features/links/service.php:437
-msgid "Enter the password to open this link."
-msgstr "Nhập mật khẩu để mở liên kết này."
-
-#: server/features/links/service.php:463
-msgid "The password for this link is incorrect."
-msgstr "Mật khẩu cho liên kết này không chính xác."
-
-#: server/features/links/service.php:498
-#: server/features/links/service.php:601
-msgid "You do not have permission to create links."
-msgstr "Bạn không có quyền tạo liên kết."
-
-#: server/features/links/service.php:516
-#: server/features/links/service.php:769
-msgid "Provide either socialImage or socialImageUrl, not both."
-msgstr "Vui lòng chỉ cung cấp socialImage hoặc socialImageUrl, không cung cấp cả hai."
-
-#: server/features/links/service.php:606
-msgid "The `urls` field is required and must be an array."
-msgstr "Trường `urls` là bắt buộc và phải là một mảng."
-
-#: server/features/links/service.php:619
-msgid "Invalid URL item payload."
-msgstr "Dữ liệu mục URL không hợp lệ."
-
-#: server/features/links/service.php:670
-msgid "You do not have permission to edit links."
-msgstr "Bạn không có quyền chỉnh sửa liên kết."
-
-#: server/features/links/service.php:681
-msgid "You do not have permission to edit this link."
-msgstr "Bạn không có quyền chỉnh sửa liên kết này."
-
-#: server/features/links/service.php:943
-#: server/features/links/service.php:1111
-#: server/features/links/service.php:1155
-#: server/features/links/service.php:1388
-msgid "You do not have permission to permanently delete links."
-msgstr "Bạn không có quyền xóa vĩnh viễn liên kết."
-
-#: server/features/links/service.php:949
-#: server/features/links/service.php:1117
-#: server/features/links/service.php:1394
-msgid "You do not have permission to delete links."
-msgstr "Bạn không có quyền xóa các liên kết."
-
-#: server/features/links/service.php:954
-msgid "You do not have permission to move this link to trash."
-msgstr "Bạn không có quyền chuyển liên kết này vào thùng rác."
-
-#: server/features/links/service.php:1035
+#: server/features/links/service.php:518
+#: server/features/links/service.php:1355
 msgid "That short link does not exist."
 msgstr "Liên kết rút gọn đó không tồn tại."
 
-#: server/features/links/service.php:1042
+#: server/features/links/service.php:526
+msgid "You do not have permission to check link health."
+msgstr "Bạn không có quyền kiểm tra tình trạng liên kết."
+
+#: server/features/links/service.php:536
+msgid "That short link does not exist or is no longer active."
+msgstr "Liên kết rút gọn đó không tồn tại hoặc không còn hoạt động."
+
+#: server/features/links/service.php:544
+msgid "The link destination changed while the health check was running."
+msgstr "Đích của liên kết đã thay đổi trong khi quá trình kiểm tra tình trạng đang chạy."
+
+#: server/features/links/service.php:555
+#: server/features/links/service.php:581
+msgid "Could not record link health snapshot."
+msgstr "Không thể ghi lại ảnh chụp nhanh tình trạng liên kết."
+
+#: server/features/links/service.php:704
+msgid "Enter the password to open this link."
+msgstr "Nhập mật khẩu để mở liên kết này."
+
+#: server/features/links/service.php:730
+msgid "The password for this link is incorrect."
+msgstr "Mật khẩu cho liên kết này không chính xác."
+
+#: server/features/links/service.php:765
+#: server/features/links/service.php:880
+msgid "You do not have permission to create links."
+msgstr "Bạn không có quyền tạo liên kết."
+
+#: server/features/links/service.php:789
+#: server/features/links/service.php:1059
+msgid "Provide either socialImage or socialImageUrl, not both."
+msgstr "Vui lòng chỉ cung cấp socialImage hoặc socialImageUrl, không cung cấp cả hai."
+
+#: server/features/links/service.php:885
+msgid "The `urls` field is required and must be an array."
+msgstr "Trường `urls` là bắt buộc và phải là một mảng."
+
+#: server/features/links/service.php:898
+msgid "Invalid URL item payload."
+msgstr "Dữ liệu mục URL không hợp lệ."
+
+#: server/features/links/service.php:949
+msgid "You do not have permission to edit links."
+msgstr "Bạn không có quyền chỉnh sửa liên kết."
+
+#: server/features/links/service.php:960
+msgid "You do not have permission to edit this link."
+msgstr "Bạn không có quyền chỉnh sửa liên kết này."
+
+#: server/features/links/service.php:1263
+#: server/features/links/service.php:1434
+#: server/features/links/service.php:1478
+#: server/features/links/service.php:1714
+msgid "You do not have permission to permanently delete links."
+msgstr "Bạn không có quyền xóa vĩnh viễn liên kết."
+
+#: server/features/links/service.php:1269
+#: server/features/links/service.php:1440
+#: server/features/links/service.php:1720
+msgid "You do not have permission to delete links."
+msgstr "Bạn không có quyền xóa các liên kết."
+
+#: server/features/links/service.php:1274
+msgid "You do not have permission to move this link to trash."
+msgstr "Bạn không có quyền chuyển liên kết này vào thùng rác."
+
+#: server/features/links/service.php:1362
 msgid "This link is already active."
 msgstr "Liên kết này đã hoạt động."
 
-#: server/features/links/service.php:1050
-#: server/features/links/service.php:1059
+#: server/features/links/service.php:1370
+#: server/features/links/service.php:1379
 msgid "You do not have permission to restore this link."
 msgstr "Bạn không có quyền khôi phục liên kết này."
 
-#: server/features/links/service.php:1248
+#: server/features/links/service.php:1571
 msgid "You do not have permission to restore links."
 msgstr "Bạn không có quyền khôi phục liên kết."
 
-#: server/features/links/service.php:1318
+#: server/features/links/service.php:1644
 msgid "You do not have permission to empty trash."
 msgstr "Bạn không có quyền dọn sạch thùng rác."
 
-#: server/features/links/service.php:1379
+#: server/features/links/service.php:1705
 msgid "Invalid delete mode."
 msgstr "Chế độ xóa không hợp lệ."
 
-#: server/features/links/service.php:1831
+#: server/features/links/service.php:2171
 msgid "Complete the verification to open this link."
 msgstr "Hoàn tất xác thực để mở liên kết này."
 
-#: server/features/links/service.php:1846
+#: server/features/links/service.php:2186
 msgid "Verification failed. Please try again."
 msgstr "Xác thực thất bại. Vui lòng thử lại."
+
+#: server/features/links/health/checker.php:185
+msgid "Empty destination URL."
+msgstr "URL đích trống."
+
+#: server/features/links/health/checker.php:207
+#: server/features/links/health/checker.php:302
+#: server/features/links/health/checker.php:339
+msgid "Request timed out."
+msgstr "Yêu cầu đã hết thời gian chờ."
+
+#: server/features/links/health/checker.php:219
+msgid "Malformed destination URL."
+msgstr "URL đích không đúng định dạng."
+
+#: server/features/links/health/checker.php:230
+#: server/features/links/health/checker.php:241
+#: server/features/links/health/checker.php:263
+#: server/features/links/health/checker.php:274
+msgid "Destination rejected by SSRF protection."
+msgstr "Đích bị từ chối bởi tính năng bảo vệ SSRF."
+
+#: server/features/links/health/checker.php:283
+msgid "Could not resolve host."
+msgstr "Không thể phân giải máy chủ."
+
+#: server/features/links/health/checker.php:392
+#: server/features/links/health/checker.php:552
+msgid "Destination is unreachable."
+msgstr "Đích không thể truy cập."
+
+#: server/features/links/health/checker.php:428
+msgid "Exceeded maximum redirect limit (%d hops)."
+msgstr "Đã vượt quá giới hạn chuyển hướng tối đa (%d bước chuyển)."
+
+#: server/features/links/health/checker.php:444
+msgid "Unsupported redirect scheme or invalid redirect location."
+msgstr "Giao thức chuyển hướng không được hỗ trợ hoặc vị trí chuyển hướng không hợp lệ."
+
+#: server/features/links/health/checker.php:458
+#: server/features/links/health/checker.php:547
+msgid "Redirect loop detected."
+msgstr "Phát hiện vòng lặp chuyển hướng."
+
+#: server/features/links/health/checker.php:491
+msgid "HTTP status %d"
+msgstr "Trạng thái HTTP %d"
+
+#: server/features/links/health/checker.php:541
+msgid "DNS resolution failed."
+msgstr "Phân giải DNS thất bại."
+
+#: server/features/links/health/checker.php:543
+msgid "TLS/SSL certificate verification failed."
+msgstr "Xác minh chứng chỉ TLS/SSL thất bại."
+
+#: server/features/links/health/checker.php:545
+msgid "Connection timed out."
+msgstr "Kết nối đã hết thời gian chờ."
+
+#: server/features/links/health/checker.php:549
+msgid "Blocked by SSRF filter."
+msgstr "Bị chặn bởi bộ lọc SSRF."
+
+#: server/features/links/health/probe.php:238
+msgid "Failed to initialize cURL."
+msgstr "Không thể khởi tạo cURL."
+
+#: server/features/links/health/probe.php:284
+msgid "Failed to configure transport options."
+msgstr "Không thể định cấu hình tùy chọn truyền tải."
 
 #: server/features/links/creator.php:226
 msgid "Failed to create link record."
 msgstr "Không thể tạo bản ghi liên kết."
+
+#: server/features/links/jobs/link-health-check.php:174
+msgid "Failed to record health snapshots for all %d checked links."
+msgstr "Không thể ghi lại ảnh chụp nhanh tình trạng cho tất cả %d liên kết đã kiểm tra."
+
+#: server/features/links/jobs/link-health-check.php:183
+msgid "Health check completed for %1$d link: %2$s."
+msgstr "Kiểm tra tình trạng hoàn tất cho %1$d liên kết: %2$s."
+
+#: server/features/links/jobs/link-health-check.php:189
+msgid "Health check completed for %1$d links: %2$s."
+msgstr "Kiểm tra tình trạng hoàn tất cho %1$d liên kết: %2$s."
+
+#: server/features/links/jobs/link-health-check.php:197
+msgid "(%d persistence failures)"
+msgstr "(%d lỗi lưu trữ)"
+
+#: server/features/links/jobs/link-health-check.php:233
+msgid "%d healthy"
+msgstr "%d hoạt động tốt"
+
+#: server/features/links/jobs/link-health-check.php:241
+msgid "%d slow"
+msgstr "%d chậm"
+
+#: server/features/links/jobs/link-health-check.php:281
+msgid "%d unreachable"
+msgstr "%d không thể truy cập"
+
+#: server/features/links/jobs/link-health-check.php:297
+msgid "%d blocked"
+msgstr "%d bị chặn"
+
+#: server/features/links/jobs/link-health-check.php:303
+msgid "0 checked"
+msgstr "0 đã kiểm tra"
+
+#: server/features/links/jobs/link-health-check.php:249
+msgid "%d HTTP error"
+msgid_plural "%d HTTP errors"
+msgstr[0] "%d lỗi HTTP"
+
+#: server/features/links/jobs/link-health-check.php:257
+msgid "%d DNS error"
+msgid_plural "%d DNS errors"
+msgstr[0] "%d lỗi DNS"
+
+#: server/features/links/jobs/link-health-check.php:265
+msgid "%d TLS error"
+msgid_plural "%d TLS errors"
+msgstr[0] "%d lỗi TLS"
+
+#: server/features/links/jobs/link-health-check.php:273
+msgid "%d timeout"
+msgid_plural "%d timeouts"
+msgstr[0] "%d lần hết thời gian"
+
+#: server/features/links/jobs/link-health-check.php:289
+msgid "%d redirect loop"
+msgid_plural "%d redirect loops"
+msgstr[0] "%d vòng lặp chuyển hướng"
 
 #: server/features/users/controller.php:64
 msgid "Users loaded."
@@ -1024,42 +1203,262 @@ msgstr "Đã cập nhật người dùng."
 msgid "User deleted."
 msgstr "Đã xóa người dùng."
 
-#: server/features/users/service.php:187
+#: server/features/users/service.php:199
 msgid "You do not have permission to update this profile."
 msgstr "Bạn không có quyền cập nhật hồ sơ này."
 
-#: server/features/users/service.php:197
+#: server/features/users/service.php:209
 msgid "Username cannot be changed."
 msgstr "Không thể thay đổi tên người dùng."
 
-#: server/features/users/service.php:228
-#: server/features/users/service.php:446
+#: server/features/users/service.php:240
+#: server/features/users/service.php:470
 msgid "Email address is already in use."
 msgstr "Địa chỉ email này đã được sử dụng."
 
-#: server/features/users/service.php:247
+#: server/features/users/service.php:259
 msgid "Current password is required to change your password."
 msgstr "Cần có mật khẩu hiện tại để thay đổi mật khẩu."
 
-#: server/features/users/service.php:328
+#: server/features/users/service.php:350
 msgid "First and last name are required."
 msgstr "Tên và họ là bắt buộc."
 
-#: server/features/users/service.php:534
+#: server/features/users/service.php:564
 msgid "You cannot delete the current user."
 msgstr "Bạn không thể xóa người dùng hiện tại."
 
-#: server/features/webhooks/validator.php:55
+#: server/features/webhooks/validator.php:50
+msgid "Link Created"
+msgstr "Đã tạo liên kết"
+
+#: server/features/webhooks/validator.php:51
+msgid "Triggered when a new short link is created."
+msgstr "Được kích hoạt khi một liên kết rút gọn mới được tạo."
+
+#: server/features/webhooks/validator.php:56
+msgid "Link Updated"
+msgstr "Đã cập nhật liên kết"
+
+#: server/features/webhooks/validator.php:57
+msgid "Triggered when an existing link is modified."
+msgstr "Được kích hoạt khi một liên kết hiện có được sửa đổi."
+
+#: server/features/webhooks/validator.php:62
+msgid "Link Clicked"
+msgstr "Liên kết đã được nhấp"
+
+#: server/features/webhooks/validator.php:63
+msgid "Triggered when a link redirect is accessed."
+msgstr "Được kích hoạt khi một chuyển hướng liên kết được truy cập."
+
+#: server/features/webhooks/validator.php:68
+msgid "Link Deleted"
+msgstr "Đã xóa liên kết"
+
+#: server/features/webhooks/validator.php:69
+msgid "Triggered when a link is trashed or permanently deleted."
+msgstr "Được kích hoạt khi một liên kết bị chuyển vào thùng rác hoặc xóa vĩnh viễn."
+
+#: server/features/webhooks/validator.php:74
+msgid "Link Restored"
+msgstr "Đã khôi phục liên kết"
+
+#: server/features/webhooks/validator.php:75
+msgid "Triggered when a trashed link is restored to active status."
+msgstr "Được kích hoạt khi một liên kết trong thùng rác được khôi phục về trạng thái hoạt động."
+
+#: server/features/webhooks/validator.php:80
+msgid "Link Activated"
+msgstr "Đã kích hoạt liên kết"
+
 #: server/features/webhooks/validator.php:81
+msgid "Triggered when a deactivated link is re-enabled."
+msgstr "Được kích hoạt khi một liên kết đã hủy kích hoạt được bật lại."
+
+#: server/features/webhooks/validator.php:86
+msgid "Link Deactivated"
+msgstr "Đã hủy kích hoạt liên kết"
+
+#: server/features/webhooks/validator.php:87
+msgid "Triggered when an active link is disabled."
+msgstr "Được kích hoạt khi một liên kết đang hoạt động bị tắt."
+
+#: server/features/webhooks/validator.php:92
+msgid "Link Expired"
+msgstr "Liên kết đã hết hạn"
+
+#: server/features/webhooks/validator.php:93
+msgid "Triggered when a link reaches its expiration timestamp."
+msgstr "Được kích hoạt khi một liên kết đạt đến dấu thời gian hết hạn."
+
+#: server/features/webhooks/validator.php:98
+msgid "Link Health Checked"
+msgstr "Đã kiểm tra tình trạng liên kết"
+
+#: server/features/webhooks/validator.php:99
+msgid "Triggered when a link destination health check completes."
+msgstr "Được kích hoạt khi quá trình kiểm tra tình trạng đích liên kết hoàn tất."
+
+#: server/features/webhooks/validator.php:104
+msgid "Link Health Changed"
+msgstr "Tình trạng liên kết đã thay đổi"
+
+#: server/features/webhooks/validator.php:105
+msgid "Triggered when a link destination health status changes."
+msgstr "Được kích hoạt khi trạng thái tình trạng đích liên kết thay đổi."
+
+#: server/features/webhooks/validator.php:110
+msgid "Link Health Recovered"
+msgstr "Tình trạng liên kết đã phục hồi"
+
+#: server/features/webhooks/validator.php:111
+msgid "Triggered when a link returns to healthy status from an unhealthy state."
+msgstr "Được kích hoạt khi một liên kết trở lại trạng thái hoạt động tốt từ trạng thái không ổn định."
+
+#: server/features/webhooks/validator.php:116
+msgid "Link Health Degraded"
+msgstr "Tình trạng liên kết bị suy giảm"
+
+#: server/features/webhooks/validator.php:117
+msgid "Triggered when a link transitions into a slow health state."
+msgstr "Được kích hoạt khi một liên kết chuyển sang trạng thái phản hồi chậm."
+
+#: server/features/webhooks/validator.php:122
+msgid "Link Health Broken"
+msgstr "Tình trạng liên kết bị hỏng"
+
+#: server/features/webhooks/validator.php:123
+msgid "Triggered when a link enters any broken destination status."
+msgstr "Được kích hoạt khi một liên kết chuyển sang bất kỳ trạng thái đích bị hỏng nào."
+
+#: server/features/webhooks/validator.php:128
+msgid "Link Health Unreachable"
+msgstr "Tình trạng liên kết không thể truy cập"
+
+#: server/features/webhooks/validator.php:129
+msgid "Triggered when a link destination is unreachable or connection is refused."
+msgstr "Được kích hoạt khi đích liên kết không thể truy cập hoặc kết nối bị từ chối."
+
+#: server/features/webhooks/validator.php:134
+msgid "Link Health DNS Error"
+msgstr "Lỗi DNS tình trạng liên kết"
+
+#: server/features/webhooks/validator.php:135
+msgid "Triggered when domain name resolution fails for a link destination."
+msgstr "Được kích hoạt khi phân giải tên miền thất bại cho đích liên kết."
+
+#: server/features/webhooks/validator.php:140
+msgid "Link Health TLS Error"
+msgstr "Lỗi TLS tình trạng liên kết"
+
+#: server/features/webhooks/validator.php:141
+msgid "Triggered when TLS certificate or handshake negotiation fails."
+msgstr "Được kích hoạt khi đàm phán bắt tay hoặc chứng chỉ TLS thất bại."
+
+#: server/features/webhooks/validator.php:146
+msgid "Link Health Timeout"
+msgstr "Hết thời gian tình trạng liên kết"
+
+#: server/features/webhooks/validator.php:147
+msgid "Triggered when a health check probe exceeds the timeout limit."
+msgstr "Được kích hoạt khi đầu dò kiểm tra tình trạng vượt quá giới hạn thời gian chờ."
+
+#: server/features/webhooks/validator.php:152
+msgid "Link Health HTTP Error"
+msgstr "Lỗi HTTP tình trạng liên kết"
+
+#: server/features/webhooks/validator.php:153
+msgid "Triggered when a destination returns an HTTP error response."
+msgstr "Được kích hoạt khi một đích trả về phản hồi lỗi HTTP."
+
+#: server/features/webhooks/validator.php:158
+msgid "Link Health Redirect Loop"
+msgstr "Vòng lặp chuyển hướng tình trạng liên kết"
+
+#: server/features/webhooks/validator.php:159
+msgid "Triggered when a destination creates a redirect loop or exceeds maximum hops."
+msgstr "Được kích hoạt khi một đích tạo vòng lặp chuyển hướng hoặc vượt quá số bước chuyển tối đa."
+
+#: server/features/webhooks/validator.php:164
+msgid "Link Health SSRF Blocked"
+msgstr "SSRF bị chặn tình trạng liên kết"
+
+#: server/features/webhooks/validator.php:165
+msgid "Triggered when a destination targets a private or restricted network address."
+msgstr "Được kích hoạt khi một đích nhắm mục tiêu vào địa chỉ mạng riêng tư hoặc bị hạn chế."
+
+#: server/features/webhooks/validator.php:170
+msgid "API Key Created"
+msgstr "Đã tạo khóa API"
+
+#: server/features/webhooks/validator.php:171
+msgid "Triggered when a new personal API key is generated."
+msgstr "Được kích hoạt khi một khóa API cá nhân mới được tạo."
+
+#: server/features/webhooks/validator.php:176
+msgid "API Key Revoked"
+msgstr "Đã thu hồi khóa API"
+
+#: server/features/webhooks/validator.php:177
+msgid "Triggered when an existing API key is revoked."
+msgstr "Được kích hoạt khi một khóa API hiện có bị thu hồi."
+
+#: server/features/webhooks/validator.php:182
+msgid "User Created"
+msgstr "Đã tạo người dùng"
+
+#: server/features/webhooks/validator.php:183
+msgid "Triggered when a new user account is created or registered."
+msgstr "Được kích hoạt khi một tài khoản người dùng mới được tạo hoặc đăng ký."
+
+#: server/features/webhooks/validator.php:188
+msgid "User Updated"
+msgstr "Đã cập nhật người dùng"
+
+#: server/features/webhooks/validator.php:189
+msgid "Triggered when user account details or profile settings are modified."
+msgstr "Được kích hoạt khi chi tiết tài khoản người dùng hoặc cài đặt hồ sơ được sửa đổi."
+
+#: server/features/webhooks/validator.php:194
+msgid "User Deleted"
+msgstr "Đã xóa người dùng"
+
+#: server/features/webhooks/validator.php:195
+msgid "Triggered when a user account is removed."
+msgstr "Được kích hoạt khi một tài khoản người dùng bị xóa."
+
+#: server/features/webhooks/validator.php:235
+msgid "Webhook name is required."
+msgstr "Tên Webhook là bắt buộc."
+
+#: server/features/webhooks/validator.php:241
+msgid "Webhook name cannot be empty."
+msgstr "Tên Webhook không được để trống."
+
+#: server/features/webhooks/validator.php:248
+msgid "Webhook name cannot exceed %d characters."
+msgstr "Tên Webhook không được vượt quá %d ký tự."
+
+#: server/features/webhooks/validator.php:329
+#: server/features/webhooks/validator.php:334
 msgid "A valid webhook URL is required."
 msgstr "Yêu cầu URL webhook hợp lệ."
 
-#: server/features/webhooks/validator.php:110
-#: server/features/webhooks/validator.php:134
+#: server/features/webhooks/validator.php:339
+msgid "Webhook URL must use the HTTPS protocol."
+msgstr "URL Webhook phải sử dụng giao thức HTTPS."
+
+#: server/features/webhooks/validator.php:344
+msgid "Webhook URL cannot target localhost, private, or reserved network addresses."
+msgstr "URL Webhook không thể nhắm mục tiêu vào localhost, địa chỉ mạng riêng tư hoặc được bảo lưu."
+
+#: server/features/webhooks/validator.php:556
+#: server/features/webhooks/validator.php:581
 msgid "Select at least one webhook event."
 msgstr "Vui lòng chọn ít nhất một sự kiện webhook."
 
-#: server/features/webhooks/validator.php:125
+#: server/features/webhooks/validator.php:572
 msgid "Unsupported webhook event: %s."
 msgstr "Sự kiện webhook không được hỗ trợ: %s."
 
@@ -1079,15 +1478,65 @@ msgstr "Đã cập nhật webhook."
 msgid "Webhook test dispatched."
 msgstr "Đã gửi thử nghiệm webhook."
 
-#: server/features/webhooks/controller.php:145
-#: server/features/webhooks/service.php:222
-#: server/features/webhooks/service.php:295
+#: server/features/webhooks/controller.php:137
+msgid "Webhook events loaded."
+msgstr "Đã tải các sự kiện Webhook."
+
+#: server/features/webhooks/controller.php:156
+msgid "Webhook secret rotated."
+msgstr "Đã đổi mới khóa bí mật Webhook."
+
+#: server/features/webhooks/controller.php:175
+msgid "Webhook deliveries loaded."
+msgstr "Đã tải các lượt gửi Webhook."
+
+#: server/features/webhooks/controller.php:197
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:190
+msgid "Delivery queued for retry."
+msgstr "Lượt gửi đã được đưa vào hàng đợi để thử lại."
+
+#: server/features/webhooks/controller.php:219
+#: server/features/webhooks/service.php:489
 msgid "Webhook not found."
 msgstr "Không tìm thấy webhook."
 
-#: server/features/webhooks/controller.php:146
+#: server/features/webhooks/controller.php:220
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:233
 msgid "Webhook deleted."
 msgstr "Đã xóa webhook."
+
+#: server/features/webhooks/service.php:255
+msgid "Webhook signing secret cannot be empty."
+msgstr "Khóa bí mật ký Webhook không được để trống."
+
+#: server/features/webhooks/service.php:274
+msgid "Webhook signing secret is missing."
+msgstr "Thiếu khóa bí mật ký Webhook."
+
+#: server/features/webhooks/service.php:278
+msgid "Webhook signing secret is not properly encrypted."
+msgstr "Khóa bí mật ký Webhook không được mã hóa đúng cách."
+
+#: server/features/webhooks/service.php:284
+msgid "Failed to decrypt webhook signing secret."
+msgstr "Không thể giải mã khóa bí mật ký Webhook."
+
+#: server/features/webhooks/service.php:2320
+msgid "Webhook delivery not found."
+msgstr "Không tìm thấy lượt gửi Webhook."
+
+#: server/features/webhooks/service.php:2324
+msgid "Webhook delivery does not belong to this webhook."
+msgstr "Lượt gửi Webhook không thuộc về Webhook này."
+
+#: server/features/webhooks/service.php:2328
+msgid "Only failed webhook deliveries can be retried."
+msgstr "Chỉ các lượt gửi Webhook thất bại mới có thể được thử lại."
+
+#: server/features/webhooks/service.php:2350
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:198
+msgid "Failed to queue webhook delivery for retry."
+msgstr "Không thể đưa lượt gửi Webhook vào hàng đợi để thử lại."
 
 #: server/features/analytics/controller.php:65
 msgid "Analytics loaded."
@@ -1155,7 +1604,7 @@ msgstr "Không tìm thấy siêu dữ liệu liên kết có thể khôi phục 
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Liên kết này đã bị xóa vĩnh viễn và không thể khôi phục."
 
-#: server/features/analytics/repository.php:1599
+#: server/features/analytics/repository.php:1611
 msgid "You do not have permission to view activity."
 msgstr "Bạn không có quyền xem hoạt động."
 
@@ -1196,55 +1645,67 @@ msgstr "Cảm ơn bạn đã kiên nhẫn."
 msgid "Loading"
 msgstr "Đang tải"
 
-#: server/services/database/schema-upgrade.php:105
+#: server/services/database/schema-upgrade.php:106
 msgid "Backfilled missing installation ID."
 msgstr "Đã bổ sung ID cài đặt còn thiếu."
 
-#: server/services/database/schema-upgrade.php:111
+#: server/services/database/schema-upgrade.php:112
 msgid "Backfilled missing installation timestamp."
 msgstr "Đã bổ sung dấu thời gian cài đặt còn thiếu."
 
-#: server/services/database/schema-upgrade.php:128
+#: server/services/database/schema-upgrade.php:129
 msgid "PeakURL could not read the bundled database schema file."
 msgstr "PeakURL không thể đọc tệp lược đồ cơ sở dữ liệu đi kèm."
 
-#: server/services/database/schema-upgrade.php:139
+#: server/services/database/schema-upgrade.php:140
 msgid "Created missing tables: %s."
 msgstr "Đã tạo các bảng còn thiếu: %s."
 
-#: server/services/database/schema-upgrade.php:219
+#: server/services/database/schema-upgrade.php:228
 msgid "Migrated API keys to hashed storage."
 msgstr "Đã di chuyển khóa API sang bộ lưu trữ băm."
 
-#: server/services/database/schema-upgrade.php:235
+#: server/services/database/schema-upgrade.php:244
 msgid "PeakURL found API keys that could not be repaired to the hashed-key schema."
 msgstr "PeakURL đã phát hiện các khóa API không thể sửa chữa về lược đồ khóa băm."
 
-#: server/services/database/schema-upgrade.php:250
+#: server/services/database/schema-upgrade.php:259
 msgid "Repaired hashed API key column constraints."
 msgstr "Đã sửa đổi các ràng buộc cột khóa API băm."
 
-#: server/services/database/schema-upgrade.php:337
+#: server/services/database/schema-upgrade.php:310
+msgid "Widened webhook identifier columns to VARCHAR(64)."
+msgstr "Đã mở rộng các cột định danh Webhook thành VARCHAR(64)."
+
+#: server/services/database/schema-upgrade.php:352
+msgid "Populated missing labels for existing %s rows."
+msgstr "Đã điền các nhãn còn thiếu cho %s hàng hiện có."
+
+#: server/services/database/schema-upgrade.php:389
+msgid "Removed obsolete peakurl_import_export background job."
+msgstr "Đã xóa tác vụ nền peakurl_import_export lỗi thời."
+
+#: server/services/database/schema-upgrade.php:476
 msgid "%1$s %2$d rows were updated."
 msgstr "Đã cập nhật %1$s %2$d hàng."
 
-#: server/services/database/schema-upgrade.php:360
+#: server/services/database/schema-upgrade.php:499
 msgid "%1$s %2$d rows were affected."
 msgstr "Đã ảnh hưởng đến %1$s %2$d hàng."
 
-#: server/services/database/schema-upgrade.php:415
+#: server/services/database/schema-upgrade.php:554
 msgid "Updated the %2$s foreign key on the %1$s table."
 msgstr "Đã cập nhật khóa ngoại %2$s trên bảng %1$s."
 
-#: server/services/database/schema-upgrade.php:435
+#: server/services/database/schema-upgrade.php:574
 msgid "Added the %2$s foreign key to the %1$s table."
 msgstr "Đã thêm khóa ngoại %2$s vào bảng %1$s."
 
-#: server/services/database/schema-upgrade.php:478
+#: server/services/database/schema-upgrade.php:617
 msgid "Added the %1$s column to the %2$s table."
 msgstr "Đã thêm cột %1$s vào bảng %2$s."
 
-#: server/services/database/schema-upgrade.php:525
+#: server/services/database/schema-upgrade.php:664
 msgid "Added the %1$s index to the %2$s table."
 msgstr "Đã thêm chỉ mục %1$s vào bảng %2$s."
 
@@ -1665,7 +2126,7 @@ msgstr "URL hình ảnh xem trước mạng xã hội không được chứa th�
 
 #: server/services/social-preview.php:358
 #: client/hooks/useDashboardSearch.ts:85
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:153
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:276
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:281
 msgid "Untitled Link"
@@ -2138,18 +2599,20 @@ msgid "Confirm"
 msgstr "Xác nhận"
 
 #: client/components/ui/ConfirmDialog/ConfirmDialog.tsx:33
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:884
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:893
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:110
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:399
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:533
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:837
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
 #: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:563
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:742
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:828
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:896
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:982
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:508
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:590
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:595
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1491
 #: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:150
 #: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:130
@@ -2173,7 +2636,7 @@ msgstr "Đóng cửa sổ"
 
 #: client/components/ui/PageSizeControl/PageSizeControl.tsx:27
 #: client/pages/dashboard/activity/components/ActivityHeader/ActivityCategoryTabs.tsx:83
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:122
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:132
 msgid "Rows per page"
 msgstr "Số hàng mỗi trang"
 
@@ -2205,7 +2668,7 @@ msgstr "Hủy kích thước trang tùy chỉnh"
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:993
 #: client/pages/dashboard/components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: client/pages/dashboard/components/TrafficOverview/TrafficOverview.tsx:64
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:178
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:270
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:48
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:167
 msgid "Clicks"
@@ -2243,19 +2706,19 @@ msgstr "Chủ nhật"
 #: client/pages/dashboard/components/StatsCards/StatsCards.tsx:112
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:22
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:146
-#: client/pages/dashboard/links/LinksPage.tsx:306
+#: client/pages/dashboard/links/LinksPage.tsx:308
 msgid "Total Clicks"
 msgstr "Tổng lượt nhấp"
 
 #: client/components/charts/TrafficChart/TrafficChart.tsx:262
 #: client/pages/dashboard/components/TrafficOverview/TrafficOverview.tsx:70
 #: client/pages/dashboard/components/StatsCards/StatsCards.tsx:133
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:187
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:279
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:49
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:174
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:29
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:154
-#: client/pages/dashboard/links/LinksPage.tsx:314
+#: client/pages/dashboard/links/LinksPage.tsx:316
 msgid "Visitors"
 msgstr "Khách truy cập"
 
@@ -2530,7 +2993,7 @@ msgstr "Rút gọn, sắp xếp và chia sẻ."
 
 #: client/pages/auth/login/LoginPage.tsx:43
 #: client/pages/dashboard/about/AboutPage.tsx:271
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:275
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:367
 msgid "Analytics"
 msgstr "Phân tích"
 
@@ -2837,7 +3300,7 @@ msgid "Search the dashboard"
 msgstr "Tìm kiếm trong bảng điều khiển"
 
 #: client/pages/layout/dashboard/Search/Search.tsx:191
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:228
 msgid "Clear search"
 msgstr "Xóa tìm kiếm"
 
@@ -2883,7 +3346,7 @@ msgstr "Bảng điều khiển"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:96
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:203
 #: client/pages/dashboard/links/components/Header/Header.tsx:42
 #: client/pages/NotFoundPage.tsx:75
 msgid "All Links"
@@ -2933,7 +3396,7 @@ msgstr "Khóa API"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:200
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:203
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:287
 #: client/pages/dashboard/settings/Layout.tsx:37
 #: client/router/pageTitle.ts:28
 msgid "Integrations"
@@ -3025,13 +3488,13 @@ msgstr "Đăng xuất"
 msgid "Back to login"
 msgstr "Quay lại đăng nhập"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:294
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:366
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:371
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:376
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:398
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:433
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:453
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:302
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:375
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:380
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:385
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:407
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:442
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:462
 #: client/pages/dashboard/settings/components/tabs/pages/security/useActiveSessions.ts:74
 #: client/pages/dashboard/settings/components/tabs/pages/security/useActiveSessions.ts:106
 #: client/pages/dashboard/settings/components/tabs/pages/security/useTwoFactorSettings.ts:171
@@ -3039,357 +3502,362 @@ msgstr "Quay lại đăng nhập"
 #: client/pages/dashboard/settings/components/tabs/pages/security/useTwoFactorSettings.ts:207
 #: client/pages/dashboard/settings/components/tabs/pages/security/useTwoFactorSettings.ts:223
 #: client/pages/dashboard/settings/components/tabs/pages/security/useTwoFactorSettings.ts:273
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:193
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:239
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:257
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:93
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:112
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:127
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:142
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:237
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:258
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:273
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:36
 msgid "Error"
 msgstr "Lỗi"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:295
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:303
 msgid "Failed to update profile"
 msgstr "Cập nhật hồ sơ thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:331
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:340
 msgid "Language updated"
 msgstr "Đã cập nhật ngôn ngữ"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:332
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:341
 msgid "PeakURL is reloading the dashboard now."
 msgstr "PeakURL đang tải lại bảng điều khiển."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:341
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:361
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:388
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:448
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:350
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:370
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:397
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:457
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:189
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:169
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:182
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:232
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:252
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:105
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:123
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:233
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:249
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:202
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:207
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:88
 msgid "Success"
 msgstr "Thành công"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:343
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:352
 msgid "Profile and general settings updated successfully"
 msgstr "Đã cập nhật hồ sơ và cài đặt chung thành công"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:346
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:355
 msgid "General settings updated successfully"
 msgstr "Đã cập nhật cài đặt chung thành công"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:351
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:529
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:568
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:699
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:360
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:538
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:577
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:708
 msgid "Save failed"
 msgstr "Lưu thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:354
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:363
 msgid "Failed to update the general settings"
 msgstr "Cập nhật cài đặt chung thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:361
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:370
 msgid "Profile updated successfully"
 msgstr "Đã cập nhật hồ sơ thành công"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:366
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:375
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:65
 msgid "Enter your current password"
 msgstr "Nhập mật khẩu hiện tại của bạn"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:371
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:380
 msgid "Passwords do not match"
 msgstr "Mật khẩu không khớp"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:377
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:386
 msgid "Password must be at least 8 characters"
 msgstr "Mật khẩu phải có ít nhất 8 ký tự"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:389
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:398
 msgid "Password updated successfully"
 msgstr "Đã cập nhật mật khẩu thành công"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:399
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:408
 msgid "Failed to update password"
 msgstr "Cập nhật mật khẩu thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:412
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:421
 msgid "Key created without visible token"
 msgstr "Khóa đã được tạo mà không có mã token hiển thị"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:413
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:422
 msgid "PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
 msgstr "PeakURL đã tạo khóa API nhưng không trả về mã token dùng một lần. Hãy thu hồi và tạo khóa mới."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:428
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:437
 msgid "API key created"
 msgstr "Đã tạo khóa API"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:429
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:438
 msgid "Copy the token now. PeakURL will not show it again."
 msgstr "Hãy sao chép mã token ngay bây giờ. PeakURL sẽ không hiển thị lại mã này nữa."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:434
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:443
 msgid "Failed to generate API key"
 msgstr "Tạo khóa API thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:449
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:458
 msgid "API key deleted successfully"
 msgstr "Đã xóa khóa API thành công"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:454
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:463
 msgid "Failed to delete API key"
 msgstr "Xóa khóa API thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:461
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:470
 msgid "API key copied to clipboard"
 msgstr "Đã sao chép khóa API vào khay nhớ tạm"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:465
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:135
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:474
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:266
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1062
 msgid "Copied"
 msgstr "Đã sao chép"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:468
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:477
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1067
 msgid "Copy failed"
 msgstr "Sao chép thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:469
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:478
 msgid "PeakURL could not copy that value to the clipboard."
 msgstr "PeakURL không thể sao chép giá trị đó vào khay nhớ tạm."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:488
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:497
 msgid "Update available"
 msgstr "Có bản cập nhật mới"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:490
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:499
 msgid "PeakURL %s is ready to install."
 msgstr "PeakURL %s đã sẵn sàng để cài đặt."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:498
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:507
 #: client/pages/dashboard/settings/components/tabs/pages/updates/helpers.ts:185
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:773
 msgid "Up to date"
 msgstr "Đã cập nhật mới nhất"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:501
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:510
 msgid "PeakURL %s is already on the latest version."
 msgstr "PeakURL %s đã ở phiên bản mới nhất."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:504
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:513
 msgid "PeakURL is already on the latest version."
 msgstr "PeakURL đã ở phiên bản mới nhất."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:508
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:517
 msgid "Update check failed"
 msgstr "Kiểm tra bản cập nhật thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:511
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:520
 msgid "PeakURL could not reach the update service."
 msgstr "PeakURL không thể kết nối với dịch vụ cập nhật."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:523
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:563
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:532
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:572
 msgid "Saved"
 msgstr "Đã lưu"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:524
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:533
 msgid "Location data settings were updated successfully."
 msgstr "Cài đặt dữ liệu vị trí đã được cập nhật thành công."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:532
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:541
 msgid "PeakURL could not save the MaxMind settings."
 msgstr "PeakURL không thể lưu cài đặt MaxMind."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:543
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:669
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:552
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:678
 msgid "Database updated"
 msgstr "Đã cập nhật cơ sở dữ liệu"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:544
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:553
 msgid "PeakURL downloaded the latest GeoLite2 City database."
 msgstr "PeakURL đã tải xuống cơ sở dữ liệu GeoLite2 City mới nhất."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:548
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:557
 msgid "Download failed"
 msgstr "Tải xuống thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:551
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:560
 msgid "PeakURL could not download the GeoLite2 database."
 msgstr "PeakURL không thể tải xuống cơ sở dữ liệu GeoLite2."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:564
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:573
 msgid "Email configuration was updated successfully."
 msgstr "Cấu hình email đã được cập nhật thành công."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:571
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:580
 msgid "PeakURL could not save the email configuration."
 msgstr "PeakURL không thể lưu cấu hình email."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:584
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:593
 msgid "Test email sent"
 msgstr "Đã gửi email thử nghiệm"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:586
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:595
 msgid "PeakURL sent a test email to %s."
 msgstr "PeakURL đã gửi email thử nghiệm đến %s."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:587
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:596
 msgid "PeakURL sent a test email to your account email."
 msgstr "PeakURL đã gửi email thử nghiệm đến email tài khoản của bạn."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:591
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:600
 msgid "Test email failed"
 msgstr "Gửi email thử nghiệm thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:594
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:603
 msgid "PeakURL could not send the test email."
 msgstr "PeakURL không thể gửi email thử nghiệm."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:625
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:634
 msgid "Release reinstalled"
 msgstr "Đã cài đặt lại bản phát hành"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:626
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:635
 msgid "Update installed"
 msgstr "Đã cài đặt bản cập nhật"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:630
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:639
 #: client/pages/dashboard/settings/components/tabs/pages/updates/releaseProgress.ts:120
 msgid "PeakURL %s has been reinstalled."
 msgstr "PeakURL %s đã được cài đặt lại."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:631
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:640
 #: client/pages/dashboard/settings/components/tabs/pages/updates/releaseProgress.ts:121
 msgid "PeakURL %s is now installed."
 msgstr "PeakURL %s hiện đã được cài đặt."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:635
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:644
 #: client/pages/dashboard/settings/components/tabs/pages/updates/releaseProgress.ts:125
 msgid "The latest version has been reinstalled."
 msgstr "Phiên bản mới nhất đã được cài đặt lại."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:636
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:645
 #: client/pages/dashboard/settings/components/tabs/pages/updates/releaseProgress.ts:126
 msgid "The latest version is now installed."
 msgstr "Phiên bản mới nhất hiện đã được cài đặt."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:641
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:650
 msgid "Reinstall failed"
 msgstr "Cài đặt lại thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:641
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:650
 msgid "Update failed"
 msgstr "Cập nhật thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:645
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:654
 msgid "PeakURL could not reinstall the latest version."
 msgstr "PeakURL không thể cài đặt lại phiên bản mới nhất."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:646
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:655
 msgid "PeakURL could not apply the update."
 msgstr "PeakURL không thể áp dụng bản cập nhật."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:671
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:680
 msgid "PeakURL repaired the database schema. Review any remaining warnings below."
 msgstr "PeakURL đã sửa chữa lược đồ cơ sở dữ liệu. Hãy xem lại các cảnh báo còn lại bên dưới."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:674
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:683
 msgid "The database schema is now current."
 msgstr "Lược đồ cơ sở dữ liệu hiện đã là mới nhất."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:678
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:687
 #: client/pages/dashboard/settings/components/tabs/pages/updates/helpers.ts:165
 msgid "Database upgrade failed"
 msgstr "Nâng cấp cơ sở dữ liệu thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:681
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:690
 #: client/pages/dashboard/settings/components/tabs/pages/updates/helpers.ts:168
 msgid "PeakURL could not repair the database schema."
 msgstr "PeakURL không thể sửa chữa lược đồ cơ sở dữ liệu."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:693
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:702
 msgid "Settings saved"
 msgstr "Đã lưu cài đặt"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:694
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:703
 msgid "Performance configuration updated successfully."
 msgstr "Cấu hình hiệu suất đã được cập nhật thành công."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:702
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:711
 msgid "Could not update performance configuration."
 msgstr "Không thể cập nhật cấu hình hiệu suất."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:713
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:722
 msgid "Cache purged"
 msgstr "Đã xóa bộ nhớ đệm"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:714
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:723
 msgid "Object cache cleared successfully across active backends."
 msgstr "Đã xóa thành công bộ nhớ đệm đối tượng trên tất cả các backend đang hoạt động."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:718
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:727
 msgid "Purge failed"
 msgstr "Xóa bộ nhớ đệm thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:719
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:728
 msgid "Could not clear object cache."
 msgstr "Không thể xóa bộ nhớ đệm đối tượng."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:838
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:847
 msgid "Delete API key"
 msgstr "Xóa khóa API"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:842
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:851
 msgid "Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
 msgstr "Xóa %s? Bất kỳ tập lệnh, quy trình tự động hoặc tiện ích mở rộng nào sử dụng khóa này sẽ ngừng hoạt động ngay lập tức."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:847
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:856
 msgid "this API key"
 msgstr "khóa API này"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:851
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:860
 msgid "Delete key"
 msgstr "Xóa khóa"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:852
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:861
 msgid "Keep key"
 msgstr "Giữ lại khóa"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:862
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:871
 msgid "Reinstall PeakURL %s?"
 msgstr "Cài đặt lại PeakURL %s?"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:863
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:872
 msgid "Install PeakURL %s?"
 msgstr "Cài đặt PeakURL %s?"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:866
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:875
 #: client/pages/dashboard/settings/components/tabs/pages/updates/helpers.ts:112
 msgid "update"
 msgstr "bản cập nhật"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:872
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:881
 msgid "PeakURL will restore the latest version and refresh the included files."
 msgstr "PeakURL sẽ khôi phục phiên bản mới nhất và làm mới các tệp đi kèm."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:875
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:884
 msgid "PeakURL will install the latest version and refresh the included files."
 msgstr "PeakURL sẽ cài đặt phiên bản mới nhất và làm mới các tệp đi kèm."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:881
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:890
 msgid "Reinstall latest version"
 msgstr "Cài đặt lại phiên bản mới nhất"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:882
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:891
 msgid "Install update"
 msgstr "Cài đặt bản cập nhật"
 
@@ -3594,8 +4062,9 @@ msgstr "Lần tạo gần nhất:"
 #: client/pages/dashboard/components/DeviceBreakdown/DeviceBreakdown.tsx:31
 #: client/pages/dashboard/components/CountryStats/CountryStats.tsx:39
 #: client/pages/dashboard/components/RecentClicks/RecentClicks.tsx:12
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:57
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:203
+#: client/pages/dashboard/links/components/health-status.ts:82
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:66
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:295
 #: client/pages/dashboard/links/components/StatsDrawer/HistoricalStats.tsx:172
 #: client/pages/dashboard/links/components/StatsDrawer/HistoricalStats.tsx:179
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:106
@@ -3761,251 +4230,280 @@ msgstr "Lưu các mã mới trước khi rời khỏi trang này."
 msgid "PeakURL downloaded the latest backup codes for this account."
 msgstr "PeakURL đã tải xuống các mã dự phòng mới nhất cho tài khoản này."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:176
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:182
 msgid "Loading languages..."
 msgstr "Đang tải ngôn ngữ..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:182
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:188
 msgid "12-hour (AM/PM)"
 msgstr "12 giờ (SA/CH)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:189
 msgid "24-hour"
 msgstr "24 giờ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:186
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:192
 #: client/pages/dashboard/links/components/StatsDrawer/analytics.ts:74
 msgid "7 days"
 msgstr "7 ngày"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:187
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:193
 msgid "14 days"
 msgstr "14 ngày"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:188
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:194
 msgid "30 days (Default)"
 msgstr "30 ngày (Mặc định)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:189
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:202
 msgid "60 days"
 msgstr "60 ngày"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:190
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:196
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:203
 msgid "90 days"
 msgstr "90 ngày"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:191
-msgid "Never (Keep indefinitely)"
-msgstr "Không bao giờ (Lưu giữ vô thời hạn)"
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:197
+msgid "Indefinite"
+msgstr "Vô thời hạn"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:194
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:200
+msgid "Indefinite (Default)"
+msgstr "Vô thời hạn (Mặc định)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:201
+#: client/pages/dashboard/links/components/StatsDrawer/analytics.ts:69
+msgid "30 days"
+msgstr "30 ngày"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:204
+msgid "180 days (6 months)"
+msgstr "180 ngày (6 tháng)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:205
+msgid "365 days (1 year)"
+msgstr "365 ngày (1 năm)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:208
 msgid "Default (Landing Page)"
 msgstr "Mặc định (Trang đích)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:209
 msgid "Redirect URL"
 msgstr "URL chuyển hướng"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:196
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:210
 msgid "Login Page"
 msgstr "Trang đăng nhập"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:321
 msgid "Replace Favicon"
 msgstr "Thay thế Favicon"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:308
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:322
 msgid "Choose Favicon"
 msgstr "Chọn Favicon"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:324
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:338
 msgid "Replace Preview Image"
 msgstr "Thay thế hình ảnh xem trước"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:339
 msgid "Choose Preview Image"
 msgstr "Chọn hình ảnh xem trước"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:332
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:346
 msgid "Profile Information"
 msgstr "Thông tin hồ sơ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:337
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:351
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:151
 msgid "First Name"
 msgstr "Tên"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:344
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:358
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:157
 msgid "Last Name"
 msgstr "Họ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:365
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:166
 msgid "Display Name"
 msgstr "Tên hiển thị"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:364
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:378
 msgid "Cannot be changed"
 msgstr "Không thể thay đổi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:381
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:395
 msgid "Email Address"
 msgstr "Địa chỉ email"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:392
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:406
 msgid "Phone Number"
 msgstr "Số điện thoại"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:399
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:413
 msgid "Company"
 msgstr "Công ty"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:405
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:419
 msgid "Job Title"
 msgstr "Chức danh"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:412
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:426
 msgid "Bio"
 msgstr "Tiểu sử"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:426
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:440
 msgid "Site Configuration"
 msgstr "Cấu hình trang web"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:455
 msgid "Tagline"
 msgstr "Khẩu hiệu"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:452
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:466
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:564
 msgid "Site Language"
 msgstr "Ngôn ngữ trang web"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:468
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:482
 msgid "Site Timezone"
 msgstr "Múi giờ trang web"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:479
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:493
 msgid "Site timezone"
 msgstr "Múi giờ trang web"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:485
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:499
 msgid "Time Format"
 msgstr "Định dạng thời gian"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:496
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:510
 msgid "Time format"
 msgstr "Định dạng thời gian"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:501
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:515
 msgid "Trash Retention Period"
 msgstr "Thời gian lưu trữ trong thùng rác"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:514
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:528
 msgid "Trash retention period"
 msgstr "Thời gian lưu trữ trong thùng rác"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:521
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:533
+msgid "Analytics Click Retention Period"
+msgstr "Thời gian lưu giữ nhấp chuột phân tích"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:548
+msgid "Analytics click retention period"
+msgstr "Thời gian lưu giữ nhấp chuột phân tích"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:557
 msgid "Homepage Configuration"
 msgstr "Cấu hình trang chủ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:527
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:542
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:563
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:578
 msgid "Root URL Behavior"
 msgstr "Hành vi URL gốc"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:548
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:584
 msgid "Custom Redirect URL"
 msgstr "URL chuyển hướng tùy chỉnh"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:564
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:600
 msgid "Visitors to the root domain will be redirected to this URL."
 msgstr "Khách truy cập vào tên miền gốc sẽ được chuyển hướng đến URL này."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:574
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:610
 msgid "To customize your HTML landing page, edit the following file in your installation:"
 msgstr "Để tùy chỉnh trang đích HTML, hãy chỉnh sửa tệp sau trong thư mục cài đặt của bạn:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:584
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:620
 msgid "This raw HTML file will be served at the root domain. You can include custom styles, scripts, and branding."
 msgstr "Tệp HTML thuần này sẽ được phân phát tại tên miền gốc. Bạn có thể thêm các kiểu dáng, tập lệnh và thương hiệu tùy chỉnh."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:595
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:631
 msgid "Branding"
 msgstr "Thương hiệu"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:603
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:639
 msgid "Site Favicon"
 msgstr "Favicon trang web"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:606
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:642
 msgid "Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
 msgstr "Tải lên favicon PNG hình vuông. PeakURL sẽ sử dụng cho các tab trình duyệt, biểu tượng Apple touch và tệp kê khai web của trang web."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:616
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:652
 msgid "Favicon PNG"
 msgstr "Favicon PNG"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:653
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:689
 msgid "Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
 msgstr "Sử dụng hình ảnh PNG hình vuông, lý tưởng là %s. Kích thước tối thiểu được hỗ trợ là 180 x 180."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:684
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:720
 msgid "Remove Favicon"
 msgstr "Xóa Favicon"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:703
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:739
 msgid "Current favicon preview"
 msgstr "Xem trước favicon hiện tại"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:755
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:791
 msgid "No favicon configured"
 msgstr "Chưa cấu hình favicon"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:767
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:803
 #: client/pages/dashboard/links/components/UrlShorteningForm/SocialPreviewFields.tsx:60
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Form.tsx:69
 msgid "Social Preview"
 msgstr "Xem trước mạng xã hội"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:770
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:806
 msgid "Upload the default image used when short links are shared on social platforms. Individual links can override it."
 msgstr "Tải lên hình ảnh mặc định được sử dụng khi chia sẻ các liên kết rút gọn trên các nền tảng mạng xã hội. Các liên kết riêng lẻ có thể ghi đè hình ảnh này."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:781
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:817
 #: client/pages/dashboard/links/components/UrlShorteningForm/SocialPreviewFields.tsx:139
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/SocialPreviewTab.tsx:106
 msgid "Preview Image"
 msgstr "Hình ảnh xem trước"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:818
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:854
 msgid "Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
 msgstr "Sử dụng hình ảnh PNG, JPG hoặc WebP, lý tưởng là %s, để xem trước đẹp mắt trên Facebook, X, LinkedIn và các ứng dụng nhắn tin."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:841
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:877
 #: client/pages/dashboard/links/components/UrlShorteningForm/SocialPreviewFields.tsx:149
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/SocialPreviewTab.tsx:116
 msgid "Remove Preview Image"
 msgstr "Xóa hình ảnh xem trước"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:855
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:891
 msgid "Default social preview image"
 msgstr "Hình ảnh xem trước mạng xã hội mặc định"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:868
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:904
 msgid "No default preview image"
 msgstr "Không có hình ảnh xem trước mặc định"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:889
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:925
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:544
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:518
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:768
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:922
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 msgid "Saving..."
 msgstr "Đang lưu..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:889
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:925
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:547
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:33
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:280
 msgid "Save Changes"
@@ -4021,8 +4519,7 @@ msgstr "Bật phân tích quốc gia và thành phố bằng cơ sở dữ liệ
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:134
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:283
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:185
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:318
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:60
 #: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:307
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:175
@@ -4042,6 +4539,8 @@ msgid "Download Database"
 msgstr "Tải xuống cơ sở dữ liệu"
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:311
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:423
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:201
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:332
@@ -4049,6 +4548,7 @@ msgstr "Tải xuống cơ sở dữ liệu"
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:34
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:91
 #: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:43
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:86
 msgid "Status"
@@ -4056,7 +4556,6 @@ msgstr "Trạng thái"
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Ready"
@@ -4080,6 +4579,7 @@ msgstr "Cơ sở dữ liệu đã cập nhật"
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:108
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:13
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:17
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:114
 msgid "Never"
 msgstr "Chưa bao giờ"
 
@@ -4380,6 +4880,336 @@ msgstr "Kiểm tra lần cuối"
 msgid "Loading update status..."
 msgstr "Đang tải trạng thái cập nhật..."
 
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:64
+msgid "Delivered"
+msgstr "Đã gửi"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:71
+msgid "Retrying"
+msgstr "Đang thử lại"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:76
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:69
+msgid "Pending"
+msgstr "Đang chờ"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:83
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:60
+msgid "Processing"
+msgstr "Đang xử lý"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:90
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:74
+#: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:184
+msgid "Failed"
+msgstr "Thất bại"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:104
+msgid "Webhook Test Ping"
+msgstr "Ping thử nghiệm Webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:112
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:930
+#: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:107
+msgid "Event"
+msgstr "Sự kiện"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:283
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:284
+msgid "Refresh deliveries"
+msgstr "Làm mới lượt gửi"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:297
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:298
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:231
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:232
+msgid "Close drawer"
+msgstr "Đóng ngăn"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:323
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:119
+#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:63
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:61
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:65
+msgid "Active"
+msgstr "Hoạt động"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:324
+#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:65
+#: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:44
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:62
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:66
+msgid "Inactive"
+msgstr "Không hoạt động"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:329
+msgid "SSL Verification"
+msgstr "Xác minh SSL"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:339
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
+msgid "Enabled"
+msgstr "Đã bật"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:348
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:177
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:339
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:463
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
+msgid "Disabled"
+msgstr "Đã tắt"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:356
+msgid "Health (24h)"
+msgstr "Tình trạng (24 giờ)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:361
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:78
+msgid "No completed deliveries in 24h"
+msgstr "Không có lượt gửi nào hoàn tất trong 24 giờ"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:367
+msgid "%d deliveries (100%%)"
+msgstr "%d lượt gửi (100%%)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:374
+msgid "%d failed / %d total"
+msgstr "%d thất bại / %d tổng số"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:386
+msgid "Total Logged"
+msgstr "Tổng số đã ghi nhật ký"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:402
+msgid "Loading delivery history…"
+msgstr "Đang tải lịch sử gửi…"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:409
+msgid "No Delivery Attempts Yet"
+msgstr "Chưa có lần thử gửi nào"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:412
+msgid "When PeakURL delivers outbound events to this endpoint, each attempt and response will appear here."
+msgstr "Khi PeakURL gửi các sự kiện gửi đi đến điểm cuối này, mỗi lần thử và phản hồi sẽ xuất hiện ở đây."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:426
+msgid "HTTP Code"
+msgstr "Mã HTTP"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:429
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:919
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:341
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:132
+msgid "Duration"
+msgstr "Thời lượng"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:432
+msgid "Attempts"
+msgstr "Số lần thử"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:434
+msgid "Date"
+msgstr "Ngày"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:436
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:82
+#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
+#: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:112
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:269
+#: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:55
+msgid "Actions"
+msgstr "Hành động"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:537
+msgid "Retrying soon"
+msgstr "Sắp thử lại"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:576
+msgid "Hide error"
+msgstr "Ẩn lỗi"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:587
+msgid "View error"
+msgstr "Xem lỗi"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:625
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:629
+msgid "Retry Delivery"
+msgstr "Thử lại lượt gửi"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:652
+msgid "Showing page %d of %d (%d total)"
+msgstr "Hiển thị trang %d / %d (tổng số %d)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:677
+#: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:63
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:69
+msgid "Previous"
+msgstr "Trước"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:696
+#: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:89
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:108
+msgid "Next"
+msgstr "Tiếp theo"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:718
+msgid "Webhook delivery & retry guide"
+msgstr "Hướng dẫn gửi & thử lại Webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:725
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:955
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:608
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:954
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:466
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:58
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:170
+#: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:532
+msgid "Close"
+msgstr "Đóng"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:102
+msgid "Link Events"
+msgstr "Sự kiện liên kết"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:103
+msgid "API Key Events"
+msgstr "Sự kiện khóa API"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:104
+msgid "User Events"
+msgstr "Sự kiện người dùng"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:125
+msgid "Other Events"
+msgstr "Sự kiện khác"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:170
+msgid "Webhook updated successfully."
+msgstr "Webhook đã được cập nhật thành công."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:183
+msgid "Webhook created successfully."
+msgstr "Webhook đã được tạo thành công."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:197
+msgid "Failed to update webhook."
+msgstr "Không thể cập nhật Webhook."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:198
+msgid "Failed to create webhook."
+msgstr "Không thể tạo Webhook."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:215
+msgid "Edit Webhook"
+msgstr "Chỉnh sửa Webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:216
+msgid "Add New Webhook"
+msgstr "Thêm Webhook mới"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:221
+msgid "Configure destination endpoint and subscribed events."
+msgstr "Định cấu hình điểm cuối đích và các sự kiện đã đăng ký."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:243
+msgid "Webhook name"
+msgstr "Tên Webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:247
+msgid "e.g. Slack notifications, Zapier, or n8n"
+msgstr "ví dụ: Thông báo Slack, Zapier hoặc n8n"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:256
+msgid "A descriptive name to identify this webhook endpoint."
+msgstr "Một tên mang tính mô tả để xác định điểm cuối Webhook này."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:265
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:765
+msgid "Endpoint URL"
+msgstr "URL điểm cuối"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:278
+msgid "Where PeakURL will send webhook requests. Must be a publicly accessible HTTPS endpoint."
+msgstr "Nơi PeakURL sẽ gửi các yêu cầu Webhook. Phải là một điểm cuối HTTPS có thể truy cập công khai."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:284
+msgid "Webhook endpoints must use the HTTPS protocol."
+msgstr "Các điểm cuối Webhook phải sử dụng giao thức HTTPS."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:296
+msgid "Subscribed Events"
+msgstr "Sự kiện đã đăng ký"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:300
+msgid "%d of %d selected"
+msgstr "Đã chọn %d / %d"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:316
+#: client/pages/dashboard/activity/components/ActivityHeader/ActivityCategoryTabs.tsx:27
+#: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:36
+#: client/pages/dashboard/links/components/Header/DateRangeFilter.tsx:22
+msgid "All"
+msgstr "Tất cả"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:327
+msgid "Clear"
+msgstr "Xóa chọn"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:371
+msgid "%d of %d"
+msgstr "%d / %d"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:383
+msgid "Deselect all"
+msgstr "Bỏ chọn tất cả"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:384
+msgid "Select all"
+msgstr "Chọn tất cả"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:453
+msgid "Enable SSL verification"
+msgstr "Bật xác minh SSL"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:456
+msgid "Verify the endpoint certificate when delivering requests. Disable only for self-signed or otherwise untrusted certificates."
+msgstr "Xác minh chứng chỉ điểm cuối khi gửi yêu cầu. Chỉ tắt đối với chứng chỉ tự ký hoặc không đáng tin cậy."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:490
+msgid "Active Webhook Delivery"
+msgstr "Gửi Webhook đang hoạt động"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:494
+msgid "Webhook is enabled and will receive event deliveries."
+msgstr "Webhook đã được bật và sẽ nhận các lượt gửi sự kiện."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:497
+msgid "Webhook is paused. Outbound deliveries will be skipped."
+msgstr "Webhook đã tạm dừng. Các lượt gửi đi sẽ bị bỏ qua."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:524
+msgid "Payload format & signature docs"
+msgstr "Tài liệu định dạng dữ liệu & chữ ký"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:545
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:70
+msgid "Creating..."
+msgstr "Đang tạo..."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:548
+msgid "Create Webhook"
+msgstr "Tạo Webhook"
+
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:55
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:63
 msgid "Google reCAPTCHA v3"
@@ -4421,20 +5251,12 @@ msgstr "Để trống để giữ khóa bí mật đã lưu."
 msgid "Paste the secret key from your CAPTCHA provider."
 msgstr "Dán khóa bí mật từ nhà cung cấp CAPTCHA của bạn."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:177
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
-msgid "Disabled"
-msgstr "Đã tắt"
-
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:181
 msgid "Editing"
 msgstr "Đang chỉnh sửa"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:186
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:349
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:798
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:802
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:855
@@ -4534,172 +5356,257 @@ msgstr "Xóa khóa"
 msgid "Save Settings"
 msgstr "Lưu cài đặt"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:42
-msgid "Link Created"
-msgstr "Đã tạo liên kết"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:87
+msgid "Healthy (%d deliveries in 24h)"
+msgstr "Hoạt động tốt (%d lượt gửi trong 24 giờ)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:43
-msgid "Link Clicked"
-msgstr "Liên kết đã được nhấp"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:97
+msgid "Failed (HTTP %d)"
+msgstr "Thất bại (HTTP %d)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:44
-msgid "Link Updated"
-msgstr "Đã cập nhật liên kết"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:99
+msgid "Failed: %s"
+msgstr "Thất bại: %s"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:45
-msgid "Link Deleted"
-msgstr "Đã xóa liên kết"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:100
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:108
+msgid "%d failed in 24h"
+msgstr "%d thất bại trong 24 giờ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:94
-msgid "Enter a URL and select at least one event."
-msgstr "Nhập URL và chọn ít nhất một sự kiện."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:201
+msgid "Test Delivered"
+msgstr "Đã gửi thử nghiệm"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:106
-msgid "Webhook created successfully"
-msgstr "Đã tạo webhook thành công"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:203
+msgid "Endpoint responded with HTTP %d in %dms."
+msgstr "Điểm cuối đã phản hồi với HTTP %d trong %dms."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:113
-msgid "Failed to create webhook"
-msgstr "Tạo webhook thất bại"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:210
+msgid "Test Failed"
+msgstr "Thử nghiệm thất bại"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:123
-msgid "Webhook deleted"
-msgstr "Đã xóa webhook"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:213
+msgid "Endpoint returned HTTP %d."
+msgstr "Điểm cuối đã trả về HTTP %d."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:128
-msgid "Failed to delete webhook"
-msgstr "Xóa webhook thất bại"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:221
+msgid "Failed to dispatch test webhook."
+msgstr "Không thể gửi Webhook thử nghiệm."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:140
-msgid "Copied to clipboard"
-msgstr "Đã sao chép vào khay nhớ tạm"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:238
+msgid "Failed to delete webhook."
+msgstr "Không thể xóa Webhook."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:142
-msgid "Failed to copy"
-msgstr "Sao chép thất bại"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:250
+msgid "Signing secret rotated successfully."
+msgstr "Khóa bí mật ký đã được đổi mới thành công."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:259
+msgid "Failed to rotate signing secret."
+msgstr "Không thể đổi mới khóa bí mật ký."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:271
+msgid "Copied to clipboard."
+msgstr "Đã sao chép vào khay nhớ tạm."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:273
+msgid "Failed to copy."
+msgstr "Sao chép thất bại."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:290
 msgid "Connect PeakURL to your automations with outbound webhooks for link activity."
 msgstr "Kết nối PeakURL với các quy trình tự động hóa của bạn bằng webhook gửi đi cho hoạt động liên kết."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:170
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:303
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:999
 msgid "Webhooks"
 msgstr "Webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:173
-msgid "PeakURL sends signed POST requests to your endpoint when selected link events happen."
-msgstr "PeakURL sẽ gửi các yêu cầu POST đã ký tới điểm cuối của bạn khi các sự kiện liên kết đã chọn xảy ra."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:306
+msgid "PeakURL sends HMAC-SHA256 signed POST requests to your endpoint when selected link events occur."
+msgstr "PeakURL gửi các yêu cầu POST đã ký HMAC-SHA256 đến điểm cuối của bạn khi các sự kiện liên kết đã chọn xảy ra."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:334
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:706
+msgid "Add Webhook"
+msgstr "Thêm Webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:356
 msgid "Enable webhooks"
 msgstr "Bật webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:232
-msgid "Add New Webhook"
-msgstr "Thêm Webhook mới"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:389
+msgid "Loading webhook configuration…"
+msgstr "Đang tải cấu hình Webhook…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:235
-msgid "Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
-msgstr "Chọn các sự kiện sẽ kích hoạt gửi dữ liệu, sau đó lưu khóa bí mật ký vào nơi an toàn khi nó hiển thị."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:395
+msgid "Failed to load webhook configuration."
+msgstr "Không thể tải cấu hình Webhook."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:243
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
-msgid "Endpoint URL"
-msgstr "URL điểm cuối"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:441
+msgid "URL copied"
+msgstr "Đã sao chép URL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
-msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route."
-msgstr "Sử dụng điểm cuối HTTPS công khai có thể chấp nhận yêu cầu POST, chẳng hạn như Zapier catch hook, URL webhook n8n hoặc tuyến API của riêng bạn."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:445
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:446
+msgid "Copy URL"
+msgstr "Sao chép URL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:272
-msgid "Events"
-msgstr "Sự kiện"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:488
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:119
+msgid "SSL"
+msgstr "SSL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:328
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:70
-msgid "Creating..."
-msgstr "Đang tạo..."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:489
+msgid "Insecure"
+msgstr "Không an toàn"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:329
-msgid "Create Webhook"
-msgstr "Tạo Webhook"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:516
+msgid "Send a test payload to this endpoint"
+msgstr "Gửi một dữ liệu thử nghiệm đến điểm cuối này"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:336
-msgid "Loading webhooks…"
-msgstr "Đang tải webhook…"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:520
+msgid "Test"
+msgstr "Thử nghiệm"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:342
-msgid "Failed to load webhooks"
-msgstr "Tải webhook thất bại"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:534
+msgid "View delivery history & attempts"
+msgstr "Xem lịch sử & lần thử gửi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:374
-#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:56
-#: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:44
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:59
-msgid "Inactive"
-msgstr "Không hoạt động"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:538
+msgid "Deliveries"
+msgstr "Lượt gửi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:391
-msgid "Signing secret stored"
-msgstr "Đã lưu khóa bí mật ký"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:550
+msgid "Edit webhook settings"
+msgstr "Chỉnh sửa cài đặt Webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:554
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:374
+msgid "Edit"
+msgstr "Chỉnh sửa"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:565
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:568
+msgid "Delete this webhook"
+msgstr "Xóa Webhook này"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:581
+msgid "Events:"
+msgstr "Sự kiện:"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:607
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:630
+msgid "No events subscribed"
+msgstr "Chưa đăng ký sự kiện nào"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:642
+msgid "Secret:"
+msgstr "Khóa bí mật:"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:655
+msgid "Rotate"
+msgstr "Đổi mới"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:666
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:128
 msgid "Created:"
 msgstr "Được tạo:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:417
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:424
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:518
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:529
-msgid "Delete webhook"
-msgstr "Xóa webhook"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:690
+msgid "No webhooks configured"
+msgstr "Chưa có Webhook nào được cấu hình"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:442
-msgid "Copy Your Webhook Secret"
-msgstr "Sao chép khóa bí mật Webhook của bạn"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:693
+msgid "Add an HTTPS endpoint to begin receiving signed event deliveries for link activity, user updates, and API key events."
+msgstr "Thêm một điểm cuối HTTPS để bắt đầu nhận các lượt gửi sự kiện đã ký cho hoạt động liên kết, cập nhật người dùng và sự kiện khóa API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:448
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:748
+msgid "Your Webhook Signing Secret"
+msgstr "Khóa bí mật ký Webhook của bạn"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:754
 msgid "This signing secret will not be shown again."
 msgstr "Khóa bí mật ký này sẽ không được hiển thị lại."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:451
-msgid "Store it in your automation tool or secret manager before closing this window."
-msgstr "Hãy lưu nó vào công cụ tự động hóa hoặc trình quản lý bí mật của bạn trước khi đóng cửa sổ này."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:757
+msgid "Store this secret securely in your receiving application. Outbound requests are signed using HMAC-SHA256 with this secret."
+msgstr "Lưu trữ khóa bí mật này an toàn trong ứng dụng nhận của bạn. Các yêu cầu gửi đi được ký bằng HMAC-SHA256 với khóa bí mật này."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:474
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:498
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:780
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:804
 msgid "Secret copied"
 msgstr "Đã sao chép khóa bí mật"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:477
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:783
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "Sao chép vào khay nhớ tạm"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:481
-msgid "If this secret is ever exposed, delete the webhook and create a new one."
-msgstr "Nếu khóa bí mật này bị lộ, hãy xóa webhook và tạo một webhook mới."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:787
+msgid "To verify signatures, compute HMAC-SHA256 over '{timestamp}.{raw_payload}' and compare against the X-PeakURL-Signature header."
+msgstr "Để xác minh chữ ký, hãy tính toán HMAC-SHA256 trên '{timestamp}.{raw_payload}' và so sánh với tiêu đề X-PeakURL-Signature."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:502
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:808
 msgid "Copy Secret"
 msgstr "Sao chép khóa bí mật"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:505
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:811
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "Tôi đã lưu trữ nó"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:522
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:825
+msgid "Rotate Webhook Signing Secret"
+msgstr "Đổi mới khóa bí mật ký Webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:829
+msgid "Rotate the signing secret for %s? The current secret will be immediately invalidated and outbound event signatures will fail until you update your receiver application."
+msgstr "Đổi mới khóa bí mật ký cho %s? Khóa bí mật hiện tại sẽ bị vô hiệu ngay lập tức và chữ ký sự kiện gửi đi sẽ thất bại cho đến khi bạn cập nhật ứng dụng nhận."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:836
+msgid "Rotate Secret"
+msgstr "Đổi mới khóa bí mật"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:851
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:862
+msgid "Delete Webhook"
+msgstr "Xóa Webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:855
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "Xóa webhook cho %s? PeakURL sẽ ngừng gửi các yêu cầu sự kiện đã ký tới điểm cuối này ngay lập tức."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:530
-msgid "Keep webhook"
-msgstr "Giữ lại webhook"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:863
+msgid "Keep Webhook"
+msgstr "Giữ lại Webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:873
+msgid "Webhook Test Ping Result"
+msgstr "Kết quả ping thử nghiệm Webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:894
+msgid "Delivery Succeeded"
+msgstr "Gửi thành công"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:904
+msgid "Delivery Failed"
+msgstr "Gửi thất bại"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:941
+msgid "Error details"
+msgstr "Chi tiết lỗi"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:342
+msgid "%d configured"
+msgid_plural "%d configured"
+msgstr[0] "%d đã định cấu hình"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:625
+msgid "+%d more"
+msgid_plural "+%d more"
+msgstr[0] "+%d nữa"
 
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:40
 msgid "Connection"
@@ -4733,15 +5640,8 @@ msgstr "Tạo khóa mới"
 msgid "API Key"
 msgstr "Khóa API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:119
-#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:54
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:58
-msgid "Active"
-msgstr "Hoạt động"
-
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:145
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:290
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:382
 msgid "Delete"
 msgstr "Xóa"
 
@@ -5045,10 +5945,6 @@ msgstr "Bạn có chắc chắn muốn xóa bộ nhớ đệm đối tượng? T
 msgid "TLS / STARTTLS"
 msgstr "TLS / STARTTLS"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:119
-msgid "SSL"
-msgstr "SSL"
-
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:140
 msgid "Save the current email settings before sending a test email."
 msgstr "Lưu cài đặt email hiện tại trước khi gửi email thử nghiệm."
@@ -5186,7 +6082,7 @@ msgstr "Quản lý tùy chọn và cấu hình tài khoản của bạn"
 
 #: client/pages/dashboard/settings/Layout.tsx:45
 #: client/pages/dashboard/about/AboutPage.tsx:231
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:246
 msgid "Performance"
 msgstr "Hiệu suất"
 
@@ -5241,7 +6137,7 @@ msgstr[0] "Đã xử lý %1$d tác vụ đến hạn: %2$s."
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:21
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:57
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:352
 msgid "Run Due Jobs"
 msgstr "Chạy tác vụ đến hạn"
 
@@ -5266,7 +6162,7 @@ msgid "Job"
 msgstr "Tác vụ"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:555
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:644
 msgid "Schedule"
 msgstr "Lịch trình"
 
@@ -5283,16 +6179,8 @@ msgstr "Lần chạy tiếp theo"
 msgid "Result"
 msgstr "Kết quả"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:82
-#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:112
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:127
-#: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:55
-msgid "Actions"
-msgstr "Hành động"
-
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:136
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:428
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:478
 msgid "Customized"
 msgstr "Tùy chỉnh"
 
@@ -5335,208 +6223,252 @@ msgstr "Đang chạy..."
 msgid "Run Now"
 msgstr "Chạy ngay"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:71
 msgid "7 Days"
 msgstr "7 ngày"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:72
 msgid "14 Days"
 msgstr "14 ngày"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
 msgid "30 Days (Recommended)"
 msgstr "30 ngày (Khuyến nghị)"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:74
 msgid "60 Days"
 msgstr "60 ngày"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:75
 msgid "90 Days"
 msgstr "90 ngày"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:76
 msgid "180 Days"
 msgstr "180 ngày"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:53
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:77
 msgid "1 Year"
 msgstr "1 năm"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:53
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:54
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:78
 msgid "Keep Indefinitely"
 msgstr "Giữ vô thời hạn"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
+msgid "Use Global (%s)"
+msgstr "Sử dụng chung (%s)"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:67
+msgid "Use Global (%d Days)"
+msgstr "Sử dụng chung (%d ngày)"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:73
+msgid "30 Days"
+msgstr "30 ngày"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:87
+msgid "%d Days"
+msgstr "%d ngày"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:96
 msgid "Every 5 minutes"
 msgstr "Mỗi 5 phút"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:97
 msgid "Every 15 minutes"
 msgstr "Mỗi 15 phút"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:98
 msgid "Every 30 minutes"
 msgstr "Mỗi 30 phút"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:99
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:21
 msgid "Hourly"
 msgstr "Hàng giờ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:100
 msgid "Every 2 hours"
 msgstr "Mỗi 2 giờ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:101
 msgid "Every 6 hours"
 msgstr "Mỗi 6 giờ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:65
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:102
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:26
 msgid "Every 12 hours"
 msgstr "Mỗi 12 giờ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:103
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:35
 msgid "Daily"
 msgstr "Hàng ngày"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:104
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:38
 msgid "Weekly"
 msgstr "Hàng tuần"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:138
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:177
 msgid "Execution history retention setting saved successfully."
 msgstr "Đã lưu cài đặt lưu giữ lịch sử thực thi thành công."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:144
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:183
 msgid "Failed to update history retention."
 msgstr "Không thể cập nhật thời gian lưu giữ lịch sử."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:170
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:210
 msgid "Schedule for [%s] updated successfully."
 msgstr "Đã cập nhật lịch trình cho [%s] thành công."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:181
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:221
 msgid "Failed to update schedule for [%s]."
 msgstr "Không thể cập nhật lịch trình cho [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:199
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:239
 msgid "Reset [%s] to recommended default schedule."
 msgstr "Đã đặt lại [%s] về lịch trình mặc định được khuyến nghị."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:210
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:250
 msgid "Failed to reset job schedule."
 msgstr "Không thể đặt lại lịch trình tác vụ."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:254
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:294
 msgid "Manage Schedules & Retention"
 msgstr "Quản lý lịch trình & lưu giữ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:264
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:628
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:304
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:717
 msgid "Site timezone: %s"
 msgstr "Múi giờ trang web: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:276
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:277
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:316
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:317
 msgid "Close schedules drawer"
 msgstr "Đóng ngăn lịch trình"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:293
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:333
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:792
 msgid "Execution History Retention"
 msgstr "Lưu giữ lịch sử thực thi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:298
-msgid "Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
-msgstr "Chọn khoảng thời gian lưu giữ các bản ghi tác vụ nền đã hoàn thành. Các lần thực thi đang hoạt động và đang thử lại sẽ không bao giờ bị xóa."
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:338
+msgid "Default retention period for background-job execution records. Scheduled jobs without an explicit override inherit this global setting. Active and retrying executions are never removed by retention cleanup."
+msgstr "Thời gian lưu giữ mặc định cho bản ghi thực thi tác vụ nền. Các tác vụ đã lên lịch không có ghi đè rõ ràng sẽ kế thừa cài đặt chung này. Các lượt thực thi đang hoạt động và đang thử lại sẽ không bao giờ bị xóa bởi tác vụ dọn dẹp lưu giữ."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:316
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:356
 msgid "History Retention Period"
 msgstr "Thời gian lưu giữ lịch sử"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:334
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:374
 msgid "Save Retention"
 msgstr "Lưu cài đặt lưu giữ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:348
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:388
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:486
 msgid "Registered Background Tasks"
 msgstr "Các tác vụ nền đã đăng ký"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:357
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:397
 msgid "Recommended schedules are based on PeakURL's default maintenance cadence. You can customize any job and restore its recommended schedule at any time."
 msgstr "Lịch trình khuyến nghị dựa trên nhịp bảo trì mặc định của PeakURL. Bạn có thể tùy chỉnh bất kỳ tác vụ nào và khôi phục lịch trình khuyến nghị bất kỳ lúc nào."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:473
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:523
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:79
 msgid "Due now"
 msgstr "Đến hạn ngay"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:478
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:528
 msgid "Next: %s"
 msgstr "Tiếp theo: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:526
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:800
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:466
-#: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:532
-msgid "Close"
-msgstr "Đóng"
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:549
+msgid "Retention: Indefinite"
+msgstr "Lưu giữ: Vô thời hạn"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:529
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:554
+msgid "Retention: 1 Year"
+msgstr "Lưu giữ: 1 năm"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:559
+msgid "Retention: %d Days"
+msgstr "Lưu giữ: %d ngày"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:611
 msgid "Configure"
 msgstr "Định cấu hình"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:586
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:625
+msgid "Schedule Settings"
+msgstr "Cài đặt lịch trình"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:675
 msgid "Recurrence cadence."
 msgstr "Nhịp lặp lại."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:598
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:687
 msgid "Preferred run time"
 msgstr "Thời gian chạy ưu tiên"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:730
 msgid "Automatic execution"
 msgstr "Thực thi tự động"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:647
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:736
 msgid "Runs this job automatically when it is due."
 msgstr "Tự động chạy tác vụ này khi đến hạn."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:650
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:739
 msgid "Automatic execution is disabled. You can still run this job manually."
 msgstr "Thực thi tự động đã bị tắt. Bạn vẫn có thể chạy tác vụ này theo cách thủ công."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:662
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:751
 msgid "Toggle automatic execution"
 msgstr "Bật/tắt thực thi tự động"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:719
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:827
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:797
+msgid "Specify how long completed execution records are kept for this job, or inherit the global retention default."
+msgstr "Chỉ định thời gian lưu giữ bản ghi thực thi đã hoàn tất cho tác vụ này, hoặc kế thừa mặc định lưu giữ chung."
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:841
+msgid "History retention for %s"
+msgstr "Lưu giữ lịch sử cho %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:873
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:981
 msgid "Reset to Recommended"
 msgstr "Đặt lại về khuyến nghị"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:771
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:925
 msgid "Save Schedule"
 msgstr "Lưu lịch trình"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:790
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:944
 msgid "Background job schedules and retention rules are stored permanently."
 msgstr "Lịch trình tác vụ nền và quy tắc lưu giữ được lưu trữ vĩnh viễn."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:814
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:968
 msgid "Reset Schedule — %s"
 msgstr "Đặt lại lịch trình — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:973
 msgid "Restore the recommended PeakURL schedule for [%1$s] (%2$s)? Any customized interval, preferred run time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
 msgstr "Khôi phục lịch trình PeakURL được khuyến nghị cho [%1$s] (%2$s)? Mọi khoảng thời gian tùy chỉnh, thời gian chạy ưu tiên và trạng thái bật sẽ được khôi phục về khuyến nghị tích hợp. Lịch sử thực thi trước đây sẽ được giữ nguyên."
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:23
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:408
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:413
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:169
 msgid "Running"
 msgstr "Đang chạy"
@@ -5545,13 +6477,8 @@ msgstr "Đang chạy"
 msgid "Retrying (%1$d/%2$d)"
 msgstr "Đang thử lại (%1$d/%2$d)"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:74
-#: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:184
-msgid "Failed"
-msgstr "Thất bại"
-
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:116
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:386
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:391
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:160
 msgid "Scheduled"
 msgstr "Đã lên lịch"
@@ -5622,10 +6549,6 @@ msgstr "Lần thử"
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 msgid "Started"
 msgstr "Đã bắt đầu"
-
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:341
-msgid "Duration"
-msgstr "Thời lượng"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:344
 msgid "Output / Details"
@@ -5842,11 +6765,11 @@ msgstr "Tự động hóa hệ thống"
 msgid "Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
 msgstr "Kiểm tra các tác vụ nền định kỳ, theo dõi tình trạng thực thi, xem lại nhật ký gần đây và kích hoạt thủ công khi được ủy quyền."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:287
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:288
 msgid "Refresh"
 msgstr "Làm mới"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:288
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:289
 msgid "Refresh scheduled jobs status"
 msgstr "Làm mới trạng thái tác vụ đã lên lịch"
 
@@ -5858,68 +6781,68 @@ msgstr "Định cấu hình lịch trình lặp lại, thời gian ưu tiên và
 msgid "Manage Schedules"
 msgstr "Quản lý lịch trình"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:326
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:330
 msgid "Clear execution run history for all jobs"
 msgstr "Xóa lịch sử thực thi cho tất cả các tác vụ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:331
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:589
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:335
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:594
 msgid "Clear All History"
 msgstr "Xóa tất cả lịch sử"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:342
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
 msgid "Execute all jobs that are currently due"
 msgstr "Thực thi tất cả các tác vụ hiện đang đến hạn"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:364
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:369
 msgid "Total Jobs"
 msgstr "Tổng số tác vụ"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:377
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:382
 msgid "Registered in system"
 msgstr "Đã đăng ký trong hệ thống"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:399
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:404
 msgid "Active recurring tasks"
 msgstr "Tác vụ định kỳ đang hoạt động"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:433
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:438
 msgid "Currently in progress"
 msgstr "Hiện đang tiến hành"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:442
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:447
 msgid "Failed / Retrying"
 msgstr "Thất bại / Đang thử lại"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:468
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:473
 msgid "Requiring attention"
 msgstr "Cần chú ý"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:503
 msgid "Search jobs..."
 msgstr "Tìm kiếm tác vụ..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:512
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:517
 msgid "Failed to load scheduled jobs"
 msgstr "Không thể tải các tác vụ đã lên lịch"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:515
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:520
 msgid "Could not retrieve registered jobs from the scheduler API."
 msgstr "Không thể lấy các tác vụ đã đăng ký từ API bộ lên lịch."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:525
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:530
 msgid "Retry"
 msgstr "Thử lại"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:533
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:538
 msgid "Loading scheduled jobs..."
 msgstr "Đang tải các tác vụ đã lên lịch..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:585
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:590
 msgid "Clear All Execution History"
 msgstr "Xóa tất cả lịch sử thực thi"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:586
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:591
 msgid "Are you sure you want to clear execution history across all background jobs? Finished run records and output logs will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "Bạn có chắc chắn muốn xóa lịch sử thực thi của tất cả các tác vụ nền không? Các bản ghi đã hoàn thành và nhật ký đầu ra sẽ bị xóa vĩnh viễn. Các lần chạy đang hoạt động và đang thử lại sẽ được bảo vệ."
 
@@ -6070,12 +6993,6 @@ msgstr "Mã nguồn"
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:582
 msgid "Debug Mode"
 msgstr "Chế độ gỡ lỗi"
-
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
-msgid "Enabled"
-msgstr "Đã bật"
 
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
 msgid "Content Directory"
@@ -6448,7 +7365,7 @@ msgid "Detailed technical environment, server configuration, storage, and databa
 msgstr "Môi trường kỹ thuật chi tiết, cấu hình máy chủ, lưu trữ và thông số kỹ thuật cơ sở dữ liệu."
 
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1457
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:102
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:137
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:62
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:105
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:227
@@ -6471,6 +7388,7 @@ msgid "Scheduler telemetry currently unavailable"
 msgstr "Đo từ xa của bộ lên lịch hiện không khả dụng"
 
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:79
+#: client/pages/dashboard/links/components/health-status.ts:28
 msgid "Healthy"
 msgstr "Tốt"
 
@@ -6610,6 +7528,7 @@ msgstr "Yêu cầu mẫu"
 
 #: client/pages/dashboard/tools/export/ExportPage.tsx:276
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:47
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:120
 msgid "Response"
 msgstr "Phản hồi"
 
@@ -7018,22 +7937,22 @@ msgid "Activate"
 msgstr "Kích hoạt"
 
 #: client/pages/dashboard/activity/ActivityPage.tsx:81
-#: client/pages/dashboard/links/LinksPage.tsx:202
+#: client/pages/dashboard/links/LinksPage.tsx:203
 msgid "Link restored"
 msgstr "Liên kết đã được khôi phục"
 
 #: client/pages/dashboard/activity/ActivityPage.tsx:82
-#: client/pages/dashboard/links/LinksPage.tsx:203
+#: client/pages/dashboard/links/LinksPage.tsx:204
 msgid "The link has been restored to active status."
 msgstr "Liên kết đã được khôi phục về trạng thái hoạt động."
 
 #: client/pages/dashboard/activity/ActivityPage.tsx:86
-#: client/pages/dashboard/links/LinksPage.tsx:207
+#: client/pages/dashboard/links/LinksPage.tsx:208
 msgid "Unable to restore link"
 msgstr "Không thể khôi phục liên kết"
 
 #: client/pages/dashboard/activity/ActivityPage.tsx:87
-#: client/pages/dashboard/links/LinksPage.tsx:208
+#: client/pages/dashboard/links/LinksPage.tsx:209
 msgid "Failed to restore link."
 msgstr "Không thể khôi phục liên kết."
 
@@ -7122,12 +8041,6 @@ msgstr "Xem lại các thay đổi liên kết và sự kiện quản lý ngư�
 msgid "Refresh activity history"
 msgstr "Làm mới lịch sử hoạt động"
 
-#: client/pages/dashboard/activity/components/ActivityHeader/ActivityCategoryTabs.tsx:27
-#: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:36
-#: client/pages/dashboard/links/components/Header/DateRangeFilter.tsx:22
-msgid "All"
-msgstr "Tất cả"
-
 #: client/pages/dashboard/activity/components/ActivityHeader/ActivityCategoryTabs.tsx:59
 msgid "All Events"
 msgstr "Tất cả sự kiện"
@@ -7137,28 +8050,24 @@ msgid "Activity history"
 msgstr "Lịch sử hoạt động"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:35
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:142
 msgid "%s selected"
 msgstr "Đã chọn %s"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:64
 #: client/pages/dashboard/activity/components/ActivityModals/ActivityModals.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:84
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:191
 msgid "Delete selected"
 msgstr "Xóa mục đã chọn"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:72
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:95
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:202
 msgid "Delete all"
 msgstr "Xóa tất cả"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:100
 msgid "Select all events on this page"
 msgstr "Chọn tất cả sự kiện trên trang này"
-
-#: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:107
-msgid "Event"
-msgstr "Sự kiện"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:108
 msgid "Details"
@@ -7223,16 +8132,6 @@ msgstr "Hiển thị %1$s-%2$s trên tổng số %3$s sự kiện"
 #: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:47
 msgid "Page %1$s of %2$s"
 msgstr "Trang %1$s / %2$s"
-
-#: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:63
-#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:40
-msgid "Previous"
-msgstr "Trước"
-
-#: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:89
-#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:84
-msgid "Next"
-msgstr "Tiếp theo"
 
 #: client/pages/dashboard/activity/components/ActivityModals/ActivityModals.tsx:45
 msgid "Delete activity logs"
@@ -7799,7 +8698,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "So với %1$s đến %2$s."
 
 #: client/pages/dashboard/components/StatsCards/StatsCards.tsx:119
-#: client/pages/dashboard/links/LinksPage.tsx:330
+#: client/pages/dashboard/links/LinksPage.tsx:332
 msgid "Active Links"
 msgstr "Liên kết đang hoạt động"
 
@@ -7933,219 +8832,338 @@ msgstr "Xóa vĩnh viễn (%s)"
 msgid "Move to Trash (%s)"
 msgstr "Chuyển vào thùng rác (%s)"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:30
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:31
 msgid "Status: All"
 msgstr "Trạng thái: Tất cả"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:31
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:32
 msgid "Status: Active"
 msgstr "Trạng thái: Đang hoạt động"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:32
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:33
 msgid "Status: Inactive"
 msgstr "Trạng thái: Không hoạt động"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:37
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:38
+msgid "Expired (%s)"
+msgstr "Đã hết hạn (%s)"
+
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:39
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:61
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:191
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:60
+msgid "Expired"
+msgstr "Đã hết hạn"
+
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:46
 msgid "Trash (%s)"
 msgstr "Thùng rác (%s)"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:38
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:47
 msgid "Trash"
 msgstr "Thùng rác"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:43
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:52
 msgid "Sort: Date Created"
 msgstr "Sắp xếp: Ngày tạo"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:44
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:53
 msgid "Sort: Date Modified"
 msgstr "Sắp xếp: Ngày sửa đổi"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:45
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:54
 msgid "Sort: Most Clicks"
 msgstr "Sắp xếp: Nhiều lượt nhấp nhất"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:46
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:55
 msgid "Sort: Unique Visitors"
 msgstr "Sắp xếp: Khách truy cập duy nhất"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:47
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:56
 msgid "Sort: Alias"
 msgstr "Sắp xếp: Bí danh"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:48
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:57
 msgid "Sort: Title"
 msgstr "Sắp xếp: Tiêu đề"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:51
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:58
+msgid "Sort: Health"
+msgstr "Sắp xếp: Tình trạng"
+
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:61
 msgid "Descending"
 msgstr "Giảm dần"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:52
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:62
 msgid "Ascending"
 msgstr "Tăng dần"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:63
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:73
 msgid "Total Links:"
 msgstr "Tổng số liên kết:"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:73
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:83
 msgid "Total Clicks:"
 msgstr "Tổng số lượt nhấp:"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:95
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:105
 msgid "Filter links by status"
 msgstr "Lọc liên kết theo trạng thái"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:105
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:115
 msgid "Sort links"
 msgstr "Sắp xếp liên kết"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:114
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:124
 msgid "Sort order"
 msgstr "Thứ tự sắp xếp"
 
-#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:25
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:52
 msgid "Showing %1$s–%2$s of %3$s links"
 msgstr "Hiển thị %1$s–%2$s trên tổng số %3$s liên kết"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:29
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:66
+msgid "Previous page"
+msgstr "Trang trước"
+
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:88
+msgid "Page %d"
+msgstr "Trang %d"
+
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:106
+msgid "Next page"
+msgstr "Trang tiếp theo"
+
+#: client/pages/dashboard/links/components/health-status.ts:19
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:235
+msgid "Not checked"
+msgstr "Chưa kiểm tra"
+
+#: client/pages/dashboard/links/components/health-status.ts:34
+msgid "Slow"
+msgstr "Chậm"
+
+#: client/pages/dashboard/links/components/health-status.ts:40
+msgid "Unreachable"
+msgstr "Không thể truy cập"
+
+#: client/pages/dashboard/links/components/health-status.ts:46
+msgid "DNS Error"
+msgstr "Lỗi DNS"
+
+#: client/pages/dashboard/links/components/health-status.ts:52
+msgid "TLS Error"
+msgstr "Lỗi TLS"
+
+#: client/pages/dashboard/links/components/health-status.ts:58
+msgid "Timeout"
+msgstr "Hết thời gian chờ"
+
+#: client/pages/dashboard/links/components/health-status.ts:64
+msgid "HTTP Error"
+msgstr "Lỗi HTTP"
+
+#: client/pages/dashboard/links/components/health-status.ts:70
+msgid "Redirect Loop"
+msgstr "Vòng lặp chuyển hướng"
+
+#: client/pages/dashboard/links/components/health-status.ts:76
+msgid "Blocked"
+msgstr "Bị chặn"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:136
 msgid "Deselect all links"
 msgstr "Bỏ chọn tất cả liên kết"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:46
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:153
 msgid "Restore selected"
 msgstr "Khôi phục mục đã chọn"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:83
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:163
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:190
 msgid "Delete permanently"
 msgstr "Xóa vĩnh viễn"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:66
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:173
 msgid "Empty trash"
 msgstr "Dọn sạch thùng rác"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:114
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:221
 msgid "Select all links"
 msgstr "Chọn tất cả liên kết"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:117
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:224
 msgid "Link"
 msgstr "Liên kết"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:227
 msgid "Title"
 msgstr "Tiêu đề"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:119
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:234
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:133
 msgid "Destination"
 msgstr "Đích đến"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:237
+msgid "Health"
+msgstr "Tình trạng"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:258
 msgid "Modified"
 msgstr "Đã sửa đổi"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:258
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:36
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:52
 msgid "Created"
 msgstr "Đã tạo"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:50
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:59
 msgid "Trashed"
 msgstr "Trong thùng rác"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:52
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:156
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:60
-msgid "Expired"
-msgstr "Đã hết hạn"
-
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:103
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:138
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:62
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:106
 #: client/pages/dashboard/links/components/QRCodeModal/QRCodeModal.tsx:144
 msgid "Copy"
 msgstr "Sao chép"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:137
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:172
 msgid "Protected"
 msgstr "Được bảo vệ"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:159
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:194
 msgid "Expires"
 msgstr "Hết hạn"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:212
+msgid "View health details"
+msgstr "Xem chi tiết tình trạng"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:213
+msgid "View destination health details"
+msgstr "Xem chi tiết tình trạng đích"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:248
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:181
+msgid "Check Now"
+msgstr "Kiểm tra ngay"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:249
+msgid "Check link health now"
+msgstr "Kiểm tra tình trạng liên kết ngay"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:304
 msgid "Created: %s"
 msgstr "Ngày tạo: %s"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:216
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:308
 msgid "Modified: %s"
 msgstr "Ngày sửa: %s"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:249
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:341
 msgid "Restore Link"
 msgstr "Khôi phục liên kết"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:257
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:349
 #: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:154
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:192
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
 msgid "Delete Permanently"
 msgstr "Xóa vĩnh viễn"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:268
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:360
 #: client/pages/dashboard/links/components/QRCodeModal/QRCodeModal.tsx:78
 msgid "QR Code"
 msgstr "Mã QR"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:282
-msgid "Edit"
-msgstr "Chỉnh sửa"
-
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:23
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:27
 msgid "No links found"
 msgstr "Không tìm thấy liên kết nào"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:26
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:30
 msgid "No links matched \"%s\"."
 msgstr "Không có liên kết nào khớp với \"%s\"."
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:39
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:43
 msgid "Trash is empty"
 msgstr "Thùng rác trống"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:42
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:46
 msgid "No deleted links found in trash."
 msgstr "Không tìm thấy liên kết đã xóa nào trong thùng rác."
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:53
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:59
+msgid "No expired links"
+msgstr "Không có liên kết đã hết hạn"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:62
+msgid "No expired links found."
+msgstr "Không tìm thấy liên kết đã hết hạn."
+
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:73
 msgid "No links yet"
 msgstr "Chưa có liên kết"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:55
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:75
 msgid "Create your first shortened link to get started"
 msgstr "Tạo liên kết rút gọn đầu tiên của bạn để bắt đầu"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:144
+msgid "Failed to check link health."
+msgstr "Không thể kiểm tra tình trạng liên kết."
+
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:200
 msgid "Trashed Links"
 msgstr "Liên kết trong thùng rác"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:175
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:202
+msgid "Expired Links"
+msgstr "Liên kết đã hết hạn"
+
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:220
 msgid "Search links..."
 msgstr "Tìm kiếm liên kết..."
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:303
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:307
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:371
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:375
 msgid "Empty Trash"
 msgstr "Dọn sạch thùng rác"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:304
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:372
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "Bạn có chắc chắn muốn xóa vĩnh viễn tất cả liên kết trong thùng rác không? Hành động này không thể hoàn tác."
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:51
+msgid "Destination Health"
+msgstr "Tình trạng đích"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:69
+#: client/pages/dashboard/links/components/UrlShorteningForm/MainInputs.tsx:22
+#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:94
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:52
+msgid "Destination URL"
+msgstr "URL đích"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:80
+#: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:231
+msgid "Open destination URL"
+msgstr "Mở URL đích"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:107
+msgid "Last checked"
+msgstr "Kiểm tra lần cuối"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:143
+msgid "Redirects"
+msgstr "Chuyển hướng"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:153
+msgid "Reason"
+msgstr "Lý do"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:25
 msgid "Link Title (Optional)"
@@ -8161,27 +9179,27 @@ msgid "Password Protection (Optional)"
 msgstr "Bảo vệ bằng mật khẩu (Tùy chọn)"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:109
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:144
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:150
 msgid "Please enter a URL"
 msgstr "Vui lòng nhập một URL"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:124
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:178
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:184
 msgid "Please enter a valid social image URL (must include http:// or https://)"
 msgstr "Vui lòng nhập URL hình ảnh mạng xã hội hợp lệ (phải bao gồm http:// hoặc https://)"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:133
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:187
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:193
 msgid "Choose a preview image file or enter an image URL, not both."
 msgstr "Chọn tệp hình ảnh xem trước hoặc nhập URL hình ảnh, không thực hiện cả hai."
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:147
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:155
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:161
 msgid "Please enter a valid URL (must include http:// or https://)"
 msgstr "Vui lòng nhập một URL hợp lệ (phải bao gồm http:// hoặc https://)"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:179
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:163
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:169
 msgid "Expiration time must be in the future."
 msgstr "Thời gian hết hạn phải ở tương lai."
 
@@ -8269,12 +9287,6 @@ msgstr "utm_term (ví dụ: running)"
 #: client/pages/dashboard/links/components/UrlShorteningForm/UTMFields.tsx:75
 msgid "utm_content (e.g., banner)"
 msgstr "utm_content (ví dụ: banner)"
-
-#: client/pages/dashboard/links/components/UrlShorteningForm/MainInputs.tsx:22
-#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:94
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:52
-msgid "Destination URL"
-msgstr "URL đích"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/MainInputs.tsx:30
 msgid "Enter long link here..."
@@ -8577,10 +9589,6 @@ msgstr "Cập nhật lần cuối:"
 msgid "24 hours"
 msgstr "24 giờ"
 
-#: client/pages/dashboard/links/components/StatsDrawer/analytics.ts:69
-msgid "30 days"
-msgstr "30 ngày"
-
 #: client/pages/dashboard/links/components/StatsDrawer/analytics.ts:169
 msgid "%s click"
 msgstr "%s lượt nhấp"
@@ -8814,10 +9822,6 @@ msgstr "URL đích không khả dụng"
 msgid "Copy destination URL"
 msgstr "Sao chép URL đích"
 
-#: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:231
-msgid "Open destination URL"
-msgstr "Mở URL đích"
-
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:269
 msgid "Link Analytics"
 msgstr "Phân tích liên kết"
@@ -8895,7 +9899,7 @@ msgstr "Để trống để giữ mật khẩu hiện tại."
 msgid "Remove password protection"
 msgstr "Xóa bảo vệ bằng mật khẩu"
 
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:224
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:230
 msgid "Failed to update link"
 msgstr "Cập nhật liên kết thất bại"
 
@@ -8936,76 +9940,76 @@ msgstr "so với tuần trước"
 msgid "vs last period"
 msgstr "so với kỳ trước"
 
-#: client/pages/dashboard/links/LinksPage.tsx:217
+#: client/pages/dashboard/links/LinksPage.tsx:218
 msgid "Links restored"
 msgstr "Các liên kết đã được khôi phục"
 
-#: client/pages/dashboard/links/LinksPage.tsx:218
+#: client/pages/dashboard/links/LinksPage.tsx:219
 msgid "Selected links have been restored to active status."
 msgstr "Các liên kết đã chọn đã được khôi phục về trạng thái hoạt động."
 
-#: client/pages/dashboard/links/LinksPage.tsx:222
+#: client/pages/dashboard/links/LinksPage.tsx:223
 msgid "Unable to restore links"
 msgstr "Không thể khôi phục các liên kết"
 
-#: client/pages/dashboard/links/LinksPage.tsx:223
+#: client/pages/dashboard/links/LinksPage.tsx:224
 msgid "Failed to restore selected links."
 msgstr "Không thể khôi phục các liên kết đã chọn."
 
-#: client/pages/dashboard/links/LinksPage.tsx:232
+#: client/pages/dashboard/links/LinksPage.tsx:233
 msgid "Trash emptied"
 msgstr "Thùng rác đã được dọn sạch"
 
-#: client/pages/dashboard/links/LinksPage.tsx:233
+#: client/pages/dashboard/links/LinksPage.tsx:234
 msgid "All trashed links have been permanently deleted."
 msgstr "Tất cả liên kết trong thùng rác đã bị xóa vĩnh viễn."
 
-#: client/pages/dashboard/links/LinksPage.tsx:237
+#: client/pages/dashboard/links/LinksPage.tsx:238
 msgid "Unable to empty trash"
 msgstr "Không thể dọn sạch thùng rác"
 
-#: client/pages/dashboard/links/LinksPage.tsx:238
+#: client/pages/dashboard/links/LinksPage.tsx:239
 msgid "Failed to empty trash."
 msgstr "Không thể dọn sạch thùng rác."
 
-#: client/pages/dashboard/links/LinksPage.tsx:286
+#: client/pages/dashboard/links/LinksPage.tsx:288
 msgid "All-time clicks"
 msgstr "Lượt nhấp mọi thời đại"
 
-#: client/pages/dashboard/links/LinksPage.tsx:289
-#: client/pages/dashboard/links/LinksPage.tsx:299
+#: client/pages/dashboard/links/LinksPage.tsx:291
+#: client/pages/dashboard/links/LinksPage.tsx:301
 msgid "Selected date range"
 msgstr "Khoảng ngày đã chọn"
 
-#: client/pages/dashboard/links/LinksPage.tsx:291
+#: client/pages/dashboard/links/LinksPage.tsx:293
 msgid "No activity recorded"
 msgstr "Chưa có hoạt động nào được ghi lại"
 
-#: client/pages/dashboard/links/LinksPage.tsx:296
+#: client/pages/dashboard/links/LinksPage.tsx:298
 msgid "All-time visitors"
 msgstr "Khách truy cập mọi thời đại"
 
-#: client/pages/dashboard/links/LinksPage.tsx:301
+#: client/pages/dashboard/links/LinksPage.tsx:303
 msgid "No visitors recorded"
 msgstr "Chưa có khách truy cập nào được ghi lại"
 
-#: client/pages/dashboard/links/LinksPage.tsx:322
+#: client/pages/dashboard/links/LinksPage.tsx:324
 msgid "Total Links"
 msgstr "Tổng số liên kết"
 
-#: client/pages/dashboard/links/LinksPage.tsx:325
+#: client/pages/dashboard/links/LinksPage.tsx:327
 msgid "Total created links"
 msgstr "Tổng số liên kết đã tạo"
 
-#: client/pages/dashboard/links/LinksPage.tsx:333
+#: client/pages/dashboard/links/LinksPage.tsx:335
 msgid "Currently active"
 msgstr "Hiện đang hoạt động"
 
-#: client/pages/dashboard/links/LinksPage.tsx:423
+#: client/pages/dashboard/links/LinksPage.tsx:425
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "Các mục trong thùng rác được giữ vô thời hạn cho đến khi được dọn sạch."
 
-#: client/pages/dashboard/links/LinksPage.tsx:427
+#: client/pages/dashboard/links/LinksPage.tsx:429
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Các mục trong thùng rác sẽ tự động bị xóa sau %d ngày."
 

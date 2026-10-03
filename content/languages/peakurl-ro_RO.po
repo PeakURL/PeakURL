@@ -6,10 +6,10 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-22 08:17+0000\n"
-"POT-Creation-Date: 2026-09-22 08:17+0000\n"
+"PO-Revision-Date: 2026-10-03 20:18+0000\n"
+"POT-Creation-Date: 2026-10-03 20:18+0000\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n == 0 || n != 1 && n % 100 >= 1 && n % 100 <= 19 ? 1 : 2;\n"
-"Project-Id-Version: PeakURL 1.7.0\n"
+"Project-Id-Version: PeakURL 1.7.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
@@ -49,7 +49,7 @@ msgid "Site info"
 msgstr "Informații despre site"
 
 #: install.php:581
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:445
 msgid "Site title"
 msgstr "Titlu site"
 
@@ -63,7 +63,7 @@ msgstr "Administrator"
 
 #: install.php:589
 #: setup-config.php:803
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:362
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:376
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:175
 msgid "Username"
 msgstr "Nume de utilizator"
@@ -88,7 +88,7 @@ msgstr "you@company.com"
 
 #: install.php:598
 #: setup-config.php:807
-#: server/features/links/controller.php:514
+#: server/features/links/controller.php:531
 #: client/pages/auth/login/LoginPage.tsx:253
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:29
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:195
@@ -122,7 +122,7 @@ msgid "Welcome - %s"
 msgstr "Bun venit – %s"
 
 #: setup-config.php:641
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:463
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:477
 msgid "Site language"
 msgstr "Limba site-ului"
 
@@ -257,11 +257,15 @@ msgstr "Rulările cron orfane au fost eliminate."
 msgid "Removed orphaned webhook deliveries."
 msgstr "Livrările de webhook orfane au fost eliminate."
 
-#: server/core/application.php:327
+#: server/database/repair-specs.php:128
+msgid "Removed orphaned link health records."
+msgstr "S-au eliminat înregistrările orfane privind starea linkurilor."
+
+#: server/core/application.php:388
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "A apărut o eroare internă de server. Vă rugăm să încercați din nou sau să contactați asistența dacă problema persistă."
 
-#: server/core/application.php:470
+#: server/core/application.php:532
 #: server/services/install/screen.php:142
 msgid "Request origin is not allowed."
 msgstr "Originea cererii nu este permisă."
@@ -305,8 +309,8 @@ msgstr "Nu puteți retrograda singurul cont de administrator rămas."
 
 #: server/features/settings/validator.php:43
 #: server/features/settings/service.php:442
-#: server/features/settings/service.php:614
-#: server/features/links/service.php:1522
+#: server/features/settings/service.php:619
+#: server/features/links/service.php:1848
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:45
 msgid "Shorten, track, and own every link - PeakURL"
 msgstr "Scurtați, urmăriți și dețineți fiecare link – PeakURL"
@@ -384,7 +388,7 @@ msgstr "E-mailul de test a fost trimis."
 msgid "Admin access is required."
 msgstr "Este necesar accesul de administrator."
 
-#: server/features/settings/service.php:712
+#: server/features/settings/service.php:717
 msgid "Save a complete mail configuration before sending a test email."
 msgstr "Salvați o configurație completă de e-mail înainte de a trimite un mesaj de test."
 
@@ -521,110 +525,110 @@ msgstr "Celelalte sesiuni au fost revocate."
 msgid "CAPTCHA verification failed. Please try again."
 msgstr "Verificarea CAPTCHA a eșuat. Vă rugăm să încercați din nou."
 
-#: server/features/auth/service.php:298
+#: server/features/auth/service.php:318
 msgid "User account could not be loaded."
 msgstr "Contul de utilizator nu a putut fi încărcat."
 
-#: server/features/auth/service.php:314
+#: server/features/auth/service.php:334
 msgid "Current password is incorrect."
 msgstr "Parola curentă este incorectă."
 
-#: server/features/auth/service.php:334
+#: server/features/auth/service.php:354
 msgid "Two-factor authentication is not enabled for this account."
 msgstr "Autentificarea cu doi factori nu este activată pentru acest cont."
 
-#: server/features/auth/service.php:385
-#: server/features/users/service.php:333
+#: server/features/auth/service.php:405
+#: server/features/users/service.php:355
 msgid "Email address is already registered."
 msgstr "Adresa de e-mail este deja înregistrată."
 
-#: server/features/auth/service.php:391
-#: server/features/users/service.php:339
-#: server/features/users/service.php:432
+#: server/features/auth/service.php:411
+#: server/features/users/service.php:361
+#: server/features/users/service.php:456
 msgid "Username is already taken."
 msgstr "Acest nume de utilizator este deja folosit."
 
-#: server/features/auth/service.php:438
+#: server/features/auth/service.php:462
 msgid "Invalid verification token."
 msgstr "Token de verificare nevalid."
 
-#: server/features/auth/service.php:455
+#: server/features/auth/service.php:479
 msgid "Verification token is invalid or has expired."
 msgstr "Tokenul de verificare este nevalid sau a expirat."
 
-#: server/features/auth/service.php:495
+#: server/features/auth/service.php:519
 msgid "Email address is required."
 msgstr "Adresa de e-mail este obligatorie."
 
-#: server/features/auth/service.php:542
+#: server/features/auth/service.php:566
 msgid "Email or username and password are required."
 msgstr "Sunt necesare adresa de e-mail sau numele de utilizator și parola."
 
-#: server/features/auth/service.php:564
+#: server/features/auth/service.php:588
 msgid "Invalid email, username, or password."
 msgstr "E-mail, nume de utilizator sau parolă incorectă."
 
-#: server/features/auth/service.php:586
+#: server/features/auth/service.php:610
 msgid "Invalid two-factor code."
 msgstr "Cod de autentificare cu doi factori nevalid."
 
-#: server/features/auth/service.php:631
+#: server/features/auth/service.php:655
 msgid "Two-factor authentication code is required."
 msgstr "Codul de autentificare cu doi factori este obligatoriu."
 
-#: server/features/auth/service.php:753
+#: server/features/auth/service.php:777
 msgid "Password reset token is invalid or has expired."
 msgstr "Tokenul de resetare a parolei este nevalid sau a expirat."
 
-#: server/features/auth/service.php:832
-#: server/features/auth/service.php:854
+#: server/features/auth/service.php:856
+#: server/features/auth/service.php:894
 msgid "You do not have permission to manage API keys."
 msgstr "Nu aveți permisiunea de a gestiona cheile API."
 
-#: server/features/auth/service.php:872
-#: server/features/auth/service.php:910
-#: server/features/auth/service.php:954
-#: server/features/auth/service.php:1024
-#: server/features/auth/service.php:1066
-#: server/features/auth/service.php:1095
-#: server/features/auth/service.php:1121
+#: server/features/auth/service.php:931
+#: server/features/auth/service.php:969
+#: server/features/auth/service.php:1013
+#: server/features/auth/service.php:1083
+#: server/features/auth/service.php:1125
 #: server/features/auth/service.php:1154
+#: server/features/auth/service.php:1180
+#: server/features/auth/service.php:1213
 msgid "You do not have permission to manage account security."
 msgstr "Nu aveți permisiunea de a gestiona securitatea contului."
 
-#: server/features/auth/service.php:959
+#: server/features/auth/service.php:1018
 msgid "Verification token is required."
 msgstr "Este necesar un token de verificare."
 
-#: server/features/auth/service.php:969
+#: server/features/auth/service.php:1028
 msgid "No two-factor setup is pending for this account."
 msgstr "Nu există nicio configurare 2FA în așteptare pentru acest cont."
 
-#: server/features/auth/service.php:975
+#: server/features/auth/service.php:1034
 msgid "Invalid verification code."
 msgstr "Cod de verificare nevalid."
 
-#: server/features/auth/service.php:1030
+#: server/features/auth/service.php:1089
 msgid "Current password is required to disable two-factor authentication."
 msgstr "Parola curentă este necesară pentru a dezactiva autentificarea cu doi factori."
 
-#: server/features/auth/service.php:1072
+#: server/features/auth/service.php:1131
 msgid "Current password is required to regenerate backup codes."
 msgstr "Parola curentă este necesară pentru a regenera codurile de rezervă."
 
-#: server/features/auth/service.php:1101
+#: server/features/auth/service.php:1160
 msgid "Current password is required to download backup codes."
 msgstr "Parola curentă este necesară pentru a descărca codurile de rezervă."
 
-#: server/features/auth/service.php:1161
+#: server/features/auth/service.php:1220
 msgid "PeakURL could not identify the current session."
 msgstr "PeakURL nu a putut identifica sesiunea curentă."
 
-#: server/features/auth/service.php:1218
+#: server/features/auth/service.php:1277
 msgid "Authentication required."
 msgstr "Este necesară autentificarea."
 
-#: server/features/auth/service.php:1238
+#: server/features/auth/service.php:1297
 msgid "Administrator privileges required."
 msgstr "Sunt necesare privilegii de administrator."
 
@@ -709,13 +713,13 @@ msgstr "PeakURL nu a putut încărca manifestul de actualizare."
 #: server/features/system/service.php:680
 #: server/features/system/service.php:724
 #: server/features/system/service.php:768
-#: server/features/system/service.php:869
+#: server/features/system/service.php:884
 msgid "Scheduler service is not configured."
 msgstr "Serviciul de planificare nu este configurat."
 
 #: server/features/system/service.php:644
 #: server/features/system/service.php:791
-#: server/features/system/service.php:892
+#: server/features/system/service.php:907
 msgid "Unknown background job identifier: %s"
 msgstr "Identificator de sarcină de fundal necunoscut: %s"
 
@@ -728,7 +732,7 @@ msgid "Retention days must be a non-negative integer."
 msgstr "Zilele de păstrare trebuie să fie un număr întreg nenegativ."
 
 #: server/features/system/service.php:782
-#: server/features/system/service.php:883
+#: server/features/system/service.php:898
 msgid "Missing background job identifier."
 msgstr "Identificatorul sarcinii de fundal lipsește."
 
@@ -744,24 +748,44 @@ msgstr "Intervalul de recurență trebuie să fie un număr întreg de cel puți
 msgid "Preferred time must be in 24-hour format (HH:MM)."
 msgstr "Ora preferată trebuie să fie în format de 24 de ore (HH:MM)."
 
+#: server/features/system/service.php:845
+msgid "Retention days must be null or a non-negative integer."
+msgstr "Zilele de păstrare trebuie să fie null sau un număr întreg nenegativ."
+
 #: server/features/links/validator.php:45
 msgid "A valid destination URL is required."
 msgstr "Este necesar un URL de destinație valid."
 
 #: server/features/links/validator.php:96
+msgid "A short code or alias cannot be empty."
+msgstr "Un cod scurt sau alias nu poate fi gol."
+
+#: server/features/links/validator.php:103
+msgid "Aliases must begin and end with a letter or number."
+msgstr "Aliasurile trebuie să înceapă și să se termine cu o literă sau o cifră."
+
+#: server/features/links/validator.php:110
+msgid "Aliases cannot end with executable script extensions."
+msgstr "Aliasurile nu se pot termina cu extensii de scripturi executabile."
+
+#: server/features/links/validator.php:117
+msgid "That short code is reserved by an existing system file."
+msgstr "Acel cod scurt este rezervat de un fișier de sistem existent."
+
+#: server/features/links/validator.php:124
 msgid "That short code is reserved by the application."
 msgstr "Acel cod scurt este rezervat de aplicație."
 
-#: server/features/links/validator.php:106
+#: server/features/links/validator.php:134
 msgid "That short code is already in use."
 msgstr "Acel cod scurt este deja utilizat."
 
-#: server/features/links/validator.php:156
+#: server/features/links/validator.php:184
 msgid "PeakURL could not hash the protected-link password."
 msgstr "PeakURL nu a putut genera hash-ul parolei pentru linkul protejat."
 
-#: server/features/links/validator.php:225
-#: server/features/links/validator.php:229
+#: server/features/links/validator.php:253
+#: server/features/links/validator.php:257
 msgid "Invalid date value provided."
 msgstr "Valoarea datei furnizate este nevalidă."
 
@@ -804,196 +828,361 @@ msgstr "URL-ul a fost șters."
 msgid "Link restored successfully."
 msgstr "Linkul a fost restaurat cu succes."
 
-#: server/features/links/controller.php:291
+#: server/features/links/controller.php:285
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:141
+msgid "Health check completed."
+msgstr "Verificarea stării a fost finalizată."
+
+#: server/features/links/controller.php:308
 msgid "Bulk delete complete."
 msgstr "Ștergerea în masă a fost finalizată."
 
-#: server/features/links/controller.php:312
+#: server/features/links/controller.php:329
 msgid "Bulk restore complete."
 msgstr "Restaurarea în masă este completă."
 
-#: server/features/links/controller.php:330
+#: server/features/links/controller.php:347
 msgid "Trash emptied successfully."
 msgstr "Coșul de gunoi a fost golit cu succes."
 
-#: server/features/links/controller.php:353
+#: server/features/links/controller.php:370
 msgid "All links moved to trash."
 msgstr "Toate linkurile au fost mutate în coș."
 
-#: server/features/links/controller.php:354
+#: server/features/links/controller.php:371
 msgid "All links deleted."
 msgstr "Toate linkurile au fost șterse."
 
-#: server/features/links/controller.php:452
+#: server/features/links/controller.php:469
 msgid "This link has expired"
 msgstr "Acest link a expirat"
 
-#: server/features/links/controller.php:453
+#: server/features/links/controller.php:470
 msgid "The short link you requested is no longer active because its expiration date has passed."
 msgstr "Linkul scurt solicitat nu mai este activ deoarece data sa de expirare a trecut."
 
-#: server/features/links/controller.php:463
+#: server/features/links/controller.php:480
 msgid "This link is unavailable"
 msgstr "Acest link este indisponibil"
 
-#: server/features/links/controller.php:464
+#: server/features/links/controller.php:481
 msgid "The short link you requested is not available right now."
 msgstr "Linkul scurt solicitat nu este disponibil în acest moment."
 
-#: server/features/links/controller.php:509
+#: server/features/links/controller.php:526
 msgid "Password required"
 msgstr "Parolă necesară"
 
-#: server/features/links/controller.php:510
+#: server/features/links/controller.php:527
 msgid "This link is protected. Enter the password to continue."
 msgstr "Acest link este protejat. Introduceți parola pentru a continua."
 
-#: server/features/links/controller.php:517
+#: server/features/links/controller.php:534
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Introduceți parola"
 
-#: server/features/links/controller.php:521
+#: server/features/links/controller.php:538
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Continuă"
 
-#: server/features/links/controller.php:526
+#: server/features/links/controller.php:543
 msgid "Protected Link"
 msgstr "Link protejat"
 
-#: server/features/links/controller.php:573
+#: server/features/links/controller.php:590
 msgid "Performing security verification"
 msgstr "Se efectuează verificarea de securitate"
 
-#: server/features/links/controller.php:574
+#: server/features/links/controller.php:591
 msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
 msgstr "Acest site web utilizează un serviciu de securitate pentru a se proteja împotriva boților rău-intenționați. Această pagină este afișată în timp ce PeakURL verifică dacă nu sunteți un bot."
 
-#: server/features/links/controller.php:578
+#: server/features/links/controller.php:595
 msgid "JavaScript is required to complete this verification."
 msgstr "Este necesar JavaScript pentru a finaliza această verificare."
 
-#: server/features/links/controller.php:581
+#: server/features/links/controller.php:598
 msgid "Security Verification"
 msgstr "Verificare de securitate"
 
-#: server/features/links/controller.php:678
-#: server/features/links/controller.php:839
+#: server/features/links/controller.php:695
+#: server/features/links/controller.php:856
 msgid "Waiting for verification…"
 msgstr "Se așteaptă verificarea…"
 
-#: server/features/links/controller.php:681
+#: server/features/links/controller.php:698
 msgid "Checking verification…"
 msgstr "Se verifică…"
 
-#: server/features/links/controller.php:684
+#: server/features/links/controller.php:701
 msgid "Starting verification…"
 msgstr "Se pornește verificarea…"
 
-#: server/features/links/controller.php:687
+#: server/features/links/controller.php:704
 msgid "Verification expired. Please try again."
 msgstr "Verificarea a expirat. Vă rugăm să încercați din nou."
 
-#: server/features/links/controller.php:690
+#: server/features/links/controller.php:707
 msgid "Verification could not be completed. Please try again."
 msgstr "Verificarea nu a putut fi finalizată. Vă rugăm să încercați din nou."
 
-#: server/features/links/controller.php:844
+#: server/features/links/controller.php:861
 msgid "Try again"
 msgstr "Încearcă din nou"
 
-#: server/features/links/service.php:329
+#: server/features/links/service.php:436
 msgid "You do not have permission to view this link."
 msgstr "Nu aveți permisiunea de a vizualiza acest link."
 
-#: server/features/links/service.php:437
-msgid "Enter the password to open this link."
-msgstr "Introduceți parola pentru a deschide acest link."
-
-#: server/features/links/service.php:463
-msgid "The password for this link is incorrect."
-msgstr "Parola pentru acest link este incorectă."
-
-#: server/features/links/service.php:498
-#: server/features/links/service.php:601
-msgid "You do not have permission to create links."
-msgstr "Nu aveți permisiunea de a crea linkuri."
-
-#: server/features/links/service.php:516
-#: server/features/links/service.php:769
-msgid "Provide either socialImage or socialImageUrl, not both."
-msgstr "Specificați fie socialImage, fie socialImageUrl, nu ambele."
-
-#: server/features/links/service.php:606
-msgid "The `urls` field is required and must be an array."
-msgstr "Câmpul `urls` este obligatoriu și trebuie să fie un tablou."
-
-#: server/features/links/service.php:619
-msgid "Invalid URL item payload."
-msgstr "Date de element URL nevalide."
-
-#: server/features/links/service.php:670
-msgid "You do not have permission to edit links."
-msgstr "Nu aveți permisiunea de a edita linkuri."
-
-#: server/features/links/service.php:681
-msgid "You do not have permission to edit this link."
-msgstr "Nu aveți permisiunea de a edita acest link."
-
-#: server/features/links/service.php:943
-#: server/features/links/service.php:1111
-#: server/features/links/service.php:1155
-#: server/features/links/service.php:1388
-msgid "You do not have permission to permanently delete links."
-msgstr "Nu aveți permisiunea de a șterge definitiv linkuri."
-
-#: server/features/links/service.php:949
-#: server/features/links/service.php:1117
-#: server/features/links/service.php:1394
-msgid "You do not have permission to delete links."
-msgstr "Nu aveți permisiunea de a șterge linkuri."
-
-#: server/features/links/service.php:954
-msgid "You do not have permission to move this link to trash."
-msgstr "Nu aveți permisiunea de a muta acest link la gunoi."
-
-#: server/features/links/service.php:1035
+#: server/features/links/service.php:518
+#: server/features/links/service.php:1355
 msgid "That short link does not exist."
 msgstr "Acel link scurt nu există."
 
-#: server/features/links/service.php:1042
+#: server/features/links/service.php:526
+msgid "You do not have permission to check link health."
+msgstr "Nu aveți permisiunea de a verifica starea linkurilor."
+
+#: server/features/links/service.php:536
+msgid "That short link does not exist or is no longer active."
+msgstr "Acel link scurt nu există sau nu mai este activ."
+
+#: server/features/links/service.php:544
+msgid "The link destination changed while the health check was running."
+msgstr "Destinația linkului s-a schimbat în timp ce se executa verificarea stării."
+
+#: server/features/links/service.php:555
+#: server/features/links/service.php:581
+msgid "Could not record link health snapshot."
+msgstr "Nu s-a putut înregistra instantaneul stării linkului."
+
+#: server/features/links/service.php:704
+msgid "Enter the password to open this link."
+msgstr "Introduceți parola pentru a deschide acest link."
+
+#: server/features/links/service.php:730
+msgid "The password for this link is incorrect."
+msgstr "Parola pentru acest link este incorectă."
+
+#: server/features/links/service.php:765
+#: server/features/links/service.php:880
+msgid "You do not have permission to create links."
+msgstr "Nu aveți permisiunea de a crea linkuri."
+
+#: server/features/links/service.php:789
+#: server/features/links/service.php:1059
+msgid "Provide either socialImage or socialImageUrl, not both."
+msgstr "Specificați fie socialImage, fie socialImageUrl, nu ambele."
+
+#: server/features/links/service.php:885
+msgid "The `urls` field is required and must be an array."
+msgstr "Câmpul `urls` este obligatoriu și trebuie să fie un tablou."
+
+#: server/features/links/service.php:898
+msgid "Invalid URL item payload."
+msgstr "Date de element URL nevalide."
+
+#: server/features/links/service.php:949
+msgid "You do not have permission to edit links."
+msgstr "Nu aveți permisiunea de a edita linkuri."
+
+#: server/features/links/service.php:960
+msgid "You do not have permission to edit this link."
+msgstr "Nu aveți permisiunea de a edita acest link."
+
+#: server/features/links/service.php:1263
+#: server/features/links/service.php:1434
+#: server/features/links/service.php:1478
+#: server/features/links/service.php:1714
+msgid "You do not have permission to permanently delete links."
+msgstr "Nu aveți permisiunea de a șterge definitiv linkuri."
+
+#: server/features/links/service.php:1269
+#: server/features/links/service.php:1440
+#: server/features/links/service.php:1720
+msgid "You do not have permission to delete links."
+msgstr "Nu aveți permisiunea de a șterge linkuri."
+
+#: server/features/links/service.php:1274
+msgid "You do not have permission to move this link to trash."
+msgstr "Nu aveți permisiunea de a muta acest link la gunoi."
+
+#: server/features/links/service.php:1362
 msgid "This link is already active."
 msgstr "Acest link este deja activ."
 
-#: server/features/links/service.php:1050
-#: server/features/links/service.php:1059
+#: server/features/links/service.php:1370
+#: server/features/links/service.php:1379
 msgid "You do not have permission to restore this link."
 msgstr "Nu aveți permisiunea de a restaura acest link."
 
-#: server/features/links/service.php:1248
+#: server/features/links/service.php:1571
 msgid "You do not have permission to restore links."
 msgstr "Nu aveți permisiunea de a restaura linkuri."
 
-#: server/features/links/service.php:1318
+#: server/features/links/service.php:1644
 msgid "You do not have permission to empty trash."
 msgstr "Nu aveți permisiunea de a goli gunoiul."
 
-#: server/features/links/service.php:1379
+#: server/features/links/service.php:1705
 msgid "Invalid delete mode."
 msgstr "Mod de ștergere nevalid."
 
-#: server/features/links/service.php:1831
+#: server/features/links/service.php:2171
 msgid "Complete the verification to open this link."
 msgstr "Finalizați verificarea pentru a deschide acest link."
 
-#: server/features/links/service.php:1846
+#: server/features/links/service.php:2186
 msgid "Verification failed. Please try again."
 msgstr "Verificarea a eșuat. Vă rugăm să încercați din nou."
+
+#: server/features/links/health/checker.php:185
+msgid "Empty destination URL."
+msgstr "URL de destinație gol."
+
+#: server/features/links/health/checker.php:207
+#: server/features/links/health/checker.php:302
+#: server/features/links/health/checker.php:339
+msgid "Request timed out."
+msgstr "Timpul de așteptare al cererii a expirat."
+
+#: server/features/links/health/checker.php:219
+msgid "Malformed destination URL."
+msgstr "URL de destinație malformat."
+
+#: server/features/links/health/checker.php:230
+#: server/features/links/health/checker.php:241
+#: server/features/links/health/checker.php:263
+#: server/features/links/health/checker.php:274
+msgid "Destination rejected by SSRF protection."
+msgstr "Destinația a fost respinsă de protecția SSRF."
+
+#: server/features/links/health/checker.php:283
+msgid "Could not resolve host."
+msgstr "Nu s-a putut rezolva gazda."
+
+#: server/features/links/health/checker.php:392
+#: server/features/links/health/checker.php:552
+msgid "Destination is unreachable."
+msgstr "Destinația este inaccesibilă."
+
+#: server/features/links/health/checker.php:428
+msgid "Exceeded maximum redirect limit (%d hops)."
+msgstr "S-a depășit limita maximă de redirecționări (%d salturi)."
+
+#: server/features/links/health/checker.php:444
+msgid "Unsupported redirect scheme or invalid redirect location."
+msgstr "Schemă de redirecționare neacceptată sau locație de redirecționare nevalidă."
+
+#: server/features/links/health/checker.php:458
+#: server/features/links/health/checker.php:547
+msgid "Redirect loop detected."
+msgstr "S-a detectat o buclă de redirecționare."
+
+#: server/features/links/health/checker.php:491
+msgid "HTTP status %d"
+msgstr "Stare HTTP %d"
+
+#: server/features/links/health/checker.php:541
+msgid "DNS resolution failed."
+msgstr "Rezoluția DNS a eșuat."
+
+#: server/features/links/health/checker.php:543
+msgid "TLS/SSL certificate verification failed."
+msgstr "Verificarea certificatului TLS/SSL a eșuat."
+
+#: server/features/links/health/checker.php:545
+msgid "Connection timed out."
+msgstr "Conexiunea a expirat."
+
+#: server/features/links/health/checker.php:549
+msgid "Blocked by SSRF filter."
+msgstr "Blocat de filtrul SSRF."
+
+#: server/features/links/health/probe.php:238
+msgid "Failed to initialize cURL."
+msgstr "Nu s-a putut inițializa cURL."
+
+#: server/features/links/health/probe.php:284
+msgid "Failed to configure transport options."
+msgstr "Nu s-au putut configura opțiunile de transport."
 
 #: server/features/links/creator.php:226
 msgid "Failed to create link record."
 msgstr "Nu s-a putut crea înregistrarea linkului."
+
+#: server/features/links/jobs/link-health-check.php:174
+msgid "Failed to record health snapshots for all %d checked links."
+msgstr "Nu s-au putut înregistra instantanee de stare pentru toate cele %d linkuri verificate."
+
+#: server/features/links/jobs/link-health-check.php:183
+msgid "Health check completed for %1$d link: %2$s."
+msgstr "Verificare de stare finalizată pentru %1$d link: %2$s."
+
+#: server/features/links/jobs/link-health-check.php:189
+msgid "Health check completed for %1$d links: %2$s."
+msgstr "Verificare de stare finalizată pentru %1$d linkuri: %2$s."
+
+#: server/features/links/jobs/link-health-check.php:197
+msgid "(%d persistence failures)"
+msgstr "(%d eșecuri de persistență)"
+
+#: server/features/links/jobs/link-health-check.php:233
+msgid "%d healthy"
+msgstr "%d sănătos"
+
+#: server/features/links/jobs/link-health-check.php:241
+msgid "%d slow"
+msgstr "%d lent"
+
+#: server/features/links/jobs/link-health-check.php:281
+msgid "%d unreachable"
+msgstr "%d inaccesibil"
+
+#: server/features/links/jobs/link-health-check.php:297
+msgid "%d blocked"
+msgstr "%d blocat"
+
+#: server/features/links/jobs/link-health-check.php:303
+msgid "0 checked"
+msgstr "0 verificate"
+
+#: server/features/links/jobs/link-health-check.php:249
+msgid "%d HTTP error"
+msgid_plural "%d HTTP errors"
+msgstr[0] "%d eroare HTTP"
+msgstr[1] "%d erori HTTP"
+msgstr[2] "%d de erori HTTP"
+
+#: server/features/links/jobs/link-health-check.php:257
+msgid "%d DNS error"
+msgid_plural "%d DNS errors"
+msgstr[0] "%d eroare DNS"
+msgstr[1] "%d erori DNS"
+msgstr[2] "%d de erori DNS"
+
+#: server/features/links/jobs/link-health-check.php:265
+msgid "%d TLS error"
+msgid_plural "%d TLS errors"
+msgstr[0] "%d eroare TLS"
+msgstr[1] "%d erori TLS"
+msgstr[2] "%d de erori TLS"
+
+#: server/features/links/jobs/link-health-check.php:273
+msgid "%d timeout"
+msgid_plural "%d timeouts"
+msgstr[0] "%d timeout"
+msgstr[1] "%d timeout-uri"
+msgstr[2] "%d de timeout-uri"
+
+#: server/features/links/jobs/link-health-check.php:289
+msgid "%d redirect loop"
+msgid_plural "%d redirect loops"
+msgstr[0] "%d buclă de redirecționare"
+msgstr[1] "%d bucle de redirecționare"
+msgstr[2] "%d de bucle de redirecționare"
 
 #: server/features/users/controller.php:64
 msgid "Users loaded."
@@ -1024,42 +1213,262 @@ msgstr "Utilizatorul a fost actualizat."
 msgid "User deleted."
 msgstr "Utilizatorul a fost șters."
 
-#: server/features/users/service.php:187
+#: server/features/users/service.php:199
 msgid "You do not have permission to update this profile."
 msgstr "Nu aveți permisiunea de a actualiza acest profil."
 
-#: server/features/users/service.php:197
+#: server/features/users/service.php:209
 msgid "Username cannot be changed."
 msgstr "Numele de utilizator nu poate fi modificat."
 
-#: server/features/users/service.php:228
-#: server/features/users/service.php:446
+#: server/features/users/service.php:240
+#: server/features/users/service.php:470
 msgid "Email address is already in use."
 msgstr "Adresa de e-mail este deja utilizată."
 
-#: server/features/users/service.php:247
+#: server/features/users/service.php:259
 msgid "Current password is required to change your password."
 msgstr "Parola curentă este necesară pentru a vă schimba parola."
 
-#: server/features/users/service.php:328
+#: server/features/users/service.php:350
 msgid "First and last name are required."
 msgstr "Numele și prenumele sunt obligatorii."
 
-#: server/features/users/service.php:534
+#: server/features/users/service.php:564
 msgid "You cannot delete the current user."
 msgstr "Nu puteți șterge utilizatorul curent."
 
-#: server/features/webhooks/validator.php:55
+#: server/features/webhooks/validator.php:50
+msgid "Link Created"
+msgstr "Link creat"
+
+#: server/features/webhooks/validator.php:51
+msgid "Triggered when a new short link is created."
+msgstr "Declanșat atunci când este creat un nou link scurt."
+
+#: server/features/webhooks/validator.php:56
+msgid "Link Updated"
+msgstr "Link actualizat"
+
+#: server/features/webhooks/validator.php:57
+msgid "Triggered when an existing link is modified."
+msgstr "Declanșat atunci când un link existent este modificat."
+
+#: server/features/webhooks/validator.php:62
+msgid "Link Clicked"
+msgstr "Link accesat"
+
+#: server/features/webhooks/validator.php:63
+msgid "Triggered when a link redirect is accessed."
+msgstr "Declanșat atunci când este accesată redirecționarea unui link."
+
+#: server/features/webhooks/validator.php:68
+msgid "Link Deleted"
+msgstr "Link șters"
+
+#: server/features/webhooks/validator.php:69
+msgid "Triggered when a link is trashed or permanently deleted."
+msgstr "Declanșat atunci când un link este mutat în coș sau șters definitiv."
+
+#: server/features/webhooks/validator.php:74
+msgid "Link Restored"
+msgstr "Link restaurat"
+
+#: server/features/webhooks/validator.php:75
+msgid "Triggered when a trashed link is restored to active status."
+msgstr "Declanșat atunci când un link din coș este restaurat la starea activă."
+
+#: server/features/webhooks/validator.php:80
+msgid "Link Activated"
+msgstr "Link activat"
+
 #: server/features/webhooks/validator.php:81
+msgid "Triggered when a deactivated link is re-enabled."
+msgstr "Declanșat atunci când un link dezactivat este reactivat."
+
+#: server/features/webhooks/validator.php:86
+msgid "Link Deactivated"
+msgstr "Link dezactivat"
+
+#: server/features/webhooks/validator.php:87
+msgid "Triggered when an active link is disabled."
+msgstr "Declanșat atunci când un link activ este dezactivat."
+
+#: server/features/webhooks/validator.php:92
+msgid "Link Expired"
+msgstr "Link expirat"
+
+#: server/features/webhooks/validator.php:93
+msgid "Triggered when a link reaches its expiration timestamp."
+msgstr "Declanșat atunci când un link atinge data de expirare."
+
+#: server/features/webhooks/validator.php:98
+msgid "Link Health Checked"
+msgstr "Starea linkului verificată"
+
+#: server/features/webhooks/validator.php:99
+msgid "Triggered when a link destination health check completes."
+msgstr "Declanșat atunci când se finalizează verificarea stării destinației unui link."
+
+#: server/features/webhooks/validator.php:104
+msgid "Link Health Changed"
+msgstr "Starea linkului modificată"
+
+#: server/features/webhooks/validator.php:105
+msgid "Triggered when a link destination health status changes."
+msgstr "Declanșat atunci când se modifică starea de funcționare a destinației unui link."
+
+#: server/features/webhooks/validator.php:110
+msgid "Link Health Recovered"
+msgstr "Starea linkului recuperată"
+
+#: server/features/webhooks/validator.php:111
+msgid "Triggered when a link returns to healthy status from an unhealthy state."
+msgstr "Declanșat atunci când un link revine la o stare funcțională dintr-o stare defectuoasă."
+
+#: server/features/webhooks/validator.php:116
+msgid "Link Health Degraded"
+msgstr "Starea linkului degradată"
+
+#: server/features/webhooks/validator.php:117
+msgid "Triggered when a link transitions into a slow health state."
+msgstr "Declanșat atunci când un link trece într-o stare de răspuns lent."
+
+#: server/features/webhooks/validator.php:122
+msgid "Link Health Broken"
+msgstr "Starea linkului nefuncțională"
+
+#: server/features/webhooks/validator.php:123
+msgid "Triggered when a link enters any broken destination status."
+msgstr "Declanșat atunci când un link intră în orice stare de destinație nefuncțională."
+
+#: server/features/webhooks/validator.php:128
+msgid "Link Health Unreachable"
+msgstr "Starea linkului inaccesibilă"
+
+#: server/features/webhooks/validator.php:129
+msgid "Triggered when a link destination is unreachable or connection is refused."
+msgstr "Declanșat atunci când destinația unui link este inaccesibilă sau conexiunea este refuzată."
+
+#: server/features/webhooks/validator.php:134
+msgid "Link Health DNS Error"
+msgstr "Eroare DNS în starea linkului"
+
+#: server/features/webhooks/validator.php:135
+msgid "Triggered when domain name resolution fails for a link destination."
+msgstr "Declanșat atunci când rezoluția numelui de domeniu eșuează pentru destinația unui link."
+
+#: server/features/webhooks/validator.php:140
+msgid "Link Health TLS Error"
+msgstr "Eroare TLS în starea linkului"
+
+#: server/features/webhooks/validator.php:141
+msgid "Triggered when TLS certificate or handshake negotiation fails."
+msgstr "Declanșat atunci când certificatul TLS sau negocierea conexiunii eșuează."
+
+#: server/features/webhooks/validator.php:146
+msgid "Link Health Timeout"
+msgstr "Timeout în starea linkului"
+
+#: server/features/webhooks/validator.php:147
+msgid "Triggered when a health check probe exceeds the timeout limit."
+msgstr "Declanșat atunci când o verificare a stării depășește limita de timp."
+
+#: server/features/webhooks/validator.php:152
+msgid "Link Health HTTP Error"
+msgstr "Eroare HTTP în starea linkului"
+
+#: server/features/webhooks/validator.php:153
+msgid "Triggered when a destination returns an HTTP error response."
+msgstr "Declanșat atunci când o destinație returnează un răspuns de eroare HTTP."
+
+#: server/features/webhooks/validator.php:158
+msgid "Link Health Redirect Loop"
+msgstr "Buclă de redirecționare în starea linkului"
+
+#: server/features/webhooks/validator.php:159
+msgid "Triggered when a destination creates a redirect loop or exceeds maximum hops."
+msgstr "Declanșat atunci când o destinație generează o buclă de redirecționare sau depășește numărul maxim de salturi."
+
+#: server/features/webhooks/validator.php:164
+msgid "Link Health SSRF Blocked"
+msgstr "Blocare SSRF în starea linkului"
+
+#: server/features/webhooks/validator.php:165
+msgid "Triggered when a destination targets a private or restricted network address."
+msgstr "Declanșat atunci când o destinație vizează o adresă de rețea privată sau restricționată."
+
+#: server/features/webhooks/validator.php:170
+msgid "API Key Created"
+msgstr "Cheie API creată"
+
+#: server/features/webhooks/validator.php:171
+msgid "Triggered when a new personal API key is generated."
+msgstr "Declanșat atunci când este generată o nouă cheie API personală."
+
+#: server/features/webhooks/validator.php:176
+msgid "API Key Revoked"
+msgstr "Cheie API revocată"
+
+#: server/features/webhooks/validator.php:177
+msgid "Triggered when an existing API key is revoked."
+msgstr "Declanșat atunci când o cheie API existentă este revocată."
+
+#: server/features/webhooks/validator.php:182
+msgid "User Created"
+msgstr "Utilizator creat"
+
+#: server/features/webhooks/validator.php:183
+msgid "Triggered when a new user account is created or registered."
+msgstr "Declanșat atunci când un nou cont de utilizator este creat sau înregistrat."
+
+#: server/features/webhooks/validator.php:188
+msgid "User Updated"
+msgstr "Utilizator actualizat"
+
+#: server/features/webhooks/validator.php:189
+msgid "Triggered when user account details or profile settings are modified."
+msgstr "Declanșat atunci când detaliile contului de utilizator sau setările de profil sunt modificate."
+
+#: server/features/webhooks/validator.php:194
+msgid "User Deleted"
+msgstr "Utilizator șters"
+
+#: server/features/webhooks/validator.php:195
+msgid "Triggered when a user account is removed."
+msgstr "Declanșat atunci când un cont de utilizator este eliminat."
+
+#: server/features/webhooks/validator.php:235
+msgid "Webhook name is required."
+msgstr "Numele webhook-ului este obligatoriu."
+
+#: server/features/webhooks/validator.php:241
+msgid "Webhook name cannot be empty."
+msgstr "Numele webhook-ului nu poate fi gol."
+
+#: server/features/webhooks/validator.php:248
+msgid "Webhook name cannot exceed %d characters."
+msgstr "Numele webhook-ului nu poate depăși %d caractere."
+
+#: server/features/webhooks/validator.php:329
+#: server/features/webhooks/validator.php:334
 msgid "A valid webhook URL is required."
 msgstr "Este necesar un URL de webhook valid."
 
-#: server/features/webhooks/validator.php:110
-#: server/features/webhooks/validator.php:134
+#: server/features/webhooks/validator.php:339
+msgid "Webhook URL must use the HTTPS protocol."
+msgstr "URL-ul webhook-ului trebuie să utilizeze protocolul HTTPS."
+
+#: server/features/webhooks/validator.php:344
+msgid "Webhook URL cannot target localhost, private, or reserved network addresses."
+msgstr "URL-ul webhook-ului nu poate viza localhost sau adrese de rețea private ori rezervate."
+
+#: server/features/webhooks/validator.php:556
+#: server/features/webhooks/validator.php:581
 msgid "Select at least one webhook event."
 msgstr "Selectați cel puțin un eveniment de webhook."
 
-#: server/features/webhooks/validator.php:125
+#: server/features/webhooks/validator.php:572
 msgid "Unsupported webhook event: %s."
 msgstr "Eveniment webhook neacceptat: %s."
 
@@ -1079,15 +1488,65 @@ msgstr "Webhook actualizat."
 msgid "Webhook test dispatched."
 msgstr "Test webhook trimis."
 
-#: server/features/webhooks/controller.php:145
-#: server/features/webhooks/service.php:222
-#: server/features/webhooks/service.php:295
+#: server/features/webhooks/controller.php:137
+msgid "Webhook events loaded."
+msgstr "Evenimentele webhook-ului au fost încărcate."
+
+#: server/features/webhooks/controller.php:156
+msgid "Webhook secret rotated."
+msgstr "Secretul webhook-ului a fost rotit."
+
+#: server/features/webhooks/controller.php:175
+msgid "Webhook deliveries loaded."
+msgstr "Livrările webhook-ului au fost încărcate."
+
+#: server/features/webhooks/controller.php:197
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:190
+msgid "Delivery queued for retry."
+msgstr "Livrarea a fost adăugată în coadă pentru reîncercare."
+
+#: server/features/webhooks/controller.php:219
+#: server/features/webhooks/service.php:489
 msgid "Webhook not found."
 msgstr "Webhook-ul nu a fost găsit."
 
-#: server/features/webhooks/controller.php:146
+#: server/features/webhooks/controller.php:220
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:233
 msgid "Webhook deleted."
 msgstr "Webhook-ul a fost șters."
+
+#: server/features/webhooks/service.php:255
+msgid "Webhook signing secret cannot be empty."
+msgstr "Secretul de semnare al webhook-ului nu poate fi gol."
+
+#: server/features/webhooks/service.php:274
+msgid "Webhook signing secret is missing."
+msgstr "Secretul de semnare al webhook-ului lipsește."
+
+#: server/features/webhooks/service.php:278
+msgid "Webhook signing secret is not properly encrypted."
+msgstr "Secretul de semnare al webhook-ului nu este criptat corespunzător."
+
+#: server/features/webhooks/service.php:284
+msgid "Failed to decrypt webhook signing secret."
+msgstr "Nu s-a putut decripta secretul de semnare al webhook-ului."
+
+#: server/features/webhooks/service.php:2320
+msgid "Webhook delivery not found."
+msgstr "Livrarea webhook-ului nu a fost găsită."
+
+#: server/features/webhooks/service.php:2324
+msgid "Webhook delivery does not belong to this webhook."
+msgstr "Livrarea webhook-ului nu aparține acestui webhook."
+
+#: server/features/webhooks/service.php:2328
+msgid "Only failed webhook deliveries can be retried."
+msgstr "Doar livrările eșuate ale webhook-ului pot fi reîncercate."
+
+#: server/features/webhooks/service.php:2350
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:198
+msgid "Failed to queue webhook delivery for retry."
+msgstr "Nu s-a putut adăuga livrarea webhook-ului în coadă pentru reîncercare."
 
 #: server/features/analytics/controller.php:65
 msgid "Analytics loaded."
@@ -1155,7 +1614,7 @@ msgstr "Nu s-au găsit metadate restaurabile în această înregistrare de activ
 msgid "This link was permanently deleted and cannot be restored."
 msgstr "Acest link a fost șters definitiv și nu poate fi restaurat."
 
-#: server/features/analytics/repository.php:1599
+#: server/features/analytics/repository.php:1611
 msgid "You do not have permission to view activity."
 msgstr "Nu aveți permisiunea de a vizualiza activitatea."
 
@@ -1196,55 +1655,67 @@ msgstr "Vă mulțumim pentru răbdare."
 msgid "Loading"
 msgstr "Se încarcă"
 
-#: server/services/database/schema-upgrade.php:105
+#: server/services/database/schema-upgrade.php:106
 msgid "Backfilled missing installation ID."
 msgstr "ID-ul de instalare lipsă a fost completat."
 
-#: server/services/database/schema-upgrade.php:111
+#: server/services/database/schema-upgrade.php:112
 msgid "Backfilled missing installation timestamp."
 msgstr "Marca temporală de instalare lipsă a fost completată."
 
-#: server/services/database/schema-upgrade.php:128
+#: server/services/database/schema-upgrade.php:129
 msgid "PeakURL could not read the bundled database schema file."
 msgstr "PeakURL nu a putut citi fișierul integrat al schemei bazei de date."
 
-#: server/services/database/schema-upgrade.php:139
+#: server/services/database/schema-upgrade.php:140
 msgid "Created missing tables: %s."
 msgstr "S-au creat tabelele lipsă: %s."
 
-#: server/services/database/schema-upgrade.php:219
+#: server/services/database/schema-upgrade.php:228
 msgid "Migrated API keys to hashed storage."
 msgstr "S-au migrat cheile API către stocarea cu hash."
 
-#: server/services/database/schema-upgrade.php:235
+#: server/services/database/schema-upgrade.php:244
 msgid "PeakURL found API keys that could not be repaired to the hashed-key schema."
 msgstr "PeakURL a găsit chei API care nu au putut fi reparate conform schemei de chei cu hash."
 
-#: server/services/database/schema-upgrade.php:250
+#: server/services/database/schema-upgrade.php:259
 msgid "Repaired hashed API key column constraints."
 msgstr "S-au reparat restricțiile coloanelor de chei API cu hash."
 
-#: server/services/database/schema-upgrade.php:337
+#: server/services/database/schema-upgrade.php:310
+msgid "Widened webhook identifier columns to VARCHAR(64)."
+msgstr "S-au extins coloanele identificatorilor de webhook-uri la VARCHAR(64)."
+
+#: server/services/database/schema-upgrade.php:352
+msgid "Populated missing labels for existing %s rows."
+msgstr "S-au completat etichetele lipsă pentru rândurile %s existente."
+
+#: server/services/database/schema-upgrade.php:389
+msgid "Removed obsolete peakurl_import_export background job."
+msgstr "S-a eliminat sarcina de fundal învechită peakurl_import_export."
+
+#: server/services/database/schema-upgrade.php:476
 msgid "%1$s %2$d rows were updated."
 msgstr "Rânduri actualizate: %1$s %2$d."
 
-#: server/services/database/schema-upgrade.php:360
+#: server/services/database/schema-upgrade.php:499
 msgid "%1$s %2$d rows were affected."
 msgstr "Rânduri afectate: %1$s %2$d."
 
-#: server/services/database/schema-upgrade.php:415
+#: server/services/database/schema-upgrade.php:554
 msgid "Updated the %2$s foreign key on the %1$s table."
 msgstr "S-a actualizat cheia externă %2$s din tabela %1$s."
 
-#: server/services/database/schema-upgrade.php:435
+#: server/services/database/schema-upgrade.php:574
 msgid "Added the %2$s foreign key to the %1$s table."
 msgstr "S-a adăugat cheia externă %2$s în tabela %1$s."
 
-#: server/services/database/schema-upgrade.php:478
+#: server/services/database/schema-upgrade.php:617
 msgid "Added the %1$s column to the %2$s table."
 msgstr "S-a adăugat coloana %1$s în tabela %2$s."
 
-#: server/services/database/schema-upgrade.php:525
+#: server/services/database/schema-upgrade.php:664
 msgid "Added the %1$s index to the %2$s table."
 msgstr "S-a adăugat indexul %1$s în tabela %2$s."
 
@@ -1665,7 +2136,7 @@ msgstr "URL-ul imaginii de previzualizare socială nu poate conține date de aut
 
 #: server/services/social-preview.php:358
 #: client/hooks/useDashboardSearch.ts:85
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:153
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:276
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:281
 msgid "Untitled Link"
@@ -2146,18 +2617,20 @@ msgid "Confirm"
 msgstr "Confirmă"
 
 #: client/components/ui/ConfirmDialog/ConfirmDialog.tsx:33
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:884
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:893
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:110
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:399
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:533
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:837
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
 #: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:563
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:742
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:828
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:896
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:982
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:508
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:590
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:595
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1491
 #: client/pages/dashboard/links/components/BulkDeleteModal/BulkDeleteModal.tsx:150
 #: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:130
@@ -2181,7 +2654,7 @@ msgstr "Închide fereastra"
 
 #: client/components/ui/PageSizeControl/PageSizeControl.tsx:27
 #: client/pages/dashboard/activity/components/ActivityHeader/ActivityCategoryTabs.tsx:83
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:122
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:132
 msgid "Rows per page"
 msgstr "Rânduri pe pagină"
 
@@ -2213,7 +2686,7 @@ msgstr "Anulează dimensiunea personalizată a paginii"
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:993
 #: client/pages/dashboard/components/DeviceBreakdown/DeviceBreakdown.tsx:113
 #: client/pages/dashboard/components/TrafficOverview/TrafficOverview.tsx:64
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:178
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:270
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:48
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:167
 msgid "Clicks"
@@ -2251,19 +2724,19 @@ msgstr "Dum"
 #: client/pages/dashboard/components/StatsCards/StatsCards.tsx:112
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:22
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:146
-#: client/pages/dashboard/links/LinksPage.tsx:306
+#: client/pages/dashboard/links/LinksPage.tsx:308
 msgid "Total Clicks"
 msgstr "Total clicuri"
 
 #: client/components/charts/TrafficChart/TrafficChart.tsx:262
 #: client/pages/dashboard/components/TrafficOverview/TrafficOverview.tsx:70
 #: client/pages/dashboard/components/StatsCards/StatsCards.tsx:133
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:187
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:279
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:49
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:174
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:29
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:154
-#: client/pages/dashboard/links/LinksPage.tsx:314
+#: client/pages/dashboard/links/LinksPage.tsx:316
 msgid "Visitors"
 msgstr "Vizitatori"
 
@@ -2538,7 +3011,7 @@ msgstr "Scurtați, organizați și partajați."
 
 #: client/pages/auth/login/LoginPage.tsx:43
 #: client/pages/dashboard/about/AboutPage.tsx:271
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:275
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:367
 msgid "Analytics"
 msgstr "Statistici"
 
@@ -2845,7 +3318,7 @@ msgid "Search the dashboard"
 msgstr "Căutați în panoul de control"
 
 #: client/pages/layout/dashboard/Search/Search.tsx:191
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:183
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:228
 msgid "Clear search"
 msgstr "Șterge căutarea"
 
@@ -2891,7 +3364,7 @@ msgstr "Panou de control"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:96
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:203
 #: client/pages/dashboard/links/components/Header/Header.tsx:42
 #: client/pages/NotFoundPage.tsx:75
 msgid "All Links"
@@ -2941,7 +3414,7 @@ msgstr "Chei API"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:200
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:203
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:155
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:287
 #: client/pages/dashboard/settings/Layout.tsx:37
 #: client/router/pageTitle.ts:28
 msgid "Integrations"
@@ -3033,13 +3506,13 @@ msgstr "Deconectare"
 msgid "Back to login"
 msgstr "Înapoi la autentificare"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:294
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:366
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:371
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:376
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:398
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:433
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:453
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:302
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:375
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:380
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:385
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:407
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:442
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:462
 #: client/pages/dashboard/settings/components/tabs/pages/security/useActiveSessions.ts:74
 #: client/pages/dashboard/settings/components/tabs/pages/security/useActiveSessions.ts:106
 #: client/pages/dashboard/settings/components/tabs/pages/security/useTwoFactorSettings.ts:171
@@ -3047,357 +3520,362 @@ msgstr "Înapoi la autentificare"
 #: client/pages/dashboard/settings/components/tabs/pages/security/useTwoFactorSettings.ts:207
 #: client/pages/dashboard/settings/components/tabs/pages/security/useTwoFactorSettings.ts:223
 #: client/pages/dashboard/settings/components/tabs/pages/security/useTwoFactorSettings.ts:273
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:193
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:239
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:257
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:93
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:112
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:127
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:142
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:220
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:237
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:258
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:273
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:36
 msgid "Error"
 msgstr "Eroare"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:295
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:303
 msgid "Failed to update profile"
 msgstr "Nu s-a putut actualiza profilul"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:331
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:340
 msgid "Language updated"
 msgstr "Limba a fost actualizată"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:332
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:341
 msgid "PeakURL is reloading the dashboard now."
 msgstr "PeakURL reîncarcă acum panoul de control."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:341
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:361
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:388
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:448
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:350
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:370
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:397
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:457
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:189
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:169
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:182
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:232
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:252
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:105
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:123
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:233
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:249
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:202
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:207
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:88
 msgid "Success"
 msgstr "Succes"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:343
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:352
 msgid "Profile and general settings updated successfully"
 msgstr "Profilul și setările generale au fost actualizate cu succes"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:346
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:355
 msgid "General settings updated successfully"
 msgstr "Setările generale au fost actualizate cu succes"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:351
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:529
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:568
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:699
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:360
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:538
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:577
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:708
 msgid "Save failed"
 msgstr "Salvarea a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:354
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:363
 msgid "Failed to update the general settings"
 msgstr "Nu s-au putut actualiza setările generale"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:361
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:370
 msgid "Profile updated successfully"
 msgstr "Profilul a fost actualizat cu succes"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:366
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:375
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:65
 msgid "Enter your current password"
 msgstr "Introduceți parola curentă"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:371
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:380
 msgid "Passwords do not match"
 msgstr "Parolele nu se potrivesc"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:377
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:386
 msgid "Password must be at least 8 characters"
 msgstr "Parola trebuie să aibă cel puțin 8 caractere"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:389
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:398
 msgid "Password updated successfully"
 msgstr "Parola a fost actualizată cu succes"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:399
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:408
 msgid "Failed to update password"
 msgstr "Nu s-a putut actualiza parola"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:412
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:421
 msgid "Key created without visible token"
 msgstr "Cheie creată fără token vizibil"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:413
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:422
 msgid "PeakURL created the API key, but the one-time token was not returned. Revoke it and create a new key."
 msgstr "PeakURL a creat cheia API, dar tokenul unic nu a fost returnat. Revocați-o și creați o cheie nouă."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:428
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:437
 msgid "API key created"
 msgstr "Cheie API creată"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:429
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:438
 msgid "Copy the token now. PeakURL will not show it again."
 msgstr "Copiați tokenul acum. PeakURL nu îl va mai afișa niciodată."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:434
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:443
 msgid "Failed to generate API key"
 msgstr "Nu s-a putut genera cheia API"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:449
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:458
 msgid "API key deleted successfully"
 msgstr "Cheia API a fost ștearsă cu succes"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:454
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:463
 msgid "Failed to delete API key"
 msgstr "Nu s-a putut șterge cheia API"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:461
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:470
 msgid "API key copied to clipboard"
 msgstr "Cheia API a fost copiată în clipboard"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:465
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:135
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:474
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:266
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1062
 msgid "Copied"
 msgstr "Copiat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:468
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:477
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1067
 msgid "Copy failed"
 msgstr "Copierea a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:469
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:478
 msgid "PeakURL could not copy that value to the clipboard."
 msgstr "PeakURL nu a putut copia acea valoare în clipboard."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:488
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:497
 msgid "Update available"
 msgstr "Actualizare disponibilă"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:490
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:499
 msgid "PeakURL %s is ready to install."
 msgstr "PeakURL %s este gata de instalare."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:498
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:507
 #: client/pages/dashboard/settings/components/tabs/pages/updates/helpers.ts:185
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:773
 msgid "Up to date"
 msgstr "La zi"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:501
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:510
 msgid "PeakURL %s is already on the latest version."
 msgstr "PeakURL %s este deja la cea mai recentă versiune."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:504
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:513
 msgid "PeakURL is already on the latest version."
 msgstr "PeakURL este deja la cea mai recentă versiune."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:508
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:517
 msgid "Update check failed"
 msgstr "Verificarea actualizărilor a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:511
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:520
 msgid "PeakURL could not reach the update service."
 msgstr "PeakURL nu a putut contacta serviciul de actualizare."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:523
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:563
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:532
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:572
 msgid "Saved"
 msgstr "Salvat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:524
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:533
 msgid "Location data settings were updated successfully."
 msgstr "Setările pentru datele de localizare au fost actualizate cu succes."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:532
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:541
 msgid "PeakURL could not save the MaxMind settings."
 msgstr "PeakURL nu a putut salva setările MaxMind."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:543
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:669
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:552
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:678
 msgid "Database updated"
 msgstr "Bază de date actualizată"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:544
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:553
 msgid "PeakURL downloaded the latest GeoLite2 City database."
 msgstr "PeakURL a descărcat cea mai recentă bază de date GeoLite2 City."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:548
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:557
 msgid "Download failed"
 msgstr "Descărcarea a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:551
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:560
 msgid "PeakURL could not download the GeoLite2 database."
 msgstr "PeakURL nu a putut descărca baza de date GeoLite2."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:564
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:573
 msgid "Email configuration was updated successfully."
 msgstr "Configurația de e-mail a fost actualizată cu succes."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:571
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:580
 msgid "PeakURL could not save the email configuration."
 msgstr "PeakURL nu a putut salva configurația de e-mail."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:584
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:593
 msgid "Test email sent"
 msgstr "E-mail de test trimis"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:586
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:595
 msgid "PeakURL sent a test email to %s."
 msgstr "PeakURL a trimis un e-mail de test către %s."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:587
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:596
 msgid "PeakURL sent a test email to your account email."
 msgstr "PeakURL a trimis un e-mail de test pe adresa de e-mail a contului dvs."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:591
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:600
 msgid "Test email failed"
 msgstr "Trimiterea e-mailului de test a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:594
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:603
 msgid "PeakURL could not send the test email."
 msgstr "PeakURL nu a putut trimite e-mailul de test."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:625
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:634
 msgid "Release reinstalled"
 msgstr "Versiune reinstalată"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:626
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:635
 msgid "Update installed"
 msgstr "Actualizare instalată"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:630
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:639
 #: client/pages/dashboard/settings/components/tabs/pages/updates/releaseProgress.ts:120
 msgid "PeakURL %s has been reinstalled."
 msgstr "PeakURL %s a fost reinstalat."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:631
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:640
 #: client/pages/dashboard/settings/components/tabs/pages/updates/releaseProgress.ts:121
 msgid "PeakURL %s is now installed."
 msgstr "PeakURL %s este acum instalat."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:635
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:644
 #: client/pages/dashboard/settings/components/tabs/pages/updates/releaseProgress.ts:125
 msgid "The latest version has been reinstalled."
 msgstr "Cea mai recentă versiune a fost reinstalată."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:636
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:645
 #: client/pages/dashboard/settings/components/tabs/pages/updates/releaseProgress.ts:126
 msgid "The latest version is now installed."
 msgstr "Cea mai recentă versiune este acum instalată."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:641
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:650
 msgid "Reinstall failed"
 msgstr "Reinstalarea a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:641
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:650
 msgid "Update failed"
 msgstr "Actualizarea a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:645
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:654
 msgid "PeakURL could not reinstall the latest version."
 msgstr "PeakURL nu a putut reinstala cea mai recentă versiune."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:646
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:655
 msgid "PeakURL could not apply the update."
 msgstr "PeakURL nu a putut aplica actualizarea."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:671
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:680
 msgid "PeakURL repaired the database schema. Review any remaining warnings below."
 msgstr "PeakURL a reparat schema bazei de date. Verificați avertismentele rămase mai jos."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:674
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:683
 msgid "The database schema is now current."
 msgstr "Schema bazei de date este acum la zi."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:678
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:687
 #: client/pages/dashboard/settings/components/tabs/pages/updates/helpers.ts:165
 msgid "Database upgrade failed"
 msgstr "Actualizarea bazei de date a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:681
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:690
 #: client/pages/dashboard/settings/components/tabs/pages/updates/helpers.ts:168
 msgid "PeakURL could not repair the database schema."
 msgstr "PeakURL nu a putut repara schema bazei de date."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:693
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:702
 msgid "Settings saved"
 msgstr "Setări salvate"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:694
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:703
 msgid "Performance configuration updated successfully."
 msgstr "Configurația de performanță a fost actualizată cu succes."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:702
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:711
 msgid "Could not update performance configuration."
 msgstr "Nu s-a putut actualiza configurația de performanță."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:713
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:722
 msgid "Cache purged"
 msgstr "Memorie cache golită"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:714
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:723
 msgid "Object cache cleared successfully across active backends."
 msgstr "Memoria cache de obiecte a fost golită cu succes pe toate motoarele active."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:718
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:727
 msgid "Purge failed"
 msgstr "Golirea a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:719
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:728
 msgid "Could not clear object cache."
 msgstr "Nu s-a putut goli memoria cache de obiecte."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:838
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:847
 msgid "Delete API key"
 msgstr "Șterge cheia API"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:842
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:851
 msgid "Delete %s? Any scripts, automations, or extensions using it will stop working immediately."
 msgstr "Ștergeți %s? Toate scripturile, automatizările sau extensiile care îl utilizează vor înceta imediat să funcționeze."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:847
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:856
 msgid "this API key"
 msgstr "această cheie API"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:851
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:860
 msgid "Delete key"
 msgstr "Șterge cheia"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:852
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:861
 msgid "Keep key"
 msgstr "Păstrează cheia"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:862
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:871
 msgid "Reinstall PeakURL %s?"
 msgstr "Reinstalați PeakURL %s?"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:863
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:872
 msgid "Install PeakURL %s?"
 msgstr "Instalați PeakURL %s?"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:866
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:875
 #: client/pages/dashboard/settings/components/tabs/pages/updates/helpers.ts:112
 msgid "update"
 msgstr "actualizare"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:872
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:881
 msgid "PeakURL will restore the latest version and refresh the included files."
 msgstr "PeakURL va restaura cea mai recentă versiune și va reîmprospăta fișierele incluse."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:875
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:884
 msgid "PeakURL will install the latest version and refresh the included files."
 msgstr "PeakURL va instala cea mai recentă versiune și va reîmprospăta fișierele incluse."
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:881
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:890
 msgid "Reinstall latest version"
 msgstr "Reinstalați cea mai recentă versiune"
 
-#: client/pages/dashboard/settings/components/tabs/Content.tsx:882
+#: client/pages/dashboard/settings/components/tabs/Content.tsx:891
 msgid "Install update"
 msgstr "Instalați actualizarea"
 
@@ -3602,8 +4080,9 @@ msgstr "Ultima generare:"
 #: client/pages/dashboard/components/DeviceBreakdown/DeviceBreakdown.tsx:31
 #: client/pages/dashboard/components/CountryStats/CountryStats.tsx:39
 #: client/pages/dashboard/components/RecentClicks/RecentClicks.tsx:12
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:57
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:203
+#: client/pages/dashboard/links/components/health-status.ts:82
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:66
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:295
 #: client/pages/dashboard/links/components/StatsDrawer/HistoricalStats.tsx:172
 #: client/pages/dashboard/links/components/StatsDrawer/HistoricalStats.tsx:179
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:106
@@ -3769,251 +4248,280 @@ msgstr "Salvați noile coduri înainte de a părăsi această pagină."
 msgid "PeakURL downloaded the latest backup codes for this account."
 msgstr "PeakURL a descărcat cele mai recente coduri de rezervă pentru acest cont."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:176
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:182
 msgid "Loading languages..."
 msgstr "Se încarcă limbile..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:182
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:188
 msgid "12-hour (AM/PM)"
 msgstr "12 ore (AM/PM)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:189
 msgid "24-hour"
 msgstr "24 de ore"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:186
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:192
 #: client/pages/dashboard/links/components/StatsDrawer/analytics.ts:74
 msgid "7 days"
 msgstr "7 zile"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:187
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:193
 msgid "14 days"
 msgstr "14 zile"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:188
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:194
 msgid "30 days (Default)"
 msgstr "30 de zile (implicit)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:189
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:202
 msgid "60 days"
 msgstr "60 de zile"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:190
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:196
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:203
 msgid "90 days"
 msgstr "90 de zile"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:191
-msgid "Never (Keep indefinitely)"
-msgstr "Niciodată (păstrează pe termen nelimitat)"
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:197
+msgid "Indefinite"
+msgstr "Nedefinit"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:194
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:200
+msgid "Indefinite (Default)"
+msgstr "Nedefinit (implicit)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:201
+#: client/pages/dashboard/links/components/StatsDrawer/analytics.ts:69
+msgid "30 days"
+msgstr "30 de zile"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:204
+msgid "180 days (6 months)"
+msgstr "180 de zile (6 luni)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:205
+msgid "365 days (1 year)"
+msgstr "365 de zile (1 an)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:208
 msgid "Default (Landing Page)"
 msgstr "Implicit (Pagină de destinație)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:195
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:209
 msgid "Redirect URL"
 msgstr "URL de redirecționare"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:196
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:210
 msgid "Login Page"
 msgstr "Pagină de autentificare"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:321
 msgid "Replace Favicon"
 msgstr "Înlocuiește favicon-ul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:308
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:322
 msgid "Choose Favicon"
 msgstr "Alege favicon-ul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:324
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:338
 msgid "Replace Preview Image"
 msgstr "Înlocuiește imaginea de previzualizare"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:325
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:339
 msgid "Choose Preview Image"
 msgstr "Alege imaginea de previzualizare"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:332
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:346
 msgid "Profile Information"
 msgstr "Informații despre profil"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:337
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:351
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:151
 msgid "First Name"
 msgstr "Prenume"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:344
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:358
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:157
 msgid "Last Name"
 msgstr "Nume de familie"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:351
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:365
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:166
 msgid "Display Name"
 msgstr "Nume afișat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:364
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:378
 msgid "Cannot be changed"
 msgstr "Nu poate fi modificat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:381
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:395
 msgid "Email Address"
 msgstr "Adresă de e-mail"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:392
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:406
 msgid "Phone Number"
 msgstr "Număr de telefon"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:399
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:413
 msgid "Company"
 msgstr "Companie"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:405
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:419
 msgid "Job Title"
 msgstr "Funcție"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:412
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:426
 msgid "Bio"
 msgstr "Biografie"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:426
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:440
 msgid "Site Configuration"
 msgstr "Configurarea site-ului"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:455
 msgid "Tagline"
 msgstr "Slogan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:452
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:466
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:564
 msgid "Site Language"
 msgstr "Limba site-ului"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:468
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:482
 msgid "Site Timezone"
 msgstr "Fusul orar al site-ului"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:479
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:493
 msgid "Site timezone"
 msgstr "fusul orar al site-ului"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:485
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:499
 msgid "Time Format"
 msgstr "Format oră"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:496
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:510
 msgid "Time format"
 msgstr "formatul orei"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:501
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:515
 msgid "Trash Retention Period"
 msgstr "Perioadă de păstrare în coș"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:514
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:528
 msgid "Trash retention period"
 msgstr "Perioadă de păstrare în coș"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:521
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:533
+msgid "Analytics Click Retention Period"
+msgstr "Perioada de păstrare a clicurilor din statistici"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:548
+msgid "Analytics click retention period"
+msgstr "Perioada de păstrare a clicurilor din statistici"
+
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:557
 msgid "Homepage Configuration"
 msgstr "Configurarea paginii principale"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:527
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:542
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:563
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:578
 msgid "Root URL Behavior"
 msgstr "Comportamentul URL-ului rădăcină"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:548
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:584
 msgid "Custom Redirect URL"
 msgstr "URL de redirecționare personalizat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:564
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:600
 msgid "Visitors to the root domain will be redirected to this URL."
 msgstr "Vizitatorii domeniului rădăcină vor fi redirecționați către acest URL."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:574
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:610
 msgid "To customize your HTML landing page, edit the following file in your installation:"
 msgstr "Pentru a personaliza pagina de destinație HTML, editați următorul fișier din instalare:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:584
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:620
 msgid "This raw HTML file will be served at the root domain. You can include custom styles, scripts, and branding."
 msgstr "Acest fișier HTML brut va fi servit pe domeniul rădăcină. Puteți include stiluri personalizate, scripturi și branding."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:595
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:631
 msgid "Branding"
 msgstr "Branding"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:603
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:639
 msgid "Site Favicon"
 msgstr "Favicon site"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:606
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:642
 msgid "Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
 msgstr "Încărcați un favicon PNG pătrat. PeakURL îl va folosi pentru filele browserului, pictogramele tactile Apple și manifestul web al site-ului."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:616
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:652
 msgid "Favicon PNG"
 msgstr "Favicon PNG"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:653
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:689
 msgid "Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
 msgstr "Utilizați un PNG pătrat, ideal %s. Dimensiunea minimă acceptată este de 180 x 180."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:684
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:720
 msgid "Remove Favicon"
 msgstr "Elimină favicon-ul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:703
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:739
 msgid "Current favicon preview"
 msgstr "Previzualizare favicon curent"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:755
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:791
 msgid "No favicon configured"
 msgstr "Niciun favicon configurat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:767
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:803
 #: client/pages/dashboard/links/components/UrlShorteningForm/SocialPreviewFields.tsx:60
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Form.tsx:69
 msgid "Social Preview"
 msgstr "Previzualizare socială"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:770
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:806
 msgid "Upload the default image used when short links are shared on social platforms. Individual links can override it."
 msgstr "Încărcați imaginea implicită utilizată la distribuirea linkurilor scurte pe platformele sociale. Linkurile individuale o pot suprascrie."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:781
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:817
 #: client/pages/dashboard/links/components/UrlShorteningForm/SocialPreviewFields.tsx:139
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/SocialPreviewTab.tsx:106
 msgid "Preview Image"
 msgstr "Imagine de previzualizare"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:818
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:854
 msgid "Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
 msgstr "Utilizați o imagine PNG, JPG sau WebP, ideal %s, pentru previzualizări clare pe Facebook, X, LinkedIn și aplicații de mesagerie."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:841
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:877
 #: client/pages/dashboard/links/components/UrlShorteningForm/SocialPreviewFields.tsx:149
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/SocialPreviewTab.tsx:116
 msgid "Remove Preview Image"
 msgstr "Elimină imaginea de previzualizare"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:855
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:891
 msgid "Default social preview image"
 msgstr "Imagine implicită de previzualizare socială"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:868
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:904
 msgid "No default preview image"
 msgstr "Nicio imagine de previzualizare implicită configurată"
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:889
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:925
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:544
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:518
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:537
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:768
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:922
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 msgid "Saving..."
 msgstr "Se salvează..."
 
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:889
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:925
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:547
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:33
 #: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:280
 msgid "Save Changes"
@@ -4029,8 +4537,7 @@ msgstr "Activați analiza țărilor și orașelor cu o bază de date locală Max
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:134
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:283
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:185
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:314
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:318
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:60
 #: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:307
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:175
@@ -4050,6 +4557,8 @@ msgid "Download Database"
 msgstr "Descarcă baza de date"
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:311
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:423
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:201
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:332
@@ -4057,6 +4566,7 @@ msgstr "Descarcă baza de date"
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:825
 #: client/pages/dashboard/tools/import/components/results/ImportDetails.tsx:34
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:64
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:91
 #: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:43
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:86
 msgid "Status"
@@ -4064,7 +4574,6 @@ msgstr "Stare"
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:185
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:790
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:827
 msgid "Ready"
@@ -4088,6 +4597,7 @@ msgstr "Bază de date actualizată"
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:108
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:13
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:17
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:114
 msgid "Never"
 msgstr "Niciodată"
 
@@ -4388,6 +4898,336 @@ msgstr "Ultima verificare"
 msgid "Loading update status..."
 msgstr "Se încarcă starea actualizării..."
 
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:64
+msgid "Delivered"
+msgstr "Livrat"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:71
+msgid "Retrying"
+msgstr "În reîncercare"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:76
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:69
+msgid "Pending"
+msgstr "În așteptare"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:83
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:60
+msgid "Processing"
+msgstr "În procesare"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:90
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:74
+#: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:184
+msgid "Failed"
+msgstr "Eșuată"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:104
+msgid "Webhook Test Ping"
+msgstr "Ping de test pentru webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:112
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:930
+#: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:107
+msgid "Event"
+msgstr "Eveniment"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:283
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:284
+msgid "Refresh deliveries"
+msgstr "Reîmprospătează livrările"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:297
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:298
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:231
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:232
+msgid "Close drawer"
+msgstr "Închide panoul"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:323
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:119
+#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:63
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:61
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:65
+msgid "Active"
+msgstr "Activ"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:324
+#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:65
+#: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:44
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:62
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:66
+msgid "Inactive"
+msgstr "Inactiv"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:329
+msgid "SSL Verification"
+msgstr "Verificare SSL"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:339
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
+msgid "Enabled"
+msgstr "Activat"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:348
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:177
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:339
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:463
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
+msgid "Disabled"
+msgstr "Dezactivat"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:356
+msgid "Health (24h)"
+msgstr "Stare (24h)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:361
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:78
+msgid "No completed deliveries in 24h"
+msgstr "Nicio livrare finalizată în 24h"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:367
+msgid "%d deliveries (100%%)"
+msgstr "%d livrări (100%%)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:374
+msgid "%d failed / %d total"
+msgstr "%d eșuate / %d în total"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:386
+msgid "Total Logged"
+msgstr "Total înregistrat"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:402
+msgid "Loading delivery history…"
+msgstr "Se încarcă istoricul livrărilor…"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:409
+msgid "No Delivery Attempts Yet"
+msgstr "Nicio încercare de livrare până acum"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:412
+msgid "When PeakURL delivers outbound events to this endpoint, each attempt and response will appear here."
+msgstr "Când PeakURL trimite evenimente de ieșire către acest punct final, fiecare încercare și răspuns va apărea aici."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:426
+msgid "HTTP Code"
+msgstr "Cod HTTP"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:429
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:919
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:341
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:132
+msgid "Duration"
+msgstr "Durată"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:432
+msgid "Attempts"
+msgstr "Încercări"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:434
+msgid "Date"
+msgstr "Dată"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:436
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:82
+#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
+#: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:112
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:269
+#: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:55
+msgid "Actions"
+msgstr "Acțiuni"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:537
+msgid "Retrying soon"
+msgstr "Se reîncearcă în curând"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:576
+msgid "Hide error"
+msgstr "Ascunde eroarea"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:587
+msgid "View error"
+msgstr "Vezi eroarea"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:625
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:629
+msgid "Retry Delivery"
+msgstr "Reîncearcă livrarea"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:652
+msgid "Showing page %d of %d (%d total)"
+msgstr "Se afișează pagina %d din %d (%d în total)"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:677
+#: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:63
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:69
+msgid "Previous"
+msgstr "Anterior"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:696
+#: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:89
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:108
+msgid "Next"
+msgstr "Următor"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:718
+msgid "Webhook delivery & retry guide"
+msgstr "Ghid de livrare și reîncercare a webhook-urilor"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:725
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:955
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:608
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:954
+#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:466
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:58
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:170
+#: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:532
+msgid "Close"
+msgstr "Închide"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:102
+msgid "Link Events"
+msgstr "Evenimente de linkuri"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:103
+msgid "API Key Events"
+msgstr "Evenimente de chei API"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:104
+msgid "User Events"
+msgstr "Evenimente de utilizatori"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:125
+msgid "Other Events"
+msgstr "Alte evenimente"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:170
+msgid "Webhook updated successfully."
+msgstr "Webhook-ul a fost actualizat cu succes."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:183
+msgid "Webhook created successfully."
+msgstr "Webhook-ul a fost creat cu succes."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:197
+msgid "Failed to update webhook."
+msgstr "Nu s-a putut actualiza webhook-ul."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:198
+msgid "Failed to create webhook."
+msgstr "Nu s-a putut crea webhook-ul."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:215
+msgid "Edit Webhook"
+msgstr "Editează webhook-ul"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:216
+msgid "Add New Webhook"
+msgstr "Adăugați un webhook nou"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:221
+msgid "Configure destination endpoint and subscribed events."
+msgstr "Configurați punctul final de destinație și evenimentele abonate."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:243
+msgid "Webhook name"
+msgstr "Nume webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:247
+msgid "e.g. Slack notifications, Zapier, or n8n"
+msgstr "de ex. Notificări Slack, Zapier sau n8n"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:256
+msgid "A descriptive name to identify this webhook endpoint."
+msgstr "Un nume descriptiv pentru identificarea acestui punct final webhook."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:265
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:765
+msgid "Endpoint URL"
+msgstr "URL punct final"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:278
+msgid "Where PeakURL will send webhook requests. Must be a publicly accessible HTTPS endpoint."
+msgstr "Unde va trimite PeakURL cererile de webhook. Trebuie să fie un punct final HTTPS accesibil public."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:284
+msgid "Webhook endpoints must use the HTTPS protocol."
+msgstr "Punctele finale de webhook trebuie să utilizeze protocolul HTTPS."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:296
+msgid "Subscribed Events"
+msgstr "Evenimente abonate"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:300
+msgid "%d of %d selected"
+msgstr "%d din %d selectate"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:316
+#: client/pages/dashboard/activity/components/ActivityHeader/ActivityCategoryTabs.tsx:27
+#: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:36
+#: client/pages/dashboard/links/components/Header/DateRangeFilter.tsx:22
+msgid "All"
+msgstr "Toate"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:327
+msgid "Clear"
+msgstr "Șterge"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:371
+msgid "%d of %d"
+msgstr "%d din %d"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:383
+msgid "Deselect all"
+msgstr "Deselectează tot"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:384
+msgid "Select all"
+msgstr "Selectează tot"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:453
+msgid "Enable SSL verification"
+msgstr "Activează verificarea SSL"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:456
+msgid "Verify the endpoint certificate when delivering requests. Disable only for self-signed or otherwise untrusted certificates."
+msgstr "Verifică certificatul punctului final la livrarea cererilor. Dezactivați doar pentru certificate autofirmate sau nesigure."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:490
+msgid "Active Webhook Delivery"
+msgstr "Livrare activă a webhook-ului"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:494
+msgid "Webhook is enabled and will receive event deliveries."
+msgstr "Webhook-ul este activat și va primi livrări de evenimente."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:497
+msgid "Webhook is paused. Outbound deliveries will be skipped."
+msgstr "Webhook-ul este întrerupt. Livrările de ieșire vor fi omise."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:524
+msgid "Payload format & signature docs"
+msgstr "Documentație despre formatul sarcinii utile și semnătură"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:545
+#: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:70
+msgid "Creating..."
+msgstr "Se creează..."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:548
+msgid "Create Webhook"
+msgstr "Creează webhook"
+
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:55
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:63
 msgid "Google reCAPTCHA v3"
@@ -4429,20 +5269,12 @@ msgstr "Lăsați necompletat pentru a păstra cheia secretă salvată."
 msgid "Paste the secret key from your CAPTCHA provider."
 msgstr "Inserați cheia secretă de la furnizorul dvs. CAPTCHA."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:177
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:192
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:586
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:813
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:894
-msgid "Disabled"
-msgstr "Dezactivat"
-
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:181
 msgid "Editing"
 msgstr "Editare"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:186
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:349
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:798
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:802
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:855
@@ -4542,172 +5374,261 @@ msgstr "Elimină cheile"
 msgid "Save Settings"
 msgstr "Salvează setările"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:42
-msgid "Link Created"
-msgstr "Link creat"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:87
+msgid "Healthy (%d deliveries in 24h)"
+msgstr "Sănătos (%d livrări în 24h)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:43
-msgid "Link Clicked"
-msgstr "Link accesat"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:97
+msgid "Failed (HTTP %d)"
+msgstr "Eșuat (HTTP %d)"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:44
-msgid "Link Updated"
-msgstr "Link actualizat"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:99
+msgid "Failed: %s"
+msgstr "Eșuat: %s"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:45
-msgid "Link Deleted"
-msgstr "Link șters"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:100
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:108
+msgid "%d failed in 24h"
+msgstr "%d eșuate în 24h"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:94
-msgid "Enter a URL and select at least one event."
-msgstr "Introduceți un URL și selectați cel puțin un eveniment."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:201
+msgid "Test Delivered"
+msgstr "Test livrat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:106
-msgid "Webhook created successfully"
-msgstr "Webhook creat cu succes"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:203
+msgid "Endpoint responded with HTTP %d in %dms."
+msgstr "Punctul final a răspuns cu HTTP %d în %d ms."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:113
-msgid "Failed to create webhook"
-msgstr "Nu s-a putut crea webhook-ul"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:210
+msgid "Test Failed"
+msgstr "Testul a eșuat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:123
-msgid "Webhook deleted"
-msgstr "Webhook șters"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:213
+msgid "Endpoint returned HTTP %d."
+msgstr "Punctul final a returnat HTTP %d."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:128
-msgid "Failed to delete webhook"
-msgstr "Nu s-a putut șterge webhook-ul"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:221
+msgid "Failed to dispatch test webhook."
+msgstr "Nu s-a putut trimite webhook-ul de test."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:140
-msgid "Copied to clipboard"
-msgstr "Copiat în clipboard"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:238
+msgid "Failed to delete webhook."
+msgstr "Nu s-a putut șterge webhook-ul."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:142
-msgid "Failed to copy"
-msgstr "Copierea a eșuat"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:250
+msgid "Signing secret rotated successfully."
+msgstr "Secretul de semnare a fost rotit cu succes."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:158
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:259
+msgid "Failed to rotate signing secret."
+msgstr "Nu s-a putut roti secretul de semnare."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:271
+msgid "Copied to clipboard."
+msgstr "Copiat în clipboard."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:273
+msgid "Failed to copy."
+msgstr "Copierea a eșuat."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:290
 msgid "Connect PeakURL to your automations with outbound webhooks for link activity."
 msgstr "Conectați PeakURL la automatizările dvs. cu webhook-uri de ieșire pentru activitatea linkurilor."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:170
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:303
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:999
 msgid "Webhooks"
 msgstr "Webhook-uri"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:173
-msgid "PeakURL sends signed POST requests to your endpoint when selected link events happen."
-msgstr "PeakURL trimite cereri POST semnate către punctul dvs. final când au loc evenimentele selectate pentru linkuri."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:306
+msgid "PeakURL sends HMAC-SHA256 signed POST requests to your endpoint when selected link events occur."
+msgstr "PeakURL trimite cereri POST semnate HMAC-SHA256 către punctul dvs. final când au loc evenimentele de link selectate."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:199
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:334
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:706
+msgid "Add Webhook"
+msgstr "Adaugă webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:356
 msgid "Enable webhooks"
 msgstr "Activează webhook-urile"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:232
-msgid "Add New Webhook"
-msgstr "Adăugați un webhook nou"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:389
+msgid "Loading webhook configuration…"
+msgstr "Se încarcă configurația webhook-ului…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:235
-msgid "Choose which events should trigger a delivery, then save the signing secret somewhere secure when it is shown."
-msgstr "Alegeți ce evenimente ar trebui să declanșeze livrarea, apoi salvați cheia secretă de semnare într-un loc sigur când este afișată."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:395
+msgid "Failed to load webhook configuration."
+msgstr "Nu s-a putut încărca configurația webhook-ului."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:243
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:459
-msgid "Endpoint URL"
-msgstr "URL punct final"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:441
+msgid "URL copied"
+msgstr "URL copiat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:260
-msgid "Use a public HTTPS endpoint that can accept POST requests, such as a Zapier catch hook, an n8n webhook URL, or your own API route."
-msgstr "Utilizați un punct final HTTPS public care poate accepta cereri POST, cum ar fi un catch hook Zapier, un webhook n8n sau propria rută API."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:445
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:446
+msgid "Copy URL"
+msgstr "Copiază URL-ul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:272
-msgid "Events"
-msgstr "Evenimente"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:488
+#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:119
+msgid "SSL"
+msgstr "SSL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:328
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:70
-msgid "Creating..."
-msgstr "Se creează..."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:489
+msgid "Insecure"
+msgstr "Nesigur"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:329
-msgid "Create Webhook"
-msgstr "Creează webhook"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:516
+msgid "Send a test payload to this endpoint"
+msgstr "Trimite o sarcină utilă de test către acest punct final"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:336
-msgid "Loading webhooks…"
-msgstr "Se încarcă webhook-urile…"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:520
+msgid "Test"
+msgstr "Test"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:342
-msgid "Failed to load webhooks"
-msgstr "Nu s-au putut încărca webhook-urile"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:534
+msgid "View delivery history & attempts"
+msgstr "Vezi istoricul livrărilor și încercările"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:374
-#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:26
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:56
-#: client/pages/dashboard/links/components/StatsDrawer/QuickInsights.tsx:44
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:59
-msgid "Inactive"
-msgstr "Inactiv"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:538
+msgid "Deliveries"
+msgstr "Livrări"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:391
-msgid "Signing secret stored"
-msgstr "Secret de semnare stocat"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:550
+msgid "Edit webhook settings"
+msgstr "Editează setările webhook-ului"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:554
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:374
+msgid "Edit"
+msgstr "Editează"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:565
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:568
+msgid "Delete this webhook"
+msgstr "Șterge acest webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:581
+msgid "Events:"
+msgstr "Evenimente:"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:607
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:630
+msgid "No events subscribed"
+msgstr "Niciun eveniment abonat"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:642
+msgid "Secret:"
+msgstr "Secret:"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:655
+msgid "Rotate"
+msgstr "Rotește"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:666
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:128
 msgid "Created:"
 msgstr "Creat la:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:417
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:424
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:518
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:529
-msgid "Delete webhook"
-msgstr "Șterge webhook-ul"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:690
+msgid "No webhooks configured"
+msgstr "Niciun webhook configurat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:442
-msgid "Copy Your Webhook Secret"
-msgstr "Copiați secretul webhook-ului"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:693
+msgid "Add an HTTPS endpoint to begin receiving signed event deliveries for link activity, user updates, and API key events."
+msgstr "Adăugați un punct final HTTPS pentru a începe să primiți livrări de evenimente semnate pentru activitatea linkurilor, actualizările de utilizatori și evenimentele cheilor API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:448
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:748
+msgid "Your Webhook Signing Secret"
+msgstr "Secretul dvs. de semnare pentru webhook"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:754
 msgid "This signing secret will not be shown again."
 msgstr "Acest secret de semnare nu va mai fi afișat din nou."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:451
-msgid "Store it in your automation tool or secret manager before closing this window."
-msgstr "Stocați-l în instrumentul dvs. de automatizare sau managerul de secrete înainte de a închide această fereastră."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:757
+msgid "Store this secret securely in your receiving application. Outbound requests are signed using HMAC-SHA256 with this secret."
+msgstr "Stocați acest secret în siguranță în aplicația de primire. Cererile de ieșire sunt semnate folosind HMAC-SHA256 cu acest secret."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:474
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:498
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:780
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:804
 msgid "Secret copied"
 msgstr "Secret copiat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:477
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:783
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "Copiază în clipboard"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:481
-msgid "If this secret is ever exposed, delete the webhook and create a new one."
-msgstr "Dacă acest secret este vreodată expus, ștergeți webhook-ul și creați unul nou."
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:787
+msgid "To verify signatures, compute HMAC-SHA256 over '{timestamp}.{raw_payload}' and compare against the X-PeakURL-Signature header."
+msgstr "Pentru a verifica semnăturile, calculați HMAC-SHA256 peste '{timestamp}.{raw_payload}' și comparați cu antetul X-PeakURL-Signature."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:502
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:808
 msgid "Copy Secret"
 msgstr "Copiază secretul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:505
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:811
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "L-am salvat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:522
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:825
+msgid "Rotate Webhook Signing Secret"
+msgstr "Rotește secretul de semnare al webhook-ului"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:829
+msgid "Rotate the signing secret for %s? The current secret will be immediately invalidated and outbound event signatures will fail until you update your receiver application."
+msgstr "Rotiți secretul de semnare pentru %s? Secretul curent va fi invalidat imediat, iar semnăturile evenimentelor de ieșire vor eșua până când actualizați aplicația de primire."
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:836
+msgid "Rotate Secret"
+msgstr "Rotește secretul"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:851
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:862
+msgid "Delete Webhook"
+msgstr "Șterge webhook-ul"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:855
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "Ștergeți webhook-ul pentru %s? PeakURL va înceta imediat trimiterea cererilor de evenimente semnate către acest punct final."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:530
-msgid "Keep webhook"
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:863
+msgid "Keep Webhook"
 msgstr "Păstrează webhook-ul"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:873
+msgid "Webhook Test Ping Result"
+msgstr "Rezultatul ping-ului de test al webhook-ului"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:894
+msgid "Delivery Succeeded"
+msgstr "Livrare reușită"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:904
+msgid "Delivery Failed"
+msgstr "Livrare eșuată"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:941
+msgid "Error details"
+msgstr "Detalii despre eroare"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:342
+msgid "%d configured"
+msgid_plural "%d configured"
+msgstr[0] "%d configurat"
+msgstr[1] "%d configurate"
+msgstr[2] "%d de configurate"
+
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:625
+msgid "+%d more"
+msgid_plural "+%d more"
+msgstr[0] "+%d altul"
+msgstr[1] "+%d altele"
+msgstr[2] "+%d de altele"
 
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:40
 msgid "Connection"
@@ -4741,15 +5662,8 @@ msgstr "Creează o cheie nouă"
 msgid "API Key"
 msgstr "Cheie API"
 
-#: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:119
-#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:54
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:58
-msgid "Active"
-msgstr "Activ"
-
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiTab.tsx:145
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:290
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:382
 msgid "Delete"
 msgstr "Șterge"
 
@@ -5053,10 +5967,6 @@ msgstr "Sigur doriți să goliți memoria cache de obiecte? Toate redirecționă
 msgid "TLS / STARTTLS"
 msgstr "TLS / STARTTLS"
 
-#: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:119
-msgid "SSL"
-msgstr "SSL"
-
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:140
 msgid "Save the current email settings before sending a test email."
 msgstr "Salvați setările curente de e-mail înainte de a trimite un e-mail de test."
@@ -5194,7 +6104,7 @@ msgstr "Gestionați preferințele și configurațiile contului dvs."
 
 #: client/pages/dashboard/settings/Layout.tsx:45
 #: client/pages/dashboard/about/AboutPage.tsx:231
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:121
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:246
 msgid "Performance"
 msgstr "Performanță"
 
@@ -5259,7 +6169,7 @@ msgstr[2] "%1$d de sarcini scadente procesate: %2$s."
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:21
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:57
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:352
 msgid "Run Due Jobs"
 msgstr "Execută sarcinile scadente"
 
@@ -5284,7 +6194,7 @@ msgid "Job"
 msgstr "Sarcină"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:70
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:555
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:644
 msgid "Schedule"
 msgstr "Programare"
 
@@ -5301,16 +6211,8 @@ msgstr "Următoarea rulare"
 msgid "Result"
 msgstr "Rezultat"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:82
-#: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:70
-#: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:112
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:127
-#: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:55
-msgid "Actions"
-msgstr "Acțiuni"
-
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:136
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:428
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:478
 msgid "Customized"
 msgstr "Personalizată"
 
@@ -5353,208 +6255,252 @@ msgstr "Se execută..."
 msgid "Run Now"
 msgstr "Execută acum"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:46
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:71
 msgid "7 Days"
 msgstr "7 zile"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:47
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:72
 msgid "14 Days"
 msgstr "14 zile"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:48
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
 msgid "30 Days (Recommended)"
 msgstr "30 de zile (recomandat)"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:49
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:74
 msgid "60 Days"
 msgstr "60 de zile"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:50
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:75
 msgid "90 Days"
 msgstr "90 de zile"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:51
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:76
 msgid "180 Days"
 msgstr "180 de zile"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:52
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:53
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:77
 msgid "1 Year"
 msgstr "1 an"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:53
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:54
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:78
 msgid "Keep Indefinitely"
 msgstr "Păstrează la nesfârșit"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:59
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
+msgid "Use Global (%s)"
+msgstr "Utilizează global (%s)"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:67
+msgid "Use Global (%d Days)"
+msgstr "Utilizează global (%d zile)"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:73
+msgid "30 Days"
+msgstr "30 de zile"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:87
+msgid "%d Days"
+msgstr "%d zile"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:96
 msgid "Every 5 minutes"
 msgstr "La fiecare 5 minute"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:60
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:97
 msgid "Every 15 minutes"
 msgstr "La fiecare 15 minute"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:61
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:98
 msgid "Every 30 minutes"
 msgstr "La fiecare 30 de minute"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:62
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:99
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:21
 msgid "Hourly"
 msgstr "În fiecare oră"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:63
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:100
 msgid "Every 2 hours"
 msgstr "La fiecare 2 ore"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:64
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:101
 msgid "Every 6 hours"
 msgstr "La fiecare 6 ore"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:65
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:102
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:26
 msgid "Every 12 hours"
 msgstr "La fiecare 12 ore"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:66
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:103
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:35
 msgid "Daily"
 msgstr "Zilnic"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:67
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:104
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:38
 msgid "Weekly"
 msgstr "Săptămânal"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:138
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:177
 msgid "Execution history retention setting saved successfully."
 msgstr "Setarea de păstrare a istoricului execuțiilor a fost salvată cu succes."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:144
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:183
 msgid "Failed to update history retention."
 msgstr "Nu s-a putut actualiza păstrarea istoricului."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:170
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:210
 msgid "Schedule for [%s] updated successfully."
 msgstr "Programarea pentru [%s] a fost actualizată cu succes."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:181
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:221
 msgid "Failed to update schedule for [%s]."
 msgstr "Nu s-a putut actualiza programarea pentru [%s]."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:199
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:239
 msgid "Reset [%s] to recommended default schedule."
 msgstr "S-a resetat [%s] la programul implicit recomandat."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:210
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:250
 msgid "Failed to reset job schedule."
 msgstr "Nu s-a putut reseta programarea sarcinii."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:254
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:294
 msgid "Manage Schedules & Retention"
 msgstr "Gestionează programările și păstrarea"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:264
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:628
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:304
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:717
 msgid "Site timezone: %s"
 msgstr "Fusul orar al site-ului: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:276
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:277
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:316
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:317
 msgid "Close schedules drawer"
 msgstr "Închide panoul de programări"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:293
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:333
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:792
 msgid "Execution History Retention"
 msgstr "Păstrarea istoricului execuțiilor"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:298
-msgid "Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
-msgstr "Alegeți cât timp sunt păstrate înregistrările sarcinilor de fundal finalizate. Execuțiile active și cele aflate în reîncercare nu sunt niciodată eliminate la curățare."
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:338
+msgid "Default retention period for background-job execution records. Scheduled jobs without an explicit override inherit this global setting. Active and retrying executions are never removed by retention cleanup."
+msgstr "Perioada implicită de păstrare pentru înregistrările de execuție ale sarcinilor de fundal. Sarcinile programate fără o suprascriere explicită moștenesc această setare globală. Execuțiile active și cele aflate în reîncercare nu sunt niciodată eliminate prin curățarea de păstrare."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:316
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:356
 msgid "History Retention Period"
 msgstr "Perioada de păstrare a istoricului"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:334
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:374
 msgid "Save Retention"
 msgstr "Salvează păstrarea"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:348
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:481
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:388
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:486
 msgid "Registered Background Tasks"
 msgstr "Sarcini de fundal înregistrate"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:357
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:397
 msgid "Recommended schedules are based on PeakURL's default maintenance cadence. You can customize any job and restore its recommended schedule at any time."
 msgstr "Programările recomandate se bazează pe ritmul implicit de întreținere PeakURL. Puteți personaliza orice sarcină și restabili programul recomandat în orice moment."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:473
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:523
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:79
 msgid "Due now"
 msgstr "Scadentă acum"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:478
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:528
 msgid "Next: %s"
 msgstr "Următoarea: %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:526
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:800
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:466
-#: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:532
-msgid "Close"
-msgstr "Închide"
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:549
+msgid "Retention: Indefinite"
+msgstr "Păstrare: nedefinită"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:529
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:554
+msgid "Retention: 1 Year"
+msgstr "Păstrare: 1 an"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:559
+msgid "Retention: %d Days"
+msgstr "Păstrare: %d zile"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:611
 msgid "Configure"
 msgstr "Configurează"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:586
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:625
+msgid "Schedule Settings"
+msgstr "Setări de programare"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:675
 msgid "Recurrence cadence."
 msgstr "Frecvența de recurență."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:598
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:687
 msgid "Preferred run time"
 msgstr "Ora preferată de execuție"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:641
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:730
 msgid "Automatic execution"
 msgstr "Execuție automată"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:647
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:736
 msgid "Runs this job automatically when it is due."
 msgstr "Execută automat această sarcină când este scadentă."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:650
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:739
 msgid "Automatic execution is disabled. You can still run this job manually."
 msgstr "Execuția automată este dezactivată. Puteți rula în continuare această sarcină manual."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:662
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:751
 msgid "Toggle automatic execution"
 msgstr "Comută execuția automată"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:719
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:827
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:797
+msgid "Specify how long completed execution records are kept for this job, or inherit the global retention default."
+msgstr "Specificați cât timp sunt păstrate înregistrările de execuție finalizate pentru această sarcină sau moșteniți valoarea implicită globală de păstrare."
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:841
+msgid "History retention for %s"
+msgstr "Păstrarea istoricului pentru %s"
+
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:873
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:981
 msgid "Reset to Recommended"
 msgstr "Resetează la recomandat"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:771
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:925
 msgid "Save Schedule"
 msgstr "Salvează programarea"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:790
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:944
 msgid "Background job schedules and retention rules are stored permanently."
 msgstr "Programările sarcinilor de fundal și regulile de păstrare sunt stocate permanent."
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:814
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:968
 msgid "Reset Schedule — %s"
 msgstr "Resetează programarea — %s"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:819
+#: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:973
 msgid "Restore the recommended PeakURL schedule for [%1$s] (%2$s)? Any customized interval, preferred run time, and enable state will be restored to the built-in recommendation. Past execution history will remain preserved."
 msgstr "Restabiliți programul recomandat PeakURL pentru [%1$s] (%2$s)? Orice interval personalizat, oră preferată de rulare și stare de activare vor fi readuse la recomandarea integrată. Istoricul execuțiilor trecute va fi păstrat."
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:23
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:408
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:413
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:169
 msgid "Running"
 msgstr "Se execută"
@@ -5563,13 +6509,8 @@ msgstr "Se execută"
 msgid "Retrying (%1$d/%2$d)"
 msgstr "Se reîncearcă (%1$d/%2$d)"
 
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:74
-#: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:184
-msgid "Failed"
-msgstr "Eșuată"
-
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:116
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:386
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:391
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:160
 msgid "Scheduled"
 msgstr "Programată"
@@ -5640,10 +6581,6 @@ msgstr "Încercare"
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 msgid "Started"
 msgstr "Pornită"
-
-#: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:341
-msgid "Duration"
-msgstr "Durată"
 
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:344
 msgid "Output / Details"
@@ -5884,11 +6821,11 @@ msgstr "Automatizarea sistemului"
 msgid "Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
 msgstr "Inspectați sarcinile recurente de fundal, monitorizați starea execuțiilor, consultați jurnalele recente și declanșați manual sarcini acolo unde este autorizat."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:287
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:288
 msgid "Refresh"
 msgstr "Reîmprospătează"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:288
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:289
 msgid "Refresh scheduled jobs status"
 msgstr "Reîmprospătează starea sarcinilor programate"
 
@@ -5900,68 +6837,68 @@ msgstr "Configurați programările de recurență, orele preferate și păstrare
 msgid "Manage Schedules"
 msgstr "Gestionează programările"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:326
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:330
 msgid "Clear execution run history for all jobs"
 msgstr "Șterge istoricul execuțiilor pentru toate sarcinile"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:331
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:589
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:335
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:594
 msgid "Clear All History"
 msgstr "Șterge tot istoricul"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:342
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:347
 msgid "Execute all jobs that are currently due"
 msgstr "Execută toate sarcinile care sunt scadente acum"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:364
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:369
 msgid "Total Jobs"
 msgstr "Total sarcini"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:377
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:382
 msgid "Registered in system"
 msgstr "Înregistrate în sistem"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:399
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:404
 msgid "Active recurring tasks"
 msgstr "Sarcini recurente active"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:433
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:438
 msgid "Currently in progress"
 msgstr "În curs de desfășurare"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:442
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:447
 msgid "Failed / Retrying"
 msgstr "Eșuate / În reîncercare"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:468
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:473
 msgid "Requiring attention"
 msgstr "Necesită atenție"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:498
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:503
 msgid "Search jobs..."
 msgstr "Caută sarcini..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:512
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:517
 msgid "Failed to load scheduled jobs"
 msgstr "Nu s-au putut încărca sarcinile programate"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:515
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:520
 msgid "Could not retrieve registered jobs from the scheduler API."
 msgstr "Nu s-au putut prelua sarcinile înregistrate de la API-ul planificatorului."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:525
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:530
 msgid "Retry"
 msgstr "Reîncearcă"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:533
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:538
 msgid "Loading scheduled jobs..."
 msgstr "Se încarcă sarcinile programate..."
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:585
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:590
 msgid "Clear All Execution History"
 msgstr "Șterge tot istoricul execuțiilor"
 
-#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:586
+#: client/pages/dashboard/tools/scheduled-jobs/ScheduledJobsPage.tsx:591
 msgid "Are you sure you want to clear execution history across all background jobs? Finished run records and output logs will be permanently deleted. Active and retrying runs will remain protected."
 msgstr "Sigur doriți să ștergeți istoricul execuțiilor pentru toate sarcinile de fundal? Înregistrările finalizate și jurnalele de ieșire vor fi șterse definitiv. Rulările active și cele aflate în reîncercare vor rămâne protejate."
 
@@ -6112,12 +7049,6 @@ msgstr "Cod sursă"
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:582
 msgid "Debug Mode"
 msgstr "Mod de depanare"
-
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:585
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:812
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:893
-msgid "Enabled"
-msgstr "Activat"
 
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:599
 msgid "Content Directory"
@@ -6490,7 +7421,7 @@ msgid "Detailed technical environment, server configuration, storage, and databa
 msgstr "Mediu tehnic detaliat, configurare server, stocare și specificații bază de date."
 
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1457
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:102
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:137
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:62
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:105
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:227
@@ -6513,6 +7444,7 @@ msgid "Scheduler telemetry currently unavailable"
 msgstr "Telemetria planificatorului nu este disponibilă în prezent"
 
 #: client/pages/dashboard/tools/system-status/components/BackgroundJobsSummary/BackgroundJobsSummary.tsx:79
+#: client/pages/dashboard/links/components/health-status.ts:28
 msgid "Healthy"
 msgstr "Sănătos"
 
@@ -6652,6 +7584,7 @@ msgstr "Exemplu de cerere"
 
 #: client/pages/dashboard/tools/export/ExportPage.tsx:276
 #: client/pages/dashboard/tools/import/components/api/ApiImport.tsx:47
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:120
 msgid "Response"
 msgstr "Răspuns"
 
@@ -7060,22 +7993,22 @@ msgid "Activate"
 msgstr "Activează"
 
 #: client/pages/dashboard/activity/ActivityPage.tsx:81
-#: client/pages/dashboard/links/LinksPage.tsx:202
+#: client/pages/dashboard/links/LinksPage.tsx:203
 msgid "Link restored"
 msgstr "Linkul a fost restaurat"
 
 #: client/pages/dashboard/activity/ActivityPage.tsx:82
-#: client/pages/dashboard/links/LinksPage.tsx:203
+#: client/pages/dashboard/links/LinksPage.tsx:204
 msgid "The link has been restored to active status."
 msgstr "Linkul a fost restaurat la starea activă."
 
 #: client/pages/dashboard/activity/ActivityPage.tsx:86
-#: client/pages/dashboard/links/LinksPage.tsx:207
+#: client/pages/dashboard/links/LinksPage.tsx:208
 msgid "Unable to restore link"
 msgstr "Nu se poate restaura linkul"
 
 #: client/pages/dashboard/activity/ActivityPage.tsx:87
-#: client/pages/dashboard/links/LinksPage.tsx:208
+#: client/pages/dashboard/links/LinksPage.tsx:209
 msgid "Failed to restore link."
 msgstr "Nu s-a putut restaura linkul."
 
@@ -7164,12 +8097,6 @@ msgstr "Examinați modificările linkurilor și evenimentele de gestionare a uti
 msgid "Refresh activity history"
 msgstr "Reîmprospătează istoricul de activitate"
 
-#: client/pages/dashboard/activity/components/ActivityHeader/ActivityCategoryTabs.tsx:27
-#: client/pages/dashboard/links/components/StatsDrawer/TrafficHistory.tsx:36
-#: client/pages/dashboard/links/components/Header/DateRangeFilter.tsx:22
-msgid "All"
-msgstr "Toate"
-
 #: client/pages/dashboard/activity/components/ActivityHeader/ActivityCategoryTabs.tsx:59
 msgid "All Events"
 msgstr "Toate evenimentele"
@@ -7179,28 +8106,24 @@ msgid "Activity history"
 msgstr "Istoricul activității"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:35
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:142
 msgid "%s selected"
 msgstr "Selectate: %s"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:64
 #: client/pages/dashboard/activity/components/ActivityModals/ActivityModals.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:84
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:191
 msgid "Delete selected"
 msgstr "Șterge selectate"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:72
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:95
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:202
 msgid "Delete all"
 msgstr "Șterge tot"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:100
 msgid "Select all events on this page"
 msgstr "Selectează toate evenimentele de pe această pagină"
-
-#: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:107
-msgid "Event"
-msgstr "Eveniment"
 
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:108
 msgid "Details"
@@ -7265,16 +8188,6 @@ msgstr "Se afișează %1$s–%2$s din %3$s evenimente"
 #: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:47
 msgid "Page %1$s of %2$s"
 msgstr "Pagina %1$s din %2$s"
-
-#: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:63
-#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:40
-msgid "Previous"
-msgstr "Anterior"
-
-#: client/pages/dashboard/activity/components/ActivityPagination/ActivityPagination.tsx:89
-#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:84
-msgid "Next"
-msgstr "Următor"
 
 #: client/pages/dashboard/activity/components/ActivityModals/ActivityModals.tsx:45
 msgid "Delete activity logs"
@@ -7841,7 +8754,7 @@ msgid "Compared with %1$s to %2$s."
 msgstr "Comparat cu perioada %1$s - %2$s."
 
 #: client/pages/dashboard/components/StatsCards/StatsCards.tsx:119
-#: client/pages/dashboard/links/LinksPage.tsx:330
+#: client/pages/dashboard/links/LinksPage.tsx:332
 msgid "Active Links"
 msgstr "Linkuri active"
 
@@ -7975,219 +8888,338 @@ msgstr "Șterge definitiv (%s)"
 msgid "Move to Trash (%s)"
 msgstr "Mută în coș (%s)"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:30
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:31
 msgid "Status: All"
 msgstr "Stare: Toate"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:31
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:32
 msgid "Status: Active"
 msgstr "Stare: Activ"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:32
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:33
 msgid "Status: Inactive"
 msgstr "Stare: Inactiv"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:37
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:38
+msgid "Expired (%s)"
+msgstr "Expirat (%s)"
+
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:39
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:61
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:191
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:60
+msgid "Expired"
+msgstr "Expirat"
+
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:46
 msgid "Trash (%s)"
 msgstr "Coș (%s)"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:38
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:47
 msgid "Trash"
 msgstr "Coș de gunoi"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:43
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:52
 msgid "Sort: Date Created"
 msgstr "Sortare: Dată creare"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:44
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:53
 msgid "Sort: Date Modified"
 msgstr "Sortare: Data modificării"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:45
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:54
 msgid "Sort: Most Clicks"
 msgstr "Sortare: Cele mai multe clicuri"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:46
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:55
 msgid "Sort: Unique Visitors"
 msgstr "Sortare: Vizitatori unici"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:47
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:56
 msgid "Sort: Alias"
 msgstr "Sortare: Alias"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:48
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:57
 msgid "Sort: Title"
 msgstr "Sortare: Titlu"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:51
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:58
+msgid "Sort: Health"
+msgstr "Sortare: stare"
+
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:61
 msgid "Descending"
 msgstr "Descrescător"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:52
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:62
 msgid "Ascending"
 msgstr "Crescător"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:63
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:73
 msgid "Total Links:"
 msgstr "Total linkuri:"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:73
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:83
 msgid "Total Clicks:"
 msgstr "Total clicuri:"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:95
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:105
 msgid "Filter links by status"
 msgstr "Filtrează linkurile după stare"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:105
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:115
 msgid "Sort links"
 msgstr "Sortează linkurile"
 
-#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:114
+#: client/pages/dashboard/links/components/TableFooter/TableFooter.tsx:124
 msgid "Sort order"
 msgstr "Ordinea de sortare"
 
-#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:25
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:52
 msgid "Showing %1$s–%2$s of %3$s links"
 msgstr "Se afișează %1$s–%2$s din %3$s linkuri"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:29
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:66
+msgid "Previous page"
+msgstr "Pagina anterioară"
+
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:88
+msgid "Page %d"
+msgstr "Pagina %d"
+
+#: client/pages/dashboard/links/components/Pagination/Pagination.tsx:106
+msgid "Next page"
+msgstr "Pagina următoare"
+
+#: client/pages/dashboard/links/components/health-status.ts:19
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:235
+msgid "Not checked"
+msgstr "Neverificat"
+
+#: client/pages/dashboard/links/components/health-status.ts:34
+msgid "Slow"
+msgstr "Lent"
+
+#: client/pages/dashboard/links/components/health-status.ts:40
+msgid "Unreachable"
+msgstr "Inaccesibil"
+
+#: client/pages/dashboard/links/components/health-status.ts:46
+msgid "DNS Error"
+msgstr "Eroare DNS"
+
+#: client/pages/dashboard/links/components/health-status.ts:52
+msgid "TLS Error"
+msgstr "Eroare TLS"
+
+#: client/pages/dashboard/links/components/health-status.ts:58
+msgid "Timeout"
+msgstr "Timeout"
+
+#: client/pages/dashboard/links/components/health-status.ts:64
+msgid "HTTP Error"
+msgstr "Eroare HTTP"
+
+#: client/pages/dashboard/links/components/health-status.ts:70
+msgid "Redirect Loop"
+msgstr "Buclă de redirecționare"
+
+#: client/pages/dashboard/links/components/health-status.ts:76
+msgid "Blocked"
+msgstr "Blocat"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:136
 msgid "Deselect all links"
 msgstr "Deselectează toate linkurile"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:46
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:153
 msgid "Restore selected"
 msgstr "Restaurează selecția"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:56
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:83
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:163
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:190
 msgid "Delete permanently"
 msgstr "Șterge definitiv"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:66
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:173
 msgid "Empty trash"
 msgstr "Golește coșul"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:114
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:221
 msgid "Select all links"
 msgstr "Selectează toate linkurile"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:117
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:224
 msgid "Link"
 msgstr "Link"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:118
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:227
 msgid "Title"
 msgstr "Titlu"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:119
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:234
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:133
 msgid "Destination"
 msgstr "Destinație"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:237
+msgid "Health"
+msgstr "Stare"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:258
 msgid "Modified"
 msgstr "Modificat"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:124
+#: client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow.tsx:258
 #: client/pages/dashboard/links/components/StatsDrawer/StatCards.tsx:36
 #: client/pages/dashboard/users/components/UsersTable/UsersTable.tsx:52
 msgid "Created"
 msgstr "Creat la"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:50
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:59
 msgid "Trashed"
 msgstr "În coș"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:52
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:156
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:60
-msgid "Expired"
-msgstr "Expirat"
-
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:103
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:138
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:62
 #: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:106
 #: client/pages/dashboard/links/components/QRCodeModal/QRCodeModal.tsx:144
 msgid "Copy"
 msgstr "Copiază"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:137
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:172
 msgid "Protected"
 msgstr "Protejat"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:159
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:194
 msgid "Expires"
 msgstr "Expiră la"
 
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:212
+msgid "View health details"
+msgstr "Vezi detaliile stării"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:213
+msgid "View destination health details"
+msgstr "Vezi detaliile stării destinației"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:248
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:181
+msgid "Check Now"
+msgstr "Verifică acum"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:249
+msgid "Check link health now"
+msgstr "Verifică starea linkului acum"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:304
 msgid "Created: %s"
 msgstr "Creat: %s"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:216
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:308
 msgid "Modified: %s"
 msgstr "Modificat: %s"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:249
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:341
 msgid "Restore Link"
 msgstr "Restaurează linkul"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:257
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:349
 #: client/pages/dashboard/links/components/DeleteAllModal/DeleteAllModal.tsx:154
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:192
 #: client/pages/dashboard/links/components/DeleteLinkModal/DeleteLinkModal.tsx:216
 msgid "Delete Permanently"
 msgstr "Șterge definitiv"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:268
+#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:360
 #: client/pages/dashboard/links/components/QRCodeModal/QRCodeModal.tsx:78
 msgid "QR Code"
 msgstr "Cod QR"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:282
-msgid "Edit"
-msgstr "Editează"
-
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:23
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:27
 msgid "No links found"
 msgstr "Nu s-au găsit linkuri"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:26
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:30
 msgid "No links matched \"%s\"."
 msgstr "Niciun link nu s-a potrivit cu \"%s\"."
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:39
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:43
 msgid "Trash is empty"
 msgstr "Gunoiul este gol"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:42
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:46
 msgid "No deleted links found in trash."
 msgstr "Nu s-au găsit linkuri șterse la gunoi."
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:53
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:59
+msgid "No expired links"
+msgstr "Niciun link expirat"
+
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:62
+msgid "No expired links found."
+msgstr "Nu s-au găsit linkuri expirate."
+
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:73
 msgid "No links yet"
 msgstr "Niciun link încă"
 
-#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:55
+#: client/pages/dashboard/links/components/LinksTable/parts/EmptyState.tsx:75
 msgid "Create your first shortened link to get started"
 msgstr "Creați primul dvs. link scurtat pentru a începe"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:158
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:144
+msgid "Failed to check link health."
+msgstr "Nu s-a putut verifica starea linkului."
+
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:200
 msgid "Trashed Links"
 msgstr "Linkuri la gunoi"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:175
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:202
+msgid "Expired Links"
+msgstr "Linkuri expirate"
+
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:220
 msgid "Search links..."
 msgstr "Caută linkuri..."
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:303
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:307
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:371
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:375
 msgid "Empty Trash"
 msgstr "Golește coșul"
 
-#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:304
+#: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:372
 msgid "Are you sure you want to permanently delete all links in the trash? This action cannot be undone."
 msgstr "Sigur doriți să ștergeți definitiv toate linkurile din coș? Această acțiune este ireversibilă."
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:51
+msgid "Destination Health"
+msgstr "Starea destinației"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:69
+#: client/pages/dashboard/links/components/UrlShorteningForm/MainInputs.tsx:22
+#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:94
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:52
+msgid "Destination URL"
+msgstr "URL de destinație"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:80
+#: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:231
+msgid "Open destination URL"
+msgstr "Deschide URL-ul de destinație"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:107
+msgid "Last checked"
+msgstr "Ultima verificare"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:143
+msgid "Redirects"
+msgstr "Redirecționări"
+
+#: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:153
+msgid "Reason"
+msgstr "Motiv"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:25
 msgid "Link Title (Optional)"
@@ -8203,27 +9235,27 @@ msgid "Password Protection (Optional)"
 msgstr "Protecție prin parolă (opțional)"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:109
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:144
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:150
 msgid "Please enter a URL"
 msgstr "Vă rugăm să introduceți un URL"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:124
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:178
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:184
 msgid "Please enter a valid social image URL (must include http:// or https://)"
 msgstr "Vă rugăm să introduceți un URL valid pentru imaginea socială (trebuie să includă http:// sau https://)"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:133
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:187
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:193
 msgid "Choose a preview image file or enter an image URL, not both."
 msgstr "Alegeți un fișier de imagine de previzualizare sau introduceți un URL de imagine, nu ambele."
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:147
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:155
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:161
 msgid "Please enter a valid URL (must include http:// or https://)"
 msgstr "Vă rugăm să introduceți un URL valid (trebuie să includă http:// sau https://)"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/UrlShorteningForm.tsx:179
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:163
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:169
 msgid "Expiration time must be in the future."
 msgstr "Ora de expirare trebuie să fie în viitor."
 
@@ -8311,12 +9343,6 @@ msgstr "utm_term (de ex. running)"
 #: client/pages/dashboard/links/components/UrlShorteningForm/UTMFields.tsx:75
 msgid "utm_content (e.g., banner)"
 msgstr "utm_content (de ex. banner)"
-
-#: client/pages/dashboard/links/components/UrlShorteningForm/MainInputs.tsx:22
-#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:94
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/LinkDetailsTab.tsx:52
-msgid "Destination URL"
-msgstr "URL de destinație"
 
 #: client/pages/dashboard/links/components/UrlShorteningForm/MainInputs.tsx:30
 msgid "Enter long link here..."
@@ -8619,10 +9645,6 @@ msgstr "Ultima actualizare:"
 msgid "24 hours"
 msgstr "24 de ore"
 
-#: client/pages/dashboard/links/components/StatsDrawer/analytics.ts:69
-msgid "30 days"
-msgstr "30 de zile"
-
 #: client/pages/dashboard/links/components/StatsDrawer/analytics.ts:169
 msgid "%s click"
 msgstr "%s clic"
@@ -8858,10 +9880,6 @@ msgstr "URL de destinație indisponibil"
 msgid "Copy destination URL"
 msgstr "Copiază URL-ul de destinație"
 
-#: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:231
-msgid "Open destination URL"
-msgstr "Deschide URL-ul de destinație"
-
 #: client/pages/dashboard/links/components/StatsDrawer/StatsDrawer.tsx:269
 msgid "Link Analytics"
 msgstr "Statistici link"
@@ -8939,7 +9957,7 @@ msgstr "Lăsați necompletat pentru a păstra parola curentă."
 msgid "Remove password protection"
 msgstr "Elimină protecția prin parolă"
 
-#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:224
+#: client/pages/dashboard/links/components/EditLinkDrawer/components/useEditLinkForm.ts:230
 msgid "Failed to update link"
 msgstr "Nu s-a putut actualiza linkul"
 
@@ -8980,76 +9998,76 @@ msgstr "față de săptămâna trecută"
 msgid "vs last period"
 msgstr "față de perioada precedentă"
 
-#: client/pages/dashboard/links/LinksPage.tsx:217
+#: client/pages/dashboard/links/LinksPage.tsx:218
 msgid "Links restored"
 msgstr "Linkuri restaurate"
 
-#: client/pages/dashboard/links/LinksPage.tsx:218
+#: client/pages/dashboard/links/LinksPage.tsx:219
 msgid "Selected links have been restored to active status."
 msgstr "Linkurile selectate au fost restaurate la starea activă."
 
-#: client/pages/dashboard/links/LinksPage.tsx:222
+#: client/pages/dashboard/links/LinksPage.tsx:223
 msgid "Unable to restore links"
 msgstr "Nu se pot restaura linkurile"
 
-#: client/pages/dashboard/links/LinksPage.tsx:223
+#: client/pages/dashboard/links/LinksPage.tsx:224
 msgid "Failed to restore selected links."
 msgstr "Nu s-au putut restaura linkurile selectate."
 
-#: client/pages/dashboard/links/LinksPage.tsx:232
+#: client/pages/dashboard/links/LinksPage.tsx:233
 msgid "Trash emptied"
 msgstr "Coșul a fost golit"
 
-#: client/pages/dashboard/links/LinksPage.tsx:233
+#: client/pages/dashboard/links/LinksPage.tsx:234
 msgid "All trashed links have been permanently deleted."
 msgstr "Toate linkurile din coș au fost șterse definitiv."
 
-#: client/pages/dashboard/links/LinksPage.tsx:237
+#: client/pages/dashboard/links/LinksPage.tsx:238
 msgid "Unable to empty trash"
 msgstr "Nu se poate goli coșul"
 
-#: client/pages/dashboard/links/LinksPage.tsx:238
+#: client/pages/dashboard/links/LinksPage.tsx:239
 msgid "Failed to empty trash."
 msgstr "Nu s-a putut goli coșul."
 
-#: client/pages/dashboard/links/LinksPage.tsx:286
+#: client/pages/dashboard/links/LinksPage.tsx:288
 msgid "All-time clicks"
 msgstr "Clicuri din toate timpurile"
 
-#: client/pages/dashboard/links/LinksPage.tsx:289
-#: client/pages/dashboard/links/LinksPage.tsx:299
+#: client/pages/dashboard/links/LinksPage.tsx:291
+#: client/pages/dashboard/links/LinksPage.tsx:301
 msgid "Selected date range"
 msgstr "Interval de date selectat"
 
-#: client/pages/dashboard/links/LinksPage.tsx:291
+#: client/pages/dashboard/links/LinksPage.tsx:293
 msgid "No activity recorded"
 msgstr "Nicio activitate înregistrată"
 
-#: client/pages/dashboard/links/LinksPage.tsx:296
+#: client/pages/dashboard/links/LinksPage.tsx:298
 msgid "All-time visitors"
 msgstr "Vizitatori din toate timpurile"
 
-#: client/pages/dashboard/links/LinksPage.tsx:301
+#: client/pages/dashboard/links/LinksPage.tsx:303
 msgid "No visitors recorded"
 msgstr "Niciun vizitator înregistrat"
 
-#: client/pages/dashboard/links/LinksPage.tsx:322
+#: client/pages/dashboard/links/LinksPage.tsx:324
 msgid "Total Links"
 msgstr "Total linkuri"
 
-#: client/pages/dashboard/links/LinksPage.tsx:325
+#: client/pages/dashboard/links/LinksPage.tsx:327
 msgid "Total created links"
 msgstr "Total linkuri create"
 
-#: client/pages/dashboard/links/LinksPage.tsx:333
+#: client/pages/dashboard/links/LinksPage.tsx:335
 msgid "Currently active"
 msgstr "Active în prezent"
 
-#: client/pages/dashboard/links/LinksPage.tsx:423
+#: client/pages/dashboard/links/LinksPage.tsx:425
 msgid "Items in the trash are retained indefinitely until emptied."
 msgstr "Elementele din coș sunt păstrate pe termen nelimitat până la golire."
 
-#: client/pages/dashboard/links/LinksPage.tsx:427
+#: client/pages/dashboard/links/LinksPage.tsx:429
 msgid "Items in the trash will be automatically deleted after %d days."
 msgstr "Elementele din coș vor fi șterse automat după %d zile."
 

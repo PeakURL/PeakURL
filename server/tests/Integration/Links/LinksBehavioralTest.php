@@ -360,6 +360,8 @@ class LinksBehavioralTest extends TestCase {
 			'status'            => 'trashed', // Already trashed, so delete() permanently deletes
 			'password_value'    => null,
 			'social_image_path' => 'uploads/preview.png',
+			'created_at'        => '2026-09-01 10:00:00',
+			'updated_at'        => '2026-09-01 10:00:00',
 		);
 
 		$this->repository->method( 'get_link_by_id' )->with( 'link_perm_1' )->willReturn( $trashed_row );

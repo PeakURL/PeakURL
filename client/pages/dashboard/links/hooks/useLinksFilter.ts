@@ -16,6 +16,7 @@ const LS_KEYS = {
 	sortBy: "peakurl_admin_links_sortBy",
 	sortOrder: "peakurl_admin_links_sortOrder",
 	limit: "peakurl_admin_links_limit",
+	status: "peakurl_admin_links_status",
 };
 
 const DATE_RANGE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -56,6 +57,7 @@ export function useLinksFilter() {
 			"uniqueClicks",
 			"alias",
 			"title",
+			"health",
 		];
 		return stored && validSortOptions.includes(stored)
 			? stored
@@ -69,7 +71,40 @@ export function useLinksFilter() {
 			: "desc"
 	);
 
-	const [statusFilter, setStatusFilter] = useState<LinksStatusFilter>("all");
+	const [statusFilter, setStatusFilterState] = useState<LinksStatusFilter>(
+		() => {
+			if (typeof window === "undefined") {
+				return "all";
+			}
+			const stored = localStorage.getItem(
+				LS_KEYS.status
+			) as LinksStatusFilter | null;
+			const validStatusOptions: LinksStatusFilter[] = [
+				"all",
+				"active",
+				"inactive",
+				"expired",
+				"trashed",
+			];
+			return stored && validStatusOptions.includes(stored)
+				? stored
+				: "all";
+		}
+	);
+
+	const setStatusFilter = (
+		newStatus: React.SetStateAction<LinksStatusFilter>
+	) => {
+		setStatusFilterState((prev) => {
+			const resolved =
+				typeof newStatus === "function" ? newStatus(prev) : newStatus;
+			if (typeof window !== "undefined") {
+				localStorage.setItem(LS_KEYS.status, resolved);
+			}
+			return resolved;
+		});
+	};
+
 	const isTrashTab = "trashed" === statusFilter;
 
 	const [limit, setLimitState] = useState<number>(() => {

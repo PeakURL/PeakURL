@@ -279,23 +279,23 @@ export function ScheduledJobsPage() {
 				</div>
 
 				<div className="scheduled-jobs-page-hero-actions">
-					<button
-						type="button"
-						onClick={handleRefresh}
-						disabled={isRefreshing}
-						className="dashboard-page-refresh"
-						aria-label={__("Refresh")}
-						title={__("Refresh scheduled jobs status")}
-					>
-						<RefreshCw
-							className={cn(
-								"dashboard-page-refresh-icon",
-								isRefreshing && "animate-spin"
-							)}
-						/>
-					</button>
-					{canManageUpdates ? (
-						<>
+					<div className="scheduled-jobs-hero-actions-primary">
+						<button
+							type="button"
+							onClick={handleRefresh}
+							disabled={isRefreshing}
+							className="dashboard-page-refresh"
+							aria-label={__("Refresh")}
+							title={__("Refresh scheduled jobs status")}
+						>
+							<RefreshCw
+								className={cn(
+									"dashboard-page-refresh-icon",
+									isRefreshing && "animate-spin"
+								)}
+							/>
+						</button>
+						{canManageUpdates ? (
 							<Button
 								variant="outline"
 								size="sm"
@@ -305,7 +305,7 @@ export function ScheduledJobsPage() {
 									null !== runningJobId ||
 									isClearingHistory
 								}
-								className="text-heading hover:bg-surface-alt"
+								className="scheduled-jobs-hero-btn text-heading hover:bg-surface-alt"
 								title={__(
 									"Configure job recurrence schedules, preferred times, and history retention"
 								)}
@@ -313,6 +313,10 @@ export function ScheduledJobsPage() {
 								<SlidersHorizontal size={13} />
 								<span>{__("Manage Schedules")}</span>
 							</Button>
+						) : null}
+					</div>
+					{canManageUpdates ? (
+						<div className="scheduled-jobs-hero-actions-secondary">
 							<Button
 								variant="outline"
 								size="sm"
@@ -322,7 +326,7 @@ export function ScheduledJobsPage() {
 									null !== runningJobId ||
 									isClearingHistory
 								}
-								className="text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-200 dark:border-rose-900/40 dark:hover:bg-rose-950/20"
+								className="scheduled-jobs-hero-btn text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-200 dark:border-rose-900/40 dark:hover:bg-rose-950/20"
 								title={__(
 									"Clear execution run history for all jobs"
 								)}
@@ -339,6 +343,7 @@ export function ScheduledJobsPage() {
 									null !== runningJobId ||
 									isClearingHistory
 								}
+								className="scheduled-jobs-hero-btn"
 								title={__(
 									"Execute all jobs that are currently due"
 								)}
@@ -346,7 +351,7 @@ export function ScheduledJobsPage() {
 								<Play size={13} />
 								<span>{__("Run Due Jobs")}</span>
 							</Button>
-						</>
+						</div>
 					) : null}
 				</div>
 			</div>

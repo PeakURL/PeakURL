@@ -151,6 +151,7 @@ export interface TableFooterProps {
 	statusFilter?: LinksStatusFilter;
 	setStatusFilter?: (value: LinksStatusFilter) => void;
 	trashedCount?: number;
+	expiredCount?: number;
 }
 
 /**

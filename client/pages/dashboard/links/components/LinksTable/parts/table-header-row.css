@@ -28,6 +28,28 @@
 		@apply text-center;
 	}
 
+	.links-table-header-sort-btn {
+		@apply inline-flex items-center gap-1.5 uppercase tracking-wide text-xs font-semibold text-text-muted hover:text-heading transition-colors cursor-pointer select-none focus:outline-hidden;
+	}
+
+	.links-table-header-sort-btn:hover .links-table-sort-triangle-inactive {
+		opacity: 0.65;
+	}
+
+	.links-table-sort-indicator {
+		@apply shrink-0 inline-block align-middle;
+	}
+
+	.links-table-sort-triangle-active {
+		@apply text-heading transition-colors;
+		opacity: 1;
+	}
+
+	.links-table-sort-triangle-inactive {
+		@apply text-text-muted transition-colors;
+		opacity: 0.25;
+	}
+
 	.links-table-header-cell-actions {
 		@apply px-4 py-2.5 align-middle;
 	}

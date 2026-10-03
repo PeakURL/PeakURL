@@ -353,6 +353,7 @@ class Service {
 			'uniqueClicks' => $aggregates['uniqueClicks'],
 			'activeLinks'  => $aggregates['activeLinks'],
 			'trashedLinks' => $this->count_trashed_links( $request ),
+			'expiredLinks' => $this->count_expired_links( $request ),
 		);
 
 		if ( isset( $aggregates['lastPeriodTotalClicks'] ) ) {
@@ -1872,6 +1873,19 @@ class Service {
 		$user = $this->auth_service->get_current_user( $request );
 
 		return $this->data->count_trashed_links( $user );
+	}
+
+	/**
+	 * Count expired links for the current user/scope.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return int Total expired links.
+	 * @since 1.7.2
+	 */
+	public function count_expired_links( Request $request ): int {
+		$user = $this->auth_service->get_current_user( $request );
+
+		return $this->data->count_expired_links( $user );
 	}
 
 	/**

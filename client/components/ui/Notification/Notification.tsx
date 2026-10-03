@@ -54,7 +54,7 @@ const notificationTypes: Record<
  * @param {('success'|'error'|'warning'|'info')} [props.type='info'] - Notification type
  * @param {string} props.title - Notification title
  * @param {string} props.message - Notification message
- * @param {number} [props.duration=5000] - Duration in ms to show the notification
+ * @param {number} [props.duration=3000] - Duration in ms to show the notification
  * @param {Function} props.onClose - Callback when notification is closed
  * @param {string} [props.className=''] - Additional class names
  */
@@ -63,7 +63,7 @@ export function Notification({
 	type = "info",
 	title,
 	message,
-	duration = 5000,
+	duration = 3000,
 	onClose,
 	className = "",
 }: NotificationProps) {

@@ -33,6 +33,9 @@ const LinksTable = ({
 	statsShortId,
 	statsLink,
 	sortBy,
+	sortOrder,
+	onSortChange,
+	statusFilter,
 	clickRange,
 	customClickRange,
 	isTrashTab = false,
@@ -193,7 +196,11 @@ const LinksTable = ({
 			<div className="links-table-panel-header">
 				<div className="flex items-center gap-2">
 					<h2 className="links-table-panel-title">
-						{isTrashTab ? __("Trashed Links") : __("All Links")}
+						{isTrashTab
+							? __("Trashed Links")
+							: statusFilter === "expired"
+								? __("Expired Links")
+								: __("All Links")}
 					</h2>
 					<span className="links-table-panel-badge">
 						{formatCount(displayCount)}
@@ -232,6 +239,7 @@ const LinksTable = ({
 					isSearchActive={isSearchActive}
 					searchQuery={searchQuery}
 					isTrashTab={isTrashTab}
+					statusFilter={statusFilter}
 				/>
 			) : (
 				<div className="links-table-scroll">
@@ -264,6 +272,8 @@ const LinksTable = ({
 								isTrashTab={isTrashTab}
 								trashedCount={trashedCount}
 								sortBy={sortBy}
+								sortOrder={sortOrder}
+								onSortChange={onSortChange}
 								canDeleteLinks={canDeleteLinks}
 								canTrashLinks={canTrashLinks}
 							/>

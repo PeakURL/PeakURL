@@ -231,7 +231,8 @@ class LinksApi {
 		?int $offset = null,
 		array $stats_params = array()
 	): array {
-		$sql = $this->get_links_select_sql( $stats_params ) .
+		$join_health = ( 'link_health.status' === $sort_by );
+		$sql         = $this->get_links_select_sql( $stats_params, $join_health ) .
 			' ' .
 			$where .
 			Query::order_by_clause( $sort_by, $sort_order );
@@ -422,7 +423,7 @@ class LinksApi {
 	 * @return string SQL SELECT fragment ending before WHERE/ORDER clauses.
 	 * @since 1.1.1
 	 */
-	private function get_links_select_sql( array $stats_params = array() ): string {
+	private function get_links_select_sql( array $stats_params = array(), bool $join_health = false ): string {
 		$stats_conditions = array();
 
 		if ( isset( $stats_params['stats_start_at'] ) ) {
@@ -437,11 +438,13 @@ class LinksApi {
 			? 'WHERE ' . implode( ' AND ', $stats_conditions )
 			: '';
 
+		$health_join = $join_health ? ' LEFT JOIN link_health AS link_health ON link_health.link_id = u.id' : '';
+
 		return 'SELECT
 				u.*,
 				COALESCE(stats.clicks, 0) AS click_count,
 				COALESCE(stats.unique_clicks, 0) AS unique_click_count
-			FROM urls u
+			FROM urls u' . $health_join . '
 			LEFT JOIN (
 				SELECT
 					url_id,

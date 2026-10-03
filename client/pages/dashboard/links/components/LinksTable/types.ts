@@ -4,6 +4,8 @@ import type {
 	LinksCustomDateRange,
 	LinksDateRange,
 	LinksSortBy,
+	LinksSortOrder,
+	LinksStatusFilter,
 } from "../types";
 
 /**
@@ -17,6 +19,9 @@ export interface LinksTableProps {
 	statsShortId: string | null;
 	statsLink: LinkRecord | null;
 	sortBy?: LinksSortBy;
+	sortOrder?: LinksSortOrder;
+	onSortChange?: (sortBy: LinksSortBy, sortOrder: LinksSortOrder) => void;
+	statusFilter?: LinksStatusFilter;
 	clickRange?: LinksDateRange;
 	customClickRange?: LinksCustomDateRange;
 	isTrashTab?: boolean;
@@ -65,6 +70,8 @@ export interface TableHeaderRowProps {
 	isTrashTab?: boolean;
 	trashedCount?: number;
 	sortBy?: LinksSortBy;
+	sortOrder?: LinksSortOrder;
+	onSortChange?: (sortBy: LinksSortBy, sortOrder: LinksSortOrder) => void;
 	canDeleteLinks: boolean;
 	canTrashLinks: boolean;
 }

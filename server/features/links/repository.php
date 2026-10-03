@@ -243,11 +243,17 @@ class Repository {
 			$conditions[]            = 'u.status = :status_filter';
 			$params['status_filter'] = 'trashed';
 		} elseif ( 'active' === $status ) {
-			$conditions[]            = 'u.status = :status_filter';
+			$conditions[]            = '(u.status = :status_filter AND (u.expires_at IS NULL OR u.expires_at > :now_active))';
 			$params['status_filter'] = 'active';
+			$params['now_active']    = Date::now();
 		} elseif ( 'inactive' === $status ) {
 			$conditions[]            = 'u.status = :status_filter';
 			$params['status_filter'] = 'inactive';
+		} elseif ( 'expired' === $status ) {
+			$conditions[]                        = '(u.status = :status_filter_expired OR (u.status != :status_filter_not_trashed AND u.expires_at IS NOT NULL AND u.expires_at <= :now_expired))';
+			$params['status_filter_expired']     = 'expired';
+			$params['status_filter_not_trashed'] = 'trashed';
+			$params['now_expired']               = Date::now();
 		} elseif ( 'all' === $status || '' === $status ) {
 			$conditions[]                    = 'u.status != :status_filter_exclude';
 			$params['status_filter_exclude'] = 'trashed';
@@ -322,6 +328,7 @@ class Repository {
 			'status'       => 'u.status',
 			'shortCode'    => 'u.short_code',
 			'alias'        => 'u.alias',
+			'health'       => 'link_health.status',
 		);
 	}
 
@@ -434,6 +441,41 @@ class Repository {
 			if ( ! $this->authorization->is_admin( $user ) ) {
 				$conditions[]                    = 'u.user_id = :trashed_count_user_id';
 				$params['trashed_count_user_id'] = (string) ( $user['id'] ?? '' );
+			}
+		}
+
+		return (int) $this->db->get_var(
+			'SELECT COUNT(*) FROM urls u WHERE ' . implode( ' AND ', $conditions ),
+			$params,
+		);
+	}
+
+	/**
+	 * Count expired links for the current user/scope.
+	 *
+	 * @param array<string, mixed> $user            Current user row.
+	 * @param callable|null        $filter_callback Optional custom scope filter.
+	 * @return int Number of expired links.
+	 * @since 1.7.2
+	 */
+	public function count_expired_links(
+		array $user,
+		?callable $filter_callback = null
+	): int {
+		$conditions = array(
+			"(u.status = 'expired' OR (u.status != 'trashed' AND u.expires_at IS NOT NULL AND u.expires_at <= :now_expired))",
+		);
+		$params     = array(
+			'now_expired' => Date::now(),
+		);
+
+		if ( null !== $filter_callback ) {
+			$filter_callback( $user, $conditions, $params, 'u' );
+		} else {
+			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+			if ( ! $this->authorization->is_admin( $user ) ) {
+				$conditions[]                    = 'u.user_id = :expired_count_user_id';
+				$params['expired_count_user_id'] = (string) ( $user['id'] ?? '' );
 			}
 		}
 

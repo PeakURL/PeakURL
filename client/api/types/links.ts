@@ -8,7 +8,13 @@ export type LinkStatus =
  * Link-list sort fields accepted by the API.
  */
 export type LinksSortBy =
-	"createdAt" | "updatedAt" | "clicks" | "uniqueClicks" | "alias" | "title";
+	| "createdAt"
+	| "updatedAt"
+	| "clicks"
+	| "uniqueClicks"
+	| "alias"
+	| "title"
+	| "health";
 
 /**
  * Link-list sort directions accepted by the API.
@@ -81,6 +87,7 @@ export interface LinksMeta {
 	uniqueClicks: number;
 	activeLinks: number;
 	trashedLinks?: number;
+	expiredLinks?: number;
 	lastPeriodTotalClicks?: number;
 	lastPeriodUniqueClicks?: number;
 }

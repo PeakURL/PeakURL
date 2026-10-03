@@ -145,6 +145,7 @@ function LinksPage() {
 		uniqueClicks: urlsRes?.data?.meta?.uniqueClicks ?? 0,
 		activeLinks: urlsRes?.data?.meta?.activeLinks ?? 0,
 		trashedLinks: urlsRes?.data?.meta?.trashedLinks ?? 0,
+		expiredLinks: urlsRes?.data?.meta?.expiredLinks ?? 0,
 		lastPeriodTotalClicks: urlsRes?.data?.meta?.lastPeriodTotalClicks,
 		lastPeriodUniqueClicks: urlsRes?.data?.meta?.lastPeriodUniqueClicks,
 	};
@@ -270,6 +271,7 @@ function LinksPage() {
 	const totalUniqueClicks = apiMeta.uniqueClicks ?? 0;
 	const activeLinks = apiMeta.activeLinks ?? 0;
 	const trashedLinksCount = apiMeta.trashedLinks ?? 0;
+	const expiredLinksCount = apiMeta.expiredLinks ?? 0;
 
 	const clicksChange = getPeriodChange(
 		totalClicks,
@@ -442,6 +444,12 @@ function LinksPage() {
 				statsShortId={statsShortId}
 				statsLink={statsLink}
 				sortBy={sortBy}
+				sortOrder={sortOrder}
+				onSortChange={(newSortBy, newSortOrder) => {
+					setSortBy(newSortBy);
+					setSortOrder(newSortOrder);
+				}}
+				statusFilter={statusFilter}
 				clickRange={clickRange}
 				customClickRange={customClickRange}
 				isTrashTab={isTrashTab}
@@ -463,6 +471,7 @@ function LinksPage() {
 				statusFilter={statusFilter}
 				setStatusFilter={setStatusFilter}
 				trashedCount={trashedLinksCount}
+				expiredCount={expiredLinksCount}
 			/>
 
 			{totalPages > 1 && (

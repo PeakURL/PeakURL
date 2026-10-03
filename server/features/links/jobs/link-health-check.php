@@ -101,11 +101,11 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 		$links = $this->db->get_results(
 			'SELECT u.id, u.destination_url
 			FROM urls u
-			LEFT JOIN link_health lh ON lh.link_id = u.id
+			LEFT JOIN link_health AS link_health ON link_health.link_id = u.id
 			WHERE u.status = :active_status
 			ORDER BY
-				CASE WHEN lh.checked_at IS NULL THEN 0 ELSE 1 END ASC,
-				lh.checked_at ASC,
+				CASE WHEN link_health.checked_at IS NULL THEN 0 ELSE 1 END ASC,
+				link_health.checked_at ASC,
 				u.updated_at ASC,
 				u.id ASC
 			LIMIT ' . $this->batch_limit,

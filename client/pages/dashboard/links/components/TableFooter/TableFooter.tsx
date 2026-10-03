@@ -24,12 +24,21 @@ const TableFooter = ({
 	statusFilter = "all",
 	setStatusFilter,
 	trashedCount = 0,
+	expiredCount = 0,
 }: TableFooterProps) => {
 	const pageDirection = isDocumentRtl() ? "rtl" : "ltr";
 	const statusOptions: SelectOption<LinksStatusFilter>[] = [
 		{ value: "all", label: __("Status: All") },
 		{ value: "active", label: __("Status: Active") },
 		{ value: "inactive", label: __("Status: Inactive") },
+		{
+			value: "expired",
+			label:
+				expiredCount > 0
+					? sprintf(__("Expired (%s)"), formatCount(expiredCount))
+					: __("Expired"),
+			disabled: expiredCount === 0,
+		},
 		{
 			value: "trashed",
 			label:
@@ -46,6 +55,7 @@ const TableFooter = ({
 		{ value: "uniqueClicks", label: __("Sort: Unique Visitors") },
 		{ value: "alias", label: __("Sort: Alias") },
 		{ value: "title", label: __("Sort: Title") },
+		{ value: "health", label: __("Sort: Health") },
 	];
 	const sortOrderOptions: SelectOption<LinksSortOrder>[] = [
 		{ value: "desc", label: __("Descending") },

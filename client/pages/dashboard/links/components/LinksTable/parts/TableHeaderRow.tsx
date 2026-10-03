@@ -101,8 +101,6 @@ function SortableHeaderButton({
 				align === "center" ? "justify-center" : "justify-start",
 				className
 			)}
-			title={sprintf(__("Sort by %s"), label)}
-			aria-label={sprintf(__("Sort by %s"), label)}
 		>
 			<span>{label}</span>
 			<WordPressSortIndicator isActive={isActive} sortOrder={sortOrder} />

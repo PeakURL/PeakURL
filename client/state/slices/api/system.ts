@@ -453,8 +453,8 @@ export const systemApi = baseApi.injectEndpoints({
 					success: boolean;
 				}>
 			) => ({
-				retentionDays: Number(response?.data?.retention_days ?? 0),
-				success: Boolean(response?.data?.success),
+				retentionDays: Number(response.data?.retention_days),
+				success: Boolean(response.data?.success),
 			}),
 			invalidatesTags: CRON_TAGS,
 		}),

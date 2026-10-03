@@ -342,6 +342,10 @@ class SchemaSpecs {
 					'definition' => 'VARCHAR(5) DEFAULT NULL',
 				),
 				array(
+					'name'       => 'retention_days',
+					'definition' => 'INT UNSIGNED DEFAULT NULL',
+				),
+				array(
 					'name'       => 'status',
 					'definition' => "VARCHAR(32) NOT NULL DEFAULT 'idle'",
 				),

@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS cron_jobs (
     title VARCHAR(191) NOT NULL,
     schedule_interval INT UNSIGNED NOT NULL DEFAULT 0,
     preferred_run_time VARCHAR(5) DEFAULT NULL,
+    retention_days INT UNSIGNED DEFAULT NULL,
     status VARCHAR(32) NOT NULL DEFAULT 'idle',
     next_run_at DATETIME NOT NULL,
     last_run_at DATETIME DEFAULT NULL,

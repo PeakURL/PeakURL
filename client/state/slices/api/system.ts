@@ -399,7 +399,13 @@ export const systemApi = baseApi.injectEndpoints({
 			CronJobScheduleResult,
 			UpdateCronJobPayload
 		>({
-			query: ({ id, intervalSeconds, preferredRunTime, isEnabled }) => ({
+			query: ({
+				id,
+				intervalSeconds,
+				preferredRunTime,
+				isEnabled,
+				retentionDays,
+			}) => ({
 				url: API_ROUTES.system.cronUpdateJob(id),
 				method: "PATCH",
 				body: {
@@ -411,6 +417,9 @@ export const systemApi = baseApi.injectEndpoints({
 						: {}),
 					...(isEnabled !== undefined
 						? { is_enabled: isEnabled }
+						: {}),
+					...(retentionDays !== undefined
+						? { retention_days: retentionDays }
 						: {}),
 				},
 			}),

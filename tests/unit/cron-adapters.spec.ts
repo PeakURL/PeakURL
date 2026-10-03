@@ -118,6 +118,9 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 				interval_seconds: 86400,
 				status: "idle",
 				is_enabled: true,
+				retention_days: null,
+				retention_is_customized: false,
+				effective_retention_days: 30,
 				next_run_at: "2026-09-14T00:00:00Z",
 				last_run_at: "2026-09-13T00:00:00Z",
 				last_finished_at: "2026-09-13T00:00:01Z",
@@ -162,6 +165,9 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 				is_customized: false,
 				status: "idle",
 				is_enabled: true,
+				retention_days: null,
+				retention_is_customized: false,
+				effective_retention_days: 30,
 				next_run_at: "2026-09-14T02:00:00Z",
 				attempts: 0,
 			};
@@ -177,6 +183,59 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(domainJob.isEnabled).toBe(true);
 		});
 
+		test("maps retention fields accurately for inherited, explicit, and indefinite jobs", () => {
+			// Case 1: Inherited global
+			const jobInherited: ApiCronJob = {
+				id: "job_inherit",
+				title: "Job Inherit",
+				interval_seconds: 3600,
+				status: "idle",
+				attempts: 0,
+				retention_days: null,
+				retention_is_customized: false,
+				effective_retention_days: 30,
+			};
+			const domainInherited = mapApiCronJob(jobInherited);
+			expect(domainInherited.retentionDays).toBeNull();
+			expect(domainInherited.retentionIsCustomized).toBe(false);
+			expect(domainInherited.effectiveRetentionDays).toBe(30);
+			expect(domainInherited.isCustomized).toBe(false);
+
+			// Case 2: Explicit positive retention (90 days)
+			const jobExplicit: ApiCronJob = {
+				id: "job_explicit",
+				title: "Job Explicit",
+				interval_seconds: 3600,
+				status: "idle",
+				attempts: 0,
+				retention_days: 90,
+				retention_is_customized: true,
+				effective_retention_days: 90,
+			};
+			const domainExplicit = mapApiCronJob(jobExplicit);
+			expect(domainExplicit.retentionDays).toBe(90);
+			expect(domainExplicit.retentionIsCustomized).toBe(true);
+			expect(domainExplicit.effectiveRetentionDays).toBe(90);
+			expect(domainExplicit.isCustomized).toBe(true);
+
+			// Case 3: Indefinite retention (0 days)
+			const jobIndefinite: ApiCronJob = {
+				id: "job_indef",
+				title: "Job Indef",
+				interval_seconds: 3600,
+				status: "idle",
+				attempts: 0,
+				retention_days: 0,
+				retention_is_customized: true,
+				effective_retention_days: 0,
+			};
+			const domainIndefinite = mapApiCronJob(jobIndefinite);
+			expect(domainIndefinite.retentionDays).toBe(0);
+			expect(domainIndefinite.retentionIsCustomized).toBe(true);
+			expect(domainIndefinite.effectiveRetentionDays).toBe(0);
+			expect(domainIndefinite.isCustomized).toBe(true);
+		});
+
 		test("safely handles empty or undefined job payload", () => {
 			const fallbackJob = mapApiCronJob(undefined);
 			expect(fallbackJob.id).toBe("");
@@ -184,6 +243,9 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(fallbackJob.intervalSeconds).toBe(0);
 			expect(fallbackJob.status).toBe("idle");
 			expect(fallbackJob.isEnabled).toBe(false);
+			expect(fallbackJob.retentionDays).toBeNull();
+			expect(fallbackJob.retentionIsCustomized).toBe(false);
+			expect(fallbackJob.effectiveRetentionDays).toBe(0);
 			expect(fallbackJob.nextRunAt).toBeNull();
 			expect(fallbackJob.recentRuns).toEqual([]);
 		});
@@ -195,8 +257,14 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 				id: "job_1",
 				title: "Job One",
 				intervalSeconds: 3600,
+				recommendedIntervalSeconds: 3600,
+				preferredRunTime: null,
+				isCustomized: false,
 				status: "idle",
 				isEnabled: true,
+				retentionDays: null,
+				retentionIsCustomized: false,
+				effectiveRetentionDays: 30,
 				nextRunAt: "2026-09-13T12:00:00Z",
 				lastRunAt: "2026-09-13T11:00:00Z",
 				lastFinishedAt: "2026-09-13T11:00:05Z",
@@ -220,8 +288,14 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 				id: "job_2",
 				title: "Job Two",
 				intervalSeconds: 86400,
+				recommendedIntervalSeconds: 86400,
+				preferredRunTime: null,
+				isCustomized: false,
 				status: "idle",
 				isEnabled: true,
+				retentionDays: null,
+				retentionIsCustomized: false,
+				effectiveRetentionDays: 30,
 				nextRunAt: "2026-09-13T15:00:00Z",
 				lastRunAt: "2026-09-12T15:00:00Z",
 				lastFinishedAt: "2026-09-12T15:00:02Z",
@@ -252,8 +326,14 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 					id: "job_running",
 					title: "Running Job",
 					intervalSeconds: 60,
+					recommendedIntervalSeconds: 60,
+					preferredRunTime: null,
+					isCustomized: false,
 					status: "running",
 					isEnabled: true,
+					retentionDays: null,
+					retentionIsCustomized: false,
+					effectiveRetentionDays: 30,
 					nextRunAt: null,
 					lastRunAt: "2026-09-13T11:59:00Z",
 					lastFinishedAt: null,
@@ -277,8 +357,14 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 					id: "job_failed",
 					title: "Failing Job",
 					intervalSeconds: 300,
+					recommendedIntervalSeconds: 300,
+					preferredRunTime: null,
+					isCustomized: false,
 					status: "failed",
 					isEnabled: true,
+					retentionDays: null,
+					retentionIsCustomized: false,
+					effectiveRetentionDays: 30,
 					nextRunAt: "2026-09-13T12:05:00Z",
 					lastRunAt: "2026-09-13T11:55:00Z",
 					lastFinishedAt: null,
@@ -350,6 +436,9 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 						interval_seconds: 3600,
 						status: "idle",
 						is_enabled: true,
+						retention_days: null,
+						retention_is_customized: false,
+						effective_retention_days: 30,
 						next_run_at: "2026-09-13T12:00:00Z",
 						attempts: 0,
 					},
@@ -570,6 +659,9 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 				interval_seconds: 3600,
 				status: "idle",
 				attempts: 0,
+				retention_days: null,
+				retention_is_customized: false,
+				effective_retention_days: 30,
 				recent_runs: [],
 			};
 			const domain = mapApiCronJob(wireJob);
@@ -888,6 +980,9 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 					preferred_run_time: "03:00",
 					is_enabled: true,
 					is_customized: true,
+					retention_days: 90,
+					retention_is_customized: true,
+					effective_retention_days: 90,
 					recommended_interval_seconds: 604800,
 					next_run_at: "2026-09-20T03:00:00Z",
 					status: "idle",
@@ -901,6 +996,9 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(domain.job.preferredRunTime).toBe("03:00");
 			expect(domain.job.isEnabled).toBe(true);
 			expect(domain.job.isCustomized).toBe(true);
+			expect(domain.job.retentionDays).toBe(90);
+			expect(domain.job.retentionIsCustomized).toBe(true);
+			expect(domain.job.effectiveRetentionDays).toBe(90);
 			expect(domain.job.recommendedIntervalSeconds).toBe(604800);
 			expect(domain.job.nextRunAt).toBe("2026-09-20T03:00:00Z");
 			expect(domain.success).toBe(true);
@@ -913,6 +1011,9 @@ test.describe("Scheduled Jobs API Boundary Adapters & Presentation", () => {
 			expect(domain.job.preferredRunTime).toBeNull();
 			expect(domain.job.isEnabled).toBe(false);
 			expect(domain.job.isCustomized).toBe(false);
+			expect(domain.job.retentionDays).toBeNull();
+			expect(domain.job.retentionIsCustomized).toBe(false);
+			expect(domain.job.effectiveRetentionDays).toBe(0);
 			expect(domain.success).toBe(false);
 		});
 	});

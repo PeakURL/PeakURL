@@ -464,4 +464,229 @@ class SchedulerIntegrationTest extends TestCase {
 		$stmt = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id = '{$this->test_prefix}failed_run'" );
 		$this->assertEmpty( $stmt->fetchAll( PDO::FETCH_COLUMN ) );
 	}
+
+	public function test_prune_history_with_per_job_retention_overrides_and_targeted_jobs(): void {
+		$prefix = $this->connection->get_table_prefix();
+		$job_a  = $this->test_prefix . 'ret_a';
+		$job_b  = $this->test_prefix . 'ret_b';
+		$job_c  = $this->test_prefix . 'ret_c';
+
+		$handler = $this->createMock( JobHandlerInterface::class );
+		// Job A: inherits global (retention_days = null)
+		$this->registry->register( new JobDefinition( $job_a, 'Job A (Inherit)', 3600, $handler ) );
+		// Job B: will have explicit 90 days override
+		$this->registry->register( new JobDefinition( $job_b, 'Job B (90d)', 3600, $handler ) );
+		// Job C: will have explicit 0 (Indefinite) override
+		$this->registry->register( new JobDefinition( $job_c, 'Job C (Indefinite)', 3600, $handler ) );
+
+		$this->repository->sync_registered_jobs( $this->registry->all() );
+
+		// Set explicit per-job overrides in cron_jobs
+		$this->repository->update_job_schedule( $job_b, 3600, null, true, null, true, 90 );
+		$this->repository->update_job_schedule( $job_c, 3600, null, true, null, true, 0 );
+
+		// Enqueue targeted jobs for B and C
+		$target_b = "{$job_b}:dest_123";
+		$target_c = "{$job_c}:link_456";
+		$target_a = "{$job_a}:item_789";
+		$now      = gmdate( 'Y-m-d H:i:s' );
+
+		$this->repository->enqueue_job( $target_b, 'Targeted B', 0, $now );
+		$this->repository->enqueue_job( $target_c, 'Targeted C', 0, $now );
+		$this->repository->enqueue_job( $target_a, 'Targeted A', 0, $now );
+
+		$t15  = gmdate( 'Y-m-d H:i:s', strtotime( '-15 days' ) );
+		$t45  = gmdate( 'Y-m-d H:i:s', strtotime( '-45 days' ) );
+		$t100 = gmdate( 'Y-m-d H:i:s', strtotime( '-100 days' ) );
+		$t150 = gmdate( 'Y-m-d H:i:s', strtotime( '-150 days' ) );
+
+		// Insert runs for Job A (global 30d):
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}run_a1', '{$job_a}', 'success', 1, '{$t45}', '{$t45}', '{$t45}'),
+			('{$this->test_prefix}run_a2', '{$job_a}', 'success', 1, '{$t15}', '{$t15}', '{$t15}'),
+			('{$this->test_prefix}run_a_run', '{$job_a}', 'running', 1, '{$t45}', NULL, '{$t45}'),
+			('{$this->test_prefix}run_a_retry', '{$job_a}', 'retrying', 1, '{$t45}', NULL, '{$t45}')"
+		);
+
+		// Insert runs for Job B (90d):
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}run_b1', '{$job_b}', 'success', 1, '{$t45}', '{$t45}', '{$t45}'),
+			('{$this->test_prefix}run_b2', '{$job_b}', 'success', 1, '{$t100}', '{$t100}', '{$t100}'),
+			('{$this->test_prefix}run_b_run', '{$job_b}', 'running', 1, '{$t100}', NULL, '{$t100}')"
+		);
+
+		// Insert runs for Job C (0 = Indefinite):
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}run_c1', '{$job_c}', 'success', 1, '{$t150}', '{$t150}', '{$t150}'),
+			('{$this->test_prefix}run_c2', '{$job_c}', 'failed', 1, '{$t150}', '{$t150}', '{$t150}')"
+		);
+
+		// Insert runs for Targeted jobs:
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}run_tc', '{$target_c}', 'success', 1, '{$t150}', '{$t150}', '{$t150}'),
+			('{$this->test_prefix}run_tb_old', '{$target_b}', 'success', 1, '{$t100}', '{$t100}', '{$t100}'),
+			('{$this->test_prefix}run_tb_new', '{$target_b}', 'success', 1, '{$t45}', '{$t45}', '{$t45}'),
+			('{$this->test_prefix}run_ta_old', '{$target_a}', 'success', 1, '{$t45}', '{$t45}', '{$t45}'),
+			('{$this->test_prefix}run_ta_new', '{$target_a}', 'success', 1, '{$t15}', '{$t15}', '{$t15}')"
+		);
+
+		// Prune via Scheduler orchestration layer with global retention = 30 days
+		$pruned = $this->scheduler->prune_history( 30 );
+		$this->assertSame( 4, $pruned, 'Exactly 4 runs (a1, b2, tb_old, ta_old) must be pruned.' );
+
+		// Verify surviving runs in DB
+		$stmt           = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE job_id LIKE '{$this->test_prefix}%' ORDER BY id ASC" );
+		$surviving_runs = $stmt->fetchAll( PDO::FETCH_COLUMN );
+
+		// Pruned runs MUST NOT be present
+		$this->assertNotContains( "{$this->test_prefix}run_a1", $surviving_runs );
+		$this->assertNotContains( "{$this->test_prefix}run_b2", $surviving_runs );
+		$this->assertNotContains( "{$this->test_prefix}run_tb_old", $surviving_runs );
+		$this->assertNotContains( "{$this->test_prefix}run_ta_old", $surviving_runs );
+
+		// Surviving runs MUST be present
+		$this->assertContains( "{$this->test_prefix}run_a2", $surviving_runs );
+		$this->assertContains( "{$this->test_prefix}run_a_run", $surviving_runs );
+		$this->assertContains( "{$this->test_prefix}run_a_retry", $surviving_runs );
+		$this->assertContains( "{$this->test_prefix}run_b1", $surviving_runs );
+		$this->assertContains( "{$this->test_prefix}run_b_run", $surviving_runs );
+		$this->assertContains( "{$this->test_prefix}run_c1", $surviving_runs );
+		$this->assertContains( "{$this->test_prefix}run_c2", $surviving_runs );
+		$this->assertContains( "{$this->test_prefix}run_tc", $surviving_runs );
+		$this->assertContains( "{$this->test_prefix}run_tb_new", $surviving_runs );
+		$this->assertContains( "{$this->test_prefix}run_ta_new", $surviving_runs );
+
+		// Now test pruning through Scheduler orchestration when global retention is 0 (indefinite):
+		// Insert an old run for A (45d ago) - since global is 0, A should NOT be pruned!
+		// Insert an old run for B (100d ago) - since B is 90d, B SHOULD be pruned!
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at) VALUES
+			('{$this->test_prefix}run_a_indef_global', '{$job_a}', 'success', 1, '{$t45}', '{$t45}', '{$t45}'),
+			('{$this->test_prefix}run_b_over_90', '{$job_b}', 'success', 1, '{$t100}', '{$t100}', '{$t100}')"
+		);
+
+		$scheduler_indef = new Scheduler( $this->registry, $this->repository, null, null, 0 );
+		$pruned_indef    = $scheduler_indef->prune_history();
+		$this->assertSame( 1, $pruned_indef, 'Only job B (override 90d) should be pruned; inherited job A survives with global=0.' );
+
+		$stmt_after = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id IN ('{$this->test_prefix}run_a_indef_global', '{$this->test_prefix}run_b_over_90')" );
+		$surv_after = $stmt_after->fetchAll( PDO::FETCH_COLUMN );
+		$this->assertContains( "{$this->test_prefix}run_a_indef_global", $surv_after );
+		$this->assertNotContains( "{$this->test_prefix}run_b_over_90", $surv_after );
+	}
+
+	public function test_prune_history_preserves_runs_with_missing_owning_job(): void {
+		$prefix    = $this->connection->get_table_prefix();
+		$base_id   = $this->test_prefix . 'orphan_base';
+		$target_id = "{$base_id}:item_1";
+		$old_time  = gmdate( 'Y-m-d H:i:s', strtotime( '-60 days' ) );
+
+		// Confirm that the base job does NOT exist in cron_jobs
+		$base_row = $this->pdo->query( "SELECT id FROM {$prefix}cron_jobs WHERE id = '{$base_id}'" )->fetch();
+		$this->assertFalse( $base_row, 'Base job must not exist in cron_jobs.' );
+
+		// 1. Test targeted run where targeted slot exists in cron_jobs but base owning job row does not
+		$this->repository->enqueue_job( $target_id, 'Orphaned Target', 0, $old_time );
+		$target_run_id = "{$this->test_prefix}run_orphan_target";
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at)
+			VALUES ('{$target_run_id}', '{$target_id}', 'success', 1, '{$old_time}', '{$old_time}', '{$old_time}')"
+		);
+
+		// 2. Test raw orphaned run with foreign key checks temporarily bypassed
+		$orphan_run_id = "{$this->test_prefix}run_orphan_standalone";
+		$this->pdo->exec( 'SET foreign_key_checks = 0' );
+		$this->pdo->exec(
+			"INSERT INTO {$prefix}cron_runs (id, job_id, status, attempt, started_at, finished_at, created_at)
+			VALUES ('{$orphan_run_id}', '{$base_id}', 'success', 1, '{$old_time}', '{$old_time}', '{$old_time}')"
+		);
+		$this->pdo->exec( 'SET foreign_key_checks = 1' );
+
+		// Prune history with global retention = 30 days
+		$this->repository->prune_history( 30 );
+
+		// Both execution records for the missing base owner must survive (not be pruned)
+		$stmt      = $this->pdo->query( "SELECT id FROM {$prefix}cron_runs WHERE id IN ('{$target_run_id}', '{$orphan_run_id}')" );
+		$surviving = $stmt->fetchAll( PDO::FETCH_COLUMN );
+		$this->assertContains( $target_run_id, $surviving, 'Targeted run with missing base job must survive.' );
+		$this->assertContains( $orphan_run_id, $surviving, 'Standalone run with missing base job must survive.' );
+
+		// Clean up
+		$this->pdo->exec( 'SET foreign_key_checks = 0' );
+		$this->pdo->exec( "DELETE FROM {$prefix}cron_runs WHERE id IN ('{$target_run_id}', '{$orphan_run_id}')" );
+		$this->pdo->exec( "DELETE FROM {$prefix}cron_jobs WHERE id = '{$target_id}'" );
+		$this->pdo->exec( 'SET foreign_key_checks = 1' );
+	}
+
+	public function test_reset_job_restores_persisted_null_retention_and_inherits_global(): void {
+		$prefix  = $this->connection->get_table_prefix();
+		$job_id  = $this->test_prefix . 'reset_retention_job';
+		$handler = $this->createMock( JobHandlerInterface::class );
+
+		$this->registry->register( new JobDefinition( $job_id, 'Reset Retention Job', 86400, $handler ) );
+		$this->repository->sync_registered_jobs( $this->registry->all() );
+
+		$stored_global = '30';
+		$settings      = new class( $stored_global ) extends \PeakURL\Api\SettingsApi {
+			public string $global_days;
+
+			public function __construct( string &$global_days ) {
+				$this->global_days = &$global_days;
+			}
+
+			public function get_option( string $key ): ?string {
+				if ( \PeakURL\Core\Config\Constants::SETTING_CRON_HISTORY_RETENTION_DAYS === $key ) {
+					return $this->global_days;
+				}
+				return null;
+			}
+
+			public function update_option( string $key, string $value, string $updated_at, bool $autoload = true ): void {
+				if ( \PeakURL\Core\Config\Constants::SETTING_CRON_HISTORY_RETENTION_DAYS === $key ) {
+					$this->global_days = $value;
+				}
+			}
+		};
+
+		$scheduler = new Scheduler( $this->registry, $this->repository, null, $settings );
+
+		// 1. Customize schedule and retention override to 90 days
+		$scheduler->update_job(
+			$job_id,
+			array(
+				'interval_seconds'   => 43200,
+				'preferred_run_time' => '04:00',
+				'retention_days'     => 90,
+			)
+		);
+
+		// Assert that cron_jobs table actually stores 90
+		$row_custom = $this->pdo->query( "SELECT retention_days, schedule_interval FROM {$prefix}cron_jobs WHERE id = '{$job_id}'" )->fetch( PDO::FETCH_ASSOC );
+		$this->assertSame( 90, (int) $row_custom['retention_days'] );
+		$this->assertSame( 90, $scheduler->get_effective_job_retention( $job_id ) );
+
+		// 2. Reset the job
+		$reset_status = $scheduler->reset_job( $job_id );
+
+		// Assert that persisted cron_jobs.retention_days is strictly NULL in the database
+		$row_after = $this->pdo->query( "SELECT retention_days, schedule_interval, preferred_run_time FROM {$prefix}cron_jobs WHERE id = '{$job_id}'" )->fetch( PDO::FETCH_ASSOC );
+		$this->assertNull( $row_after['retention_days'], 'Reset must persist NULL for retention_days, not copy the global value.' );
+		$this->assertNull( $row_after['preferred_run_time'] );
+		$this->assertSame( 86400, (int) $row_after['schedule_interval'] );
+
+		// Wire status confirms retention_days is null and not customized
+		$this->assertNull( $reset_status['retention_days'] );
+		$this->assertFalse( $reset_status['retention_is_customized'] );
+		$this->assertFalse( $reset_status['is_customized'] );
+		$this->assertSame( 30, $reset_status['effective_retention_days'] );
+
+		// 3. Changing global setting immediately affects this job because it has NULL
+		$scheduler->set_retention_days( 60 );
+		$this->assertSame( 60, $scheduler->get_retention_days() );
+		$this->assertSame( 60, $scheduler->get_effective_job_retention( $job_id ) );
+	}
 }

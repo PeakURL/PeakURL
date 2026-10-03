@@ -837,6 +837,21 @@ class Service {
 			$params['is_enabled'] = (bool) $payload['is_enabled'];
 		}
 
+		if ( array_key_exists( 'retention_days', $payload ) ) {
+			$raw_retention = $payload['retention_days'];
+			if ( null !== $raw_retention ) {
+				if ( ! is_numeric( $raw_retention ) || (int) $raw_retention < 0 || (float) (int) $raw_retention !== (float) $raw_retention ) {
+					throw new ApiException(
+						__( 'Retention days must be null or a non-negative integer.', 'peakurl' ),
+						422
+					);
+				}
+				$params['retention_days'] = (int) $raw_retention;
+			} else {
+				$params['retention_days'] = null;
+			}
+		}
+
 		try {
 			$job_status = $this->scheduler->update_job( $clean_id, $params );
 

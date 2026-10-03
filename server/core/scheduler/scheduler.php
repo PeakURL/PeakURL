@@ -299,9 +299,18 @@ class Scheduler {
 				? (string) $matching_row['preferred_run_time']
 				: null;
 			$persisted_enabled   = ! empty( $matching_row['is_enabled'] );
-			$is_customized       = ( $persisted_interval !== $definition->get_interval_seconds() )
+
+			$persisted_retention = ( isset( $matching_row['retention_days'] ) && is_numeric( $matching_row['retention_days'] ) && (int) $matching_row['retention_days'] >= 0 )
+				? (int) $matching_row['retention_days']
+				: null;
+
+			$retention_is_customized  = ( null !== $persisted_retention );
+			$effective_retention_days = null !== $persisted_retention ? $persisted_retention : $this->get_retention_days();
+
+			$is_customized = ( $persisted_interval !== $definition->get_interval_seconds() )
 				|| ( null !== $persisted_pref_time )
-				|| ( $persisted_enabled !== $definition->is_enabled() );
+				|| ( $persisted_enabled !== $definition->is_enabled() )
+				|| $retention_is_customized;
 
 			$jobs[] = array(
 				'id'                           => $job_id,
@@ -312,6 +321,9 @@ class Scheduler {
 				'is_customized'                => $is_customized,
 				'status'                       => (string) ( $matching_row['status'] ?? 'idle' ),
 				'is_enabled'                   => $persisted_enabled,
+				'retention_days'               => $persisted_retention,
+				'retention_is_customized'      => $retention_is_customized,
+				'effective_retention_days'     => $effective_retention_days,
 				'next_run_at'                  => ! empty( $matching_row['next_run_at'] ) ? Date::to_iso( (string) $matching_row['next_run_at'] ) : null,
 				'last_run_at'                  => ! empty( $matching_row['last_run_at'] ) ? Date::to_iso( (string) $matching_row['last_run_at'] ) : null,
 				'last_finished_at'             => ! empty( $matching_row['last_finished_at'] ) ? Date::to_iso( (string) $matching_row['last_finished_at'] ) : null,
@@ -586,6 +598,7 @@ class Scheduler {
 			$this->settings_api->update_option(
 				Constants::SETTING_CRON_HISTORY_RETENTION_DAYS,
 				(string) $retention_days,
+				Date::now(),
 				false
 			);
 		}
@@ -601,13 +614,9 @@ class Scheduler {
 	public function prune_history( ?int $retention_days = null ): int {
 		$days = ( null !== $retention_days ) ? max( 0, $retention_days ) : $this->get_retention_days();
 
-		if ( $days <= 0 ) {
-			return 0;
-		}
-
 		$pruned = $this->repository->prune_history( $days );
 		if ( $pruned > 0 ) {
-			$this->log( sprintf( 'Pruned %d stale cron execution history rows (retention: %d days).', $pruned, $days ) );
+			$this->log( sprintf( 'Pruned %d stale cron execution history rows (global retention: %d days).', $pruned, $days ) );
 		}
 
 		return $pruned;
@@ -695,6 +704,30 @@ class Scheduler {
 	}
 
 	/**
+	 * Resolve the effective history retention in days for a job (or targeted job instance).
+	 *
+	 * Persisted cron_jobs configuration takes precedence; falls back to global retention when NULL.
+	 * Returns 0 for indefinite retention.
+	 *
+	 * @param string $job_id Job identifier (supports targeted IDs like base_id:target).
+	 * @return int Effective retention in days (0 for indefinite).
+	 * @since 1.7.0
+	 */
+	public function get_effective_job_retention( string $job_id ): int {
+		$base_id = str_contains( $job_id, ':' ) ? explode( ':', $job_id, 2 )[0] : trim( $job_id );
+		$row     = $this->repository->get_job( $base_id );
+
+		if ( ! empty( $row ) && array_key_exists( 'retention_days', $row ) && null !== $row['retention_days'] ) {
+			$val = $row['retention_days'];
+			if ( is_numeric( $val ) && (int) $val >= 0 ) {
+				return (int) $val;
+			}
+		}
+
+		return $this->get_retention_days();
+	}
+
+	/**
 	 * Return the status dictionary for a single job by ID.
 	 *
 	 * @param string $job_id Unique job identifier.
@@ -721,9 +754,18 @@ class Scheduler {
 			? (string) $job_row['preferred_run_time']
 			: null;
 		$persisted_enabled   = ! empty( $job_row['is_enabled'] );
-		$is_customized       = ( $persisted_interval !== $definition->get_interval_seconds() )
+
+		$persisted_retention = ( isset( $job_row['retention_days'] ) && is_numeric( $job_row['retention_days'] ) && (int) $job_row['retention_days'] >= 0 )
+			? (int) $job_row['retention_days']
+			: null;
+
+		$retention_is_customized  = ( null !== $persisted_retention );
+		$effective_retention_days = null !== $persisted_retention ? $persisted_retention : $this->get_retention_days();
+
+		$is_customized = ( $persisted_interval !== $definition->get_interval_seconds() )
 			|| ( null !== $persisted_pref_time )
-			|| ( $persisted_enabled !== $definition->is_enabled() );
+			|| ( $persisted_enabled !== $definition->is_enabled() )
+			|| $retention_is_customized;
 
 		return array(
 			'id'                           => $job_id,
@@ -734,6 +776,9 @@ class Scheduler {
 			'is_customized'                => $is_customized,
 			'status'                       => (string) ( $job_row['status'] ?? 'idle' ),
 			'is_enabled'                   => $persisted_enabled,
+			'retention_days'               => $persisted_retention,
+			'retention_is_customized'      => $retention_is_customized,
+			'effective_retention_days'     => $effective_retention_days,
 			'next_run_at'                  => ! empty( $job_row['next_run_at'] ) ? Date::to_iso( (string) $job_row['next_run_at'] ) : null,
 			'last_run_at'                  => ! empty( $job_row['last_run_at'] ) ? Date::to_iso( (string) $job_row['last_run_at'] ) : null,
 			'last_finished_at'             => ! empty( $job_row['last_finished_at'] ) ? Date::to_iso( (string) $job_row['last_finished_at'] ) : null,
@@ -829,6 +874,21 @@ class Scheduler {
 			$is_enabled = (bool) $params['is_enabled'];
 		}
 
+		$update_retention = false;
+		$retention_days   = null;
+		if ( array_key_exists( 'retention_days', $params ) ) {
+			$raw_retention = $params['retention_days'];
+			if ( null !== $raw_retention ) {
+				if ( ! is_numeric( $raw_retention ) || (int) $raw_retention < 0 || (float) (int) $raw_retention !== (float) $raw_retention ) {
+					throw new \InvalidArgumentException(
+						'Retention days must be null or a non-negative integer.'
+					);
+				}
+				$retention_days = (int) $raw_retention;
+			}
+			$update_retention = true;
+		}
+
 		// Calculate next_run_at if the job is not currently active/running.
 		$next_run_at = null;
 		$is_running  = 'running' === ( $current_row['status'] ?? '' );
@@ -841,7 +901,9 @@ class Scheduler {
 			$interval,
 			$preferred_run_time,
 			$is_enabled,
-			$next_run_at
+			$next_run_at,
+			$update_retention,
+			$retention_days
 		);
 
 		return $this->get_single_job_status( $clean_id );

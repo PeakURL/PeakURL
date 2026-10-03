@@ -61,6 +61,9 @@ export interface ApiCronJob {
 	is_customized?: boolean;
 	status: string;
 	is_enabled?: boolean;
+	retention_days: number | null;
+	retention_is_customized: boolean;
+	effective_retention_days: number;
 	next_run_at?: string | null;
 	last_run_at?: string | null;
 	last_finished_at?: string | null;
@@ -133,6 +136,9 @@ export interface CronJob {
 	isCustomized: boolean;
 	status: CronJobStatus;
 	isEnabled: boolean;
+	retentionDays: number | null;
+	retentionIsCustomized: boolean;
+	effectiveRetentionDays: number;
 	nextRunAt: string | null;
 	lastRunAt: string | null;
 	lastFinishedAt: string | null;
@@ -160,6 +166,7 @@ export interface UpdateCronJobPayload {
 	intervalSeconds?: number;
 	preferredRunTime?: string | null;
 	isEnabled?: boolean;
+	retentionDays?: number | null;
 }
 
 /**
@@ -169,6 +176,7 @@ export interface ApiUpdateCronJobPayload {
 	interval_seconds?: number;
 	preferred_run_time?: string | null;
 	is_enabled?: boolean;
+	retention_days?: number | null;
 }
 
 /**

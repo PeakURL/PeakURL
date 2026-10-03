@@ -145,15 +145,18 @@ class SchedulerUnitTest extends TestCase {
 		$scheduler->set_retention_days( -5 );
 	}
 
-	public function test_scheduler_retention_forever_disables_pruning(): void {
+	public function test_scheduler_prune_history_delegates_when_global_retention_is_zero(): void {
 		$registry   = new JobRegistry();
 		$repository = $this->createMock( SchedulerRepository::class );
-		$repository->expects( $this->never() )->method( 'prune_history' );
+		$repository->expects( $this->exactly( 2 ) )
+			->method( 'prune_history' )
+			->with( 0 )
+			->willReturn( 5 );
 
 		$scheduler = new Scheduler( $registry, $repository, null, null, 0 );
 		$this->assertSame( 0, $scheduler->get_retention_days() );
-		$this->assertSame( 0, $scheduler->prune_history() );
-		$this->assertSame( 0, $scheduler->prune_history( 0 ) );
+		$this->assertSame( 5, $scheduler->prune_history() );
+		$this->assertSame( 5, $scheduler->prune_history( 0 ) );
 	}
 
 	public function test_scheduler_retention_fallback_on_invalid_stored_value(): void {
@@ -346,7 +349,7 @@ class SchedulerUnitTest extends TestCase {
 		$repository = $this->createMock( SchedulerRepository::class );
 		$repository->expects( $this->once() )
 			->method( 'update_job_schedule' )
-			->with( 'test_job', 7200, '04:00', false, $this->isType( 'string' ) )
+			->with( 'test_job', 7200, '04:00', false, $this->isType( 'string' ), false, null )
 			->willReturn( true );
 
 		$repository->method( 'get_job' )
@@ -447,7 +450,7 @@ class SchedulerUnitTest extends TestCase {
 		// When job is currently running, next_run_at passed to repository MUST be null
 		$repository->expects( $this->once() )
 			->method( 'update_job_schedule' )
-			->with( 'running_job', 7200, null, null, null )
+			->with( 'running_job', 7200, null, null, null, false, null )
 			->willReturn( true );
 
 		$repository->method( 'get_job' )
@@ -498,5 +501,299 @@ class SchedulerUnitTest extends TestCase {
 		$this->expectException( \InvalidArgumentException::class );
 		$this->expectExceptionMessage( 'Preferred time must be in 24-hour format (HH:MM).' );
 		$scheduler->update_job( 'test_job', array( 'preferred_run_time' => '25:99' ) );
+	}
+
+	public function test_effective_retention_resolution_matrix(): void {
+		$registry     = new JobRegistry();
+		$handler      = $this->createMock( JobHandlerInterface::class );
+		$job_inherit  = new JobDefinition( 'job_inherit', 'Inherit Job', 3600, $handler );
+		$job_override = new JobDefinition( 'job_override', 'Override Job', 3600, $handler );
+		$job_indef    = new JobDefinition( 'job_indef', 'Indefinite Job', 3600, $handler );
+		$job_targeted = new JobDefinition( 'peakurl_link_health_check', 'Link Health', 86400, $handler );
+
+		$registry->register( $job_inherit );
+		$registry->register( $job_override );
+		$registry->register( $job_indef );
+		$registry->register( $job_targeted );
+
+		$repository = $this->createMock( SchedulerRepository::class );
+		$repository->method( 'get_job' )
+			->willReturnCallback(
+				function ( string $id ) {
+					if ( 'job_inherit' === $id ) {
+						return array(
+							'id'             => 'job_inherit',
+							'retention_days' => null,
+						);
+					}
+					if ( 'job_override' === $id ) {
+						return array(
+							'id'             => 'job_override',
+							'retention_days' => 90,
+						);
+					}
+					if ( 'job_indef' === $id ) {
+						return array(
+							'id'             => 'job_indef',
+							'retention_days' => 0,
+						);
+					}
+					if ( 'peakurl_link_health_check' === $id ) {
+						return array(
+							'id'             => 'peakurl_link_health_check',
+							'retention_days' => 14,
+						);
+					}
+					return null;
+				}
+			);
+
+		$settings_api = $this->createMock( SettingsApi::class );
+		$settings_api->method( 'get_option' )
+			->with( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS )
+			->willReturn( '30' );
+
+		$scheduler = new Scheduler( $registry, $repository, null, $settings_api );
+
+		// Case 1: NULL inherits global (30)
+		$this->assertSame( 30, $scheduler->get_effective_job_retention( 'job_inherit' ) );
+
+		// Case 2: Explicit positive retention (90) preserved
+		$this->assertSame( 90, $scheduler->get_effective_job_retention( 'job_override' ) );
+
+		// Case 3: 0 means indefinite
+		$this->assertSame( 0, $scheduler->get_effective_job_retention( 'job_indef' ) );
+
+		// Case 4: Targeted job IDs inherit the retention policy of their base registered job
+		$this->assertSame( 14, $scheduler->get_effective_job_retention( 'peakurl_link_health_check:link_xyz789' ) );
+		$this->assertSame( 14, $scheduler->get_effective_job_retention( 'peakurl_link_health_check:link_xyz789:next' ) );
+	}
+
+	public function test_global_retention_changes_affect_inherited_jobs_only(): void {
+		$registry     = new JobRegistry();
+		$handler      = $this->createMock( JobHandlerInterface::class );
+		$job_inherit  = new JobDefinition( 'job_inherit', 'Inherit Job', 3600, $handler );
+		$job_override = new JobDefinition( 'job_override', 'Override Job', 3600, $handler );
+		$job_indef    = new JobDefinition( 'job_indef', 'Indefinite Job', 3600, $handler );
+
+		$registry->register( $job_inherit );
+		$registry->register( $job_override );
+		$registry->register( $job_indef );
+
+		$repository = $this->createMock( SchedulerRepository::class );
+		$repository->method( 'get_job' )
+			->willReturnCallback(
+				function ( string $id ) {
+					if ( 'job_inherit' === $id ) {
+						return array(
+							'id'             => 'job_inherit',
+							'retention_days' => null,
+						);
+					}
+					if ( 'job_override' === $id ) {
+						return array(
+							'id'             => 'job_override',
+							'retention_days' => 90,
+						);
+					}
+					if ( 'job_indef' === $id ) {
+						return array(
+							'id'             => 'job_indef',
+							'retention_days' => 0,
+						);
+					}
+					return null;
+				}
+			);
+
+		$stored_global = '30';
+		$settings_api  = $this->createMock( SettingsApi::class );
+		$settings_api->method( 'get_option' )
+			->with( Constants::SETTING_CRON_HISTORY_RETENTION_DAYS )
+			->willReturnCallback(
+				function () use ( &$stored_global ) {
+					return $stored_global;
+				}
+			);
+		$settings_api->method( 'update_option' )
+			->willReturnCallback(
+				function ( $opt, $val ) use ( &$stored_global ) {
+					$stored_global = (string) $val;
+					return true;
+				}
+			);
+
+		$scheduler = new Scheduler( $registry, $repository, null, $settings_api );
+
+		// Initial global = 30
+		$this->assertSame( 30, $scheduler->get_effective_job_retention( 'job_inherit' ) );
+		$this->assertSame( 90, $scheduler->get_effective_job_retention( 'job_override' ) );
+		$this->assertSame( 0, $scheduler->get_effective_job_retention( 'job_indef' ) );
+
+		// Change global to 60
+		$scheduler->set_retention_days( 60 );
+		$this->assertSame( 60, $scheduler->get_retention_days() );
+
+		// Job inheriting NULL immediately reflects new global 60
+		$this->assertSame( 60, $scheduler->get_effective_job_retention( 'job_inherit' ) );
+
+		// Jobs with explicit overrides remain completely unchanged
+		$this->assertSame( 90, $scheduler->get_effective_job_retention( 'job_override' ) );
+		$this->assertSame( 0, $scheduler->get_effective_job_retention( 'job_indef' ) );
+
+		// Change global to 0 (indefinite)
+		$scheduler->set_retention_days( 0 );
+		$this->assertSame( 0, $scheduler->get_retention_days() );
+		$this->assertSame( 0, $scheduler->get_effective_job_retention( 'job_inherit' ) );
+		$this->assertSame( 90, $scheduler->get_effective_job_retention( 'job_override' ) );
+	}
+
+	public function test_update_job_retention_validation_and_delegation(): void {
+		$registry = new JobRegistry();
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		$job      = new JobDefinition( 'test_job', 'Test Job', 3600, $handler );
+		$registry->register( $job );
+
+		$repository = $this->createMock( SchedulerRepository::class );
+		$repository->method( 'get_job' )
+			->willReturn(
+				array(
+					'id'                 => 'test_job',
+					'schedule_interval'  => 3600,
+					'preferred_run_time' => null,
+					'is_enabled'         => 1,
+					'retention_days'     => null,
+					'status'             => 'idle',
+				)
+			);
+
+		$scheduler = new Scheduler( $registry, $repository, null, null, 30 );
+
+		// 1. Negative retention rejected
+		try {
+			$scheduler->update_job( 'test_job', array( 'retention_days' => -5 ) );
+			$this->fail( 'Expected InvalidArgumentException for negative retention.' );
+		} catch ( \InvalidArgumentException $e ) {
+			$this->assertStringContainsString( 'Retention days must be null or a non-negative integer', $e->getMessage() );
+		}
+
+		// 2. Non-numeric retention rejected
+		try {
+			$scheduler->update_job( 'test_job', array( 'retention_days' => 'abc' ) );
+			$this->fail( 'Expected InvalidArgumentException for non-numeric retention.' );
+		} catch ( \InvalidArgumentException $e ) {
+			$this->assertStringContainsString( 'Retention days must be null or a non-negative integer', $e->getMessage() );
+		}
+
+		// 3. Valid explicit retention (90 days)
+		$repository->expects( $this->once() )
+			->method( 'update_job_schedule' )
+			->with( 'test_job', 3600, null, null, $this->anything(), true, 90 )
+			->willReturn( true );
+
+		$scheduler->update_job( 'test_job', array( 'retention_days' => 90 ) );
+	}
+
+	public function test_reset_job_restores_null_retention_inheritance(): void {
+		$registry = new JobRegistry();
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		// Registered job with default null retention
+		$job = new JobDefinition( 'test_job', 'Test Job', 3600, $handler );
+		$registry->register( $job );
+
+		$repository = $this->createMock( SchedulerRepository::class );
+		$repository->method( 'get_job' )
+			->willReturn(
+				array(
+					'id'                 => 'test_job',
+					'schedule_interval'  => 7200,
+					'preferred_run_time' => '03:00',
+					'is_enabled'         => 1,
+					'retention_days'     => 90, // currently customized
+					'status'             => 'idle',
+				)
+			);
+
+		// reset_job must call reset_job_schedule without hardcoding global retention
+		$repository->expects( $this->once() )
+			->method( 'reset_job_schedule' )
+			->with( 'test_job', 3600, true, $this->anything() )
+			->willReturn( true );
+
+		$scheduler = new Scheduler( $registry, $repository, null, null, 30 );
+		$status    = $scheduler->reset_job( 'test_job' );
+
+		// Wire status confirms retention returns to null inheritance
+		$this->assertSame( 'test_job', $status['id'] );
+	}
+
+	public function test_job_status_reports_wire_level_retention_fields(): void {
+		$registry   = new JobRegistry();
+		$handler    = $this->createMock( JobHandlerInterface::class );
+		$job_global = new JobDefinition( 'job_global', 'Global Job', 3600, $handler );
+		$job_custom = new JobDefinition( 'job_custom', 'Custom Job', 3600, $handler );
+		$job_indef  = new JobDefinition( 'job_indef', 'Indefinite Job', 3600, $handler );
+
+		$registry->register( $job_global );
+		$registry->register( $job_custom );
+		$registry->register( $job_indef );
+
+		$repository = $this->createMock( SchedulerRepository::class );
+		$repository->method( 'get_job' )
+			->willReturnCallback(
+				function ( string $id ) {
+					if ( 'job_global' === $id ) {
+						return array(
+							'id'                => 'job_global',
+							'schedule_interval' => 3600,
+							'retention_days'    => null,
+							'status'            => 'idle',
+							'is_enabled'        => 1,
+						);
+					}
+					if ( 'job_custom' === $id ) {
+						return array(
+							'id'                => 'job_custom',
+							'schedule_interval' => 3600,
+							'retention_days'    => 90,
+							'status'            => 'idle',
+							'is_enabled'        => 1,
+						);
+					}
+					if ( 'job_indef' === $id ) {
+						return array(
+							'id'                => 'job_indef',
+							'schedule_interval' => 3600,
+							'retention_days'    => 0,
+							'status'            => 'idle',
+							'is_enabled'        => 1,
+						);
+					}
+					return null;
+				}
+			);
+
+		$scheduler = new Scheduler( $registry, $repository, null, null, 30 );
+
+		// 1. Inherited global job
+		$status_global = $scheduler->get_single_job_status( 'job_global' );
+		$this->assertNull( $status_global['retention_days'] );
+		$this->assertFalse( $status_global['retention_is_customized'] );
+		$this->assertSame( 30, $status_global['effective_retention_days'] );
+		$this->assertFalse( $status_global['is_customized'] );
+
+		// 2. Customized explicit job
+		$status_custom = $scheduler->get_single_job_status( 'job_custom' );
+		$this->assertSame( 90, $status_custom['retention_days'] );
+		$this->assertTrue( $status_custom['retention_is_customized'] );
+		$this->assertSame( 90, $status_custom['effective_retention_days'] );
+		$this->assertTrue( $status_custom['is_customized'] );
+
+		// 3. Indefinite job
+		$status_indef = $scheduler->get_single_job_status( 'job_indef' );
+		$this->assertSame( 0, $status_indef['retention_days'] );
+		$this->assertTrue( $status_indef['retention_is_customized'] );
+		$this->assertSame( 0, $status_indef['effective_retention_days'] );
+		$this->assertTrue( $status_indef['is_customized'] );
 	}
 }

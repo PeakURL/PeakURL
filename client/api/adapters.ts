@@ -238,6 +238,9 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 			isCustomized: false,
 			status: "idle",
 			isEnabled: false,
+			retentionDays: null,
+			retentionIsCustomized: false,
+			effectiveRetentionDays: 0,
 			nextRunAt: null,
 			lastRunAt: null,
 			lastFinishedAt: null,
@@ -258,10 +261,15 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 			? apiJob.preferred_run_time.trim()
 			: null;
 	const isEnabled = Boolean(apiJob.is_enabled);
+	const retentionDays =
+		null !== apiJob.retention_days ? Number(apiJob.retention_days) : null;
+	const retentionIsCustomized = Boolean(apiJob.retention_is_customized);
+	const effectiveRetentionDays = Number(apiJob.effective_retention_days);
 	const isCustomized = Boolean(
 		apiJob.is_customized ??
 		(intervalSeconds !== recommendedIntervalSeconds ||
-			Boolean(preferredRunTime))
+			Boolean(preferredRunTime) ||
+			retentionIsCustomized)
 	);
 
 	return {
@@ -273,6 +281,9 @@ export function mapApiCronJob(apiJob?: ApiCronJob | null): CronJob {
 		isCustomized,
 		status: (apiJob.status as CronJobStatus) || "idle",
 		isEnabled,
+		retentionDays,
+		retentionIsCustomized,
+		effectiveRetentionDays,
 		nextRunAt: apiJob.next_run_at ?? null,
 		lastRunAt: apiJob.last_run_at ?? null,
 		lastFinishedAt: apiJob.last_finished_at ?? null,

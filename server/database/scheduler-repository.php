@@ -72,6 +72,7 @@ class SchedulerRepository {
 						'id'                => $def->get_id(),
 						'title'             => $def->get_title(),
 						'schedule_interval' => $def->get_interval_seconds(),
+						'retention_days'    => null,
 						'status'            => 'idle',
 						'next_run_at'       => $now,
 						'attempts'          => 0,
@@ -812,39 +813,54 @@ class SchedulerRepository {
 	}
 
 	/**
-	 * Prune completed execution history runs older than the specified retention days.
+	 * Prune old terminal execution history records according to per-job effective retention.
 	 *
-	 * Runs with 'running' or 'retrying' status are strictly excluded to avoid
-	 * corrupting active executions.
+	 * Preserves 'running' and 'retrying' runs under all circumstances.
+	 * Bounded batch deletion with safety limit iterations.
 	 *
-	 * @param int $retention_days Number of days of history to retain (<= 0 disables pruning).
-	 * @param int $batch_size     Maximum number of records to delete per batch.
+	 * @param int         $global_retention_days Fallback global retention in days (0 disables automatic pruning for inherited jobs).
+	 * @param int         $batch_size            Maximum number of records to delete per batch.
+	 * @param string|null $now                   Optional UTC timestamp override for testing.
 	 * @return int Total number of pruned history rows.
 	 * @since 1.7.0
 	 */
-	public function prune_history( int $retention_days, int $batch_size = 500 ): int {
-		if ( $retention_days <= 0 ) {
-			return 0;
-		}
-
-		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $retention_days * 86400 ) );
-		$limit  = max( 1, min( 5000, (int) $batch_size ) );
+	public function prune_history( int $global_retention_days, int $batch_size = 500, ?string $now = null ): int {
+		$global_days = max( 0, $global_retention_days );
+		$now_time    = $now ?? Date::now();
+		$cutoff      = gmdate( 'Y-m-d H:i:s', strtotime( $now_time . ' UTC' ) - ( $global_days * 86400 ) );
+		$limit       = max( 1, min( 5000, (int) $batch_size ) );
 
 		$total_deleted  = 0;
 		$max_iterations = 10;
 		$iterations     = 0;
 
+		$sql = 'DELETE FROM cron_runs
+		WHERE id IN (
+			SELECT id FROM (
+				SELECT cr.id
+				FROM cron_runs AS cr
+				LEFT JOIN cron_jobs AS cj ON cj.id = SUBSTRING_INDEX(cr.job_id, \':\', 1)
+				WHERE cr.status != :running_status
+				AND cr.status != :retrying_status
+				AND cj.id IS NOT NULL
+				AND (
+					(cj.retention_days IS NOT NULL AND cj.retention_days > 0 AND cr.created_at < DATE_SUB(:now_time, INTERVAL cj.retention_days DAY))
+					OR
+					(cj.retention_days IS NULL AND :global_retention > 0 AND cr.created_at < :global_cutoff)
+				)
+				LIMIT ' . $limit . '
+			) AS batch_to_prune
+		)';
+
 		do {
 			$deleted = $this->db->query(
-				'DELETE FROM cron_runs
-				WHERE created_at < :cutoff
-				AND status != :running_status
-				AND status != :retrying_status
-				LIMIT ' . $limit,
+				$sql,
 				array(
-					'cutoff'          => $cutoff,
-					'running_status'  => 'running',
-					'retrying_status' => 'retrying',
+					'running_status'   => 'running',
+					'retrying_status'  => 'retrying',
+					'now_time'         => $now_time,
+					'global_retention' => $global_days,
+					'global_cutoff'    => $cutoff,
 				)
 			);
 
@@ -901,6 +917,8 @@ class SchedulerRepository {
 	 * @param string|null $preferred_run_time   Optional preferred time of day (HH:MM) or null.
 	 * @param bool|null   $is_enabled       Optional enabled state or null to preserve.
 	 * @param string|null $next_run_at      Optional recalculated next run timestamp.
+	 * @param bool        $update_retention Whether retention_days should be updated.
+	 * @param int|null    $retention_days   Retention override in days, 0 for indefinite, or null to inherit.
 	 * @return bool True if updated successfully.
 	 * @since 1.7.0
 	 */
@@ -909,7 +927,9 @@ class SchedulerRepository {
 		int $interval_seconds,
 		?string $preferred_run_time = null,
 		?bool $is_enabled = null,
-		?string $next_run_at = null
+		?string $next_run_at = null,
+		bool $update_retention = false,
+		?int $retention_days = null
 	): bool {
 		$fields = array(
 			'schedule_interval'  => max( 1, $interval_seconds ),
@@ -925,6 +945,10 @@ class SchedulerRepository {
 			$fields['next_run_at'] = $next_run_at;
 		}
 
+		if ( $update_retention ) {
+			$fields['retention_days'] = ( null !== $retention_days ) ? max( 0, $retention_days ) : null;
+		}
+
 		return (bool) $this->db->update(
 			'cron_jobs',
 			$fields,
@@ -934,6 +958,9 @@ class SchedulerRepository {
 
 	/**
 	 * Reset a background job to its recommended default schedule.
+	 *
+	 * Restores default recurrence interval and enabled state, and resets retention
+	 * to NULL (inheriting global retention default).
 	 *
 	 * @param string      $job_id           Unique job identifier.
 	 * @param int         $default_interval Built-in recommended interval in seconds.
@@ -951,6 +978,7 @@ class SchedulerRepository {
 		$fields = array(
 			'schedule_interval'  => max( 1, $default_interval ),
 			'preferred_run_time' => null,
+			'retention_days'     => null,
 			'is_enabled'         => $default_enabled ? 1 : 0,
 			'updated_at'         => Date::now(),
 		);

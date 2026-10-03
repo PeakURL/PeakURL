@@ -598,4 +598,154 @@ class SystemCronEndpointsTest extends TestCase {
 		$this->expectExceptionCode( 403 );
 		$system_service->reset_cron_job( $request, 'peakurl_session_cleanup' );
 	}
+
+	public function test_system_service_update_cron_job_supports_retention_days(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '1',
+					'role' => 'admin',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		$registry = new JobRegistry();
+		$registry->register( new JobDefinition( 'peakurl_cache_cleanup', 'Cache Cleanup', 3600, $handler ) );
+
+		$scheduler = $this->createMock( Scheduler::class );
+		$scheduler->method( 'get_registry' )->willReturn( $registry );
+
+		$captured_params = array();
+		$scheduler->expects( $this->exactly( 3 ) )
+			->method( 'update_job' )
+			->willReturnCallback(
+				function ( string $id, array $params ) use ( &$captured_params ) {
+					$captured_params[] = $params;
+					return array(
+						'id'                       => $id,
+						'retention_days'           => $params['retention_days'] ?? null,
+						'retention_is_customized'  => null !== ( $params['retention_days'] ?? null ),
+						'effective_retention_days' => $params['retention_days'] ?? 30,
+					);
+				}
+			);
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$prop_scheduler = $ref->getProperty( 'scheduler' );
+		$prop_scheduler->setValue( $system_service, $scheduler );
+
+		// 1. Explicit retention = 90
+		$req1 = new Request( 'PATCH', '/api/v1/system/cron/jobs/peakurl_cache_cleanup', array(), array( 'retention_days' => 90 ) );
+		$req1->set_route_params( array( 'id' => 'peakurl_cache_cleanup' ) );
+		$res1 = $system_service->update_cron_job( $req1 );
+		$this->assertTrue( $res1['success'] );
+		$this->assertSame( 90, $res1['job']['retention_days'] );
+
+		// 2. Indefinite retention = 0
+		$req2 = new Request( 'PATCH', '/api/v1/system/cron/jobs/peakurl_cache_cleanup', array(), array( 'retention_days' => 0 ) );
+		$req2->set_route_params( array( 'id' => 'peakurl_cache_cleanup' ) );
+		$res2 = $system_service->update_cron_job( $req2 );
+		$this->assertTrue( $res2['success'] );
+		$this->assertSame( 0, $res2['job']['retention_days'] );
+
+		// 3. Inherit global = null
+		$req3 = new Request( 'PATCH', '/api/v1/system/cron/jobs/peakurl_cache_cleanup', array(), array( 'retention_days' => null ) );
+		$req3->set_route_params( array( 'id' => 'peakurl_cache_cleanup' ) );
+		$res3 = $system_service->update_cron_job( $req3 );
+		$this->assertTrue( $res3['success'] );
+		$this->assertNull( $res3['job']['retention_days'] );
+
+		$this->assertSame( 90, $captured_params[0]['retention_days'] );
+		$this->assertSame( 0, $captured_params[1]['retention_days'] );
+		$this->assertNull( $captured_params[2]['retention_days'] );
+	}
+
+	public function test_system_service_update_cron_job_rejects_negative_retention(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '1',
+					'role' => 'admin',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		$registry = new JobRegistry();
+		$registry->register( new JobDefinition( 'peakurl_cache_cleanup', 'Cache Cleanup', 3600, $handler ) );
+
+		$scheduler = $this->createMock( Scheduler::class );
+		$scheduler->method( 'get_registry' )->willReturn( $registry );
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$prop_scheduler = $ref->getProperty( 'scheduler' );
+		$prop_scheduler->setValue( $system_service, $scheduler );
+
+		$request = new Request( 'PATCH', '/api/v1/system/cron/jobs/peakurl_cache_cleanup', array(), array( 'retention_days' => -5 ) );
+		$request->set_route_params( array( 'id' => 'peakurl_cache_cleanup' ) );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 422 );
+		$system_service->update_cron_job( $request );
+	}
+
+	public function test_system_service_update_cron_job_rejects_non_numeric_retention(): void {
+		$ref            = new ReflectionClass( SystemService::class );
+		$system_service = $ref->newInstanceWithoutConstructor();
+
+		$auth_service = $this->createMock( AuthService::class );
+		$auth_service->method( 'get_current_user' )
+			->willReturn(
+				array(
+					'id'   => '1',
+					'role' => 'admin',
+				)
+			);
+
+		$authorization = $this->createMock( Authorization::class );
+
+		$handler  = $this->createMock( JobHandlerInterface::class );
+		$registry = new JobRegistry();
+		$registry->register( new JobDefinition( 'peakurl_cache_cleanup', 'Cache Cleanup', 3600, $handler ) );
+
+		$scheduler = $this->createMock( Scheduler::class );
+		$scheduler->method( 'get_registry' )->willReturn( $registry );
+
+		$prop_auth = $ref->getProperty( 'auth_service' );
+		$prop_auth->setValue( $system_service, $auth_service );
+
+		$prop_authorization = $ref->getProperty( 'authorization' );
+		$prop_authorization->setValue( $system_service, $authorization );
+
+		$prop_scheduler = $ref->getProperty( 'scheduler' );
+		$prop_scheduler->setValue( $system_service, $scheduler );
+
+		$request = new Request( 'PATCH', '/api/v1/system/cron/jobs/peakurl_cache_cleanup', array(), array( 'retention_days' => 'invalid_str' ) );
+		$request->set_route_params( array( 'id' => 'peakurl_cache_cleanup' ) );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 422 );
+		$system_service->update_cron_job( $request );
+	}
 }

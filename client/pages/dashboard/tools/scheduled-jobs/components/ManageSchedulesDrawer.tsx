@@ -6,6 +6,7 @@ import {
 	DialogTitle,
 } from "@headlessui/react";
 import {
+	Archive,
 	Clock,
 	RotateCcw,
 	Save,
@@ -54,6 +55,42 @@ function getRetentionOptions(): SelectOption<number>[] {
 	];
 }
 
+function getJobRetentionOptions(
+	globalRetentionDays: number,
+	currentJobRetention: number | null
+): SelectOption<string>[] {
+	const globalLabel =
+		globalRetentionDays === 0
+			? sprintf(__("Use Global (%s)"), __("Keep Indefinitely"))
+			: globalRetentionDays === 365
+				? sprintf(__("Use Global (%s)"), __("1 Year"))
+				: sprintf(__("Use Global (%d Days)"), globalRetentionDays);
+
+	const options: SelectOption<string>[] = [
+		{ value: "global", label: globalLabel },
+		{ value: "7", label: __("7 Days") },
+		{ value: "14", label: __("14 Days") },
+		{ value: "30", label: __("30 Days") },
+		{ value: "60", label: __("60 Days") },
+		{ value: "90", label: __("90 Days") },
+		{ value: "180", label: __("180 Days") },
+		{ value: "365", label: __("1 Year") },
+		{ value: "0", label: __("Keep Indefinitely") },
+	];
+
+	if (
+		currentJobRetention !== null &&
+		!options.some((opt) => opt.value === String(currentJobRetention))
+	) {
+		options.push({
+			value: String(currentJobRetention),
+			label: sprintf(__("%d Days"), currentJobRetention),
+		});
+	}
+
+	return options;
+}
+
 function getStandardIntervalOptions(): SelectOption<number>[] {
 	return [
 		{ value: 300, label: __("Every 5 minutes") },
@@ -72,6 +109,7 @@ interface JobEditState {
 	intervalSeconds: number;
 	preferredRunTime: string;
 	isEnabled: boolean;
+	retentionDays: number | null;
 }
 
 export function ManageSchedulesDrawer({
@@ -121,6 +159,7 @@ export function ManageSchedulesDrawer({
 				intervalSeconds: job.intervalSeconds,
 				preferredRunTime: job.preferredRunTime || "02:00",
 				isEnabled: job.isEnabled,
+				retentionDays: job.retentionDays,
 			},
 		}));
 	};
@@ -162,6 +201,7 @@ export function ManageSchedulesDrawer({
 				intervalSeconds: form.intervalSeconds,
 				preferredRunTime: preferredRunTimePayload,
 				isEnabled: form.isEnabled,
+				retentionDays: form.retentionDays,
 			}).unwrap();
 
 			notification.success(
@@ -296,7 +336,7 @@ export function ManageSchedulesDrawer({
 											</h3>
 											<p className="text-xs text-text-muted leading-relaxed">
 												{__(
-													"Choose how long completed background-job execution records are kept. Active and retrying executions are never removed by retention cleanup."
+													"Default retention period for background-job execution records. Scheduled jobs without an explicit override inherit this global setting. Active and retrying executions are never removed by retention cleanup."
 												)}
 											</p>
 										</div>
@@ -367,13 +407,17 @@ export function ManageSchedulesDrawer({
 												editingJobId === job.id;
 											const isSavingThisJob =
 												savingJobId === job.id;
-											const form = editForm[job.id] || {
+											const form: JobEditState = editForm[
+												job.id
+											] || {
 												intervalSeconds:
 													job.intervalSeconds,
 												preferredRunTime:
 													job.preferredRunTime ||
 													"02:00",
 												isEnabled: job.isEnabled,
+												retentionDays:
+													job.retentionDays,
 											};
 
 											// Build select options ensuring current interval is present
@@ -397,6 +441,12 @@ export function ManageSchedulesDrawer({
 																a.value -
 																b.value
 														);
+
+											const jobRetentionOptions =
+												getJobRetentionOptions(
+													retentionDays,
+													form.retentionDays
+												);
 
 											const nextRun = formatNextRun(
 												job.nextRunAt
@@ -482,6 +532,38 @@ export function ManageSchedulesDrawer({
 																				)}
 																	</span>
 																</span>
+
+																{job.retentionIsCustomized &&
+																job.retentionDays !==
+																	null ? (
+																	<span className="inline-flex items-center gap-1.5 rounded-md bg-accent/10 text-accent px-2.5 py-0.5 text-xs font-medium border border-accent/20">
+																		<Archive
+																			size={
+																				12
+																			}
+																			className="shrink-0"
+																		/>
+																		<span>
+																			{job.retentionDays ===
+																			0
+																				? __(
+																						"Retention: Indefinite"
+																					)
+																				: job.retentionDays ===
+																					  365
+																					? __(
+																							"Retention: 1 Year"
+																						)
+																					: sprintf(
+																							/* translators: %d is number of days */
+																							__(
+																								"Retention: %d Days"
+																							),
+																							job.retentionDays
+																						)}
+																		</span>
+																	</span>
+																) : null}
 															</div>
 														</div>
 
@@ -537,32 +619,200 @@ export function ManageSchedulesDrawer({
 													{/* Expanded Inline Editor Form */}
 													{isEditing ? (
 														<div className="px-4 py-4 sm:px-4.5 sm:py-4.5 border-t border-stroke/50 bg-surface-alt/30 space-y-4">
-															<div
-																className={cn(
-																	"grid gap-3.5",
-																	form.intervalSeconds >=
-																		86400
-																		? "grid-cols-1 sm:grid-cols-2"
-																		: "grid-cols-1"
-																)}
-															>
-																{/* Recurrence Interval */}
-																<div className="form-field">
-																	<label
-																		htmlFor={`interval-${job.id}`}
-																		className="form-field-label"
-																	>
-																		{__(
-																			"Schedule"
+															{/* Schedule Settings Group */}
+															<div className="space-y-3">
+																<div className="text-[11px] font-semibold text-heading uppercase tracking-wider">
+																	{__(
+																		"Schedule Settings"
+																	)}
+																</div>
+																<div
+																	className={cn(
+																		"grid gap-3.5",
+																		form.intervalSeconds >=
+																			86400
+																			? "grid-cols-1 sm:grid-cols-2"
+																			: "grid-cols-1"
+																	)}
+																>
+																	{/* Recurrence Interval */}
+																	<div className="form-field">
+																		<label
+																			htmlFor={`interval-${job.id}`}
+																			className="form-field-label"
+																		>
+																			{__(
+																				"Schedule"
+																			)}
+																		</label>
+																		<Select
+																			id={`interval-${job.id}`}
+																			value={
+																				form.intervalSeconds
+																			}
+																			options={
+																				jobIntervalOptions
+																			}
+																			onChange={(
+																				val
+																			) =>
+																				setEditForm(
+																					(
+																						prev
+																					) => ({
+																						...prev,
+																						[job.id]:
+																							{
+																								...form,
+																								intervalSeconds:
+																									val as number,
+																							},
+																					})
+																				)
+																			}
+																		/>
+																		<p className="form-field-helper">
+																			{__(
+																				"Recurrence cadence."
+																			)}
+																		</p>
+																	</div>
+
+																	{/* Preferred Run Time (only if interval >= 86400) */}
+																	{form.intervalSeconds >=
+																	86400 ? (
+																		<Input
+																			id={`preferred-run-time-${job.id}`}
+																			type="time"
+																			label={__(
+																				"Preferred run time"
+																			)}
+																			icon={
+																				Clock
+																			}
+																			value={
+																				form.preferredRunTime
+																			}
+																			onChange={(
+																				e
+																			) =>
+																				setEditForm(
+																					(
+																						prev
+																					) => ({
+																						...prev,
+																						[job.id]:
+																							{
+																								...form,
+																								preferredRunTime:
+																									e
+																										.target
+																										.value,
+																							},
+																					})
+																				)
+																			}
+																			helperText={sprintf(
+																				/* translators: %s is the site timezone */
+																				__(
+																					"Site timezone: %s"
+																				),
+																				timezone
+																			)}
+																		/>
+																	) : null}
+																</div>
+
+																{/* Automatic Execution Enable/Disable Switch */}
+																<div className="flex items-center justify-between rounded-xl border border-stroke bg-surface p-3.5 shadow-2xs">
+																	<div className="space-y-0.5">
+																		<p className="text-xs font-semibold text-heading">
+																			{__(
+																				"Automatic execution"
+																			)}
+																		</p>
+																		<p className="text-[11px] text-text-muted">
+																			{form.isEnabled
+																				? __(
+																						"Runs this job automatically when it is due."
+																					)
+																				: __(
+																						"Automatic execution is disabled. You can still run this job manually."
+																					)}
+																		</p>
+																	</div>
+
+																	<button
+																		type="button"
+																		role="switch"
+																		aria-checked={
+																			form.isEnabled
+																		}
+																		aria-label={__(
+																			"Toggle automatic execution"
 																		)}
-																	</label>
+																		onClick={() =>
+																			setEditForm(
+																				(
+																					prev
+																				) => ({
+																					...prev,
+																					[job.id]:
+																						{
+																							...form,
+																							isEnabled:
+																								!form.isEnabled,
+																						},
+																				})
+																			)
+																		}
+																		className={cn(
+																			"scheduled-jobs-switch-track",
+																			form.isEnabled
+																				? "scheduled-jobs-switch-track-active"
+																				: "scheduled-jobs-switch-track-inactive"
+																		)}
+																	>
+																		<span
+																			className={cn(
+																				"scheduled-jobs-switch-thumb",
+																				form.isEnabled
+																					? "scheduled-jobs-switch-thumb-active"
+																					: "scheduled-jobs-switch-thumb-inactive"
+																			)}
+																		/>
+																	</button>
+																</div>
+															</div>
+
+															{/* Execution History Retention Group */}
+															<div className="space-y-2.5 pt-3 border-t border-stroke/50">
+																<div className="space-y-0.5">
+																	<div className="text-[11px] font-semibold text-heading uppercase tracking-wider">
+																		{__(
+																			"Execution History Retention"
+																		)}
+																	</div>
+																	<p className="text-xs text-text-muted leading-relaxed">
+																		{__(
+																			"Specify how long completed execution records are kept for this job, or inherit the global retention default."
+																		)}
+																	</p>
+																</div>
+
+																<div className="w-full sm:max-w-xs">
 																	<Select
-																		id={`interval-${job.id}`}
+																		id={`retention-${job.id}`}
 																		value={
-																			form.intervalSeconds
+																			form.retentionDays ===
+																			null
+																				? "global"
+																				: String(
+																						form.retentionDays
+																					)
 																		}
 																		options={
-																			jobIntervalOptions
+																			jobRetentionOptions
 																		}
 																		onChange={(
 																			val
@@ -575,124 +825,28 @@ export function ManageSchedulesDrawer({
 																					[job.id]:
 																						{
 																							...form,
-																							intervalSeconds:
-																								val as number,
+																							retentionDays:
+																								val ===
+																								"global"
+																									? null
+																									: Number(
+																											val
+																										),
 																						},
 																				})
 																			)
 																		}
-																	/>
-																	<p className="form-field-helper">
-																		{__(
-																			"Recurrence cadence."
-																		)}
-																	</p>
-																</div>
-
-																{/* Preferred Run Time (only if interval >= 86400) */}
-																{form.intervalSeconds >=
-																86400 ? (
-																	<Input
-																		id={`preferred-run-time-${job.id}`}
-																		type="time"
-																		label={__(
-																			"Preferred run time"
-																		)}
-																		icon={
-																			Clock
-																		}
-																		value={
-																			form.preferredRunTime
-																		}
-																		onChange={(
-																			e
-																		) =>
-																			setEditForm(
-																				(
-																					prev
-																				) => ({
-																					...prev,
-																					[job.id]:
-																						{
-																							...form,
-																							preferredRunTime:
-																								e
-																									.target
-																									.value,
-																						},
-																				})
-																			)
-																		}
-																		helperText={sprintf(
-																			/* translators: %s is the site timezone */
+																		ariaLabel={sprintf(
+																			/* translators: %s is the background job title */
 																			__(
-																				"Site timezone: %s"
+																				"History retention for %s"
 																			),
-																			timezone
+																			__(
+																				job.title
+																			)
 																		)}
 																	/>
-																) : null}
-															</div>
-
-															{/* Automatic Execution Enable/Disable Switch */}
-															<div className="flex items-center justify-between rounded-xl border border-stroke bg-surface p-3.5 shadow-2xs">
-																<div className="space-y-0.5">
-																	<p className="text-xs font-semibold text-heading">
-																		{__(
-																			"Automatic execution"
-																		)}
-																	</p>
-																	<p className="text-[11px] text-text-muted">
-																		{form.isEnabled
-																			? __(
-																					"Runs this job automatically when it is due."
-																				)
-																			: __(
-																					"Automatic execution is disabled. You can still run this job manually."
-																				)}
-																	</p>
 																</div>
-
-																<button
-																	type="button"
-																	role="switch"
-																	aria-checked={
-																		form.isEnabled
-																	}
-																	aria-label={__(
-																		"Toggle automatic execution"
-																	)}
-																	onClick={() =>
-																		setEditForm(
-																			(
-																				prev
-																			) => ({
-																				...prev,
-																				[job.id]:
-																					{
-																						...form,
-																						isEnabled:
-																							!form.isEnabled,
-																					},
-																			})
-																		)
-																	}
-																	className={cn(
-																		"scheduled-jobs-switch-track",
-																		form.isEnabled
-																			? "scheduled-jobs-switch-track-active"
-																			: "scheduled-jobs-switch-track-inactive"
-																	)}
-																>
-																	<span
-																		className={cn(
-																			"scheduled-jobs-switch-thumb",
-																			form.isEnabled
-																				? "scheduled-jobs-switch-thumb-active"
-																				: "scheduled-jobs-switch-thumb-inactive"
-																		)}
-																	/>
-																</button>
 															</div>
 
 															{/* Form Actions */}

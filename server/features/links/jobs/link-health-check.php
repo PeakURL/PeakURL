@@ -35,6 +35,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 class LinkHealthCheckJob implements JobHandlerInterface {
 
 	/**
+	 * Default batch size of links to fetch per query.
+	 *
+	 * @since 1.7.1
+	 */
+	public const DEFAULT_BATCH_SIZE = 25;
+
+	/**
+	 * Default safeguard ceiling on total links processed in a single execution sweep.
+	 *
+	 * @since 1.7.1
+	 */
+	public const DEFAULT_MAX_LINKS_PER_RUN = 5000;
+
+	/**
+	 * Default safeguard ceiling on total execution time in seconds (10 minutes).
+	 *
+	 * @since 1.7.1
+	 */
+	public const DEFAULT_MAX_EXECUTION_SECONDS = 600;
+
+	/**
 	 * Database wrapper.
 	 *
 	 * @var PeakURL_DB
@@ -43,7 +64,7 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 	private PeakURL_DB $db;
 
 	/**
-	 * Maximum number of links to check per execution run.
+	 * Maximum number of links to fetch per batch query.
 	 *
 	 * @var int
 	 * @since 1.7.0
@@ -67,11 +88,27 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 	private WebhooksService $webhooks_service;
 
 	/**
+	 * Maximum number of links to process across all batches in a single run.
+	 *
+	 * @var int
+	 * @since 1.7.1
+	 */
+	private int $max_links_per_run;
+
+	/**
+	 * Maximum elapsed execution time budget in seconds before stopping cleanly.
+	 *
+	 * @var int
+	 * @since 1.7.1
+	 */
+	private int $max_execution_seconds;
+
+	/**
 	 * Create a new link health check job.
 	 *
 	 * @param PeakURL_DB      $db               Database wrapper.
 	 * @param Checker         $checker          Shared destination health checker.
-	 * @param int             $batch_limit      Number of links to sample per run (default 25).
+	 * @param int             $batch_limit      Number of links to fetch per batch (default 25).
 	 * @param WebhooksService $webhooks_service Webhooks domain service.
 	 * @since 1.7.0
 	 */
@@ -81,10 +118,36 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 		int $batch_limit,
 		WebhooksService $webhooks_service
 	) {
-		$this->db               = $db;
-		$this->checker          = $checker;
-		$this->batch_limit      = max( 1, min( 100, $batch_limit ) );
-		$this->webhooks_service = $webhooks_service;
+		$this->db                    = $db;
+		$this->checker               = $checker;
+		$this->batch_limit           = max( 1, min( 100, $batch_limit ) );
+		$this->webhooks_service      = $webhooks_service;
+		$this->max_links_per_run     = self::DEFAULT_MAX_LINKS_PER_RUN;
+		$this->max_execution_seconds = self::DEFAULT_MAX_EXECUTION_SECONDS;
+	}
+
+	/**
+	 * Set safeguard ceiling on total links processed per execution sweep.
+	 *
+	 * @param int $max Maximum links (clamped to minimum 1).
+	 * @return self
+	 * @since 1.7.1
+	 */
+	public function set_max_links_per_run( int $max ): self {
+		$this->max_links_per_run = max( 1, $max );
+		return $this;
+	}
+
+	/**
+	 * Set safeguard budget on execution time in seconds.
+	 *
+	 * @param int $seconds Maximum seconds (0 to disable).
+	 * @return self
+	 * @since 1.7.1
+	 */
+	public function set_max_execution_seconds( int $seconds ): self {
+		$this->max_execution_seconds = max( 0, $seconds );
+		return $this;
 	}
 
 	/**
@@ -97,26 +160,25 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 			return $this->execute_targeted( $link_id );
 		}
 
-		// Rotating sweep: never-checked links first (checked_at IS NULL), then oldest checked_at, with deterministic tie-breaker.
-		$links = $this->db->get_results(
-			'SELECT u.id, u.destination_url
-			FROM urls u
-			LEFT JOIN link_health AS link_health ON link_health.link_id = u.id
-			WHERE u.status = :active_status
-			ORDER BY
-				CASE WHEN link_health.checked_at IS NULL THEN 0 ELSE 1 END ASC,
-				link_health.checked_at ASC,
-				u.updated_at ASC,
-				u.id ASC
-			LIMIT ' . $this->batch_limit,
-			array(
-				'active_status' => 'active',
-			)
-		);
+		return $this->execute_sweep( $context );
+	}
 
-		if ( empty( $links ) || ! is_array( $links ) ) {
-			return ExecutionResult::success( 'No active links available for health check.' );
-		}
+	/**
+	 * Execute scheduled rotating health check sweep across active links.
+	 *
+	 * Iterates through active links in bounded batches until all active links have
+	 * been checked or an execution safeguard (max links or time budget) is reached.
+	 *
+	 * Rotating ordering prioritizes never-checked links first (checked_at IS NULL),
+	 * followed by oldest checked_at, with deterministic tie-breaking.
+	 *
+	 * @param ExecutionContext $context Job execution context.
+	 * @return ExecutionResult Execution outcome.
+	 * @since 1.7.1
+	 */
+	private function execute_sweep( ExecutionContext $context ): ExecutionResult {
+		$sweep_start      = Date::now();
+		$start_time_float = microtime( true );
 
 		$category_counts = array(
 			'healthy'       => 0,
@@ -130,66 +192,222 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 			'ssrf_blocked'  => 0,
 		);
 
-		$persistence_failures = 0;
 		$checked_count        = 0;
+		$persistence_failures = 0;
+		$batch_count          = 0;
+		$processed_ids        = array();
+		$unupdated_ids        = array();
+		$sweep_completed      = true;
+		$safeguard_reason     = null;
 
-		foreach ( $links as $link ) {
-			$link_id  = (string) ( $link['id'] ?? '' );
-			$dest_url = trim( (string) ( $link['destination_url'] ?? '' ) );
-
-			if ( '' === $link_id ) {
-				continue;
+		while ( true ) {
+			// Check execution safeguards before querying next batch.
+			if ( $checked_count >= $this->max_links_per_run ) {
+				$sweep_completed  = false;
+				$safeguard_reason = 'max_links_reached';
+				break;
 			}
 
-			$result = $this->checker->check( $dest_url );
-			$status = (string) $result['status'];
-
-			$skip_reason = null;
-			$outcome     = $this->record_health_snapshot_and_dispatch( $link, $dest_url, $result, $skip_reason );
-
-			if ( 'failed' === $outcome ) {
-				++$persistence_failures;
-				continue;
+			if ( $this->max_execution_seconds > 0 && ( microtime( true ) - $start_time_float ) >= $this->max_execution_seconds ) {
+				$sweep_completed  = false;
+				$safeguard_reason = 'time_budget_exhausted';
+				break;
 			}
 
-			if ( 'skipped' === $outcome ) {
-				continue;
+			$remaining_allowed = $this->max_links_per_run - $checked_count;
+			$fetch_limit       = min( $this->batch_limit, $remaining_allowed );
+
+			// Fetch next batch of active links needing health check.
+			// Any link successfully updated in this sweep has checked_at >= sweep_start.
+			$sql = 'SELECT u.id, u.destination_url
+				FROM urls u
+				LEFT JOIN link_health AS link_health ON link_health.link_id = u.id
+				WHERE u.status = :active_status
+					AND (link_health.checked_at IS NULL OR link_health.checked_at < :sweep_start)';
+
+			$params = array(
+				'active_status' => 'active',
+				'sweep_start'   => $sweep_start,
+			);
+
+			if ( ! empty( $unupdated_ids ) ) {
+				$placeholders = array();
+				$idx          = 0;
+				foreach ( array_keys( $unupdated_ids ) as $unupdated_id ) {
+					$key            = 'unup_' . $idx++;
+					$placeholders[] = ':' . $key;
+					$params[ $key ] = $unupdated_id;
+				}
+				$sql .= ' AND u.id NOT IN (' . implode( ', ', $placeholders ) . ')';
 			}
 
-			++$checked_count;
-			if ( isset( $category_counts[ $status ] ) ) {
-				++$category_counts[ $status ];
-			} else {
-				++$category_counts['unreachable'];
+			$sql .= ' ORDER BY
+				CASE WHEN link_health.checked_at IS NULL THEN 0 ELSE 1 END ASC,
+				link_health.checked_at ASC,
+				u.updated_at ASC,
+				u.id ASC
+				LIMIT ' . (int) $fetch_limit;
+
+			$links = $this->db->get_results( $sql, $params );
+
+			if ( empty( $links ) || ! is_array( $links ) ) {
+				// No more links match criteria; complete sweep has finished.
+				break;
+			}
+
+			++$batch_count;
+			$batch_processed_new = false;
+
+			foreach ( $links as $link ) {
+				$link_id  = (string) ( $link['id'] ?? '' );
+				$dest_url = trim( (string) ( $link['destination_url'] ?? '' ) );
+
+				if ( '' === $link_id ) {
+					continue;
+				}
+
+				if ( isset( $processed_ids[ $link_id ] ) ) {
+					continue;
+				}
+
+				// Check time safeguard before processing link.
+				if ( $this->max_execution_seconds > 0 && ( microtime( true ) - $start_time_float ) >= $this->max_execution_seconds ) {
+					$sweep_completed  = false;
+					$safeguard_reason = 'time_budget_exhausted';
+					break 2;
+				}
+
+				// Check max links safeguard before processing link.
+				if ( $checked_count >= $this->max_links_per_run ) {
+					$sweep_completed  = false;
+					$safeguard_reason = 'max_links_reached';
+					break 2;
+				}
+
+				$processed_ids[ $link_id ] = true;
+				$batch_processed_new       = true;
+
+				$result = $this->checker->check( $dest_url );
+				$status = (string) $result['status'];
+
+				$skip_reason = null;
+				$outcome     = $this->record_health_snapshot_and_dispatch( $link, $dest_url, $result, $skip_reason );
+
+				if ( 'failed' === $outcome ) {
+					++$persistence_failures;
+					$unupdated_ids[ $link_id ] = true;
+					continue;
+				}
+
+				if ( 'skipped' === $outcome ) {
+					$unupdated_ids[ $link_id ] = true;
+					continue;
+				}
+
+				++$checked_count;
+				if ( isset( $category_counts[ $status ] ) ) {
+					++$category_counts[ $status ];
+				} else {
+					++$category_counts['unreachable'];
+				}
+			}
+
+			if ( ! $batch_processed_new ) {
+				break;
 			}
 		}
 
-		$total_links = count( $links );
-		$breakdown   = $this->format_category_breakdown( $category_counts );
+		$total_attempted = count( $processed_ids );
 
-		if ( $persistence_failures === $total_links && $total_links > 0 ) {
-			return ExecutionResult::failure(
-				sprintf(
-					/* translators: %d: count of links */
-					__( 'Failed to record health snapshots for all %d checked links.', 'peakurl' ),
-					$total_links
+		// If a safeguard was hit, verify whether any active links actually remain unchecked.
+		if ( ! $sweep_completed || null !== $safeguard_reason ) {
+			$remaining_sql = 'SELECT u.id
+				FROM urls u
+				LEFT JOIN link_health AS link_health ON link_health.link_id = u.id
+				WHERE u.status = :active_status
+					AND (link_health.checked_at IS NULL OR link_health.checked_at < :sweep_start)';
+
+			$rem_params = array(
+				'active_status' => 'active',
+				'sweep_start'   => $sweep_start,
+			);
+
+			if ( ! empty( $unupdated_ids ) ) {
+				$placeholders = array();
+				$idx          = 0;
+				foreach ( array_keys( $unupdated_ids ) as $unupdated_id ) {
+					$key                = 'rem_unup_' . $idx++;
+					$placeholders[]     = ':' . $key;
+					$rem_params[ $key ] = $unupdated_id;
+				}
+				$remaining_sql .= ' AND u.id NOT IN (' . implode( ', ', $placeholders ) . ')';
+			}
+
+			$remaining_sql  .= ' LIMIT 1';
+			$remaining_rows  = $this->db->get_results( $remaining_sql, $rem_params );
+			$has_remaining   = ! empty( $remaining_rows ) && is_array( $remaining_rows );
+			$sweep_completed = ! $has_remaining;
+		}
+
+		if ( 0 === $checked_count && 0 === $persistence_failures ) {
+			return ExecutionResult::success(
+				__( 'No active links available for health check.', 'peakurl' ),
+				array(
+					'checked'             => 0,
+					'completed'           => true,
+					'sweepCompleted'      => true,
+					'batches'             => 0,
+					'persistenceFailures' => 0,
+					'healthy'             => 0,
+					'slow'                => 0,
+					'httpError'           => 0,
+					'dnsError'            => 0,
+					'tlsError'            => 0,
+					'timeout'             => 0,
+					'unreachable'         => 0,
+					'redirectLoop'        => 0,
+					'blockedSsrf'         => 0,
 				)
 			);
 		}
 
-		$message = 1 === $total_links
-			? sprintf(
+		if ( $persistence_failures === $total_attempted && $total_attempted > 0 && 0 === $checked_count ) {
+			return ExecutionResult::failure(
+				sprintf(
+					/* translators: %d: count of links */
+					__( 'Failed to record health snapshots for all %d checked links.', 'peakurl' ),
+					$total_attempted
+				)
+			);
+		}
+
+		$breakdown = $this->format_category_breakdown( $category_counts );
+
+		if ( $sweep_completed ) {
+			$message = sprintf(
 				/* translators: 1: total links, 2: category breakdown string. */
-				__( 'Health check completed for %1$d link: %2$s.', 'peakurl' ),
-				$total_links,
-				$breakdown
-			)
-			: sprintf(
-				/* translators: 1: total links, 2: category breakdown string. */
-				__( 'Health check completed for %1$d links: %2$s.', 'peakurl' ),
-				$total_links,
+				_n(
+					'Daily link health sweep completed for %1$d link: %2$s.',
+					'Daily link health sweep completed for %1$d links: %2$s.',
+					$checked_count,
+					'peakurl'
+				),
+				$checked_count,
 				$breakdown
 			);
+		} else {
+			$message = sprintf(
+				/* translators: 1: checked count, 2: category breakdown string. */
+				_n(
+					'Daily link health check processed %1$d link (sweep paused by execution safeguard): %2$s.',
+					'Daily link health check processed %1$d links (sweep paused by execution safeguard): %2$s.',
+					$checked_count,
+					'peakurl'
+				),
+				$checked_count,
+				$breakdown
+			);
+		}
 
 		if ( $persistence_failures > 0 ) {
 			$message .= ' ' . sprintf(
@@ -202,7 +420,10 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 		return ExecutionResult::success(
 			$message,
 			array(
-				'checked'             => $total_links,
+				'checked'             => $checked_count,
+				'completed'           => $sweep_completed,
+				'sweepCompleted'      => $sweep_completed,
+				'batches'             => $batch_count,
 				'persistenceFailures' => $persistence_failures,
 				'healthy'             => $category_counts['healthy'],
 				'slow'                => $category_counts['slow'],

@@ -656,111 +656,126 @@ class LinkHealthWebhooksIntegrationTest extends TestCase {
 	}
 
 	public function test_scheduled_rotating_check_stale_results_do_not_increment_persistence_failures(): void {
-		$now     = Date::now();
-		$hook_id = Str::random_id( 16 );
-		$this->db->insert(
-			'webhooks',
-			array(
-				'id'         => $hook_id,
-				'user_id'    => 1,
-				'label'      => 'Stale Sweep Hook',
-				'url'        => 'https://example.com/stale-sweep',
-				'secret'     => 'secret',
-				'events'     => json_encode( array( 'link.health.checked', 'link.health.changed', 'link.health.broken' ) ),
-				'is_active'  => 1,
-				'created_at' => $now,
-				'updated_at' => $now,
-			)
-		);
+		$table_urls = $this->connection->table_name( 'urls' );
+		$pdo        = $this->connection->get_connection();
+		$paused_ids = $pdo->query( "SELECT id FROM {$table_urls} WHERE status = 'active'" )->fetchAll( \PDO::FETCH_COLUMN );
+		if ( ! empty( $paused_ids ) ) {
+			$pdo->exec( "UPDATE {$table_urls} SET status = 'paused' WHERE status = 'active'" );
+		}
 
-		// Link 1: Will have destination changed in-flight
-		$link1_id = Str::random_id( 16 );
-		$code1    = 'swp1_' . substr( Str::random_id( 6 ), 0, 6 );
-		$this->db->insert(
-			'urls',
-			array(
-				'id'              => $link1_id,
-				'user_id'         => 1,
-				'short_code'      => $code1,
-				'alias'           => $code1,
-				'destination_url' => 'https://example.com/orig-1',
-				'title'           => 'Sweep 1',
-				'status'          => 'active',
-				'created_at'      => $now,
-				'updated_at'      => $now,
-			)
-		);
-
-		// Link 2: Will be deactivated in-flight
-		$link2_id = Str::random_id( 16 );
-		$code2    = 'swp2_' . substr( Str::random_id( 6 ), 0, 6 );
-		$this->db->insert(
-			'urls',
-			array(
-				'id'              => $link2_id,
-				'user_id'         => 1,
-				'short_code'      => $code2,
-				'alias'           => $code2,
-				'destination_url' => 'https://example.com/orig-2',
-				'title'           => 'Sweep 2',
-				'status'          => 'active',
-				'created_at'      => $now,
-				'updated_at'      => $now,
-			)
-		);
-
-		// Link 3: Normal active link
-		$link3_id = Str::random_id( 16 );
-		$code3    = 'swp3_' . substr( Str::random_id( 6 ), 0, 6 );
-		$this->db->insert(
-			'urls',
-			array(
-				'id'              => $link3_id,
-				'user_id'         => 1,
-				'short_code'      => $code3,
-				'alias'           => $code3,
-				'destination_url' => 'https://example.com/orig-3',
-				'title'           => 'Sweep 3',
-				'status'          => 'active',
-				'created_at'      => $now,
-				'updated_at'      => $now,
-			)
-		);
-
-		$mock_checker = $this->createMock( Checker::class );
-		$mock_checker->method( 'check' )
-			->willReturnCallback(
-				function ( string $url ) use ( $link1_id, $link2_id ) {
-					if ( 'https://example.com/orig-1' === $url ) {
-						$this->db->update( 'urls', array( 'destination_url' => 'https://example.com/new-dest-1' ), array( 'id' => $link1_id ) );
-					}
-					if ( 'https://example.com/orig-2' === $url ) {
-						$this->db->update( 'urls', array( 'status' => 'inactive' ), array( 'id' => $link2_id ) );
-					}
-					return array(
-						'status'           => 'healthy',
-						'response_code'    => 200,
-						'response_time_ms' => 150,
-						'error_message'    => null,
-						'redirect_count'   => 0,
-					);
-				}
+		try {
+			$now     = Date::now();
+			$hook_id = Str::random_id( 16 );
+			$this->db->insert(
+				'webhooks',
+				array(
+					'id'         => $hook_id,
+					'user_id'    => 1,
+					'label'      => 'Stale Sweep Hook',
+					'url'        => 'https://example.com/stale-sweep',
+					'secret'     => 'secret',
+					'events'     => json_encode( array( 'link.health.checked', 'link.health.changed', 'link.health.broken' ) ),
+					'is_active'  => 1,
+					'created_at' => $now,
+					'updated_at' => $now,
+				)
 			);
 
-		$job     = new LinkHealthCheckJob( $this->db, $mock_checker, 10, $this->webhooks_service );
-		$context = new \PeakURL\Core\Scheduler\ExecutionContext( 'peakurl_link_health_check', 'run_stale_test', 1, false, $now );
-		$result  = $job->execute( $context );
+			// Link 1: Will have destination changed in-flight
+			$link1_id = Str::random_id( 16 );
+			$code1    = 'swp1_' . substr( Str::random_id( 6 ), 0, 6 );
+			$this->db->insert(
+				'urls',
+				array(
+					'id'              => $link1_id,
+					'user_id'         => 1,
+					'short_code'      => $code1,
+					'alias'           => $code1,
+					'destination_url' => 'https://example.com/orig-1',
+					'title'           => 'Sweep 1',
+					'status'          => 'active',
+					'created_at'      => $now,
+					'updated_at'      => $now,
+				)
+			);
 
-		$this->assertTrue( $result->is_success() );
-		$meta = $result->get_metadata();
-		$this->assertSame( 0, $meta['persistenceFailures'], 'Stale skips must not increment persistenceFailures.' );
-		$this->assertSame( 1, $meta['healthy'] );
+			// Link 2: Will be deactivated in-flight
+			$link2_id = Str::random_id( 16 );
+			$code2    = 'swp2_' . substr( Str::random_id( 6 ), 0, 6 );
+			$this->db->insert(
+				'urls',
+				array(
+					'id'              => $link2_id,
+					'user_id'         => 1,
+					'short_code'      => $code2,
+					'alias'           => $code2,
+					'destination_url' => 'https://example.com/orig-2',
+					'title'           => 'Sweep 2',
+					'status'          => 'active',
+					'created_at'      => $now,
+					'updated_at'      => $now,
+				)
+			);
 
-		// Only Link 3 should have emitted events; 0 events for Link 1 and Link 2.
-		$delivs = $this->db->get_results( 'SELECT * FROM webhook_deliveries WHERE webhook_id = :id', array( 'id' => $hook_id ) );
-		$this->assertCount( 1, $delivs );
-		$payload = json_decode( (string) $delivs[0]['payload'], true );
-		$this->assertSame( $link3_id, $payload['data']['id'] );
+			// Link 3: Normal active link
+			$link3_id = Str::random_id( 16 );
+			$code3    = 'swp3_' . substr( Str::random_id( 6 ), 0, 6 );
+			$this->db->insert(
+				'urls',
+				array(
+					'id'              => $link3_id,
+					'user_id'         => 1,
+					'short_code'      => $code3,
+					'alias'           => $code3,
+					'destination_url' => 'https://example.com/orig-3',
+					'title'           => 'Sweep 3',
+					'status'          => 'active',
+					'created_at'      => $now,
+					'updated_at'      => $now,
+				)
+			);
+
+			$mock_checker = $this->createMock( Checker::class );
+			$mock_checker->method( 'check' )
+				->willReturnCallback(
+					function ( string $url ) use ( $link1_id, $link2_id ) {
+						if ( 'https://example.com/orig-1' === $url ) {
+							$this->db->update( 'urls', array( 'destination_url' => 'https://example.com/new-dest-1' ), array( 'id' => $link1_id ) );
+						}
+						if ( 'https://example.com/orig-2' === $url ) {
+							$this->db->update( 'urls', array( 'status' => 'inactive' ), array( 'id' => $link2_id ) );
+						}
+						return array(
+							'status'           => 'healthy',
+							'response_code'    => 200,
+							'response_time_ms' => 150,
+							'error_message'    => null,
+							'redirect_count'   => 0,
+						);
+					}
+				);
+
+			$job     = new LinkHealthCheckJob( $this->db, $mock_checker, 10, $this->webhooks_service );
+			$context = new \PeakURL\Core\Scheduler\ExecutionContext( 'peakurl_link_health_check', 'run_stale_test', 1, false, $now );
+			$result  = $job->execute( $context );
+
+			$this->assertTrue( $result->is_success() );
+			$meta = $result->get_metadata();
+			$this->assertSame( 0, $meta['persistenceFailures'], 'Stale skips must not increment persistenceFailures.' );
+			$this->assertSame( 1, $meta['healthy'] );
+
+			// Only Link 3 should have emitted events; 0 events for Link 1 and Link 2.
+			$delivs = $this->db->get_results( 'SELECT * FROM webhook_deliveries WHERE webhook_id = :id', array( 'id' => $hook_id ) );
+			$this->assertCount( 1, $delivs );
+			$payload = json_decode( (string) $delivs[0]['payload'], true );
+			$this->assertSame( $link3_id, $payload['data']['id'] );
+		} finally {
+			if ( ! empty( $paused_ids ) ) {
+				$placeholders = implode( ',', array_fill( 0, count( $paused_ids ), '?' ) );
+				$stmt         = $pdo->prepare( "UPDATE {$table_urls} SET status = 'active' WHERE id IN ({$placeholders})" );
+				$stmt->execute( $paused_ids );
+			}
+		}
 	}
 
 	public function test_failed_persistence_produces_no_webhook_events(): void {

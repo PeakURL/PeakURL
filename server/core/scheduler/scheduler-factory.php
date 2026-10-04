@@ -170,9 +170,12 @@ class SchedulerFactory {
 				new LinkHealthCheckJob(
 					$db,
 					$health_checker,
-					25,
+					LinkHealthCheckJob::DEFAULT_BATCH_SIZE,
 					$webhooks_service
-				)
+				),
+				null,
+				JobDefinition::OVERLAP_PREVENT,
+				1800
 			)
 		);
 

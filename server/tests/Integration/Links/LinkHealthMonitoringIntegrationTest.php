@@ -344,49 +344,239 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 				1500
 			);
 
-			// RUN 1 with batch_limit = 2.
-			// Priority: never checked (Link A) > oldest checked (Link B).
+			// RUN 1 with batch_limit = 2 across 4 links.
+			// The daily sweep continues across bounded batches until all active links are evaluated.
+			// Rotating priority: never checked (Link A) > oldest checked (Link B) > recent (Link C) > newest (Link D).
 			$job_run_1 = new LinkHealthCheckJob( $this->db, $mock_checker, 2, $this->create_webhooks_service() );
 			$context_1 = new ExecutionContext( 'peakurl_link_health_check', 'run_batch_1', 1, false, $now_dt );
 			$result_1  = $job_run_1->execute( $context_1 );
 
 			$this->assertTrue( $result_1->is_success() );
-			$this->assertSame( 2, count( $checked_urls ) );
-			$this->assertContains( 'https://93.184.216.34/1', $checked_urls ); // Link A
-			$this->assertContains( 'https://93.184.216.34/2', $checked_urls ); // Link B
+			$this->assertSame( 4, count( $checked_urls ) );
+			$this->assertSame(
+				array(
+					'https://93.184.216.34/1', // Link A (never checked)
+					'https://93.184.216.34/2', // Link B (oldest checked: 3h ago)
+					'https://93.184.216.34/3', // Link C (recent checked: 1h ago)
+					'https://93.184.216.34/4', // Link D (newest checked: 5m ago)
+				),
+				$checked_urls
+			);
+
+			$meta_1 = $result_1->get_metadata();
+			$this->assertSame( 4, $meta_1['checked'] );
+			$this->assertTrue( $meta_1['completed'] );
+			$this->assertTrue( $meta_1['sweepCompleted'] );
+			$this->assertSame( 2, $meta_1['batches'] );
 
 			// Verify Link A now has a health record.
 			$never_health_after_run1 = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_never ) );
 			$this->assertNotNull( $never_health_after_run1 );
 
-			// Verify Link B received an updated checked_at.
+			// Verify all links received updated checked_at.
 			$oldest_health_after_run1 = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_oldest ) );
 			$this->assertNotNull( $oldest_health_after_run1 );
 			$this->assertGreaterThan( $oldest_dt, $oldest_health_after_run1['checked_at'] );
 
-			// Verify Link C and Link D were NOT checked in run 1.
 			$recent_health_after_run1 = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_recent ) );
-			$this->assertSame( $recent_dt, $recent_health_after_run1['checked_at'] );
-			$newest_health_after_run1 = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_newest ) );
-			$this->assertSame( $newest_dt, $newest_health_after_run1['checked_at'] );
+			$this->assertGreaterThan( $recent_dt, $recent_health_after_run1['checked_at'] );
 
-			// RUN 2 with batch_limit = 2.
-			// Priority rotates to next oldest: Link C (1h ago) > Link D (5m ago).
+			$newest_health_after_run1 = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_newest ) );
+			$this->assertGreaterThan( $newest_dt, $newest_health_after_run1['checked_at'] );
+		} finally {
+			if ( ! empty( $paused_ids ) ) {
+				$placeholders = implode( ',', array_fill( 0, count( $paused_ids ), '?' ) );
+				$stmt         = $this->pdo->prepare( "UPDATE {$this->table_prefix}urls SET status = 'active' WHERE id IN ({$placeholders})" );
+				$stmt->execute( $paused_ids );
+			}
+		}
+	}
+
+	public function test_scheduled_job_respects_safeguard_limit_and_resumes_from_oldest_unchecked(): void {
+		$time_now    = time();
+		$now_dt      = gmdate( 'Y-m-d H:i:s', $time_now );
+		$oldest_dt   = gmdate( 'Y-m-d H:i:s', $time_now - 10800 ); // 3 hours ago.
+		$recent_dt   = gmdate( 'Y-m-d H:i:s', $time_now - 3600 );  // 1 hour ago.
+		$newest_dt   = gmdate( 'Y-m-d H:i:s', $time_now - 300 );   // 5 minutes ago.
+		$fixed_order = '2026-01-01 00:00:00';
+
+		$id_never  = $this->test_prefix . 'sg_never';
+		$id_oldest = $this->test_prefix . 'sg_oldest';
+		$id_recent = $this->test_prefix . 'sg_recent';
+		$id_newest = $this->test_prefix . 'sg_newest';
+
+		$paused_ids = $this->pdo->query( "SELECT id FROM {$this->table_prefix}urls WHERE status = 'active'" )->fetchAll( \PDO::FETCH_COLUMN );
+		if ( ! empty( $paused_ids ) ) {
+			$this->pdo->exec( "UPDATE {$this->table_prefix}urls SET status = 'paused' WHERE status = 'active'" );
+		}
+
+		try {
+			$this->pdo->exec(
+				"INSERT INTO {$this->table_prefix}urls (id, user_id, short_code, alias, title, destination_url, status, created_at, updated_at)
+				VALUES
+				('{$id_never}', 1, '{$id_never}', '{$id_never}', 'Never Checked', 'https://93.184.216.34/sg1', 'active', '{$fixed_order}', '{$fixed_order}'),
+				('{$id_oldest}', 1, '{$id_oldest}', '{$id_oldest}', 'Oldest Checked', 'https://93.184.216.34/sg2', 'active', '{$fixed_order}', '{$fixed_order}'),
+				('{$id_recent}', 1, '{$id_recent}', '{$id_recent}', 'Recent Checked', 'https://93.184.216.34/sg3', 'active', '{$fixed_order}', '{$fixed_order}'),
+				('{$id_newest}', 1, '{$id_newest}', '{$id_newest}', 'Newest Checked', 'https://93.184.216.34/sg4', 'active', '{$fixed_order}', '{$fixed_order}')"
+			);
+
+			$this->pdo->exec(
+				"INSERT INTO {$this->table_prefix}link_health (link_id, status, checked_at, response_code, response_time_ms, error_message, redirect_count, created_at, updated_at)
+				VALUES ('{$id_oldest}', 'healthy', '{$oldest_dt}', 200, 100, NULL, 0, '{$oldest_dt}', '{$oldest_dt}')"
+			);
+			$this->pdo->exec(
+				"INSERT INTO {$this->table_prefix}link_health (link_id, status, checked_at, response_code, response_time_ms, error_message, redirect_count, created_at, updated_at)
+				VALUES ('{$id_recent}', 'healthy', '{$recent_dt}', 200, 100, NULL, 0, '{$recent_dt}', '{$recent_dt}')"
+			);
+			$this->pdo->exec(
+				"INSERT INTO {$this->table_prefix}link_health (link_id, status, checked_at, response_code, response_time_ms, error_message, redirect_count, created_at, updated_at)
+				VALUES ('{$id_newest}', 'healthy', '{$newest_dt}', 200, 100, NULL, 0, '{$newest_dt}', '{$newest_dt}')"
+			);
+
 			$checked_urls = array();
-			$context_2    = new ExecutionContext( 'peakurl_link_health_check', 'run_batch_2', 1, false, $now_dt );
-			$result_2     = $job_run_1->execute( $context_2 );
+			$mock_checker = $this->create_checker(
+				static function ( string $url ) use ( &$checked_urls ): array {
+					$checked_urls[] = $url;
+					return array(
+						'response_code' => 200,
+						'duration_ms'   => 50,
+						'error_code'    => 0,
+						'error_message' => '',
+						'redirect_url'  => null,
+					);
+				}
+			);
+
+			// RUN 1: batch_limit = 2, max_links_per_run = 2 (safeguard cap).
+			// Should process Link A and Link B, then stop cleanly at safeguard.
+			$job_sg = new LinkHealthCheckJob( $this->db, $mock_checker, 2, $this->create_webhooks_service() );
+			$job_sg->set_max_links_per_run( 2 );
+			$context_1 = new ExecutionContext( 'peakurl_link_health_check', 'run_sg_1', 1, false, $now_dt );
+			$result_1  = $job_sg->execute( $context_1 );
+
+			$this->assertTrue( $result_1->is_success() );
+			$this->assertSame( 2, count( $checked_urls ) );
+			$this->assertContains( 'https://93.184.216.34/sg1', $checked_urls ); // Link A
+			$this->assertContains( 'https://93.184.216.34/sg2', $checked_urls ); // Link B
+
+			$meta_1 = $result_1->get_metadata();
+			$this->assertSame( 2, $meta_1['checked'] );
+			$this->assertFalse( $meta_1['completed'] );
+			$this->assertFalse( $meta_1['sweepCompleted'] );
+
+			// Link C and Link D remain untouched with older checked_at timestamps.
+			$recent_health_before_run2 = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_recent ) );
+			$this->assertSame( $recent_dt, $recent_health_before_run2['checked_at'] );
+
+			// RUN 2: Resumes from the oldest unchecked links (Link C and Link D).
+			// Must NOT re-check Link A or Link B.
+			$checked_urls = array();
+			$context_2    = new ExecutionContext( 'peakurl_link_health_check', 'run_sg_2', 1, false, $now_dt );
+			$result_2     = $job_sg->execute( $context_2 );
 
 			$this->assertTrue( $result_2->is_success() );
 			$this->assertSame( 2, count( $checked_urls ) );
-			$this->assertContains( 'https://93.184.216.34/3', $checked_urls ); // Link C
-			$this->assertContains( 'https://93.184.216.34/4', $checked_urls ); // Link D
+			$this->assertSame(
+				array(
+					'https://93.184.216.34/sg3', // Link C (1h ago)
+					'https://93.184.216.34/sg4', // Link D (5m ago)
+				),
+				$checked_urls
+			);
 
-			// Verify Link C and Link D now have updated checked_at.
-			$recent_health_after_run2 = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_recent ) );
-			$this->assertGreaterThan( $recent_dt, $recent_health_after_run2['checked_at'] );
-			$newest_health_after_run2 = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_newest ) );
-			$this->assertGreaterThan( $newest_dt, $newest_health_after_run2['checked_at'] );
+			$meta_2 = $result_2->get_metadata();
+			$this->assertSame( 2, $meta_2['checked'] );
+			// All remaining active links in the environment are now checked.
+			$this->assertTrue( $meta_2['completed'] );
+			$this->assertTrue( $meta_2['sweepCompleted'] );
 		} finally {
+			if ( ! empty( $paused_ids ) ) {
+				$placeholders = implode( ',', array_fill( 0, count( $paused_ids ), '?' ) );
+				$stmt         = $this->pdo->prepare( "UPDATE {$this->table_prefix}urls SET status = 'active' WHERE id IN ({$placeholders})" );
+				$stmt->execute( $paused_ids );
+			}
+		}
+	}
+
+	public function test_scheduled_job_performs_complete_sweep_across_large_collection(): void {
+		$time_now    = time();
+		$now_dt      = gmdate( 'Y-m-d H:i:s', $time_now );
+		$old_dt      = gmdate( 'Y-m-d H:i:s', $time_now - 86400 * 2 );
+		$fixed_order = '2026-01-01 00:00:00';
+
+		$paused_ids = $this->pdo->query( "SELECT id FROM {$this->table_prefix}urls WHERE status = 'active'" )->fetchAll( \PDO::FETCH_COLUMN );
+		if ( ! empty( $paused_ids ) ) {
+			$this->pdo->exec( "UPDATE {$this->table_prefix}urls SET status = 'paused' WHERE status = 'active'" );
+		}
+
+		$created_ids = array();
+
+		try {
+			// Seed 12 links: 6 never checked, 6 previously checked.
+			for ( $i = 0; $i < 12; $i++ ) {
+				$id            = sprintf( '%slg_%02d', $this->test_prefix, $i );
+				$created_ids[] = $id;
+				$dest          = sprintf( 'https://93.184.216.34/large/%02d', $i );
+
+				$this->pdo->exec(
+					"INSERT INTO {$this->table_prefix}urls (id, user_id, short_code, alias, title, destination_url, status, created_at, updated_at)
+					VALUES ('{$id}', 1, '{$id}', '{$id}', 'Large {$i}', '{$dest}', 'active', '{$fixed_order}', '{$fixed_order}')"
+				);
+
+				if ( $i >= 6 ) {
+					// Seed previous health check for second half.
+					$this->pdo->exec(
+						"INSERT INTO {$this->table_prefix}link_health (link_id, status, checked_at, response_code, response_time_ms, error_message, redirect_count, created_at, updated_at)
+						VALUES ('{$id}', 'healthy', '{$old_dt}', 200, 100, NULL, 0, '{$old_dt}', '{$old_dt}')"
+					);
+				}
+			}
+
+			$checked_urls = array();
+			$mock_checker = $this->create_checker(
+				static function ( string $url ) use ( &$checked_urls ): array {
+					$checked_urls[] = $url;
+					return array(
+						'response_code' => 200,
+						'duration_ms'   => 40,
+						'error_code'    => 0,
+						'error_message' => '',
+						'redirect_url'  => null,
+					);
+				}
+			);
+
+			// Batch size 4 across 12 links -> exactly 3 batches.
+			$job     = new LinkHealthCheckJob( $this->db, $mock_checker, 4, $this->create_webhooks_service() );
+			$context = new ExecutionContext( 'peakurl_link_health_check', 'run_large_sweep', 1, false, $now_dt );
+			$result  = $job->execute( $context );
+
+			$this->assertTrue( $result->is_success() );
+			$this->assertSame( 12, count( $checked_urls ) );
+
+			$meta = $result->get_metadata();
+			$this->assertSame( 12, $meta['checked'] );
+			$this->assertTrue( $meta['completed'] );
+			$this->assertTrue( $meta['sweepCompleted'] );
+			$this->assertSame( 3, $meta['batches'] );
+			$this->assertSame( 12, $meta['healthy'] );
+			$this->assertSame( 0, $meta['persistenceFailures'] );
+
+			// Verify all 12 links have health records with checked_at >= sweep time.
+			foreach ( $created_ids as $id ) {
+				$health = $this->db->get_row_by( 'link_health', array( 'link_id' => $id ) );
+				$this->assertNotNull( $health );
+				$this->assertGreaterThanOrEqual( $old_dt, $health['checked_at'] );
+			}
+		} finally {
+			if ( ! empty( $created_ids ) ) {
+				$placeholders = implode( ',', array_fill( 0, count( $created_ids ), '?' ) );
+				$stmt         = $this->pdo->prepare( "DELETE FROM {$this->table_prefix}urls WHERE id IN ({$placeholders})" );
+				$stmt->execute( $created_ids );
+				$stmt_h = $this->pdo->prepare( "DELETE FROM {$this->table_prefix}link_health WHERE link_id IN ({$placeholders})" );
+				$stmt_h->execute( $created_ids );
+			}
+
 			if ( ! empty( $paused_ids ) ) {
 				$placeholders = implode( ',', array_fill( 0, count( $paused_ids ), '?' ) );
 				$stmt         = $this->pdo->prepare( "UPDATE {$this->table_prefix}urls SET status = 'active' WHERE id IN ({$placeholders})" );

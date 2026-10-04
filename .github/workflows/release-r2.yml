@@ -236,27 +236,31 @@ jobs:
           trap 'rm -f "$NOTES_FILE"' EXIT
 
           PREVIOUS_TAG="$(git tag --sort=version:refname --list 'v*' | awk -v current="$TAG_NAME" '$0 == current { print previous; exit } { previous = $0 }')"
-          FULL_CHANGELOG_URL="https://github.com/PeakURL/PeakURL/commits/${TAG_NAME}"
-          RELEASE_NOTES_URL="https://peakurl.org/release-notes#${TAG_NAME}"
+          FULL_CHANGELOG_URL="https://go.peakurl.org/commits-${TAG_NAME}"
+          CHANGELOG_TEXT="PeakURL ${TAG_NAME} Initial Commits"
+          RELEASE_NOTES_URL="https://go.peakurl.org/release-notes-${TAG_NAME}"
 
           if [ -n "$PREVIOUS_TAG" ]; then
-            FULL_CHANGELOG_URL="https://github.com/PeakURL/PeakURL/compare/${PREVIOUS_TAG}...${TAG_NAME}"
+            FULL_CHANGELOG_URL="https://go.peakurl.org/compare-${PREVIOUS_TAG}...${TAG_NAME}"
+            CHANGELOG_TEXT="Compare ${PREVIOUS_TAG} vs ${TAG_NAME} on GitHub"
           fi
 
           cat > "$NOTES_FILE" <<EOF
+          For complete release highlights and details, see the [PeakURL ${VERSION} Release Notes](${RELEASE_NOTES_URL}).
+
           ## Install
 
-          - Download the latest release: https://peakurl.org/latest.zip
-          - Read the getting started guide: https://peakurl.org/docs/getting-started
-          - View installation steps: https://peakurl.org/docs/getting-started#installation
+          - [Download latest release package (.zip)](https://go.peakurl.org/latest.zip)
+          - [Download PeakURL ${VERSION} package (.zip)](https://go.peakurl.org/peakurl-${VERSION}.zip)
+          - [Getting Started Guide](https://go.peakurl.org/getting-started)
 
           ## Notes
 
           - This GitHub release includes a versioned release asset for project history and GitHub downloads.
-          - For the latest public install package, use https://peakurl.org/latest.zip.
+          - For the latest public install package, use the [latest release package](https://go.peakurl.org/latest.zip).
 
-          **Release Notes**: ${RELEASE_NOTES_URL}
-          **Full Changelog**: ${FULL_CHANGELOG_URL}
+          **All Release Notes**: [Browse all release notes](https://go.peakurl.org/release-notes) · [Plain text version](https://go.peakurl.org/release-notes.txt)
+          **Full Changelog**: [${CHANGELOG_TEXT}](${FULL_CHANGELOG_URL})
           EOF
 
           if gh release view "$TAG_NAME" --repo PeakURL/PeakURL > /dev/null 2>&1; then

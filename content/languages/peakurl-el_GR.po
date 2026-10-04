@@ -6,10 +6,10 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-10-03 22:20+0000\n"
-"POT-Creation-Date: 2026-10-03 22:20+0000\n"
+"PO-Revision-Date: 2026-10-04 21:15+0000\n"
+"POT-Creation-Date: 2026-10-04 21:15+0000\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"Project-Id-Version: PeakURL 1.7.0\n"
+"Project-Id-Version: PeakURL 1.7.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
@@ -261,12 +261,12 @@ msgstr "Καταργήθηκαν οι ορφανές παραδόσεις webhoo
 msgid "Removed orphaned link health records."
 msgstr "Καταργήθηκαν οι ορφανές εγγραφές κατάστασης συνδέσμων."
 
-#: server/core/application.php:388
+#: server/core/application.php:389
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "Παρουσιάστηκε εσωτερικό σφάλμα διακομιστή. Παρακαλούμε δοκιμάστε ξανά ή επικοινωνήστε με την υποστήριξη εάν το πρόβλημα παραμένει."
 
-#: server/core/application.php:532
-#: server/services/install/screen.php:142
+#: server/core/application.php:533
+#: server/services/install/screen.php:191
 msgid "Request origin is not allowed."
 msgstr "Η προέλευση του αιτήματος δεν επιτρέπεται."
 
@@ -384,7 +384,7 @@ msgstr "Το δοκιμαστικό email στάλθηκε."
 #: server/features/settings/service.php:283
 #: server/features/settings/service.php:301
 #: server/features/settings/service.php:319
-#: server/features/system/service.php:203
+#: server/features/system/service.php:215
 msgid "Admin access is required."
 msgstr "Απαιτείται πρόσβαση διαχειριστή."
 
@@ -684,71 +684,83 @@ msgstr "Το χρονοδιάγραμμα της εργασίας ενημερώ
 msgid "Job schedule reset to recommended defaults."
 msgstr "Το χρονοδιάγραμμα της εργασίας επαναφέρθηκε στις συνιστώμενες προεπιλογές."
 
-#: server/features/system/service.php:317
+#: server/features/system/service.php:329
 msgid "PeakURL is already up to date."
 msgstr "Το PeakURL είναι ήδη ενημερωμένο."
 
-#: server/features/system/service.php:339
+#: server/features/system/service.php:351
 msgid "A newer PeakURL release is available. Install the update instead."
 msgstr "Μια νεότερη έκδοση του PeakURL είναι διαθέσιμη. Εγκαταστήστε την ενημέρωση αντ' αυτού."
 
-#: server/features/system/service.php:346
+#: server/features/system/service.php:358
 msgid "PeakURL cannot reinstall the latest release right now."
 msgstr "Το PeakURL δεν μπορεί να επανεγκαταστήσει την πιο πρόσφατη έκδοση αυτή τη στιγμή."
 
-#: server/features/system/service.php:460
+#: server/features/system/service.php:404
+msgid "PeakURL could not complete the database schema upgrade. Verify that the database user has permission to create and alter tables, check the server logs, and retry."
+msgstr "Το PeakURL δεν μπόρεσε να ολοκληρώσει την αναβάθμιση του σχήματος της βάσης δεδομένων. Βεβαιωθείτε ότι ο χρήστης της βάσης δεδομένων έχει δικαιώματα δημιουργίας και τροποποίησης πινάκων, ελέγξτε τα αρχεία καταγραφής του διακομιστή και προσπαθήστε ξανά."
+
+#: server/features/system/service.php:490
 msgid "PeakURL could not inspect the database schema."
 msgstr "Το PeakURL δεν μπόρεσε να εξετάσει το σχήμα της βάσης δεδομένων."
 
-#: server/features/system/service.php:488
+#: server/features/system/service.php:518
 msgid "PeakURL cannot apply this release."
 msgstr "Το PeakURL δεν μπορεί να εφαρμόσει αυτήν την έκδοση."
 
-#: server/features/system/service.php:499
+#: server/features/system/service.php:529
 msgid "PeakURL could not load the update manifest."
 msgstr "Το PeakURL δεν μπόρεσε να φορτώσει το αρχείο δήλωσης (manifest) ενημέρωσης."
 
-#: server/features/system/service.php:585
-#: server/features/system/service.php:608
-#: server/features/system/service.php:680
-#: server/features/system/service.php:724
-#: server/features/system/service.php:768
-#: server/features/system/service.php:884
+#: server/features/system/service.php:547
+msgid "PeakURL could not complete the database schema upgrade."
+msgstr "Το PeakURL δεν μπόρεσε να ολοκληρώσει την αναβάθμιση του σχήματος της βάσης δεδομένων."
+
+#: server/features/system/service.php:589
+msgid "PeakURL could not complete the release update. Check the server logs and retry."
+msgstr "Το PeakURL δεν μπόρεσε να ολοκληρώσει την ενημέρωση της έκδοσης. Ελέγξτε τα αρχεία καταγραφής του διακομιστή και προσπαθήστε ξανά."
+
+#: server/features/system/service.php:661
+#: server/features/system/service.php:684
+#: server/features/system/service.php:756
+#: server/features/system/service.php:800
+#: server/features/system/service.php:844
+#: server/features/system/service.php:960
 msgid "Scheduler service is not configured."
 msgstr "Η υπηρεσία χρονοπρογραμματιστή δεν έχει ρυθμιστεί."
 
-#: server/features/system/service.php:644
-#: server/features/system/service.php:791
-#: server/features/system/service.php:907
+#: server/features/system/service.php:720
+#: server/features/system/service.php:867
+#: server/features/system/service.php:983
 msgid "Unknown background job identifier: %s"
 msgstr "Άγνωστο αναγνωριστικό εργασίας παρασκηνίου: %s"
 
-#: server/features/system/service.php:688
+#: server/features/system/service.php:764
 msgid "Missing required field: retention_days."
 msgstr "Λείπει το απαιτούμενο πεδίο: retention_days."
 
-#: server/features/system/service.php:696
+#: server/features/system/service.php:772
 msgid "Retention days must be a non-negative integer."
 msgstr "Οι ημέρες διατήρησης πρέπει να είναι μη αρνητικός ακέραιος αριθμός."
 
-#: server/features/system/service.php:782
-#: server/features/system/service.php:898
+#: server/features/system/service.php:858
+#: server/features/system/service.php:974
 msgid "Missing background job identifier."
 msgstr "Λείπει το αναγνωριστικό εργασίας παρασκηνίου."
 
-#: server/features/system/service.php:801
+#: server/features/system/service.php:877
 msgid "Invalid request payload."
 msgstr "Μη έγκυρο ωφέλιμο φορτίο αιτήματος."
 
-#: server/features/system/service.php:813
+#: server/features/system/service.php:889
 msgid "Recurrence interval must be an integer of at least 300 seconds (5 minutes)."
 msgstr "Το διάστημα επανάληψης πρέπει να είναι ακέραιος αριθμός τουλάχιστον 300 δευτερολέπτων (5 λεπτά)."
 
-#: server/features/system/service.php:826
+#: server/features/system/service.php:902
 msgid "Preferred time must be in 24-hour format (HH:MM)."
 msgstr "Η προτιμώμενη ώρα πρέπει να είναι σε 24ωρη μορφή (ΩΩ:ΛΛ)."
 
-#: server/features/system/service.php:845
+#: server/features/system/service.php:921
 msgid "Retention days must be null or a non-negative integer."
 msgstr "Οι ημέρες διατήρησης πρέπει να είναι null ή μη αρνητικός ακέραιος αριθμός."
 
@@ -1113,67 +1125,76 @@ msgstr "Αποτυχία διαμόρφωσης επιλογών μεταφορ�
 msgid "Failed to create link record."
 msgstr "Αποτυχία δημιουργίας εγγραφής συνδέσμου."
 
-#: server/features/links/jobs/link-health-check.php:174
+#: server/features/links/jobs/link-health-check.php:354
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
+msgid "No active links available for health check."
+msgstr "Δεν υπάρχουν ενεργοί σύνδεσμοι διαθέσιμοι για έλεγχο κατάστασης."
+
+#: server/features/links/jobs/link-health-check.php:378
 msgid "Failed to record health snapshots for all %d checked links."
 msgstr "Αποτυχία καταγραφής στιγμιοτύπων κατάστασης για όλους τους %d ελεγμένους συνδέσμους."
 
-#: server/features/links/jobs/link-health-check.php:183
-msgid "Health check completed for %1$d link: %2$s."
-msgstr "Ο έλεγχος κατάστασης ολοκληρώθηκε για %1$d σύνδεσμο: %2$s."
-
-#: server/features/links/jobs/link-health-check.php:189
-msgid "Health check completed for %1$d links: %2$s."
-msgstr "Ο έλεγχος κατάστασης ολοκληρώθηκε για %1$d συνδέσμους: %2$s."
-
-#: server/features/links/jobs/link-health-check.php:197
+#: server/features/links/jobs/link-health-check.php:415
 msgid "(%d persistence failures)"
 msgstr "(%d αποτυχίες διατήρησης)"
 
-#: server/features/links/jobs/link-health-check.php:233
+#: server/features/links/jobs/link-health-check.php:454
 msgid "%d healthy"
 msgstr "%d υγιείς"
 
-#: server/features/links/jobs/link-health-check.php:241
+#: server/features/links/jobs/link-health-check.php:462
 msgid "%d slow"
 msgstr "%d αργοί"
 
-#: server/features/links/jobs/link-health-check.php:281
+#: server/features/links/jobs/link-health-check.php:502
 msgid "%d unreachable"
 msgstr "%d μη προσβάσιμοι"
 
-#: server/features/links/jobs/link-health-check.php:297
+#: server/features/links/jobs/link-health-check.php:518
 msgid "%d blocked"
 msgstr "%d αποκλεισμένοι"
 
-#: server/features/links/jobs/link-health-check.php:303
+#: server/features/links/jobs/link-health-check.php:524
 msgid "0 checked"
 msgstr "0 ελέγχθηκαν"
 
-#: server/features/links/jobs/link-health-check.php:249
+#: server/features/links/jobs/link-health-check.php:389
+msgid "Daily link health sweep completed for %1$d link: %2$s."
+msgid_plural "Daily link health sweep completed for %1$d links: %2$s."
+msgstr[0] "Η καθημερινή σάρωση κατάστασης συνδέσμων ολοκληρώθηκε για %1$d σύνδεσμο: %2$s."
+msgstr[1] "Η καθημερινή σάρωση κατάστασης συνδέσμων ολοκληρώθηκε για %1$d συνδέσμους: %2$s."
+
+#: server/features/links/jobs/link-health-check.php:401
+msgid "Daily link health check processed %1$d link (sweep paused by execution safeguard): %2$s."
+msgid_plural "Daily link health check processed %1$d links (sweep paused by execution safeguard): %2$s."
+msgstr[0] "Ο καθημερινός έλεγχος κατάστασης συνδέσμων επεξεργάστηκε %1$d σύνδεσμο (η σάρωση τέθηκε σε παύση από μέτρο προστασίας εκτέλεσης): %2$s."
+msgstr[1] "Ο καθημερινός έλεγχος κατάστασης συνδέσμων επεξεργάστηκε %1$d συνδέσμους (η σάρωση τέθηκε σε παύση από μέτρο προστασίας εκτέλεσης): %2$s."
+
+#: server/features/links/jobs/link-health-check.php:470
 msgid "%d HTTP error"
 msgid_plural "%d HTTP errors"
 msgstr[0] "%d σφάλμα HTTP"
 msgstr[1] "%d σφάλματα HTTP"
 
-#: server/features/links/jobs/link-health-check.php:257
+#: server/features/links/jobs/link-health-check.php:478
 msgid "%d DNS error"
 msgid_plural "%d DNS errors"
 msgstr[0] "%d σφάλμα DNS"
 msgstr[1] "%d σφάλματα DNS"
 
-#: server/features/links/jobs/link-health-check.php:265
+#: server/features/links/jobs/link-health-check.php:486
 msgid "%d TLS error"
 msgid_plural "%d TLS errors"
 msgstr[0] "%d σφάλμα TLS"
 msgstr[1] "%d σφάλματα TLS"
 
-#: server/features/links/jobs/link-health-check.php:273
+#: server/features/links/jobs/link-health-check.php:494
 msgid "%d timeout"
 msgid_plural "%d timeouts"
 msgstr[0] "%d λήξη χρονικού ορίου"
 msgstr[1] "%d λήξεις χρονικού ορίου"
 
-#: server/features/links/jobs/link-health-check.php:289
+#: server/features/links/jobs/link-health-check.php:510
 msgid "%d redirect loop"
 msgid_plural "%d redirect loops"
 msgstr[0] "%d βρόχος ανακατεύθυνσης"
@@ -1714,35 +1735,39 @@ msgstr "Προστέθηκε η στήλη %1$s στον πίνακα %2$s."
 msgid "Added the %1$s index to the %2$s table."
 msgstr "Προστέθηκε ο δείκτης %1$s στον πίνακα %2$s."
 
-#: server/services/database/schema-manager.php:148
+#: server/services/database/schema-manager.php:167
+msgid "PeakURL could not acquire the database schema repair lock."
+msgstr "Το PeakURL δεν μπόρεσε να αποκτήσει το κλείδωμα επιδιόρθωσης του σχήματος της βάσης δεδομένων."
+
+#: server/services/database/schema-manager.php:213
 msgid "PeakURL could not fully repair the database schema."
 msgstr "Το PeakURL δεν μπόρεσε να επιδιορθώσει πλήρως το σχήμα της βάσης δεδομένων."
 
-#: server/services/database/schema-status.php:179
+#: server/services/database/schema-status.php:206
 msgid "The %s table is missing."
 msgstr "Ο πίνακας %s λείπει."
 
-#: server/services/database/schema-status.php:192
+#: server/services/database/schema-status.php:219
 msgid "The %1$s table is missing the %2$s column."
 msgstr "Από τον πίνακα %1$s λείπει η στήλη %2$s."
 
-#: server/services/database/schema-status.php:205
+#: server/services/database/schema-status.php:232
 msgid "The %1$s table is missing the %2$s index."
 msgstr "Από τον πίνακα %1$s λείπει ο δείκτης %2$s."
 
-#: server/services/database/schema-status.php:218
+#: server/services/database/schema-status.php:245
 msgid "The %1$s table is missing the %2$s foreign key."
 msgstr "Από τον πίνακα %1$s λείπει το ξένο κλειδί %2$s."
 
-#: server/services/database/schema-status.php:233
+#: server/services/database/schema-status.php:260
 msgid "The api_keys table still contains plain-text key storage and needs to be repaired."
 msgstr "Ο πίνακας api_keys εξακολουθεί να περιέχει αποθήκευση κλειδιών σε απλό κείμενο και πρέπει να επιδιορθωθεί."
 
-#: server/services/database/schema-status.php:248
+#: server/services/database/schema-status.php:275
 msgid "The hashed API key columns still allow NULL values and need to be repaired."
 msgstr "Οι στήλες κατακερματισμένων κλειδιών API εξακολουθούν να επιτρέπουν τιμές NULL και πρέπει να επιδιορθωθούν."
 
-#: server/services/database/schema-status.php:273
+#: server/services/database/schema-status.php:300
 msgid "The database schema version %1$d is behind the required version %2$d."
 msgstr "Η έκδοση σχήματος της βάσης δεδομένων %1$d είναι παλαιότερη από την απαιτούμενη έκδοση %2$d."
 
@@ -1846,15 +1871,15 @@ msgstr "Ο κωδικός πρόσβασης διαχειριστή πρέπει
 msgid "Unable to connect to the database or create the PeakURL tables. "
 msgstr "Δεν είναι δυνατή η σύνδεση με τη βάση δεδομένων ή η δημιουργία των πινάκων του PeakURL. "
 
-#: server/services/install/initializer.php:104
+#: server/services/install/initializer.php:106
 msgid "PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry."
 msgstr "Το PeakURL δεν μπόρεσε να ολοκληρώσει την αναβάθμιση της βάσης δεδομένων. Βεβαιωθείτε ότι ο χρήστης της βάσης δεδομένων μπορεί να τροποποιεί πίνακες και προσπαθήστε ξανά."
 
-#: server/services/install/initializer.php:126
+#: server/services/install/initializer.php:142
 msgid "Database tables are missing. Run the installer or `%s` inside the PHP runtime directory."
 msgstr "Λείπουν πίνακες βάσης δεδομένων. Εκτελέστε το πρόγραμμα εγκατάστασης ή το `%s` στον κατάλογο εκτέλεσης PHP."
 
-#: server/services/install/initializer.php:155
+#: server/services/install/initializer.php:171
 msgid "PeakURL is not installed yet. Run install.php to finish setup."
 msgstr "Το PeakURL δεν έχει εγκατασταθεί ακόμα. Εκτελέστε το install.php για να ολοκληρώσετε την εγκατάσταση."
 
@@ -1955,7 +1980,7 @@ msgid "The update manifest did not include a package URL."
 msgstr "Η δήλωση ενημέρωσης δεν περιλάμβανε URL πακέτου."
 
 #: server/services/update/manifest.php:211
-#: server/services/update/installer.php:264
+#: server/services/update/installer.php:272
 msgid "The update manifest did not include a SHA-256 checksum."
 msgstr "Η δήλωση ενημέρωσης δεν περιλάμβανε άθροισμα ελέγχου SHA-256."
 
@@ -1964,7 +1989,7 @@ msgid "The update manifest included an invalid SHA-256 checksum."
 msgstr "Η δήλωση ενημέρωσης περιλάμβανε μη έγκυρο άθροισμα ελέγχου SHA-256."
 
 #: server/services/update/manifest.php:223
-#: server/services/update/installer.php:123
+#: server/services/update/installer.php:126
 msgid "release package URL"
 msgstr "URL πακέτου έκδοσης"
 
@@ -1996,51 +2021,51 @@ msgstr "Το PeakURL δεν μπόρεσε να δημιουργήσει το κ
 msgid "Another PeakURL update is already running."
 msgstr "Μια άλλη ενημέρωση του PeakURL εκτελείται ήδη."
 
-#: server/services/update/installer.php:117
+#: server/services/update/installer.php:120
 msgid "The update manifest is missing a package URL or version."
 msgstr "Από τη δήλωση ενημέρωσης λείπει το URL πακέτου ή η έκδοση."
 
-#: server/services/update/installer.php:205
+#: server/services/update/installer.php:213
 msgid "PeakURL could not apply the update and the rollback failed. "
 msgstr "Το PeakURL δεν μπόρεσε να εφαρμόσει την ενημέρωση και η επαναφορά απέτυχε. "
 
-#: server/services/update/installer.php:214
+#: server/services/update/installer.php:222
 msgid "PeakURL could not apply the update. "
 msgstr "Το PeakURL δεν μπόρεσε να εφαρμόσει την ενημέρωση. "
 
-#: server/services/update/installer.php:241
+#: server/services/update/installer.php:249
 msgid "PeakURL could not store the downloaded release package."
 msgstr "Το PeakURL δεν μπόρεσε να αποθηκεύσει το ληφθέν πακέτο έκδοσης."
 
-#: server/services/update/installer.php:272
+#: server/services/update/installer.php:280
 msgid "PeakURL could not verify the downloaded release checksum."
 msgstr "Το PeakURL δεν μπόρεσε να επαληθεύσει το άθροισμα ελέγχου της ληφθείσας έκδοσης."
 
-#: server/services/update/installer.php:278
+#: server/services/update/installer.php:286
 msgid "The downloaded release checksum did not match the manifest."
 msgstr "Το άθροισμα ελέγχου της ληφθείσας έκδοσης δεν ταίριαζε με τη δήλωση."
 
-#: server/services/update/installer.php:298
+#: server/services/update/installer.php:306
 msgid "PeakURL could not open the downloaded release archive."
 msgstr "Το PeakURL δεν μπόρεσε να ανοίξει το ληφθέν αρχείο έκδοσης."
 
-#: server/services/update/installer.php:307
+#: server/services/update/installer.php:315
 msgid "PeakURL could not extract the downloaded release archive."
 msgstr "Το PeakURL δεν μπόρεσε να εξαγάγει το ληφθέν αρχείο έκδοσης."
 
-#: server/services/update/installer.php:330
+#: server/services/update/installer.php:338
 msgid "The downloaded release archive contains an unsafe file path."
 msgstr "Το ληφθέν αρχείο έκδοσης περιέχει μη ασφαλή διαδρομή αρχείου."
 
-#: server/services/update/installer.php:345
+#: server/services/update/installer.php:353
 msgid "The downloaded release archive contains an unsupported symbolic link."
 msgstr "Το ληφθέν αρχείο έκδοσης περιέχει μη υποστηριζόμενο συμβολικό σύνδεσμο."
 
-#: server/services/update/installer.php:382
+#: server/services/update/installer.php:390
 msgid "PeakURL could not determine the extracted package root."
 msgstr "Το PeakURL δεν μπόρεσε να προσδιορίσει τη ρίζα του εξαχθέντος πακέτου."
 
-#: server/services/update/installer.php:393
+#: server/services/update/installer.php:401
 msgid "PeakURL could not validate the extracted package structure."
 msgstr "Το PeakURL δεν μπόρεσε να επικυρώσει τη δομή του εξαχθέντος πακέτου."
 
@@ -6673,10 +6698,6 @@ msgstr "Ο έλεγχος έκδοσης ολοκληρώθηκε: βρέθηκ�
 msgid "No pending webhook deliveries."
 msgstr "Δεν υπάρχουν εκκρεμείς παραδόσεις webhook."
 
-#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
-msgid "No active links available for health check."
-msgstr "Δεν υπάρχουν ενεργοί σύνδεσμοι διαθέσιμοι για έλεγχο κατάστασης."
-
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:385
 msgid "GeoIP update failed: %s"
 msgstr "Η ενημέρωση του GeoIP απέτυχε: %s"
@@ -7641,60 +7662,60 @@ msgid "Sample Data Structure"
 msgstr "Δομή δειγματοληπτικών δεδομένων"
 
 #: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:16
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:31
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:55
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:29
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:53
 msgid "Example page"
 msgstr "Σελίδα παραδείγματος"
 
 #: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:18
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:35
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:59
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:33
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:57
 msgid "Custom Social Title"
 msgstr "Προσαρμοσμένος κοινωνικός τίτλος"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:20
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:36
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:60
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:18
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:34
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:58
 msgid "Custom Social Description"
 msgstr "Προσαρμοσμένη κοινωνική περιγραφή"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:79
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:77
 msgid "File Format Requirements"
 msgstr "Απαιτήσεις μορφής αρχείου"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:84
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:82
 msgid "Required Fields"
 msgstr "Απαιτούμενα πεδία"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:89
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:90
 msgid " - Destination URL"
 msgstr " - URL προορισμού"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:97
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:96
 msgid "Optional Fields"
 msgstr "Προαιρετικά πεδία"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:102
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:101
 msgid " - Custom alias"
 msgstr " - Προσαρμοσμένο ψευδώνυμο"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:106
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:105
 msgid " - Link title"
 msgstr " - Τίτλος συνδέσμου"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:110
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:109
 msgid " - Link status (active, inactive, paused, archived)"
 msgstr " - Κατάσταση συνδέσμου (ενεργός, ανενεργός, σε παύση, αρχειοθετημένος)"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:117
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:116
 msgid " - Protection password"
 msgstr " - Κωδικός πρόσβασης προστασίας"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:122
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:123
 msgid " - Expiration date (YYYY-MM-DD)"
 msgstr " - Ημερομηνία λήξης (ΕΕΕΕ-ΜΜ-ΗΗ)"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:137
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:138
 msgid " - Social preview meta tags"
 msgstr " - Ετικέτες meta κοινωνικής προεπισκόπησης"
 
@@ -7711,49 +7732,49 @@ msgid "Please wait while we process your file"
 msgstr "Παρακαλούμε περιμένετε όσο επεξεργαζόμαστε το αρχείο σας"
 
 #: client/pages/dashboard/tools/import/components/file-upload/ProcessingStatus.tsx:42
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:210
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:212
 msgid "Processing URLs"
 msgstr "Επεξεργασία URL..."
 
 #: client/pages/dashboard/tools/import/components/file-upload/ProcessingStatus.tsx:45
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:213
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:215
 msgid "Creating short links..."
 msgstr "Δημιουργία σύντομων συνδέσμων..."
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:143
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:149
 msgid "Unsupported file format"
 msgstr "Μη υποστηριζόμενη μορφή αρχείου"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:150
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:156
 msgid "No valid data found in file"
 msgstr "Δεν βρέθηκαν έγκυρα δεδομένα στο αρχείο"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:155
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:161
 msgid "Failed to parse file"
 msgstr "Αποτυχία ανάλυσης του αρχείου."
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:156
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:328
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:114
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:162
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:335
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:116
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficLocationTab.tsx:247
 msgid "Unknown error"
 msgstr "Άγνωστο σφάλμα"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:296
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:84
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:303
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:86
 msgid "Auto-generated"
 msgstr "Αυτόματη δημιουργία"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:327
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:113
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:334
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:115
 msgid "Import failed"
 msgstr "Η εισαγωγή απέτυχε"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:337
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:344
 msgid "Upload File"
 msgstr "Μεταφόρτωση αρχείου"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:339
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:346
 msgid "Upload a CSV, JSON, or XML file containing URLs and their metadata."
 msgstr "Μεταφορτώστε ένα αρχείο CSV, JSON ή XML που περιέχει URL και τα μεταδεδομένα τους."
 
@@ -7786,50 +7807,50 @@ msgstr "Χρησιμοποιήστε το API μας για να εισαγάγ�
 msgid "Read Import Guide"
 msgstr "Οδηγός εισαγωγής"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:61
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:63
 msgid "No URLs found"
 msgstr "Δεν βρέθηκαν URL"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:123
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:125
 #: client/pages/dashboard/tools/import/Layout.tsx:19
 msgid "Paste URLs"
 msgstr "Επικόλληση URL"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:125
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:127
 msgid "Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias and title separated by commas, tabs, or spaces."
 msgstr "Επικολλήστε μια λίστα με URL (ένα ανά γραμμή) για να δημιουργήσετε γρήγορα πολλαπλούς σύντομους συνδέσμους. Μπορείτε προαιρετικά να προσθέσετε ένα προσαρμοσμένο ψευδώνυμο και τίτλο διαχωρισμένα με κόμματα, καρτέλες ή κενά."
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:134
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:136
 msgid "URLs (one per line)"
 msgstr "URL (ένα ανά γραμμή)"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:154
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:156
 msgid "Create Links"
 msgstr "Δημιουργία συνδέσμων"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:160
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:162
 msgid "Tips"
 msgstr "Συμβουλές"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:167
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:169
 msgid "Format:"
 msgstr "Μορφή:"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:170
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:172
 #: client/pages/dashboard/links/components/UrlShorteningForm/SocialPreviewFields.tsx:108
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/SocialPreviewTab.tsx:77
 msgid "or"
 msgstr "ή"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:178
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:180
 msgid "Each entry should be on a separate line"
 msgstr "Κάθε καταχώριση πρέπει να βρίσκεται σε ξεχωριστή γραμμή"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:186
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:188
 msgid "URLs must include http:// or https://"
 msgstr "Τα URL πρέπει να περιλαμβάνουν http:// ή https://"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:194
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:196
 msgid "If alias is omitted, one will be auto-generated"
 msgstr "Εάν παραλειφθεί το ψευδώνυμο, θα δημιουργηθεί αυτόματα"
 

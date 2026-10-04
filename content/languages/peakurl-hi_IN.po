@@ -6,10 +6,10 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-10-03 22:20+0000\n"
-"POT-Creation-Date: 2026-10-03 22:20+0000\n"
+"PO-Revision-Date: 2026-10-04 21:15+0000\n"
+"POT-Creation-Date: 2026-10-04 21:15+0000\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"Project-Id-Version: PeakURL 1.7.0\n"
+"Project-Id-Version: PeakURL 1.7.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
@@ -261,12 +261,12 @@ msgstr "अनाथ वेबहुक वितरण हटा दिए ग�
 msgid "Removed orphaned link health records."
 msgstr "लावारिस लिंक स्वास्थ्य रिकॉर्ड हटा दिए गए।"
 
-#: server/core/application.php:388
+#: server/core/application.php:389
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "एक आंतरिक सर्वर त्रुटि हुई। कृपया पुनः प्रयास करें या समस्या जारी रहने पर समर्थन से संपर्क करें।"
 
-#: server/core/application.php:532
-#: server/services/install/screen.php:142
+#: server/core/application.php:533
+#: server/services/install/screen.php:191
 msgid "Request origin is not allowed."
 msgstr "अनुरोध का स्रोत अनुमत नहीं है।"
 
@@ -384,7 +384,7 @@ msgstr "परीक्षण ईमेल भेजा गया।"
 #: server/features/settings/service.php:283
 #: server/features/settings/service.php:301
 #: server/features/settings/service.php:319
-#: server/features/system/service.php:203
+#: server/features/system/service.php:215
 msgid "Admin access is required."
 msgstr "व्यवस्थापक पहुँच आवश्यक है।"
 
@@ -684,71 +684,83 @@ msgstr "कार्य अनुसूची अपडेट की गई।"
 msgid "Job schedule reset to recommended defaults."
 msgstr "कार्य अनुसूची को अनुशंसित डिफ़ॉल्ट पर रीसेट कर दिया गया है।"
 
-#: server/features/system/service.php:317
+#: server/features/system/service.php:329
 msgid "PeakURL is already up to date."
 msgstr "PeakURL पहले से ही अद्यतित है।"
 
-#: server/features/system/service.php:339
+#: server/features/system/service.php:351
 msgid "A newer PeakURL release is available. Install the update instead."
 msgstr "एक नया PeakURL रिलीज़ उपलब्ध है। इसके बजाय अपडेट इंस्टॉल करें।"
 
-#: server/features/system/service.php:346
+#: server/features/system/service.php:358
 msgid "PeakURL cannot reinstall the latest release right now."
 msgstr "PeakURL अभी नवीनतम रिलीज़ को पुनः इंस्टॉल नहीं कर सकता है।"
 
-#: server/features/system/service.php:460
+#: server/features/system/service.php:404
+msgid "PeakURL could not complete the database schema upgrade. Verify that the database user has permission to create and alter tables, check the server logs, and retry."
+msgstr "PeakURL डेटाबेस स्कीमा अपग्रेड पूरा नहीं कर सका। सत्यापित करें कि डेटाबेस उपयोगकर्ता के पास तालिकाएँ बनाने और बदलने की अनुमति है, सर्वर लॉग की जाँच करें, और पुनः प्रयास करें।"
+
+#: server/features/system/service.php:490
 msgid "PeakURL could not inspect the database schema."
 msgstr "PeakURL डेटाबेस स्कीमा का निरीक्षण नहीं कर सका।"
 
-#: server/features/system/service.php:488
+#: server/features/system/service.php:518
 msgid "PeakURL cannot apply this release."
 msgstr "PeakURL इस रिलीज़ को लागू नहीं कर सकता।"
 
-#: server/features/system/service.php:499
+#: server/features/system/service.php:529
 msgid "PeakURL could not load the update manifest."
 msgstr "PeakURL अपडेट मैनिफ़ेस्ट लोड नहीं कर सका।"
 
-#: server/features/system/service.php:585
-#: server/features/system/service.php:608
-#: server/features/system/service.php:680
-#: server/features/system/service.php:724
-#: server/features/system/service.php:768
-#: server/features/system/service.php:884
+#: server/features/system/service.php:547
+msgid "PeakURL could not complete the database schema upgrade."
+msgstr "PeakURL डेटाबेस स्कीमा अपग्रेड पूरा नहीं कर सका।"
+
+#: server/features/system/service.php:589
+msgid "PeakURL could not complete the release update. Check the server logs and retry."
+msgstr "PeakURL रिलीज़ अपडेट पूरा नहीं कर सका। सर्वर लॉग की जाँच करें और पुनः प्रयास करें।"
+
+#: server/features/system/service.php:661
+#: server/features/system/service.php:684
+#: server/features/system/service.php:756
+#: server/features/system/service.php:800
+#: server/features/system/service.php:844
+#: server/features/system/service.php:960
 msgid "Scheduler service is not configured."
 msgstr "शेड्यूलर सेवा कॉन्फ़िगर नहीं है।"
 
-#: server/features/system/service.php:644
-#: server/features/system/service.php:791
-#: server/features/system/service.php:907
+#: server/features/system/service.php:720
+#: server/features/system/service.php:867
+#: server/features/system/service.php:983
 msgid "Unknown background job identifier: %s"
 msgstr "अज्ञात बैकग्राउंड कार्य पहचानकर्ता: %s"
 
-#: server/features/system/service.php:688
+#: server/features/system/service.php:764
 msgid "Missing required field: retention_days."
 msgstr "आवश्यक फ़ील्ड मौजूद नहीं है: retention_days।"
 
-#: server/features/system/service.php:696
+#: server/features/system/service.php:772
 msgid "Retention days must be a non-negative integer."
 msgstr "अवधारण दिवस गैर-ऋणात्मक पूर्णांक होना चाहिए।"
 
-#: server/features/system/service.php:782
-#: server/features/system/service.php:898
+#: server/features/system/service.php:858
+#: server/features/system/service.php:974
 msgid "Missing background job identifier."
 msgstr "बैकग्राउंड कार्य पहचानकर्ता अनुपलब्ध है।"
 
-#: server/features/system/service.php:801
+#: server/features/system/service.php:877
 msgid "Invalid request payload."
 msgstr "अमान्य अनुरोध पेलोड।"
 
-#: server/features/system/service.php:813
+#: server/features/system/service.php:889
 msgid "Recurrence interval must be an integer of at least 300 seconds (5 minutes)."
 msgstr "पुनरावृत्ति अंतराल कम से कम 300 सेकंड (5 मिनट) का पूर्णांक होना चाहिए।"
 
-#: server/features/system/service.php:826
+#: server/features/system/service.php:902
 msgid "Preferred time must be in 24-hour format (HH:MM)."
 msgstr "पसंदीदा समय 24-घंटे के प्रारूप (HH:MM) में होना चाहिए।"
 
-#: server/features/system/service.php:845
+#: server/features/system/service.php:921
 msgid "Retention days must be null or a non-negative integer."
 msgstr "अवधारण दिवस शून्य (null) या गैर-ऋणात्मक पूर्णांक होना चाहिए।"
 
@@ -1113,67 +1125,76 @@ msgstr "ट्रांसपोर्ट विकल्प कॉन्फ़�
 msgid "Failed to create link record."
 msgstr "लिंक रिकॉर्ड बनाने में विफल।"
 
-#: server/features/links/jobs/link-health-check.php:174
+#: server/features/links/jobs/link-health-check.php:354
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
+msgid "No active links available for health check."
+msgstr "स्वास्थ्य जांच के लिए कोई सक्रिय लिंक उपलब्ध नहीं है।"
+
+#: server/features/links/jobs/link-health-check.php:378
 msgid "Failed to record health snapshots for all %d checked links."
 msgstr "जांचे गए सभी %d लिंक के लिए स्वास्थ्य स्नैपशॉट रिकॉर्ड करने में विफल।"
 
-#: server/features/links/jobs/link-health-check.php:183
-msgid "Health check completed for %1$d link: %2$s."
-msgstr "%1$d लिंक के लिए स्वास्थ्य जांच पूर्ण: %2$s।"
-
-#: server/features/links/jobs/link-health-check.php:189
-msgid "Health check completed for %1$d links: %2$s."
-msgstr "%1$d लिंक के लिए स्वास्थ्य जांच पूर्ण: %2$s।"
-
-#: server/features/links/jobs/link-health-check.php:197
+#: server/features/links/jobs/link-health-check.php:415
 msgid "(%d persistence failures)"
 msgstr "(%d अवधारण विफलताएं)"
 
-#: server/features/links/jobs/link-health-check.php:233
+#: server/features/links/jobs/link-health-check.php:454
 msgid "%d healthy"
 msgstr "%d स्वस्थ"
 
-#: server/features/links/jobs/link-health-check.php:241
+#: server/features/links/jobs/link-health-check.php:462
 msgid "%d slow"
 msgstr "%d धीमा"
 
-#: server/features/links/jobs/link-health-check.php:281
+#: server/features/links/jobs/link-health-check.php:502
 msgid "%d unreachable"
 msgstr "%d अगम्य"
 
-#: server/features/links/jobs/link-health-check.php:297
+#: server/features/links/jobs/link-health-check.php:518
 msgid "%d blocked"
 msgstr "%d अवरोधित"
 
-#: server/features/links/jobs/link-health-check.php:303
+#: server/features/links/jobs/link-health-check.php:524
 msgid "0 checked"
 msgstr "0 जांचे गए"
 
-#: server/features/links/jobs/link-health-check.php:249
+#: server/features/links/jobs/link-health-check.php:389
+msgid "Daily link health sweep completed for %1$d link: %2$s."
+msgid_plural "Daily link health sweep completed for %1$d links: %2$s."
+msgstr[0] "%1$d लिंक के लिए दैनिक लिंक स्वास्थ्य स्वीप पूर्ण: %2$s।"
+msgstr[1] "%1$d लिंक के लिए दैनिक लिंक स्वास्थ्य स्वीप पूर्ण: %2$s।"
+
+#: server/features/links/jobs/link-health-check.php:401
+msgid "Daily link health check processed %1$d link (sweep paused by execution safeguard): %2$s."
+msgid_plural "Daily link health check processed %1$d links (sweep paused by execution safeguard): %2$s."
+msgstr[0] "दैनिक लिंक स्वास्थ्य जांच ने %1$d लिंक को संसाधित किया (निष्पादन सुरक्षा द्वारा स्वीप रोका गया): %2$s।"
+msgstr[1] "दैनिक लिंक स्वास्थ्य जांच ने %1$d लिंक को संसाधित किया (निष्पादन सुरक्षा द्वारा स्वीप रोका गया): %2$s।"
+
+#: server/features/links/jobs/link-health-check.php:470
 msgid "%d HTTP error"
 msgid_plural "%d HTTP errors"
 msgstr[0] "%d HTTP त्रुटि"
 msgstr[1] "%d HTTP त्रुटियां"
 
-#: server/features/links/jobs/link-health-check.php:257
+#: server/features/links/jobs/link-health-check.php:478
 msgid "%d DNS error"
 msgid_plural "%d DNS errors"
 msgstr[0] "%d DNS त्रुटि"
 msgstr[1] "%d DNS त्रुटियां"
 
-#: server/features/links/jobs/link-health-check.php:265
+#: server/features/links/jobs/link-health-check.php:486
 msgid "%d TLS error"
 msgid_plural "%d TLS errors"
 msgstr[0] "%d TLS त्रुटि"
 msgstr[1] "%d TLS त्रुटियां"
 
-#: server/features/links/jobs/link-health-check.php:273
+#: server/features/links/jobs/link-health-check.php:494
 msgid "%d timeout"
 msgid_plural "%d timeouts"
 msgstr[0] "%d टाइमआउट"
 msgstr[1] "%d टाइमआउट"
 
-#: server/features/links/jobs/link-health-check.php:289
+#: server/features/links/jobs/link-health-check.php:510
 msgid "%d redirect loop"
 msgid_plural "%d redirect loops"
 msgstr[0] "%d रीडायरेक्ट लूप"
@@ -1714,35 +1735,39 @@ msgstr "%2$s तालिका में %1$s कॉलम जोड़ा ग�
 msgid "Added the %1$s index to the %2$s table."
 msgstr "%2$s तालिका में %1$s इंडेक्स जोड़ा गया।"
 
-#: server/services/database/schema-manager.php:148
+#: server/services/database/schema-manager.php:167
+msgid "PeakURL could not acquire the database schema repair lock."
+msgstr "PeakURL डेटाबेस स्कीमा मरम्मत लॉक प्राप्त नहीं कर सका।"
+
+#: server/services/database/schema-manager.php:213
 msgid "PeakURL could not fully repair the database schema."
 msgstr "PeakURL डेटाबेस स्कीमा को पूरी तरह से ठीक नहीं कर सका।"
 
-#: server/services/database/schema-status.php:179
+#: server/services/database/schema-status.php:206
 msgid "The %s table is missing."
 msgstr "%s तालिका अनुपलब्ध है।"
 
-#: server/services/database/schema-status.php:192
+#: server/services/database/schema-status.php:219
 msgid "The %1$s table is missing the %2$s column."
 msgstr "%1$s तालिका में %2$s कॉलम अनुपलब्ध है।"
 
-#: server/services/database/schema-status.php:205
+#: server/services/database/schema-status.php:232
 msgid "The %1$s table is missing the %2$s index."
 msgstr "%1$s तालिका में %2$s इंडेक्स अनुपलब्ध है।"
 
-#: server/services/database/schema-status.php:218
+#: server/services/database/schema-status.php:245
 msgid "The %1$s table is missing the %2$s foreign key."
 msgstr "%1$s तालिका में %2$s foreign key अनुपलब्ध है।"
 
-#: server/services/database/schema-status.php:233
+#: server/services/database/schema-status.php:260
 msgid "The api_keys table still contains plain-text key storage and needs to be repaired."
 msgstr "api_keys तालिका में अभी भी सादे पाठ वाली कुंजियाँ संग्रहीत हैं और इसे सुधारने की आवश्यकता है।"
 
-#: server/services/database/schema-status.php:248
+#: server/services/database/schema-status.php:275
 msgid "The hashed API key columns still allow NULL values and need to be repaired."
 msgstr "हैश किए गए API कुंजी कॉलम अभी भी NULL मानों की अनुमति देते हैं और इन्हें ठीक करने की आवश्यकता है।"
 
-#: server/services/database/schema-status.php:273
+#: server/services/database/schema-status.php:300
 msgid "The database schema version %1$d is behind the required version %2$d."
 msgstr "डेटाबेस स्कीमा संस्करण %1$d आवश्यक संस्करण %2$d से पीछे है।"
 
@@ -1846,15 +1871,15 @@ msgstr "व्यवस्थापक पासवर्ड कम से क�
 msgid "Unable to connect to the database or create the PeakURL tables. "
 msgstr "डेटाबेस से कनेक्ट करने या PeakURL तालिकाएँ बनाने में असमर्थ। "
 
-#: server/services/install/initializer.php:104
+#: server/services/install/initializer.php:106
 msgid "PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry."
 msgstr "PeakURL डेटाबेस अपग्रेड पूरा नहीं कर सका। सत्यापित करें कि डेटाबेस उपयोगकर्ता तालिकाओं में बदलाव कर सकता है, फिर पुनः प्रयास करें।"
 
-#: server/services/install/initializer.php:126
+#: server/services/install/initializer.php:142
 msgid "Database tables are missing. Run the installer or `%s` inside the PHP runtime directory."
 msgstr "डेटाबेस तालिकाएं अनुपलब्ध हैं। PHP रनटाइम निर्देशिका में इंस्टॉलर या `%s` चलाएं।"
 
-#: server/services/install/initializer.php:155
+#: server/services/install/initializer.php:171
 msgid "PeakURL is not installed yet. Run install.php to finish setup."
 msgstr "PeakURL अभी इंस्टॉल नहीं है। सेटअप पूरा करने के लिए install.php चलाएं।"
 
@@ -1955,7 +1980,7 @@ msgid "The update manifest did not include a package URL."
 msgstr "अपडेट मैनिफ़ेस्ट में पैकेज URL शामिल नहीं था।"
 
 #: server/services/update/manifest.php:211
-#: server/services/update/installer.php:264
+#: server/services/update/installer.php:272
 msgid "The update manifest did not include a SHA-256 checksum."
 msgstr "अपडेट मैनिफ़ेस्ट में SHA-256 चेकसम शामिल नहीं था।"
 
@@ -1964,7 +1989,7 @@ msgid "The update manifest included an invalid SHA-256 checksum."
 msgstr "अपडेट मैनिफ़ेस्ट में एक अमान्य SHA-256 चेकसम शामिल था।"
 
 #: server/services/update/manifest.php:223
-#: server/services/update/installer.php:123
+#: server/services/update/installer.php:126
 msgid "release package URL"
 msgstr "रिलीज़ पैकेज URL"
 
@@ -1996,51 +2021,51 @@ msgstr "PeakURL अपडेट लॉक नहीं बना सका।"
 msgid "Another PeakURL update is already running."
 msgstr "एक अन्य PeakURL अपडेट पहले से चल रहा है।"
 
-#: server/services/update/installer.php:117
+#: server/services/update/installer.php:120
 msgid "The update manifest is missing a package URL or version."
 msgstr "अपडेट मैनिफ़ेस्ट में पैकेज URL या संस्करण गायब है।"
 
-#: server/services/update/installer.php:205
+#: server/services/update/installer.php:213
 msgid "PeakURL could not apply the update and the rollback failed. "
 msgstr "PeakURL अपडेट लागू नहीं कर सका और रोलबैक विफल रहा। "
 
-#: server/services/update/installer.php:214
+#: server/services/update/installer.php:222
 msgid "PeakURL could not apply the update. "
 msgstr "PeakURL अपडेट लागू नहीं कर सका। "
 
-#: server/services/update/installer.php:241
+#: server/services/update/installer.php:249
 msgid "PeakURL could not store the downloaded release package."
 msgstr "PeakURL डाउनलोड किए गए रिलीज़ पैकेज को संग्रहीत नहीं कर सका।"
 
-#: server/services/update/installer.php:272
+#: server/services/update/installer.php:280
 msgid "PeakURL could not verify the downloaded release checksum."
 msgstr "PeakURL डाउनलोड किए गए रिलीज़ चेकसम को सत्यापित नहीं कर सका।"
 
-#: server/services/update/installer.php:278
+#: server/services/update/installer.php:286
 msgid "The downloaded release checksum did not match the manifest."
 msgstr "डाउनलोड किया गया रिलीज़ चेकसम मैनिफ़ेस्ट से मेल नहीं खाता था।"
 
-#: server/services/update/installer.php:298
+#: server/services/update/installer.php:306
 msgid "PeakURL could not open the downloaded release archive."
 msgstr "PeakURL डाउनलोड किए गए रिलीज़ संग्रह (archive) को नहीं खोल सका।"
 
-#: server/services/update/installer.php:307
+#: server/services/update/installer.php:315
 msgid "PeakURL could not extract the downloaded release archive."
 msgstr "PeakURL डाउनलोड किए गए रिलीज़ संग्रह को निकाल (extract) नहीं सका।"
 
-#: server/services/update/installer.php:330
+#: server/services/update/installer.php:338
 msgid "The downloaded release archive contains an unsafe file path."
 msgstr "डाउनलोड किए गए रिलीज़ संग्रह में एक असुरक्षित फ़ाइल पथ शामिल है।"
 
-#: server/services/update/installer.php:345
+#: server/services/update/installer.php:353
 msgid "The downloaded release archive contains an unsupported symbolic link."
 msgstr "डाउनलोड किए गए रिलीज़ संग्रह में एक असमर्थित सिम्बॉलिक लिंक शामिल है।"
 
-#: server/services/update/installer.php:382
+#: server/services/update/installer.php:390
 msgid "PeakURL could not determine the extracted package root."
 msgstr "PeakURL निकाले गए पैकेज के रूट को निर्धारित नहीं कर सका।"
 
-#: server/services/update/installer.php:393
+#: server/services/update/installer.php:401
 msgid "PeakURL could not validate the extracted package structure."
 msgstr "PeakURL निकाले गए पैकेज की संरचना को मान्य नहीं कर सका।"
 
@@ -6673,10 +6698,6 @@ msgstr "संस्करण जांच पूर्ण: रिमोट र�
 msgid "No pending webhook deliveries."
 msgstr "कोई लंबित वेबहुक वितरण नहीं है।"
 
-#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
-msgid "No active links available for health check."
-msgstr "स्वास्थ्य जांच के लिए कोई सक्रिय लिंक उपलब्ध नहीं है।"
-
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:385
 msgid "GeoIP update failed: %s"
 msgstr "GeoIP अपडेट विफल: %s"
@@ -7641,60 +7662,60 @@ msgid "Sample Data Structure"
 msgstr "नमूना डेटा संरचना"
 
 #: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:16
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:31
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:55
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:29
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:53
 msgid "Example page"
 msgstr "उदाहरण पृष्ठ"
 
 #: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:18
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:35
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:59
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:33
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:57
 msgid "Custom Social Title"
 msgstr "कस्टम सोशल शीर्षक"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:20
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:36
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:60
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:18
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:34
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:58
 msgid "Custom Social Description"
 msgstr "कस्टम सोशल विवरण"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:79
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:77
 msgid "File Format Requirements"
 msgstr "फ़ाइल प्रारूप आवश्यकताएँ"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:84
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:82
 msgid "Required Fields"
 msgstr "आवश्यक फ़ील्ड"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:89
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:90
 msgid " - Destination URL"
 msgstr " - गंतव्य URL"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:97
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:96
 msgid "Optional Fields"
 msgstr "वैकल्पिक फ़ील्ड"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:102
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:101
 msgid " - Custom alias"
 msgstr " - कस्टम उपनाम (alias)"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:106
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:105
 msgid " - Link title"
 msgstr " - लिंक शीर्षक"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:110
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:109
 msgid " - Link status (active, inactive, paused, archived)"
 msgstr " - लिंक स्थिति (सक्रिय, निष्क्रिय, रोका गया, संग्रहीत)"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:117
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:116
 msgid " - Protection password"
 msgstr " - सुरक्षा पासवर्ड"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:122
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:123
 msgid " - Expiration date (YYYY-MM-DD)"
 msgstr " - समाप्ति तिथि (YYYY-MM-DD)"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:137
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:138
 msgid " - Social preview meta tags"
 msgstr " - सोशल पूर्वावलोकन मेटा टैग"
 
@@ -7711,49 +7732,49 @@ msgid "Please wait while we process your file"
 msgstr "कृपया प्रतीक्षा करें जब तक हम आपकी फ़ाइल संसाधित करते हैं"
 
 #: client/pages/dashboard/tools/import/components/file-upload/ProcessingStatus.tsx:42
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:210
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:212
 msgid "Processing URLs"
 msgstr "URL संसाधित हो रहे हैं"
 
 #: client/pages/dashboard/tools/import/components/file-upload/ProcessingStatus.tsx:45
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:213
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:215
 msgid "Creating short links..."
 msgstr "छोटे लिंक बनाए जा रहे हैं..."
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:143
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:149
 msgid "Unsupported file format"
 msgstr "असमर्थित फ़ाइल प्रारूप"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:150
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:156
 msgid "No valid data found in file"
 msgstr "फ़ाइल में कोई मान्य डेटा नहीं मिला"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:155
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:161
 msgid "Failed to parse file"
 msgstr "फ़ाइल पार्स करने में विफल"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:156
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:328
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:114
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:162
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:335
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:116
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficLocationTab.tsx:247
 msgid "Unknown error"
 msgstr "अज्ञात त्रुटि"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:296
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:84
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:303
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:86
 msgid "Auto-generated"
 msgstr "स्वचालित रूप से उत्पन्न"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:327
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:113
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:334
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:115
 msgid "Import failed"
 msgstr "आयात विफल रहा"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:337
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:344
 msgid "Upload File"
 msgstr "फ़ाइल अपलोड करें"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:339
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:346
 msgid "Upload a CSV, JSON, or XML file containing URLs and their metadata."
 msgstr "URL और उनके मेटाडेटा वाली एक CSV, JSON, या XML फ़ाइल अपलोड करें।"
 
@@ -7786,50 +7807,50 @@ msgstr "प्रोग्रामेटिक रूप से कई URL आ�
 msgid "Read Import Guide"
 msgstr "आयात मार्गदर्शिका पढ़ें"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:61
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:63
 msgid "No URLs found"
 msgstr "कोई URL नहीं मिला"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:123
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:125
 #: client/pages/dashboard/tools/import/Layout.tsx:19
 msgid "Paste URLs"
 msgstr "URL चिपकाएँ"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:125
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:127
 msgid "Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias and title separated by commas, tabs, or spaces."
 msgstr "जल्दी से कई छोटे लिंक बनाने के लिए URL की एक सूची (प्रति पंक्ति एक) चिपकाएँ। आप वैकल्पिक रूप से अल्पविराम, टैब या स्थान से अलग करके एक कस्टम उपनाम और शीर्षक जोड़ सकते हैं।"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:134
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:136
 msgid "URLs (one per line)"
 msgstr "URL (प्रति पंक्ति एक)"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:154
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:156
 msgid "Create Links"
 msgstr "लिंक बनाएं"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:160
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:162
 msgid "Tips"
 msgstr "सुझाव"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:167
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:169
 msgid "Format:"
 msgstr "प्रारूप:"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:170
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:172
 #: client/pages/dashboard/links/components/UrlShorteningForm/SocialPreviewFields.tsx:108
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/SocialPreviewTab.tsx:77
 msgid "or"
 msgstr "या"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:178
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:180
 msgid "Each entry should be on a separate line"
 msgstr "प्रत्येक प्रविष्टि एक अलग पंक्ति पर होनी चाहिए"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:186
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:188
 msgid "URLs must include http:// or https://"
 msgstr "URL में http:// या https:// शामिल होना चाहिए"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:194
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:196
 msgid "If alias is omitted, one will be auto-generated"
 msgstr "यदि उपनाम छोड़ दिया जाता है, तो एक स्वतः उत्पन्न हो जाएगा"
 

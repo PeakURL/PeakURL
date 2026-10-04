@@ -6,10 +6,10 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-10-03 22:20+0000\n"
-"POT-Creation-Date: 2026-10-03 22:20+0000\n"
+"PO-Revision-Date: 2026-10-04 21:15+0000\n"
+"POT-Creation-Date: 2026-10-04 21:15+0000\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2;\n"
-"Project-Id-Version: PeakURL 1.7.0\n"
+"Project-Id-Version: PeakURL 1.7.1\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
@@ -261,12 +261,12 @@ msgstr "Osiřelá doručení webhooků byla odstraněna."
 msgid "Removed orphaned link health records."
 msgstr "Odstraněny osiřelé záznamy kontroly stavu odkazů."
 
-#: server/core/application.php:388
+#: server/core/application.php:389
 msgid "An internal server error occurred. Please try again or contact support if the issue persists."
 msgstr "Došlo k vnitřní chybě serveru. Zkuste to prosím znovu, nebo kontaktujte podporu, pokud problém přetrvává."
 
-#: server/core/application.php:532
-#: server/services/install/screen.php:142
+#: server/core/application.php:533
+#: server/services/install/screen.php:191
 msgid "Request origin is not allowed."
 msgstr "Původ požadavku není povolen."
 
@@ -384,7 +384,7 @@ msgstr "Testovací e-mail byl odeslán."
 #: server/features/settings/service.php:283
 #: server/features/settings/service.php:301
 #: server/features/settings/service.php:319
-#: server/features/system/service.php:203
+#: server/features/system/service.php:215
 msgid "Admin access is required."
 msgstr "Je vyžadován přístup správce."
 
@@ -684,71 +684,83 @@ msgstr "Plán úlohy byl aktualizován."
 msgid "Job schedule reset to recommended defaults."
 msgstr "Plán úlohy byl resetován na doporučené výchozí hodnoty."
 
-#: server/features/system/service.php:317
+#: server/features/system/service.php:329
 msgid "PeakURL is already up to date."
 msgstr "PeakURL je již aktuální."
 
-#: server/features/system/service.php:339
+#: server/features/system/service.php:351
 msgid "A newer PeakURL release is available. Install the update instead."
 msgstr "Je k dispozici novější verze PeakURL. Nainstalujte aktualizaci."
 
-#: server/features/system/service.php:346
+#: server/features/system/service.php:358
 msgid "PeakURL cannot reinstall the latest release right now."
 msgstr "PeakURL právě teď nemůže přeinstalovat nejnovější verzi."
 
-#: server/features/system/service.php:460
+#: server/features/system/service.php:404
+msgid "PeakURL could not complete the database schema upgrade. Verify that the database user has permission to create and alter tables, check the server logs, and retry."
+msgstr "PeakURL nemohl dokončit aktualizaci schématu databáze. Zkontrolujte, zda má uživatel databáze oprávnění vytvářet a měnit tabulky, zkontrolujte protokoly serveru a zkuste to znovu."
+
+#: server/features/system/service.php:490
 msgid "PeakURL could not inspect the database schema."
 msgstr "PeakURL nemohl zkontrolovat schéma databáze."
 
-#: server/features/system/service.php:488
+#: server/features/system/service.php:518
 msgid "PeakURL cannot apply this release."
 msgstr "PeakURL nemůže tuto verzi použít."
 
-#: server/features/system/service.php:499
+#: server/features/system/service.php:529
 msgid "PeakURL could not load the update manifest."
 msgstr "PeakURL nemohl načíst manifest aktualizací."
 
-#: server/features/system/service.php:585
-#: server/features/system/service.php:608
-#: server/features/system/service.php:680
-#: server/features/system/service.php:724
-#: server/features/system/service.php:768
-#: server/features/system/service.php:884
+#: server/features/system/service.php:547
+msgid "PeakURL could not complete the database schema upgrade."
+msgstr "PeakURL nemohl dokončit aktualizaci schématu databáze."
+
+#: server/features/system/service.php:589
+msgid "PeakURL could not complete the release update. Check the server logs and retry."
+msgstr "PeakURL nemohl dokončit aktualizaci vydání. Zkontrolujte protokoly serveru a zkuste to znovu."
+
+#: server/features/system/service.php:661
+#: server/features/system/service.php:684
+#: server/features/system/service.php:756
+#: server/features/system/service.php:800
+#: server/features/system/service.php:844
+#: server/features/system/service.php:960
 msgid "Scheduler service is not configured."
 msgstr "Služba plánovače není nakonfigurována."
 
-#: server/features/system/service.php:644
-#: server/features/system/service.php:791
-#: server/features/system/service.php:907
+#: server/features/system/service.php:720
+#: server/features/system/service.php:867
+#: server/features/system/service.php:983
 msgid "Unknown background job identifier: %s"
 msgstr "Neznámý identifikátor úlohy na pozadí: %s"
 
-#: server/features/system/service.php:688
+#: server/features/system/service.php:764
 msgid "Missing required field: retention_days."
 msgstr "Chybí povinné pole: retention_days."
 
-#: server/features/system/service.php:696
+#: server/features/system/service.php:772
 msgid "Retention days must be a non-negative integer."
 msgstr "Počet dní uchování musí být nezáporné celé číslo."
 
-#: server/features/system/service.php:782
-#: server/features/system/service.php:898
+#: server/features/system/service.php:858
+#: server/features/system/service.php:974
 msgid "Missing background job identifier."
 msgstr "Chybí identifikátor úlohy na pozadí."
 
-#: server/features/system/service.php:801
+#: server/features/system/service.php:877
 msgid "Invalid request payload."
 msgstr "Neplatná data požadavku."
 
-#: server/features/system/service.php:813
+#: server/features/system/service.php:889
 msgid "Recurrence interval must be an integer of at least 300 seconds (5 minutes)."
 msgstr "Interval opakování musí být celé číslo alespoň 300 sekund (5 minut)."
 
-#: server/features/system/service.php:826
+#: server/features/system/service.php:902
 msgid "Preferred time must be in 24-hour format (HH:MM)."
 msgstr "Preferovaný čas musí být ve 24hodinovém formátu (HH:MM)."
 
-#: server/features/system/service.php:845
+#: server/features/system/service.php:921
 msgid "Retention days must be null or a non-negative integer."
 msgstr "Počet dní uchování musí být null nebo nezáporné celé číslo."
 
@@ -1113,71 +1125,82 @@ msgstr "Nepodařilo se nakonfigurovat možnosti přenosu."
 msgid "Failed to create link record."
 msgstr "Vytvoření záznamu odkazu se nezdařilo."
 
-#: server/features/links/jobs/link-health-check.php:174
+#: server/features/links/jobs/link-health-check.php:354
+#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
+msgid "No active links available for health check."
+msgstr "Pro kontrolu stavu nejsou k dispozici žádné aktivní odkazy."
+
+#: server/features/links/jobs/link-health-check.php:378
 msgid "Failed to record health snapshots for all %d checked links."
 msgstr "Nepodařilo se zaznamenat snímky stavu pro všech %d zkontrolovaných odkazů."
 
-#: server/features/links/jobs/link-health-check.php:183
-msgid "Health check completed for %1$d link: %2$s."
-msgstr "Kontrola stavu dokončena pro %1$d odkaz: %2$s."
-
-#: server/features/links/jobs/link-health-check.php:189
-msgid "Health check completed for %1$d links: %2$s."
-msgstr "Kontrola stavu dokončena pro %1$d odkazů: %2$s."
-
-#: server/features/links/jobs/link-health-check.php:197
+#: server/features/links/jobs/link-health-check.php:415
 msgid "(%d persistence failures)"
 msgstr "(%d selhání uložení)"
 
-#: server/features/links/jobs/link-health-check.php:233
+#: server/features/links/jobs/link-health-check.php:454
 msgid "%d healthy"
 msgstr "%d v pořádku"
 
-#: server/features/links/jobs/link-health-check.php:241
+#: server/features/links/jobs/link-health-check.php:462
 msgid "%d slow"
 msgstr "%d pomalých"
 
-#: server/features/links/jobs/link-health-check.php:281
+#: server/features/links/jobs/link-health-check.php:502
 msgid "%d unreachable"
 msgstr "%d nedostupných"
 
-#: server/features/links/jobs/link-health-check.php:297
+#: server/features/links/jobs/link-health-check.php:518
 msgid "%d blocked"
 msgstr "%d zablokovaných"
 
-#: server/features/links/jobs/link-health-check.php:303
+#: server/features/links/jobs/link-health-check.php:524
 msgid "0 checked"
 msgstr "0 zkontrolováno"
 
-#: server/features/links/jobs/link-health-check.php:249
+#: server/features/links/jobs/link-health-check.php:389
+msgid "Daily link health sweep completed for %1$d link: %2$s."
+msgid_plural "Daily link health sweep completed for %1$d links: %2$s."
+msgstr[0] "Denní kontrolní průchod stavu odkazů dokončen pro %1$d odkaz: %2$s."
+msgstr[1] "Denní kontrolní průchod stavu odkazů dokončen pro %1$d odkazy: %2$s."
+msgstr[2] "Denní kontrolní průchod stavu odkazů dokončen pro %1$d odkazů: %2$s."
+
+#: server/features/links/jobs/link-health-check.php:401
+msgid "Daily link health check processed %1$d link (sweep paused by execution safeguard): %2$s."
+msgid_plural "Daily link health check processed %1$d links (sweep paused by execution safeguard): %2$s."
+msgstr[0] "Denní kontrola stavu odkazů zpracovala %1$d odkaz (průchod pozastaven bezpečnostním limitem provádění): %2$s."
+msgstr[1] "Denní kontrola stavu odkazů zpracovala %1$d odkazy (průchod pozastaven bezpečnostním limitem provádění): %2$s."
+msgstr[2] "Denní kontrola stavu odkazů zpracovala %1$d odkazů (průchod pozastaven bezpečnostním limitem provádění): %2$s."
+
+#: server/features/links/jobs/link-health-check.php:470
 msgid "%d HTTP error"
 msgid_plural "%d HTTP errors"
 msgstr[0] "%d chyba HTTP"
 msgstr[1] "%d chyby HTTP"
 msgstr[2] "%d chyb HTTP"
 
-#: server/features/links/jobs/link-health-check.php:257
+#: server/features/links/jobs/link-health-check.php:478
 msgid "%d DNS error"
 msgid_plural "%d DNS errors"
 msgstr[0] "%d chyba DNS"
 msgstr[1] "%d chyby DNS"
 msgstr[2] "%d chyb DNS"
 
-#: server/features/links/jobs/link-health-check.php:265
+#: server/features/links/jobs/link-health-check.php:486
 msgid "%d TLS error"
 msgid_plural "%d TLS errors"
 msgstr[0] "%d chyba TLS"
 msgstr[1] "%d chyby TLS"
 msgstr[2] "%d chyb TLS"
 
-#: server/features/links/jobs/link-health-check.php:273
+#: server/features/links/jobs/link-health-check.php:494
 msgid "%d timeout"
 msgid_plural "%d timeouts"
 msgstr[0] "%d vypršení časového limitu"
 msgstr[1] "%d vypršení časového limitu"
 msgstr[2] "%d vypršení časového limitu"
 
-#: server/features/links/jobs/link-health-check.php:289
+#: server/features/links/jobs/link-health-check.php:510
 msgid "%d redirect loop"
 msgid_plural "%d redirect loops"
 msgstr[0] "%d smyčka přesměrování"
@@ -1719,35 +1742,39 @@ msgstr "Do tabulky %2$s byl přidán sloupec %1$s."
 msgid "Added the %1$s index to the %2$s table."
 msgstr "Do tabulky %2$s byl přidán index %1$s."
 
-#: server/services/database/schema-manager.php:148
+#: server/services/database/schema-manager.php:167
+msgid "PeakURL could not acquire the database schema repair lock."
+msgstr "PeakURL nemohl získat zámek opravy schématu databáze."
+
+#: server/services/database/schema-manager.php:213
 msgid "PeakURL could not fully repair the database schema."
 msgstr "PeakURL nemohl plně opravit schéma databáze."
 
-#: server/services/database/schema-status.php:179
+#: server/services/database/schema-status.php:206
 msgid "The %s table is missing."
 msgstr "Tabulka %s chybí."
 
-#: server/services/database/schema-status.php:192
+#: server/services/database/schema-status.php:219
 msgid "The %1$s table is missing the %2$s column."
 msgstr "V tabulce %1$s chybí sloupec %2$s."
 
-#: server/services/database/schema-status.php:205
+#: server/services/database/schema-status.php:232
 msgid "The %1$s table is missing the %2$s index."
 msgstr "V tabulce %1$s chybí index %2$s."
 
-#: server/services/database/schema-status.php:218
+#: server/services/database/schema-status.php:245
 msgid "The %1$s table is missing the %2$s foreign key."
 msgstr "V tabulce %1$s chybí cizí klíč %2$s."
 
-#: server/services/database/schema-status.php:233
+#: server/services/database/schema-status.php:260
 msgid "The api_keys table still contains plain-text key storage and needs to be repaired."
 msgstr "Tabulka api_keys stále obsahuje klíče v prostém textu a vyžaduje opravu."
 
-#: server/services/database/schema-status.php:248
+#: server/services/database/schema-status.php:275
 msgid "The hashed API key columns still allow NULL values and need to be repaired."
 msgstr "Sloupce hešovaných klíčů API stále povolují hodnoty NULL a vyžadují opravu."
 
-#: server/services/database/schema-status.php:273
+#: server/services/database/schema-status.php:300
 msgid "The database schema version %1$d is behind the required version %2$d."
 msgstr "Verze schématu databáze %1$d je starší než požadovaná verze %2$d."
 
@@ -1851,15 +1878,15 @@ msgstr "Heslo správce musí mít alespoň 8 znaků."
 msgid "Unable to connect to the database or create the PeakURL tables. "
 msgstr "Nelze se připojit k databázi nebo vytvořit tabulky PeakURL. "
 
-#: server/services/install/initializer.php:104
+#: server/services/install/initializer.php:106
 msgid "PeakURL could not finish the database upgrade. Verify the database user can alter tables, then retry."
 msgstr "PeakURL nemohl dokončit aktualizaci databáze. Zkontrolujte, zda má uživatel databáze oprávnění měnit tabulky (ALTER), a zkuste to znovu."
 
-#: server/services/install/initializer.php:126
+#: server/services/install/initializer.php:142
 msgid "Database tables are missing. Run the installer or `%s` inside the PHP runtime directory."
 msgstr "Databázové tabulky chybí. Spusťte instalační program nebo `%s` v běhovém adresáři PHP."
 
-#: server/services/install/initializer.php:155
+#: server/services/install/initializer.php:171
 msgid "PeakURL is not installed yet. Run install.php to finish setup."
 msgstr "PeakURL ještě není nainstalován. Spusťte install.php pro dokončení instalace."
 
@@ -1960,7 +1987,7 @@ msgid "The update manifest did not include a package URL."
 msgstr "Manifest aktualizací neobsahoval URL balíčku."
 
 #: server/services/update/manifest.php:211
-#: server/services/update/installer.php:264
+#: server/services/update/installer.php:272
 msgid "The update manifest did not include a SHA-256 checksum."
 msgstr "Manifest aktualizací neobsahoval kontrolní součet SHA-256."
 
@@ -1969,7 +1996,7 @@ msgid "The update manifest included an invalid SHA-256 checksum."
 msgstr "Manifest aktualizací obsahoval neplatný kontrolní součet SHA-256."
 
 #: server/services/update/manifest.php:223
-#: server/services/update/installer.php:123
+#: server/services/update/installer.php:126
 msgid "release package URL"
 msgstr "URL balíčku vydání"
 
@@ -2001,51 +2028,51 @@ msgstr "PeakURL nemohl vytvořit zámek aktualizace."
 msgid "Another PeakURL update is already running."
 msgstr "Jiná aktualizace PeakURL již probíhá."
 
-#: server/services/update/installer.php:117
+#: server/services/update/installer.php:120
 msgid "The update manifest is missing a package URL or version."
 msgstr "V manifestu aktualizací chybí URL balíčku nebo verze."
 
-#: server/services/update/installer.php:205
+#: server/services/update/installer.php:213
 msgid "PeakURL could not apply the update and the rollback failed. "
 msgstr "PeakURL nemohl použít aktualizaci a vrácení změn se nezdařilo. "
 
-#: server/services/update/installer.php:214
+#: server/services/update/installer.php:222
 msgid "PeakURL could not apply the update. "
 msgstr "PeakURL nemohl použít aktualizaci. "
 
-#: server/services/update/installer.php:241
+#: server/services/update/installer.php:249
 msgid "PeakURL could not store the downloaded release package."
 msgstr "PeakURL nemohl uložit stažený balíček vydání."
 
-#: server/services/update/installer.php:272
+#: server/services/update/installer.php:280
 msgid "PeakURL could not verify the downloaded release checksum."
 msgstr "PeakURL nemohl ověřit kontrolní součet staženého vydání."
 
-#: server/services/update/installer.php:278
+#: server/services/update/installer.php:286
 msgid "The downloaded release checksum did not match the manifest."
 msgstr "Kontrolní součet staženého vydání neodpovídá manifestu."
 
-#: server/services/update/installer.php:298
+#: server/services/update/installer.php:306
 msgid "PeakURL could not open the downloaded release archive."
 msgstr "PeakURL nemohl otevřít stažený archiv vydání."
 
-#: server/services/update/installer.php:307
+#: server/services/update/installer.php:315
 msgid "PeakURL could not extract the downloaded release archive."
 msgstr "PeakURL nemohl rozbalit stažený archiv vydání."
 
-#: server/services/update/installer.php:330
+#: server/services/update/installer.php:338
 msgid "The downloaded release archive contains an unsafe file path."
 msgstr "Stažený archiv vydání obsahuje nebezpečnou cestu k souboru."
 
-#: server/services/update/installer.php:345
+#: server/services/update/installer.php:353
 msgid "The downloaded release archive contains an unsupported symbolic link."
 msgstr "Stažený archiv vydání obsahuje nepodporovaný symbolický odkaz."
 
-#: server/services/update/installer.php:382
+#: server/services/update/installer.php:390
 msgid "PeakURL could not determine the extracted package root."
 msgstr "PeakURL nemohl určit kořenový adresář rozbaleného balíčku."
 
-#: server/services/update/installer.php:393
+#: server/services/update/installer.php:401
 msgid "PeakURL could not validate the extracted package structure."
 msgstr "PeakURL nemohl ověřit strukturu rozbaleného balíčku."
 
@@ -6690,10 +6717,6 @@ msgstr "Kontrola verze dokončena: nalezena vzdálená verze %s."
 msgid "No pending webhook deliveries."
 msgstr "Žádná čekající doručení webhooků."
 
-#: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:337
-msgid "No active links available for health check."
-msgstr "Pro kontrolu stavu nejsou k dispozici žádné aktivní odkazy."
-
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:385
 msgid "GeoIP update failed: %s"
 msgstr "Aktualizace GeoIP se nezdařila: %s"
@@ -7669,60 +7692,60 @@ msgid "Sample Data Structure"
 msgstr "Ukázková struktura dat"
 
 #: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:16
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:31
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:55
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:29
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:53
 msgid "Example page"
 msgstr "Ukázková stránka"
 
 #: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:18
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:35
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:59
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:33
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:57
 msgid "Custom Social Title"
 msgstr "Vlastní sociální název"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:20
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:36
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:60
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:18
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:34
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:58
 msgid "Custom Social Description"
 msgstr "Vlastní sociální popis"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:79
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:77
 msgid "File Format Requirements"
 msgstr "Požadavky na formát souboru"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:84
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:82
 msgid "Required Fields"
 msgstr "Povinná pole"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:89
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:90
 msgid " - Destination URL"
 msgstr " - Cílová URL"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:97
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:96
 msgid "Optional Fields"
 msgstr "Volitelná pole"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:102
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:101
 msgid " - Custom alias"
 msgstr " - Vlastní alias"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:106
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:105
 msgid " - Link title"
 msgstr " - Název odkazu"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:110
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:109
 msgid " - Link status (active, inactive, paused, archived)"
 msgstr " - Stav odkazu (aktivní, neaktivní, pozastaveno, archivováno)"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:117
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:116
 msgid " - Protection password"
 msgstr " - Heslo pro ochranu"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:122
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:123
 msgid " - Expiration date (YYYY-MM-DD)"
 msgstr " - Datum vypršení platnosti (RRRR-MM-DD)"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:137
+#: client/pages/dashboard/tools/import/components/file-upload/FormatRequirements.tsx:138
 msgid " - Social preview meta tags"
 msgstr " - Meta tagy pro sociální náhled"
 
@@ -7739,49 +7762,49 @@ msgid "Please wait while we process your file"
 msgstr "Počkejte prosím, než zpracujeme váš soubor"
 
 #: client/pages/dashboard/tools/import/components/file-upload/ProcessingStatus.tsx:42
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:210
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:212
 msgid "Processing URLs"
 msgstr "Zpracování adres URL"
 
 #: client/pages/dashboard/tools/import/components/file-upload/ProcessingStatus.tsx:45
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:213
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:215
 msgid "Creating short links..."
 msgstr "Vytváření zkrácených odkazů..."
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:143
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:149
 msgid "Unsupported file format"
 msgstr "Nepodporovaný formát souboru"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:150
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:156
 msgid "No valid data found in file"
 msgstr "V souboru nebyla nalezena žádná platná data"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:155
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:161
 msgid "Failed to parse file"
 msgstr "Soubor se nepodařilo analyzovat"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:156
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:328
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:114
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:162
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:335
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:116
 #: client/pages/dashboard/links/components/StatsDrawer/TrafficLocationTab.tsx:247
 msgid "Unknown error"
 msgstr "Neznámá chyba"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:296
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:84
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:303
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:86
 msgid "Auto-generated"
 msgstr "Automaticky vygenerováno"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:327
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:113
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:334
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:115
 msgid "Import failed"
 msgstr "Import se nezdařil"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:337
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:344
 msgid "Upload File"
 msgstr "Nahrát soubor"
 
-#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:339
+#: client/pages/dashboard/tools/import/components/file-upload/FileUpload.tsx:346
 msgid "Upload a CSV, JSON, or XML file containing URLs and their metadata."
 msgstr "Nahrajte soubor CSV, JSON nebo XML obsahující adresy URL a jejich metadata."
 
@@ -7814,50 +7837,50 @@ msgstr "Použijte naše API k programovému importu více adres URL. Ideální p
 msgid "Read Import Guide"
 msgstr "Přečíst si průvodce importem"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:61
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:63
 msgid "No URLs found"
 msgstr "Nebyly nalezeny žádné adresy URL"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:123
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:125
 #: client/pages/dashboard/tools/import/Layout.tsx:19
 msgid "Paste URLs"
 msgstr "Vložit adresy URL"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:125
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:127
 msgid "Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias and title separated by commas, tabs, or spaces."
 msgstr "Vložte seznam adres URL (jedna na řádek) pro rychlé vytvoření více zkrácených odkazů. Volitelně můžete přidat vlastní alias a název oddělený čárkami, tabulátory nebo mezerami."
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:134
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:136
 msgid "URLs (one per line)"
 msgstr "Adresy URL (jedna na řádek)"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:154
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:156
 msgid "Create Links"
 msgstr "Vytvořit odkazy"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:160
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:162
 msgid "Tips"
 msgstr "Tipy"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:167
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:169
 msgid "Format:"
 msgstr "Formát:"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:170
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:172
 #: client/pages/dashboard/links/components/UrlShorteningForm/SocialPreviewFields.tsx:108
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/SocialPreviewTab.tsx:77
 msgid "or"
 msgstr "nebo"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:178
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:180
 msgid "Each entry should be on a separate line"
 msgstr "Každá položka by měla být na samostatném řádku"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:186
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:188
 msgid "URLs must include http:// or https://"
 msgstr "Adresy URL musí obsahovat http:// nebo https://"
 
-#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:194
+#: client/pages/dashboard/tools/import/components/paste/PasteImport.tsx:196
 msgid "If alias is omitted, one will be auto-generated"
 msgstr "Pokud je alias vynechán, bude automaticky vygenerován"
 

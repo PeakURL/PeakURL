@@ -22,7 +22,7 @@ use PeakURL\Core\Config\Constants;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Core\Config\Configuration;
 use PeakURL\Services\Favicon;
-use PeakURL\Services\Install\State as InstallState;
+use PeakURL\Services\Install\InstallationState;
 use PeakURL\Utils\Str;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -538,10 +538,10 @@ if ( ! file_exists( $autoload ) ) {
 
 require_once $autoload;
 
-$install_state = InstallState::get_state( $runtime_path );
+$install_state = InstallationState::get_state( $runtime_path );
 
 if ( $is_favicon( $relative_path ) ) {
-	if ( InstallState::READY !== $install_state ) {
+	if ( InstallationState::READY !== $install_state ) {
 		http_response_code( 404 );
 		exit();
 	}
@@ -578,15 +578,15 @@ if ( $is_favicon( $relative_path ) ) {
 }
 
 if ( Str::starts_with( $relative_path, '/api/' ) ) {
-	if ( InstallState::READY !== $install_state ) {
+	if ( InstallationState::READY !== $install_state ) {
 		http_response_code( 503 );
 		header( 'Content-Type: application/json; charset=utf-8' );
 		echo json_encode(
 			array(
 				'success' => false,
-				'message' => InstallState::NEEDS_INSTALL === $install_state
+				'message' => InstallationState::NOT_INSTALLED === $install_state
 					? 'PeakURL needs installation.'
-					: ( InstallState::DATABASE_CONNECTION_ERROR === $install_state
+					: ( InstallationState::DATABASE_UNAVAILABLE === $install_state
 						? 'PeakURL could not connect to the configured database.'
 						: 'PeakURL needs database configuration.' ),
 				'data'    => array(
@@ -606,7 +606,7 @@ if ( Str::starts_with( $relative_path, '/api/' ) ) {
 	exit();
 }
 
-if ( InstallState::DATABASE_CONNECTION_ERROR === $install_state ) {
+if ( InstallationState::DATABASE_UNAVAILABLE === $install_state ) {
 	$safe_database_connection_error_path = str_replace(
 		array( "\r", "\n" ),
 		'',
@@ -620,11 +620,15 @@ if ( InstallState::DATABASE_CONNECTION_ERROR === $install_state ) {
 		$safe_database_connection_error_path = '/';
 	}
 
+	if ( ! Str::starts_with( $relative_path, '/database-error' ) && '/' !== $relative_path ) {
+		$safe_database_connection_error_path .= '?redirect_to=' . rawurlencode( $uri );
+	}
+
 	header( 'Location: ' . $safe_database_connection_error_path, true, 302 );
 	exit();
 }
 
-if ( InstallState::NEEDS_SETUP === $install_state ) {
+if ( InstallationState::NOT_CONFIGURED === $install_state ) {
 	$safe_setup_path = str_replace( array( "\r", "\n" ), '', (string) $setup_path );
 
 	if ( '' === $safe_setup_path || '/' !== $safe_setup_path[0] ) {
@@ -635,7 +639,7 @@ if ( InstallState::NEEDS_SETUP === $install_state ) {
 	exit();
 }
 
-if ( InstallState::NEEDS_INSTALL === $install_state ) {
+if ( InstallationState::NOT_INSTALLED === $install_state ) {
 	$safe_install_path = str_replace( array( "\r", "\n" ), '', (string) $install_path );
 
 	if ( '' === $safe_install_path || '/' !== $safe_install_path[0] ) {
@@ -646,7 +650,7 @@ if ( InstallState::NEEDS_INSTALL === $install_state ) {
 	exit();
 }
 
-if ( '/' === $relative_path && InstallState::READY === $install_state ) {
+if ( '/' === $relative_path && InstallationState::READY === $install_state ) {
 	$app_config   = Configuration::bootstrap( $runtime_path );
 	$connection   = new Connection( $app_config );
 	$settings_api = new SettingsApi( new PeakURL_DB( $connection ) );

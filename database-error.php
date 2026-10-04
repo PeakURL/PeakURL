@@ -11,8 +11,8 @@
 
 declare(strict_types=1);
 
+use PeakURL\Services\Install\InstallationState;
 use PeakURL\Services\Install\Screen as InstallScreen;
-use PeakURL\Services\Install\State as InstallState;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
@@ -29,19 +29,20 @@ $environment->load_autoloader();
 $base_path     = InstallScreen::get_base_path(
 	(string) ( $_SERVER['SCRIPT_NAME'] ?? '/database-error.php' ),
 );
-$install_state = InstallState::get_state( $runtime_path );
+$install_state = InstallationState::get_state( $runtime_path );
 
-if ( InstallState::READY === $install_state ) {
-	header( 'Location: ' . InstallScreen::format_url( $base_path, '/dashboard' ) );
+if ( InstallationState::READY === $install_state ) {
+	$target = InstallScreen::sanitize_redirect_target( (string) ( $_GET['redirect_to'] ?? '' ), '/dashboard' );
+	header( 'Location: ' . InstallScreen::format_url( $base_path, $target ) );
 	exit();
 }
 
-if ( InstallState::NEEDS_SETUP === $install_state ) {
+if ( InstallationState::NOT_CONFIGURED === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/setup-config.php' ) );
 	exit();
 }
 
-if ( InstallState::NEEDS_INSTALL === $install_state ) {
+if ( InstallationState::NOT_INSTALLED === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/install.php' ) );
 	exit();
 }

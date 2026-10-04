@@ -144,6 +144,14 @@ class Service {
 	private ?Scheduler $scheduler;
 
 	/**
+	 * Update manager instance.
+	 *
+	 * @var UpdateManager|null
+	 * @since 1.7.1
+	 */
+	private ?UpdateManager $update_manager;
+
+	/**
 	 * Create a new System Service instance.
 	 *
 	 * @param PeakURL_DB           $db             Shared database wrapper.
@@ -158,7 +166,9 @@ class Service {
 	 * @param Authorization        $authorization  Authorization helper.
 	 * @param array<string, mixed> $config         Runtime config map.
 	 * @param Scheduler|null       $scheduler      Optional scheduler instance.
+	 * @param UpdateManager|null   $update_manager Optional update manager instance.
 	 * @since 1.0.0
+	 * @since 1.7.1 Added $update_manager parameter.
 	 */
 	public function __construct(
 		PeakURL_DB $db,
@@ -172,7 +182,8 @@ class Service {
 		Roles $roles,
 		Authorization $authorization,
 		array $config,
-		?Scheduler $scheduler = null
+		?Scheduler $scheduler = null,
+		?UpdateManager $update_manager = null
 	) {
 		$this->db             = $db;
 		$this->connection     = $connection;
@@ -186,6 +197,7 @@ class Service {
 		$this->authorization  = $authorization;
 		$this->config         = $config;
 		$this->scheduler      = $scheduler;
+		$this->update_manager = $update_manager;
 	}
 
 	/**
@@ -371,9 +383,27 @@ class Service {
 				return $status;
 			}
 
-			return $service->upgrade();
+			$result = $service->upgrade();
+
+			$version = (string) ( $this->config[ Constants::VERSION ] ?? '' );
+			if ( '' !== $version && $service->is_current() ) {
+				$this->settings_api->update_option(
+					'installed_version',
+					$version,
+					Date::now(),
+					false,
+				);
+			}
+
+			return $result;
 		} catch ( \Throwable $exception ) {
-			throw new ApiException( $exception->getMessage(), 500 );
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			error_log( 'PeakURL database schema upgrade failed: ' . $exception->getMessage() );
+
+			throw new ApiException(
+				__( 'PeakURL could not complete the database schema upgrade. Verify that the database user has permission to create and alter tables, check the server logs, and retry.', 'peakurl' ),
+				500,
+			);
 		}
 	}
 
@@ -386,7 +416,7 @@ class Service {
 	 */
 	private function load_update_status( bool $force_check ): array {
 		$settings_api    = $this->settings_api;
-		$update_service  = new UpdateManager( $this->config, $this->settings_api, $this->db );
+		$update_service  = $this->get_update_manager();
 		$manifest_url    = $update_service->get_manifest_url();
 		$last_checked    = $settings_api->get_option( 'update_last_checked_at' );
 		$last_error      = $settings_api->get_option( 'update_last_error' );
@@ -501,12 +531,52 @@ class Service {
 			);
 		}
 
-		$update_service = new UpdateManager( $this->config, $this->settings_api, $this->db );
-		$settings_api   = $this->settings_api;
+		$update_service         = $this->get_update_manager();
+		$settings_api           = $this->settings_api;
+		$previous_version_value = $settings_api->get_option( 'installed_version' );
+		$had_installed_version  = null !== $previous_version_value;
 
 		try {
-			$result = $update_service->apply_update( $manifest );
+			$result = $update_service->apply_update(
+				$manifest,
+				function ( string $version ) use ( $settings_api ): void {
+					$this->schema_service->repair_schema();
+
+					if ( ! $this->schema_service->is_current() ) {
+						throw new \RuntimeException(
+							__( 'PeakURL could not complete the database schema upgrade.', 'peakurl' ),
+						);
+					}
+
+					$target_version = '' !== $version
+						? $version
+						: (string) ( $this->config[ Constants::VERSION ] ?? Constants::DEFAULT_VERSION );
+
+					$settings_api->update_option(
+						'installed_version',
+						$target_version,
+						Date::now(),
+						false,
+					);
+				}
+			);
 		} catch ( \Throwable $exception ) {
+			if ( $had_installed_version ) {
+				if ( $settings_api->get_option( 'installed_version' ) !== $previous_version_value ) {
+					$settings_api->update_option(
+						'installed_version',
+						(string) $previous_version_value,
+						Date::now(),
+						false,
+					);
+				}
+			} else {
+				$settings_api->delete_option( 'installed_version' );
+			}
+
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			error_log( 'PeakURL update failed: ' . $exception->getMessage() );
+
 			$settings_api->update_option( 'update_last_checked_at', Date::now(), Date::now(), false );
 			$settings_api->update_option(
 				'update_last_error',
@@ -515,20 +585,16 @@ class Service {
 				false,
 			);
 
-			throw new ApiException( $exception->getMessage(), 500 );
+			throw new ApiException(
+				__( 'PeakURL could not complete the release update. Check the server logs and retry.', 'peakurl' ),
+				500,
+			);
 		}
 
 		$installed_version = (string) (
 			$result['version']
 			?? $this->config[ Constants::VERSION ]
 			?? Constants::DEFAULT_VERSION
-		);
-
-		$settings_api->update_option(
-			'installed_version',
-			$installed_version,
-			Date::now(),
-			false,
 		);
 		$settings_api->update_option( 'update_last_applied_at', Date::now(), Date::now(), false );
 		$settings_api->update_option( 'update_last_checked_at', Date::now(), Date::now(), false );
@@ -549,6 +615,16 @@ class Service {
 			'appliedAt'      => (string) ( $result['appliedAt'] ?? gmdate( DATE_ATOM ) ),
 			'reloadRequired' => true,
 		);
+	}
+
+	/**
+	 * Get the update manager instance.
+	 *
+	 * @return UpdateManager
+	 * @since 1.7.1
+	 */
+	protected function get_update_manager(): UpdateManager {
+		return $this->update_manager ?? new UpdateManager( $this->config, $this->settings_api, $this->db );
 	}
 
 	/**

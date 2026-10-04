@@ -2,7 +2,43 @@ import { test, expect } from "@playwright/test";
 import { getInstallRecovery } from "../../client/shared/install";
 
 test.describe("Install Recovery Utilities", () => {
-	test("extracts needs_setup recovery with setupConfigUrl", () => {
+	test("extracts not_configured recovery with setupConfigUrl", () => {
+		const error = {
+			status: 503,
+			data: {
+				data: {
+					recoveryState: "not_configured",
+					setupConfigUrl: "/setup-config.php",
+				},
+			},
+		};
+
+		const recovery = getInstallRecovery(error);
+		expect(recovery).toEqual({
+			state: "not_configured",
+			url: "/setup-config.php",
+		});
+	});
+
+	test("extracts not_installed recovery with installUrl", () => {
+		const error = {
+			status: 503,
+			data: {
+				data: {
+					recoveryState: "not_installed",
+					installUrl: "/install.php",
+				},
+			},
+		};
+
+		const recovery = getInstallRecovery(error);
+		expect(recovery).toEqual({
+			state: "not_installed",
+			url: "/install.php",
+		});
+	});
+
+	test("extracts legacy needs_setup recovery with setupConfigUrl", () => {
 		const error = {
 			status: 503,
 			data: {
@@ -20,7 +56,7 @@ test.describe("Install Recovery Utilities", () => {
 		});
 	});
 
-	test("extracts needs_install recovery with installUrl", () => {
+	test("extracts legacy needs_install recovery with installUrl", () => {
 		const error = {
 			status: 503,
 			data: {

@@ -68,11 +68,11 @@ class Manager {
 	): array {
 		unset( $request );
 
-		if ( State::is_installed( $app_path ) ) {
+		if ( InstallationState::is_installed( $app_path ) ) {
 			throw new \RuntimeException( __( 'PeakURL is already installed.', 'peakurl' ) );
 		}
 
-		if ( ! State::config_exists( $app_path ) ) {
+		if ( ! InstallationState::config_exists( $app_path ) ) {
 			throw new \RuntimeException(
 				__( 'PeakURL still needs database configuration. Run setup-config.php first.', 'peakurl' ),
 			);

@@ -98,7 +98,9 @@ class Initializer {
 		$schema      = new DatabaseSchema( $connection, $schema_path );
 
 		try {
-			$schema->repair_schema();
+			if ( $schema->needs_repair() ) {
+				$schema->repair_schema();
+			}
 		} catch ( \Throwable $exception ) {
 			throw new ApiException(
 				__(
@@ -114,6 +116,20 @@ class Initializer {
 		}
 
 		$db = new PeakURL_DB( $connection );
+
+		if ( $db->table_exists( 'settings' ) ) {
+			$version = trim( (string) ( $config[ Constants::VERSION ] ?? '' ) );
+			if ( '' !== $version ) {
+				$settings_api      = new SettingsApi( $db );
+				$installed_version = $settings_api->get_option( 'installed_version' );
+				$is_absent         = null === $installed_version || '' === trim( $installed_version );
+				$is_older          = ! $is_absent && version_compare( (string) $installed_version, $version, '<' );
+
+				if ( ( $is_absent || $is_older ) && $schema->is_current() ) {
+					$settings_api->update_option( 'installed_version', $version, Date::now(), false );
+				}
+			}
+		}
 
 		if ( ! $db->table_exists( 'users' ) ) {
 			$setup_command = \PeakURL\Core\Config\Environment::get_instance()->is_development()

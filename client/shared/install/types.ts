@@ -1,7 +1,8 @@
 /**
  * Recovery states returned when the PHP runtime needs setup or installation.
  */
-export type InstallRecoveryState = "needs_setup" | "needs_install";
+export type InstallRecoveryState =
+	"not_configured" | "not_installed" | "needs_setup" | "needs_install";
 
 /**
  * Redirect target returned for setup or install recovery flows.

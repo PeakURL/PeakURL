@@ -75,6 +75,55 @@ class Screen {
 	}
 
 	/**
+	 * Sanitize an internal redirect target path.
+	 *
+	 * Rejects external schemes, protocol-relative paths, backslash variants,
+	 * CRLF characters, and malformed targets, ensuring only safe internal paths are used.
+	 *
+	 * @param string $target   Candidate redirect path.
+	 * @param string $fallback Fallback internal path if target is unsafe.
+	 * @return string Safe relative target path.
+	 * @since 1.7.1
+	 */
+	public static function sanitize_redirect_target( string $target, string $fallback = '/dashboard' ): string {
+		$target = trim( $target );
+
+		if ( '' === $target ) {
+			return $fallback;
+		}
+
+		if ( preg_match( '/[\r\n\x00-\x1F\x7F]/', $target ) ) {
+			return $fallback;
+		}
+
+		if ( ! str_starts_with( $target, '/' ) || str_starts_with( $target, '//' ) || str_contains( $target, '\\' ) ) {
+			return $fallback;
+		}
+
+		$decoded = rawurldecode( $target );
+		if (
+			preg_match( '/[\r\n\x00-\x1F\x7F]/', $decoded ) ||
+			! str_starts_with( $decoded, '/' ) ||
+			str_starts_with( $decoded, '//' ) ||
+			str_contains( $decoded, '\\' )
+		) {
+			return $fallback;
+		}
+
+		$parts = parse_url( $target );
+		if ( false === $parts || ! empty( $parts['scheme'] ) || ! empty( $parts['host'] ) ) {
+			return $fallback;
+		}
+
+		$decoded_parts = parse_url( $decoded );
+		if ( false === $decoded_parts || ! empty( $decoded_parts['scheme'] ) || ! empty( $decoded_parts['host'] ) ) {
+			return $fallback;
+		}
+
+		return $target;
+	}
+
+	/**
 	 * Return an escaped form field value for safe HTML output.
 	 *
 	 * @param array<string, string> $values Current form values.

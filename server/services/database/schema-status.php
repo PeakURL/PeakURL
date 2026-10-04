@@ -46,9 +46,10 @@ class Status {
 	}
 
 	/**
-	 * Determine whether the installed schema is already current.
+	 * Determine whether the installed schema is already current and structurally compatible.
 	 *
-	 * Uses a fast path suitable for runtime bootstrap on every request.
+	 * Checks for missing managed tables, schema errors, outstanding data repairs,
+	 * and recorded version matching or exceeding target version.
 	 *
 	 * @param int $target_version Current codebase schema version.
 	 * @return bool
@@ -67,7 +68,33 @@ class Status {
 			return false;
 		}
 
-		return $this->context->get_recorded_version() >= $target_version;
+		$recorded_version = $this->context->get_recorded_version();
+
+		return null !== $recorded_version && $recorded_version >= $target_version;
+	}
+
+	/**
+	 * Check whether the schema requires convergence or repair.
+	 *
+	 * Uses a lightweight version and error check suitable for runtime bootstrap
+	 * to determine whether full schema reconciliation is necessary.
+	 *
+	 * @param int $target_version Current codebase schema version.
+	 * @return bool True if repair is needed.
+	 * @since 1.7.1
+	 */
+	public function needs_repair( int $target_version ): bool {
+		$recorded_version = $this->context->get_recorded_version();
+
+		if ( null === $recorded_version || $recorded_version < $target_version ) {
+			return true;
+		}
+
+		if ( '' !== trim( (string) $this->context->get_option( Constants::SETTING_DB_SCHEMA_LAST_ERROR ) ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

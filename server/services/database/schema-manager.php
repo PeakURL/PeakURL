@@ -86,15 +86,42 @@ class Schema {
 	}
 
 	/**
-	 * Determine whether the installed schema is already current.
-	 *
-	 * Uses a fast path suitable for runtime bootstrap on every request.
+	 * Determine whether the installed schema is already current and structurally compatible.
 	 *
 	 * @return bool
 	 * @since 1.0.14
 	 */
 	public function is_current(): bool {
 		return $this->status->is_current( $this->get_target_version() );
+	}
+
+	/**
+	 * Determine whether the database schema needs repair or upgrade.
+	 *
+	 * Uses a lightweight version and error check suitable for runtime bootstrap
+	 * to determine whether full schema reconciliation is necessary.
+	 *
+	 * @return bool
+	 * @since 1.7.1
+	 */
+	public function needs_repair(): bool {
+		return $this->status->needs_repair( $this->get_target_version() );
+	}
+
+	/**
+	 * Get the advisory lock name for schema repairs.
+	 *
+	 * Scoped to the database name and table prefix to prevent cross-installation contention.
+	 *
+	 * @return string
+	 * @since 1.7.1
+	 */
+	public function get_lock_name(): string {
+		$connection = $this->context->get_connection();
+		$db_name    = (string) ( $connection->get_config()[ Constants::DB_DATABASE ] ?? '' );
+		$prefix     = $connection->get_table_prefix();
+
+		return 'peakurl_schema_repair_' . md5( $db_name . ':' . $prefix );
 	}
 
 	/**
@@ -113,7 +140,45 @@ class Schema {
 			);
 		}
 
-		return $this->upgrade();
+		$lock_name = $this->get_lock_name();
+		$pdo       = $this->context->get_pdo();
+		$acquired  = false;
+
+		try {
+			$stmt = $pdo->prepare( 'SELECT GET_LOCK(?, 30)' );
+			$stmt->execute( array( $lock_name ) );
+			$acquired = '1' === (string) $stmt->fetchColumn();
+		} catch ( \Throwable $lock_exception ) {
+			$acquired = false;
+		}
+
+		try {
+			if ( $this->is_current() ) {
+				return $this->status->get_payload(
+					$this->get_target_version(),
+					array(),
+					array(),
+					false,
+				);
+			}
+
+			if ( ! $acquired ) {
+				throw new \RuntimeException(
+					__( 'PeakURL could not acquire the database schema repair lock.', 'peakurl' ),
+				);
+			}
+
+			return $this->upgrade();
+		} finally {
+			if ( $acquired ) {
+				try {
+					$stmt = $pdo->prepare( 'SELECT RELEASE_LOCK(?)' );
+					$stmt->execute( array( $lock_name ) );
+				} catch ( \Throwable $unlock_exception ) {
+					// Advisory locks are released automatically on connection close.
+				}
+			}
+		}
 	}
 
 	/**

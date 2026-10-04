@@ -28,7 +28,12 @@ function getInstallRecoveryPayload(
 	const recoveryState = getStringRecordValue(payload, "recoveryState");
 
 	/* Only allow specific recovery states. */
-	if ("needs_setup" !== recoveryState && "needs_install" !== recoveryState) {
+	if (
+		"not_configured" !== recoveryState &&
+		"not_installed" !== recoveryState &&
+		"needs_setup" !== recoveryState &&
+		"needs_install" !== recoveryState
+	) {
 		return null;
 	}
 
@@ -55,14 +60,22 @@ export function getInstallRecovery(
 	}
 
 	/* Map the recovery state to the appropriate redirect URL. */
-	if ("needs_setup" === payload.recoveryState && payload.setupConfigUrl) {
+	if (
+		("not_configured" === payload.recoveryState ||
+			"needs_setup" === payload.recoveryState) &&
+		payload.setupConfigUrl
+	) {
 		return {
 			state: payload.recoveryState,
 			url: payload.setupConfigUrl,
 		};
 	}
 
-	if ("needs_install" === payload.recoveryState && payload.installUrl) {
+	if (
+		("not_installed" === payload.recoveryState ||
+			"needs_install" === payload.recoveryState) &&
+		payload.installUrl
+	) {
 		return {
 			state: payload.recoveryState,
 			url: payload.installUrl,

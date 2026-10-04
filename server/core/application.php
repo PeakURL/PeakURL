@@ -288,7 +288,8 @@ class Application {
 			$roles,
 			$authorization,
 			$config,
-			$scheduler
+			$scheduler,
+			$update_manager
 		);
 
 		$this->register_routes(

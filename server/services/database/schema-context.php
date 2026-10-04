@@ -86,6 +86,32 @@ class Context {
 	 * @since 1.0.14
 	 */
 	public function get_missing_tables( array $managed_tables ): array {
+		$db_name = (string) ( $this->connection->get_config()[ Constants::DB_DATABASE ] ?? '' );
+		$prefix  = $this->connection->get_table_prefix();
+
+		if ( '' !== $db_name ) {
+			try {
+				$stmt = $this->get_pdo()->prepare(
+					'SELECT table_name FROM information_schema.tables WHERE table_schema = ?'
+				);
+				$stmt->execute( array( $db_name ) );
+				$existing_raw = $stmt->fetchAll( \PDO::FETCH_COLUMN );
+				$existing_map = array_fill_keys( is_array( $existing_raw ) ? $existing_raw : array(), true );
+
+				$missing_tables = array();
+				foreach ( $managed_tables as $table_name ) {
+					$prefixed = $prefix . $table_name;
+					if ( ! isset( $existing_map[ $prefixed ] ) ) {
+						$missing_tables[] = $table_name;
+					}
+				}
+
+				return $missing_tables;
+			} catch ( \Throwable $exception ) {
+				// Fall back to per-table check on query failure.
+			}
+		}
+
 		$missing_tables = array();
 
 		foreach ( $managed_tables as $table_name ) {

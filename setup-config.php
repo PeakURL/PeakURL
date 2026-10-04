@@ -17,8 +17,8 @@ declare(strict_types=1);
 
 use PeakURL\Services\Install\Config as InstallConfig;
 use PeakURL\Services\Install\Locale as InstallLocale;
+use PeakURL\Services\Install\InstallationState;
 use PeakURL\Services\Install\Screen as InstallScreen;
-use PeakURL\Services\Install\State as InstallState;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', __DIR__ . DIRECTORY_SEPARATOR );
@@ -54,19 +54,19 @@ $installer_locale = new InstallLocale(
 
 set_i18n_service( $installer_locale->get_i18n_service() );
 
-$install_state = InstallState::get_state( $runtime_path );
+$install_state = InstallationState::get_state( $runtime_path );
 
-if ( InstallState::READY === $install_state ) {
+if ( InstallationState::READY === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/dashboard' ) );
 	exit();
 }
 
-if ( InstallState::NEEDS_INSTALL === $install_state ) {
+if ( InstallationState::NOT_INSTALLED === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/install.php' ) );
 	exit();
 }
 
-if ( InstallState::DATABASE_CONNECTION_ERROR === $install_state ) {
+if ( InstallationState::DATABASE_UNAVAILABLE === $install_state ) {
 	header( 'Location: ' . InstallScreen::format_url( $base_path, '/database-error.php' ) );
 	exit();
 }

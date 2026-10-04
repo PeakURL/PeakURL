@@ -95,12 +95,15 @@ class Installer {
 	 * Apply an update from a normalized manifest payload.
 	 *
 	 * @param array<string, string> $manifest Normalized update manifest.
+	 * @param callable|null         $verifier Optional verification callback invoked after release files
+	 *                                        are staged but before committing (deleting backup).
 	 * @return array<string, string>
 	 *
 	 * @throws \RuntimeException On any apply failure.
 	 * @since 1.0.14
+	 * @since 1.7.1 Added $verifier parameter for pre-commit verification before backup cleanup.
 	 */
-	public function apply( array $manifest ): array {
+	public function apply( array $manifest, ?callable $verifier = null ): array {
 		$availability = $this->context->get_availability();
 
 		if ( ! $availability['allowed'] ) {
@@ -180,6 +183,11 @@ class Installer {
 				$content_paths,
 				$source_root,
 			);
+
+			if ( null !== $verifier ) {
+				$verifier( $version, $manifest );
+			}
+
 			$this->filesystem->delete( $backup_dir );
 
 			return array(

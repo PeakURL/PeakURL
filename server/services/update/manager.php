@@ -74,17 +74,20 @@ class Manager {
 	 * @param array<string, mixed> $config       Shared runtime configuration.
 	 * @param SettingsApi          $settings_api Settings API instance.
 	 * @param PeakURL_DB           $db           Shared database wrapper.
+	 * @param Client|null          $client       Optional HTTP client override.
 	 * @since 1.0.14
 	 * @since 1.7.0 Added $settings_api and $db dependencies.
+	 * @since 1.7.1 Added $client dependency.
 	 */
 	public function __construct(
 		array $config,
 		SettingsApi $settings_api,
-		PeakURL_DB $db
+		PeakURL_DB $db,
+		?Client $client = null
 	) {
 		$filesystem      = new Filesystem();
 		$this->context   = new Context( $config, $filesystem );
-		$client          = new Client( $this->context );
+		$client          = $client ?? new Client( $this->context );
 		$metadata        = new Metadata( $this->context, $settings_api, $db );
 		$this->manifest  = new Manifest( $this->context, $client, $metadata );
 		$this->workspace = new Workspace( $this->context, $filesystem );
@@ -168,10 +171,12 @@ class Manager {
 	 * Apply an update from the given manifest.
 	 *
 	 * @param array<string, string> $manifest Normalized update manifest.
+	 * @param callable|null         $verifier Optional verification callback before update commit.
 	 * @return array<string, string>
 	 * @since 1.0.14
+	 * @since 1.7.1 Added $verifier parameter.
 	 */
-	public function apply_update( array $manifest ): array {
-		return $this->installer->apply( $manifest );
+	public function apply_update( array $manifest, ?callable $verifier = null ): array {
+		return $this->installer->apply( $manifest, $verifier );
 	}
 }

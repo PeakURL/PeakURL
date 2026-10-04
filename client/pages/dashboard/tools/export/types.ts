@@ -15,6 +15,24 @@ export interface LinkExportSourceLink extends ShortUrlLinkLike {
 	/** Optional title stored for the link. */
 	title?: string | null;
 
+	/** Current link status (active, inactive, expired, etc.). */
+	status?: string | null;
+
+	/** OpenGraph / SEO social preview metadata. */
+	socialPreview?: {
+		title?: string | null;
+		description?: string | null;
+		imageUrl?: string | null;
+		externalImageUrl?: string | null;
+	} | null;
+
+	/** Campaign tracking parameters. */
+	utmSource?: string | null;
+	utmMedium?: string | null;
+	utmCampaign?: string | null;
+	utmTerm?: string | null;
+	utmContent?: string | null;
+
 	/** Expiration timestamp associated with the link. */
 	expiresAt?: string | null;
 
@@ -32,15 +50,24 @@ export interface LinkExportSourceLink extends ShortUrlLinkLike {
  * Normalized row representation emitted during link exports.
  */
 export interface LinkExportItem {
-	url: string;
+	destinationUrl: string;
 	alias: string;
 	title: string;
+	status: string;
 	password: string;
-	expires: string;
-	short_url: string;
+	expiresAt: string;
+	socialTitle: string;
+	socialDescription: string;
+	socialImageUrl: string;
+	utmSource: string;
+	utmMedium: string;
+	utmCampaign: string;
+	utmTerm: string;
+	utmContent: string;
+	shortUrl: string;
 	clicks: number | string;
-	unique_clicks: number | string;
-	created_at: string;
+	uniqueClicks: number | string;
+	createdAt: string;
 }
 
 /**

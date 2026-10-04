@@ -68,6 +68,11 @@ export interface LinkRecord {
 	status?: LinkStatus | null;
 	clicks?: number | null;
 	uniqueClicks?: number | null;
+	utmSource?: string | null;
+	utmMedium?: string | null;
+	utmCampaign?: string | null;
+	utmTerm?: string | null;
+	utmContent?: string | null;
 	createdAt?: string | null;
 	updatedAt?: string | null;
 	expiresAt?: string | null;
@@ -138,12 +143,18 @@ export interface CreateUrlPayload {
 	destinationUrl: string;
 	alias?: string;
 	title?: string;
+	status?: LinkStatus;
 	socialTitle?: string;
 	socialDescription?: string;
 	socialImageFile?: File | null;
 	socialImageUrl?: string | null;
 	password?: string;
 	expiresAt?: string | null;
+	utmSource?: string;
+	utmMedium?: string;
+	utmCampaign?: string;
+	utmTerm?: string;
+	utmContent?: string;
 }
 
 /**

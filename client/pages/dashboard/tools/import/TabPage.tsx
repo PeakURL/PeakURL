@@ -15,19 +15,25 @@ function TabPage() {
 
 	const sampleData: SampleRow[] = [
 		{
-			url: "https://example.com/page1",
+			destinationUrl: "https://example.com/page1",
 			alias: "page1",
 			title: __("Product launch"),
+			status: "active",
+			utmSource: "newsletter",
 		},
 		{
-			url: "https://example.com/page2",
+			destinationUrl: "https://example.com/page2",
 			alias: "page2",
 			title: __("Help docs"),
+			status: "active",
+			utmSource: "docs",
 		},
 		{
-			url: "https://example.com/page3",
+			destinationUrl: "https://example.com/page3",
 			alias: "page3",
 			title: __("Newsletter"),
+			status: "inactive",
+			utmSource: "twitter",
 		},
 	];
 

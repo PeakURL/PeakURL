@@ -12,15 +12,24 @@ import type {
  * Ordered list of headers for CSV exports.
  */
 const LINK_EXPORT_HEADERS: Array<keyof LinkExportItem> = [
-	"url",
+	"destinationUrl",
 	"alias",
 	"title",
+	"status",
 	"password",
-	"expires",
-	"short_url",
+	"expiresAt",
+	"socialTitle",
+	"socialDescription",
+	"socialImageUrl",
+	"utmSource",
+	"utmMedium",
+	"utmCampaign",
+	"utmTerm",
+	"utmContent",
+	"shortUrl",
 	"clicks",
-	"unique_clicks",
-	"created_at",
+	"uniqueClicks",
+	"createdAt",
 ];
 
 /**
@@ -49,18 +58,31 @@ export function formatLinkExportItems(
 ): LinkExportItem[] {
 	return links.map((link) => {
 		const alias = link.alias || link.shortCode || "";
+		const socialImageUrl =
+			link.socialPreview?.imageUrl ||
+			link.socialPreview?.externalImageUrl ||
+			"";
 
 		return {
-			url: link.destinationUrl || "",
+			destinationUrl: link.destinationUrl || "",
 			alias,
 			title: link.title || "",
+			status: link.status || "active",
 			/* Password values are intentionally excluded for security reasons. */
 			password: "",
-			expires: link.expiresAt || "",
-			short_url: getShortUrl(link),
+			expiresAt: link.expiresAt || "",
+			socialTitle: link.socialPreview?.title || "",
+			socialDescription: link.socialPreview?.description || "",
+			socialImageUrl,
+			utmSource: link.utmSource || "",
+			utmMedium: link.utmMedium || "",
+			utmCampaign: link.utmCampaign || "",
+			utmTerm: link.utmTerm || "",
+			utmContent: link.utmContent || "",
+			shortUrl: getShortUrl(link),
 			clicks: link.clicks ?? 0,
-			unique_clicks: link.uniqueClicks ?? 0,
-			created_at: link.createdAt || "",
+			uniqueClicks: link.uniqueClicks ?? 0,
+			createdAt: link.createdAt || "",
 		};
 	});
 }
@@ -84,15 +106,24 @@ export function serializeLinkExport(
 		const itemXml = items
 			.map(
 				(item) => `  <url>
-    <destinationUrl>${escapeXml(item.url)}</destinationUrl>
+    <destinationUrl>${escapeXml(item.destinationUrl)}</destinationUrl>
     <alias>${escapeXml(item.alias)}</alias>
     <title>${escapeXml(item.title)}</title>
+    <status>${escapeXml(item.status)}</status>
     <password>${escapeXml(item.password)}</password>
-    <expiresAt>${escapeXml(item.expires)}</expiresAt>
-    <shortUrl>${escapeXml(item.short_url)}</shortUrl>
+    <expiresAt>${escapeXml(item.expiresAt)}</expiresAt>
+    <socialTitle>${escapeXml(item.socialTitle)}</socialTitle>
+    <socialDescription>${escapeXml(item.socialDescription)}</socialDescription>
+    <socialImageUrl>${escapeXml(item.socialImageUrl)}</socialImageUrl>
+    <utmSource>${escapeXml(item.utmSource)}</utmSource>
+    <utmMedium>${escapeXml(item.utmMedium)}</utmMedium>
+    <utmCampaign>${escapeXml(item.utmCampaign)}</utmCampaign>
+    <utmTerm>${escapeXml(item.utmTerm)}</utmTerm>
+    <utmContent>${escapeXml(item.utmContent)}</utmContent>
+    <shortUrl>${escapeXml(item.shortUrl)}</shortUrl>
     <clicks>${escapeXml(item.clicks)}</clicks>
-    <uniqueClicks>${escapeXml(item.unique_clicks)}</uniqueClicks>
-    <createdAt>${escapeXml(item.created_at)}</createdAt>
+    <uniqueClicks>${escapeXml(item.uniqueClicks)}</uniqueClicks>
+    <createdAt>${escapeXml(item.createdAt)}</createdAt>
   </url>`
 			)
 			.join("\n");

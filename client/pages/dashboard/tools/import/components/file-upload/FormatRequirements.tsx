@@ -13,20 +13,31 @@ function FormatRequirements() {
 		let type = "";
 
 		if (format === "csv") {
-			content = `url,alias,title,password,expires\nhttps://example.com,ex1,${__(
+			content = `destinationUrl,alias,title,status,password,expiresAt,socialTitle,socialDescription,socialImageUrl,utmSource,utmMedium,utmCampaign,utmTerm,utmContent\nhttps://example.com,ex1,${__(
 				"Example page"
-			)},,2025-12-31`;
+			)},active,,2026-12-31,${__("Custom Social Title")},${__(
+				"Custom Social Description"
+			)},https://example.com/preview.png,newsletter,email,summer_sale,discount,banner`;
 			filename = "sample.csv";
 			type = "text/csv";
 		} else if (format === "json") {
 			content = JSON.stringify(
 				[
 					{
-						url: "https://example.com",
+						destinationUrl: "https://example.com",
 						alias: "ex1",
 						title: __("Example page"),
+						status: "active",
 						password: "",
-						expires: "2025-12-31",
+						expiresAt: "2026-12-31",
+						socialTitle: __("Custom Social Title"),
+						socialDescription: __("Custom Social Description"),
+						socialImageUrl: "https://example.com/preview.png",
+						utmSource: "newsletter",
+						utmMedium: "email",
+						utmCampaign: "summer_sale",
+						utmTerm: "discount",
+						utmContent: "banner",
 					},
 				],
 				null,
@@ -40,8 +51,17 @@ function FormatRequirements() {
     <destinationUrl>https://example.com</destinationUrl>
     <alias>ex1</alias>
     <title>${__("Example page")}</title>
+    <status>active</status>
     <password></password>
-    <expiresAt>2025-12-31</expiresAt>
+    <expiresAt>2026-12-31</expiresAt>
+    <socialTitle>${__("Custom Social Title")}</socialTitle>
+    <socialDescription>${__("Custom Social Description")}</socialDescription>
+    <socialImageUrl>https://example.com/preview.png</socialImageUrl>
+    <utmSource>newsletter</utmSource>
+    <utmMedium>email</utmMedium>
+    <utmCampaign>summer_sale</utmCampaign>
+    <utmTerm>discount</utmTerm>
+    <utmContent>banner</utmContent>
   </url>
 </urls>`;
 			filename = "sample.xml";
@@ -63,10 +83,11 @@ function FormatRequirements() {
 					</h4>
 					<ul className="import-format-list">
 						<li className="import-format-item">
-							• <code className="import-inline-code">url</code>{" "}
-							{__(
-								" - The destination URL (e.g. destinationUrl in JSON/XML)"
-							)}
+							•{" "}
+							<code className="import-inline-code">
+								destinationUrl
+							</code>{" "}
+							{__(" - Destination URL")}
 						</li>
 					</ul>
 				</div>
@@ -84,19 +105,57 @@ function FormatRequirements() {
 							{__(" - Link title")}
 						</li>
 						<li className="import-format-item">
+							• <code className="import-inline-code">status</code>{" "}
+							{__(
+								" - Link status (active, inactive, paused, archived)"
+							)}
+						</li>
+						<li className="import-format-item">
 							•{" "}
 							<code className="import-inline-code">password</code>{" "}
 							{__(" - Protection password")}
 						</li>
 						<li className="import-format-item">
 							•{" "}
-							<code className="import-inline-code">expires</code>{" "}
-							{__(" - Date (YYYY-MM-DD)")}
+							<code className="import-inline-code">
+								expiresAt
+							</code>{" "}
+							{__(" - Expiration date (YYYY-MM-DD)")}
 						</li>
 						<li className="import-format-item">
-							{__(
-								"• Additional columns are ignored during import, so PeakURL exports can be imported again later."
-							)}
+							•{" "}
+							<code className="import-inline-code">
+								socialTitle
+							</code>
+							,{" "}
+							<code className="import-inline-code">
+								socialDescription
+							</code>
+							,{" "}
+							<code className="import-inline-code">
+								socialImageUrl
+							</code>{" "}
+							{__(" - Social preview meta tags")}
+						</li>
+						<li className="import-format-item">
+							•{" "}
+							<code className="import-inline-code">
+								utmSource
+							</code>
+							,{" "}
+							<code className="import-inline-code">
+								utmMedium
+							</code>
+							,{" "}
+							<code className="import-inline-code">
+								utmCampaign
+							</code>
+							,{" "}
+							<code className="import-inline-code">utmTerm</code>,{" "}
+							<code className="import-inline-code">
+								utmContent
+							</code>{" "}
+							{__(" - UTM campaign tracking parameters")}
 						</li>
 					</ul>
 				</div>

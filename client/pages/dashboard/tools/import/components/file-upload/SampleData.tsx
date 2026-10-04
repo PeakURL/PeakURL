@@ -12,22 +12,36 @@ function SampleData({ sampleData }: SampleDataProps) {
 				<table className="import-sample-table">
 					<thead>
 						<tr className="import-sample-header-row">
-							<th className="import-sample-header-cell">url</th>
+							<th className="import-sample-header-cell">
+								destinationUrl
+							</th>
 							<th className="import-sample-header-cell">alias</th>
 							<th className="import-sample-header-cell">title</th>
+							<th className="import-sample-header-cell">
+								status
+							</th>
+							<th className="import-sample-header-cell">
+								utmSource
+							</th>
 						</tr>
 					</thead>
 					<tbody>
 						{sampleData.map((row, index) => (
 							<tr key={index} className="import-sample-row">
 								<td className="import-sample-code">
-									{row.url}
+									{row.destinationUrl}
 								</td>
 								<td className="import-sample-cell">
 									{row.alias}
 								</td>
 								<td className="import-sample-cell">
 									{row.title}
+								</td>
+								<td className="import-sample-cell">
+									{row.status || "active"}
+								</td>
+								<td className="import-sample-cell">
+									{row.utmSource || ""}
 								</td>
 							</tr>
 						))}

@@ -40,14 +40,20 @@ export interface ImportResult {
  * Represents a sample row used for previewing or validating import data.
  */
 export interface SampleRow {
-	/** URL to be shortened */
-	url: string;
+	/** Destination URL to be shortened */
+	destinationUrl: string;
 
 	/** Desired alias for the short link */
 	alias: string;
 
 	/** Optional title or label for the link */
 	title: string;
+
+	/** Optional status (active, inactive, paused, archived) */
+	status?: string;
+
+	/** Optional UTM campaign source */
+	utmSource?: string;
 }
 
 /**

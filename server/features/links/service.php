@@ -907,7 +907,7 @@ class Service {
 				);
 			} catch ( \Throwable $e ) {
 				$errors[] = array(
-					'destinationUrl' => (string) ( $item['destinationUrl'] ?? $item['url'] ?? '' ),
+					'destinationUrl' => (string) ( $item['destinationUrl'] ?? '' ),
 					'alias'          => (string) ( $item['alias'] ?? '' ),
 					'error'          => $e->getMessage(),
 				);
@@ -1954,6 +1954,11 @@ class Service {
 			'expiresAt'      => ! empty( $row['expires_at'] )
 				? Date::to_iso( (string) $row['expires_at'] )
 				: ( $row['expiresAt'] ?? null ),
+			'utmSource'      => ! empty( $row['utm_source'] ) ? (string) $row['utm_source'] : ( $row['utmSource'] ?? null ),
+			'utmMedium'      => ! empty( $row['utm_medium'] ) ? (string) $row['utm_medium'] : ( $row['utmMedium'] ?? null ),
+			'utmCampaign'    => ! empty( $row['utm_campaign'] ) ? (string) $row['utm_campaign'] : ( $row['utmCampaign'] ?? null ),
+			'utmTerm'        => ! empty( $row['utm_term'] ) ? (string) $row['utm_term'] : ( $row['utmTerm'] ?? null ),
+			'utmContent'     => ! empty( $row['utm_content'] ) ? (string) $row['utm_content'] : ( $row['utmContent'] ?? null ),
 			'createdAt'      => ! empty( $row['created_at'] )
 				? Date::to_iso( (string) $row['created_at'] )
 				: (string) ( $row['createdAt'] ?? Date::to_iso( Date::now() ) ),

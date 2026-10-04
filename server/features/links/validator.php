@@ -314,13 +314,18 @@ class Validator {
 		);
 
 		foreach ( $field_map as $input_key => $meta ) {
-			if ( ! $include_missing && ! array_key_exists( $input_key, $payload ) ) {
+			$found_key = null;
+			if ( array_key_exists( $input_key, $payload ) ) {
+				$found_key = $input_key;
+			}
+
+			if ( ! $include_missing && null === $found_key ) {
 				continue;
 			}
 
 			$value_key                  = $meta['value'];
 			$columns[ $meta['column'] ] = true;
-			$value                      = $payload[ $input_key ] ?? null;
+			$value                      = null !== $found_key ? $payload[ $found_key ] : null;
 
 			try {
 				if ( 'title' === $value_key ) {

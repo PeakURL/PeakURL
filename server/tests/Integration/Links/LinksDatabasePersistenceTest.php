@@ -818,4 +818,120 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$stmt->execute( array( 'id' => $id ) );
 		$this->assertSame( 'trashed', $stmt->fetchColumn(), 'Editor must not be able to permanently delete trashed links.' );
 	}
+
+	public function test_bulk_create_and_export_urls_with_full_metadata(): void {
+		$alias1 = $this->test_prefix . 'bulk-full-1';
+		$alias2 = $this->test_prefix . 'bulk-full-2';
+
+		$bulk_req = $this->admin_request(
+			'POST',
+			'/api/v1/urls/bulk',
+			array(),
+			array(
+				'urls' => array(
+					array(
+						'destinationUrl'    => 'https://example.com/promo',
+						'alias'             => $alias1,
+						'title'             => 'Promo Link',
+						'status'            => 'active',
+						'password'          => 'bulksecret123',
+						'expiresAt'         => '2030-12-31',
+						'socialTitle'       => 'Promo Social Title',
+						'socialDescription' => 'Promo Social Description',
+						'socialImageUrl'    => 'https://example.com/promo.png',
+						'utmSource'         => 'newsletter',
+						'utmMedium'         => 'email',
+						'utmCampaign'       => 'summer_sale',
+						'utmTerm'           => 'discount',
+						'utmContent'        => 'banner_link',
+					),
+					array(
+						'destinationUrl'    => 'https://example.com/blog',
+						'alias'             => $alias2,
+						'title'             => 'Blog Link',
+						'status'            => 'inactive',
+						'socialTitle'       => 'Blog Social Title',
+						'socialDescription' => 'Blog Social Description',
+						'socialImageUrl'    => 'https://example.com/blog.png',
+						'utmSource'         => 'twitter',
+						'utmMedium'         => 'social',
+						'utmCampaign'       => 'launch',
+					),
+				),
+			)
+		);
+
+		$bulk_res = $this->dispatch( $bulk_req );
+		$this->assertSame( 200, $bulk_res['status'] );
+		$this->assertCount( 2, $bulk_res['body']['data']['results'] );
+		$this->assertCount( 0, $bulk_res['body']['data']['errors'] );
+
+		// Verify database persistence directly
+		$stmt = $this->pdo->prepare(
+			'SELECT * FROM peakurl_urls WHERE alias IN (:alias1, :alias2) ORDER BY alias ASC'
+		);
+		$stmt->execute(
+			array(
+				'alias1' => $alias1,
+				'alias2' => $alias2,
+			)
+		);
+		$rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
+		$this->assertCount( 2, $rows );
+
+		$row1 = $rows[0];
+		$this->assertSame( $alias1, $row1['alias'] );
+		$this->assertSame( 'active', $row1['status'] );
+		$this->assertSame( 'Promo Social Title', $row1['social_title'] );
+		$this->assertSame( 'Promo Social Description', $row1['social_description'] );
+		$this->assertSame( 'https://example.com/promo.png', $row1['social_image_url'] );
+		$this->assertSame( 'newsletter', $row1['utm_source'] );
+		$this->assertSame( 'email', $row1['utm_medium'] );
+		$this->assertSame( 'summer_sale', $row1['utm_campaign'] );
+		$this->assertSame( 'discount', $row1['utm_term'] );
+		$this->assertSame( 'banner_link', $row1['utm_content'] );
+		$this->assertNotEmpty( $row1['password_value'] );
+		$this->assertNotSame( 'bulksecret123', $row1['password_value'], 'Password must be hashed at rest.' );
+
+		$row2 = $rows[1];
+		$this->assertSame( $alias2, $row2['alias'] );
+		$this->assertSame( 'inactive', $row2['status'] );
+		$this->assertSame( 'Blog Social Title', $row2['social_title'] );
+		$this->assertSame( 'Blog Social Description', $row2['social_description'] );
+		$this->assertSame( 'https://example.com/blog.png', $row2['social_image_url'] );
+		$this->assertSame( 'twitter', $row2['utm_source'] );
+		$this->assertSame( 'social', $row2['utm_medium'] );
+		$this->assertSame( 'launch', $row2['utm_campaign'] );
+
+		// Verify export API returns all full metadata
+		$export_res = $this->dispatch( $this->admin_request( 'GET', '/api/v1/urls/export' ) );
+		$this->assertSame( 200, $export_res['status'] );
+
+		$items_by_alias = array();
+		foreach ( $export_res['body']['data']['items'] as $item ) {
+			$items_by_alias[ $item['alias'] ] = $item;
+		}
+
+		$this->assertArrayHasKey( $alias1, $items_by_alias );
+		$exp1 = $items_by_alias[ $alias1 ];
+		$this->assertSame( 'active', $exp1['status'] );
+		$this->assertSame( 'Promo Social Title', $exp1['socialPreview']['title'] );
+		$this->assertSame( 'Promo Social Description', $exp1['socialPreview']['description'] );
+		$this->assertSame( 'https://example.com/promo.png', $exp1['socialPreview']['imageUrl'] );
+		$this->assertSame( 'newsletter', $exp1['utmSource'] );
+		$this->assertSame( 'email', $exp1['utmMedium'] );
+		$this->assertSame( 'summer_sale', $exp1['utmCampaign'] );
+		$this->assertSame( 'discount', $exp1['utmTerm'] );
+		$this->assertSame( 'banner_link', $exp1['utmContent'] );
+
+		$this->assertArrayHasKey( $alias2, $items_by_alias );
+		$exp2 = $items_by_alias[ $alias2 ];
+		$this->assertSame( 'inactive', $exp2['status'] );
+		$this->assertSame( 'Blog Social Title', $exp2['socialPreview']['title'] );
+		$this->assertSame( 'Blog Social Description', $exp2['socialPreview']['description'] );
+		$this->assertSame( 'https://example.com/blog.png', $exp2['socialPreview']['imageUrl'] );
+		$this->assertSame( 'twitter', $exp2['utmSource'] );
+		$this->assertSame( 'social', $exp2['utmMedium'] );
+		$this->assertSame( 'launch', $exp2['utmCampaign'] );
+	}
 }

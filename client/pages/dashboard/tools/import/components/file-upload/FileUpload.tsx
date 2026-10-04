@@ -48,16 +48,101 @@ const FileUpload = ({
 				if (file.name.endsWith(".csv")) {
 					data = parseCsv(text);
 				} else if (file.name.endsWith(".json")) {
-					data = (JSON.parse(text) as Array<Record<string, unknown>>)
-						.map((item) => ({
-							...item,
-							destinationUrl: item.destinationUrl || item.url,
-						}))
-						.filter(
-							(item): item is ImportRecord =>
-								"string" === typeof item.destinationUrl &&
-								Boolean(item.destinationUrl)
-						);
+					const parsed = JSON.parse(text);
+					const rawList: Array<Record<string, unknown>> =
+						Array.isArray(parsed)
+							? parsed
+							: Array.isArray(parsed?.urls)
+								? parsed.urls
+								: Array.isArray(parsed?.items)
+									? parsed.items
+									: [];
+
+					data = rawList
+						.map((item): ImportRecord | null => {
+							const destinationUrl = String(
+								item.destinationUrl || ""
+							).trim();
+
+							if (!destinationUrl) {
+								return null;
+							}
+
+							const alias = String(item.alias || "").trim();
+							const title =
+								String(item.title || "").trim() || undefined;
+							const password =
+								String(item.password || "").trim() || undefined;
+							const expiresAt =
+								String(item.expiresAt || "").trim() ||
+								undefined;
+							const status =
+								String(item.status || "").trim() || undefined;
+
+							const socialPreviewObj =
+								typeof item.socialPreview === "object" &&
+								item.socialPreview !== null
+									? (item.socialPreview as Record<
+											string,
+											unknown
+										>)
+									: null;
+
+							const socialTitle =
+								String(
+									item.socialTitle ||
+										socialPreviewObj?.title ||
+										""
+								).trim() || undefined;
+
+							const socialDescription =
+								String(
+									item.socialDescription ||
+										socialPreviewObj?.description ||
+										""
+								).trim() || undefined;
+
+							const socialImageUrl =
+								String(
+									item.socialImageUrl ||
+										socialPreviewObj?.imageUrl ||
+										socialPreviewObj?.externalImageUrl ||
+										""
+								).trim() || undefined;
+
+							const utmSource =
+								String(item.utmSource || "").trim() ||
+								undefined;
+							const utmMedium =
+								String(item.utmMedium || "").trim() ||
+								undefined;
+							const utmCampaign =
+								String(item.utmCampaign || "").trim() ||
+								undefined;
+							const utmTerm =
+								String(item.utmTerm || "").trim() || undefined;
+							const utmContent =
+								String(item.utmContent || "").trim() ||
+								undefined;
+
+							return {
+								destinationUrl,
+								alias: alias || undefined,
+								title,
+								password,
+								expiresAt,
+								status,
+								socialTitle,
+								socialDescription,
+								socialImageUrl,
+								utmSource,
+								utmMedium,
+								utmCampaign,
+								utmTerm,
+								utmContent,
+							};
+						})
+						.filter((item): item is ImportRecord => item !== null);
 				} else if (file.name.endsWith(".xml")) {
 					data = parseXml(text);
 				} else {
@@ -102,26 +187,34 @@ const FileUpload = ({
 				const value = values[index]?.trim();
 
 				if (value) {
-					if (
-						header === "url" ||
-						header === "destinationurl" ||
-						header === "destination"
-					) {
+					if (header === "destinationurl") {
 						entry.destinationUrl = value;
-					} else if (header === "alias" || header === "shortcode") {
+					} else if (header === "alias") {
 						entry.alias = value;
-					} else if (
-						header === "shorturl" ||
-						header === "shortlink"
-					) {
-						entry.alias =
-							entry.alias || extractAliasFromShortUrl(value);
-					} else if (header === "password") {
-						entry.password = value;
-					} else if (header === "expires" || header === "expiresat") {
-						entry.expiresAt = value;
 					} else if (header === "title") {
 						entry.title = value;
+					} else if (header === "password") {
+						entry.password = value;
+					} else if (header === "expiresat") {
+						entry.expiresAt = value;
+					} else if (header === "status") {
+						entry.status = value;
+					} else if (header === "socialtitle") {
+						entry.socialTitle = value;
+					} else if (header === "socialdescription") {
+						entry.socialDescription = value;
+					} else if (header === "socialimageurl") {
+						entry.socialImageUrl = value;
+					} else if (header === "utmsource") {
+						entry.utmSource = value;
+					} else if (header === "utmmedium") {
+						entry.utmMedium = value;
+					} else if (header === "utmcampaign") {
+						entry.utmCampaign = value;
+					} else if (header === "utmterm") {
+						entry.utmTerm = value;
+					} else if (header === "utmcontent") {
+						entry.utmContent = value;
 					}
 				}
 			});
@@ -136,8 +229,7 @@ const FileUpload = ({
 	const parseXml = (text: string): ImportRecord[] => {
 		const parser = new DOMParser();
 		const xmlDoc = parser.parseFromString(text, "text/xml");
-		const urls = xmlDoc.getElementsByTagName("url"); // Assumes <url> item tag
-		// If not <url>, try <item>
+		const urls = xmlDoc.getElementsByTagName("url");
 		const items =
 			urls.length > 0 ? urls : xmlDoc.getElementsByTagName("item");
 
@@ -146,18 +238,36 @@ const FileUpload = ({
 		for (let i = 0; i < items.length; i++) {
 			const node = items[i];
 			if (!node) continue;
-			const getVal = (tag: string): string | undefined =>
-				node.getElementsByTagName(tag)[0]?.textContent || undefined;
+			const getVal = (...tags: string[]): string | undefined => {
+				for (const tag of tags) {
+					const val = node
+						.getElementsByTagName(tag)[0]
+						?.textContent?.trim();
+					if (val) return val;
+				}
+				return undefined;
+			};
 
-			const destinationUrl = getVal("destinationUrl") || getVal("url");
+			const destinationUrl = getVal("destinationUrl");
 
 			if (destinationUrl) {
+				const alias = getVal("alias");
+
 				data.push({
 					destinationUrl,
-					alias: getVal("alias") || getVal("shortCode"),
-					password: getVal("password"),
-					expiresAt: getVal("expiresAt") || getVal("expires"),
+					alias: alias || undefined,
 					title: getVal("title"),
+					password: getVal("password"),
+					expiresAt: getVal("expiresAt"),
+					status: getVal("status"),
+					socialTitle: getVal("socialTitle"),
+					socialDescription: getVal("socialDescription"),
+					socialImageUrl: getVal("socialImageUrl"),
+					utmSource: getVal("utmSource"),
+					utmMedium: getVal("utmMedium"),
+					utmCampaign: getVal("utmCampaign"),
+					utmTerm: getVal("utmTerm"),
+					utmContent: getVal("utmContent"),
 				});
 			}
 		}

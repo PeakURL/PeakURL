@@ -4,9 +4,18 @@
 export interface ImportRecord {
 	destinationUrl: string;
 	alias?: string;
+	title?: string;
 	password?: string;
 	expiresAt?: string;
-	title?: string;
+	status?: string;
+	socialTitle?: string;
+	socialDescription?: string;
+	socialImageUrl?: string;
+	utmSource?: string;
+	utmMedium?: string;
+	utmCampaign?: string;
+	utmTerm?: string;
+	utmContent?: string;
 }
 
 /**
@@ -15,6 +24,7 @@ export interface ImportRecord {
 export interface PasteImportRequestItem {
 	destinationUrl: string;
 	alias?: string;
+	title?: string;
 }
 
 /**

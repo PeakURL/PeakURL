@@ -30,25 +30,34 @@ const PasteImport = () => {
 		try {
 			const lines = text.split(/\r\n|\n/).filter((line) => line.trim());
 			const data: PasteImportRequestItem[] = lines.map((line) => {
-				// Split by comma or space to find alias
-				// But URL might contain comma (less likely) or spaces (encoded).
-				// Let's assume: URL [comma or space] Alias
-				// If comma exists, split by comma. Else split by space.
-
 				let destinationUrl = line.trim();
 				let alias: string | undefined;
+				let title: string | undefined;
 
-				if (line.includes(",")) {
+				if (line.includes("\t")) {
+					const parts = line.split("\t");
+					destinationUrl = parts[0]?.trim() || "";
+					if (parts[1]?.trim()) alias = parts[1].trim();
+					if (parts[2]?.trim())
+						title = parts.slice(2).join("\t").trim();
+				} else if (line.includes(",")) {
 					const parts = line.split(",");
 					destinationUrl = parts[0]?.trim() || "";
-					if (parts[1]) alias = parts[1].trim();
+					if (parts[1]?.trim()) alias = parts[1].trim();
+					if (parts[2]?.trim())
+						title = parts.slice(2).join(",").trim();
 				} else if (line.includes(" ")) {
 					const parts = line.trim().split(/\s+/);
 					destinationUrl = parts[0] || "";
 					if (parts[1]) alias = parts[1];
+					if (parts.length > 2) title = parts.slice(2).join(" ");
 				}
 
-				return { destinationUrl, alias };
+				return {
+					destinationUrl,
+					alias: alias || undefined,
+					title: title || undefined,
+				};
 			});
 
 			if (data.length === 0) throw new Error(__("No URLs found"));
@@ -116,7 +125,7 @@ const PasteImport = () => {
 				<h2 className="import-panel-title">{__("Paste URLs")}</h2>
 				<p className="import-panel-copy">
 					{__(
-						"Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias separated by a comma or space."
+						"Paste a list of URLs (one per line) to quickly create multiple short links. You can optionally add a custom alias and title separated by commas, tabs, or spaces."
 					)}
 				</p>
 
@@ -130,8 +139,8 @@ const PasteImport = () => {
 								valueDirection="ltr"
 								className="form-control-surface-alt form-control-roomy form-control-strong-focus import-paste-textarea font-mono"
 								placeholder={`https://example.com/page1
-https://example.com/page2, my-alias
-https://example.com/page3 custom-alias`}
+https://example.com/page2, my-alias, Page Title
+https://example.com/page3 custom-alias Custom Title`}
 								value={text}
 								onChange={(event) =>
 									setText(event.target.value)
@@ -159,9 +168,9 @@ https://example.com/page3 custom-alias`}
 										<div className="import-paste-tip-content">
 											<p>{__("Format:")}</p>
 											<div className="import-paste-tip-format">
-												<code>URL [alias]</code>
+												<code>URL [alias] [title]</code>
 												<span>{__("or")}</span>
-												<code>URL, alias</code>
+												<code>URL, alias, title</code>
 											</div>
 										</div>
 									</li>

@@ -31,9 +31,16 @@ Content-Type: application/json
     {
       "destinationUrl": "https://example.com/page1",
       "alias": "page1",
-      "title": "Marketing Page",
+      "title": "Marketing Campaign",
+      "status": "active",
+      "socialTitle": "Custom SEO Title",
+      "socialDescription": "Rich OpenGraph description for social shares.",
+      "socialImageUrl": "https://example.com/banner.jpg",
+      "utmSource": "newsletter",
+      "utmMedium": "email",
+      "utmCampaign": "fall-launch",
       "password": "optional-password",
-      "expiresAt": "YYYY-MM-DD"
+      "expiresAt": "2026-12-31T23:59:59Z"
     },
     {
       "destinationUrl": "https://example.com/page2",

@@ -435,7 +435,7 @@ const ReleaseNotesCard = ({
 				{__("For all release notes see the main page")}
 			</a>
 			<a
-				href="https://go.peakurl.org/release-notes-txt"
+				href="https://go.peakurl.org/release-notes.txt"
 				target="_blank"
 				rel="noopener noreferrer"
 				className="about-page-release-footer-link about-page-release-footer-link-secondary"

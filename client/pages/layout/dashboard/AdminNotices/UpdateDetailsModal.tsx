@@ -96,7 +96,7 @@ function UpdateDetailsModal({ open, setOpen }: UpdateDetailsModalProps) {
 								{__("For all release notes see the main page")}
 							</a>
 							<a
-								href="https://go.peakurl.org/release-notes-txt"
+								href="https://go.peakurl.org/release-notes.txt"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="update-details-modal-footer-link update-details-modal-footer-link-secondary"

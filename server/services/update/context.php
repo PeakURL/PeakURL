@@ -84,7 +84,7 @@ class Context {
 	}
 
 	/**
-	 * Get the configured site URL for updater user-agent headers.
+	 * Get the configured site URL for update metadata and service requests.
 	 *
 	 * @return string
 	 * @since 1.0.14

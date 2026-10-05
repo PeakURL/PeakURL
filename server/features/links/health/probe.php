@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Features\Links\Health;
 
+use PeakURL\Http\UserAgent;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -128,7 +130,7 @@ class Probe {
 			CURLOPT_RETURNTRANSFER    => ! $is_get,
 			CURLOPT_SSL_VERIFYPEER    => true,
 			CURLOPT_SSL_VERIFYHOST    => 2,
-			CURLOPT_USERAGENT         => 'PeakURL/' . $this->context->get_version(),
+			CURLOPT_USERAGENT         => UserAgent::format( $this->context->get_version() ),
 			CURLOPT_PROXY             => '',
 		);
 

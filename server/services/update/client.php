@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Update;
 
+use PeakURL\Http\UserAgent;
+
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct access forbidden.' );
@@ -182,7 +184,7 @@ class Client {
 				CURLOPT_SSL_VERIFYHOST => 2,
 				CURLOPT_HTTPHEADER     => array(
 					'Accept: ' . $accept,
-					'User-Agent: ' . $this->format_user_agent(),
+					'User-Agent: ' . UserAgent::format( $this->context->get_current_version() ),
 				),
 			),
 		);
@@ -240,7 +242,7 @@ class Client {
 						"\r\n",
 						array(
 							'Accept: ' . $accept,
-							'User-Agent: ' . $this->format_user_agent(),
+							'User-Agent: ' . UserAgent::format( $this->context->get_current_version() ),
 						),
 					),
 				),
@@ -302,19 +304,5 @@ class Client {
 		}
 
 		return (string) $body;
-	}
-
-	/**
-	 * Format the User-Agent header for update requests.
-	 *
-	 * @return string
-	 * @since 1.0.14
-	 * @since 1.7.0 Removed site URL suffix.
-	 */
-	private function format_user_agent(): string {
-		return sprintf(
-			'PeakURL/%s',
-			$this->context->get_current_version(),
-		);
 	}
 }

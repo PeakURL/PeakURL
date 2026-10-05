@@ -13,6 +13,7 @@ namespace PeakURL\Tests\Unit\Services;
 use PHPUnit\Framework\TestCase;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Http\UserAgent;
 use PeakURL\Services\Database\Context as SchemaContext;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Database\Upgrade as SchemaUpgrade;
@@ -46,7 +47,7 @@ class UpdateMetadataTest extends TestCase {
 		$this->assertCount( 100, array_unique( $uuids ) );
 	}
 
-	public function test_user_agent_format_contains_only_version(): void {
+	public function test_user_agent_format_follows_canonical_standard(): void {
 		$context = new UpdateContext(
 			array(
 				Constants::VERSION  => '1.7.0',
@@ -54,14 +55,11 @@ class UpdateMetadataTest extends TestCase {
 			),
 			new Filesystem()
 		);
-		$client  = new Client( $context );
 
-		$ref_method = new ReflectionMethod( Client::class, 'format_user_agent' );
-		$user_agent = $ref_method->invoke( $client );
+		$user_agent = UserAgent::format( $context->get_current_version() );
 
 		$this->assertSame( 'PeakURL/1.7.0', $user_agent );
 		$this->assertStringNotContainsString( 'example.com', $user_agent );
-		$this->assertStringNotContainsString( ';', $user_agent );
 	}
 
 	public function test_query_string_rfc3986_encoding_and_appending(): void {

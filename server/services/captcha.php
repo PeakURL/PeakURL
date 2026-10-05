@@ -12,6 +12,7 @@ namespace PeakURL\Services;
 
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Http\UserAgent;
 use PeakURL\Services\Install\Writer as InstallWriter;
 
 // If this file is called directly, abort.
@@ -494,12 +495,15 @@ class Captcha {
 			return '';
 		}
 
+		$version = (string) ( $this->config[ Constants::VERSION ] ?? '' );
+
 		curl_setopt_array(
 			$handle,
 			array(
 				CURLOPT_CONNECTTIMEOUT => 3,
 				CURLOPT_HTTPHEADER     => array(
 					'Content-Type: application/x-www-form-urlencoded',
+					'User-Agent: ' . UserAgent::format( $version ),
 				),
 				CURLOPT_POST           => true,
 				CURLOPT_POSTFIELDS     => $body,
@@ -523,11 +527,13 @@ class Captcha {
 	 * @since 1.2.0
 	 */
 	private function post_with_stream( string $endpoint, string $body ): string {
+		$version  = (string) ( $this->config[ Constants::VERSION ] ?? '' );
 		$context  = stream_context_create(
 			array(
 				'http' => array(
 					'content' => $body,
-					'header'  => "Content-Type: application/x-www-form-urlencoded\r\n",
+					'header'  => "Content-Type: application/x-www-form-urlencoded\r\n" .
+						'User-Agent: ' . UserAgent::format( $version ) . "\r\n",
 					'method'  => 'POST',
 					'timeout' => 8,
 				),

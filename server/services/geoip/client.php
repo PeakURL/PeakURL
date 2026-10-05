@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Services\Geoip;
 
+use PeakURL\Http\UserAgent;
 use PeakURL\Services\Geoip as GeoipService;
 
 // If this file is called directly, abort.
@@ -87,7 +88,7 @@ class Client {
 				CURLOPT_USERPWD        => $this->context->get_account_id() . ':' . $this->context->get_license_key(),
 				CURLOPT_HTTPHEADER     => array(
 					'Accept: application/gzip, application/octet-stream',
-					'User-Agent: PeakURL/' . $this->context->get_version(),
+					'User-Agent: ' . UserAgent::format( $this->context->get_version() ),
 				),
 			),
 		);
@@ -129,7 +130,7 @@ class Client {
 			'Authorization: Basic ' . base64_encode(
 				$this->context->get_account_id() . ':' . $this->context->get_license_key(),
 			),
-			'User-Agent: PeakURL/' . $this->context->get_version(),
+			'User-Agent: ' . UserAgent::format( $this->context->get_version() ),
 		);
 		$result  = $this->send_stream_request(
 			GeoipService::DOWNLOAD_URL,
@@ -150,7 +151,7 @@ class Client {
 				$redirect_url,
 				array(
 					'Accept: application/gzip, application/octet-stream',
-					'User-Agent: PeakURL/' . $this->context->get_version(),
+					'User-Agent: ' . UserAgent::format( $this->context->get_version() ),
 				),
 				false,
 			);

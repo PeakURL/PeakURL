@@ -21,6 +21,7 @@ use PeakURL\Core\Errors\ApiException;
 use PeakURL\Core\Scheduler\BackgroundRunner;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Http\Request;
+use PeakURL\Http\UserAgent;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Utils\Date;
@@ -1522,13 +1523,15 @@ class Service {
 		string $signature,
 		string $delivery_id
 	): array {
+		$version = (string) ( $this->config[ Constants::VERSION ] ?? '' );
+
 		return array(
 			'Content-Type: application/json; charset=utf-8',
 			'X-PeakURL-Event: ' . $event,
 			'X-PeakURL-Delivery: ' . $delivery_id,
 			'X-PeakURL-Timestamp: ' . $timestamp,
 			'X-PeakURL-Signature: ' . $signature,
-			'User-Agent: PeakURL-Webhook/1.7.1 (+https://peakurl.org)',
+			'User-Agent: ' . UserAgent::format( $version ),
 		);
 	}
 

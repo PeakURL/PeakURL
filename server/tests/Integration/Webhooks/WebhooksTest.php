@@ -16,6 +16,7 @@ use PeakURL\Api\UsersApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Configuration;
+use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Analytics\Repository as AnalyticsRepository;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
@@ -30,6 +31,7 @@ use PeakURL\Features\Webhooks\Validator as WebhooksValidator;
 use PeakURL\Core\Scheduler\ExecutionContext;
 use PeakURL\Features\Webhooks\Jobs\WebhookDeliveryJob;
 use PeakURL\Http\Request;
+use PeakURL\Http\UserAgent;
 use PeakURL\Services\Crypto;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\Database\PeakURL_DB;
@@ -1025,7 +1027,9 @@ class WebhooksTest extends TestCase {
 		$this->assertNotEmpty( $captured_headers );
 		$this->assertContains( 'Content-Type: application/json; charset=utf-8', $captured_headers );
 		$this->assertContains( 'X-PeakURL-Event: webhook.test', $captured_headers );
-		$this->assertContains( 'User-Agent: PeakURL-Webhook/1.7.1 (+https://peakurl.org)', $captured_headers );
+		$version             = (string) ( $this->config[ Constants::VERSION ] ?? '' );
+		$expected_user_agent = 'User-Agent: ' . UserAgent::format( $version );
+		$this->assertContains( $expected_user_agent, $captured_headers );
 
 		$headers_map = array();
 		foreach ( $captured_headers as $header_line ) {

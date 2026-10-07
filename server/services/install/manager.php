@@ -12,6 +12,7 @@ namespace PeakURL\Services\Install;
 
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Configuration;
+use PeakURL\Features\Settings\Validator;
 use PeakURL\Http\Request;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\I18n;
@@ -43,6 +44,7 @@ class Manager {
 		return array(
 			'site_url'       => untrailingslashit( $site_url ),
 			'site_language'  => Constants::DEFAULT_LOCALE,
+			'site_timezone'  => '',
 			'workspace_name' => '',
 			'owner_username' => '',
 			'owner_email'    => '',
@@ -141,6 +143,14 @@ class Manager {
 			$site_language = $i18n_service->get_default_locale();
 		}
 
+		$site_timezone    = isset( $input['site_timezone'] )
+			? (string) $input['site_timezone']
+			: null;
+		$browser_timezone = isset( $input['browser_timezone'] )
+			? (string) $input['browser_timezone']
+			: null;
+		$site_timezone    = self::resolve_timezone( $site_timezone, $browser_timezone );
+
 		if ( '' === $workspace_name ) {
 			throw new \RuntimeException( __( 'Site title is required.', 'peakurl' ) );
 		}
@@ -182,9 +192,45 @@ class Manager {
 		$values[ Constants::OWNER_EMAIL ]         = $owner_email;
 		$values[ Constants::OWNER_PASSWORD ]      = $owner_password;
 		$values[ Constants::SITE_LANGUAGE ]       = $site_language;
+		$values[ Constants::SITE_TIMEZONE ]       = $site_timezone;
 		$values[ Constants::OWNER_FALLBACK ]      = 'false';
 
 		return $values;
+	}
+
+	/**
+	 * Resolve the installer site timezone.
+	 *
+	 * @param string|null $site_timezone    Explicit installer timezone selection.
+	 * @param string|null $browser_timezone Detected browser IANA timezone.
+	 * @return string Resolved valid IANA timezone identifier.
+	 *
+	 * @throws \RuntimeException When an explicitly supplied site timezone is invalid.
+	 * @since 1.7.2
+	 */
+	public static function resolve_timezone(
+		?string $site_timezone = null,
+		?string $browser_timezone = null
+	): string {
+		$site_timezone = null !== $site_timezone ? trim( $site_timezone ) : '';
+
+		if ( '' !== $site_timezone ) {
+			if ( ! Validator::is_valid_timezone( $site_timezone ) ) {
+				throw new \RuntimeException(
+					__( 'The selected timezone is invalid.', 'peakurl' ),
+				);
+			}
+
+			return $site_timezone;
+		}
+
+		$browser_timezone = null !== $browser_timezone ? trim( $browser_timezone ) : '';
+
+		if ( '' !== $browser_timezone && Validator::is_valid_timezone( $browser_timezone ) ) {
+			return $browser_timezone;
+		}
+
+		return Constants::DEFAULT_TIMEZONE;
 	}
 
 	/**

@@ -308,6 +308,11 @@ class Configuration {
 				$file_values,
 				'',
 			),
+			Constants::SITE_TIMEZONE            => self::get_value(
+				Constants::SITE_TIMEZONE,
+				$file_values,
+				Constants::DEFAULT_TIMEZONE,
+			),
 			Constants::WORKSPACE_NAME           => self::get_value(
 				Constants::WORKSPACE_NAME,
 				$file_values,

@@ -51,6 +51,27 @@ class Validator {
 	}
 
 	/**
+	 * Check whether a timezone identifier is supported by PHP's timezone database.
+	 *
+	 * @param string $timezone Candidate timezone string.
+	 * @return bool True if valid IANA timezone or UTC.
+	 * @since 1.7.2
+	 */
+	public static function is_valid_timezone( string $timezone ): bool {
+		$timezone = trim( $timezone );
+
+		if ( '' === $timezone ) {
+			return false;
+		}
+
+		if ( Constants::DEFAULT_TIMEZONE === $timezone ) {
+			return true;
+		}
+
+		return in_array( $timezone, \DateTimeZone::listIdentifiers(), true );
+	}
+
+	/**
 	 * Normalize a dashboard timezone setting.
 	 *
 	 * @param string $timezone            Submitted timezone identifier.
@@ -70,12 +91,7 @@ class Validator {
 			return Constants::DEFAULT_TIMEZONE;
 		}
 
-		$valid_timezones = \DateTimeZone::listIdentifiers();
-
-		if (
-			Constants::DEFAULT_TIMEZONE === $timezone ||
-			in_array( $timezone, $valid_timezones, true )
-		) {
+		if ( self::is_valid_timezone( $timezone ) ) {
 			return $timezone;
 		}
 

@@ -74,8 +74,17 @@ if ( InstallationState::DATABASE_UNAVAILABLE === $install_state ) {
 $detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER );
 $values                  = InstallConfig::get_form_defaults( $detected_site_url );
 $values['site_language'] = $installer_locale->get_locale();
-$error_message           = '';
-$generator_meta          = get_generator_tag();
+$browser_timezone        = trim( (string) ( $_POST['browser_timezone'] ?? $_GET['browser_timezone'] ?? '' ) );
+$site_timezone           = trim( (string) ( $_POST['site_timezone'] ?? $_GET['site_timezone'] ?? '' ) );
+if ( '' !== $browser_timezone ) {
+	$values['browser_timezone'] = $browser_timezone;
+}
+if ( '' !== $site_timezone ) {
+	$values['site_timezone'] = $site_timezone;
+}
+
+$error_message  = '';
+$generator_meta = get_generator_tag();
 if ( '' !== $generator_meta ) {
 	$generator_meta .= "\n\t";
 }
@@ -97,11 +106,20 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	try {
 		InstallScreen::validate_post_origin( $detected_site_url, $_SERVER );
 		InstallConfig::configure( $runtime_path, $_POST );
+		$redirect_params = array(
+			'site_language' => $values['site_language'],
+		);
+		if ( ! empty( $values['site_timezone'] ) ) {
+			$redirect_params['site_timezone'] = $values['site_timezone'];
+		}
+		if ( ! empty( $values['browser_timezone'] ) ) {
+			$redirect_params['browser_timezone'] = $values['browser_timezone'];
+		}
 		header(
 			'Location: ' . InstallScreen::format_url(
 				$base_path,
 				'/install.php',
-				array( 'site_language' => $values['site_language'] ),
+				$redirect_params,
 			),
 		);
 		exit();
@@ -791,6 +809,10 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 										">
 				<input type="hidden" name="site_url" value="<?php echo InstallScreen::get_escaped_value( $values, 'site_url' ); ?>">
 				<input type="hidden" name="site_language" value="<?php echo InstallScreen::get_escaped_value( $values, 'site_language' ); ?>">
+				<input type="hidden" name="browser_timezone" id="browser_timezone" value="<?php echo InstallScreen::get_escaped_value( $values, 'browser_timezone' ); ?>">
+				<?php if ( ! empty( $values['site_timezone'] ) ) : ?>
+					<input type="hidden" name="site_timezone" id="site_timezone" value="<?php echo InstallScreen::get_escaped_value( $values, 'site_timezone' ); ?>">
+				<?php endif; ?>
 				<div class="form-body">
 					<div class="divider" style="margin: 0;"></div>
 					<p class="form-section-label"><?php echo esc_html__( 'Connection details', 'peakurl' ); ?></p>
@@ -863,5 +885,17 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			?>
 		</div>
 	</div>
+	<script>
+	(function() {
+		try {
+			var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			var input = document.getElementById('browser_timezone');
+
+			if (input && !input.value && timezone) {
+				input.value = timezone;
+			}
+		} catch (error) {}
+	})();
+	</script>
 </body>
 </html>

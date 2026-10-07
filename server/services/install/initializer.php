@@ -251,6 +251,7 @@ class Initializer {
 		$version       = trim( (string) ( $config[ Constants::VERSION ] ?? '' ) );
 		$manifest_url  = trim( (string) ( $config[ Constants::UPDATE_MANIFEST_URL ] ?? '' ) );
 		$site_language = trim( (string) ( $config[ Constants::SITE_LANGUAGE ] ?? '' ) );
+		$site_timezone = trim( (string) ( $config[ Constants::SITE_TIMEZONE ] ?? '' ) );
 		$now           = Date::now();
 
 		if ( '' !== $site_name && null === $settings_api->get_option( 'site_name' ) ) {
@@ -273,6 +274,9 @@ class Initializer {
 		}
 		if ( '' !== $site_language && null === $settings_api->get_option( 'site_language' ) ) {
 			$settings_api->update_option( 'site_language', $site_language, $now );
+		}
+		if ( '' !== $site_timezone && null === $settings_api->get_option( 'site_timezone' ) ) {
+			$settings_api->update_option( 'site_timezone', $site_timezone, $now );
 		}
 		if ( null === $settings_api->get_option( 'installed_at' ) ) {
 			$settings_api->update_option( 'installed_at', $now, $now, false );
@@ -446,6 +450,7 @@ class Initializer {
 			Constants::OWNER_EMAIL              => $values[ Constants::OWNER_EMAIL ],
 			Constants::OWNER_PASSWORD           => $values[ Constants::OWNER_PASSWORD ],
 			Constants::SITE_LANGUAGE            => $values[ Constants::SITE_LANGUAGE ],
+			Constants::SITE_TIMEZONE            => $values[ Constants::SITE_TIMEZONE ] ?? Constants::DEFAULT_TIMEZONE,
 			Constants::WORKSPACE_NAME           => $values[ Constants::WORKSPACE_NAME ],
 			Constants::WORKSPACE_SLUG           => $values[ Constants::WORKSPACE_SLUG ],
 		);

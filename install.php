@@ -75,11 +75,16 @@ if ( InstallationState::DATABASE_UNAVAILABLE === $install_state ) {
 	exit();
 }
 
-$detected_site_url       = InstallScreen::detect_site_url( $base_path, $_SERVER );
-$values                  = InstallManager::get_form_defaults( $detected_site_url );
-$values['site_language'] = $installer_locale->get_locale();
-$error_message           = '';
-$generator_meta          = get_generator_tag();
+$detected_site_url          = InstallScreen::detect_site_url( $base_path, $_SERVER );
+$values                     = InstallManager::get_form_defaults( $detected_site_url );
+$values['site_language']    = $installer_locale->get_locale();
+$values['browser_timezone'] = trim( (string) ( $_POST['browser_timezone'] ?? $_GET['browser_timezone'] ?? '' ) );
+if ( isset( $_POST['site_timezone'] ) || isset( $_GET['site_timezone'] ) ) {
+	$values['site_timezone'] = trim( (string) ( $_POST['site_timezone'] ?? $_GET['site_timezone'] ?? '' ) );
+}
+
+$error_message  = '';
+$generator_meta = get_generator_tag();
 if ( '' !== $generator_meta ) {
 	$generator_meta .= "\n\t";
 }
@@ -573,6 +578,10 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 			<form method="post" action="<?php echo htmlspecialchars( InstallScreen::format_url( $base_path, '/install.php' ), ENT_QUOTES, 'UTF-8' ); ?>" novalidate>
 				<input type="hidden" name="site_language" value="<?php echo InstallScreen::get_escaped_value( $values, 'site_language' ); ?>">
+				<input type="hidden" name="browser_timezone" id="browser_timezone" value="<?php echo InstallScreen::get_escaped_value( $values, 'browser_timezone' ); ?>">
+				<?php if ( ! empty( $values['site_timezone'] ) ) : ?>
+					<input type="hidden" name="site_timezone" id="site_timezone" value="<?php echo InstallScreen::get_escaped_value( $values, 'site_timezone' ); ?>">
+				<?php endif; ?>
 				<div class="form-body">
 					<div class="divider" style="margin: 0;"></div>
 					<p class="form-section-label"><?php echo esc_html__( 'Site info', 'peakurl' ); ?></p>
@@ -642,5 +651,17 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			?>
 		</div>
 	</div>
+	<script>
+	(function() {
+		try {
+			var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			var input = document.getElementById('browser_timezone');
+
+			if (input && !input.value && timezone) {
+				input.value = timezone;
+			}
+		} catch (error) {}
+	})();
+	</script>
 </body>
 </html>

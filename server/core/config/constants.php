@@ -107,6 +107,8 @@ class Constants {
 	public const OWNER_PASSWORD = 'PEAKURL_OWNER_PASSWORD';
 	/** Install site language key. */
 	public const SITE_LANGUAGE = 'PEAKURL_SITE_LANGUAGE';
+	/** Install site timezone key. */
+	public const SITE_TIMEZONE = 'PEAKURL_SITE_TIMEZONE';
 	/** Install site name key. */
 	public const WORKSPACE_NAME = 'PEAKURL_WORKSPACE_NAME';
 	/** Install site slug key. */
@@ -153,6 +155,7 @@ class Constants {
 		self::OWNER_EMAIL,
 		self::OWNER_PASSWORD,
 		self::SITE_LANGUAGE,
+		self::SITE_TIMEZONE,
 		self::WORKSPACE_NAME,
 		self::WORKSPACE_SLUG,
 	);

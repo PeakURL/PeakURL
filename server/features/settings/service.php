@@ -371,6 +371,7 @@ class Service {
 		$version       = trim( (string) ( $this->config[ Constants::VERSION ] ?? '' ) );
 		$manifest_url  = trim( (string) ( $this->config[ Constants::UPDATE_MANIFEST_URL ] ?? '' ) );
 		$site_language = trim( (string) ( $this->config[ Constants::SITE_LANGUAGE ] ?? '' ) );
+		$site_timezone = trim( (string) ( $this->config[ Constants::SITE_TIMEZONE ] ?? '' ) );
 
 		if ( '' !== $site_name ) {
 			$this->add_option( 'site_name', $site_name );
@@ -398,6 +399,10 @@ class Service {
 
 		if ( '' !== $site_language ) {
 			$this->add_option( 'site_language', $site_language );
+		}
+
+		if ( '' !== $site_timezone ) {
+			$this->add_option( 'site_timezone', $site_timezone );
 		}
 
 		$this->add_default_options();

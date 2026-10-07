@@ -21,5 +21,6 @@ if (
 	return false;
 }
 
+$_SERVER['SCRIPT_NAME'] = '/index.php';
 require $release_dir . '/index.php';
 return true;

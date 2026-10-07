@@ -56,27 +56,30 @@ class Locale {
 	}
 
 	/**
-	 * Normalize a locale string to a WordPress-style identifier.
+	 * Canonicalize a raw locale string to a standard identifier.
+	 *
+	 * Returns an empty string if the input is empty or does not match a valid
+	 * locale pattern. Does not choose a fallback locale.
 	 *
 	 * @param string $locale Raw locale value.
-	 * @return string
+	 * @return string Canonical locale identifier or empty string when invalid.
 	 * @since 1.0.14
 	 */
-	public function normalize_locale( string $locale ): string {
+	public function canonicalize_locale( string $locale ): string {
 		$locale = trim( str_replace( '-', '_', $locale ) );
 
 		if ( '' === $locale ) {
-			return $this->get_default_locale();
+			return '';
 		}
 
 		if ( ! preg_match( '/^[A-Za-z]{2,3}(?:_[A-Za-z0-9]{2,8})*$/', $locale ) ) {
-			return $this->get_default_locale();
+			return '';
 		}
 
 		$parts = explode( '_', $locale );
 
 		if ( empty( $parts ) ) {
-			return $this->get_default_locale();
+			return '';
 		}
 
 		$parts[0] = strtolower( (string) $parts[0] );
@@ -102,15 +105,13 @@ class Locale {
 	 * @since 1.0.14
 	 */
 	public function get_html_lang( string $locale ): string {
-		$parts = explode( '_', $this->normalize_locale( $locale ) );
+		$canonical_locale = $this->canonicalize_locale( $locale );
 
-		foreach ( $parts as $index => $part ) {
-			$parts[ $index ] = 0 === $index
-				? strtolower( $part )
-				: strtoupper( $part );
+		if ( '' === $canonical_locale ) {
+			return '';
 		}
 
-		return implode( '-', $parts );
+		return str_replace( '_', '-', $canonical_locale );
 	}
 
 	/**
@@ -121,8 +122,14 @@ class Locale {
 	 * @since 1.0.14
 	 */
 	public function is_locale_rtl( string $locale ): bool {
+		$base_locale = $this->get_base_locale( $locale );
+
+		if ( '' === $base_locale ) {
+			return false;
+		}
+
 		return in_array(
-			$this->get_base_locale( $this->normalize_locale( $locale ) ),
+			$base_locale,
 			self::RTL_BASE_LOCALES,
 			true,
 		);
@@ -143,14 +150,20 @@ class Locale {
 	 * Resolve the base language code for a locale.
 	 *
 	 * @param string $locale Locale identifier.
-	 * @return string
+	 * @return string Base language code in lowercase or empty string.
 	 * @since 1.0.14
 	 */
 	public function get_base_locale( string $locale ): string {
-		$base_locale = strstr( $this->normalize_locale( $locale ), '_', true );
+		$canonical_locale = $this->canonicalize_locale( $locale );
+
+		if ( '' === $canonical_locale ) {
+			return '';
+		}
+
+		$base_locale = strstr( $canonical_locale, '_', true );
 
 		if ( false === $base_locale || '' === $base_locale ) {
-			return strtolower( $locale );
+			return strtolower( $canonical_locale );
 		}
 
 		return strtolower( $base_locale );

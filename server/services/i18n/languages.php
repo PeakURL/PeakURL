@@ -136,7 +136,11 @@ class Languages {
 	 * @since 1.0.14
 	 */
 	public function is_locale_available( string $locale ): bool {
-		$locale = $this->locale_helper->normalize_locale( $locale );
+		$locale = $this->locale_helper->canonicalize_locale( $locale );
+
+		if ( '' === $locale ) {
+			return false;
+		}
 
 		foreach ( $this->list_languages() as $language ) {
 			if ( (string) ( $language['locale'] ?? '' ) === $locale ) {
@@ -464,7 +468,11 @@ class Languages {
 					$matches,
 				)
 			) {
-				$locale = $this->locale_helper->normalize_locale( (string) $matches[1] );
+				$locale = $this->locale_helper->canonicalize_locale( (string) $matches[1] );
+
+				if ( '' === $locale ) {
+					continue;
+				}
 
 				if ( ! isset( $available[ $locale ] ) ) {
 					$available[ $locale ] = array(
@@ -484,7 +492,11 @@ class Languages {
 					$matches,
 				)
 			) {
-				$locale = $this->locale_helper->normalize_locale( (string) $matches[1] );
+				$locale = $this->locale_helper->canonicalize_locale( (string) $matches[1] );
+
+				if ( '' === $locale ) {
+					continue;
+				}
 
 				if ( ! isset( $available[ $locale ] ) ) {
 					$available[ $locale ] = array(

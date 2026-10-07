@@ -97,21 +97,34 @@ class BrowserLocale {
 				$language_tag = trim( (string) array_shift( $parts ) );
 
 				foreach ( $parts as $parameter ) {
-					if ( preg_match( '/^\s*q=([0-9.]+)\s*$/i', trim( $parameter ), $matches ) ) {
-						$quality = (float) $matches[1];
+					$param_trimmed = trim( $parameter );
+
+					if ( 0 === stripos( $param_trimmed, 'q=' ) ) {
+						$raw_q = trim( substr( $param_trimmed, 2 ) );
+
+						if ( ! preg_match( '/^(?:0(?:\.[0-9]{0,3})?|1(?:\.0{0,3})?)$/', $raw_q ) ) {
+							$quality = -1.0;
+							break;
+						}
+
+						$quality = (float) $raw_q;
 						break;
 					}
 				}
 			}
 
-			if ( '' === $language_tag || '*' === $language_tag ) {
+			if ( '' === $language_tag || '*' === $language_tag || $quality <= 0.0 || $quality > 1.0 ) {
 				continue;
 			}
 
-			$normalized_locale = $this->locale_helper->normalize_locale( $language_tag );
+			$locale = $this->locale_helper->canonicalize_locale( $language_tag );
+
+			if ( '' === $locale ) {
+				continue;
+			}
 
 			$preferences[] = array(
-				'locale'  => $normalized_locale,
+				'locale'  => $locale,
 				'quality' => $quality,
 				'index'   => $index,
 			);
@@ -160,6 +173,19 @@ class BrowserLocale {
 		}
 
 		$preferred_base_locale = $this->locale_helper->get_base_locale( $preferred_locale );
+
+		if ( '' === $preferred_base_locale ) {
+			return '';
+		}
+
+		$default_locale = $this->locale_helper->get_default_locale();
+
+		if (
+			$preferred_base_locale === $this->locale_helper->get_base_locale( $default_locale ) &&
+			in_array( $default_locale, $installed_locales, true )
+		) {
+			return $default_locale;
+		}
 
 		foreach ( $installed_locales as $installed_locale ) {
 			if ( $preferred_base_locale === $this->locale_helper->get_base_locale( $installed_locale ) ) {

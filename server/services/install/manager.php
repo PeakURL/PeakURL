@@ -42,7 +42,7 @@ class Manager {
 	public static function get_form_defaults( string $site_url ): array {
 		return array(
 			'site_url'       => untrailingslashit( $site_url ),
-			'site_language'  => 'en_US',
+			'site_language'  => Constants::DEFAULT_LOCALE,
 			'workspace_name' => '',
 			'owner_username' => '',
 			'owner_email'    => '',
@@ -133,11 +133,11 @@ class Manager {
 		$owner_name     = trim( (string) ( $input['owner_name'] ?? '' ) );
 		$owner_names    = self::get_owner_names( $owner_name, $owner_username );
 		$i18n_service   = new I18n( $config, null );
-		$site_language  = $i18n_service->normalize_locale(
+		$site_language  = $i18n_service->canonicalize_locale(
 			(string) ( $input['site_language'] ?? '' ),
 		);
 
-		if ( ! $i18n_service->is_locale_available( $site_language ) ) {
+		if ( '' === $site_language || ! $i18n_service->is_locale_available( $site_language ) ) {
 			$site_language = $i18n_service->get_default_locale();
 		}
 

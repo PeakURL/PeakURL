@@ -68,7 +68,7 @@ class SettingsRoundTripIntegrationTest extends TestCase {
 			);
 
 		$this->i18n_service = $this->createMock( I18n::class );
-		$this->i18n_service->method( 'normalize_locale' )->willReturn( 'en_US' );
+		$this->i18n_service->method( 'canonicalize_locale' )->willReturn( 'en_US' );
 		$this->i18n_service->method( 'is_locale_available' )->willReturn( true );
 		$this->i18n_service->method( 'get_site_locale' )->willReturn( 'en_US' );
 		$this->i18n_service->method( 'get_text_direction' )->willReturn( 'ltr' );

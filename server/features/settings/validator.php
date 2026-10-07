@@ -141,11 +141,11 @@ class Validator {
 		string $current_timezone,
 		string $current_time_format
 	): array {
-		$site_language = $i18n_service->normalize_locale(
+		$site_language = $i18n_service->canonicalize_locale(
 			(string) ( $payload['siteLanguage'] ?? '' ),
 		);
 
-		if ( ! $i18n_service->is_locale_available( $site_language ) ) {
+		if ( '' === $site_language || ! $i18n_service->is_locale_available( $site_language ) ) {
 			throw new ApiException(
 				__( 'PeakURL could not find that language pack.', 'peakurl' ),
 				422,

@@ -364,12 +364,13 @@ class Service {
 			return;
 		}
 
-		$site_name    = trim( (string) ( $this->config[ Constants::WORKSPACE_NAME ] ?? '' ) );
-		$site_slug    = trim( (string) ( $this->config[ Constants::WORKSPACE_SLUG ] ?? '' ) );
-		$site_url     = trim( (string) ( $this->config[ Constants::SITE_URL ] ?? '' ) );
-		$admin_email  = trim( (string) ( $this->config[ Constants::OWNER_EMAIL ] ?? '' ) );
-		$version      = trim( (string) ( $this->config[ Constants::VERSION ] ?? '' ) );
-		$manifest_url = trim( (string) ( $this->config[ Constants::UPDATE_MANIFEST_URL ] ?? '' ) );
+		$site_name     = trim( (string) ( $this->config[ Constants::WORKSPACE_NAME ] ?? '' ) );
+		$site_slug     = trim( (string) ( $this->config[ Constants::WORKSPACE_SLUG ] ?? '' ) );
+		$site_url      = trim( (string) ( $this->config[ Constants::SITE_URL ] ?? '' ) );
+		$admin_email   = trim( (string) ( $this->config[ Constants::OWNER_EMAIL ] ?? '' ) );
+		$version       = trim( (string) ( $this->config[ Constants::VERSION ] ?? '' ) );
+		$manifest_url  = trim( (string) ( $this->config[ Constants::UPDATE_MANIFEST_URL ] ?? '' ) );
+		$site_language = trim( (string) ( $this->config[ Constants::SITE_LANGUAGE ] ?? '' ) );
 
 		if ( '' !== $site_name ) {
 			$this->add_option( 'site_name', $site_name );
@@ -393,6 +394,10 @@ class Service {
 
 		if ( '' !== $manifest_url ) {
 			$this->settings_api->update_option( 'update_manifest_url', $manifest_url, Date::now(), false );
+		}
+
+		if ( '' !== $site_language ) {
+			$this->add_option( 'site_language', $site_language );
 		}
 
 		$this->add_default_options();
@@ -427,9 +432,9 @@ class Service {
 		if ( '' === $site_language ) {
 			$site_language = Constants::DEFAULT_LOCALE;
 		} else {
-			$site_language = $this->i18n_service->normalize_locale( $site_language );
+			$site_language = $this->i18n_service->canonicalize_locale( $site_language );
 
-			if ( ! $this->i18n_service->is_locale_available( $site_language ) ) {
+			if ( '' === $site_language || ! $this->i18n_service->is_locale_available( $site_language ) ) {
 				$site_language = Constants::DEFAULT_LOCALE;
 			}
 		}

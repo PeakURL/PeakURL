@@ -316,8 +316,12 @@ if ( ! function_exists( 'get_peakurl_data' ) ) {
 		 * through `window.__PEAKURL__`.
 		 */
 		$locale = array_key_exists( 'locale', $args )
-			? $i18n->normalize_locale( (string) $args['locale'] )
+			? $i18n->canonicalize_locale( (string) $args['locale'] )
 			: $i18n->get_current_locale();
+
+		if ( '' === $locale ) {
+			$locale = $i18n->get_current_locale();
+		}
 
 		$timezone = array_key_exists( 'timezone', $args )
 			? trim( (string) $args['timezone'] )

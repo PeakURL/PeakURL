@@ -243,14 +243,15 @@ class Initializer {
 			return;
 		}
 
-		$settings_api = new SettingsApi( $db );
-		$site_name    = trim( (string) ( $config[ Constants::WORKSPACE_NAME ] ?? '' ) );
-		$site_slug    = trim( (string) ( $config[ Constants::WORKSPACE_SLUG ] ?? '' ) );
-		$site_url     = trim( (string) ( $config[ Constants::SITE_URL ] ?? '' ) );
-		$admin_email  = trim( (string) ( $config[ Constants::OWNER_EMAIL ] ?? '' ) );
-		$version      = trim( (string) ( $config[ Constants::VERSION ] ?? '' ) );
-		$manifest_url = trim( (string) ( $config[ Constants::UPDATE_MANIFEST_URL ] ?? '' ) );
-		$now          = Date::now();
+		$settings_api  = new SettingsApi( $db );
+		$site_name     = trim( (string) ( $config[ Constants::WORKSPACE_NAME ] ?? '' ) );
+		$site_slug     = trim( (string) ( $config[ Constants::WORKSPACE_SLUG ] ?? '' ) );
+		$site_url      = trim( (string) ( $config[ Constants::SITE_URL ] ?? '' ) );
+		$admin_email   = trim( (string) ( $config[ Constants::OWNER_EMAIL ] ?? '' ) );
+		$version       = trim( (string) ( $config[ Constants::VERSION ] ?? '' ) );
+		$manifest_url  = trim( (string) ( $config[ Constants::UPDATE_MANIFEST_URL ] ?? '' ) );
+		$site_language = trim( (string) ( $config[ Constants::SITE_LANGUAGE ] ?? '' ) );
+		$now           = Date::now();
 
 		if ( '' !== $site_name && null === $settings_api->get_option( 'site_name' ) ) {
 			$settings_api->update_option( 'site_name', $site_name, $now );
@@ -269,6 +270,9 @@ class Initializer {
 		}
 		if ( '' !== $manifest_url && null === $settings_api->get_option( 'update_manifest_url' ) ) {
 			$settings_api->update_option( 'update_manifest_url', $manifest_url, $now );
+		}
+		if ( '' !== $site_language && null === $settings_api->get_option( 'site_language' ) ) {
+			$settings_api->update_option( 'site_language', $site_language, $now );
 		}
 		if ( null === $settings_api->get_option( 'installed_at' ) ) {
 			$settings_api->update_option( 'installed_at', $now, $now, false );

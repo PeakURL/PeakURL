@@ -123,11 +123,11 @@ class Locale {
 	}
 
 	/**
-	 * Choose the installer locale.
+	 * Choose the installer locale from explicit input, browser preferences, or default.
 	 *
-	 * @param string|null $requested_locale       Requested installer locale.
+	 * @param string|null $requested_locale       Explicitly requested installer locale.
 	 * @param string|null $accept_language_header Browser language header.
-	 * @return string
+	 * @return string Chosen supported locale.
 	 * @since 1.0.14
 	 */
 	private function choose_locale(
@@ -135,10 +135,10 @@ class Locale {
 		?string $accept_language_header
 	): string {
 		if ( null !== $requested_locale && '' !== trim( $requested_locale ) ) {
-			$normalized_locale = $this->i18n_service->normalize_locale( $requested_locale );
+			$locale = $this->i18n_service->canonicalize_locale( $requested_locale );
 
-			if ( $this->i18n_service->is_locale_available( $normalized_locale ) ) {
-				return $normalized_locale;
+			if ( '' !== $locale && $this->i18n_service->is_locale_available( $locale ) ) {
+				return $locale;
 			}
 		}
 

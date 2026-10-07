@@ -155,14 +155,14 @@ class I18n {
 	}
 
 	/**
-	 * Normalize a locale string to a WordPress-style identifier.
+	 * Canonicalize a raw locale string to a standard identifier.
 	 *
 	 * @param string $locale Raw locale value.
-	 * @return string
+	 * @return string Canonical locale identifier or empty string when invalid.
 	 * @since 1.0.14
 	 */
-	public function normalize_locale( string $locale ): string {
-		return $this->locale_helper->normalize_locale( $locale );
+	public function canonicalize_locale( string $locale ): string {
+		return $this->locale_helper->canonicalize_locale( $locale );
 	}
 
 	/**
@@ -173,9 +173,14 @@ class I18n {
 	 */
 	public function get_site_locale(): string {
 		if ( null !== $this->settings_api ) {
-			return $this->normalize_locale(
-				(string) $this->settings_api->get_option( 'site_language' ),
-			);
+			$configured = (string) $this->settings_api->get_option( 'site_language' );
+			$locale     = $this->locale_helper->canonicalize_locale( $configured );
+
+			if ( '' !== $locale && $this->is_locale_available( $locale ) ) {
+				return $locale;
+			}
+
+			return $this->get_default_locale();
 		}
 
 		$configured_locale = trim(
@@ -186,9 +191,9 @@ class I18n {
 			return $this->get_default_locale();
 		}
 
-		$configured_locale = $this->normalize_locale( $configured_locale );
+		$configured_locale = $this->locale_helper->canonicalize_locale( $configured_locale );
 
-		if ( ! $this->is_locale_available( $configured_locale ) ) {
+		if ( '' === $configured_locale || ! $this->is_locale_available( $configured_locale ) ) {
 			return $this->get_default_locale();
 		}
 
@@ -205,7 +210,11 @@ class I18n {
 	public function load_locale( ?string $locale = null ): string {
 		$locale_name = null === $locale
 			? ( '' !== $this->locale && null !== $this->catalog ? $this->locale : $this->get_site_locale() )
-			: $this->normalize_locale( $locale );
+			: $this->locale_helper->canonicalize_locale( $locale );
+
+		if ( '' === $locale_name || ! $this->is_locale_available( $locale_name ) ) {
+			$locale_name = $this->get_site_locale();
+		}
 
 		if ( $locale_name === $this->locale && null !== $this->catalog ) {
 			return $locale_name;
@@ -382,7 +391,11 @@ class I18n {
 	public function get_dashboard_catalog( ?string $locale = null ): array {
 		$locale_name = null === $locale
 			? $this->get_current_locale()
-			: $this->normalize_locale( $locale );
+			: $this->locale_helper->canonicalize_locale( $locale );
+
+		if ( '' === $locale_name || ! $this->is_locale_available( $locale_name ) ) {
+			$locale_name = $this->get_site_locale();
+		}
 
 		return $this->loader->get_dashboard_catalog(
 			$locale_name,
@@ -400,7 +413,11 @@ class I18n {
 	public function get_html_lang( ?string $locale = null ): string {
 		$locale_name = null === $locale
 			? $this->get_current_locale()
-			: $this->normalize_locale( $locale );
+			: $this->locale_helper->canonicalize_locale( $locale );
+
+		if ( '' === $locale_name ) {
+			$locale_name = $this->get_site_locale();
+		}
 
 		return $this->locale_helper->get_html_lang( $locale_name );
 	}
@@ -415,7 +432,11 @@ class I18n {
 	public function is_locale_rtl( ?string $locale = null ): bool {
 		$locale_name = null === $locale
 			? $this->get_current_locale()
-			: $this->normalize_locale( $locale );
+			: $this->locale_helper->canonicalize_locale( $locale );
+
+		if ( '' === $locale_name ) {
+			$locale_name = $this->get_site_locale();
+		}
 
 		return $this->locale_helper->is_locale_rtl( $locale_name );
 	}
@@ -430,7 +451,11 @@ class I18n {
 	public function get_text_direction( ?string $locale = null ): string {
 		$locale_name = null === $locale
 			? $this->get_current_locale()
-			: $this->normalize_locale( $locale );
+			: $this->locale_helper->canonicalize_locale( $locale );
+
+		if ( '' === $locale_name ) {
+			$locale_name = $this->get_site_locale();
+		}
 
 		return $this->locale_helper->get_text_direction( $locale_name );
 	}

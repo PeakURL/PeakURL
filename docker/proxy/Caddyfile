@@ -21,7 +21,9 @@ https://peakurl.dev {
 
 	@api path /api/*
 	handle @api {
-		reverse_proxy server:8000
+		reverse_proxy server:8000 {
+			header_up X-Server "Caddy"
+		}
 	}
 
 	handle {
@@ -35,7 +37,9 @@ http://api.peakurl.dev {
 
 https://api.peakurl.dev {
 	import local_tls
-	reverse_proxy server:8000
+	reverse_proxy server:8000 {
+		header_up X-Server "Caddy"
+	}
 }
 
 http://peakurl.test {
@@ -44,5 +48,7 @@ http://peakurl.test {
 
 https://peakurl.test {
 	import local_tls
-	reverse_proxy test:8080
+	reverse_proxy test:8080 {
+		header_up X-Server "Caddy"
+	}
 }

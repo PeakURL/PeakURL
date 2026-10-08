@@ -193,22 +193,41 @@ class Metadata {
 	 * @since 1.7.0
 	 */
 	public static function normalize_web_server( ?string $server_software = null ): string {
-		$software = strtolower( trim( (string) ( $server_software ?? ( $_SERVER['SERVER_SOFTWARE'] ?? '' ) ) ) );
+		$proxy_software = strtolower(
+			trim(
+				(string) (
+				$_SERVER['HTTP_X_SERVER'] ??
+				$_SERVER['HTTP_SERVER'] ??
+				$_SERVER['HTTP_X_FORWARDED_SERVER'] ??
+				''
+				)
+			)
+		);
 
-		if ( '' === $software ) {
+		$software = strtolower( trim( (string) ( $server_software ?? ( $_SERVER['SERVER_SOFTWARE'] ?? $proxy_software ) ) ) );
+
+		if ( '' === $software && '' === $proxy_software ) {
 			return 'unknown';
 		}
 
-		if ( false !== strpos( $software, 'nginx' ) ) {
+		if ( false !== strpos( $software, 'caddy' ) || false !== strpos( $proxy_software, 'caddy' ) ) {
+			return 'caddy';
+		}
+
+		if ( false !== strpos( $software, 'nginx' ) || false !== strpos( $proxy_software, 'nginx' ) ) {
 			return 'nginx';
 		}
 
-		if ( false !== strpos( $software, 'apache' ) ) {
+		if ( false !== strpos( $software, 'apache' ) || false !== strpos( $proxy_software, 'apache' ) ) {
 			return 'apache';
 		}
 
-		if ( false !== strpos( $software, 'caddy' ) ) {
-			return 'caddy';
+		if ( false !== strpos( $software, 'litespeed' ) || false !== strpos( $proxy_software, 'litespeed' ) ) {
+			return 'litespeed';
+		}
+
+		if ( false !== strpos( $software, 'openlitespeed' ) || false !== strpos( $proxy_software, 'openlitespeed' ) ) {
+			return 'openlitespeed';
 		}
 
 		if ( false !== strpos( $software, 'iis' ) || false !== strpos( $software, 'microsoft-iis' ) ) {
@@ -217,6 +236,19 @@ class Metadata {
 
 		if ( false !== strpos( $software, 'lighttpd' ) ) {
 			return 'lighttpd';
+		}
+
+		if ( false !== strpos( $software, 'frankenphp' ) ) {
+			return 'frankenphp';
+		}
+
+		if ( false !== strpos( $software, 'traefik' ) || false !== strpos( $proxy_software, 'traefik' ) ) {
+			return 'traefik';
+		}
+
+		// When running under local PHP development server fronted by Caddy
+		if ( false !== strpos( $software, 'development server' ) || false !== strpos( $software, 'cli-server' ) ) {
+			return 'caddy';
 		}
 
 		return 'other';

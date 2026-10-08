@@ -109,7 +109,8 @@ class UpdateMetadataTest extends TestCase {
 		$this->assertSame( 'caddy', Metadata::normalize_web_server( 'Caddy v2.7.6' ) );
 		$this->assertSame( 'iis', Metadata::normalize_web_server( 'Microsoft-IIS/10.0' ) );
 		$this->assertSame( 'lighttpd', Metadata::normalize_web_server( 'lighttpd/1.4.69' ) );
-		$this->assertSame( 'other', Metadata::normalize_web_server( 'LiteSpeed' ) );
+		$this->assertSame( 'litespeed', Metadata::normalize_web_server( 'LiteSpeed' ) );
+		$this->assertSame( 'other', Metadata::normalize_web_server( 'CustomServer/1.0' ) );
 		$this->assertSame( 'unknown', Metadata::normalize_web_server( '' ) );
 		$this->assertSame( 'unknown', Metadata::normalize_web_server( null ) );
 	}

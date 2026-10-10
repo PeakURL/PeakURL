@@ -291,7 +291,7 @@ class StarterLinksInstallTest extends TestCase {
 		$this->assertSame( 'trashed', $trashed['status'] );
 
 		// 3. Permanently delete the link through domain repository method.
-		$deleted_result = $repository->delete_url_permanent( $link_id );
+		$deleted_result = $repository->delete_url_permanently( $link_id );
 		$this->assertTrue( $deleted_result );
 
 		$deleted = $repository->find_url_row( $link_id );

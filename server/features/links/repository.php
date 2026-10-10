@@ -150,23 +150,15 @@ class Repository {
 	}
 
 	/**
-	 * Apply user access and ownership filters to URL query conditions.
+	 * Validate that the current user has permission to view links.
 	 *
-	 * @param array<string, mixed>      $user        Current user.
-	 * @param array<int, string>        $conditions  SQL conditions array.
-	 * @param array<string, string|int> $params      Bound parameter array.
-	 * @param string                    $table_alias URL table alias.
+	 * @param array<string, mixed> $user Current user row.
 	 * @return void
 	 *
 	 * @throws ApiException When the user cannot view links.
 	 * @since 1.0.0
 	 */
-	public function apply_user_filter(
-		array $user,
-		array &$conditions,
-		array &$params,
-		string $table_alias = 'u'
-	): void {
+	public function validate_link_access( array $user ): void {
 		if ( $this->authorization->has_capability( $user, 'view_links' ) ) {
 			return;
 		}
@@ -192,16 +184,16 @@ class Repository {
 	}
 
 	/**
-	 * Prepare shared listing query fragments and bound parameters.
+	 * Return the query details for a link collection.
 	 *
 	 * @param array<string, mixed> $user            Current authenticated user row.
 	 * @param array<string, mixed> $query           Query parameters.
 	 * @param callable|null        $filter_callback Optional callback to apply user filter.
 	 * @param callable             $period_resolver Callback to resolve analytics bounds.
-	 * @return array<string, mixed> Prepared query details.
+	 * @return array<string, mixed> Link collection query details.
 	 * @since 1.0.0
 	 */
-	public function prepare_url_listing_query(
+	public function get_link_collection_query(
 		array $user,
 		array $query,
 		?callable $filter_callback,
@@ -209,7 +201,7 @@ class Repository {
 	): array {
 		$search       = trim( (string) ( $query['search'] ?? '' ) );
 		$sort_by      = Query::sort_column(
-			$this->get_url_sort_map(),
+			$this->get_link_sort_columns(),
 			$query['sortBy'] ?? 'createdAt',
 			'u.created_at',
 		);
@@ -218,7 +210,7 @@ class Repository {
 		);
 		$conditions   = array();
 		$params       = array();
-		$stats_params = $this->get_url_listing_stats_params( $query, $period_resolver );
+		$stats_params = $this->get_link_stats_period_params( $query, $period_resolver );
 
 		if ( '' !== $search ) {
 			$conditions[]                 = '(
@@ -262,7 +254,7 @@ class Repository {
 		if ( null !== $filter_callback ) {
 			$filter_callback( $user, $conditions, $params, 'u' );
 		} else {
-			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+			$this->validate_link_access( $user );
 		}
 
 		return array(
@@ -277,14 +269,14 @@ class Repository {
 	}
 
 	/**
-	 * Resolve optional click-stat query bounds for link listing.
+	 * Resolve optional click-stat query period bounds for a link collection.
 	 *
-	 * @param array<string, mixed> $query           Raw listing query parameters.
+	 * @param array<string, mixed> $query           Raw query parameters.
 	 * @param callable             $period_resolver Callback to resolve date period bounds.
 	 * @return array<string, string> Bound parameters for click stats.
 	 * @since 1.2.1
 	 */
-	public function get_url_listing_stats_params(
+	public function get_link_stats_period_params(
 		array $query,
 		callable $period_resolver
 	): array {
@@ -313,12 +305,12 @@ class Repository {
 	}
 
 	/**
-	 * Return the allowed URL list sort keys.
+	 * Return the allowed link sort keys mapped to SQL columns.
 	 *
 	 * @return array<string, string> API sort keys mapped to SQL columns.
 	 * @since 1.0.0
 	 */
-	public function get_url_sort_map(): array {
+	public function get_link_sort_columns(): array {
 		return array(
 			'createdAt'    => 'u.created_at',
 			'updatedAt'    => 'u.updated_at',
@@ -333,19 +325,19 @@ class Repository {
 	}
 
 	/**
-	 * Count matching link rows for a listing query.
+	 * Count matching link rows for a link collection query.
 	 *
 	 * @param string               $where  Prepared WHERE clause.
 	 * @param array<string, mixed> $params Bound parameters.
 	 * @return int Total matching rows.
 	 * @since 1.0.0
 	 */
-	public function count_url_listing_rows( string $where, array $params ): int {
+	public function count_link_rows( string $where, array $params ): int {
 		return $this->links_api->count_links_for_listing( $where, $params );
 	}
 
 	/**
-	 * Query URL rows with click stats for a listing or export request.
+	 * Retrieve link rows with click statistics for a link collection or export.
 	 *
 	 * @param string                $where        Prepared WHERE clause.
 	 * @param array<string, mixed>  $params       Bound parameters.
@@ -357,7 +349,7 @@ class Repository {
 	 * @return array<int, array<string, mixed>> Link rows.
 	 * @since 1.0.0
 	 */
-	public function query_url_listing_rows(
+	public function get_link_rows(
 		string $where,
 		array $params,
 		string $sort_by,
@@ -378,7 +370,7 @@ class Repository {
 	}
 
 	/**
-	 * Calculate total click aggregates for a listing query.
+	 * Calculate total click aggregates for a link collection query.
 	 *
 	 * @param string                $where        Prepared WHERE clause.
 	 * @param array<string, mixed>  $params       Query parameters.
@@ -386,7 +378,7 @@ class Repository {
 	 * @return array<string, int> Click aggregates.
 	 * @since 1.5.2
 	 */
-	public function aggregate_link_stats(
+	public function get_link_collection_stats(
 		string $where,
 		array $params,
 		array $stats_params
@@ -399,7 +391,7 @@ class Repository {
 	}
 
 	/**
-	 * Calculate total clicks for a listing query within a date window.
+	 * Calculate total clicks for a link collection within a date window.
 	 *
 	 * @param string                $where             Prepared WHERE clause.
 	 * @param array<string, mixed>  $params            Query parameters.
@@ -407,7 +399,7 @@ class Repository {
 	 * @return array<string, int> Click counts.
 	 * @since 1.5.2
 	 */
-	public function aggregate_link_clicks(
+	public function get_link_click_totals(
 		string $where,
 		array $params,
 		array $last_stats_params
@@ -437,7 +429,7 @@ class Repository {
 		if ( null !== $filter_callback ) {
 			$filter_callback( $user, $conditions, $params, 'u' );
 		} else {
-			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+			$this->validate_link_access( $user );
 			if ( ! $this->authorization->is_admin( $user ) ) {
 				$conditions[]                    = 'u.user_id = :trashed_count_user_id';
 				$params['trashed_count_user_id'] = (string) ( $user['id'] ?? '' );
@@ -472,7 +464,7 @@ class Repository {
 		if ( null !== $filter_callback ) {
 			$filter_callback( $user, $conditions, $params, 'u' );
 		} else {
-			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+			$this->validate_link_access( $user );
 			if ( ! $this->authorization->is_admin( $user ) ) {
 				$conditions[]                    = 'u.user_id = :expired_count_user_id';
 				$params['expired_count_user_id'] = (string) ( $user['id'] ?? '' );
@@ -563,7 +555,7 @@ class Repository {
 	 * @return bool True if row was deleted.
 	 * @since 1.0.0
 	 */
-	public function delete_url_permanent( string $id ): bool {
+	public function delete_url_permanently( string $id ): bool {
 		$this->db->begin_transaction();
 
 		try {
@@ -600,10 +592,10 @@ class Repository {
 	 *
 	 * @param array<int, string> $ids     Target URL IDs.
 	 * @param string             $user_id User primary ID.
-	 * @return array<int, string> Allowed IDs.
+	 * @return array<int, string> Owned IDs.
 	 * @since 1.0.0
 	 */
-	public function get_allowed_ids_for_user( array $ids, string $user_id ): array {
+	public function get_owned_link_ids( array $ids, string $user_id ): array {
 		return array_map(
 			'strval',
 			$this->db->get_col_where_in(
@@ -638,7 +630,7 @@ class Repository {
 	 * @return int Number of rows deleted.
 	 * @since 1.0.0
 	 */
-	public function bulk_delete_permanent( array $ids ): int {
+	public function delete_links_permanently( array $ids ): int {
 		$this->db->begin_transaction();
 
 		try {
@@ -681,7 +673,7 @@ class Repository {
 	 * @return array<int, array<string, mixed>> Trashed URL rows.
 	 * @since 1.6.0
 	 */
-	public function get_all_trashed_links(
+	public function get_trashed_links(
 		array $user,
 		?callable $filter_callback = null
 	): array {
@@ -691,7 +683,7 @@ class Repository {
 		if ( null !== $filter_callback ) {
 			$filter_callback( $user, $conditions, $params, 'u' );
 		} else {
-			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+			$this->validate_link_access( $user );
 		}
 
 		return $this->db->get_results(
@@ -708,7 +700,7 @@ class Repository {
 	 * @return array<int, array<string, mixed>> All URL rows.
 	 * @since 1.5.3
 	 */
-	public function get_all_accessible_links(
+	public function get_accessible_links(
 		array $user,
 		?callable $filter_callback = null
 	): array {
@@ -718,7 +710,7 @@ class Repository {
 		if ( null !== $filter_callback ) {
 			$filter_callback( $user, $conditions, $params, 'u' );
 		} else {
-			$this->apply_user_filter( $user, $conditions, $params, 'u' );
+			$this->validate_link_access( $user );
 		}
 
 		$where = ! empty( $conditions )
@@ -790,7 +782,7 @@ class Repository {
 	 * @return bool True if updated.
 	 * @since 1.7.0
 	 */
-	public function mark_link_expired( string $id ): bool {
+	public function expire_link( string $id ): bool {
 		$now = Date::now();
 
 		return $this->db->update(

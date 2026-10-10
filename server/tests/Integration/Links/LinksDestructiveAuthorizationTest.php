@@ -105,12 +105,12 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		);
 
 		$this->repository->expects( $this->once() )
-			->method( 'get_all_trashed_links' )
+			->method( 'get_trashed_links' )
 			->with( $admin_user )
 			->willReturn( $mock_trashed );
 
 		$this->repository->expects( $this->once() )
-			->method( 'bulk_delete_permanent' )
+			->method( 'delete_links_permanently' )
 			->with( array( 'link_1' ) )
 			->willReturn( 1 );
 
@@ -146,12 +146,12 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		);
 
 		$this->repository->expects( $this->once() )
-			->method( 'get_all_accessible_links' )
+			->method( 'get_accessible_links' )
 			->with( $admin_user )
 			->willReturn( $mock_links );
 
 		$this->repository->expects( $this->once() )
-			->method( 'bulk_delete_permanent' )
+			->method( 'delete_links_permanently' )
 			->with( array( 'link_1', 'link_2' ) )
 			->willReturn( 2 );
 
@@ -173,10 +173,10 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 
 		// Critical: Editor must NEVER cause repository mutation on global empty_trash
 		$this->repository->expects( $this->never() )
-			->method( 'get_all_trashed_links' );
+			->method( 'get_trashed_links' );
 
 		$this->repository->expects( $this->never() )
-			->method( 'bulk_delete_permanent' );
+			->method( 'delete_links_permanently' );
 
 		$this->expectException( ApiException::class );
 		$this->expectExceptionCode( 403 );
@@ -204,7 +204,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		);
 
 		$this->repository->expects( $this->once() )
-			->method( 'get_all_accessible_links' )
+			->method( 'get_accessible_links' )
 			->willReturn( $mock_links );
 
 		$this->repository->expects( $this->once() )
@@ -213,7 +213,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			->willReturn( true );
 
 		$this->repository->expects( $this->never() )
-			->method( 'bulk_delete_permanent' );
+			->method( 'delete_links_permanently' );
 
 		$response = $this->links_controller->clear( $request );
 
@@ -255,8 +255,8 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->auth_service->method( 'get_current_user' )->willReturn( $unauthorized_user );
 
 		// Critical invariant: Repository MUST NOT be queried or mutated when unauthorized.
-		$this->repository->expects( $this->never() )->method( 'get_all_trashed_links' );
-		$this->repository->expects( $this->never() )->method( 'bulk_delete_permanent' );
+		$this->repository->expects( $this->never() )->method( 'get_trashed_links' );
+		$this->repository->expects( $this->never() )->method( 'delete_links_permanently' );
 
 		$this->expectException( ApiException::class );
 		$this->expectExceptionCode( 403 );
@@ -298,8 +298,8 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->auth_service->method( 'get_current_user' )->willReturn( $unauthorized_user );
 
 		// Critical invariant: Repository MUST NOT be queried or mutated when unauthorized.
-		$this->repository->expects( $this->never() )->method( 'get_all_accessible_links' );
-		$this->repository->expects( $this->never() )->method( 'bulk_delete_permanent' );
+		$this->repository->expects( $this->never() )->method( 'get_accessible_links' );
+		$this->repository->expects( $this->never() )->method( 'delete_links_permanently' );
 
 		$this->expectException( ApiException::class );
 		$this->expectExceptionCode( 403 );
@@ -317,8 +317,8 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$request = new Request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'permanent' ) );
 		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
 
-		$this->repository->expects( $this->never() )->method( 'get_all_accessible_links' );
-		$this->repository->expects( $this->never() )->method( 'bulk_delete_permanent' );
+		$this->repository->expects( $this->never() )->method( 'get_accessible_links' );
+		$this->repository->expects( $this->never() )->method( 'delete_links_permanently' );
 
 		$this->expectException( ApiException::class );
 		$this->expectExceptionCode( 403 );
@@ -359,7 +359,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$request = new Request( 'DELETE', '/api/v1/urls', array(), array( 'mode' => 'trash' ) );
 		$this->auth_service->method( 'get_current_user' )->willReturn( $unauthorized_user );
 
-		$this->repository->expects( $this->never() )->method( 'get_all_accessible_links' );
+		$this->repository->expects( $this->never() )->method( 'get_accessible_links' );
 		$this->repository->expects( $this->never() )->method( 'trash_url' );
 
 		$this->expectException( ApiException::class );
@@ -419,7 +419,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			->willReturn( true );
 
 		$this->repository->expects( $this->never() )
-			->method( 'bulk_delete_permanent' );
+			->method( 'delete_links_permanently' );
 
 		$response = $this->links_controller->bulk_delete( $request );
 
@@ -461,7 +461,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			->willReturn( $mock_links );
 
 		$this->repository->expects( $this->once() )
-			->method( 'bulk_delete_permanent' )
+			->method( 'delete_links_permanently' )
 			->with( array( 'link_1' ) )
 			->willReturn( 1 );
 
@@ -485,7 +485,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
 
 		$this->repository->expects( $this->once() )
-			->method( 'get_allowed_ids_for_user' )
+			->method( 'get_owned_link_ids' )
 			->with( array( 'link_ed_1' ), '2' )
 			->willReturn( array( 'link_ed_1' ) );
 
@@ -509,7 +509,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 			->willReturn( true );
 
 		$this->repository->expects( $this->never() )
-			->method( 'bulk_delete_permanent' );
+			->method( 'delete_links_permanently' );
 
 		$response = $this->links_controller->bulk_delete( $request );
 
@@ -536,7 +536,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
 
 		$this->repository->expects( $this->never() )->method( 'get_links_by_ids' );
-		$this->repository->expects( $this->never() )->method( 'bulk_delete_permanent' );
+		$this->repository->expects( $this->never() )->method( 'delete_links_permanently' );
 		$this->repository->expects( $this->never() )->method( 'trash_url' );
 
 		$this->expectException( ApiException::class );
@@ -579,7 +579,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->auth_service->method( 'get_current_user' )->willReturn( $unauthorized_user );
 
 		$this->repository->expects( $this->never() )->method( 'get_links_by_ids' );
-		$this->repository->expects( $this->never() )->method( 'bulk_delete_permanent' );
+		$this->repository->expects( $this->never() )->method( 'delete_links_permanently' );
 		$this->repository->expects( $this->never() )->method( 'trash_url' );
 
 		$this->expectException( ApiException::class );

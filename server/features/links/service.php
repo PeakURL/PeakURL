@@ -16,20 +16,19 @@ namespace PeakURL\Features\Links;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
-use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Core\Scheduler\BackgroundRunner;
 use PeakURL\Core\Scheduler\Scheduler;
-use PeakURL\Core\Security\Security;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Service as AuthService;
+use PeakURL\Features\Links\Access;
 use PeakURL\Features\Links\Health\Checker;
+use PeakURL\Features\Links\Lifecycle;
 use PeakURL\Features\Webhooks\Service as WebhooksService;
 use PeakURL\Http\Request;
 use PeakURL\Services\Captcha;
 use PeakURL\Services\SocialPreview;
 use PeakURL\Utils\Date;
-use PeakURL\Services\Database\Query;
 use PeakURL\Utils\Str;
 
 // If this file is called directly, abort.
@@ -50,7 +49,7 @@ class Service {
 	 * @var Repository
 	 * @since 1.0.0
 	 */
-	private Repository $data;
+	private Repository $repository;
 
 	/**
 	 * Link validation helper.
@@ -117,28 +116,36 @@ class Service {
 	private SocialPreview $social_preview;
 
 	/**
-	 * CAPTCHA verification service.
-	 *
-	 * @var Captcha
-	 * @since 1.2.0
-	 */
-	private Captcha $captcha;
-
-	/**
-	 * Runtime configuration values.
-	 *
-	 * @var array<string, mixed>
-	 * @since 1.0.0
-	 */
-	private array $config;
-
-	/**
 	 * Canonical link creator domain service.
 	 *
 	 * @var Creator
 	 * @since 1.7.0
 	 */
 	private Creator $creator;
+
+	/**
+	 * Public access domain service.
+	 *
+	 * @var Access
+	 * @since 1.7.2
+	 */
+	private Access $access;
+
+	/**
+	 * Link lifecycle domain service.
+	 *
+	 * @var Lifecycle
+	 * @since 1.7.2
+	 */
+	private Lifecycle $lifecycle;
+
+	/**
+	 * Link collection query domain service.
+	 *
+	 * @var LinkCollection
+	 * @since 1.7.2
+	 */
+	private LinkCollection $collection;
 
 	/**
 	 * Destination health checker service.
@@ -187,19 +194,48 @@ class Service {
 		array $config,
 		Checker $health_checker
 	) {
-		$this->data              = $data;
+		$this->repository        = $data;
 		$this->validator         = $validator;
 		$this->settings_api      = $settings_api;
 		$this->auth_service      = $auth_service;
 		$this->analytics_service = $analytics_service;
 		$this->webhooks_service  = $webhooks_service;
 		$this->social_preview    = $social_preview;
-		$this->captcha           = $captcha;
 		$this->roles             = $roles;
 		$this->authorization     = $authorization;
-		$this->config            = $config;
 		$this->creator           = new Creator( $data, $validator, $social_preview );
 		$this->health_checker    = $health_checker;
+		$this->access            = new Access(
+			$data,
+			$validator,
+			$analytics_service,
+			$webhooks_service,
+			$captcha,
+			$config,
+			fn( array $row ): array => $this->format_url( $row )
+		);
+		$this->lifecycle         = new Lifecycle(
+			$data,
+			$validator,
+			$auth_service,
+			$analytics_service,
+			$webhooks_service,
+			$social_preview,
+			$roles,
+			$authorization,
+			fn( ?array $row ): array => $this->format_url( $row ),
+			function ( string $link_id ): void {
+				$this->schedule_health_check( $link_id );
+			},
+			fn( ?array $row ): ?array => $this->format_health( $row )
+		);
+		$this->collection        = new LinkCollection(
+			$data,
+			$auth_service,
+			$analytics_service,
+			fn( ?array $row ): array => $this->format_url( $row ),
+			fn( ?array $row ): ?array => $this->format_health( $row )
+		);
 	}
 
 	/**
@@ -210,7 +246,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function find_url_row( string $id ): ?array {
-		return $this->data->find_url_row( $id );
+		return $this->repository->find_url_row( $id );
 	}
 
 	/**
@@ -220,7 +256,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function get_data(): Repository {
-		return $this->data;
+		return $this->repository;
 	}
 
 	/**
@@ -311,75 +347,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function list_urls( Request $request, array $query ): array {
-		$pagination = Query::pagination( $query, 25 );
-		$page       = $pagination['page'];
-		$limit      = $pagination['limit'];
-		$offset     = $pagination['offset'];
-
-		$user    = $this->auth_service->get_current_user( $request );
-		$listing = $this->data->prepare_url_listing_query(
-			$user,
-			$query,
-			null,
-			fn( string $r, string $f, string $t ) => $this->analytics_service->get_link_stats_period( $r, $f, $t ),
-		);
-
-		$count      = $this->data->count_url_listing_rows(
-			$listing['where'],
-			$listing['params'],
-		);
-		$aggregates = $this->aggregate_url_listing_stats(
-			$query,
-			$listing['where'],
-			$listing['params'],
-			$listing['statsParams'],
-		);
-		$rows       = $this->data->query_url_listing_rows(
-			$listing['where'],
-			$listing['params'],
-			$listing['sortBy'],
-			$listing['sortOrder'],
-			$limit,
-			$offset,
-			$listing['statsParams'],
-		);
-
-		$meta = array(
-			'page'         => $page,
-			'limit'        => $limit,
-			'totalItems'   => $count,
-			'totalPages'   => max( 1, (int) ceil( $count / $limit ) ),
-			'totalClicks'  => $aggregates['totalClicks'],
-			'uniqueClicks' => $aggregates['uniqueClicks'],
-			'activeLinks'  => $aggregates['activeLinks'],
-			'trashedLinks' => $this->count_trashed_links( $request ),
-			'expiredLinks' => $this->count_expired_links( $request ),
-		);
-
-		if ( isset( $aggregates['lastPeriodTotalClicks'] ) ) {
-			$meta['lastPeriodTotalClicks']  = $aggregates['lastPeriodTotalClicks'];
-			$meta['lastPeriodUniqueClicks'] = $aggregates['lastPeriodUniqueClicks'];
-		}
-
-		$row_ids    = array_map( 'strval', array_column( $rows, 'id' ) );
-		$health_map = ! empty( $row_ids ) ? $this->data->get_link_health_by_ids( $row_ids ) : array();
-
-		$items = array_map(
-			function ( array $row ) use ( $health_map ): array {
-				$formatted           = $this->format_url( $row );
-				$id                  = (string) ( $row['id'] ?? '' );
-				$formatted['health'] = isset( $health_map[ $id ] )
-					? $this->format_health( $health_map[ $id ] )
-					: null;
-				return $formatted;
-			},
-			$rows
-		);
-
-		return array(
-			'items' => $items,
-			'meta'  => $meta,
-		);
+		return $this->collection->list_urls( $request, $query );
 	}
 
 	/**
@@ -391,30 +359,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function export_urls( Request $request, array $query = array() ): array {
-		$user    = $this->auth_service->get_current_user( $request );
-		$listing = $this->data->prepare_url_listing_query(
-			$user,
-			$query,
-			null,
-			fn( string $r, string $f, string $t ) => $this->analytics_service->get_link_stats_period( $r, $f, $t ),
-		);
-		$rows    = $this->data->query_url_listing_rows(
-			$listing['where'],
-			$listing['params'],
-			$listing['sortBy'],
-			$listing['sortOrder'],
-			null,
-			null,
-			$listing['statsParams'],
-		);
-		$items   = $this->format_url_list( $rows );
-
-		return array(
-			'items' => $items,
-			'meta'  => array(
-				'totalItems' => count( $items ),
-			),
-		);
+		return $this->collection->export_urls( $request, $query );
 	}
 
 	/**
@@ -427,7 +372,7 @@ class Service {
 	 */
 	public function find_url( Request $request, string $id ): ?array {
 		$user = $this->auth_service->get_current_user( $request );
-		$row  = $this->data->find_url_row( $id );
+		$row  = $this->repository->find_url_row( $id );
 
 		if ( $row ) {
 			$this->authorization->validate_capability(
@@ -442,7 +387,7 @@ class Service {
 		}
 
 		$formatted           = $this->format_url( $row );
-		$health_row          = $this->data->get_link_health( (string) $row['id'] );
+		$health_row          = $this->repository->get_link_health( (string) $row['id'] );
 		$formatted['health'] = $this->format_health( $health_row );
 
 		return $formatted;
@@ -511,7 +456,7 @@ class Service {
 	 */
 	public function check_link_health( Request $request, string $id ): array {
 		$user = $this->auth_service->get_current_user( $request );
-		$row  = $this->data->find_url_row( $id );
+		$row  = $this->repository->find_url_row( $id );
 
 		if ( ! $row ) {
 			throw new ApiException(
@@ -529,8 +474,7 @@ class Service {
 		$dest_url = trim( (string) ( $row['destination_url'] ?? '' ) );
 		$result   = $this->health_checker->check( $dest_url );
 
-		// Re-read authoritative link row to ensure destination did not change and link remains active.
-		$current_row = $this->data->find_url_row( (string) $row['id'] );
+		$current_row = $this->repository->find_url_row( (string) $row['id'] );
 		if ( ! $current_row || 'active' !== (string) ( $current_row['status'] ?? '' ) ) {
 			throw new ApiException(
 				__( 'That short link does not exist or is no longer active.', 'peakurl' ),
@@ -546,9 +490,8 @@ class Service {
 			);
 		}
 
-		// Capture previous health snapshot before save; fail closed if database read fails.
 		try {
-			$previous_map    = $this->data->get_link_health_by_ids( array( (string) $current_row['id'] ) );
+			$previous_map    = $this->repository->get_link_health_by_ids( array( (string) $current_row['id'] ) );
 			$previous_health = $previous_map[ (string) $current_row['id'] ] ?? null;
 		} catch ( \Throwable $e ) {
 			throw new ApiException(
@@ -571,7 +514,7 @@ class Service {
 		);
 
 		try {
-			$saved = $this->data->save_link_health( (string) $current_row['id'], $health_data );
+			$saved = $this->repository->save_link_health( (string) $current_row['id'], $health_data );
 		} catch ( \Throwable $e ) {
 			$saved = false;
 		}
@@ -605,11 +548,7 @@ class Service {
 		string $id,
 		Request $request
 	): ?string {
-		$result = $this->get_link_access( $id, $request );
-
-		return 'redirect' === $result['status']
-			? (string) $result['location']
-			: null;
+		return $this->access->get_redirect_url( $id, $request );
 	}
 
 	/**
@@ -624,127 +563,7 @@ class Service {
 		string $id,
 		Request $request
 	): array {
-		$code = $this->validator->sanitize_code( $id );
-
-		if ( '' === $code ) {
-			return array(
-				'status' => 'not_found',
-				'url'    => null,
-			);
-		}
-
-		$url = $this->data->find_link_access_row( $code );
-
-		if ( ! $url ) {
-			return array(
-				'status' => 'not_found',
-				'url'    => null,
-			);
-		}
-
-		if ( $this->validator->is_public_link_expired( $url ) || 'expired' === (string) ( $url['status'] ?? '' ) ) {
-			if ( 'expired' !== (string) ( $url['status'] ?? '' ) && ! empty( $url['id'] ) ) {
-				$this->data->mark_link_expired( (string) $url['id'] );
-				$this->invalidate_link_cache( $url );
-				\do_action( 'link_expired', $url );
-				$this->webhooks_service->dispatch_link_event( 'link.expired', $this->format_url( array_merge( $url, array( 'status' => 'expired' ) ) ) );
-			}
-
-			return array(
-				'status' => 'expired',
-				'url'    => $url,
-			);
-		}
-
-		if ( 'active' !== (string) ( $url['status'] ?? 'active' ) ) {
-			return array(
-				'status' => 'unavailable',
-				'url'    => $url,
-			);
-		}
-
-		$allow_non_get_hit = false;
-		$captcha_access    = $this->get_link_captcha_access( $url, $request );
-		$captcha_protected = ! empty( $captcha_access['protected'] );
-
-		if ( 'passed' === $captcha_access['status'] ) {
-			$allow_non_get_hit = true;
-		} elseif ( 'open' !== $captcha_access['status'] ) {
-			return $captcha_access;
-		}
-
-		if ( ! empty( $url['password_value'] ) ) {
-			$cookie_name     = $this->link_cookie_name( $url );
-			$expected_cookie = $this->link_cookie_value( $url );
-			$cookie_value    = (string) $request->get_cookie( $cookie_name, '' );
-
-			if (
-				'' !== $cookie_value &&
-				hash_equals( $expected_cookie, $cookie_value )
-			) {
-				$this->analytics_service->record_click( $url, $request, $allow_non_get_hit );
-
-				return array(
-					'status'           => 'redirect',
-					'url'              => $url,
-					'location'         => (string) $url['destination_url'],
-					'captchaProtected' => $captcha_protected,
-				);
-			}
-
-			$password_attempt = trim(
-				(string) $request->get_body_param( 'link_password', '' ),
-			);
-
-			if ( 'POST' === $request->get_method() ) {
-				if ( '' === $password_attempt ) {
-					return array(
-						'status'  => 'password_required',
-						'url'     => $url,
-						'message' => __( 'Enter the password to open this link.', 'peakurl' ),
-					);
-				}
-
-				if ( $this->validator->link_password_matches( $url, $password_attempt ) ) {
-					$request->queue_cookie(
-						$cookie_name,
-						$expected_cookie,
-						$this->link_cookie_options(
-							$request,
-							$url,
-						),
-					);
-					$this->analytics_service->record_click( $url, $request, true );
-
-					return array(
-						'status'           => 'redirect',
-						'url'              => $url,
-						'location'         => (string) $url['destination_url'],
-						'captchaProtected' => $captcha_protected,
-					);
-				}
-
-				return array(
-					'status'  => 'password_invalid',
-					'url'     => $url,
-					'message' => __( 'The password for this link is incorrect.', 'peakurl' ),
-				);
-			}
-
-			return array(
-				'status' => 'password_required',
-				'url'    => $url,
-			);
-		}
-
-		$this->analytics_service->record_click( $url, $request, $allow_non_get_hit );
-
-		return array(
-			'status'           => 'redirect',
-			'url'              => $url,
-			'location'         => (string) $url['destination_url'],
-			'captchaProtected' => $captcha_protected,
-		);
+		return $this->access->get_link_access( $id, $request );
 	}
 
 	/**
@@ -772,7 +591,6 @@ class Service {
 			$user,
 		);
 
-		// Clean and normalize destination URL before any side-effects.
 		$raw_destination           = (string) ( $payload['destinationUrl'] ?? '' );
 		$destination_url           = $this->validator->clean_destination( $raw_destination );
 		$payload['destinationUrl'] = $destination_url;
@@ -821,29 +639,24 @@ class Service {
 
 		$link_id = (string) $row['id'];
 
-		// Asynchronously schedule targeted health check without blocking user response.
 		$this->schedule_health_check( $link_id );
 
 		$url           = $this->format_url( $row );
 		$url['health'] = null;
 
-		$link_title = ! empty( $url['title'] ) ? $url['title'] : '/' . ( $url['alias'] ?? $url['shortCode'] ?? '' );
+		$link_title = $this->get_link_title( $url );
 
-		$this->analytics_service->record_activity(
+		$this->record_link_activity(
 			'link_created',
 			'Created new link "' . $link_title . '"',
-			(string) $user['id'],
-			(string) $url['id'],
+			$user,
 			array(
-				'link' => $this->get_link_activity_meta(
-					array(
-						'id'         => $url['id'],
-						'title'      => $url['title'] ?? '',
-						'alias'      => $url['alias'] ?? '',
-						'short_code' => $url['shortCode'] ?? '',
-					),
-				),
+				'id'         => $url['id'],
+				'title'      => $url['title'] ?? '',
+				'alias'      => $url['alias'] ?? '',
+				'short_code' => $url['shortCode'] ?? '',
 			),
+			(string) $url['id']
 		);
 
 		/**
@@ -936,299 +749,7 @@ class Service {
 		string $id,
 		array $payload
 	): ?array {
-		$user     = $this->auth_service->get_current_user( $request );
-		$existing = $this->data->get_link_by_id( $id );
-
-		if ( ! $existing ) {
-			return null;
-		}
-
-		$this->authorization->validate_capability(
-			$user,
-			'edit_links',
-			__( 'You do not have permission to edit links.', 'peakurl' ),
-		);
-
-		$owner_id = (string) ( $existing['user_id'] ?? '' );
-		$is_owner = (string) ( $user['id'] ?? '' ) === $owner_id;
-		$is_admin = $this->roles->is_admin( $user );
-
-		if ( ! $is_admin && ! $is_owner ) {
-			$owner_role = $this->data->get_user_role( $owner_id );
-			if ( 'admin' !== $owner_role ) {
-				throw new ApiException(
-					__( 'You do not have permission to edit this link.', 'peakurl' ),
-					403,
-				);
-			}
-		}
-
-		$payload = $this->filter_link_payload(
-			'pre_update_link',
-			$payload,
-			$id,
-			$existing,
-			$request,
-			$user,
-		);
-
-		$destination_changed = false;
-
-		if ( array_key_exists( 'destinationUrl', $payload ) ) {
-			$cleaned_dest = $this->validator->clean_destination( $payload['destinationUrl'] );
-			$current_dest = (string) ( $existing['destination_url'] ?? '' );
-			if ( $cleaned_dest !== $current_dest ) {
-				$destination_changed = true;
-			}
-			$payload['destinationUrl'] = $cleaned_dest;
-		}
-
-		$updates = array();
-		$params  = array();
-
-		$field_map = array(
-			'title'          => 'title',
-			'destinationUrl' => 'destination_url',
-			'status'         => 'status',
-		);
-
-		foreach ( $field_map as $input_key => $column ) {
-			if ( ! array_key_exists( $input_key, $payload ) ) {
-				continue;
-			}
-
-			$value = $payload[ $input_key ];
-
-			if ( 'title' === $input_key ) {
-				$value = is_string( $value )
-					? trim( html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) )
-					: $value;
-			}
-
-			if ( 'destinationUrl' === $input_key ) {
-				$value = $this->validator->clean_destination( $value );
-			}
-
-			if ( 'status' === $input_key ) {
-				$value = $this->validator->normalize_url_status( (string) $value );
-			}
-
-			$updates[]         = $column . ' = :' . $column;
-			$params[ $column ] = is_string( $value ) ? trim( $value ) : $value;
-		}
-
-		$social_preview = $this->validator->normalize_link_social_preview(
-			$payload,
-			$this->social_preview,
-			false,
-		);
-
-		foreach (
-			array(
-				'social_title'       => 'title',
-				'social_description' => 'description',
-			) as $column => $value_key
-		) {
-			if ( ! array_key_exists( $column, $social_preview['columns'] ) ) {
-				continue;
-			}
-
-			$updates[]         = $column . ' = :' . $column;
-			$params[ $column ] = $social_preview[ $value_key ] ?? null;
-		}
-
-		$social_image_file       = $request->get_file( 'socialImage' );
-		$has_social_image_upload = $this->validator->has_link_upload( $social_image_file );
-		$has_social_image_url    = array_key_exists( 'socialImageUrl', $payload );
-		$remove_social_image     = ! empty( $payload['removeSocialImage'] );
-		$delete_social_image     = '';
-
-		$social_image_url = $has_social_image_url
-			? $this->validator->normalize_link_social_image_url(
-				$payload['socialImageUrl'],
-				$this->social_preview,
-			)
-			: null;
-
-		if (
-			$has_social_image_upload &&
-			$has_social_image_url &&
-			null !== $social_image_url
-		) {
-			throw new ApiException(
-				__(
-					'Provide either socialImage or socialImageUrl, not both.',
-					'peakurl',
-				),
-				422,
-			);
-		}
-
-		if ( $remove_social_image ) {
-			try {
-				$updates[]                   = 'social_image_path = :social_image_path';
-				$params['social_image_path'] = $this->social_preview->save_link_image(
-					$id,
-					null,
-					true,
-					(string) ( $existing['social_image_path'] ?? '' ),
-				);
-			} catch ( \RuntimeException $exception ) {
-				throw new ApiException( $exception->getMessage(), 422 );
-			}
-
-			$updates[]                  = 'social_image_url = :social_image_url';
-			$params['social_image_url'] = null;
-		} elseif ( $has_social_image_upload ) {
-			try {
-				$updates[]                   = 'social_image_path = :social_image_path';
-				$params['social_image_path'] = $this->social_preview->save_link_image(
-					$id,
-					$social_image_file,
-					false,
-					(string) ( $existing['social_image_path'] ?? '' ),
-				);
-			} catch ( \RuntimeException $exception ) {
-				throw new ApiException( $exception->getMessage(), 422 );
-			}
-
-			$updates[]                  = 'social_image_url = :social_image_url';
-			$params['social_image_url'] = null;
-		} elseif ( $has_social_image_url ) {
-			$updates[]                  = 'social_image_url = :social_image_url';
-			$params['social_image_url'] = $social_image_url;
-
-			if ( null !== $social_image_url ) {
-				$delete_social_image = trim(
-					(string) ( $existing['social_image_path'] ?? '' ),
-				);
-
-				$updates[]                   = 'social_image_path = :social_image_path';
-				$params['social_image_path'] = null;
-			}
-		}
-
-		$clear_password = ! empty( $payload['clearPassword'] );
-
-		if ( $clear_password ) {
-			$updates[] = 'password_value = NULL';
-		} elseif ( array_key_exists( 'password', $payload ) ) {
-			$password = $this->validator->sanitize_link_password(
-				$payload['password'],
-			);
-
-			if ( '' !== $password ) {
-				$updates[]                = 'password_value = :password_value';
-				$params['password_value'] = $this->validator->hash_link_password(
-					$password,
-				);
-			}
-		}
-
-		if ( array_key_exists( 'expiresAt', $payload ) ) {
-			$updates[]            = 'expires_at = :expires_at';
-			$params['expires_at'] = $this->validator->normalize_datetime(
-				$payload['expiresAt'],
-			);
-		}
-
-		if (
-			array_key_exists( 'alias', $payload ) &&
-			'' !== trim( (string) $payload['alias'] )
-		) {
-			$alias = $this->validator->sanitize_code( (string) $payload['alias'] );
-
-			$this->validator->validate_alias(
-				$alias,
-				(string) $existing['alias'],
-				fn( string $code ): bool => $this->data->short_code_exists( $code ),
-			);
-
-			$updates[]            = 'alias = :alias';
-			$updates[]            = 'short_code = :short_code';
-			$params['alias']      = $alias;
-			$params['short_code'] = $alias;
-		}
-
-		if ( empty( $updates ) ) {
-			return $this->format_url( $this->data->find_url_row( $id ) );
-		}
-
-		$updates[]            = 'updated_at = :updated_at';
-		$params['updated_at'] = Date::now();
-
-		$this->data->update_url_fields( $id, $updates, $params );
-
-		if ( '' !== $delete_social_image ) {
-			$this->social_preview->delete_link_image(
-				$delete_social_image,
-			);
-		}
-
-		$updated_row = $this->data->find_url_row( $id );
-
-		if ( $destination_changed ) {
-			// Invalidate/clear old health snapshot from link_health.
-			$this->data->delete_link_health( $id );
-
-			// Asynchronously schedule targeted health check without blocking user response.
-			$this->schedule_health_check( $id );
-		}
-
-		$this->analytics_service->record_activity(
-			'link_updated',
-			'Updated link ' . ( $params['alias'] ?? $existing['alias'] ) . '.',
-			(string) $user['id'],
-			$id,
-			array(
-				'link' => $this->get_link_activity_meta(
-					$updated_row ? $updated_row : $existing,
-				),
-			),
-		);
-
-		$url = $this->format_url( $updated_row );
-
-		if ( $destination_changed ) {
-			$url['health'] = null;
-		} else {
-			$health_row    = $this->data->get_link_health( $id );
-			$url['health'] = $this->format_health( $health_row );
-		}
-
-		$this->invalidate_link_cache( $existing );
-		$this->invalidate_link_cache( $updated_row );
-
-		/**
-		 * Fires after a short link has been updated.
-		 *
-		 * @since 1.2.2
-		 *
-		 * @param array<string, mixed> $url      Formatted link payload.
-		 * @param array<string, mixed> $previous Previous database row.
-		 * @param Request              $request  Incoming request.
-		 * @param array<string, mixed> $user     Current user row.
-		 */
-		\do_action( 'link_updated', $url, $existing, $request, $user );
-
-		$formatted_existing = $this->format_url( $existing );
-		$formatted_url      = $this->format_url( $url );
-		$this->webhooks_service->dispatch_link_event( 'link.updated', $formatted_url, $user, $formatted_existing );
-
-		$prev_status = (string) ( $existing['status'] ?? 'active' );
-		$new_status  = (string) ( $formatted_url['status'] ?? 'active' );
-
-		if ( $prev_status !== $new_status ) {
-			if ( 'active' === $new_status && in_array( $prev_status, array( 'inactive', 'paused' ), true ) ) {
-				$this->webhooks_service->dispatch_link_event( 'link.activated', $formatted_url, $user, $formatted_existing );
-			} elseif ( in_array( $new_status, array( 'inactive', 'paused' ), true ) && 'active' === $prev_status ) {
-				$this->webhooks_service->dispatch_link_event( 'link.deactivated', $formatted_url, $user, $formatted_existing );
-			} elseif ( 'expired' === $new_status && 'expired' !== $prev_status ) {
-				$this->webhooks_service->dispatch_link_event( 'link.expired', $formatted_url, $user, $formatted_existing );
-			}
-		}
-
-		return $url;
+		return $this->lifecycle->update_url( $request, $id, $payload );
 	}
 
 	/**
@@ -1243,97 +764,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function delete_url( Request $request, string $id, bool $force = false ): bool {
-		$user = $this->auth_service->get_current_user( $request );
-		$row  = $this->data->get_link_by_id( $id );
-
-		if ( ! $row ) {
-			return false;
-		}
-
-		$is_trashed = 'trashed' === (string) ( $row['status'] ?? 'active' );
-		$permanent  = $force || $is_trashed;
-		$owner_id   = (string) ( $row['user_id'] ?? '' );
-		$is_owner   = (string) ( $user['id'] ?? '' ) === $owner_id;
-		$is_admin   = $this->roles->is_admin( $user );
-
-		if ( $permanent ) {
-			$this->authorization->validate_capability(
-				$user,
-				'delete_links',
-				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
-			);
-		} else {
-			$this->authorization->validate_capability(
-				$user,
-				'trash_links',
-				__( 'You do not have permission to delete links.', 'peakurl' ),
-			);
-
-			if ( ! $is_admin && ! $is_owner ) {
-				throw new ApiException(
-					__( 'You do not have permission to move this link to trash.', 'peakurl' ),
-					403,
-				);
-			}
-		}
-
-		$link_title = ! empty( $row['title'] )
-			? (string) $row['title']
-			: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $id );
-
-		if ( ! $permanent ) {
-			\do_action( 'pre_trash_link', $row, $request, $user );
-
-			$updated = $this->data->trash_url( $id, Date::now() );
-
-			if ( $updated ) {
-				$this->invalidate_link_cache( $row );
-
-				$this->analytics_service->record_activity(
-					'link_trashed',
-					'Moved link "' . $link_title . '" to trash',
-					(string) $user['id'],
-					$id,
-					array(
-						'link' => $this->get_link_activity_meta( $row ),
-					),
-				);
-
-				\do_action( 'link_trashed', $row, $request, $user );
-
-				$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $row ), $user );
-			}
-
-			return $updated;
-		}
-
-		\do_action( 'pre_delete_link', $row, $request, $user );
-
-		$this->analytics_service->record_activity(
-			'link_deleted',
-			'Permanently deleted link "' . $link_title . '"',
-			(string) $user['id'],
-			null,
-			array(
-				'link' => $this->get_link_activity_meta( $row ),
-			),
-		);
-
-		$deleted = $this->data->delete_url_permanent( $id );
-
-		if ( $deleted ) {
-			$this->invalidate_link_cache( $row );
-
-			$this->social_preview->delete_link_image(
-				(string) ( $row['social_image_path'] ?? '' ),
-			);
-
-			\do_action( 'link_deleted', $row, $request, $user );
-
-			$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $row ), $user );
-		}
-
-		return $deleted;
+		return $this->lifecycle->delete_url( $request, $id, $force );
 	}
 
 	/**
@@ -1347,67 +778,7 @@ class Service {
 	 * @since 1.6.0
 	 */
 	public function restore_url( Request $request, string $id ): array {
-		$user = $this->auth_service->get_current_user( $request );
-		$row  = $this->data->get_link_by_id( $id );
-
-		if ( ! $row ) {
-			throw new ApiException(
-				__( 'That short link does not exist.', 'peakurl' ),
-				404,
-			);
-		}
-
-		if ( 'active' === ( $row['status'] ?? '' ) ) {
-			throw new ApiException(
-				__( 'This link is already active.', 'peakurl' ),
-				400,
-			);
-		}
-
-		$this->authorization->validate_capability(
-			$user,
-			'edit_links',
-			__( 'You do not have permission to restore this link.', 'peakurl' ),
-		);
-
-		$owner_id = (string) ( $row['user_id'] ?? '' );
-		$is_owner = (string) ( $user['id'] ?? '' ) === $owner_id;
-		$is_admin = $this->roles->is_admin( $user );
-
-		if ( ! $is_admin && ! $is_owner ) {
-			throw new ApiException(
-				__( 'You do not have permission to restore this link.', 'peakurl' ),
-				403,
-			);
-		}
-
-		$now = Date::now();
-		$this->data->restore_url( $id, $now );
-
-		$row['status']     = 'active';
-		$row['updated_at'] = $now;
-		$link_title        = ! empty( $row['title'] )
-			? (string) $row['title']
-			: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $id );
-
-		$this->analytics_service->record_activity(
-			'link_restored',
-			'Restored link "' . $link_title . '"',
-			(string) $user['id'],
-			$id,
-			array(
-				'link' => $this->get_link_activity_meta( $row ),
-			),
-		);
-
-		$this->invalidate_link_cache( $row );
-
-		\do_action( 'link_restored', $row, $request, $user );
-
-		$formatted_url = $this->format_url( $row );
-		$this->webhooks_service->dispatch_link_event( 'link.restored', $formatted_url, $user );
-
-		return $formatted_url;
+		return $this->lifecycle->restore_url( $request, $id );
 	}
 
 	/**
@@ -1420,133 +791,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function bulk_delete_urls( Request $request, array $ids, bool $force = false ): int {
-		$user = $this->auth_service->get_current_user( $request );
-		$ids  = Query::string_ids( $ids );
-
-		if ( empty( $ids ) ) {
-			return 0;
-		}
-
-		if ( $force ) {
-			$this->authorization->validate_capability(
-				$user,
-				'delete_links',
-				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
-			);
-		} else {
-			$this->authorization->validate_capability(
-				$user,
-				'trash_links',
-				__( 'You do not have permission to delete links.', 'peakurl' ),
-			);
-		}
-
-		$is_admin    = $this->roles->is_admin( $user );
-		$allowed_ids = $ids;
-
-		if ( ! $is_admin ) {
-			$allowed_ids = $this->data->get_allowed_ids_for_user(
-				$ids,
-				(string) $user['id'],
-			);
-		}
-
-		if ( empty( $allowed_ids ) ) {
-			return 0;
-		}
-
-		$target_rows = $this->data->get_links_by_ids( $allowed_ids );
-
-		if ( empty( $target_rows ) ) {
-			return 0;
-		}
-
-		$all_trashed = true;
-		foreach ( $target_rows as $target_row ) {
-			if ( 'trashed' !== (string) ( $target_row['status'] ?? 'active' ) ) {
-				$all_trashed = false;
-				break;
-			}
-		}
-
-		$permanent = $force || $all_trashed;
-
-		if ( $permanent && ! $force ) {
-			$this->authorization->validate_capability(
-				$user,
-				'delete_links',
-				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
-			);
-		}
-
-		if ( ! $permanent ) {
-			$now         = Date::now();
-			$trashed_ids = array();
-
-			foreach ( $target_rows as $row ) {
-				$row_id = (string) ( $row['id'] ?? '' );
-				if ( '' === $row_id ) {
-					continue;
-				}
-
-				$this->data->trash_url( $row_id, $now );
-
-				$link_title = ! empty( $row['title'] )
-					? (string) $row['title']
-					: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $row_id );
-
-				$this->analytics_service->record_activity(
-					'link_trashed',
-					'Moved link "' . $link_title . '" to trash',
-					(string) $user['id'],
-					$row_id,
-					array(
-						'link' => $this->get_link_activity_meta( $row ),
-					),
-				);
-
-				$trashed_ids[] = $row_id;
-				$this->invalidate_link_cache( $row );
-
-				\do_action( 'link_trashed', $row, $request, $user );
-
-				$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $row ), $user );
-			}
-
-			return count( $trashed_ids );
-		}
-
-		foreach ( $target_rows as $deleted_row ) {
-			$link_title = ! empty( $deleted_row['title'] )
-				? (string) $deleted_row['title']
-				: '/' . (string) ( $deleted_row['alias'] ?? $deleted_row['short_code'] ?? $deleted_row['id'] );
-
-			$this->analytics_service->record_activity(
-				'link_deleted',
-				'Permanently deleted link "' . $link_title . '"',
-				(string) $user['id'],
-				null,
-				array(
-					'link' => $this->get_link_activity_meta( $deleted_row ),
-				),
-			);
-		}
-
-		$deleted_count = $this->data->bulk_delete_permanent( $allowed_ids );
-
-		$this->social_preview->delete_link_images(
-			array_column( $target_rows, 'social_image_path' ),
-		);
-
-		foreach ( $target_rows as $deleted_row ) {
-			$this->invalidate_link_cache( $deleted_row );
-
-			\do_action( 'link_deleted', $deleted_row, $request, $user );
-
-			$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $deleted_row ), $user );
-		}
-
-		return $deleted_count;
+		return $this->lifecycle->bulk_delete_urls( $request, $ids, $force );
 	}
 
 	/**
@@ -1558,74 +803,7 @@ class Service {
 	 * @since 1.6.0
 	 */
 	public function bulk_restore_urls( Request $request, array $ids ): int {
-		$user = $this->auth_service->get_current_user( $request );
-		$ids  = Query::string_ids( $ids );
-
-		if ( empty( $ids ) ) {
-			return 0;
-		}
-
-		$this->authorization->validate_capability(
-			$user,
-			'edit_links',
-			__( 'You do not have permission to restore links.', 'peakurl' ),
-		);
-
-		$is_admin    = $this->roles->is_admin( $user );
-		$allowed_ids = $ids;
-
-		if ( ! $is_admin ) {
-			$allowed_ids = $this->data->get_allowed_ids_for_user(
-				$ids,
-				(string) $user['id'],
-			);
-		}
-
-		if ( empty( $allowed_ids ) ) {
-			return 0;
-		}
-
-		$target_rows = $this->data->get_links_by_ids( $allowed_ids );
-
-		if ( empty( $target_rows ) ) {
-			return 0;
-		}
-
-		$now          = Date::now();
-		$restored_ids = array();
-
-		foreach ( $target_rows as $row ) {
-			$row_id = (string) ( $row['id'] ?? '' );
-			if ( '' === $row_id || 'trashed' !== (string) ( $row['status'] ?? '' ) ) {
-				continue;
-			}
-
-			$this->data->restore_url( $row_id, $now );
-
-			$link_title = ! empty( $row['title'] )
-				? (string) $row['title']
-				: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $row_id );
-
-			$this->analytics_service->record_activity(
-				'link_restored',
-				'Restored link "' . $link_title . '"',
-				(string) $user['id'],
-				$row_id,
-				array(
-					'link' => $this->get_link_activity_meta( $row ),
-				),
-			);
-
-			$restored_ids[] = $row_id;
-			$this->invalidate_link_cache( $row );
-
-			\do_action( 'link_restored', $row, $request, $user );
-
-			$row['status'] = 'active';
-			$this->webhooks_service->dispatch_link_event( 'link.restored', $this->format_url( $row ), $user );
-		}
-
-		return count( $restored_ids );
+		return $this->lifecycle->bulk_restore_urls( $request, $ids );
 	}
 
 	/**
@@ -1636,53 +814,7 @@ class Service {
 	 * @since 1.6.0
 	 */
 	public function empty_trash( Request $request ): int {
-		$user = $this->auth_service->get_current_user( $request );
-
-		$this->authorization->validate_capability(
-			$user,
-			'empty_trash',
-			__( 'You do not have permission to empty trash.', 'peakurl' ),
-		);
-
-		$rows = $this->data->get_all_trashed_links( $user );
-
-		if ( empty( $rows ) ) {
-			return 0;
-		}
-
-		$ids = array_map( 'strval', array_column( $rows, 'id' ) );
-
-		foreach ( $rows as $deleted_row ) {
-			$link_title = ! empty( $deleted_row['title'] )
-				? (string) $deleted_row['title']
-				: '/' . (string) ( $deleted_row['alias'] ?? $deleted_row['short_code'] ?? $deleted_row['id'] );
-
-			$this->analytics_service->record_activity(
-				'link_deleted',
-				'Permanently deleted link "' . $link_title . '"',
-				(string) $user['id'],
-				null,
-				array(
-					'link' => $this->get_link_activity_meta( $deleted_row ),
-				),
-			);
-		}
-
-		$deleted_count = $this->data->bulk_delete_permanent( $ids );
-
-		$this->social_preview->delete_link_images(
-			array_column( $rows, 'social_image_path' ),
-		);
-
-		foreach ( $rows as $deleted_row ) {
-			$this->invalidate_link_cache( $deleted_row );
-
-			\do_action( 'link_deleted', $deleted_row, $request, $user );
-
-			$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $deleted_row ), $user );
-		}
-
-		return $deleted_count;
+		return $this->lifecycle->empty_trash( $request );
 	}
 
 	/**
@@ -1698,124 +830,7 @@ class Service {
 	 * @since 1.5.3
 	 */
 	public function clear_urls( Request $request, string $mode ): int {
-		$user = $this->auth_service->get_current_user( $request );
-
-		if ( ! in_array( $mode, array( 'trash', 'permanent' ), true ) ) {
-			throw new ApiException(
-				__( 'Invalid delete mode.', 'peakurl' ),
-				400
-			);
-		}
-
-		if ( 'permanent' === $mode ) {
-			$this->authorization->validate_capability(
-				$user,
-				'delete_links',
-				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
-			);
-		} else {
-			$this->authorization->validate_capability(
-				$user,
-				'trash_links',
-				__( 'You do not have permission to delete links.', 'peakurl' ),
-			);
-		}
-
-		$is_admin  = $this->roles->is_admin( $user );
-		$permanent = 'permanent' === $mode;
-
-		if ( $permanent ) {
-			$rows = $this->data->get_all_accessible_links( $user );
-
-			if ( empty( $rows ) ) {
-				return 0;
-			}
-
-			$ids = array_map( 'strval', array_column( $rows, 'id' ) );
-
-			foreach ( $rows as $deleted_row ) {
-				$link_title = ! empty( $deleted_row['title'] )
-					? (string) $deleted_row['title']
-					: '/' . (string) ( $deleted_row['alias'] ?? $deleted_row['short_code'] ?? $deleted_row['id'] );
-
-				$this->analytics_service->record_activity(
-					'link_deleted',
-					'Permanently deleted link "' . $link_title . '"',
-					(string) $user['id'],
-					null,
-					array(
-						'link' => $this->get_link_activity_meta( $deleted_row ),
-					),
-				);
-			}
-
-			$deleted_count = $this->data->bulk_delete_permanent( $ids );
-
-			$this->social_preview->delete_link_images(
-				array_column( $rows, 'social_image_path' ),
-			);
-
-			foreach ( $rows as $deleted_row ) {
-				$this->invalidate_link_cache( $deleted_row );
-
-				\do_action( 'link_deleted', $deleted_row, $request, $user );
-
-				$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $deleted_row ), $user );
-			}
-
-			return $deleted_count;
-		}
-
-		// Move to Trash (Active -> Trash lifecycle)
-		$rows = $this->data->get_all_accessible_links(
-			$user,
-			function ( array $u, array &$conditions, array &$params, string $table_alias ) use ( $is_admin ) {
-				if ( ! $is_admin ) {
-					$conditions[]             = $table_alias . '.user_id = :filter_user_id';
-					$params['filter_user_id'] = (string) ( $u['id'] ?? '' );
-				}
-				$conditions[] = $table_alias . ".status = 'active'";
-			}
-		);
-
-		if ( empty( $rows ) ) {
-			return 0;
-		}
-
-		$now         = Date::now();
-		$trashed_ids = array();
-
-		foreach ( $rows as $row ) {
-			$row_id = (string) ( $row['id'] ?? '' );
-			if ( '' === $row_id ) {
-				continue;
-			}
-
-			$this->data->trash_url( $row_id, $now );
-
-			$link_title = ! empty( $row['title'] )
-				? (string) $row['title']
-				: '/' . (string) ( $row['alias'] ?? $row['short_code'] ?? $row_id );
-
-			$this->analytics_service->record_activity(
-				'link_trashed',
-				'Moved link "' . $link_title . '" to trash',
-				(string) $user['id'],
-				$row_id,
-				array(
-					'link' => $this->get_link_activity_meta( $row ),
-				),
-			);
-
-			$trashed_ids[] = $row_id;
-			$this->invalidate_link_cache( $row );
-
-			\do_action( 'link_trashed', $row, $request, $user );
-
-			$this->webhooks_service->dispatch_link_event( 'link.deleted', $this->format_url( $row ), $user );
-		}
-
-		return count( $trashed_ids );
+		return $this->lifecycle->clear_urls( $request, $mode );
 	}
 
 	/**
@@ -1832,7 +847,7 @@ class Service {
 			return null;
 		}
 
-		$url = $this->data->find_link_access_row( $code );
+		$url = $this->repository->find_link_access_row( $code );
 
 		if ( ! $url || $this->validator->is_public_link_expired( $url ) ) {
 			return null;
@@ -1870,9 +885,7 @@ class Service {
 	 * @since 1.6.0
 	 */
 	public function count_trashed_links( Request $request ): int {
-		$user = $this->auth_service->get_current_user( $request );
-
-		return $this->data->count_trashed_links( $user );
+		return $this->collection->count_trashed_links( $request );
 	}
 
 	/**
@@ -1883,9 +896,7 @@ class Service {
 	 * @since 1.7.2
 	 */
 	public function count_expired_links( Request $request ): int {
-		$user = $this->auth_service->get_current_user( $request );
-
-		return $this->data->count_expired_links( $user );
+		return $this->collection->count_expired_links( $request );
 	}
 
 	/**
@@ -1896,7 +907,7 @@ class Service {
 	 * @since 1.6.0
 	 */
 	private function invalidate_link_cache( $link ): void {
-		$this->data->get_links_api()->invalidate_link_cache( $link );
+		$this->repository->get_links_api()->invalidate_link_cache( $link );
 	}
 
 	/**
@@ -1983,101 +994,50 @@ class Service {
 	}
 
 	/**
-	 * Calculate total stats for the current listing query.
+	 * Get the fallback display title for a link in activity logs.
 	 *
-	 * @param array<string, mixed>  $query        Raw query parameters.
-	 * @param string                $where        Prepared WHERE clause.
-	 * @param array<string, mixed>  $params       Query parameters.
-	 * @param array<string, string> $stats_params Optional click-stat query bounds.
-	 * @return array<string, int>
-	 * @since 1.5.2
+	 * @param array<string, mixed> $link     Link row or formatted link array.
+	 * @param string               $fallback Fallback identifier when alias or code is absent.
+	 * @return string Display title.
+	 * @since 1.7.2
 	 */
-	private function aggregate_url_listing_stats(
-		array $query,
-		string $where,
-		array $params,
-		array $stats_params
-	): array {
-		$aggregates = $this->data->aggregate_link_stats(
-			$where,
-			$params,
-			$stats_params,
+	private function get_link_title( array $link, string $fallback = '' ): string {
+		if ( ! empty( $link['title'] ) ) {
+			return (string) $link['title'];
+		}
+
+		$identifier = (string) ( $link['alias'] ?? $link['short_code'] ?? $link['shortCode'] ?? $fallback );
+
+		return '/' . $identifier;
+	}
+
+	/**
+	 * Record a link lifecycle activity event.
+	 *
+	 * @param string               $type    Activity type (e.g. 'link_created', 'link_trashed', 'link_deleted', 'link_restored').
+	 * @param string               $message Activity description message.
+	 * @param array<string, mixed> $user    Acting user array.
+	 * @param array<string, mixed> $link    Link database row or payload.
+	 * @param string|null          $link_id Target link ID (or null for permanent deletion).
+	 * @return void
+	 * @since 1.7.2
+	 */
+	private function record_link_activity(
+		string $type,
+		string $message,
+		array $user,
+		array $link,
+		?string $link_id = null
+	): void {
+		$this->analytics_service->record_activity(
+			$type,
+			$message,
+			(string) ( $user['id'] ?? '' ),
+			$link_id,
+			array(
+				'link' => $this->get_link_activity_meta( $link ),
+			)
 		);
-
-		$range = trim( (string) ( $query['range'] ?? '' ) );
-		if ( in_array( $range, array( '24h', '7d', '30d' ), true ) ) {
-			$days        = '24h' === $range ? 1 : ( '30d' === $range ? 30 : 7 );
-			$period      = $this->analytics_service->get_analytics_period( $days );
-			$last_period = $this->analytics_service->get_last_month_period( $period, $days );
-
-			$last_stats_params = array(
-				'stats_start_at' => $last_period['start_at'],
-				'stats_end_at'   => $last_period['end_at'],
-			);
-
-			$last_stats = $this->data->aggregate_link_clicks(
-				$where,
-				$params,
-				$last_stats_params,
-			);
-
-			$aggregates['lastPeriodTotalClicks']  = $last_stats['totalClicks'];
-			$aggregates['lastPeriodUniqueClicks'] = $last_stats['uniqueClicks'];
-		}
-
-		return $aggregates;
-	}
-
-	/**
-	 * Return the stored title for a new link.
-	 *
-	 * @param mixed  $title             Raw request title value.
-	 * @param string $alias             Final stored alias / short code.
-	 * @param bool   $uses_custom_alias Whether the alias came from user input.
-	 * @return string Normalized title value.
-	 * @since 1.0.3
-	 */
-	private function get_url_title(
-		$title,
-		string $alias,
-		bool $uses_custom_alias
-	): string {
-		$normalized_title = trim( (string) $title );
-
-		if ( '' !== $normalized_title ) {
-			return trim( html_entity_decode( $normalized_title, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
-		}
-
-		if ( $uses_custom_alias ) {
-			return $this->format_alias_title( $alias );
-		}
-
-		return '';
-	}
-
-	/**
-	 * Get a default title from a custom alias.
-	 *
-	 * @param string $alias Final stored alias / short code.
-	 * @return string
-	 * @since 1.0.14
-	 */
-	private function format_alias_title( string $alias ): string {
-		if ( '' === $alias ) {
-			return '';
-		}
-
-		if (
-			function_exists( 'mb_substr' ) &&
-			function_exists( 'mb_strtoupper' )
-		) {
-			return mb_strtoupper(
-				mb_substr( $alias, 0, 1, 'UTF-8' ),
-				'UTF-8'
-			) . mb_substr( $alias, 1, null, 'UTF-8' );
-		}
-
-		return strtoupper( substr( $alias, 0, 1 ) ) . substr( $alias, 1 );
 	}
 
 	/**
@@ -2117,243 +1077,6 @@ class Service {
 	}
 
 	/**
-	 * Verify CAPTCHA status for public redirect requests.
-	 *
-	 * @param array<string, mixed> $url     Raw URL database row.
-	 * @param Request              $request Incoming HTTP request.
-	 * @return array<string, mixed> Access state for redirect handler.
-	 * @since 1.2.0
-	 */
-	private function get_link_captcha_access(
-		array $url,
-		Request $request
-	): array {
-		$challenge = $this->captcha->get_challenge();
-
-		if ( null === $challenge ) {
-			return array(
-				'status'    => 'open',
-				'protected' => false,
-			);
-		}
-
-		$cookie_name     = $this->link_captcha_cookie_name( $url );
-		$expected_cookie = $this->link_captcha_cookie_value( $url, $challenge );
-		$cookie_value    = (string) $request->get_cookie( $cookie_name, '' );
-
-		if (
-			'' !== $cookie_value &&
-			hash_equals( $expected_cookie, $cookie_value )
-		) {
-			return array(
-				'status'    => 'open',
-				'protected' => true,
-			);
-		}
-
-		if ( 'POST' !== $request->get_method() ) {
-			return array(
-				'status'    => 'captcha_required',
-				'url'       => $url,
-				'challenge' => $challenge,
-				'protected' => true,
-			);
-		}
-
-		$token = trim(
-			(string) $request->get_body_param(
-				(string) $challenge['responseField'],
-				'',
-			),
-		);
-
-		if ( '' === $token ) {
-			return array(
-				'status'    => 'captcha_required',
-				'url'       => $url,
-				'challenge' => $challenge,
-				'protected' => true,
-				'message'   => __( 'Complete the verification to open this link.', 'peakurl' ),
-			);
-		}
-
-		if (
-			! $this->captcha->verify_token(
-				$token,
-				$request->get_ip_address(),
-			)
-		) {
-			return array(
-				'status'    => 'captcha_invalid',
-				'url'       => $url,
-				'challenge' => $challenge,
-				'protected' => true,
-				'message'   => __( 'Verification failed. Please try again.', 'peakurl' ),
-			);
-		}
-
-		$request->queue_cookie(
-			$cookie_name,
-			$expected_cookie,
-			$this->link_captcha_cookie_options( $request, $url ),
-		);
-
-		return array(
-			'status'    => 'passed',
-			'protected' => true,
-		);
-	}
-
-	/**
-	 * Get the cookie name used for password-protected link access.
-	 *
-	 * @param array<string, mixed> $url Raw URL row.
-	 * @return string
-	 * @since 1.0.0
-	 */
-	private function link_cookie_name( array $url ): string {
-		return 'peakurl_link_access_' . (string) ( $url['id'] ?? '' );
-	}
-
-	/**
-	 * Get the cookie value hash for password-authorized links.
-	 *
-	 * @param array<string, mixed> $url Raw URL row.
-	 * @return string
-	 * @since 1.0.0
-	 */
-	private function link_cookie_value( array $url ): string {
-		return hash(
-			'sha256',
-			(string) ( $url['id'] ?? '' ) . '|' . (string) ( $url['password_value'] ?? '' ),
-		);
-	}
-
-	/**
-	 * Get cookie options for password-authorized public links.
-	 *
-	 * @param Request              $request Incoming HTTP request.
-	 * @param array<string, mixed> $url     Raw URL row.
-	 * @return array<string, mixed>
-	 * @since 1.0.0
-	 */
-	private function link_cookie_options(
-		Request $request,
-		array $url
-	): array {
-		return $this->link_access_cookie_options(
-			$request,
-			$url,
-			30 * 24 * 60 * 60,
-		);
-	}
-
-	/**
-	 * Get the cookie name used after successful CAPTCHA verification.
-	 *
-	 * @param array<string, mixed> $url Raw URL row.
-	 * @return string
-	 * @since 1.2.0
-	 */
-	private function link_captcha_cookie_name( array $url ): string {
-		return 'peakurl_link_captcha_' . (string) ( $url['id'] ?? '' );
-	}
-
-	/**
-	 * Get the signed cookie value for CAPTCHA verification.
-	 *
-	 * @param array<string, mixed>  $url       Raw URL row.
-	 * @param array<string, string> $challenge Challenge details.
-	 * @return string
-	 * @since 1.2.0
-	 */
-	private function link_captcha_cookie_value(
-		array $url,
-		array $challenge
-	): string {
-		$payload = implode(
-			'|',
-			array(
-				(string) ( $url['id'] ?? '' ),
-				(string) ( $url['updated_at'] ?? '' ),
-				(string) ( $challenge['provider'] ?? '' ),
-				(string) ( $challenge['siteKey'] ?? '' ),
-			),
-		);
-		$secret  = trim(
-			(string) ( $this->config[ Constants::AUTH_SALT ] ?? '' ),
-		);
-
-		if ( '' === $secret ) {
-			$secret = trim(
-				(string) ( $this->config[ Constants::AUTH_KEY ] ?? '' ),
-			);
-		}
-
-		return '' === $secret
-			? hash( 'sha256', $payload )
-			: hash_hmac( 'sha256', $payload, $secret );
-	}
-
-	/**
-	 * Get cookie options for CAPTCHA-verified links.
-	 *
-	 * @param Request              $request Incoming HTTP request.
-	 * @param array<string, mixed> $url     Raw URL row.
-	 * @return array<string, mixed>
-	 * @since 1.2.0
-	 */
-	private function link_captcha_cookie_options(
-		Request $request,
-		array $url
-	): array {
-		return $this->link_access_cookie_options(
-			$request,
-			$url,
-			12 * 60 * 60,
-		);
-	}
-
-	/**
-	 * Build shared cookie options for link access challenges.
-	 *
-	 * @param Request              $request         Incoming HTTP request.
-	 * @param array<string, mixed> $url             Raw URL row.
-	 * @param int                  $default_max_age Default max age in seconds.
-	 * @return array<string, mixed>
-	 * @since 1.2.0
-	 */
-	private function link_access_cookie_options(
-		Request $request,
-		array $url,
-		int $default_max_age
-	): array {
-		$options = Security::session_cookie_options(
-			$this->config,
-			$request,
-			array(
-				'samesite' => 'Lax',
-			),
-		);
-		$max_age = $default_max_age;
-
-		$expires_at = (string) ( $url['expires_at'] ?? '' );
-
-		if ( '' !== $expires_at ) {
-			$expires_timestamp = strtotime( $expires_at . ' UTC' );
-
-			if ( false !== $expires_timestamp ) {
-				$max_age = max( 60, $expires_timestamp - time() );
-			}
-		}
-
-		$options['max-age'] = $max_age;
-		$options['expires'] = gmdate( 'D, d M Y H:i:s T', time() + $max_age );
-
-		return $options;
-	}
-
-	/**
 	 * Apply a link payload filter hook.
 	 *
 	 * @param string               $hook_name Hook name.
@@ -2386,7 +1109,7 @@ class Service {
 		}
 
 		$cutoff = gmdate( 'Y-m-d H:i:s', time() - ( $days * 86400 ) );
-		$rows   = $this->data->get_stale_trashed_links( $cutoff, $batch_limit );
+		$rows   = $this->repository->get_stale_trashed_links( $cutoff, $batch_limit );
 
 		if ( empty( $rows ) ) {
 			return 0;
@@ -2404,7 +1127,7 @@ class Service {
 			return 0;
 		}
 
-		$deleted_count = $this->data->bulk_delete_permanent( $ids );
+		$deleted_count = $this->repository->delete_links_permanently( $ids );
 
 		$this->social_preview->delete_link_images(
 			array_column( $rows, 'social_image_path' ),
@@ -2426,7 +1149,7 @@ class Service {
 	 * @since 1.7.0
 	 */
 	public function expire_due_links( int $batch_limit = 100 ): int {
-		$due_links = $this->data->expire_due_links( $batch_limit );
+		$due_links = $this->repository->expire_due_links( $batch_limit );
 
 		if ( empty( $due_links ) ) {
 			return 0;

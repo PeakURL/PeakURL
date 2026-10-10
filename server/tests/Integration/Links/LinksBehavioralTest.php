@@ -408,7 +408,7 @@ class LinksBehavioralTest extends TestCase {
 		$this->repository->method( 'get_link_by_id' )->with( 'link_perm_1' )->willReturn( $trashed_row );
 
 		$this->repository->expects( $this->once() )
-			->method( 'delete_url_permanent' )
+			->method( 'delete_url_permanently' )
 			->with( 'link_perm_1' )
 			->willReturn( true );
 
@@ -435,7 +435,7 @@ class LinksBehavioralTest extends TestCase {
 		);
 		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
 
-		$this->repository->method( 'get_allowed_ids_for_user' )
+		$this->repository->method( 'get_owned_link_ids' )
 			->with( array( 'b1', 'b2' ), 'user_editor' )
 			->willReturn( array( 'b1', 'b2' ) );
 
@@ -476,7 +476,7 @@ class LinksBehavioralTest extends TestCase {
 		);
 		$this->auth_service->method( 'get_current_user' )->willReturn( $editor_user );
 
-		$this->repository->method( 'get_allowed_ids_for_user' )
+		$this->repository->method( 'get_owned_link_ids' )
 			->with( array( 'b1', 'b2' ), 'user_editor' )
 			->willReturn( array( 'b1', 'b2' ) );
 
@@ -686,7 +686,7 @@ class LinksBehavioralTest extends TestCase {
 		);
 
 		$this->repository->expects( $this->once() )
-			->method( 'mark_link_expired' )
+			->method( 'expire_link' )
 			->with( 'url_expired_prot' )
 			->willReturn( true );
 

@@ -298,24 +298,52 @@ class Service {
 				c.operating_system AS click_operating_system,
 				c.referrer_name AS click_referrer_name,
 				c.referrer_domain AS click_referrer_domain,
-				u.*,
-				COALESCE(stats.clicks, 0) AS click_count,
-				COALESCE(stats.unique_clicks, 0) AS unique_click_count
+				u.*
 			FROM clicks c
-			INNER JOIN urls u ON u.id = c.url_id
-			LEFT JOIN (
-				SELECT
-					url_id,
-					COUNT(*) AS clicks,
-					COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_clicks
-				FROM clicks
-				GROUP BY url_id
-			) stats ON stats.url_id = u.id' .
+			INNER JOIN urls u ON u.id = c.url_id' .
 			$where .
 			' ORDER BY c.clicked_at DESC' .
 			Query::limit_offset_clause( $limit, 0 ),
 			$params,
 		);
+
+		if ( empty( $rows ) || ! is_array( $rows ) ) {
+			return array();
+		}
+
+		// Batch-load click stats for only the distinct URLs in the recent clicks feed.
+		$url_ids   = array_values( array_unique( array_column( $rows, 'id' ) ) );
+		$stats_map = array();
+
+		if ( ! empty( $url_ids ) ) {
+			$in_clause  = $this->db->in_placeholders( $url_ids, 'url_id' );
+			$stats_rows = $this->db->get_results(
+				'SELECT
+					url_id,
+					COUNT(*) AS clicks,
+					COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_clicks
+				FROM clicks
+				WHERE url_id IN (' . $in_clause['sql'] . ')
+				GROUP BY url_id',
+				$in_clause['params'],
+			);
+
+			if ( is_array( $stats_rows ) ) {
+				foreach ( $stats_rows as $sr ) {
+					$stats_map[ (string) $sr['url_id'] ] = array(
+						'clicks'        => (int) $sr['clicks'],
+						'unique_clicks' => (int) $sr['unique_clicks'],
+					);
+				}
+			}
+		}
+
+		foreach ( $rows as &$row ) {
+			$uid                       = (string) ( $row['id'] ?? '' );
+			$row['click_count']        = $stats_map[ $uid ]['clicks'] ?? 0;
+			$row['unique_click_count'] = $stats_map[ $uid ]['unique_clicks'] ?? 0;
+		}
+		unset( $row );
 
 		return array_map(
 			fn( array $row ): array => $this->data->format_recent_click( $row ),

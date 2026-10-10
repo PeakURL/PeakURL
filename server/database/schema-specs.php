@@ -579,31 +579,26 @@ class SchemaSpecs {
 			),
 			'sessions'           => array(
 				array(
-					'name'    => 'idx_sessions_user_id',
-					'type'    => 'index',
-					'columns' => '(user_id)',
-				),
-				array(
-					'name'    => 'idx_sessions_token_hash',
-					'type'    => 'index',
-					'columns' => '(token_hash)',
-				),
-				array(
 					'name'    => 'idx_sessions_user_active',
 					'type'    => 'index',
 					'columns' => '(user_id, revoked_at, last_active_at)',
 				),
+				array(
+					'name'    => 'idx_sessions_revoked',
+					'type'    => 'index',
+					'columns' => '(revoked_at)',
+				),
+				array(
+					'name'    => 'idx_sessions_last_active',
+					'type'    => 'index',
+					'columns' => '(last_active_at)',
+				),
 			),
 			'urls'               => array(
 				array(
-					'name'    => 'idx_urls_user_id',
+					'name'    => 'idx_urls_user_status_created',
 					'type'    => 'index',
-					'columns' => '(user_id)',
-				),
-				array(
-					'name'    => 'idx_urls_user_status',
-					'type'    => 'index',
-					'columns' => '(user_id, status)',
+					'columns' => '(user_id, status, created_at)',
 				),
 				array(
 					'name'    => 'idx_urls_status',
@@ -615,13 +610,13 @@ class SchemaSpecs {
 					'type'    => 'index',
 					'columns' => '(created_at)',
 				),
+				array(
+					'name'    => 'idx_urls_expires_at',
+					'type'    => 'index',
+					'columns' => '(expires_at)',
+				),
 			),
 			'clicks'             => array(
-				array(
-					'name'    => 'idx_clicks_url_id',
-					'type'    => 'index',
-					'columns' => '(url_id)',
-				),
 				array(
 					'name'    => 'idx_clicks_clicked_at',
 					'type'    => 'index',
@@ -649,19 +644,20 @@ class SchemaSpecs {
 					'type'    => 'index',
 					'columns' => '(link_id)',
 				),
+				array(
+					'name'    => 'idx_audit_logs_type_created',
+					'type'    => 'index',
+					'columns' => '(type, created_at)',
+				),
 			),
 			'webhooks'           => array(
-				array(
-					'name'    => 'idx_webhooks_user_id',
-					'type'    => 'index',
-					'columns' => '(user_id)',
-				),
 				array(
 					'name'    => 'idx_webhooks_user_active',
 					'type'    => 'index',
 					'columns' => '(user_id, is_active)',
 				),
 			),
+
 			'cron_jobs'          => array(
 				array(
 					'name'    => 'idx_cron_jobs_due',
@@ -708,7 +704,13 @@ class SchemaSpecs {
 					'columns' => '(webhook_id)',
 				),
 				array(
+					'name'    => 'idx_webhook_deliveries_webhook_created',
+					'type'    => 'index',
+					'columns' => '(webhook_id, created_at, id)',
+				),
+				array(
 					'name'    => 'idx_webhook_deliveries_claim_token',
+
 					'type'    => 'index',
 					'columns' => '(claim_token)',
 				),

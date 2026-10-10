@@ -62,9 +62,9 @@ CREATE TABLE IF NOT EXISTS sessions (
     last_active_at DATETIME NOT NULL,
     revoked_at DATETIME DEFAULT NULL,
     revoked_reason VARCHAR(191) DEFAULT NULL,
-    KEY idx_sessions_user_id (user_id),
-    KEY idx_sessions_token_hash (token_hash),
     KEY idx_sessions_user_active (user_id, revoked_at, last_active_at),
+    KEY idx_sessions_revoked (revoked_at),
+    KEY idx_sessions_last_active (last_active_at),
     CONSTRAINT fk_sessions_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -89,10 +89,10 @@ CREATE TABLE IF NOT EXISTS urls (
     utm_content VARCHAR(120) DEFAULT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
-    KEY idx_urls_user_id (user_id),
-    KEY idx_urls_user_status (user_id, status),
+    KEY idx_urls_user_status_created (user_id, status, created_at),
     KEY idx_urls_status (status),
     KEY idx_urls_created_at (created_at),
+    KEY idx_urls_expires_at (expires_at),
     CONSTRAINT fk_urls_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -117,7 +117,6 @@ CREATE TABLE IF NOT EXISTS clicks (
     utm_term VARCHAR(120) DEFAULT NULL,
     utm_content VARCHAR(120) DEFAULT NULL,
     user_agent TEXT DEFAULT NULL,
-    KEY idx_clicks_url_id (url_id),
     KEY idx_clicks_clicked_at (clicked_at),
     KEY idx_clicks_url_clicked_at (url_id, clicked_at),
     CONSTRAINT fk_clicks_url_id FOREIGN KEY (url_id) REFERENCES urls (id) ON DELETE CASCADE
@@ -134,6 +133,7 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     KEY idx_audit_logs_created_at (created_at),
     KEY idx_audit_logs_user_created_at (user_id, created_at),
     KEY idx_audit_logs_link_id (link_id),
+    KEY idx_audit_logs_type_created (type, created_at),
     CONSTRAINT fk_audit_logs_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     CONSTRAINT fk_audit_logs_link_id FOREIGN KEY (link_id) REFERENCES urls (id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -150,10 +150,10 @@ CREATE TABLE IF NOT EXISTS webhooks (
     is_active TINYINT(1) NOT NULL DEFAULT 1,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
-    KEY idx_webhooks_user_id (user_id),
     KEY idx_webhooks_user_active (user_id, is_active),
     CONSTRAINT fk_webhooks_user_id FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 CREATE TABLE IF NOT EXISTS cron_jobs (
     id VARCHAR(64) NOT NULL PRIMARY KEY,
@@ -217,6 +217,7 @@ CREATE TABLE IF NOT EXISTS webhook_deliveries (
     updated_at DATETIME NOT NULL,
     KEY idx_webhook_deliveries_pending (status, next_attempt_at),
     KEY idx_webhook_deliveries_webhook_id (webhook_id),
+    KEY idx_webhook_deliveries_webhook_created (webhook_id, created_at, id),
     KEY idx_webhook_deliveries_claim_token (claim_token),
     KEY idx_webhook_deliveries_status_completed_at (status, completed_at),
     KEY idx_webhook_deliveries_status_updated_at (status, updated_at),

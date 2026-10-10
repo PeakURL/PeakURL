@@ -1589,7 +1589,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 	}
 
 	public function test_canonical_schema_contains_required_tables_and_foreign_keys(): void {
-		$this->assertSame( 10, \PeakURL\Core\Config\Constants::DB_SCHEMA_VERSION );
+		$this->assertSame( 11, \PeakURL\Core\Config\Constants::DB_SCHEMA_VERSION );
 
 		// 1. Verify cron_jobs table exists.
 		$cron_jobs = $this->pdo->query( "SHOW TABLES LIKE '{$this->table_prefix}cron_jobs'" )->fetchAll();

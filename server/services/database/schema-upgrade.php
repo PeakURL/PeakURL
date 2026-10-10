@@ -185,6 +185,8 @@ class Upgrade {
 				$changes,
 			);
 		}
+
+		$this->drop_redundant_indexes( $changes );
 	}
 
 	/**
@@ -667,6 +669,160 @@ class Upgrade {
 			);
 		}
 	}
+	/**
+	 * Verify that a redundant index has an existing covering replacement before dropping.
+	 *
+	 * Ensures safe schema convergence across interrupted upgrades and varying prior states.
+	 *
+	 * @param string     $table_name Base table name.
+	 * @param string     $index_name Redundant index name.
+	 * @param Connection $connection Database connection instance.
+	 * @return bool True if a replacement index is confirmed present.
+	 * @since 1.7.2
+	 */
+	private function is_index_safely_covered( string $table_name, string $index_name, Connection $connection ): bool {
+		if ( 'idx_sessions_token_hash' === $index_name ) {
+			$database_name = (string) ( $connection->get_config()[ Constants::DB_DATABASE ] ?? '' );
+			// Must have a standalone single-column unique index on token_hash.
+			$stmt = $this->context->get_pdo()->prepare(
+				'SELECT COUNT(*) FROM (
+					SELECT index_name
+					FROM information_schema.statistics
+					WHERE table_schema = :table_schema
+					AND table_name = :table_name
+					AND non_unique = 0
+					GROUP BY index_name
+					HAVING COUNT(*) = 1 AND MAX(CASE WHEN column_name = \'token_hash\' AND sub_part IS NULL THEN 1 ELSE 0 END) = 1
+				) AS standalone_unique'
+			);
+			$stmt->execute(
+				array(
+					'table_schema' => $database_name,
+					'table_name'   => $this->context->get_table_name( $table_name ),
+				)
+			);
+			return (int) $stmt->fetchColumn() > 0;
+		}
+
+		if ( 'idx_sessions_user_id' === $index_name ) {
+			$columns = $this->get_index_columns( $table_name, 'idx_sessions_user_active', $connection );
+			return array( 'user_id', 'revoked_at', 'last_active_at' ) === $columns;
+		}
+
+		if ( 'idx_urls_user_id' === $index_name || 'idx_urls_user_status' === $index_name ) {
+			$columns = $this->get_index_columns( $table_name, 'idx_urls_user_status_created', $connection );
+			return array( 'user_id', 'status', 'created_at' ) === $columns;
+		}
+
+		if ( 'idx_clicks_url_id' === $index_name ) {
+			$columns = $this->get_index_columns( $table_name, 'idx_clicks_url_clicked_at', $connection );
+			return array( 'url_id', 'clicked_at' ) === $columns;
+		}
+
+		if ( 'idx_webhooks_user_id' === $index_name ) {
+			$columns = $this->get_index_columns( $table_name, 'idx_webhooks_user_active', $connection );
+			return array( 'user_id', 'is_active' ) === $columns;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get the ordered list of fully-indexed column names for a specific table index.
+	 *
+	 * Prefix-indexed columns (where sub_part is not NULL) are rejected because partial column
+	 * coverage does not provide full index coverage.
+	 *
+	 * @param string     $table_name Base table name.
+	 * @param string     $index_name Index name.
+	 * @param Connection $connection Database connection instance.
+	 * @return array<int, string> Ordered column names, or empty if index has partial column prefixes.
+	 * @since 1.7.2
+	 */
+	private function get_index_columns( string $table_name, string $index_name, Connection $connection ): array {
+		$database_name = (string) ( $connection->get_config()[ Constants::DB_DATABASE ] ?? '' );
+		$stmt          = $this->context->get_pdo()->prepare(
+			'SELECT column_name, sub_part
+			FROM information_schema.statistics
+			WHERE table_schema = :table_schema
+			AND table_name = :table_name
+			AND index_name = :index_name
+			ORDER BY seq_in_index ASC'
+		);
+		$stmt->execute(
+			array(
+				'table_schema' => $database_name,
+				'table_name'   => $this->context->get_table_name( $table_name ),
+				'index_name'   => $index_name,
+			)
+		);
+		$rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+		if ( ! is_array( $rows ) ) {
+			return array();
+		}
+
+		$columns = array();
+		foreach ( $rows as $row ) {
+			$norm_row = array_change_key_case( $row, CASE_LOWER );
+			if ( null !== $norm_row['sub_part'] ) {
+				return array();
+			}
+			$columns[] = (string) $norm_row['column_name'];
+		}
+
+		return $columns;
+	}
+
+
+	/**
+	 * Drop redundant indexes that duplicate unique constraints or composite left prefixes.
+	 *
+	 * Verified against replacement indexes before executing DROP to prevent leaving
+	 * tables without required key coverage or breaking foreign-key cascades.
+	 *
+	 * @param array<int, string> $changes Applied repair labels.
+	 * @return void
+	 * @since 1.7.2
+	 */
+	private function drop_redundant_indexes( array &$changes ): void {
+		$redundant = array(
+			'sessions' => array( 'idx_sessions_token_hash', 'idx_sessions_user_id' ),
+			'urls'     => array( 'idx_urls_user_id', 'idx_urls_user_status' ),
+			'clicks'   => array( 'idx_clicks_url_id' ),
+			'webhooks' => array( 'idx_webhooks_user_id' ),
+		);
+
+		$connection = $this->context->get_connection();
+
+		foreach ( $redundant as $table_name => $index_names ) {
+			if ( ! $connection->table_exists( $table_name ) ) {
+				continue;
+			}
+
+			foreach ( $index_names as $index_name ) {
+				if ( ! $connection->index_exists( $table_name, $index_name ) ) {
+					continue;
+				}
+
+				if ( ! $this->is_index_safely_covered( $table_name, $index_name, $connection ) ) {
+					continue;
+				}
+
+				$this->context->get_pdo()->exec(
+					'ALTER TABLE ' . $this->context->get_table_identifier( $table_name ) . ' DROP INDEX ' .
+					Sql::quote_identifier( $index_name ),
+				);
+				$changes[] = sprintf(
+					/* translators: 1: index name, 2: prefixed table name. */
+					__( 'Removed redundant %1$s index from the %2$s table.', 'peakurl' ),
+					$index_name,
+					$this->context->get_table_name( $table_name ),
+				);
+			}
+		}
+	}
+
+
 
 	/**
 	 * Parse the expected ON DELETE rule from a foreign-key definition.

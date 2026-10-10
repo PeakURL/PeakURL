@@ -684,15 +684,17 @@ class Repository {
 		int $days,
 		string $created_at
 	): array {
-		$current_total_clicks  = (int) $this->db->get_var(
-			'SELECT COUNT(*) FROM clicks WHERE url_id = :url_id',
+		$stats                 = $this->db->get_row(
+			'SELECT
+				COUNT(*) AS total_clicks,
+				COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_clicks
+			FROM clicks
+			WHERE url_id = :url_id',
 			array( 'url_id' => $url_id ),
 		);
+		$current_total_clicks  = (int) ( $stats['total_clicks'] ?? 0 );
 		$current_unique_clicks = min(
-			(int) $this->db->get_var(
-				'SELECT COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) FROM clicks WHERE url_id = :url_id',
-				array( 'url_id' => $url_id ),
-			),
+			(int) ( $stats['unique_clicks'] ?? 0 ),
 			$current_total_clicks,
 		);
 
@@ -1600,9 +1602,9 @@ class Repository {
 		$params     = array();
 
 		if ( 'links' === $category ) {
-			$conditions[] = "(LEFT(a.type, 5) = 'link_' OR a.type = 'click')";
+			$conditions[] = "(a.type LIKE 'link=_%' ESCAPE '=' OR a.type = 'click')";
 		} elseif ( 'users' === $category ) {
-			$conditions[] = "LEFT(a.type, 5) = 'user_'";
+			$conditions[] = "a.type LIKE 'user=_%' ESCAPE '='";
 		}
 
 		if ( ! $this->authorization->is_admin( $user ) ) {

@@ -92,17 +92,37 @@ class LinksApi {
 	 * @since 1.0.0
 	 */
 	public function get_link_by_identifier( string $identifier ): ?array {
-		return $this->db->get_row(
-			$this->get_links_select_sql() .
-				' WHERE u.id = :url_id OR u.short_code = :short_code OR u.alias = :alias
-				LIMIT 1',
+		$row = $this->db->get_row(
+			'SELECT u.*
+			FROM urls u
+			WHERE u.id = :url_id OR u.short_code = :short_code OR u.alias = :alias
+			LIMIT 1',
 			array(
 				'url_id'     => $identifier,
 				'short_code' => $identifier,
 				'alias'      => $identifier,
 			),
 		);
+
+		if ( ! $row || ! is_array( $row ) ) {
+			return null;
+		}
+
+		$stats = $this->db->get_row(
+			'SELECT
+				COUNT(*) AS click_count,
+				COUNT(DISTINCT COALESCE(NULLIF(visitor_hash, \'\'), id)) AS unique_click_count
+			FROM clicks
+			WHERE url_id = :url_id',
+			array( 'url_id' => $row['id'] ),
+		);
+
+		$row['click_count']        = (int) ( $stats['click_count'] ?? 0 );
+		$row['unique_click_count'] = (int) ( $stats['unique_click_count'] ?? 0 );
+
+		return $row;
 	}
+
 
 	/**
 	 * Count URL rows for a prepared listing query.

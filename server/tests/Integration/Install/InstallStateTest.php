@@ -462,14 +462,14 @@ class InstallStateTest extends TestCase {
 		$retry_result = $converging_schema->repair_schema();
 		$this->assertNotEmpty( $retry_result );
 
-		// Step 9: Post-retry assertions: schema converges to 10, is_current is true, error is cleared
+		// Step 9: Post-retry assertions: schema converges to 11, is_current is true, error is cleared
 		$this->assertTrue( $converging_schema->is_current() );
 		$this->assertFalse( $converging_schema->needs_repair() );
 
 		$stmt_version_after = $this->pdo->query(
 			"SELECT setting_value FROM `{$settings_table}` WHERE setting_key = 'db_schema_version'"
 		);
-		$this->assertSame( '10', (string) $stmt_version_after->fetchColumn() );
+		$this->assertSame( '11', (string) $stmt_version_after->fetchColumn() );
 
 		$stmt_error_after = $this->pdo->query(
 			"SELECT setting_value FROM `{$settings_table}` WHERE setting_key = 'db_schema_last_error'"
@@ -599,7 +599,7 @@ class InstallStateTest extends TestCase {
 			"INSERT INTO `{$settings_table}` (`setting_key`, `setting_value`, `updated_at`)
 			VALUES
 				('site_url', 'https://example.test', NOW()),
-				('db_schema_version', '10', NOW())"
+				('db_schema_version', '11', NOW())"
 		);
 		$this->pdo->exec(
 			"INSERT INTO `{$users_table}` (`id`, `username`, `email`, `first_name`, `last_name`, `password_hash`, `role`, `created_at`, `updated_at`)
@@ -607,6 +607,7 @@ class InstallStateTest extends TestCase {
 		);
 
 		// Execute HTTP GET /install.php against established installation
+
 		$response = $this->make_http_request( '/install.php' );
 
 		// 1. Must respond with 302 redirect to /dashboard
@@ -694,7 +695,7 @@ class InstallStateTest extends TestCase {
 			"INSERT INTO `{$settings_table}` (`setting_key`, `setting_value`, `updated_at`)
 			VALUES
 				('site_url', 'https://example.test', NOW()),
-				('db_schema_version', '10', NOW())"
+				('db_schema_version', '11', NOW())"
 		);
 		$this->pdo->exec(
 			"INSERT INTO `{$users_table}` (`id`, `username`, `email`, `first_name`, `last_name`, `password_hash`, `role`, `created_at`, `updated_at`)
@@ -702,6 +703,7 @@ class InstallStateTest extends TestCase {
 		);
 
 		// On established site: install.php redirects to /dashboard
+
 		$install_res = $this->make_http_request( '/install.php' );
 		$this->assertSame( 302, $install_res['code'] );
 		$this->assertSame( '/dashboard', $install_res['location'] );
@@ -820,7 +822,7 @@ class InstallStateTest extends TestCase {
 			"INSERT INTO `{$settings_table}` (`setting_key`, `setting_value`, `updated_at`)
 			VALUES
 				('site_url', 'https://example.test', NOW()),
-				('db_schema_version', '10', NOW())"
+				('db_schema_version', '11', NOW())"
 		);
 		$this->pdo->exec(
 			"INSERT INTO `{$users_table}` (`id`, `username`, `email`, `first_name`, `last_name`, `password_hash`, `role`, `created_at`, `updated_at`)
@@ -843,7 +845,7 @@ class InstallStateTest extends TestCase {
 		Initializer::bootstrap_site( $conn, $isolated_config );
 
 		$this->assertSame( '1.7.1', $settings_api->get_option( 'installed_version' ) );
-		$this->assertSame( '10', (string) $settings_api->get_option( 'db_schema_version' ) );
+		$this->assertSame( '11', (string) $settings_api->get_option( 'db_schema_version' ) );
 	}
 
 	#[RunInSeparateProcess]
@@ -903,7 +905,7 @@ class InstallStateTest extends TestCase {
 		Initializer::bootstrap_site( $conn, $isolated_config );
 
 		$this->assertSame( '1.7.1', $settings_api->get_option( 'installed_version' ) );
-		$this->assertSame( '10', (string) $settings_api->get_option( 'db_schema_version' ) );
+		$this->assertSame( '11', (string) $settings_api->get_option( 'db_schema_version' ) );
 	}
 
 	#[RunInSeparateProcess]
@@ -940,8 +942,9 @@ class InstallStateTest extends TestCase {
 			VALUES
 				('site_url', 'https://example.test', NOW()),
 				('installed_version', '1.8.0', NOW()),
-				('db_schema_version', '10', NOW())"
+				('db_schema_version', '11', NOW())"
 		);
+
 		$this->pdo->exec(
 			"INSERT INTO `{$users_table}` (`id`, `username`, `email`, `first_name`, `last_name`, `password_hash`, `role`, `created_at`, `updated_at`)
 			VALUES (1, 'admin', 'admin@example.test', 'Admin', 'User', 'hash', 'admin', NOW(), NOW())"

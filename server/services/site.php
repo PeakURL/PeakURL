@@ -67,9 +67,26 @@ if ( ! function_exists( 'get_site_url' ) ) {
 	 * @since 1.0.2
 	 */
 	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
-	function get_site_url( string $path = '', ?string $scheme = null, ?SettingsApi $settings = null ): string {
+	function get_site_url(
+		$blog_id_or_path = null,
+		$path_or_scheme = '',
+		$scheme_or_settings = null,
+		?SettingsApi $settings = null
+	): string {
+		if ( is_string( $blog_id_or_path ) ) {
+			// Called with get_site_url( string $path, ?string $scheme, ... ).
+			$path              = $blog_id_or_path;
+			$resolved_scheme   = is_string( $path_or_scheme ) && '' !== $path_or_scheme ? $path_or_scheme : ( is_string( $scheme_or_settings ) ? $scheme_or_settings : null );
+			$resolved_settings = $path_or_scheme instanceof SettingsApi ? $path_or_scheme : ( $scheme_or_settings instanceof SettingsApi ? $scheme_or_settings : $settings );
+		} else {
+			// Called with WordPress standard get_site_url( ?int $blog_id, string $path, ?string $scheme ).
+			$path              = is_string( $path_or_scheme ) ? $path_or_scheme : '';
+			$resolved_scheme   = is_string( $scheme_or_settings ) ? $scheme_or_settings : null;
+			$resolved_settings = $scheme_or_settings instanceof SettingsApi ? $scheme_or_settings : $settings;
+		}
+
 		$config       = get_peakurl_config();
-		$settings_api = $settings ?? get_settings_api( $config );
+		$settings_api = $resolved_settings ?? get_settings_api( $config );
 		$site_url     = trim( (string) $settings_api->get_option( 'site_url' ) );
 
 		if ( '' === $site_url ) {
@@ -80,8 +97,8 @@ if ( ! function_exists( 'get_site_url' ) ) {
 
 		$site_url = untrailingslashit( $site_url );
 
-		if ( null !== $scheme ) {
-			$normalized_scheme = strtolower( trim( $scheme ) );
+		if ( null !== $resolved_scheme ) {
+			$normalized_scheme = strtolower( trim( $resolved_scheme ) );
 
 			if ( in_array( $normalized_scheme, array( 'http', 'https' ), true ) ) {
 				$parts = parse_url( $site_url );
@@ -111,7 +128,7 @@ if ( ! function_exists( 'get_site_url' ) ) {
 			'site_url',
 			$site_url,
 			$path,
-			$scheme,
+			$resolved_scheme,
 		);
 	}
 }

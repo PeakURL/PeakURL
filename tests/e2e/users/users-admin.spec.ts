@@ -69,8 +69,9 @@ test.describe("Users & Roles Admin Journeys", () => {
 
 		// Locate self user row
 		const selfRow = page.locator(".users-page-table-row", {
-			hasText: adminCredentials.identifier,
+			hasText: `@${adminCredentials.identifier}`,
 		});
+
 		await expect(selfRow).toBeVisible();
 
 		// 1. Self-delete is disabled with safeguard notice
@@ -117,8 +118,9 @@ test.describe("Users & Roles Admin Journeys", () => {
 
 		// 1. Open edit dialog for admin user
 		const adminRow = page.locator(".users-page-table-row", {
-			hasText: adminCredentials.identifier,
+			hasText: `@${adminCredentials.identifier}`,
 		});
+
 		await expect(adminRow).toBeVisible();
 		await adminRow.locator(".users-page-action-btn-edit").click();
 

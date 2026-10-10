@@ -81,4 +81,23 @@ class SiteUrlTest extends TestCase {
 
 		\get_site_url( '', null, $settings );
 	}
+
+	public function test_get_site_url_supports_wordpress_blog_id_and_path_signature(): void {
+		$settings = $this->createMock( SettingsApi::class );
+		$settings->method( 'get_option' )
+			->with( 'site_url' )
+			->willReturn( 'https://settings.peakurl.dev/' );
+
+		// 1. WordPress signature with null blog_id and path
+		$url_null_id = \get_site_url( null, 'my-custom-alias', null, $settings );
+		$this->assertSame( 'https://settings.peakurl.dev/my-custom-alias', $url_null_id );
+
+		// 2. WordPress signature with integer blog_id and path
+		$url_int_id = \get_site_url( 1, 'another-alias', null, $settings );
+		$this->assertSame( 'https://settings.peakurl.dev/another-alias', $url_int_id );
+
+		// 3. WordPress signature with null blog_id and empty path
+		$url_base = \get_site_url( null, '', null, $settings );
+		$this->assertSame( 'https://settings.peakurl.dev', $url_base );
+	}
 }

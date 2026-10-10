@@ -406,7 +406,7 @@ class UpdateLifecycleTest extends TestCase {
 		$recorded_version = (int) $this->pdo->query(
 			"SELECT setting_value FROM `{$this->isolated_prefix}settings` WHERE setting_key = 'db_schema_version'"
 		)->fetchColumn();
-		$this->assertSame( 10, $recorded_version );
+		$this->assertSame( 11, $recorded_version );
 
 		// Step 4: Installed version and settings assertions.
 		$installed_ver = $settings_api->get_option( 'installed_version' );

@@ -158,6 +158,16 @@ Proactively monitor server performance and identify potential bottlenecks from t
 - **Active Session Management**: Inspect connected browser sessions with device icons and revoke unrecognized sessions remotely.
 - **Hashed Secrets at Rest**: Passwords, API keys, and link passwords are cryptographically hashed; secret values are never exposed or stored in plaintext.
 
+### 6. Webhook Delivery History & Retention Safeguards
+
+Outbound webhooks include safeguards that prevent historical payload buildup while keeping real-time event dispatch resilient:
+
+- **Per-Webhook Retention Policies**: Configure custom retention periods (`Indefinitely`, `7 days`, `30 days` default, or `90 days`) per webhook subscription to govern completed delivery lifetimes.
+- **Automated Scheduled Cleanup**: Periodic background maintenance (`WebhookDeliveryJob`) purges expired completed records strictly based on `completed_at` timestamps using bounded batch deletions without triggering immediate purges on setting saves.
+- **Active State Protection**: Active deliveries in `pending` and `processing` states are protected from manual deletion or automated cleanup to safeguard retry sequences and in-flight dispatches.
+- **Atomic Individual Deletion & Manual Bulk Clear**: Operators can selectively delete individual terminal (`delivered` or `failed`) delivery logs—permanently wiping replay payloads—or clear entire completed delivery histories across all pages in a single atomic operation.
+- **Concurrency Protections**: Atomic conditional DELETE operations and joined policy cleanup recheck terminal delivery status (`delivered` or `failed`), non-null completion, active retention policy (`> 0`), and completion age against cutoff time directly in the DELETE predicate to protect deliveries modified or retried concurrently.
+
 ## Getting Started
 
 PeakURL is designed to be installed through its built-in web installer.

@@ -11,6 +11,9 @@ export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(baseApi.middleware),
 });
+import { setupListeners } from "@reduxjs/toolkit/query";
+
+setupListeners(store.dispatch);
 
 /**
  * Concrete store instance type derived from the configured dashboard store.

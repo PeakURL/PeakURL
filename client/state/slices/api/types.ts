@@ -52,6 +52,10 @@ import type {
 	TestWebhookPayload,
 	GetWebhookDeliveriesParams,
 	RetryWebhookDeliveryParams,
+	DeleteWebhookDeliveryParams,
+	DeleteWebhookDeliveryResponse,
+	ClearWebhookDeliveriesParams,
+	ClearWebhookDeliveriesResponse,
 	RotateSecretResult,
 	WebhookDeliveriesResponse,
 	WebhookDeliveryItem,
@@ -66,6 +70,10 @@ export type {
 	WebhookTestResult,
 	GetWebhookDeliveriesParams,
 	RetryWebhookDeliveryParams,
+	DeleteWebhookDeliveryParams,
+	DeleteWebhookDeliveryResponse,
+	ClearWebhookDeliveriesParams,
+	ClearWebhookDeliveriesResponse,
 	RotateSecretResult,
 	WebhookDeliveriesResponse,
 	WebhookDeliveryItem,
@@ -109,6 +117,7 @@ export type ApiTagType =
 	| "Profile"
 	| "Users"
 	| "Webhooks"
+	| "WebhookDeliveries"
 	| "Security"
 	| "Geoip"
 	| "Mail"
@@ -135,6 +144,7 @@ export const API_TAG_TYPES: ApiTagType[] = [
 	"Profile",
 	"Users",
 	"Webhooks",
+	"WebhookDeliveries",
 	"Security",
 	"Geoip",
 	"Mail",

@@ -104,6 +104,8 @@ export {
 	useGetWebhookEventsQuery,
 	useGetWebhooksQuery,
 	useRetryWebhookDeliveryMutation,
+	useDeleteWebhookDeliveryMutation,
+	useClearWebhookDeliveriesMutation,
 	useRotateWebhookSecretMutation,
 	useTestWebhookMutation,
 	useUpdateWebhookMutation,

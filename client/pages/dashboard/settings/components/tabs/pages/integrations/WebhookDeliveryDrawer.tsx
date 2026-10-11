@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
 	Dialog,
 	DialogBackdrop,
@@ -14,19 +14,24 @@ import {
 	History,
 	RefreshCw,
 	RotateCcw,
+	Save,
 	ShieldAlert,
 	ShieldCheck,
+	Trash2,
 	X,
 	XCircle,
 } from "lucide-react";
 
-import { Button } from "@/components";
+import { Button, ConfirmDialog, Select, type SelectOption } from "@/components";
 import {
+	useClearWebhookDeliveriesMutation,
+	useDeleteWebhookDeliveryMutation,
 	useGetWebhookDeliveriesQuery,
 	useGetWebhookEventsQuery,
 	useRetryWebhookDeliveryMutation,
+	useUpdateWebhookMutation,
 } from "@/state/slices/api";
-import { __, sprintf } from "@/i18n";
+import { __, _n, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { formatLocalizedDateTime } from "@/shared/dates";
 import { getErrorMessage } from "@/shared/errors";
@@ -150,18 +155,79 @@ export function WebhookDeliveryDrawer({
 
 	// Cache the active webhook so closing animations stay smooth without jumping even if parent clears the webhook
 	const [cachedWebhook, setCachedWebhook] = useState(webhook);
+	const activeWebhook = webhook ?? cachedWebhook;
+	const webhookId = activeWebhook?.id ?? "";
+
+	const currentWebhookIdRef = useRef<string | null>(webhook?.id ?? null);
+	const previousWebhookIdRef = useRef<string | null>(null);
+	const wasOpenRef = useRef<boolean>(isOpen);
+
+	// Track the confirmed saved retention baseline separately from the editable user draft
+	const [savedRetentionDays, setSavedRetentionDays] = useState<number>(
+		activeWebhook?.deliveryRetentionDays ?? 30
+	);
+	const [draftRetentionDays, setDraftRetentionDays] = useState<number>(
+		activeWebhook?.deliveryRetentionDays ?? 30
+	);
+	const [isDraftEdited, setIsDraftEdited] = useState<boolean>(false);
+
+	const isRetentionDirty =
+		isDraftEdited && draftRetentionDays !== savedRetentionDays;
+
+	const [deliveryPendingDelete, setDeliveryPendingDelete] =
+		useState<WebhookDeliveryItem | null>(null);
+	const [isClearConfirmOpen, setIsClearConfirmOpen] = useState(false);
+
+	const [retryDelivery] = useRetryWebhookDeliveryMutation();
+	const [deleteDelivery, { isLoading: isDeletingDelivery }] =
+		useDeleteWebhookDeliveryMutation();
+	const [clearDeliveries, { isLoading: isClearing }] =
+		useClearWebhookDeliveriesMutation();
+	const [updateWebhook, { isLoading: isUpdatingRetention }] =
+		useUpdateWebhookMutation();
 
 	useEffect(() => {
+		currentWebhookIdRef.current = webhook?.id ?? null;
+		const isJustOpened = !wasOpenRef.current && isOpen;
+		wasOpenRef.current = isOpen;
+
 		if (webhook) {
 			// eslint-disable-next-line react-hooks/set-state-in-effect -- Synchronize cached webhook on change
 			setCachedWebhook(webhook);
-			setPage(1);
-			setExpandedErrorId(null);
-		}
-	}, [webhook]);
 
-	const activeWebhook = webhook ?? cachedWebhook;
-	const webhookId = activeWebhook?.id ?? "";
+			if (isJustOpened || webhook.id !== previousWebhookIdRef.current) {
+				previousWebhookIdRef.current = webhook.id;
+				setPage(1);
+				setExpandedErrorId(null);
+				setDeliveryPendingDelete(null);
+				setIsClearConfirmOpen(false);
+				setRetryingDeliveryId(null);
+
+				const initialRetention = webhook.deliveryRetentionDays ?? 30;
+				setSavedRetentionDays(initialRetention);
+				setDraftRetentionDays(initialRetention);
+				setIsDraftEdited(false);
+			} else {
+				const incomingSavedRetention =
+					webhook.deliveryRetentionDays ?? 30;
+
+				if (!isDraftEdited) {
+					// Untouched draft adopts incoming saved policy (including 0)
+					setSavedRetentionDays(incomingSavedRetention);
+					setDraftRetentionDays(incomingSavedRetention);
+				} else {
+					// Genuinely edited draft: update saved baseline
+					setSavedRetentionDays(incomingSavedRetention);
+					// If refreshed saved policy matches the current draft, draft becomes clean
+					if (incomingSavedRetention === draftRetentionDays) {
+						setIsDraftEdited(false);
+					}
+				}
+			}
+		} else {
+			previousWebhookIdRef.current = null;
+		}
+	}, [webhook, isOpen, isDraftEdited, draftRetentionDays]);
 
 	const { data, isLoading, isFetching, refetch } =
 		useGetWebhookDeliveriesQuery(
@@ -175,10 +241,58 @@ export function WebhookDeliveryDrawer({
 			}
 		);
 
-	const [retryDelivery] = useRetryWebhookDeliveryMutation();
+	const retentionOptions: SelectOption<number>[] = useMemo(
+		() => [
+			{ value: 30, label: __("30 days (Default)") },
+			{ value: 7, label: __("7 days") },
+			{ value: 90, label: __("90 days") },
+			{ value: 0, label: __("Keep indefinitely (Disabled)") },
+		],
+		[]
+	);
+
+	const handleSaveRetention = async () => {
+		const targetWebhookId = webhookId;
+		const targetRetention = draftRetentionDays;
+
+		if (!targetWebhookId || isUpdatingRetention) {
+			return;
+		}
+
+		try {
+			const res = await updateWebhook({
+				id: targetWebhookId,
+				deliveryRetentionDays: targetRetention,
+			}).unwrap();
+
+			// Guard state updates by captured webhook context
+			if (currentWebhookIdRef.current === targetWebhookId) {
+				const confirmedValue =
+					res?.data?.deliveryRetentionDays ?? targetRetention;
+				setSavedRetentionDays(confirmedValue);
+				setDraftRetentionDays(confirmedValue);
+				setIsDraftEdited(false);
+			}
+
+			notification?.success?.(
+				__("Success"),
+				__("Delivery retention period updated.")
+			);
+		} catch (err) {
+			notification?.error?.(
+				__("Error"),
+				getErrorMessage(err, __("Failed to update delivery retention."))
+			);
+		}
+	};
 
 	const handleRetryDelivery = async (deliveryId: string) => {
-		if (!webhookId || retryingDeliveryId) {
+		if (
+			!webhookId ||
+			retryingDeliveryId ||
+			isDeletingDelivery ||
+			isClearing
+		) {
 			return;
 		}
 
@@ -203,6 +317,77 @@ export function WebhookDeliveryDrawer({
 		}
 	};
 
+	const handleDeleteDelivery = async () => {
+		if (
+			!webhookId ||
+			!deliveryPendingDelete ||
+			deliveryPendingDelete.webhookId !== webhookId ||
+			isDeletingDelivery
+		) {
+			return;
+		}
+
+		const target = deliveryPendingDelete;
+		try {
+			await deleteDelivery({
+				id: webhookId,
+				deliveryId: target.id,
+			}).unwrap();
+
+			notification?.success?.(
+				__("Success"),
+				__("Delivery record deleted.")
+			);
+
+			if (expandedErrorId === target.id) {
+				setExpandedErrorId(null);
+			}
+
+			if (deliveries.length === 1 && page > 1) {
+				setPage((p) => Math.max(1, p - 1));
+			}
+
+			setDeliveryPendingDelete(null);
+		} catch (err) {
+			notification?.error?.(
+				__("Error"),
+				getErrorMessage(err, __("Failed to delete delivery record."))
+			);
+		}
+	};
+
+	const handleClearHistory = async () => {
+		if (!webhookId || isClearing) {
+			return;
+		}
+
+		try {
+			const res = await clearDeliveries({ id: webhookId }).unwrap();
+			const count = res?.data?.deletedCount ?? 0;
+			notification?.success?.(
+				__("History Cleared"),
+				count > 0
+					? sprintf(
+							_n(
+								"Cleared %d completed delivery record.",
+								"Cleared %d completed delivery records.",
+								count
+							),
+							count
+						)
+					: __("No completed delivery records to clear.")
+			);
+			setPage(1);
+			setExpandedErrorId(null);
+			setIsClearConfirmOpen(false);
+		} catch (err) {
+			notification?.error?.(
+				__("Error"),
+				getErrorMessage(err, __("Failed to clear delivery history."))
+			);
+		}
+	};
+
 	const deliveries = data?.items ?? [];
 	const meta = data?.meta ?? {
 		page: 1,
@@ -212,8 +397,19 @@ export function WebhookDeliveryDrawer({
 	};
 
 	const handleClose = () => {
+		if (
+			isClearing ||
+			isDeletingDelivery ||
+			Boolean(deliveryPendingDelete) ||
+			isClearConfirmOpen
+		) {
+			return;
+		}
+
 		setPage(1);
 		setExpandedErrorId(null);
+		setDeliveryPendingDelete(null);
+		setIsClearConfirmOpen(false);
 		onClose();
 	};
 
@@ -388,6 +584,80 @@ export function WebhookDeliveryDrawer({
 										<span className="webhook-drawer-meta-value font-mono">
 											{meta.total}
 										</span>
+									</div>
+								</div>
+
+								{/* History Retention and Bulk Clear Bar */}
+								<div className="rounded-xl border border-stroke bg-surface-alt/40 p-3 sm:p-3.5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+									<div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-2.5 min-w-0">
+										<span className="text-xs font-semibold text-heading shrink-0">
+											{__("History Retention:")}
+										</span>
+										<div className="flex items-center gap-2">
+											<div className="w-52">
+												<Select<number>
+													value={draftRetentionDays}
+													onChange={(val) => {
+														const nextValue =
+															Number(val);
+														setDraftRetentionDays(
+															nextValue
+														);
+														setIsDraftEdited(
+															nextValue !==
+																savedRetentionDays
+														);
+													}}
+													options={retentionOptions}
+													disabled={
+														isUpdatingRetention ||
+														isClearing
+													}
+													ariaLabel={__(
+														"History Retention"
+													)}
+												/>
+											</div>
+											{isRetentionDirty && (
+												<Button
+													variant="primary"
+													size="xs"
+													icon={Save}
+													loading={
+														isUpdatingRetention
+													}
+													onClick={
+														handleSaveRetention
+													}
+													title={__(
+														"Save retention policy"
+													)}
+												>
+													{__("Save")}
+												</Button>
+											)}
+										</div>
+									</div>
+									<div className="flex items-center gap-2 shrink-0">
+										<Button
+											variant="secondary"
+											size="xs"
+											icon={Trash2}
+											disabled={
+												meta.total === 0 ||
+												isClearing ||
+												isDeletingDelivery
+											}
+											onClick={() =>
+												setIsClearConfirmOpen(true)
+											}
+											className="hover:border-red-300 hover:text-red-600 dark:hover:border-red-900/40 dark:hover:text-red-400"
+											title={__(
+												"Clear completed delivery history"
+											)}
+										>
+											{__("Clear history")}
+										</Button>
 									</div>
 								</div>
 
@@ -603,38 +873,91 @@ export function WebhookDeliveryDrawer({
 																		)}
 																	</td>
 																	<td className="text-end">
-																		{isFailed ? (
-																			<Button
-																				variant="secondary"
-																				size="xs"
-																				icon={
-																					RotateCcw
-																				}
-																				loading={
-																					retryingDeliveryId ===
-																					item.id
-																				}
-																				disabled={Boolean(
-																					retryingDeliveryId
-																				)}
-																				onClick={() =>
-																					handleRetryDelivery(
+																		<div className="flex items-center justify-end gap-1.5">
+																			{isFailed && (
+																				<Button
+																					variant="secondary"
+																					size="xs"
+																					icon={
+																						RotateCcw
+																					}
+																					loading={
+																						retryingDeliveryId ===
 																						item.id
-																					)
-																				}
-																				title={__(
-																					"Retry Delivery"
-																				)}
-																			>
-																				{__(
-																					"Retry Delivery"
-																				)}
-																			</Button>
-																		) : (
-																			<span className="text-text-muted text-xs">
-																				—
-																			</span>
-																		)}
+																					}
+																					disabled={
+																						Boolean(
+																							retryingDeliveryId
+																						) ||
+																						isDeletingDelivery ||
+																						isClearing
+																					}
+																					onClick={() =>
+																						handleRetryDelivery(
+																							item.id
+																						)
+																					}
+																					title={__(
+																						"Retry Delivery"
+																					)}
+																				>
+																					{__(
+																						"Retry"
+																					)}
+																				</Button>
+																			)}
+																			{item.status ===
+																				"delivered" ||
+																			item.status ===
+																				"failed" ? (
+																				<button
+																					type="button"
+																					disabled={
+																						isDeletingDelivery ||
+																						isClearing ||
+																						Boolean(
+																							retryingDeliveryId
+																						)
+																					}
+																					onClick={() =>
+																						setDeliveryPendingDelete(
+																							item
+																						)
+																					}
+																					className="integrations-tab-delete-btn"
+																					title={__(
+																						"Delete delivery record"
+																					)}
+																					aria-label={__(
+																						"Delete delivery record"
+																					)}
+																				>
+																					<Trash2
+																						size={
+																							13
+																						}
+																					/>
+																				</button>
+																			) : (
+																				<button
+																					type="button"
+																					disabled
+																					className="integrations-tab-delete-btn opacity-40 cursor-not-allowed hover:border-stroke! hover:bg-transparent! hover:text-text-muted!"
+																					title={__(
+																						"Active deliveries cannot be deleted until completed."
+																					)}
+																					aria-label={__(
+																						"Active deliveries cannot be deleted until completed."
+																					)}
+																				>
+																					<Trash2
+																						size={
+																							13
+																						}
+																					/>
+																				</button>
+																			)}
+																		</div>
 																	</td>
 																</tr>
 															);
@@ -725,6 +1048,67 @@ export function WebhookDeliveryDrawer({
 									{__("Close")}
 								</Button>
 							</div>
+
+							{/* Delete Delivery Confirmation Dialog */}
+							<ConfirmDialog
+								open={Boolean(deliveryPendingDelete)}
+								onClose={() => {
+									if (!isDeletingDelivery) {
+										setDeliveryPendingDelete(null);
+									}
+								}}
+								title={__("Delete Delivery Record")}
+								description={
+									deliveryPendingDelete
+										? deliveryPendingDelete.status ===
+											"failed"
+											? sprintf(
+													__(
+														"Permanently delete the delivery record for event %1$s (ID: %2$s)? Retained replay data will also be deleted, so this delivery can no longer be retried."
+													),
+													getEventLabel(
+														deliveryPendingDelete.event,
+														labelMap
+													),
+													deliveryPendingDelete.id
+												)
+											: sprintf(
+													__(
+														"Permanently delete the delivery record for event %1$s (ID: %2$s)? This action cannot be undone."
+													),
+													getEventLabel(
+														deliveryPendingDelete.event,
+														labelMap
+													),
+													deliveryPendingDelete.id
+												)
+										: ""
+								}
+								confirmText={__("Delete Delivery")}
+								cancelText={__("Cancel")}
+								confirmVariant="danger"
+								onConfirm={handleDeleteDelivery}
+								loading={isDeletingDelivery}
+							/>
+
+							{/* Clear Completed History Confirmation Dialog */}
+							<ConfirmDialog
+								open={isClearConfirmOpen}
+								onClose={() => {
+									if (!isClearing) {
+										setIsClearConfirmOpen(false);
+									}
+								}}
+								title={__("Clear Completed History")}
+								description={__(
+									"Permanently delete all delivered and failed records for this webhook across all pages? Active pending and processing deliveries will be preserved. This action cannot be undone."
+								)}
+								confirmText={__("Clear Completed History")}
+								cancelText={__("Cancel")}
+								confirmVariant="danger"
+								onConfirm={handleClearHistory}
+								loading={isClearing}
+							/>
 						</DialogPanel>
 					</div>
 				</div>

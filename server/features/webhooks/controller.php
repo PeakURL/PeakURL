@@ -199,6 +199,45 @@ class Controller extends BaseController {
 	}
 
 	/**
+	 * Delete a single terminal webhook delivery record.
+	 *
+	 * @param Request $request Incoming HTTP request with route params `id` and `delivery_id`.
+	 * @return array<string, mixed> JSON envelope confirming deletion.
+	 * @since 1.7.2
+	 */
+	public function delete_delivery( Request $request ): array {
+		$this->webhooks_service->delete_delivery(
+			$request,
+			$this->route_param( $request, 'id' ),
+			$this->route_param( $request, 'delivery_id' ),
+		);
+
+		return $this->success_response(
+			array( 'deleted' => true ),
+			__( 'Webhook delivery deleted.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Clear all terminal delivery history for a webhook endpoint.
+	 *
+	 * @param Request $request Incoming HTTP request with route param `id`.
+	 * @return array<string, mixed> JSON envelope with deleted count.
+	 * @since 1.7.2
+	 */
+	public function clear_deliveries( Request $request ): array {
+		$deleted_count = $this->webhooks_service->clear_delivery_history(
+			$request,
+			$this->route_param( $request, 'id' ),
+		);
+
+		return $this->success_response(
+			array( 'deletedCount' => $deleted_count ),
+			__( 'Webhook delivery history cleared.', 'peakurl' ),
+		);
+	}
+
+	/**
 	 * Delete a webhook by ID.
 	 *
 	 * Returns 404 if the webhook does not exist or does not

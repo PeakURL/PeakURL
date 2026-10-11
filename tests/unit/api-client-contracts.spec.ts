@@ -155,6 +155,21 @@ test.describe("Frontend API Client Contracts", () => {
 			expect(API_ROUTES.webhooks.testById("whk_99")).toBe(
 				"webhooks/whk_99/test"
 			);
+			expect(API_ROUTES.webhooks.rotateSecret("whk_99")).toBe(
+				"webhooks/whk_99/rotate-secret"
+			);
+			expect(API_ROUTES.webhooks.deliveries("whk_99")).toBe(
+				"webhooks/whk_99/deliveries"
+			);
+			expect(API_ROUTES.webhooks.deliveryById("whk_99", "del_123")).toBe(
+				"webhooks/whk_99/deliveries/del_123"
+			);
+			expect(API_ROUTES.webhooks.clearDeliveries("whk_99")).toBe(
+				"webhooks/whk_99/deliveries"
+			);
+			expect(API_ROUTES.webhooks.retryDelivery("whk_99", "del_123")).toBe(
+				"webhooks/whk_99/deliveries/del_123/retry"
+			);
 		});
 	});
 

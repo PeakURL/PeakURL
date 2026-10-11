@@ -339,4 +339,100 @@ class ValidatorTest extends TestCase {
 		// Unresolvable hostname returns null.
 		$this->assertNull( $this->validator->validate_destination( 'https://unresolvable.domain.invalid/hook' ) );
 	}
+
+	public function test_validate_delivery_retention_days_accepts_allowed_values(): void {
+		$this->assertSame( 0, $this->validator->validate_delivery_retention_days( 0 ) );
+		$this->assertSame( 7, $this->validator->validate_delivery_retention_days( 7 ) );
+		$this->assertSame( 30, $this->validator->validate_delivery_retention_days( 30 ) );
+		$this->assertSame( 90, $this->validator->validate_delivery_retention_days( 90 ) );
+
+		// String digits
+		$this->assertSame( 0, $this->validator->validate_delivery_retention_days( '0' ) );
+		$this->assertSame( 7, $this->validator->validate_delivery_retention_days( '7' ) );
+		$this->assertSame( 30, $this->validator->validate_delivery_retention_days( '30' ) );
+		$this->assertSame( 90, $this->validator->validate_delivery_retention_days( '90' ) );
+	}
+
+	public function test_validate_delivery_retention_days_rejects_invalid_values(): void {
+		$invalid_values = array(
+			null,
+			false,
+			true,
+			7.5,
+			30.0,
+			-1,
+			-30,
+			1,
+			14,
+			60,
+			365,
+			'abc',
+			'30days',
+			'',
+			array( 30 ),
+			(object) array( 'days' => 30 ),
+		);
+
+		foreach ( $invalid_values as $val ) {
+			try {
+				$this->validator->validate_delivery_retention_days( $val );
+				$this->fail( 'Expected ApiException for invalid retention days: ' . var_export( $val, true ) );
+			} catch ( ApiException $e ) {
+				$this->assertSame( 422, $e->get_status() );
+				$this->assertSame( 'Invalid delivery retention period. Allowed values: 0, 7, 30, 90 days.', $e->getMessage() );
+			}
+		}
+	}
+
+	public function test_validate_create_handles_retention_days(): void {
+		// Default to 30 when omitted
+		$validated_default = $this->validator->validate_create(
+			array(
+				'label'  => 'Webhook Retention Default',
+				'url'    => 'https://93.184.216.34/webhook',
+				'events' => array( 'link.created' ),
+			)
+		);
+		$this->assertSame( 30, $validated_default['delivery_retention_days'] );
+
+		// CamelCase deliveryRetentionDays
+		$validated_camel = $this->validator->validate_create(
+			array(
+				'label'                 => 'Webhook Retention 7',
+				'url'                   => 'https://93.184.216.34/webhook',
+				'events'                => array( 'link.created' ),
+				'deliveryRetentionDays' => 7,
+			)
+		);
+		$this->assertSame( 7, $validated_camel['delivery_retention_days'] );
+
+		// Snake_case delivery_retention_days
+		$validated_snake = $this->validator->validate_create(
+			array(
+				'label'                   => 'Webhook Retention 0',
+				'url'                     => 'https://93.184.216.34/webhook',
+				'events'                  => array( 'link.created' ),
+				'delivery_retention_days' => 0,
+			)
+		);
+		$this->assertSame( 0, $validated_snake['delivery_retention_days'] );
+	}
+
+	public function test_validate_update_handles_retention_days(): void {
+		// When omitted, not included in updates
+		$updates_omitted = $this->validator->validate_update(
+			array(
+				'label' => 'Updated Label',
+			)
+		);
+		$this->assertArrayNotHasKey( 'delivery_retention_days', $updates_omitted );
+
+		// When present, validated and included
+		$updates_with_retention = $this->validator->validate_update(
+			array(
+				'deliveryRetentionDays' => 90,
+			)
+		);
+		$this->assertSame( 90, $updates_with_retention['delivery_retention_days'] );
+	}
 }

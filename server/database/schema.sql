@@ -148,6 +148,7 @@ CREATE TABLE IF NOT EXISTS webhooks (
     secret_hint VARCHAR(64) DEFAULT NULL,
     verify_ssl TINYINT(1) NOT NULL DEFAULT 1,
     is_active TINYINT(1) NOT NULL DEFAULT 1,
+    delivery_retention_days INT UNSIGNED NOT NULL DEFAULT 30,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     KEY idx_webhooks_user_active (user_id, is_active),

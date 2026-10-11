@@ -476,15 +476,54 @@ class Service {
 	}
 
 	/**
-	 * Clean up terminal webhook delivery history past the retention threshold.
+	 * Delete a single terminal webhook delivery record.
 	 *
-	 * @param int $retention_days Retention period in days.
-	 * @param int $batch_limit    Maximum records to delete in one invocation.
+	 * @param Request $request     Incoming HTTP request for authorization.
+	 * @param string  $webhook_id  Target webhook ID.
+	 * @param string  $delivery_id Target delivery ID.
+	 * @return bool True if deleted successfully.
+	 * @since 1.7.2
+	 */
+	public function delete_delivery( Request $request, string $webhook_id, string $delivery_id ): bool {
+		return $this->delivery->delete_delivery( $request, $webhook_id, $delivery_id );
+	}
+
+	/**
+	 * Clear all terminal delivery history for a webhook endpoint.
+	 *
+	 * @param Request $request    Incoming HTTP request for authorization.
+	 * @param string  $webhook_id Target webhook ID.
+	 * @return int Number of deleted delivery history rows.
+	 * @since 1.7.2
+	 */
+	public function clear_delivery_history( Request $request, string $webhook_id ): int {
+		return $this->delivery->clear_delivery_history( $request, $webhook_id );
+	}
+
+	/**
+	 * Clean up terminal webhook delivery history using per-webhook retention policies.
+	 *
+	 * @param int $batch_limit Maximum records to delete in one invocation (default 500).
+	 * @return int Number of deleted delivery history rows.
+	 * @since 1.7.2
+	 */
+	public function cleanup_policy_delivery_history( int $batch_limit = 500 ): int {
+		return $this->delivery->cleanup_policy_delivery_history( $batch_limit );
+	}
+
+	/**
+	 * Clean up terminal webhook delivery history.
+	 *
+	 * When $retention_days is null, delegates to per-webhook retention policy cleanup.
+	 * When an integer is supplied, applies uniform retention for backward compatibility.
+	 *
+	 * @param int|null $retention_days Retention period in days (default null for policy cleanup).
+	 * @param int      $batch_limit    Maximum records to delete in one invocation (default 500).
 	 * @return int Number of deleted delivery history rows.
 	 * @since 1.7.1
 	 */
 	public function cleanup_delivery_history(
-		int $retention_days = self::DEFAULT_DELIVERY_RETENTION_DAYS,
+		?int $retention_days = null,
 		int $batch_limit = 500
 	): int {
 		return $this->delivery->cleanup_delivery_history( $retention_days, $batch_limit );

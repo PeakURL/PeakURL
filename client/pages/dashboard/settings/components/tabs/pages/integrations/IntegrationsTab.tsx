@@ -119,7 +119,9 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 		data: webhookData,
 		isLoading,
 		error,
-	} = useGetWebhooksQuery(undefined);
+	} = useGetWebhooksQuery(undefined, {
+		refetchOnFocus: true,
+	});
 
 	const [deleteWebhook, { isLoading: isDeleting }] =
 		useDeleteWebhookMutation();
@@ -127,7 +129,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 		useRotateWebhookSecretMutation();
 	const [testWebhook] = useTestWebhookMutation();
 
-	const webhooks = webhookData || [];
+	const webhooks = useMemo(() => webhookData || [], [webhookData]);
 
 	const eventOptions: WebhookEventOption[] = useMemo(() => {
 		if (!webhookEventsData || !Array.isArray(webhookEventsData)) {
@@ -163,8 +165,21 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 	);
 
 	const [isDeliveryDrawerOpen, setIsDeliveryDrawerOpen] = useState(false);
-	const [deliveryWebhook, setDeliveryWebhook] =
+	const [deliveryWebhookId, setDeliveryWebhookId] = useState<string | null>(
+		null
+	);
+	const [deliveryWebhookSnapshot, setDeliveryWebhookSnapshot] =
 		useState<WebhookSummary | null>(null);
+
+	const activeDeliveryWebhook = useMemo(() => {
+		if (!deliveryWebhookId) {
+			return deliveryWebhookSnapshot;
+		}
+		return (
+			webhooks.find((w) => w.id === deliveryWebhookId) ??
+			deliveryWebhookSnapshot
+		);
+	}, [deliveryWebhookId, webhooks, deliveryWebhookSnapshot]);
 
 	// Action dialog states
 	const [webhookPendingDelete, setWebhookPendingDelete] =
@@ -525,7 +540,12 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 												size="xs"
 												icon={History}
 												onClick={() => {
-													setDeliveryWebhook(webhook);
+													setDeliveryWebhookId(
+														webhook.id
+													);
+													setDeliveryWebhookSnapshot(
+														webhook
+													);
 													setIsDeliveryDrawerOpen(
 														true
 													);
@@ -732,10 +752,11 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 			{/* Webhook Delivery Slide-Over Drawer */}
 			<WebhookDeliveryDrawer
 				isOpen={isDeliveryDrawerOpen}
-				webhook={deliveryWebhook}
+				webhook={activeDeliveryWebhook}
 				onClose={() => {
 					setIsDeliveryDrawerOpen(false);
-					setDeliveryWebhook(null);
+					setDeliveryWebhookId(null);
+					setDeliveryWebhookSnapshot(null);
 				}}
 				notification={notification}
 				eventLabelMap={eventLabelMap}

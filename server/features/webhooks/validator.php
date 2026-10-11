@@ -256,10 +256,59 @@ class Validator {
 	}
 
 	/**
+	 * Allowed delivery retention periods in days.
+	 *
+	 * 0 = keep indefinitely (disabled), 7, 30 (default), 90 days.
+	 *
+	 * @var array<int, int>
+	 * @since 1.7.2
+	 */
+	public const ALLOWED_RETENTION_DAYS = array( 0, 7, 30, 90 );
+
+	/**
+	 * Default delivery retention period in days.
+	 *
+	 * @var int
+	 * @since 1.7.2
+	 */
+	public const DEFAULT_RETENTION_DAYS = 30;
+
+	/**
+	 * Validate and sanitize delivery retention days.
+	 *
+	 * Supported values: 0 (disabled), 7, 30, 90.
+	 *
+	 * @param mixed $value Input candidate.
+	 * @return int Validated retention days integer.
+	 *
+	 * @throws ApiException When value is null, boolean, float, negative, unsupported, or malformed.
+	 * @since 1.7.2
+	 */
+	public function validate_delivery_retention_days( mixed $value ): int {
+		if ( null === $value || is_bool( $value ) || is_float( $value ) || is_array( $value ) || is_object( $value ) ) {
+			throw new ApiException( __( 'Invalid delivery retention period. Allowed values: 0, 7, 30, 90 days.', 'peakurl' ), 422 );
+		}
+
+		if ( is_int( $value ) ) {
+			$days = $value;
+		} elseif ( is_string( $value ) && '' !== $value && ctype_digit( $value ) ) {
+			$days = (int) $value;
+		} else {
+			throw new ApiException( __( 'Invalid delivery retention period. Allowed values: 0, 7, 30, 90 days.', 'peakurl' ), 422 );
+		}
+
+		if ( ! in_array( $days, self::ALLOWED_RETENTION_DAYS, true ) ) {
+			throw new ApiException( __( 'Invalid delivery retention period. Allowed values: 0, 7, 30, 90 days.', 'peakurl' ), 422 );
+		}
+
+		return $days;
+	}
+
+	/**
 	 * Validate and sanitize payload for creating a new webhook.
 	 *
 	 * @param array<string, mixed> $payload Request body parameters.
-	 * @return array{label: string, url: string, events: array<int, string>, verify_ssl: int} Sanitized fields.
+	 * @return array{label: string, url: string, events: array<int, string>, verify_ssl: int, delivery_retention_days: int} Sanitized fields.
 	 *
 	 * @throws ApiException When label is invalid (422), URL is invalid or unsafe (422), or no events selected (422).
 	 * @since 1.0.0
@@ -270,11 +319,19 @@ class Validator {
 		$events     = $this->validate_events( $payload['events'] ?? null );
 		$verify_ssl = $this->validate_verify_ssl( $payload );
 
+		$retention_days = self::DEFAULT_RETENTION_DAYS;
+		if ( array_key_exists( 'deliveryRetentionDays', $payload ) ) {
+			$retention_days = $this->validate_delivery_retention_days( $payload['deliveryRetentionDays'] );
+		} elseif ( array_key_exists( 'delivery_retention_days', $payload ) ) {
+			$retention_days = $this->validate_delivery_retention_days( $payload['delivery_retention_days'] );
+		}
+
 		return array(
-			'label'      => $label,
-			'url'        => $url,
-			'events'     => $events,
-			'verify_ssl' => $verify_ssl ? 1 : 0,
+			'label'                   => $label,
+			'url'                     => $url,
+			'events'                  => $events,
+			'verify_ssl'              => $verify_ssl ? 1 : 0,
+			'delivery_retention_days' => $retention_days,
 		);
 	}
 
@@ -308,6 +365,12 @@ class Validator {
 
 		if ( array_key_exists( 'isActive', $payload ) ) {
 			$updates['is_active'] = ! empty( $payload['isActive'] ) ? 1 : 0;
+		}
+
+		if ( array_key_exists( 'deliveryRetentionDays', $payload ) ) {
+			$updates['delivery_retention_days'] = $this->validate_delivery_retention_days( $payload['deliveryRetentionDays'] );
+		} elseif ( array_key_exists( 'delivery_retention_days', $payload ) ) {
+			$updates['delivery_retention_days'] = $this->validate_delivery_retention_days( $payload['delivery_retention_days'] );
 		}
 
 		return $updates;

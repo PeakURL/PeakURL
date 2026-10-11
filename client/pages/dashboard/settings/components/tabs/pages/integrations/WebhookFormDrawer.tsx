@@ -16,7 +16,7 @@ import {
 	X,
 } from "lucide-react";
 
-import { Button, Input } from "@/components";
+import { Button, Input, Select, type SelectOption } from "@/components";
 import {
 	useCreateWebhookMutation,
 	useUpdateWebhookMutation,
@@ -68,6 +68,9 @@ function FormInner({
 	);
 	const [verifySsl, setVerifySsl] = useState(webhook?.verifySsl !== false);
 	const [isActive, setIsActive] = useState(webhook?.isActive !== false);
+	const [deliveryRetentionDays, setDeliveryRetentionDays] = useState<number>(
+		webhook?.deliveryRetentionDays ?? 30
+	);
 
 	const [createWebhook, { isLoading: isCreating }] =
 		useCreateWebhookMutation();
@@ -88,10 +91,31 @@ function FormInner({
 		if (url.trim() !== webhook.url.trim()) return true;
 		if (verifySsl !== (webhook.verifySsl !== false)) return true;
 		if (isActive !== (webhook.isActive !== false)) return true;
+		if (deliveryRetentionDays !== (webhook.deliveryRetentionDays ?? 30))
+			return true;
 		const originalEvents = webhook.events || [];
 		if (events.length !== originalEvents.length) return true;
 		return events.some((e) => !originalEvents.includes(e));
-	}, [isEditing, webhook, label, url, verifySsl, isActive, events]);
+	}, [
+		isEditing,
+		webhook,
+		label,
+		url,
+		verifySsl,
+		isActive,
+		deliveryRetentionDays,
+		events,
+	]);
+
+	const retentionOptions: SelectOption<number>[] = useMemo(
+		() => [
+			{ value: 30, label: __("30 days (Default)") },
+			{ value: 7, label: __("7 days") },
+			{ value: 90, label: __("90 days") },
+			{ value: 0, label: __("Keep indefinitely (Disabled)") },
+		],
+		[]
+	);
 
 	const eventGroups = useMemo(() => {
 		const groups: {
@@ -163,6 +187,7 @@ function FormInner({
 					events,
 					verifySsl,
 					isActive,
+					deliveryRetentionDays,
 				}).unwrap();
 
 				notification?.success?.(
@@ -176,6 +201,7 @@ function FormInner({
 					url: url.trim(),
 					events,
 					verifySsl,
+					deliveryRetentionDays,
 				}).unwrap();
 
 				notification?.success?.(
@@ -466,6 +492,26 @@ function FormInner({
 						checked={verifySsl}
 						onChange={(e) => setVerifySsl(e.target.checked)}
 					/>
+				</div>
+
+				{/* History Retention */}
+				<div className="integrations-tab-field-group">
+					<label className="integrations-tab-field-label">
+						{__("History Retention")}
+					</label>
+					<Select<number>
+						value={deliveryRetentionDays}
+						onChange={(val) =>
+							setDeliveryRetentionDays(Number(val))
+						}
+						options={retentionOptions}
+						ariaLabel={__("History Retention")}
+					/>
+					<p className="integrations-tab-field-desc">
+						{__(
+							"Completed deliveries older than this retention threshold are permanently purged during scheduled maintenance."
+						)}
+					</p>
 				</div>
 
 				{/* 4. Active Status (Shown when editing) */}

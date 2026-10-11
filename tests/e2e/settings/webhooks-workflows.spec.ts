@@ -1,4 +1,4 @@
-import { test, expect } from "../fixtures/auth.fixture";
+import { test, expect, generateTestId } from "../fixtures/auth.fixture";
 
 test.describe("Webhooks Settings and Management Workflows", () => {
 	test("full webhooks lifecycle: create, secret rotation, delivery drawer, edit, and delete", async ({
@@ -456,6 +456,679 @@ test.describe("Webhooks Settings and Management Workflows", () => {
 						toggleErr
 					);
 				}
+			}
+		}
+	});
+
+	test("delivery drawer retention draft synchronization: adopts 90 and 0, genuine edit survives refresh, save error/success", async ({
+		authenticatedPage: page,
+	}) => {
+		const testWebhookLabel = generateTestId("drawer-sync");
+		let createdWebhookId: string | null = null;
+
+		try {
+			// 1. Create a test webhook via API
+			const createRes = await page.request.post("/api/v1/webhooks", {
+				data: {
+					label: testWebhookLabel,
+					url: "https://93.184.216.34/sync-webhook",
+					events: ["link.created"],
+					deliveryRetentionDays: 30,
+				},
+			});
+			expect(createRes.status()).toBe(201);
+			const createData = await createRes.json();
+			createdWebhookId = createData.id ?? createData.data?.id ?? null;
+			expect(createdWebhookId).toBeTruthy();
+
+			// 2. Navigate to Settings -> Integrations
+			await page.goto("/dashboard/settings/integrations", {
+				waitUntil: "commit",
+			});
+			await expect(
+				page.getByRole("heading", { name: /webhooks/i })
+			).toBeVisible({ timeout: 25000 });
+			await expect(
+				page.getByText(/loading webhook configuration/i)
+			).toHaveCount(0, { timeout: 15000 });
+
+			// 3. Locate webhook card and click Deliveries
+			const card = page.locator(".integrations-tab-webhook-card", {
+				hasText: testWebhookLabel,
+			});
+			await expect(card).toBeVisible({ timeout: 15000 });
+			await card.getByRole("button", { name: /deliveries/i }).click();
+
+			// 4. Drawer opens with baseline 30 days
+			const drawer = page.locator(".webhook-drawer-panel");
+			await expect(drawer).toBeVisible({ timeout: 10000 });
+
+			const retentionSelect = drawer.locator(
+				"button[aria-label='History Retention']"
+			);
+			await expect(retentionSelect).toContainText("30 days (Default)");
+			await expect(
+				drawer.getByRole("button", { name: "Save" })
+			).toBeHidden();
+
+			// 5. Test delayed pre-save GET: hold request in-flight, perform Save 7, release old GET, verify 7 is protected
+			let releasePreSaveGet: (() => void) | null = null;
+			let delayNextGet = true;
+			let simulatedRetention = 30;
+
+			const isWebhookListRequest = (urlStr: string, method: string) => {
+				if (method !== "GET") return false;
+				try {
+					const urlObj = new URL(urlStr);
+					return (
+						urlObj.pathname === "/api/v1/webhooks" ||
+						urlObj.pathname === "/api/v1/webhooks/"
+					);
+				} catch {
+					return (
+						urlStr.includes("/api/v1/webhooks") &&
+						!urlStr.includes("/deliveries") &&
+						!urlStr.includes("/events")
+					);
+				}
+			};
+
+			await page.route("**/api/v1/webhooks*", async (route) => {
+				if (
+					!isWebhookListRequest(
+						route.request().url(),
+						route.request().method()
+					)
+				) {
+					return route.continue();
+				}
+				if (delayNextGet) {
+					delayNextGet = false;
+					// Capture stale response data when the request starts
+					const response = await route.fetch();
+					const json = await response.json();
+					const rawItems = json.data ?? json;
+					const items = Array.isArray(rawItems)
+						? rawItems.map(
+								(wh: {
+									id?: string;
+									[key: string]: unknown;
+								}) =>
+									wh.id === createdWebhookId
+										? {
+												...wh,
+												deliveryRetentionDays:
+													simulatedRetention,
+												delivery_retention_days:
+													simulatedRetention,
+											}
+										: wh
+							)
+						: rawItems;
+					const staleBody =
+						json.data !== undefined
+							? { ...json, data: items }
+							: items;
+
+					await new Promise<void>((resolve) => {
+						releasePreSaveGet = resolve;
+					});
+
+					await route.fulfill({
+						response,
+						json: staleBody,
+					});
+					return;
+				}
+				const response = await route.fetch();
+				const json = await response.json();
+				const rawItems = json.data ?? json;
+				const items = Array.isArray(rawItems)
+					? rawItems.map(
+							(wh: { id?: string; [key: string]: unknown }) =>
+								wh.id === createdWebhookId
+									? {
+											...wh,
+											deliveryRetentionDays:
+												simulatedRetention,
+											delivery_retention_days:
+												simulatedRetention,
+										}
+									: wh
+						)
+					: rawItems;
+				await route.fulfill({
+					response,
+					json:
+						json.data !== undefined
+							? { ...json, data: items }
+							: items,
+				});
+			});
+
+			// Initiate pre-save GET and hold it in-flight
+			const preSaveReqPromise = page.waitForRequest((req) =>
+				isWebhookListRequest(req.url(), req.method())
+			);
+			await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+			await preSaveReqPromise;
+
+			// While pre-save GET is in-flight, user selects 7 days and saves
+			await retentionSelect.click();
+			await page.getByRole("option", { name: "7 days" }).click();
+			const saveButton = drawer.getByRole("button", { name: "Save" });
+			await expect(saveButton).toBeVisible();
+
+			const putPromise = page.waitForResponse(
+				(res) =>
+					res.url().includes("/api/v1/webhooks/") &&
+					res.request().method() === "PUT"
+			);
+			await saveButton.click();
+			const putRes = await putPromise;
+			expect(putRes.status()).toBe(200);
+
+			await expect(
+				page.getByText(/Delivery retention period updated/i)
+			).toBeVisible({ timeout: 10000 });
+			await expect(saveButton).toBeHidden();
+			await expect(retentionSelect).toContainText("7 days");
+
+			// Release the delayed pre-save GET (returns 30); verify confirmed 7 is protected
+			const delayedGetPromise = page.waitForResponse((res) =>
+				isWebhookListRequest(res.url(), res.request().method())
+			);
+			releasePreSaveGet?.();
+			await delayedGetPromise;
+
+			await expect(retentionSelect).toContainText("7 days");
+			await expect(saveButton).toBeHidden();
+
+			// 6. Newer authoritative GET returning 90 without an intervening GET returning 7
+			simulatedRetention = 90;
+			const freshGet90 = page.waitForResponse((res) =>
+				isWebhookListRequest(res.url(), res.request().method())
+			);
+			await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+			await freshGet90;
+			await expect(retentionSelect).toContainText("90 days", {
+				timeout: 10000,
+			});
+			await expect(saveButton).toBeHidden();
+
+			// 7. Equivalent transition to 0: untouched draft adopts 0
+			simulatedRetention = 0;
+			const freshGet0 = page.waitForResponse((res) =>
+				isWebhookListRequest(res.url(), res.request().method())
+			);
+			await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+			await freshGet0;
+			await expect(retentionSelect).toContainText(
+				"Keep indefinitely (Disabled)",
+				{ timeout: 10000 }
+			);
+			await expect(saveButton).toBeHidden();
+
+			// 8. Genuine local edit: user selects 7 days, survives refresh
+			await retentionSelect.click();
+			await page.getByRole("option", { name: "7 days" }).click();
+			await expect(retentionSelect).toContainText("7 days");
+			await expect(saveButton).toBeVisible();
+
+			const freshGetSurvive = page.waitForResponse((res) =>
+				isWebhookListRequest(res.url(), res.request().method())
+			);
+			await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+			await freshGetSurvive;
+			await expect(retentionSelect).toContainText("7 days");
+			await expect(saveButton).toBeVisible();
+
+			// 9. Failed Save preserves draft and shows error notification
+			await page.route(
+				`**/api/v1/webhooks/${createdWebhookId}`,
+				async (route) => {
+					if (route.request().method() === "PUT") {
+						await route.fulfill({
+							status: 500,
+							json: {
+								message: "Simulated internal server error",
+							},
+						});
+					} else {
+						await route.continue();
+					}
+				}
+			);
+
+			await saveButton.click();
+			await expect(
+				page.getByText(
+					/Simulated internal server error|Failed to update delivery retention/i
+				)
+			).toBeVisible({ timeout: 5000 });
+			await expect(retentionSelect).toContainText("7 days");
+			await expect(saveButton).toBeVisible();
+
+			// 10. Successful Save retry: confirmed value and clean UI
+			await page.unroute(`**/api/v1/webhooks/${createdWebhookId}`);
+			await saveButton.click();
+			simulatedRetention = 7;
+			await expect(
+				page.getByText(/Delivery retention period updated/i)
+			).toBeVisible({ timeout: 10000 });
+			await expect(saveButton).toBeHidden();
+			await expect(retentionSelect).toContainText("7 days");
+		} finally {
+			await page.unrouteAll({ behavior: "ignoreErrors" });
+			if (createdWebhookId) {
+				await page.request
+					.delete(`/api/v1/webhooks/${createdWebhookId}`)
+					.catch(() => {});
+			}
+		}
+	});
+
+	test("delivery drawer: individual delivery deletion, page rollback, active state protection, and 409 error", async ({
+		authenticatedPage: page,
+	}) => {
+		const testWebhookLabel = generateTestId("drawer-del");
+		let createdWebhookId: string | null = null;
+
+		try {
+			const createRes = await page.request.post("/api/v1/webhooks", {
+				data: {
+					label: testWebhookLabel,
+					url: "https://93.184.216.34/del-webhook",
+					events: ["link.created"],
+					deliveryRetentionDays: 30,
+				},
+			});
+			expect(createRes.status()).toBe(201);
+			const createData = await createRes.json();
+			createdWebhookId = createData.id ?? createData.data?.id ?? null;
+			expect(createdWebhookId).toBeTruthy();
+
+			const makeDel = (id: string, status: string, resp = 200) => ({
+				id,
+				webhookId: createdWebhookId,
+				eventId: `evt_${id}`,
+				event: "link.created",
+				status,
+				attempts: 1,
+				maxAttempts: 3,
+				nextAttemptAt: null,
+				lastAttemptAt: null,
+				completedAt:
+					status === "pending" ? null : new Date().toISOString(),
+				durationMs: 45,
+				responseCode: resp || null,
+				lastError: resp === 500 ? "Server Error" : null,
+				createdAt: new Date().toISOString(),
+			});
+
+			let totalDeliveries = 16;
+			const page1Items = [
+				makeDel("del_item_active", "pending", 0),
+				...Array.from({ length: 14 }, (_, i) =>
+					makeDel(`del_p1_${i + 1}`, "delivered", 200)
+				),
+			];
+			const page2Item = makeDel("del_item_p2_last", "failed", 500);
+
+			await page.route(
+				`**/api/v1/webhooks/${createdWebhookId}/deliveries*`,
+				async (route) => {
+					if (route.request().method() === "GET") {
+						const url = new URL(route.request().url());
+						const reqPage = Number(
+							url.searchParams.get("page") || "1"
+						);
+						const isP2 = reqPage === 2 && totalDeliveries > 15;
+						await route.fulfill({
+							status: 200,
+							json: {
+								success: true,
+								data: {
+									items: isP2 ? [page2Item] : page1Items,
+									meta: {
+										page: isP2 ? 2 : 1,
+										perPage: 15,
+										total: totalDeliveries,
+										totalPages:
+											totalDeliveries > 15 ? 2 : 1,
+									},
+								},
+							},
+						});
+					} else {
+						await route.continue();
+					}
+				}
+			);
+
+			await page.goto("/dashboard/settings/integrations", {
+				waitUntil: "commit",
+			});
+			await expect(
+				page.getByRole("heading", { name: /webhooks/i })
+			).toBeVisible({ timeout: 25000 });
+			const card = page.locator(".integrations-tab-webhook-card", {
+				hasText: testWebhookLabel,
+			});
+			await expect(card).toBeVisible({ timeout: 15000 });
+			await card.getByRole("button", { name: /deliveries/i }).click();
+
+			const drawer = page.locator(".webhook-drawer-panel");
+			await expect(drawer).toBeVisible({ timeout: 10000 });
+			await expect(drawer.getByText("del_item_active")).toBeVisible({
+				timeout: 10000,
+			});
+
+			// Active delivery deletion is disabled
+			const activeDeleteBtn = drawer
+				.locator(
+					"button[aria-label='Active deliveries cannot be deleted until completed.']"
+				)
+				.first();
+			await expect(activeDeleteBtn).toBeVisible();
+			await expect(activeDeleteBtn).toBeDisabled();
+
+			// Navigate to Page 2
+			const nextBtn = drawer.getByRole("button", { name: /next/i });
+			await expect(nextBtn).toBeEnabled();
+			await nextBtn.click();
+			await expect(drawer.getByText("del_item_p2_last")).toBeVisible({
+				timeout: 10000,
+			});
+
+			// Cancel preserves row
+			const deleteBtn = drawer
+				.locator("button[aria-label='Delete delivery record']")
+				.first();
+			await deleteBtn.click();
+			await expect(
+				page.getByRole("heading", { name: /Delete Delivery Record/i })
+			).toBeVisible();
+			await page.getByRole("button", { name: "Cancel" }).click();
+			await expect(
+				page.getByRole("heading", { name: /Delete Delivery Record/i })
+			).toBeHidden();
+			await expect(drawer.getByText("del_item_p2_last")).toBeVisible();
+
+			// 409 conflict handling
+			await page.route(
+				`**/api/v1/webhooks/${createdWebhookId}/deliveries/del_item_p2_last`,
+				async (route) => {
+					if (route.request().method() === "DELETE") {
+						await route.fulfill({
+							status: 409,
+							json: {
+								message:
+									"Active webhook deliveries cannot be deleted.",
+							},
+						});
+					} else {
+						await route.continue();
+					}
+				}
+			);
+
+			await deleteBtn.click();
+			await page.getByRole("button", { name: "Delete Delivery" }).click();
+			await expect(
+				page.getByText(/Active webhook deliveries cannot be deleted/i)
+			).toBeVisible({ timeout: 5000 });
+			await expect(drawer.getByText("del_item_p2_last")).toBeVisible();
+			await page.getByRole("button", { name: "Cancel" }).click();
+			await expect(
+				page.getByRole("heading", { name: /Delete Delivery Record/i })
+			).toBeHidden();
+
+			// Successful deletion rolls back to Page 1
+			await page.route(
+				`**/api/v1/webhooks/${createdWebhookId}/deliveries/del_item_p2_last`,
+				async (route) => {
+					if (route.request().method() === "DELETE") {
+						totalDeliveries = 15;
+						await route.fulfill({
+							status: 200,
+							json: { success: true, data: { deleted: true } },
+						});
+					} else {
+						await route.continue();
+					}
+				}
+			);
+
+			await deleteBtn.click();
+			await page.getByRole("button", { name: "Delete Delivery" }).click();
+			await expect(
+				page.getByText(/Delivery record deleted/i)
+			).toBeVisible({ timeout: 10000 });
+
+			await expect(drawer.getByText("del_item_active")).toBeVisible({
+				timeout: 10000,
+			});
+			await expect(drawer.getByText("del_item_p2_last")).toHaveCount(0);
+		} finally {
+			await page.unrouteAll({ behavior: "ignoreErrors" });
+			if (createdWebhookId) {
+				await page.request
+					.delete(`/api/v1/webhooks/${createdWebhookId}`)
+					.catch(() => {});
+			}
+		}
+	});
+
+	test("delivery drawer: clear history confirmation, cancellation, active record preservation, and page preservation across refetch", async ({
+		authenticatedPage: page,
+	}) => {
+		const testWebhookLabel = generateTestId("drawer-clr");
+		let createdWebhookId: string | null = null;
+
+		try {
+			const createRes = await page.request.post("/api/v1/webhooks", {
+				data: {
+					label: testWebhookLabel,
+					url: "https://93.184.216.34/clear-webhook",
+					events: ["link.created"],
+					deliveryRetentionDays: 30,
+				},
+			});
+			expect(createRes.status()).toBe(201);
+			const createData = await createRes.json();
+			createdWebhookId = createData.id ?? createData.data?.id ?? null;
+			expect(createdWebhookId).toBeTruthy();
+
+			const makeItem = (id: string, status: string) => ({
+				id,
+				webhookId: createdWebhookId,
+				eventId: `evt_${id}`,
+				event: "link.created",
+				status,
+				attempts: 1,
+				maxAttempts: 3,
+				nextAttemptAt: null,
+				lastAttemptAt: null,
+				completedAt:
+					status === "pending" ? null : new Date().toISOString(),
+				durationMs: 40,
+				responseCode: 200,
+				lastError: null,
+				createdAt: new Date().toISOString(),
+			});
+
+			const activeItem = makeItem("del_clr_active", "pending");
+			const terminalItems = Array.from({ length: 16 }, (_, i) =>
+				makeItem(`del_clr_term_${i + 1}`, "delivered")
+			);
+
+			let isCleared = false;
+
+			await page.route(
+				`**/api/v1/webhooks/${createdWebhookId}/deliveries*`,
+				async (route) => {
+					if (route.request().method() === "GET") {
+						const url = new URL(route.request().url());
+						const reqPage = Number(
+							url.searchParams.get("page") || "1"
+						);
+
+						if (isCleared) {
+							await route.fulfill({
+								status: 200,
+								json: {
+									success: true,
+									data: {
+										items: [activeItem],
+										meta: {
+											page: 1,
+											perPage: 15,
+											total: 1,
+											totalPages: 1,
+										},
+									},
+								},
+							});
+						} else {
+							const allItems = [activeItem, ...terminalItems];
+							const start = (reqPage - 1) * 15;
+							await route.fulfill({
+								status: 200,
+								json: {
+									success: true,
+									data: {
+										items: allItems.slice(
+											start,
+											start + 15
+										),
+										meta: {
+											page: reqPage,
+											perPage: 15,
+											total: allItems.length,
+											totalPages: 2,
+										},
+									},
+								},
+							});
+						}
+					} else {
+						await route.continue();
+					}
+				}
+			);
+
+			await page.goto("/dashboard/settings/integrations", {
+				waitUntil: "commit",
+			});
+			await expect(
+				page.getByRole("heading", { name: /webhooks/i })
+			).toBeVisible({ timeout: 25000 });
+			const card = page.locator(".integrations-tab-webhook-card", {
+				hasText: testWebhookLabel,
+			});
+			await expect(card).toBeVisible({ timeout: 15000 });
+			await card.getByRole("button", { name: /deliveries/i }).click();
+
+			const drawer = page.locator(".webhook-drawer-panel");
+			await expect(drawer).toBeVisible({ timeout: 10000 });
+
+			// Go to Page 2
+			const nextBtn = drawer.getByRole("button", { name: /next/i });
+			await expect(nextBtn).toBeEnabled();
+			await nextBtn.click();
+			await expect(
+				drawer.getByText("Showing page 2 of 2 (17 total)")
+			).toBeVisible({ timeout: 10000 });
+
+			// Background refetch does NOT reset user's delivery page
+			await page.evaluate(() => window.dispatchEvent(new Event("focus")));
+			await expect(
+				drawer.getByText("Showing page 2 of 2 (17 total)")
+			).toBeVisible({ timeout: 5000 });
+
+			// Cancel preserves records
+			const clearBtn = drawer.getByRole("button", {
+				name: /clear history/i,
+			});
+			await clearBtn.click();
+			await expect(
+				page.getByRole("heading", { name: /Clear Completed History/i })
+			).toBeVisible();
+			await page.getByRole("button", { name: "Cancel" }).click();
+			await expect(
+				page.getByRole("heading", { name: /Clear Completed History/i })
+			).toBeHidden();
+			await expect(
+				drawer.getByText("Showing page 2 of 2 (17 total)")
+			).toBeVisible();
+
+			// 409 conflict on clear history
+			await page.route(
+				`**/api/v1/webhooks/${createdWebhookId}/deliveries`,
+				async (route) => {
+					if (route.request().method() === "DELETE") {
+						await route.fulfill({
+							status: 409,
+							json: {
+								message:
+									"Active webhook deliveries cannot be deleted.",
+							},
+						});
+					} else {
+						await route.continue();
+					}
+				}
+			);
+
+			await clearBtn.click();
+			await page
+				.getByRole("button", { name: "Clear Completed History" })
+				.click();
+			await expect(
+				page.getByText(/Active webhook deliveries cannot be deleted/i)
+			).toBeVisible({ timeout: 5000 });
+			await page.getByRole("button", { name: "Cancel" }).click();
+			await expect(
+				page.getByRole("heading", { name: /Clear Completed History/i })
+			).toBeHidden();
+
+			// Successful clear preserves active item and resets to page 1
+			await page.route(
+				`**/api/v1/webhooks/${createdWebhookId}/deliveries`,
+				async (route) => {
+					if (route.request().method() === "DELETE") {
+						isCleared = true;
+						await route.fulfill({
+							status: 200,
+							json: { success: true, data: { deletedCount: 16 } },
+						});
+					} else {
+						await route.continue();
+					}
+				}
+			);
+
+			await clearBtn.click();
+			await page
+				.getByRole("button", { name: "Clear Completed History" })
+				.click();
+			await expect(
+				page.getByText(/Cleared 16 completed delivery records/i)
+			).toBeVisible({ timeout: 10000 });
+
+			await expect(drawer.getByText("del_clr_active")).toBeVisible({
+				timeout: 10000,
+			});
+			await expect(
+				drawer.getByText("del_clr_term_1", { exact: true })
+			).toHaveCount(0);
+		} finally {
+			await page.unrouteAll({ behavior: "ignoreErrors" });
+			if (createdWebhookId) {
+				await page.request
+					.delete(`/api/v1/webhooks/${createdWebhookId}`)
+					.catch(() => {});
 			}
 		}
 	});

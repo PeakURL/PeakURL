@@ -29,6 +29,7 @@ export interface WebhookSummary {
 	events?: string[] | null;
 	verifySsl?: boolean;
 	isActive?: boolean;
+	deliveryRetentionDays?: number;
 	secretHint?: string | null;
 	health?: WebhookHealthSummary | null;
 	createdAt?: string | null;
@@ -57,6 +58,7 @@ export interface CreateWebhookPayload {
 	url: string;
 	events: string[];
 	verifySsl?: boolean;
+	deliveryRetentionDays?: number;
 }
 
 /**
@@ -69,6 +71,7 @@ export interface UpdateWebhookPayload {
 	events?: string[];
 	verifySsl?: boolean;
 	isActive?: boolean;
+	deliveryRetentionDays?: number;
 }
 
 /**
@@ -148,4 +151,33 @@ export interface GetWebhookDeliveriesParams {
 export interface RetryWebhookDeliveryParams {
 	id: string;
 	deliveryId: string;
+}
+
+/**
+ * Request parameters for deleting a single terminal webhook delivery record.
+ */
+export interface DeleteWebhookDeliveryParams {
+	id: string;
+	deliveryId: string;
+}
+
+/**
+ * Response payload confirming single delivery deletion.
+ */
+export interface DeleteWebhookDeliveryResponse {
+	deleted: boolean;
+}
+
+/**
+ * Request parameters for clearing completed delivery history for a webhook.
+ */
+export interface ClearWebhookDeliveriesParams {
+	id: string;
+}
+
+/**
+ * Response payload confirming completed delivery history clearing.
+ */
+export interface ClearWebhookDeliveriesResponse {
+	deletedCount: number;
 }

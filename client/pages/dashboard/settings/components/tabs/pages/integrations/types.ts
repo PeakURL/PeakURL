@@ -3,7 +3,11 @@ import type { NotificationContextValue } from "@/components";
 export type { NotificationContextValue };
 
 export type {
+	ClearWebhookDeliveriesParams,
+	ClearWebhookDeliveriesResponse,
 	CreatedWebhook,
+	DeleteWebhookDeliveryParams,
+	DeleteWebhookDeliveryResponse,
 	RetryWebhookDeliveryParams,
 	RotateSecretResult,
 	WebhookDeliveriesResponse,

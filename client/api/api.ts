@@ -636,6 +636,27 @@ export const API_ROUTES = {
 			apiPath("webhooks", encodeApiParam(id), "deliveries"),
 
 		/**
+		 * Relative API path: `webhooks/{id}/deliveries/{deliveryId}`.
+		 *
+		 * Permanently deletes one terminal webhook delivery record.
+		 */
+		deliveryById: (id: ApiPathPart, deliveryId: ApiPathPart) =>
+			apiPath(
+				"webhooks",
+				encodeApiParam(id),
+				"deliveries",
+				encodeApiParam(deliveryId)
+			),
+
+		/**
+		 * Relative API path: `webhooks/{id}/deliveries`.
+		 *
+		 * Clears completed delivery history for a webhook.
+		 */
+		clearDeliveries: (id: ApiPathPart) =>
+			apiPath("webhooks", encodeApiParam(id), "deliveries"),
+
+		/**
 		 * Relative API path: `webhooks/{id}/deliveries/{deliveryId}/retry`.
 		 *
 		 * Re-queues an existing failed delivery for retry.

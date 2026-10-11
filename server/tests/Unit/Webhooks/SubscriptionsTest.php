@@ -126,6 +126,34 @@ class SubscriptionsTest extends TestCase {
 		$this->assertSame( array( 'link.created', 'link.clicked' ), $formatted['events'] );
 		$this->assertTrue( $formatted['isActive'] );
 		$this->assertTrue( $formatted['verifySsl'] );
+		$this->assertSame( 30, $formatted['deliveryRetentionDays'] );
+	}
+
+	public function test_format_webhook_formats_configured_retention_days(): void {
+		$row = array(
+			'id'                      => 'peakurl_wh_123',
+			'label'                   => 'Production Slack',
+			'url'                     => 'https://example.com/webhook',
+			'events'                  => '["link.created"]',
+			'secret'                  => 'enc:v1:encrypted',
+			'secret_hint'             => 'peakurl_whsec_••••••••••••••••',
+			'verify_ssl'              => 1,
+			'delivery_retention_days' => 90,
+			'is_active'               => 1,
+			'created_at'              => '2026-10-08 12:00:00',
+			'updated_at'              => '2026-10-08 12:00:00',
+		);
+
+		$this->db->method( 'in_placeholders' )->willReturn(
+			array(
+				'sql'    => ':wh_0',
+				'params' => array( 'wh_0' => 'peakurl_wh_123' ),
+			)
+		);
+		$this->db->method( 'get_results' )->willReturn( array() );
+
+		$formatted = $this->subscriptions->format_webhook( $row );
+		$this->assertSame( 90, $formatted['deliveryRetentionDays'] );
 	}
 
 	public function test_format_webhook_includes_one_time_secret_when_explicitly_passed(): void {

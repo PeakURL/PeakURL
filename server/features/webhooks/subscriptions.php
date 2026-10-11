@@ -254,17 +254,18 @@ class Subscriptions {
 		$now              = Date::now();
 
 		$row = array(
-			'id'          => $webhook_id,
-			'user_id'     => $user['id'],
-			'label'       => $validated['label'],
-			'url'         => $validated['url'],
-			'events'      => peakurl_json_encode( $validated['events'] ),
-			'secret'      => $encrypted_secret,
-			'secret_hint' => $secret_hint,
-			'verify_ssl'  => $validated['verify_ssl'],
-			'is_active'   => 1,
-			'created_at'  => $now,
-			'updated_at'  => $now,
+			'id'                      => $webhook_id,
+			'user_id'                 => $user['id'],
+			'label'                   => $validated['label'],
+			'url'                     => $validated['url'],
+			'events'                  => peakurl_json_encode( $validated['events'] ),
+			'secret'                  => $encrypted_secret,
+			'secret_hint'             => $secret_hint,
+			'verify_ssl'              => $validated['verify_ssl'],
+			'delivery_retention_days' => $validated['delivery_retention_days'] ?? 30,
+			'is_active'               => 1,
+			'created_at'              => $now,
+			'updated_at'              => $now,
 		);
 
 		$this->db->insert( 'webhooks', $row );
@@ -594,16 +595,17 @@ class Subscriptions {
 		$health_summary = $health ?? $this->get_webhook_health_summary( $webhook_id );
 
 		$webhook = array(
-			'id'         => $webhook_id,
-			'label'      => (string) ( $row['label'] ?? '' ),
-			'url'        => (string) $row['url'],
-			'events'     => $this->decode_json_array( (string) ( $row['events'] ?? '[]' ) ),
-			'secretHint' => $hint,
-			'verifySsl'  => ! isset( $row['verify_ssl'] ) || ! empty( $row['verify_ssl'] ),
-			'isActive'   => ! empty( $row['is_active'] ),
-			'createdAt'  => Date::to_iso( (string) $row['created_at'] ),
-			'updatedAt'  => ! empty( $row['updated_at'] ) ? Date::to_iso( (string) $row['updated_at'] ) : null,
-			'health'     => $health_summary,
+			'id'                    => $webhook_id,
+			'label'                 => (string) ( $row['label'] ?? '' ),
+			'url'                   => (string) $row['url'],
+			'events'                => $this->decode_json_array( (string) ( $row['events'] ?? '[]' ) ),
+			'secretHint'            => $hint,
+			'verifySsl'             => ! isset( $row['verify_ssl'] ) || ! empty( $row['verify_ssl'] ),
+			'deliveryRetentionDays' => isset( $row['delivery_retention_days'] ) ? (int) $row['delivery_retention_days'] : 30,
+			'isActive'              => ! empty( $row['is_active'] ),
+			'createdAt'             => Date::to_iso( (string) $row['created_at'] ),
+			'updatedAt'             => ! empty( $row['updated_at'] ) ? Date::to_iso( (string) $row['updated_at'] ) : null,
+			'health'                => $health_summary,
 		);
 
 		if ( null !== $one_time_secret && '' !== $one_time_secret ) {

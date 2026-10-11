@@ -327,6 +327,10 @@ class SchemaSpecs {
 					'name'       => 'verify_ssl',
 					'definition' => 'TINYINT(1) NOT NULL DEFAULT 1',
 				),
+				array(
+					'name'       => 'delivery_retention_days',
+					'definition' => 'INT UNSIGNED NOT NULL DEFAULT 30',
+				),
 			),
 			'cron_jobs'          => array(
 				array(

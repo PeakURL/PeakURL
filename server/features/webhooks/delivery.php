@@ -19,6 +19,7 @@ use PeakURL\Core\Scheduler\BackgroundRunner;
 use PeakURL\Http\Request;
 use PeakURL\Http\UserAgent;
 use PeakURL\Services\Database\PeakURL_DB;
+use PeakURL\Services\Database\Sql;
 use PeakURL\Utils\Date;
 use PeakURL\Utils\Str;
 
@@ -728,17 +729,164 @@ class Delivery {
 	}
 
 	/**
-	 * Clean up terminal webhook delivery history past the retention threshold.
+	 * Delete a single terminal webhook delivery record.
 	 *
-	 * Operates in a bounded batch to prevent table locks and keep cron execution predictable.
-	 * Filters strictly by completion timestamp (completed_at) on terminal deliveries.
+	 * Permitted only for terminal states (delivered, failed).
+	 * Re-verifies terminal status in the conditional DELETE statement to prevent
+	 * deleting a concurrently retried delivery.
 	 *
-	 * @param int $retention_days Retention period in days (default self::DEFAULT_RETENTION_DAYS).
-	 * @param int $batch_limit    Maximum records to delete in one invocation (default 500).
+	 * @param Request $request     Incoming HTTP request for authorization.
+	 * @param string  $webhook_id  Target webhook ID.
+	 * @param string  $delivery_id Target delivery ID.
+	 * @return bool True if deleted successfully.
+	 * @throws ApiException When delivery is missing (404), mismatched (404), or in active state (409).
+	 * @since 1.7.2
+	 */
+	public function delete_delivery( Request $request, string $webhook_id, string $delivery_id ): bool {
+		$webhook = $this->subscriptions->get_accessible_webhook( $request, $webhook_id );
+
+		$delivery = $this->db->get_row_by(
+			'webhook_deliveries',
+			array( 'id' => $delivery_id )
+		);
+
+		if ( ! $delivery ) {
+			throw new ApiException( __( 'Webhook delivery not found.', 'peakurl' ), 404 );
+		}
+
+		if ( (string) $delivery['webhook_id'] !== (string) $webhook['id'] ) {
+			throw new ApiException( __( 'Webhook delivery does not belong to this webhook.', 'peakurl' ), 404 );
+		}
+
+		$status = (string) $delivery['status'];
+		if ( in_array( $status, array( 'pending', 'processing' ), true ) ) {
+			throw new ApiException( __( 'Active webhook deliveries cannot be deleted.', 'peakurl' ), 409 );
+		}
+
+		if ( ! in_array( $status, array( 'delivered', 'failed' ), true ) ) {
+			throw new ApiException( __( 'Only completed webhook deliveries can be deleted.', 'peakurl' ), 409 );
+		}
+
+		$deleted = $this->db->query(
+			"DELETE FROM webhook_deliveries
+			WHERE id = :id AND webhook_id = :webhook_id AND status IN ('delivered', 'failed')",
+			array(
+				'id'         => $delivery_id,
+				'webhook_id' => (string) $webhook['id'],
+			)
+		);
+
+		if ( $deleted <= 0 ) {
+			$current = $this->db->get_row_by(
+				'webhook_deliveries',
+				array( 'id' => $delivery_id )
+			);
+
+			if ( ! $current || (string) $current['webhook_id'] !== (string) $webhook['id'] ) {
+				throw new ApiException( __( 'Webhook delivery not found.', 'peakurl' ), 404 );
+			}
+
+			throw new ApiException( __( 'Active webhook deliveries cannot be deleted.', 'peakurl' ), 409 );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Clear all terminal delivery history for a specific webhook endpoint.
+	 *
+	 * Clears every delivered and failed record for the selected webhook across all pages
+	 * in one operation, while preserving pending/processing deliveries and other webhooks.
+	 *
+	 * @param Request $request    Incoming HTTP request for authorization.
+	 * @param string  $webhook_id Target webhook ID.
+	 * @return int Number of deleted delivery history rows.
+	 * @throws ApiException When webhook is not found or unauthorized.
+	 * @since 1.7.2
+	 */
+	public function clear_delivery_history( Request $request, string $webhook_id ): int {
+		$webhook = $this->subscriptions->get_accessible_webhook( $request, $webhook_id );
+
+		$deleted = $this->db->query(
+			"DELETE FROM webhook_deliveries
+			WHERE webhook_id = :webhook_id
+			AND status IN ('delivered', 'failed')",
+			array(
+				'webhook_id' => (string) $webhook['id'],
+			)
+		);
+
+		return max( 0, (int) $deleted );
+	}
+
+	/**
+	 * Clean up terminal webhook delivery history using per-webhook retention policies.
+	 *
+	 * Selects candidate delivery IDs for terminal deliveries past each webhook's
+	 * configured retention period, bounded across the whole invocation, and deletes them
+	 * using a joined atomic DELETE statement that re-evaluates terminal status, non-null
+	 * completion, active retention policy, and cutoff age against current stored values.
+	 *
+	 * @param int $batch_limit Maximum records to delete in one invocation (default 500).
+	 * @return int Number of deleted delivery history rows.
+	 * @since 1.7.2
+	 */
+	public function cleanup_policy_delivery_history( int $batch_limit = 500 ): int {
+		$limit = max( 1, min( 1000, $batch_limit ) );
+		$now   = gmdate( 'Y-m-d H:i:s' );
+
+		$sql = "SELECT d.id
+			FROM webhook_deliveries d
+			INNER JOIN webhooks w ON w.id = d.webhook_id
+			WHERE d.status IN ('delivered', 'failed')
+			AND d.completed_at IS NOT NULL
+			AND w.delivery_retention_days > 0
+			AND d.completed_at < DATE_SUB(:now, INTERVAL w.delivery_retention_days DAY)
+			ORDER BY d.completed_at ASC
+			LIMIT {$limit}";
+
+		$candidate_rows = $this->db->get_results( $sql, array( 'now' => $now ) );
+
+		if ( empty( $candidate_rows ) ) {
+			return 0;
+		}
+
+		$candidate_ids = array_column( $candidate_rows, 'id' );
+		$in_clause     = Sql::in_placeholders( $candidate_ids, 'del_id' );
+
+		$delete_sql = "DELETE d
+			FROM webhook_deliveries d
+			INNER JOIN webhooks w ON w.id = d.webhook_id
+			WHERE d.id IN ({$in_clause['sql']})
+			AND d.status IN ('delivered', 'failed')
+			AND d.completed_at IS NOT NULL
+			AND w.delivery_retention_days > 0
+			AND d.completed_at < DATE_SUB(:now, INTERVAL w.delivery_retention_days DAY)";
+
+		$params = array_merge(
+			$in_clause['params'],
+			array( 'now' => $now )
+		);
+
+		return max( 0, (int) $this->db->query( $delete_sql, $params ) );
+	}
+
+	/**
+	 * Clean up terminal webhook delivery history.
+	 *
+	 * When $retention_days is null, delegates to cleanup_policy_delivery_history() using
+	 * per-webhook retention policies. When an integer is supplied, applies uniform retention
+	 * across all webhooks for backward compatibility with explicit legacy calls.
+	 *
+	 * @param int|null $retention_days Retention period in days (default null for policy cleanup).
+	 * @param int      $batch_limit    Maximum records to delete in one invocation (default 500).
 	 * @return int Number of deleted delivery history rows.
 	 * @since 1.7.1
 	 */
-	public function cleanup_delivery_history( int $retention_days = self::DEFAULT_RETENTION_DAYS, int $batch_limit = 500 ): int {
+	public function cleanup_delivery_history( ?int $retention_days = null, int $batch_limit = 500 ): int {
+		if ( null === $retention_days ) {
+			return $this->cleanup_policy_delivery_history( $batch_limit );
+		}
 
 		$days   = max( 1, $retention_days );
 		$limit  = max( 1, min( 1000, $batch_limit ) );

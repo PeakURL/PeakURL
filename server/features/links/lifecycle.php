@@ -768,6 +768,10 @@ class Lifecycle {
 	public function empty_trash( Request $request ): int {
 		$user = $this->auth_service->get_current_user( $request );
 
+		$this->authorization->require_admin(
+			$user,
+			__( 'Administrator access required to empty trash.', 'peakurl' ),
+		);
 		$this->authorization->validate_capability(
 			$user,
 			'empty_trash',

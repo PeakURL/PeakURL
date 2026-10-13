@@ -4,6 +4,7 @@ import { __ } from "@/i18n";
 
 import {
 	DeleteUserModal,
+	ManageRolesDrawer,
 	UserDialog,
 	UsersOverview,
 	UsersOverviewSkeleton,
@@ -16,16 +17,20 @@ function UsersPage() {
 		users,
 		currentUser,
 		canManageUsers,
+		isAdmin,
 		isUsersLoading,
 		usersError,
 		overviewItems,
 		dialogMode,
 		activeUser,
 		isDialogOpen,
+		isRolesDrawerOpen,
 		isSubmitting,
 		openCreateDialog,
 		openEditDialog,
 		closeDialog,
+		openRolesDrawer,
+		closeRolesDrawer,
 		handleSaveUser,
 		userPendingDelete,
 		isDeleting,
@@ -60,6 +65,7 @@ function UsersPage() {
 				<UsersOverview
 					items={overviewItems}
 					onAddUserClick={openCreateDialog}
+					onManageRolesClick={isAdmin ? openRolesDrawer : undefined}
 				/>
 			)}
 
@@ -89,6 +95,11 @@ function UsersPage() {
 				onClose={closeDeleteDialog}
 				onConfirm={handleDeleteUser}
 				isDeleting={isDeleting}
+			/>
+
+			<ManageRolesDrawer
+				isOpen={isRolesDrawerOpen}
+				onClose={closeRolesDrawer}
 			/>
 		</div>
 	);

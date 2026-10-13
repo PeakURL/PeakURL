@@ -277,6 +277,7 @@ class Service {
 	 */
 	private function get_settings_user( Request $request ): array {
 		$user = $this->auth_service->get_current_user( $request );
+		$this->authorization->require_admin( $user, __( 'Admin access is required.', 'peakurl' ) );
 		$this->authorization->validate_capability(
 			$user,
 			'manage_site_settings',
@@ -295,6 +296,7 @@ class Service {
 	 */
 	private function get_mail_user( Request $request ): array {
 		$user = $this->auth_service->get_current_user( $request );
+		$this->authorization->require_admin( $user, __( 'Admin access is required.', 'peakurl' ) );
 		$this->authorization->validate_capability(
 			$user,
 			'manage_mail_delivery',
@@ -313,9 +315,29 @@ class Service {
 	 */
 	private function get_geoip_user( Request $request ): array {
 		$user = $this->auth_service->get_current_user( $request );
+		$this->authorization->require_admin( $user, __( 'Admin access is required.', 'peakurl' ) );
 		$this->authorization->validate_capability(
 			$user,
 			'manage_location_data',
+			__( 'Admin access is required.', 'peakurl' ),
+		);
+
+		return $user;
+	}
+
+	/**
+	 * Return the current performance/cache-management user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 * @since 1.7.2
+	 */
+	private function get_performance_user( Request $request ): array {
+		$user = $this->auth_service->get_current_user( $request );
+		$this->authorization->require_admin( $user, __( 'Admin access is required.', 'peakurl' ) );
+		$this->authorization->validate_capability(
+			$user,
+			'manage_performance',
 			__( 'Admin access is required.', 'peakurl' ),
 		);
 
@@ -915,7 +937,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function get_cache_status( Request $request ): array {
-		$this->get_admin_user( $request );
+		$this->get_performance_user( $request );
 
 		$service = new \PeakURL\Services\SystemStatus\Cache(
 			new \PeakURL\Services\SystemStatus\Context(
@@ -941,7 +963,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function save_cache_configuration( Request $request, array $payload ): array {
-		$this->get_admin_user( $request );
+		$this->get_performance_user( $request );
 
 		if ( array_key_exists( 'enabled', $payload ) ) {
 			$enabled = (bool) $payload['enabled'];
@@ -1001,7 +1023,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function clear_cache( Request $request ): array {
-		$this->get_admin_user( $request );
+		$this->get_performance_user( $request );
 
 		// Clear active cache driver.
 		$this->cache_service->clear();

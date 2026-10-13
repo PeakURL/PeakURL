@@ -201,8 +201,8 @@ class ApiRouteContractsTest extends TestCase {
 
 		// Substitute sample deterministic parameters for route placeholders
 		$concrete_path = preg_replace(
-			array( '/\{token\}/', '/\{username\}/', '/\{id\}/', '/\{short_code\}/', '/\{delivery_id\}/' ),
-			array( 'test_token', 'test_user', 'test_id', 'test_code', 'test_delivery_id' ),
+			array( '/\{token\}/', '/\{username\}/', '/\{id\}/', '/\{short_code\}/', '/\{delivery_id\}/', '/\{role\}/' ),
+			array( 'test_token', 'test_user', 'test_id', 'test_code', 'test_delivery_id', 'editor' ),
 			$template
 		);
 
@@ -213,7 +213,7 @@ class ApiRouteContractsTest extends TestCase {
 		$inventory = RouteInventoryTest::ROUTE_INVENTORY;
 
 		// Verify complete route inventory size
-		$this->assertCount( 99, $inventory, 'Authoritative inventory must contain exactly 99 registered routes.' );
+		$this->assertCount( 102, $inventory, 'Authoritative inventory must contain exactly 102 registered routes.' );
 
 		$public_routes    = array();
 		$protected_routes = array();
@@ -242,8 +242,8 @@ class ApiRouteContractsTest extends TestCase {
 		}
 
 		$this->assertCount( 17, $public_routes, 'Expected exactly 17 public routes.' );
-		$this->assertCount( 82, $protected_routes, 'Expected exactly 82 protected routes.' );
-		$this->assertCount( 50, $admin_routes, 'Expected exactly 50 admin-only routes.' );
+		$this->assertCount( 85, $protected_routes, 'Expected exactly 85 protected routes.' );
+		$this->assertCount( 53, $admin_routes, 'Expected exactly 53 admin-only routes.' );
 	}
 
 	public function test_unauthenticated_requests_to_protected_endpoints_receive_401(): void {
@@ -253,9 +253,9 @@ class ApiRouteContractsTest extends TestCase {
 		);
 
 		$this->assertCount(
-			82,
+			85,
 			$protected_routes,
-			'Authoritative inventory must contain exactly 82 protected routes.'
+			'Authoritative inventory must contain exactly 85 protected routes.'
 		);
 
 		foreach ( array_keys( $protected_routes ) as $route_key ) {
@@ -289,9 +289,9 @@ class ApiRouteContractsTest extends TestCase {
 		);
 
 		$this->assertCount(
-			50,
+			53,
 			$admin_only_routes,
-			'Authoritative inventory must contain exactly 50 admin-only routes.'
+			'Authoritative inventory must contain exactly 53 admin-only routes.'
 		);
 
 		foreach ( array_keys( $admin_only_routes ) as $route_key ) {

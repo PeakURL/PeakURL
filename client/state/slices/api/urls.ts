@@ -21,9 +21,9 @@ import type {
 	ApiDataResponse,
 } from "./types";
 
-const urlTag = (id: string) => ({ type: "Urls" as const, id });
+import { URL_LIST_TAG } from "./tags";
 
-const URL_LIST_TAG = urlTag("LIST");
+const urlTag = (id: string) => ({ type: "Urls" as const, id });
 const URL_LIST_CHANGE_TAGS = [URL_LIST_TAG, "Analytics"] as const;
 
 type CreateUrlRequestBody =

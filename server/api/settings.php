@@ -153,6 +153,80 @@ class SettingsApi {
 	}
 
 	/**
+	 * Perform an atomic read-modify-write on a setting row under transaction lock.
+	 *
+	 * Ensures concurrent modifications to shared JSON documents or settings values
+	 * do not overwrite each other. Fails explicitly if settings storage is unavailable.
+	 *
+	 * @param string   $setting_key Setting key.
+	 * @param callable $modifier    Callback receiving current ?string and returning new ?string (or null to delete).
+	 * @return string|null New stored value or null if deleted.
+	 *
+	 * @throws \RuntimeException When settings storage table does not exist.
+	 * @since 1.7.2
+	 */
+	public function update_option_with_lock( string $setting_key, callable $modifier ): ?string {
+		if ( ! $this->table_exists() ) {
+			throw new \RuntimeException( 'Settings storage table is not available.', 500 );
+		}
+
+		$did_begin = false;
+		if ( ! $this->db->in_transaction() ) {
+			$this->db->begin_transaction();
+			$did_begin = true;
+		}
+
+		try {
+			// Ensure row exists so FOR UPDATE locks a concrete row
+			$this->db->upsert(
+				'settings',
+				array(
+					'setting_key'   => $setting_key,
+					'setting_value' => null,
+					'autoload'      => 1,
+					'updated_at'    => \PeakURL\Utils\Date::now(),
+				),
+				array( 'updated_at' )
+			);
+
+			$row = $this->db->get_row(
+				'SELECT setting_value FROM settings WHERE setting_key = :key FOR UPDATE',
+				array( 'key' => $setting_key )
+			);
+
+			$current_val = isset( $row['setting_value'] )
+				? (string) $row['setting_value']
+				: null;
+
+			$new_val = $modifier( $current_val );
+
+			if ( null === $new_val ) {
+				$this->db->delete( 'settings', array( 'setting_key' => $setting_key ) );
+			} else {
+				$this->db->update(
+					'settings',
+					array(
+						'setting_value' => $new_val,
+						'updated_at'    => \PeakURL\Utils\Date::now(),
+					),
+					array( 'setting_key' => $setting_key )
+				);
+			}
+
+			if ( $did_begin ) {
+				$this->db->commit();
+			}
+
+			return $new_val;
+		} catch ( \Throwable $e ) {
+			if ( $did_begin && $this->db->in_transaction() ) {
+				$this->db->roll_back();
+			}
+			throw $e;
+		}
+	}
+
+	/**
 	 * Delete a single setting row by key.
 	 *
 	 * @param string $setting_key Setting key to delete.

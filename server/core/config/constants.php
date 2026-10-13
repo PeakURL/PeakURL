@@ -254,4 +254,6 @@ class Constants {
 	public const SETTING_CRON_HISTORY_RETENTION_DAYS = 'cron_history_retention_days';
 	/** Default scheduled jobs execution history retention in days (30 days). */
 	public const DEFAULT_CRON_HISTORY_RETENTION_DAYS = 30;
+	/** Settings key storing persisted custom role capabilities JSON. */
+	public const SETTING_ROLE_CAPABILITIES = 'role_capabilities';
 }

@@ -40,6 +40,11 @@ const USER_LIST_TAGS = ["Users"] as const;
 const PROFILE_TAGS = ["Profile"] as const;
 const SECURITY_TAGS = ["Security"] as const;
 
+import { USER_DELETION_TAGS } from "./tags";
+
+const userDeletionTags = (_result: void | undefined, error: unknown) =>
+	error ? [] : USER_DELETION_TAGS;
+
 const userProfileTags = (result?: LoginResponse) =>
 	result?.data?.user ? USER_PROFILE_TAGS : [];
 
@@ -249,7 +254,7 @@ export const userApi = baseApi.injectEndpoints({
 				url: API_ROUTES.users.byUsername(username),
 				method: "DELETE",
 			}),
-			invalidatesTags: USER_LIST_TAGS,
+			invalidatesTags: userDeletionTags,
 		}),
 		generateApiKey: build.mutation<
 			GenerateApiKeyResponse,

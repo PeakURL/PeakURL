@@ -1,11 +1,15 @@
-import { Plus, UserRound } from "lucide-react";
+import { Plus, Shield, UserRound } from "lucide-react";
 
 import { Button } from "@/components";
 import { __ } from "@/i18n";
 
 import type { UsersOverviewProps } from "../../types";
 
-export function UsersOverview({ items, onAddUserClick }: UsersOverviewProps) {
+export function UsersOverview({
+	items,
+	onAddUserClick,
+	onManageRolesClick,
+}: UsersOverviewProps) {
 	return (
 		<div className="space-y-4">
 			<div className="users-page-hero">
@@ -21,10 +25,18 @@ export function UsersOverview({ items, onAddUserClick }: UsersOverviewProps) {
 						)}
 					</p>
 				</div>
-				<Button onClick={onAddUserClick}>
-					<Plus size={16} />
-					<span>{__("Add User")}</span>
-				</Button>
+				<div className="flex flex-wrap items-center gap-2.5">
+					{onManageRolesClick ? (
+						<Button variant="outline" onClick={onManageRolesClick}>
+							<Shield size={16} />
+							<span>{__("Manage Roles & Capabilities")}</span>
+						</Button>
+					) : null}
+					<Button onClick={onAddUserClick}>
+						<Plus size={16} />
+						<span>{__("Add User")}</span>
+					</Button>
+				</div>
 			</div>
 
 			<div className="users-page-overview">

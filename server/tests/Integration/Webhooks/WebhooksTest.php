@@ -116,6 +116,7 @@ class WebhooksTest extends TestCase {
 			null,
 			$this->config
 		);
+		$links_api            = new \PeakURL\Api\LinksApi( $this->db );
 		$analytics_service    = new AnalyticsService(
 			$analytics_repository,
 			$this->db,
@@ -123,7 +124,7 @@ class WebhooksTest extends TestCase {
 			$roles,
 			$authorization,
 			$this->config,
-			new \PeakURL\Api\LinksApi( $this->db )
+			$links_api
 		);
 		$social_preview       = new SocialPreview( $this->config, $settings_api );
 
@@ -136,7 +137,8 @@ class WebhooksTest extends TestCase {
 			$roles,
 			$authorization,
 			$social_preview,
-			$this->webhooks_service
+			$this->webhooks_service,
+			$links_api
 		);
 
 		$this->cleanup_test_data();

@@ -19,6 +19,12 @@ export {
 	useRestoreActivityLinkMutation,
 } from "./analytics";
 export { default as baseApi } from "./base";
+export { rolesApi } from "./roles";
+export {
+	useGetRolesQuery,
+	useUpdateRoleCapabilitiesMutation,
+	useResetRoleCapabilitiesMutation,
+} from "./roles";
 export { systemApi } from "./system";
 export {
 	useApplyUpdateMutation,

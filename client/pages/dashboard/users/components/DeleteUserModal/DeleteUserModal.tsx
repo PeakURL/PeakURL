@@ -23,7 +23,7 @@ export function DeleteUserModal({
 				user
 					? sprintf(
 							__(
-								'Are you sure you want to delete "%s"? Their created links will remain active.'
+								'Are you sure you want to delete "%s"? Their short links, clicks, and analytics will be transferred to your administrator account. Active sessions, API keys, and personal webhooks will be permanently deleted.'
 							),
 							displayName
 						)

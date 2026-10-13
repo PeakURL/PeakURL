@@ -321,6 +321,33 @@ export const API_ROUTES = {
 	},
 
 	/**
+	 * Role and capability configuration endpoints.
+	 */
+	roles: {
+		/**
+		 * Relative API path: `roles`.
+		 *
+		 * Lists all role definitions with their capability status.
+		 */
+		index: apiPath("roles"),
+
+		/**
+		 * Relative API path: `roles/{role}`.
+		 *
+		 * Updates capability configuration for a specific role.
+		 */
+		byRole: (role: ApiPathPart) => apiPath("roles", encodeApiParam(role)),
+
+		/**
+		 * Relative API path: `roles/{role}/reset`.
+		 *
+		 * Resets capability configuration for a specific role to shipped defaults.
+		 */
+		reset: (role: ApiPathPart) =>
+			apiPath("roles", encodeApiParam(role), "reset"),
+	},
+
+	/**
 	 * Site settings, admin notices, diagnostics, mail, GeoIP, and updates.
 	 */
 	system: {

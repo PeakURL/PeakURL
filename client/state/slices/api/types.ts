@@ -61,6 +61,10 @@ import type {
 	WebhookDeliveryItem,
 	WebhookEventCatalogItem,
 	WebhookHealthSummary,
+	RoleCapability,
+	RoleDefinition,
+	UpdateRoleCapabilitiesPayload,
+	ResetRoleCapabilitiesPayload,
 } from "@/api";
 
 export type {
@@ -79,6 +83,10 @@ export type {
 	WebhookDeliveryItem,
 	WebhookEventCatalogItem,
 	WebhookHealthSummary,
+	RoleCapability,
+	RoleDefinition,
+	UpdateRoleCapabilitiesPayload,
+	ResetRoleCapabilitiesPayload,
 };
 
 /**
@@ -128,7 +136,8 @@ export type ApiTagType =
 	| "CacheStatus"
 	| "AdminNotices"
 	| "CronStatus"
-	| "CronHistory";
+	| "CronHistory"
+	| "Roles";
 
 /**
  * Ordered list of RTK Query cache tags registered on the base API instance.
@@ -156,6 +165,7 @@ export const API_TAG_TYPES: ApiTagType[] = [
 	"AdminNotices",
 	"CronStatus",
 	"CronHistory",
+	"Roles",
 ];
 
 /**

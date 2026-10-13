@@ -58,6 +58,22 @@ class Connection {
 	}
 
 	/**
+	 * Shared Connection instance for the current request.
+	 *
+	 * @var Connection|null
+	 * @since 1.7.2
+	 */
+	private static ?Connection $instance = null;
+
+	/**
+	 * Configuration hash for the active instance.
+	 *
+	 * @var string|null
+	 * @since 1.7.2
+	 */
+	private static ?string $config_hash = null;
+
+	/**
 	 * Get the shared Connection instance for the current request.
 	 *
 	 * @param array<string, mixed>|null $config Optional app config.
@@ -65,23 +81,44 @@ class Connection {
 	 * @since 1.2.2
 	 */
 	public static function get_instance( ?array $config = null ): Connection {
-		static $instance    = null;
-		static $config_hash = null;
-
 		$app_config = $config ?? Configuration::get_current();
 		$next_hash  = Configuration::hash_keys(
 			$app_config,
 			Constants::DB_KEYS,
 		);
 
-		if ( $instance instanceof Connection && $config_hash === $next_hash ) {
-			return $instance;
+		if ( self::$instance instanceof Connection && self::$config_hash === $next_hash ) {
+			return self::$instance;
 		}
 
-		$instance    = new self( $app_config );
-		$config_hash = $next_hash;
+		self::$instance    = new self( $app_config );
+		self::$config_hash = $next_hash;
 
-		return $instance;
+		return self::$instance;
+	}
+
+	/**
+	 * Reset the shared Connection instance and disconnect.
+	 *
+	 * @return void
+	 * @since 1.7.2
+	 */
+	public static function reset_instance(): void {
+		if ( self::$instance instanceof Connection ) {
+			self::$instance->disconnect();
+		}
+		self::$instance    = null;
+		self::$config_hash = null;
+	}
+
+	/**
+	 * Disconnect the underlying PDO connection.
+	 *
+	 * @return void
+	 * @since 1.7.2
+	 */
+	public function disconnect(): void {
+		$this->connection = null;
 	}
 
 	/**

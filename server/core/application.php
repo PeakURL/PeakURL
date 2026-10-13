@@ -40,6 +40,8 @@ use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Features\Links\Repository as LinksRepository;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Validator as LinksValidator;
+use PeakURL\Features\Roles\Controller as RolesController;
+use PeakURL\Features\Roles\Service as RolesService;
 use PeakURL\Features\Settings\Controller as SettingsController;
 use PeakURL\Features\Settings\Service as SettingsService;
 use PeakURL\Features\Settings\Validator as SettingsValidator;
@@ -146,7 +148,7 @@ class Application {
 		$captcha_service        = new Captcha( $config, $settings_api, $crypto_service );
 		$social_preview_service = new SocialPreview( $config, $settings_api );
 		$favicon_service        = new Favicon( $config, $settings_api );
-		$roles                  = new Roles();
+		$roles                  = new Roles( $settings_api );
 		$authorization          = new Authorization( $roles );
 
 		$auth_credentials = new AuthCredentials( $db );
@@ -203,7 +205,8 @@ class Application {
 			$roles,
 			$authorization,
 			$social_preview_service,
-			$webhooks_service
+			$webhooks_service,
+			$links_api
 		);
 		$links_repository     = new LinksRepository(
 			$db,
@@ -291,10 +294,15 @@ class Application {
 			$scheduler,
 			$update_manager
 		);
+		$roles_service           = new RolesService(
+			$roles,
+			$auth_service
+		);
 
 		$this->register_routes(
 			$auth_service,
 			$users_service,
+			$roles_service,
 			$links_service,
 			$analytics_service,
 			$webhooks_service,
@@ -554,6 +562,7 @@ class Application {
 	private function register_routes(
 		AuthService $auth_service,
 		UsersService $users_service,
+		RolesService $roles_service,
 		LinksService $links_service,
 		AnalyticsService $analytics_service,
 		WebhooksService $webhooks_service,
@@ -563,6 +572,7 @@ class Application {
 	): void {
 		$auth      = new AuthController( $auth_service, $captcha_service );
 		$users     = new UsersController( $users_service );
+		$roles     = new RolesController( $roles_service );
 		$urls      = new LinksController( $links_service );
 		$analytics = new AnalyticsController( $analytics_service );
 		$webhooks  = new WebhooksController( $webhooks_service );
@@ -572,6 +582,7 @@ class Application {
 		$this->register_core_routes( $settings );
 		$this->register_auth_routes( $auth );
 		$this->register_user_routes( $users );
+		$this->register_role_routes( $roles );
 		$this->register_url_routes( $urls );
 		$this->register_analytics_routes( $analytics );
 		$this->register_webhook_routes( $webhooks );
@@ -658,6 +669,23 @@ class Application {
 				array( 'put', '/users/me', array( $users, 'update_me' ) ),
 				array( 'put', '/users/{username}', array( $users, 'update' ) ),
 				array( 'delete', '/users/{username}', array( $users, 'delete' ) ),
+			)
+		);
+	}
+
+	/**
+	 * Register role and capability management routes.
+	 *
+	 * @param RolesController $roles Roles controller.
+	 * @return void
+	 * @since 1.7.2
+	 */
+	private function register_role_routes( RolesController $roles ): void {
+		$this->add_routes(
+			array(
+				array( 'get', '/roles', array( $roles, 'index' ) ),
+				array( 'put', '/roles/{role}', array( $roles, 'update' ) ),
+				array( 'post', '/roles/{role}/reset', array( $roles, 'reset' ) ),
 			)
 		);
 	}

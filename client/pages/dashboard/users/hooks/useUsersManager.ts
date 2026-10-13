@@ -65,6 +65,7 @@ export function useUsersManager() {
 	const [dialogMode, setDialogMode] = useState<UserDialogMode>("create");
 	const [activeUser, setActiveUser] = useState<UserSummary | null>(null);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [isRolesDrawerOpen, setIsRolesDrawerOpen] = useState(false);
 	const [userPendingDelete, setUserPendingDelete] =
 		useState<UserSummary | null>(null);
 
@@ -203,6 +204,7 @@ export function useUsersManager() {
 
 	const handleDeleteUser = async () => {
 		if (
+			isDeleting ||
 			!userPendingDelete ||
 			!userPendingDelete.username ||
 			userPendingDelete.id === currentUser?.id
@@ -225,10 +227,14 @@ export function useUsersManager() {
 		}
 	};
 
+	const openRolesDrawer = () => setIsRolesDrawerOpen(true);
+	const closeRolesDrawer = () => setIsRolesDrawerOpen(false);
+
 	return {
 		users,
 		currentUser,
 		canManageUsers,
+		isAdmin: currentUser?.role === "admin",
 		isUsersLoading,
 		usersError,
 		refetch,
@@ -236,10 +242,13 @@ export function useUsersManager() {
 		dialogMode,
 		activeUser,
 		isDialogOpen,
+		isRolesDrawerOpen,
 		isSubmitting: isCreating || isUpdating,
 		openCreateDialog,
 		openEditDialog,
 		closeDialog,
+		openRolesDrawer,
+		closeRolesDrawer,
 		handleSaveUser,
 		userPendingDelete,
 		isDeleting,

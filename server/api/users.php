@@ -100,7 +100,61 @@ class UsersApi {
 	}
 
 	/**
+	 * Lock a single user row for update.
+	 *
+	 * @param string $user_id Target user ID.
+	 * @return array<string, mixed>|null Locked row or null if not found.
+	 * @since 1.7.2
+	 */
+	public function lock_user( string $user_id ): ?array {
+		return $this->db->get_row(
+			'SELECT * FROM users WHERE id = :id FOR UPDATE',
+			array( 'id' => $user_id )
+		);
+	}
+
+	/**
+	 * Lock multiple user rows for update in deterministic ascending numeric ID order.
+	 *
+	 * Deduplicates user IDs and acquires exclusive row locks in sorted numeric order
+	 * (matching InnoDB BIGINT UNSIGNED primary key ordering) to prevent AB-BA deadlocks.
+	 *
+	 * @param array<int|string, string> $user_ids List of user IDs.
+	 * @return array<string, array<string, mixed>|null> Map of user ID to locked row (or null).
+	 * @since 1.7.2
+	 */
+	public function lock_users( array $user_ids ): array {
+		$unique_ids = array_values( array_unique( array_map( 'strval', $user_ids ) ) );
+
+		usort(
+			$unique_ids,
+			function ( string $a, string $b ): int {
+				$trimmed_a = ltrim( $a, '0' );
+				$trimmed_b = ltrim( $b, '0' );
+				$sa        = '' !== $trimmed_a ? $trimmed_a : '0';
+				$sb        = '' !== $trimmed_b ? $trimmed_b : '0';
+				$len_a     = strlen( $sa );
+				$len_b     = strlen( $sb );
+				if ( $len_a !== $len_b ) {
+					return $len_a <=> $len_b;
+				}
+				return strcmp( $sa, $sb );
+			}
+		);
+
+		$locked = array();
+		foreach ( $unique_ids as $id ) {
+			$locked[ $id ] = $this->lock_user( $id );
+		}
+
+		return $locked;
+	}
+
+	/**
 	 * Count admin users.
+	 *
+	 * Performs an ordinary non-locking count of admin accounts. For exclusive locking
+	 * during transactions, call count_admin_users_for_update() directly.
 	 *
 	 * @return int Number of admin rows.
 	 * @since 1.0.0
@@ -109,6 +163,20 @@ class UsersApi {
 		return $this->db->count(
 			'users',
 			array( 'role' => 'admin' ),
+		);
+	}
+
+	/**
+	 * Count admin users under exclusive row locks in deterministic ID order.
+	 *
+	 * @return int Number of locked admin rows.
+	 * @since 1.7.2
+	 */
+	public function count_admin_users_for_update(): int {
+		return count(
+			$this->db->get_results(
+				'SELECT id FROM users WHERE role = \'admin\' ORDER BY id ASC FOR UPDATE'
+			)
 		);
 	}
 

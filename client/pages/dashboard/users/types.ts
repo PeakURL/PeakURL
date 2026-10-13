@@ -54,6 +54,7 @@ export interface UsersOverviewItem {
 export interface UsersOverviewProps {
 	items: UsersOverviewItem[];
 	onAddUserClick: () => void;
+	onManageRolesClick?: () => void;
 }
 
 export interface UsersTableProps {

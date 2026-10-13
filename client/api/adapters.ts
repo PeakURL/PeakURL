@@ -12,6 +12,12 @@ import type {
 	UserCapabilities,
 } from "./types/users";
 import type {
+	ApiRoleCapability,
+	ApiRoleDefinition,
+	RoleCapability,
+	RoleDefinition,
+} from "./types/roles";
+import type {
 	ApiClearCronHistoryResponse,
 	ApiCronJob,
 	ApiCronJobScheduleResponse,
@@ -403,5 +409,57 @@ export function mapApiClearCronHistory(
 		deletedCount: Number(apiResponse?.deleted_count ?? 0),
 		jobId: apiResponse?.job_id ?? apiResponse?.job_key ?? null,
 		success: Boolean(apiResponse?.success),
+	};
+}
+
+/**
+ * Map raw wire capability item from the API response into the camelCase domain model.
+ *
+ * @param apiCapability - Raw snake_case capability item returned by the backend.
+ * @return Normalized RoleCapability object.
+ */
+export function mapApiRoleCapability(
+	apiCapability: ApiRoleCapability
+): RoleCapability {
+	return {
+		id: apiCapability.id,
+		label: apiCapability.label,
+		description: apiCapability.description,
+		group: apiCapability.group,
+		groupLabel: apiCapability.group_label,
+		enabled: Boolean(apiCapability.enabled),
+		default: Boolean(apiCapability.default),
+		protected: Boolean(apiCapability.protected),
+		protectedReason: apiCapability.protected_reason ?? null,
+		applicable: apiCapability.applicable !== false,
+		applicableReason: apiCapability.applicable_reason ?? null,
+	};
+}
+
+/**
+ * Map raw wire role definition from the API response into the camelCase domain model.
+ *
+ * @param apiRole - Raw snake_case role definition returned by the backend.
+ * @return Normalized RoleDefinition object.
+ */
+export function mapApiRoleDefinition(
+	apiRole?: ApiRoleDefinition | null
+): RoleDefinition {
+	if (!apiRole) {
+		return {
+			id: "",
+			name: "",
+			description: "",
+			isCustomized: false,
+			capabilities: [],
+		};
+	}
+
+	return {
+		id: apiRole.id,
+		name: apiRole.name,
+		description: apiRole.description,
+		isCustomized: Boolean(apiRole.is_customized),
+		capabilities: (apiRole.capabilities ?? []).map(mapApiRoleCapability),
 	};
 }

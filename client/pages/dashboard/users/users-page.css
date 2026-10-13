@@ -353,4 +353,77 @@
 	.users-page-dialog-actions-end {
 		@apply justify-end;
 	}
+
+	/* ─── Manage Roles & Capabilities Slide-Over Drawer ─── */
+	.users-roles-drawer-layout {
+		@apply pointer-events-none fixed inset-y-0 flex max-w-full;
+	}
+
+	.users-roles-drawer-layout-ltr {
+		@apply right-0 pl-0 sm:pl-16;
+	}
+
+	.users-roles-drawer-layout-rtl {
+		@apply left-0 pr-0 sm:pr-16;
+	}
+
+	.users-roles-drawer-panel {
+		@apply pointer-events-auto flex h-full w-screen max-w-2xl transform flex-col overflow-hidden bg-surface shadow-2xl transition-transform duration-500 ease-out;
+	}
+
+	.users-roles-drawer-panel[data-closed] {
+		@apply ease-in;
+	}
+
+	.users-roles-drawer-header {
+		@apply flex items-start justify-between gap-4 border-b border-stroke bg-surface-alt px-4 py-5 sm:px-6;
+	}
+
+	.users-roles-drawer-title-icon {
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent;
+	}
+
+	.users-roles-drawer-title {
+		@apply text-base font-semibold text-heading;
+	}
+
+	.users-roles-drawer-subtitle {
+		@apply mt-0.5 text-xs text-text-muted;
+	}
+
+	.users-roles-drawer-close {
+		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-surface hover:text-heading;
+	}
+
+	.users-roles-drawer-content {
+		@apply min-h-0 flex-1 overflow-y-auto p-4 sm:p-6 space-y-6;
+	}
+
+	.users-roles-drawer-footer {
+		@apply flex items-center justify-between gap-3 border-t border-stroke bg-surface-alt/60 px-4 py-4 sm:px-6;
+	}
+
+	.users-roles-tab {
+		@apply inline-flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-semibold text-text-muted transition-all hover:bg-surface-alt hover:text-heading;
+	}
+
+	.users-roles-tab-active {
+		@apply bg-accent/10 text-accent font-bold hover:bg-accent/15 hover:text-accent;
+	}
+
+	.users-roles-tab-badge-customized {
+		@apply rounded-full bg-accent/15 px-2 py-0.5 text-[10px] font-bold text-accent;
+	}
+
+	.users-roles-tab-badge-default {
+		@apply rounded-full bg-surface-alt px-2 py-0.5 text-[10px] font-medium text-text-muted;
+	}
+
+	.users-roles-group-header {
+		@apply flex items-center justify-between border-b border-stroke bg-surface-alt/70 px-4 py-3;
+	}
+
+	.users-roles-capability-card {
+		@apply flex items-start justify-between gap-3 p-4 transition-colors hover:bg-surface-alt/30;
+	}
 }

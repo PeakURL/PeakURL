@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace PeakURL\Features\Users;
 
+use PeakURL\Api\LinksApi;
 use PeakURL\Api\UsersApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
@@ -110,6 +111,14 @@ class Service {
 	private WebhooksService $webhooks_service;
 
 	/**
+	 * Links data API.
+	 *
+	 * @var LinksApi
+	 * @since 1.7.2
+	 */
+	private LinksApi $links_api;
+
+	/**
 	 * Create a new Users domain service instance.
 	 *
 	 * @param PeakURL_DB       $db                Database service.
@@ -121,6 +130,7 @@ class Service {
 	 * @param Authorization    $authorization     Authorization service.
 	 * @param SocialPreview    $social_preview    Social preview service.
 	 * @param WebhooksService  $webhooks_service  Webhooks domain service.
+	 * @param LinksApi         $links_api         Links API helper.
 	 * @since 1.0.0
 	 */
 	public function __construct(
@@ -132,7 +142,8 @@ class Service {
 		Roles $roles,
 		Authorization $authorization,
 		SocialPreview $social_preview,
-		WebhooksService $webhooks_service
+		WebhooksService $webhooks_service,
+		LinksApi $links_api
 	) {
 		$this->db                = $db;
 		$this->users_api         = $users_api;
@@ -143,6 +154,7 @@ class Service {
 		$this->authorization     = $authorization;
 		$this->social_preview    = $social_preview;
 		$this->webhooks_service  = $webhooks_service;
+		$this->links_api         = $links_api;
 	}
 
 	/**
@@ -477,14 +489,7 @@ class Service {
 		}
 
 		if ( array_key_exists( 'role', $changes ) ) {
-			$role = $this->roles->normalize_role( (string) $changes['role'] );
-			$this->authorization->validate_role_change(
-				(string) $user['id'],
-				(string) $user['role'],
-				$role,
-				(string) $current_user['id'],
-			);
-			$data['role'] = $role;
+			$data['role'] = $this->roles->normalize_role( (string) $changes['role'] );
 		}
 
 		if ( array_key_exists( 'password', $changes ) ) {
@@ -506,9 +511,85 @@ class Service {
 			);
 		}
 
-		$data['updated_at'] = Date::now();
+		$role_supplied = array_key_exists( 'role', $data );
 
-		$this->db->update( 'users', $data, array( 'id' => $user_id ) );
+		if ( $role_supplied && $this->db->in_transaction() ) {
+			throw new \LogicException( 'Cannot execute role modification within an active external transaction.' );
+		}
+
+		$max_attempts = $role_supplied ? 3 : 1;
+		$attempt      = 0;
+
+		while ( $attempt < $max_attempts ) {
+			++$attempt;
+			$did_begin = false;
+
+			if ( $role_supplied ) {
+				$this->db->begin_transaction();
+				$did_begin = true;
+			}
+
+			try {
+				if ( $role_supplied ) {
+					$acting_admin_id = (string) $current_user['id'];
+					$target_user_id  = (string) $user['id'];
+
+					$locked       = $this->users_api->lock_users( array( $acting_admin_id, $target_user_id ) );
+					$acting_admin = $locked[ $acting_admin_id ] ?? null;
+					$locked_user  = $locked[ $target_user_id ] ?? null;
+
+					if ( null === $locked_user ) {
+						throw new ApiException( __( 'User not found.', 'peakurl' ), 404 );
+					}
+
+					if ( null === $acting_admin || 'admin' !== (string) ( $acting_admin['role'] ?? '' ) ) {
+						throw new ApiException( __( 'Administrator access required.', 'peakurl' ), 403 );
+					}
+
+					$actual_current_role   = (string) $locked_user['role'];
+					$proposed_role         = (string) $data['role'];
+					$is_actual_role_change = ( $actual_current_role !== $proposed_role );
+
+					if ( $is_actual_role_change ) {
+						$this->authorization->validate_role_change(
+							(string) $locked_user['id'],
+							$actual_current_role,
+							$proposed_role,
+							(string) $acting_admin['id'],
+							fn(): int => $this->users_api->count_admin_users_for_update(),
+						);
+					}
+				}
+
+				$data['updated_at'] = Date::now();
+
+				$this->db->update( 'users', $data, array( 'id' => $user_id ) );
+
+				if ( $did_begin ) {
+					$this->db->commit();
+				}
+				break;
+			} catch ( \Throwable $exception ) {
+				if ( $did_begin && $this->db->in_transaction() ) {
+					$this->db->roll_back();
+				}
+
+				if ( $role_supplied && $attempt < $max_attempts && $this->is_lock_conflict( $exception ) ) {
+					usleep( 50000 * $attempt );
+					continue;
+				}
+
+				if ( $this->is_lock_conflict( $exception ) ) {
+					throw new ApiException(
+						__( 'Database lock conflict occurred. Please retry the operation.', 'peakurl' ),
+						409,
+						$exception
+					);
+				}
+
+				throw $exception;
+			}
+		}
 
 		if ( ! empty( $password_changed ) ) {
 			$this->auth_service->send_password_changed( $user );
@@ -516,22 +597,26 @@ class Service {
 
 		$updated_user = $this->users_api->get_user( $user_id );
 
-		if ( $updated_user ) {
-			$this->analytics_service->record_activity(
-				'user_updated',
-				'Updated user ' . (string) ( $updated_user['username'] ?? $username ) . '.',
-				(string) $current_user['id'],
-				null,
-				array(
-					'user' => $this->get_user_activity_meta( $updated_user ),
-				),
-			);
+		try {
+			if ( $updated_user ) {
+				$this->analytics_service->record_activity(
+					'user_updated',
+					'Updated user ' . (string) ( $updated_user['username'] ?? $username ) . '.',
+					(string) $current_user['id'],
+					null,
+					array(
+						'user' => $this->get_user_activity_meta( $updated_user ),
+					),
+				);
 
-			$this->webhooks_service->dispatch_user_event(
-				'user.updated',
-				$updated_user,
-				$user
-			);
+				$this->webhooks_service->dispatch_user_event(
+					'user.updated',
+					$updated_user,
+					$user
+				);
+			}
+		} catch ( \Throwable $side_effect_error ) {
+			\error_log( 'Failed to process user_updated side effects: ' . $side_effect_error->getMessage() );
 		}
 
 		return $this->format_user( $updated_user );
@@ -540,13 +625,15 @@ class Service {
 	/**
 	 * Delete a user by their username (admin only).
 	 *
-	 * Prevents self-deletion and enforces minimum-admin constraints.
+	 * Prevents self-deletion, enforces minimum-admin constraints under lock,
+	 * transfers owned links to the acting admin, and removes access credentials.
 	 *
 	 * @param Request $request  Incoming HTTP request (must be admin).
 	 * @param string  $username Target user's username.
 	 * @return bool True if deleted; false if username not found.
 	 *
 	 * @throws ApiException When deleting self or last admin (422).
+	 * @throws \LogicException When called inside an existing transaction.
 	 * @since 1.0.0
 	 */
 	public function delete_user_by_username(
@@ -564,131 +651,209 @@ class Service {
 			throw new ApiException( __( 'You cannot delete the current user.', 'peakurl' ), 422 );
 		}
 
-		$this->authorization->validate_role_change(
-			(string) $user['id'],
-			(string) $user['role'],
-			'deleted',
-			(string) $current_user['id'],
-		);
-
-		$link_cleanup = array(
-			'ids'         => array(),
-			'image_paths' => array(),
-		);
-
-		$this->db->begin_transaction();
-
-		try {
-			$link_cleanup = $this->get_user_link_cleanup_data( (string) $user['id'] );
-
-			$this->prune_user_activity( (string) $user['id'] );
-			$this->delete_user_links( $link_cleanup['ids'] );
-
-			$this->analytics_service->record_activity(
-				'user_deleted',
-				'Deleted user ' . (string) ( $user['username'] ?? $username ) . '.',
-				(string) $current_user['id'],
-				null,
-				array(
-					'user' => $this->get_user_activity_meta( $user ),
-				),
-			);
-			$this->db->delete(
-				'users',
-				array(
-					'id' => $user['id'],
-				)
-			);
-			$this->db->commit();
-		} catch ( \Throwable $exception ) {
-			if ( $this->db->in_transaction() ) {
-				$this->db->roll_back();
-			}
-
-			throw $exception;
+		if ( $this->db->in_transaction() ) {
+			throw new \LogicException( 'Cannot execute user deletion within an active external transaction.' );
 		}
 
-		$this->social_preview->delete_link_images(
-			$link_cleanup['image_paths'],
-		);
+		$transferred_links = array();
+		$target_user       = null;
+		$max_attempts      = 3;
+		$attempt           = 0;
 
-		if ( $user ) {
-			$this->webhooks_service->dispatch_user_event( 'user.deleted', $user );
+		while ( $attempt < $max_attempts ) {
+			++$attempt;
+			$this->db->begin_transaction();
+
+			try {
+				$acting_admin_id = (string) $current_user['id'];
+				$target_user_id  = (string) $user['id'];
+
+				$locked       = $this->users_api->lock_users( array( $acting_admin_id, $target_user_id ) );
+				$acting_admin = $locked[ $acting_admin_id ] ?? null;
+				$target_user  = $locked[ $target_user_id ] ?? null;
+
+				if ( null === $target_user ) {
+					$this->db->roll_back();
+					return false;
+				}
+
+				if ( null === $acting_admin || 'admin' !== (string) ( $acting_admin['role'] ?? '' ) ) {
+					throw new ApiException( __( 'Administrator access required.', 'peakurl' ), 403 );
+				}
+
+				if ( (string) $target_user['id'] === (string) $acting_admin['id'] ) {
+					throw new ApiException( __( 'You cannot delete the current user.', 'peakurl' ), 422 );
+				}
+
+				$this->authorization->validate_role_change(
+					(string) $target_user['id'],
+					(string) $target_user['role'],
+					'deleted',
+					(string) $acting_admin['id'],
+					fn(): int => $this->users_api->count_admin_users_for_update(),
+				);
+
+				$transferred_links = $this->transfer_user_links(
+					(string) $target_user['id'],
+					(string) $acting_admin['id']
+				);
+
+				$this->cleanup_user_credentials( (string) $target_user['id'] );
+				$this->prune_user_activity( (string) $target_user['id'] );
+
+				$deleted_count = $this->db->delete(
+					'users',
+					array(
+						'id' => $target_user['id'],
+					)
+				);
+
+				if ( 0 === $deleted_count ) {
+					throw new ApiException( __( 'User could not be deleted.', 'peakurl' ), 500 );
+				}
+
+				// Record terminal user_deleted audit activity inside the transaction for durable consistency
+				$this->analytics_service->record_activity(
+					'user_deleted',
+					'Deleted user ' . (string) ( $target_user['username'] ?? $username ) . '.',
+					(string) $acting_admin['id'],
+					null,
+					array(
+						'user' => $this->get_user_activity_meta( $target_user ),
+					),
+				);
+
+				$this->db->commit();
+				break;
+			} catch ( \Throwable $exception ) {
+				if ( $this->db->in_transaction() ) {
+					$this->db->roll_back();
+				}
+
+				if ( $attempt < $max_attempts && $this->is_lock_conflict( $exception ) ) {
+					usleep( 50000 * $attempt );
+					continue;
+				}
+
+				if ( $this->is_lock_conflict( $exception ) ) {
+					throw new ApiException(
+						__( 'Database lock conflict occurred. Please retry the operation.', 'peakurl' ),
+						409,
+						$exception
+					);
+				}
+
+				throw $exception;
+			}
+		}
+
+		// Invalidate transferred link caches per link; errors logged without failing the committed deletion or skipping remaining links.
+		foreach ( $transferred_links as $link_row ) {
+			try {
+				$this->links_api->invalidate_link_cache( $link_row );
+			} catch ( \Throwable $cache_error ) {
+				\error_log( 'Failed to invalidate transferred link cache: ' . $cache_error->getMessage() );
+			}
+		}
+
+		// Dispatch user.deleted webhook independently; secondary error does not hide deletion success.
+		try {
+			if ( $target_user ) {
+				$this->webhooks_service->dispatch_user_event( 'user.deleted', $target_user );
+			}
+		} catch ( \Throwable $webhook_error ) {
+			\error_log( 'Failed to dispatch user.deleted webhook: ' . $webhook_error->getMessage() );
 		}
 
 		return true;
 	}
 
 	/**
-	 * Return link rows that need database and file cleanup before user deletion.
+	 * Transfer all URLs owned by a user to another user.
 	 *
-	 * @param string $user_id Target user ID.
-	 * @return array{ids: array<int, string>, image_paths: array<int, string>}
-	 * @since 1.0.0
+	 * Preserves short codes, aliases, destinations, status, clicks, and analytics.
+	 * Returns the transferred link rows for post-commit cache invalidation.
+	 *
+	 * @param string $source_user_id User currently owning the links.
+	 * @param string $target_user_id User to receive ownership.
+	 * @return array<int, array<string, mixed>> Transferred link rows.
+	 * @throws ApiException When transfer verification fails.
+	 * @since 1.7.2
 	 */
-	private function get_user_link_cleanup_data( string $user_id ): array {
+	private function transfer_user_links( string $source_user_id, string $target_user_id ): array {
 		$rows = $this->db->get_results_by(
 			'urls',
-			array(
-				'user_id' => $user_id,
-			),
-			array( 'id', 'social_image_path' ),
+			array( 'user_id' => $source_user_id ),
+			array( 'id', 'short_code', 'alias' ),
+			array( 'id' => 'ASC' )
 		);
 
-		$ids         = array();
-		$image_paths = array();
-
-		foreach ( $rows as $row ) {
-			$id = trim( (string) ( $row['id'] ?? '' ) );
-
-			if ( '' !== $id ) {
-				$ids[] = $id;
-			}
-
-			$image_path = trim( (string) ( $row['social_image_path'] ?? '' ) );
-
-			if ( '' !== $image_path ) {
-				$image_paths[] = $image_path;
-			}
+		if ( empty( $rows ) ) {
+			return array();
 		}
 
-		return array(
-			'ids'         => $ids,
-			'image_paths' => $image_paths,
+		$this->db->update(
+			'urls',
+			array( 'user_id' => $target_user_id ),
+			array( 'user_id' => $source_user_id ),
 		);
+
+		$remaining = (int) $this->db->count(
+			'urls',
+			array( 'user_id' => $source_user_id ),
+		);
+
+		if ( $remaining > 0 ) {
+			throw new ApiException(
+				__( 'Failed to transfer user links.', 'peakurl' ),
+				500
+			);
+		}
+
+		return $rows;
 	}
 
 	/**
-	 * Delete all link-owned rows for a user before the user row is removed.
+	 * Determine whether an exception was caused by a database lock conflict.
 	 *
-	 * This keeps cleanup explicit even on installs where foreign-key repair has
-	 * not run yet.
+	 * Detects InnoDB deadlocks (1213), lock wait timeouts (1205), and SQLSTATE 40001 serialization failures.
 	 *
-	 * @param array<int, string> $link_ids Link IDs owned by the user.
-	 * @return void
-	 * @since 1.0.0
+	 * @param \Throwable $exception Caught error.
+	 * @return bool True if retryable lock conflict.
+	 * @since 1.7.2
 	 */
-	private function delete_user_links( array $link_ids ): void {
-		if ( empty( $link_ids ) ) {
-			return;
+	private function is_lock_conflict( \Throwable $exception ): bool {
+		if ( $exception instanceof \PDOException ) {
+			// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			$driver_code = (int) ( $exception->errorInfo[1] ?? 0 );
+			if ( 1213 === $driver_code || 1205 === $driver_code ) {
+				return true;
+			}
+			if ( '40001' === (string) $exception->getCode() ) {
+				return true;
+			}
 		}
 
-		$this->db->delete_where_in(
-			'clicks',
-			'url_id',
-			$link_ids,
+		$msg = $exception->getMessage();
+		return str_contains( $msg, '1213 Deadlock' ) || str_contains( $msg, '1205 Lock wait timeout' );
+	}
+
+	/**
+	 * Clean up active sessions and API keys for a deleted user.
+	 *
+	 * @param string $user_id Target user ID.
+	 * @return void
+	 * @since 1.7.2
+	 */
+	private function cleanup_user_credentials( string $user_id ): void {
+		$this->db->delete(
+			'sessions',
+			array( 'user_id' => $user_id ),
 		);
 
-		$this->db->delete_where_in(
-			'audit_logs',
-			'link_id',
-			$link_ids,
-		);
-
-		$this->db->delete_where_in(
-			'urls',
-			'id',
-			$link_ids,
+		$this->db->delete(
+			'api_keys',
+			array( 'user_id' => $user_id ),
 		);
 	}
 

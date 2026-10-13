@@ -274,29 +274,51 @@ class Authorization {
 			return;
 		}
 
-		$admin_count = $admin_count_check ? (int) $admin_count_check() : 1;
-
-		if ( $admin_count > 1 ) {
-			return;
-		}
-
-		if ( 'deleted' === $next_role ) {
+		// Fail safely if administrator count check is unavailable.
+		if ( null === $admin_count_check ) {
 			throw new ApiException(
 				__( 'At least one admin account must remain on the site.', 'peakurl' ),
 				422,
 			);
 		}
 
-		if ( $target_user_id === $acting_user_id ) {
+		$admin_count = (int) $admin_count_check();
+
+		// Demoting or deleting the last administrator must always be prevented.
+		if ( $admin_count <= 1 ) {
+			if ( 'deleted' === $next_role ) {
+				throw new ApiException(
+					__( 'At least one admin account must remain on the site.', 'peakurl' ),
+					422,
+				);
+			}
+
+			if ( $target_user_id === $acting_user_id ) {
+				throw new ApiException(
+					__( 'You cannot demote the only remaining admin account.', 'peakurl' ),
+					422,
+				);
+			}
+
 			throw new ApiException(
-				__( 'You cannot demote the only remaining admin account.', 'peakurl' ),
+				__( 'At least one admin account must remain on the site.', 'peakurl' ),
 				422,
 			);
 		}
 
-		throw new ApiException(
-			__( 'At least one admin account must remain on the site.', 'peakurl' ),
-			422,
-		);
+		// Self-demotion and self-deletion are rejected regardless of admin count.
+		if ( $target_user_id === $acting_user_id ) {
+			if ( 'deleted' === $next_role ) {
+				throw new ApiException(
+					__( 'You cannot delete the current user.', 'peakurl' ),
+					422,
+				);
+			}
+
+			throw new ApiException(
+				__( 'You cannot demote your own administrator account.', 'peakurl' ),
+				422,
+			);
+		}
 	}
 }

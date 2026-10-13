@@ -27,12 +27,7 @@ export function useUsersManager() {
 	const { data: userData } = useGetUserProfileQuery(undefined);
 
 	const accountUser = userData?.data ?? authUser ?? null;
-	const currentUserRole: UserSummary["role"] =
-		accountUser?.role === "admin"
-			? "admin"
-			: accountUser?.role === "editor"
-				? "editor"
-				: undefined;
+	const currentUserRole: UserSummary["role"] = accountUser?.role ?? undefined;
 
 	const currentUser: UserSummary | null = accountUser
 		? {
@@ -48,6 +43,7 @@ export function useUsersManager() {
 				displayName: accountUser.displayName,
 				email: accountUser.email,
 				role: currentUserRole,
+				roleName: accountUser.roleName,
 			}
 		: null;
 
@@ -79,8 +75,8 @@ export function useUsersManager() {
 		[users]
 	);
 
-	const editorCount = useMemo(
-		() => users.filter((user) => user.role === "editor").length,
+	const nonAdminCount = useMemo(
+		() => users.filter((user) => user.role !== "admin").length,
 		[users]
 	);
 
@@ -122,11 +118,11 @@ export function useUsersManager() {
 			},
 			{
 				key: "editors",
-				label: __("Editors"),
-				value: formatCount(editorCount),
+				label: __("Editors & Team"),
+				value: formatCount(nonAdminCount),
 				icon: UserCheck,
 				iconTone: "editors",
-				note: __("Link creation & editing access"),
+				note: __("Configured role members"),
 			},
 			{
 				key: "newest",
@@ -146,7 +142,7 @@ export function useUsersManager() {
 					: __("No users yet"),
 			},
 		],
-		[users.length, adminCount, editorCount, newestUser]
+		[users.length, adminCount, nonAdminCount, newestUser]
 	);
 
 	const openCreateDialog = () => {

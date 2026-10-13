@@ -21,6 +21,14 @@ export function DrawerFooter({
 	onCancelClick,
 	onSaveClick,
 }: DrawerFooterProps) {
+	const isCustom = Boolean(activeRole && !activeRole.isBuiltin);
+	const resetLabel = isCustom
+		? __("Reset to Snapshot")
+		: __("Reset to Defaults");
+	const resetTitle = isCustom
+		? __("Reset this role's capabilities to its creation-time snapshot")
+		: __("Reset this role's capabilities to shipped defaults");
+
 	return (
 		<div className="users-roles-drawer-footer">
 			<div>
@@ -34,11 +42,9 @@ export function DrawerFooter({
 							isSaving || (!activeRole.isCustomized && !isDirty)
 						}
 						onClick={onResetClick}
-						title={__(
-							"Reset this role's capabilities to shipped defaults"
-						)}
+						title={resetTitle}
 					>
-						<span>{__("Reset to Defaults")}</span>
+						<span>{resetLabel}</span>
 					</Button>
 				) : null}
 			</div>

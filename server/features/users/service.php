@@ -17,6 +17,7 @@ use PeakURL\Api\LinksApi;
 use PeakURL\Api\UsersApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
+use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Service as AuthService;
@@ -353,10 +354,18 @@ class Service {
 		);
 		$first_name = trim( (string) ( $payload['firstName'] ?? '' ) );
 		$last_name  = trim( (string) ( $payload['lastName'] ?? '' ) );
-		$role       = $this->roles->normalize_role(
-			(string) ( $payload['role'] ?? 'editor' ),
-		);
-		$now        = Date::now();
+		if ( array_key_exists( 'role', $payload ) ) {
+			if ( ! is_string( $payload['role'] ) ) {
+				throw new ApiException( __( 'Invalid role identifier.', 'peakurl' ), 422 );
+			}
+			$role = $payload['role'];
+		} else {
+			$role = 'editor';
+		}
+		if ( ! $this->roles->is_registered_role( $role ) ) {
+			throw new ApiException( __( 'Invalid role identifier.', 'peakurl' ), 422 );
+		}
+		$now = Date::now();
 
 		if ( '' === $first_name || '' === $last_name ) {
 			throw new ApiException( __( 'First and last name are required.', 'peakurl' ), 422 );
@@ -373,24 +382,61 @@ class Service {
 			throw new ApiException( __( 'Username is already taken.', 'peakurl' ), 422 );
 		}
 
-		$this->db->insert(
-			'users',
-			array(
-				'username'          => $username,
-				'email'             => $email,
-				'first_name'        => $first_name,
-				'last_name'         => $last_name,
-				'display_name'      => isset( $payload['displayName'] ) ? trim( (string) $payload['displayName'] ) : null,
-				'password_hash'     => password_hash( $password, PASSWORD_DEFAULT ),
-				'role'              => $role,
-				'is_email_verified' => 1,
-				'email_verified_at' => $now,
-				'created_at'        => $now,
-				'updated_at'        => $now,
-			),
-		);
-		$user_id = (string) $this->db->insert_id();
-		$user    = $this->users_api->get_user( $user_id );
+		if ( $this->roles->is_custom_role( $role ) ) {
+			$this->db->begin_transaction();
+			try {
+				$this->db->get_row(
+					'SELECT setting_value FROM settings WHERE setting_key = ? FOR UPDATE',
+					array( Constants::SETTING_ROLE_CAPABILITIES )
+				);
+				$this->roles->clear_cache();
+				if ( ! $this->roles->is_custom_role( $role ) ) {
+					throw new ApiException( __( 'The selected custom role no longer exists.', 'peakurl' ), 422 );
+				}
+				$this->db->insert(
+					'users',
+					array(
+						'username'          => $username,
+						'email'             => $email,
+						'first_name'        => $first_name,
+						'last_name'         => $last_name,
+						'display_name'      => isset( $payload['displayName'] ) ? trim( (string) $payload['displayName'] ) : null,
+						'password_hash'     => password_hash( $password, PASSWORD_DEFAULT ),
+						'role'              => $role,
+						'is_email_verified' => 1,
+						'email_verified_at' => $now,
+						'created_at'        => $now,
+						'updated_at'        => $now,
+					),
+				);
+				$user_id = (string) $this->db->insert_id();
+				$this->db->commit();
+			} catch ( \Throwable $e ) {
+				if ( $this->db->in_transaction() ) {
+					$this->db->roll_back();
+				}
+				throw $e;
+			}
+		} else {
+			$this->db->insert(
+				'users',
+				array(
+					'username'          => $username,
+					'email'             => $email,
+					'first_name'        => $first_name,
+					'last_name'         => $last_name,
+					'display_name'      => isset( $payload['displayName'] ) ? trim( (string) $payload['displayName'] ) : null,
+					'password_hash'     => password_hash( $password, PASSWORD_DEFAULT ),
+					'role'              => $role,
+					'is_email_verified' => 1,
+					'email_verified_at' => $now,
+					'created_at'        => $now,
+					'updated_at'        => $now,
+				),
+			);
+			$user_id = (string) $this->db->insert_id();
+		}
+		$user = $this->users_api->get_user( $user_id );
 
 		if ( $user ) {
 			$this->analytics_service->record_activity(
@@ -489,7 +535,14 @@ class Service {
 		}
 
 		if ( array_key_exists( 'role', $changes ) ) {
-			$data['role'] = $this->roles->normalize_role( (string) $changes['role'] );
+			if ( ! is_string( $changes['role'] ) ) {
+				throw new ApiException( __( 'Invalid role identifier.', 'peakurl' ), 422 );
+			}
+			$proposed = $changes['role'];
+			if ( ! $this->roles->is_registered_role( $proposed ) ) {
+				throw new ApiException( __( 'Invalid role identifier.', 'peakurl' ), 422 );
+			}
+			$data['role'] = $proposed;
 		}
 
 		if ( array_key_exists( 'password', $changes ) ) {
@@ -533,6 +586,17 @@ class Service {
 				if ( $role_supplied ) {
 					$acting_admin_id = (string) $current_user['id'];
 					$target_user_id  = (string) $user['id'];
+
+					if ( $this->roles->is_custom_role( (string) $data['role'] ) ) {
+						$this->db->get_row(
+							'SELECT setting_value FROM settings WHERE setting_key = ? FOR UPDATE',
+							array( Constants::SETTING_ROLE_CAPABILITIES )
+						);
+						$this->roles->clear_cache();
+						if ( ! $this->roles->is_custom_role( (string) $data['role'] ) ) {
+							throw new ApiException( __( 'The selected custom role no longer exists.', 'peakurl' ), 422 );
+						}
+					}
 
 					$locked       = $this->users_api->lock_users( array( $acting_admin_id, $target_user_id ) );
 					$acting_admin = $locked[ $acting_admin_id ] ?? null;

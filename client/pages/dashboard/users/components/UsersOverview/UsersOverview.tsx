@@ -25,14 +25,21 @@ export function UsersOverview({
 						)}
 					</p>
 				</div>
-				<div className="flex flex-wrap items-center gap-2.5">
+				<div className="users-page-hero-actions">
 					{onManageRolesClick ? (
-						<Button variant="outline" onClick={onManageRolesClick}>
+						<Button
+							variant="outline"
+							onClick={onManageRolesClick}
+							className="users-page-hero-action-button"
+						>
 							<Shield size={16} />
 							<span>{__("Manage Roles & Capabilities")}</span>
 						</Button>
 					) : null}
-					<Button onClick={onAddUserClick}>
+					<Button
+						onClick={onAddUserClick}
+						className="users-page-hero-action-button"
+					>
 						<Plus size={16} />
 						<span>{__("Add User")}</span>
 					</Button>

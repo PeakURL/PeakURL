@@ -450,8 +450,11 @@ export function mapApiRoleDefinition(
 			id: "",
 			name: "",
 			description: "",
+			isBuiltin: false,
+			isConfigurable: true,
 			isCustomized: false,
 			capabilities: [],
+			userCount: 0,
 		};
 	}
 
@@ -459,7 +462,12 @@ export function mapApiRoleDefinition(
 		id: apiRole.id,
 		name: apiRole.name,
 		description: apiRole.description,
+		isBuiltin:
+			apiRole.is_builtin ??
+			("admin" === apiRole.id || "editor" === apiRole.id),
+		isConfigurable: apiRole.is_configurable !== false,
 		isCustomized: Boolean(apiRole.is_customized),
 		capabilities: (apiRole.capabilities ?? []).map(mapApiRoleCapability),
+		userCount: apiRole.user_count ?? 0,
 	};
 }

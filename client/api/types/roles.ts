@@ -29,8 +29,11 @@ export interface ApiRoleDefinition {
 	id: string;
 	name: string;
 	description: string;
+	is_builtin?: boolean;
+	is_configurable?: boolean;
 	is_customized: boolean;
 	capabilities: ApiRoleCapability[];
+	user_count?: number;
 }
 
 /**
@@ -57,21 +60,42 @@ export interface RoleDefinition {
 	id: string;
 	name: string;
 	description: string;
+	isBuiltin: boolean;
+	isConfigurable: boolean;
 	isCustomized: boolean;
 	capabilities: RoleCapability[];
+	userCount: number;
 }
 
 /**
- * Request payload for updating capabilities on a role.
+ * Request payload for creating a custom role.
+ */
+export interface CreateRolePayload {
+	id: string;
+	name: string;
+	description?: string;
+}
+
+/**
+ * Request payload for updating capabilities and/or metadata on a role.
  */
 export interface UpdateRoleCapabilitiesPayload {
 	role: string;
-	capabilities: Record<string, boolean>;
+	name?: string;
+	description?: string;
+	capabilities?: Record<string, boolean>;
 }
 
 /**
  * Request payload for resetting a role's capabilities to defaults.
  */
 export interface ResetRoleCapabilitiesPayload {
+	role: string;
+}
+
+/**
+ * Request payload for deleting a custom role.
+ */
+export interface DeleteRolePayload {
 	role: string;
 }

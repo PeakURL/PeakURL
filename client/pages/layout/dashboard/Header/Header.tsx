@@ -30,15 +30,22 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	const { useAuthCheckQuery } = authApi;
 	const { data: sessionData } = useAuthCheckQuery(undefined);
 	const user = selectSessionUser(sessionData);
-	const { canManageUsers } = useAdminAccess();
+	const { canManageUsers, canManageProfile } = useAdminAccess();
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const basePath = "/dashboard";
 
-	const getRoleLabel = (role?: string | null) => {
+	const getRoleLabel = (role?: string | null, roleName?: string | null) => {
+		if (roleName) return roleName;
 		if (role === "admin") return __("Admin");
 		if (role === "editor") return __("Editor");
+		if (role) {
+			return role
+				.split(/[_-]+/)
+				.map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+				.join(" ");
+		}
 		return __("User");
 	};
 
@@ -89,7 +96,7 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 								</div>
 								<div className="dashboard-header-user-role">
 									{user
-										? getRoleLabel(user.role)
+										? getRoleLabel(user.role, user.roleName)
 										: __("Admin")}
 								</div>
 							</div>
@@ -128,28 +135,30 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 										)}
 									</MenuItem>
 								) : null}
-								<MenuItem>
-									{({ focus }) => (
-										<button
-											onClick={() =>
-												navigate(
-													`${basePath}/settings/general`
-												)
-											}
-											className={cn(
-												"dashboard-header-user-item",
-												focus &&
-													"dashboard-header-user-item-active"
-											)}
-										>
-											<User
-												size={16}
-												className="dashboard-header-user-item-icon"
-											/>
-											{__("Profile")}
-										</button>
-									)}
-								</MenuItem>
+								{canManageProfile ? (
+									<MenuItem>
+										{({ focus }) => (
+											<button
+												onClick={() =>
+													navigate(
+														`${basePath}/settings/general`
+													)
+												}
+												className={cn(
+													"dashboard-header-user-item",
+													focus &&
+														"dashboard-header-user-item-active"
+												)}
+											>
+												<User
+													size={16}
+													className="dashboard-header-user-item-icon"
+												/>
+												{__("Profile")}
+											</button>
+										)}
+									</MenuItem>
+								) : null}
 								<MenuItem>
 									{({ focus }) => (
 										<button

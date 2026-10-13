@@ -332,6 +332,13 @@ export const API_ROUTES = {
 		index: apiPath("roles"),
 
 		/**
+		 * Relative API path: `roles`.
+		 *
+		 * Creates a new custom role cloned from the current Editor snapshot.
+		 */
+		create: apiPath("roles"),
+
+		/**
 		 * Relative API path: `roles/{role}`.
 		 *
 		 * Updates capability configuration for a specific role.
@@ -345,6 +352,13 @@ export const API_ROUTES = {
 		 */
 		reset: (role: ApiPathPart) =>
 			apiPath("roles", encodeApiParam(role), "reset"),
+
+		/**
+		 * Relative API path: `roles/{role}`.
+		 *
+		 * Deletes a custom role from the registry.
+		 */
+		delete: (role: ApiPathPart) => apiPath("roles", encodeApiParam(role)),
 	},
 
 	/**

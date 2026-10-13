@@ -1713,6 +1713,9 @@ class Service {
 			'jobTitle'        => (string) ( $row['job_title'] ?? '' ),
 			'bio'             => (string) ( $row['bio'] ?? '' ),
 			'role'            => (string) ( $row['role'] ?? 'editor' ),
+			'roleName'        => $this->roles->get_role_name(
+				(string) ( $row['role'] ?? 'editor' ),
+			),
 			'capabilities'    => $this->roles->capabilities_for_role(
 				(string) ( $row['role'] ?? 'editor' ),
 			),

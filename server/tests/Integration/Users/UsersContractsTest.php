@@ -24,6 +24,7 @@ use PeakURL\Http\Request;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Webhooks\Service as WebhooksService;
 use PeakURL\Api\LinksApi;
+use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Services\Database\Connection;
@@ -2628,5 +2629,980 @@ class UsersContractsTest extends TestCase {
 
 		$transferred_owner = (string) $verify_db->get_var( "SELECT user_id FROM `{$prefix}urls` WHERE id = 'url_peer_99002'" );
 		$this->assertSame( '99001', $transferred_owner, 'Links owned by deleted admin must be transferred to surviving admin.' );
+	}
+
+	public function test_user_lifecycle_creation_and_retrieval_with_custom_role(): void {
+		list( $setup_connection, $setup_db, $setup_pdo, $prefix ) = $this->setup_isolated_db();
+
+		$custom_roles_data = array(
+			'custom_roles' => array(
+				'support_lead' => array(
+					'name'                 => 'Support Lead',
+					'description'          => 'Customer support lead role',
+					'initial_capabilities' => array(
+						'view_links'   => true,
+						'create_links' => true,
+						'edit_links'   => true,
+					),
+					'capabilities'         => array(
+						'view_links'   => true,
+						'create_links' => true,
+						'edit_links'   => true,
+					),
+				),
+			),
+		);
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}settings` (setting_key, setting_value, autoload, updated_at) " .
+			"VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $custom_roles_data ) . "', 1, NOW())"
+		);
+
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}users` (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at) " .
+			"VALUES (88001, 'acting_admin', 'acting_admin@example.com', 'Super', 'Admin', 'hash', 'admin', 1, NOW(), NOW())"
+		);
+		unset( $setup_connection, $setup_db, $setup_pdo );
+
+		$base_config   = Configuration::get_current();
+		$conn_config   = array_merge( $base_config, array( Constants::DB_PREFIX => $prefix ) );
+		$conn          = new Connection( $conn_config );
+		$db            = new PeakURL_DB( $conn );
+		$settings_api  = new SettingsApi( $db );
+		$users_api     = new UsersApi( $db );
+		$roles         = new Roles( $settings_api, $users_api );
+		$authorization = new Authorization( $roles );
+
+		$auth_mock = $this->createMock( AuthService::class );
+		$auth_mock->method( 'get_admin_user' )->willReturn(
+			array(
+				'id'       => '88001',
+				'username' => 'acting_admin',
+				'role'     => 'admin',
+			)
+		);
+		$auth_mock->method( 'email_in_use' )->willReturn( false );
+		$auth_mock->method( 'username_in_use' )->willReturn( false );
+		$auth_mock->method( 'format_user' )->willReturnCallback(
+			function ( ?array $row ) use ( $roles ) {
+				if ( ! $row ) {
+					return array();
+				}
+				return array(
+					'id'           => (string) $row['id'],
+					'username'     => (string) $row['username'],
+					'email'        => (string) $row['email'],
+					'role'         => (string) $row['role'],
+					'roleName'     => $roles->get_role_name( (string) $row['role'] ),
+					'displayName'  => $row['display_name'] ?? null,
+					'capabilities' => $roles->capabilities_for_role( (string) $row['role'] ),
+				);
+			}
+		);
+
+		$users_service = $this->create_users_service(
+			$db,
+			$users_api,
+			$auth_mock,
+			null,
+			null,
+			$roles,
+			$authorization
+		);
+
+		$created = $users_service->create_user(
+			new Request( 'POST', '/api/v1/users', array(), array() ),
+			array(
+				'username'    => 'support_agent_jane',
+				'email'       => 'jane@support.example.com',
+				'password'    => 'SecurePass123!#',
+				'firstName'   => 'Jane',
+				'lastName'    => 'Doe',
+				'displayName' => 'Support Jane',
+				'role'        => 'support_lead',
+			)
+		);
+
+		$this->assertSame( 'support_lead', $created['role'] );
+		$this->assertSame( 'Support Jane', $created['displayName'] );
+		$this->assertSame( 'Support Lead', $created['roleName'] );
+		$this->assertTrue( $created['capabilities']['create_links'] );
+		$this->assertTrue( $created['capabilities']['edit_links'] );
+		$this->assertFalse( $created['capabilities']['delete_links'] );
+		$this->assertFalse( $created['capabilities']['manage_users'] );
+
+		$fetched = $users_api->get_user( (string) $created['id'] );
+		$this->assertNotNull( $fetched );
+		$this->assertSame( 'support_lead', $fetched['role'] );
+		$this->assertSame( 'Support Jane', $fetched['display_name'] );
+
+		$formatted = $users_service->format_user( $fetched );
+		$this->assertSame( 'support_lead', $formatted['role'] );
+		$this->assertSame( 'Support Lead', $formatted['roleName'] );
+		$this->assertSame( 'Support Jane', $formatted['displayName'] );
+		$this->assertSame( $created['capabilities'], $formatted['capabilities'] );
+	}
+
+	public function test_user_lifecycle_role_transitions_and_rejection_of_invalid_or_deleted_roles(): void {
+		list( $setup_connection, $setup_db, $setup_pdo, $prefix ) = $this->setup_isolated_db();
+
+		$custom_roles_data = array(
+			'custom_roles' => array(
+				'analyst' => array(
+					'name'                 => 'Analyst Role',
+					'description'          => 'Analyst',
+					'initial_capabilities' => array( 'view_links' => true ),
+					'capabilities'         => array( 'view_links' => true ),
+				),
+				'manager' => array(
+					'name'                 => 'Manager Role',
+					'description'          => 'Manager',
+					'initial_capabilities' => array(
+						'view_links'   => true,
+						'create_links' => true,
+					),
+					'capabilities'         => array(
+						'view_links'   => true,
+						'create_links' => true,
+					),
+				),
+			),
+		);
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}settings` (setting_key, setting_value, autoload, updated_at) " .
+			"VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $custom_roles_data ) . "', 1, NOW())"
+		);
+
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}users` (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at) " .
+			'VALUES ' .
+			"(88010, 'admin_super', 'admin_super@example.com', 'Super', 'Admin', 'hash', 'admin', 1, NOW(), NOW()), " .
+			"(88011, 'target_member', 'target_member@example.com', 'Target', 'Member', 'hash', 'editor', 1, NOW(), NOW())"
+		);
+		unset( $setup_connection, $setup_db, $setup_pdo );
+
+		$base_config   = Configuration::get_current();
+		$conn_config   = array_merge( $base_config, array( Constants::DB_PREFIX => $prefix ) );
+		$conn          = new Connection( $conn_config );
+		$db            = new PeakURL_DB( $conn );
+		$settings_api  = new SettingsApi( $db );
+		$users_api     = new UsersApi( $db );
+		$roles         = new Roles( $settings_api, $users_api );
+		$authorization = new Authorization( $roles );
+
+		$auth_mock = $this->createMock( AuthService::class );
+		$auth_mock->method( 'get_admin_user' )->willReturn(
+			array(
+				'id'       => '88010',
+				'username' => 'admin_super',
+				'role'     => 'admin',
+			)
+		);
+		$auth_mock->method( 'format_user' )->willReturnCallback(
+			function ( ?array $row ) use ( $roles ) {
+				if ( ! $row ) {
+					return array();
+				}
+				return array(
+					'id'       => (string) $row['id'],
+					'username' => (string) $row['username'],
+					'role'     => (string) $row['role'],
+					'roleName' => $roles->get_role_name( (string) $row['role'] ),
+				);
+			}
+		);
+
+		$users_service = $this->create_users_service(
+			$db,
+			$users_api,
+			$auth_mock,
+			null,
+			null,
+			$roles,
+			$authorization
+		);
+
+		$req = new Request( 'PUT', '/api/v1/users/target_member', array(), array() );
+
+		// Transition 1: Editor -> Custom ('analyst')
+		$res1 = $users_service->update_user_by_username( $req, 'target_member', array( 'role' => 'analyst' ) );
+		$this->assertSame( 'analyst', $res1['role'] );
+		$db_user1 = $users_api->get_user( '88011' );
+		$this->assertSame( 'analyst', $db_user1['role'] );
+
+		// Transition 2: Custom A ('analyst') -> Custom B ('manager')
+		$res2 = $users_service->update_user_by_username( $req, 'target_member', array( 'role' => 'manager' ) );
+		$this->assertSame( 'manager', $res2['role'] );
+		$db_user2 = $users_api->get_user( '88011' );
+		$this->assertSame( 'manager', $db_user2['role'] );
+
+		// Transition 3: Custom B ('manager') -> Built-in ('editor')
+		$res3 = $users_service->update_user_by_username( $req, 'target_member', array( 'role' => 'editor' ) );
+		$this->assertSame( 'editor', $res3['role'] );
+		$db_user3 = $users_api->get_user( '88011' );
+		$this->assertSame( 'editor', $db_user3['role'] );
+
+		// Rejection 1: Unknown role ID -> 422, no coercion
+		try {
+			$users_service->update_user_by_username( $req, 'target_member', array( 'role' => 'ghost_role' ) );
+			$this->fail( 'Unknown role must throw 422 ApiException.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'Invalid role identifier.', $e->getMessage() );
+		}
+		$db_user_after_invalid = $users_api->get_user( '88011' );
+		$this->assertSame( 'editor', $db_user_after_invalid['role'], 'Role must not be modified or coerced.' );
+
+		// Rejection 2: Disallowed character syntax -> 422
+		try {
+			$users_service->update_user_by_username( $req, 'target_member', array( 'role' => 'bad!role' ) );
+			$this->fail( 'Invalid role syntax must throw 422 ApiException.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'Invalid role identifier.', $e->getMessage() );
+		}
+
+		// Rejection 3: Nonexistent role in create_user -> 422
+		try {
+			$users_service->create_user(
+				new Request( 'POST', '/api/v1/users', array(), array() ),
+				array(
+					'username'  => 'orphan_user',
+					'email'     => 'orphan@example.com',
+					'password'  => 'ValidPass123!#',
+					'firstName' => 'Orphan',
+					'lastName'  => 'User',
+					'role'      => 'deleted_role_xyz',
+				)
+			);
+			$this->fail( 'Create user with nonexistent role must throw 422 ApiException.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'Invalid role identifier.', $e->getMessage() );
+		}
+	}
+
+	public function test_custom_role_with_all_delegable_capabilities_cannot_manage_users_or_empty_trash(): void {
+		$settings_api = $this->createMock( SettingsApi::class );
+		$users_api    = $this->createMock( UsersApi::class );
+
+		$all_delegable = array();
+		foreach ( Roles::CAPABILITIES_CATALOG as $cap_id => $meta ) {
+			if ( in_array( 'editor', $meta['applicable_roles'] ?? array(), true ) ) {
+				$all_delegable[ $cap_id ] = true;
+			}
+		}
+
+		$settings_doc = array(
+			'custom_roles' => array(
+				'super_custom' => array(
+					'name'                 => 'Super Custom',
+					'description'          => 'Role with all delegable capabilities',
+					'initial_capabilities' => $all_delegable,
+					'capabilities'         => $all_delegable,
+				),
+			),
+		);
+
+		$settings_api->method( 'get_option' )->willReturn( json_encode( $settings_doc ) );
+
+		$roles         = new Roles( $settings_api, $users_api );
+		$authorization = new Authorization( $roles );
+
+		$caps = $roles->capabilities_for_role( 'super_custom' );
+		$this->assertFalse( $caps['manage_users'] ?? false, 'Non-admin role must never inherit manage_users.' );
+		$this->assertFalse( $caps['empty_trash'] ?? false, 'Non-admin role must never inherit empty_trash.' );
+
+		$custom_user = array(
+			'id'   => '100',
+			'role' => 'super_custom',
+		);
+
+		$this->assertFalse( $authorization->has_capability( $custom_user, 'manage_users' ) );
+		$this->assertFalse( $authorization->has_capability( $custom_user, 'empty_trash' ) );
+
+		try {
+			$authorization->validate_capability( $custom_user, 'manage_users' );
+			$this->fail( 'Must throw 403 on manage_users.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+		}
+
+		try {
+			$authorization->validate_capability( $custom_user, 'empty_trash' );
+			$this->fail( 'Must throw 403 on empty_trash.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+		}
+
+		// Sole admin cannot be demoted to super_custom
+		try {
+			$authorization->validate_role_change(
+				'1',
+				'admin',
+				'super_custom',
+				'1',
+				fn(): int => 1
+			);
+			$this->fail( 'Must prevent demoting last admin.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertStringContainsString( 'cannot demote the only remaining admin account', $e->getMessage() );
+		}
+
+		// Admin cannot self-demote even if multiple admins exist
+		try {
+			$authorization->validate_role_change(
+				'1',
+				'admin',
+				'super_custom',
+				'1',
+				fn(): int => 2
+			);
+			$this->fail( 'Must prevent admin self-demotion.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertStringContainsString( 'cannot demote your own administrator account', $e->getMessage() );
+		}
+
+		// Corrupted settings containing admin-only capabilities for a custom role are strictly rejected
+		$corrupted_settings_api = $this->createMock( SettingsApi::class );
+		$corrupted_doc          = array(
+			'custom_roles' => array(
+				'hacked_role' => array(
+					'name'                 => 'Hacked Role',
+					'description'          => 'Tries to gain manage_users',
+					'initial_capabilities' => array( 'view_links' => true ),
+					'capabilities'         => array(
+						'view_links'   => true,
+						'manage_users' => true,
+					),
+				),
+			),
+		);
+		$corrupted_settings_api->method( 'get_option' )->willReturn( json_encode( $corrupted_doc ) );
+		$corrupted_roles = new Roles( $corrupted_settings_api, $users_api );
+
+		try {
+			$corrupted_roles->get_role_settings();
+			$this->fail( 'Corrupted settings granting admin capability must fail with 500.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 500, $e->getCode() );
+			$this->assertStringContainsString( 'corrupted', $e->getMessage() );
+		}
+
+		// Administrator privileges remain immutable superuser even with corrupted custom roles in storage
+		$admin_caps = $corrupted_roles->capabilities_for_role( 'admin' );
+		$this->assertTrue( $admin_caps['manage_users'] );
+		$this->assertTrue( $admin_caps['empty_trash'] );
+		$this->assertTrue( ( new Authorization( $corrupted_roles ) )->has_capability( array( 'role' => 'admin' ), 'manage_users' ) );
+	}
+
+	public function test_manage_profile_capability_controls_profile_mutation_on_editor_and_custom_role(): void {
+		list( $setup_connection, $setup_db, $setup_pdo, $prefix ) = $this->setup_isolated_db();
+
+		$custom_roles_data = array(
+			'editor'       => array(
+				'manage_profile' => false,
+			),
+			'custom_roles' => array(
+				'restricted_agent' => array(
+					'name'                 => 'Restricted Agent',
+					'description'          => 'Cannot manage profile',
+					'initial_capabilities' => array(
+						'manage_profile' => false,
+						'view_links'     => true,
+					),
+					'capabilities'         => array(
+						'manage_profile' => false,
+						'view_links'     => true,
+					),
+				),
+				'full_agent'       => array(
+					'name'                 => 'Full Agent',
+					'description'          => 'Can manage profile',
+					'initial_capabilities' => array(
+						'manage_profile' => true,
+						'view_links'     => true,
+					),
+					'capabilities'         => array(
+						'manage_profile' => true,
+						'view_links'     => true,
+					),
+				),
+			),
+		);
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}settings` (setting_key, setting_value, autoload, updated_at) " .
+			"VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $custom_roles_data ) . "', 1, NOW())"
+		);
+
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}users` (id, username, email, first_name, last_name, bio, password_hash, role, is_email_verified, created_at, updated_at) " .
+			'VALUES ' .
+			"(88020, 'restricted_u', 'restricted@example.com', 'Restricted', 'User', 'Initial Bio', 'hash', 'restricted_agent', 1, NOW(), NOW()), " .
+			"(88021, 'full_u', 'full@example.com', 'Full', 'User', 'Initial Bio', 'hash', 'full_agent', 1, NOW(), NOW()), " .
+			"(88022, 'editor_u', 'editor@example.com', 'Editor', 'User', 'Initial Bio', 'hash', 'editor', 1, NOW(), NOW())"
+		);
+		unset( $setup_connection, $setup_db, $setup_pdo );
+
+		$base_config   = Configuration::get_current();
+		$conn_config   = array_merge( $base_config, array( Constants::DB_PREFIX => $prefix ) );
+		$conn          = new Connection( $conn_config );
+		$db            = new PeakURL_DB( $conn );
+		$settings_api  = new SettingsApi( $db );
+		$users_api     = new UsersApi( $db );
+		$roles         = new Roles( $settings_api, $users_api );
+		$authorization = new Authorization( $roles );
+
+		$current_user_state = array();
+		$auth_mock          = $this->createMock( AuthService::class );
+		$auth_mock->method( 'get_current_user' )->willReturnCallback(
+			function () use ( &$current_user_state ) {
+				return $current_user_state;
+			}
+		);
+		$auth_mock->method( 'format_user' )->willReturnCallback(
+			function ( ?array $row ) {
+				if ( ! $row ) {
+					return array();
+				}
+				return array(
+					'id'       => (string) $row['id'],
+					'username' => (string) $row['username'],
+					'bio'      => (string) ( $row['bio'] ?? '' ),
+					'role'     => (string) $row['role'],
+				);
+			}
+		);
+
+		$users_service = $this->create_users_service(
+			$db,
+			$users_api,
+			$auth_mock,
+			null,
+			null,
+			$roles,
+			$authorization
+		);
+
+		$req = new Request( 'PUT', '/api/v1/users/me', array(), array() );
+
+		// 1. Restricted agent cannot update profile -> 403 Forbidden
+		$current_user_state = array(
+			'id'       => '88020',
+			'username' => 'restricted_u',
+			'email'    => 'restricted@example.com',
+			'role'     => 'restricted_agent',
+		);
+		try {
+			$users_service->update_current_user( $req, array( 'bio' => 'Hacked Bio' ) );
+			$this->fail( 'Must reject profile update when manage_profile is disabled.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+			$this->assertStringContainsString( 'permission to update this profile', $e->getMessage() );
+		}
+		$db_restricted = $users_api->get_user( '88020' );
+		$this->assertSame( 'Initial Bio', $db_restricted['bio'] );
+
+		// Read-only profile view is still safe and accessible
+		$profile = $users_service->get_current_profile( $req );
+		$this->assertSame( 'restricted_u', $profile['username'] );
+
+		// 2. Full agent with manage_profile = true succeeds
+		$current_user_state = array(
+			'id'       => '88021',
+			'username' => 'full_u',
+			'email'    => 'full@example.com',
+			'role'     => 'full_agent',
+		);
+		$updated_full       = $users_service->update_current_user( $req, array( 'bio' => 'Updated Full Bio' ) );
+		$this->assertSame( 'Updated Full Bio', $updated_full['bio'] );
+		$db_full = $users_api->get_user( '88021' );
+		$this->assertSame( 'Updated Full Bio', $db_full['bio'] );
+
+		// 3. Editor with revoked manage_profile is rejected with 403
+		$current_user_state = array(
+			'id'       => '88022',
+			'username' => 'editor_u',
+			'email'    => 'editor@example.com',
+			'role'     => 'editor',
+		);
+		try {
+			$users_service->update_current_user( $req, array( 'bio' => 'Editor New Bio' ) );
+			$this->fail( 'Must reject editor profile update when manage_profile is revoked.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+			$this->assertStringContainsString( 'permission to update this profile', $e->getMessage() );
+		}
+	}
+
+	public function test_real_db_concurrent_role_assignment_wins_lock_blocks_role_deletion_with_409(): void {
+		list( $setup_connection, $setup_db, $setup_pdo, $prefix ) = $this->setup_isolated_db();
+
+		$custom_roles_data = array(
+			'custom_roles' => array(
+				'reviewer' => array(
+					'name'                 => 'Reviewer Role',
+					'description'          => 'Reviewer',
+					'initial_capabilities' => array( 'view_links' => true ),
+					'capabilities'         => array( 'view_links' => true ),
+				),
+			),
+		);
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}settings` (setting_key, setting_value, autoload, updated_at) " .
+			"VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $custom_roles_data ) . "', 1, NOW())"
+		);
+
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}users` (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at) " .
+			"VALUES (88031, 'admin_assigner', 'admin_assigner@example.com', 'Admin', 'Assigner', 'hash', 'admin', 1, NOW(), NOW())"
+		);
+		unset( $setup_connection, $setup_db, $setup_pdo );
+
+		$base_config = Configuration::get_current();
+		$conn_config = array_merge( $base_config, array( Constants::DB_PREFIX => $prefix ) );
+
+		list( $parent_res, $child_res ) = $this->run_concurrent_test_processes(
+			function ( $sock ) use ( $conn_config, $prefix ) {
+				$conn = new Connection( $conn_config );
+				$pdo  = $conn->get_connection();
+
+				$pdo->beginTransaction();
+				$lock_stmt = $pdo->prepare(
+					"SELECT setting_value FROM `{$prefix}settings` WHERE setting_key = :key FOR UPDATE"
+				);
+				$lock_stmt->execute( array( 'key' => Constants::SETTING_ROLE_CAPABILITIES ) );
+				$lock_stmt->fetch();
+
+				$blocker_conn_id = (int) $pdo->query( 'SELECT CONNECTION_ID()' )->fetchColumn();
+				fwrite( $sock, "LOCK_ACQUIRED:{$blocker_conn_id}\n" );
+				fflush( $sock );
+
+				$waiter_line    = trim( (string) fgets( $sock ) );
+				$waiter_conn_id = 0;
+				if ( false !== strpos( $waiter_line, ':' ) ) {
+					list( $sig, $waiter_conn_id ) = explode( ':', $waiter_line, 2 );
+				}
+
+				$contention_observed = $this->observe_innodb_lock_wait(
+					$pdo,
+					(int) $waiter_conn_id,
+					$blocker_conn_id,
+					"{$prefix}settings"
+				);
+
+				$insert_stmt = $pdo->prepare(
+					"INSERT INTO `{$prefix}users` (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at) " .
+					"VALUES (88032, 'assigned_user', 'assigned@example.com', 'Assigned', 'User', 'hash', 'reviewer', 1, NOW(), NOW())"
+				);
+				$insert_stmt->execute();
+				$pdo->commit();
+
+				return array(
+					'assigned'            => true,
+					'contention_observed' => $contention_observed,
+				);
+			},
+			function ( $sock ) use ( $conn_config ) {
+				$conn         = new Connection( $conn_config );
+				$db           = new PeakURL_DB( $conn );
+				$settings_api = new SettingsApi( $db );
+				$users_api    = new UsersApi( $db );
+				$roles        = new Roles( $settings_api, $users_api );
+
+				fgets( $sock );
+				$waiter_conn_id = (int) $conn->get_connection()->query( 'SELECT CONNECTION_ID()' )->fetchColumn();
+				fwrite( $sock, "ATTEMPTING:{$waiter_conn_id}\n" );
+				fflush( $sock );
+
+				try {
+					$roles->delete_custom_role( 'reviewer' );
+					return array( 'status' => 'unexpected_success' );
+				} catch ( ApiException $e ) {
+					return array(
+						'status'  => 'conflict',
+						'code'    => $e->getCode(),
+						'message' => $e->getMessage(),
+					);
+				}
+			}
+		);
+
+		$this->assertSame( 'ok', $parent_res['status'] );
+		$this->assertTrue( $parent_res['result']['assigned'] );
+		$this->assertTrue( $parent_res['result']['contention_observed'] );
+		$this->assertSame( 'ok', $child_res['status'] );
+		$this->assertSame( 'conflict', $child_res['result']['status'] );
+		$this->assertSame( 409, $child_res['result']['code'] );
+		$this->assertStringContainsString( 'assigned to 1 user(s)', $child_res['result']['message'] );
+
+		$verify_conn = new Connection( $conn_config );
+		$verify_db   = new PeakURL_DB( $verify_conn );
+		$roles       = new Roles( new SettingsApi( $verify_db ), new UsersApi( $verify_db ) );
+		$this->assertTrue( $roles->is_custom_role( 'reviewer' ), 'Role must remain intact in settings after deletion conflict.' );
+		$user_count = (int) $verify_db->get_var( "SELECT COUNT(*) FROM `{$prefix}users` WHERE role = 'reviewer'" );
+		$this->assertSame( 1, $user_count, 'Assigned user must remain in users table.' );
+	}
+
+	public function test_real_db_concurrent_role_deletion_wins_lock_blocks_assignment_with_422(): void {
+		list( $setup_connection, $setup_db, $setup_pdo, $prefix ) = $this->setup_isolated_db();
+
+		$custom_roles_data = array(
+			'custom_roles' => array(
+				'ephemeral_role' => array(
+					'name'                 => 'Ephemeral Role',
+					'description'          => 'Role to be deleted concurrently',
+					'initial_capabilities' => array( 'view_links' => true ),
+					'capabilities'         => array( 'view_links' => true ),
+				),
+			),
+		);
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}settings` (setting_key, setting_value, autoload, updated_at) " .
+			"VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $custom_roles_data ) . "', 1, NOW())"
+		);
+
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}users` (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at) " .
+			"VALUES (88041, 'admin_creator', 'admin_creator@example.com', 'Admin', 'Creator', 'hash', 'admin', 1, NOW(), NOW())"
+		);
+		unset( $setup_connection, $setup_db, $setup_pdo );
+
+		$base_config = Configuration::get_current();
+		$conn_config = array_merge( $base_config, array( Constants::DB_PREFIX => $prefix ) );
+
+		list( $parent_res, $child_res ) = $this->run_concurrent_test_processes(
+			function ( $sock ) use ( $conn_config, $prefix ) {
+				$conn = new Connection( $conn_config );
+				$pdo  = $conn->get_connection();
+
+				$pdo->beginTransaction();
+				$lock_stmt = $pdo->prepare(
+					"SELECT setting_value FROM `{$prefix}settings` WHERE setting_key = :key FOR UPDATE"
+				);
+				$lock_stmt->execute( array( 'key' => Constants::SETTING_ROLE_CAPABILITIES ) );
+				$raw = $lock_stmt->fetchColumn();
+
+				$blocker_conn_id = (int) $pdo->query( 'SELECT CONNECTION_ID()' )->fetchColumn();
+				fwrite( $sock, "LOCK_ACQUIRED:{$blocker_conn_id}\n" );
+				fflush( $sock );
+
+				$waiter_line    = trim( (string) fgets( $sock ) );
+				$waiter_conn_id = 0;
+				if ( false !== strpos( $waiter_line, ':' ) ) {
+					list( $sig, $waiter_conn_id ) = explode( ':', $waiter_line, 2 );
+				}
+
+				$contention_observed = $this->observe_innodb_lock_wait(
+					$pdo,
+					(int) $waiter_conn_id,
+					$blocker_conn_id,
+					"{$prefix}settings"
+				);
+
+				$stored = json_decode( (string) $raw, true );
+				unset( $stored['custom_roles']['ephemeral_role'] );
+				if ( empty( $stored['custom_roles'] ) ) {
+					$del_stmt = $pdo->prepare(
+						"DELETE FROM `{$prefix}settings` WHERE setting_key = :key"
+					);
+					$del_stmt->execute( array( 'key' => Constants::SETTING_ROLE_CAPABILITIES ) );
+				} else {
+					$update_stmt = $pdo->prepare(
+						"UPDATE `{$prefix}settings` SET setting_value = :val, updated_at = NOW() WHERE setting_key = :key"
+					);
+					$update_stmt->execute(
+						array(
+							'val' => json_encode( $stored ),
+							'key' => Constants::SETTING_ROLE_CAPABILITIES,
+						)
+					);
+				}
+				$pdo->commit();
+
+				return array(
+					'deleted'             => true,
+					'contention_observed' => $contention_observed,
+				);
+			},
+			function ( $sock ) use ( $conn_config ) {
+				$conn          = new Connection( $conn_config );
+				$db            = new PeakURL_DB( $conn );
+				$settings_api  = new SettingsApi( $db );
+				$users_api     = new UsersApi( $db );
+				$roles         = new Roles( $settings_api, $users_api );
+				$authorization = new Authorization( $roles );
+
+				$auth_mock = $this->createMock( AuthService::class );
+				$auth_mock->method( 'get_admin_user' )->willReturn(
+					array(
+						'id'       => '88041',
+						'username' => 'admin_creator',
+						'role'     => 'admin',
+					)
+				);
+				$auth_mock->method( 'email_in_use' )->willReturn( false );
+				$auth_mock->method( 'username_in_use' )->willReturn( false );
+
+				$validator     = new UsersValidator();
+				$analytics     = $this->createMock( AnalyticsService::class );
+				$social_mock   = $this->createMock( SocialPreview::class );
+				$webhooks_mock = $this->createMock( WebhooksService::class );
+				$links_mock    = $this->createMock( LinksApi::class );
+
+				$service = new UsersService(
+					$db,
+					$users_api,
+					$auth_mock,
+					$analytics,
+					$validator,
+					$roles,
+					$authorization,
+					$social_mock,
+					$webhooks_mock,
+					$links_mock
+				);
+
+				fgets( $sock );
+				$waiter_conn_id = (int) $conn->get_connection()->query( 'SELECT CONNECTION_ID()' )->fetchColumn();
+				fwrite( $sock, "ATTEMPTING:{$waiter_conn_id}\n" );
+				fflush( $sock );
+
+				try {
+					$service->create_user(
+						new Request( 'POST', '/api/v1/users', array(), array() ),
+						array(
+							'username'  => 'candidate_user',
+							'email'     => 'candidate@example.com',
+							'password'  => 'ValidPass123!#',
+							'firstName' => 'Candidate',
+							'lastName'  => 'User',
+							'role'      => 'ephemeral_role',
+						)
+					);
+					return array( 'status' => 'unexpected_success' );
+				} catch ( ApiException $e ) {
+					return array(
+						'status'  => 'rejected',
+						'code'    => $e->getCode(),
+						'message' => $e->getMessage(),
+					);
+				}
+			}
+		);
+
+		$this->assertSame( 'ok', $parent_res['status'] );
+		$this->assertTrue( $parent_res['result']['deleted'] );
+		$this->assertTrue( $parent_res['result']['contention_observed'] );
+		$this->assertSame( 'ok', $child_res['status'] );
+		$this->assertSame( 'rejected', $child_res['result']['status'] );
+		$this->assertSame( 422, $child_res['result']['code'] );
+		$this->assertStringContainsString( 'no longer exists', $child_res['result']['message'] );
+
+		$verify_conn = new Connection( $conn_config );
+		$verify_db   = new PeakURL_DB( $verify_conn );
+		$roles       = new Roles( new SettingsApi( $verify_db ), new UsersApi( $verify_db ) );
+		$this->assertFalse( $roles->is_custom_role( 'ephemeral_role' ), 'Role must be gone from settings.' );
+		$created_count = (int) $verify_db->get_var( "SELECT COUNT(*) FROM `{$prefix}users` WHERE username = 'candidate_user'" );
+		$this->assertSame( 0, $created_count, 'No candidate user must be created.' );
+	}
+
+	/**
+	 * Verify that create_user and update_user_by_username reject malformed role IDs with 422
+	 * without silently coercing them via sanitize_key().
+	 */
+	public function test_user_endpoints_reject_malformed_role_id_without_coercion(): void {
+		list( $setup_connection, $setup_db, $setup_pdo, $prefix ) = $this->setup_isolated_db();
+
+		$custom_roles_data = array(
+			'custom_roles' => array(
+				'analyst' => array(
+					'name'                 => 'Analyst',
+					'description'          => 'Data Analyst',
+					'initial_capabilities' => array( 'view_analytics' => true ),
+					'capabilities'         => array( 'view_analytics' => true ),
+				),
+			),
+		);
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}settings` (setting_key, setting_value, autoload, updated_at) " .
+			"VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $custom_roles_data ) . "', 1, NOW())"
+		);
+
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}users` (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at) " .
+			"VALUES (89001, 'acting_admin', 'acting_admin@example.com', 'Super', 'Admin', 'hash', 'admin', 1, NOW(), NOW())"
+		);
+		$setup_pdo->exec(
+			"INSERT INTO `{$prefix}users` (id, username, email, first_name, last_name, password_hash, role, is_email_verified, created_at, updated_at) " .
+			"VALUES (89002, 'target_user', 'target_user@example.com', 'Target', 'User', 'hash', 'editor', 1, NOW(), NOW())"
+		);
+		unset( $setup_connection, $setup_db, $setup_pdo );
+
+		$base_config   = Configuration::get_current();
+		$conn_config   = array_merge( $base_config, array( Constants::DB_PREFIX => $prefix ) );
+		$conn          = new Connection( $conn_config );
+		$db            = new PeakURL_DB( $conn );
+		$settings_api  = new SettingsApi( $db );
+		$users_api     = new UsersApi( $db );
+		$roles         = new Roles( $settings_api, $users_api );
+		$authorization = new Authorization( $roles );
+
+		$auth_mock = $this->createMock( AuthService::class );
+		$auth_mock->method( 'get_admin_user' )->willReturn(
+			array(
+				'id'       => '89001',
+				'username' => 'acting_admin',
+				'role'     => 'admin',
+			)
+		);
+		$auth_mock->method( 'username_in_use' )->willReturn( false );
+		$auth_mock->method( 'email_in_use' )->willReturn( false );
+
+		$analytics_mock = $this->createMock( \PeakURL\Features\Analytics\Service::class );
+		$social_mock    = $this->createMock( \PeakURL\Services\SocialPreview::class );
+		$webhooks_mock  = $this->createMock( \PeakURL\Features\Webhooks\Service::class );
+		$links_api_mock = $this->createMock( \PeakURL\Api\LinksApi::class );
+
+		$service = new UsersService(
+			$db,
+			$users_api,
+			$auth_mock,
+			$analytics_mock,
+			new UsersValidator(),
+			$roles,
+			$authorization,
+			$social_mock,
+			$webhooks_mock,
+			$links_api_mock
+		);
+
+		$request = new Request( 'POST', '/api/v1/users', array(), array() );
+
+		// 1. Attempt user creation with 'ana!lyst' (must NOT coerce to 'analyst')
+		try {
+			$service->create_user(
+				$request,
+				array(
+					'username'  => 'new_analyst',
+					'email'     => 'new_analyst@example.com',
+					'password'  => 'ValidPass123!',
+					'firstName' => 'New',
+					'lastName'  => 'Analyst',
+					'role'      => 'ana!lyst',
+				)
+			);
+			$this->fail( 'Expected 422 for malformed role ID on user creation' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'Invalid role identifier.', $e->getMessage() );
+		}
+
+		// 2. Attempt user creation with 'content-manager' (hyphen)
+		try {
+			$service->create_user(
+				$request,
+				array(
+					'username'  => 'new_cm',
+					'email'     => 'new_cm@example.com',
+					'password'  => 'ValidPass123!',
+					'firstName' => 'New',
+					'lastName'  => 'CM',
+					'role'      => 'content-manager',
+				)
+			);
+			$this->fail( 'Expected 422 for hyphenated role ID on user creation' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+		}
+
+		// 3. Attempt user creation with 'admin\n' (trailing newline must NOT match 'admin')
+		try {
+			$service->create_user(
+				$request,
+				array(
+					'username'  => 'fake_admin',
+					'email'     => 'fake_admin@example.com',
+					'password'  => 'ValidPass123!',
+					'firstName' => 'Fake',
+					'lastName'  => 'Admin',
+					'role'      => "admin\n",
+				)
+			);
+			$this->fail( 'Expected 422 for newline-suffixed role ID on user creation' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'Invalid role identifier.', $e->getMessage() );
+		}
+
+		// 4. Attempt user creation with non-string roles (null, integer, array)
+		foreach ( array( null, 123, array( 'admin' ) ) as $invalid_role_type ) {
+			try {
+				$service->create_user(
+					$request,
+					array(
+						'username'  => 'type_test_user',
+						'email'     => 'type_test@example.com',
+						'password'  => 'ValidPass123!',
+						'firstName' => 'Type',
+						'lastName'  => 'Test',
+						'role'      => $invalid_role_type,
+					)
+				);
+				$this->fail( 'Expected 422 for non-string role on user creation' );
+			} catch ( ApiException $e ) {
+				$this->assertSame( 422, $e->getCode() );
+				$this->assertSame( 'Invalid role identifier.', $e->getMessage() );
+			}
+		}
+
+		// 5. Attempt user update with 'ana!lyst'
+		try {
+			$update_req = new Request( 'PUT', '/api/v1/users/target_user', array(), array() );
+			$service->update_user_by_username(
+				$update_req,
+				'target_user',
+				array( 'role' => 'ana!lyst' )
+			);
+			$this->fail( 'Expected 422 for malformed role ID on user update' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'Invalid role identifier.', $e->getMessage() );
+		}
+
+		// 6. Attempt user update with 'admin\n'
+		try {
+			$update_req = new Request( 'PUT', '/api/v1/users/target_user', array(), array() );
+			$service->update_user_by_username(
+				$update_req,
+				'target_user',
+				array( 'role' => "admin\n" )
+			);
+			$this->fail( 'Expected 422 for newline-suffixed role ID on user update' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'Invalid role identifier.', $e->getMessage() );
+		}
+
+		// 7. Attempt user update with non-string role (null, integer, array)
+		foreach ( array( null, 123, array( 'admin' ) ) as $invalid_role_type ) {
+			try {
+				$update_req = new Request( 'PUT', '/api/v1/users/target_user', array(), array() );
+				$service->update_user_by_username(
+					$update_req,
+					'target_user',
+					array( 'role' => $invalid_role_type )
+				);
+				$this->fail( 'Expected 422 for non-string role on user update' );
+			} catch ( ApiException $e ) {
+				$this->assertSame( 422, $e->getCode() );
+				$this->assertSame( 'Invalid role identifier.', $e->getMessage() );
+			}
+		}
+
+		// Verify target user's role is still 'editor' (untouched)
+		$user_row = $users_api->get_user( '89002' );
+		$this->assertSame( 'editor', $user_row['role'] );
 	}
 }

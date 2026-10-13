@@ -271,20 +271,21 @@ class AuthorizationMatrixTest extends TestCase {
 		$this->assertTrue( true );
 	}
 
-	public function test_admin_with_disabled_configurable_capabilities_is_strictly_denied_access(): void {
-		$stored_caps = array(
-			'admin' => array(
+	public function test_admin_is_immutable_superuser_unconditionally_and_ignores_tampered_storage(): void {
+		$tampered_stored = array(
+			'admin'  => array(
 				'manage_performance'   => false,
 				'manage_mail_delivery' => false,
 				'manage_location_data' => false,
 				'manage_updates'       => false,
 			),
+			'editor' => '{invalid_corrupted_payload',
 		);
 
 		$settings_api = $this->createMock( SettingsApi::class );
 		$settings_api->method( 'get_option' )
 			->with( Constants::SETTING_ROLE_CAPABILITIES )
-			->willReturn( (string) json_encode( $stored_caps ) );
+			->willReturn( (string) json_encode( $tampered_stored ) );
 
 		$roles = new Roles( $settings_api );
 		$auth  = new Authorization( $roles );
@@ -298,40 +299,101 @@ class AuthorizationMatrixTest extends TestCase {
 		$this->assertTrue( $roles->is_admin( $admin ) );
 		$auth->require_admin( $admin );
 
-		// Protected recovery capabilities remain true (cannot be disabled)
-		$this->assertTrue( $roles->has_capability( $admin, 'manage_users' ) );
-		$this->assertTrue( $roles->has_capability( $admin, 'manage_site_settings' ) );
-
-		// Configurable admin capabilities disabled in storage must return false
-		$disabled_caps = array(
-			'manage_performance',
+		// Administrator is an immutable superuser: has all catalog capabilities unconditionally
+		$all_catalog_caps = array(
+			'manage_users',
+			'manage_site_settings',
 			'manage_mail_delivery',
 			'manage_location_data',
+			'manage_performance',
 			'manage_updates',
+			'manage_webhooks',
+			'manage_api_keys',
+			'manage_profile',
+			'create_links',
+			'view_links',
+			'edit_links',
+			'trash_links',
+			'delete_links',
+			'empty_trash',
+			'view_analytics',
 		);
 
-		foreach ( $disabled_caps as $cap ) {
-			$this->assertFalse(
+		foreach ( $all_catalog_caps as $cap ) {
+			$this->assertTrue(
 				$roles->has_capability( $admin, $cap ),
-				"Disabled configurable admin capability '{$cap}' must return false"
+				"Admin must possess capability '{$cap}' unconditionally"
 			);
-
-			try {
-				$auth->require_capability( $admin, $cap );
-				$this->fail( "require_capability must throw 403 for disabled admin capability '{$cap}'" );
-			} catch ( ApiException $e ) {
-				$this->assertSame( 403, $e->getCode() );
-			}
+			// require_capability must never throw for admin
+			$auth->require_capability( $admin, $cap );
 		}
 	}
 
-	public function test_editor_cannot_access_configurable_admin_capabilities_even_if_forged(): void {
-		$forged_stored = array(
+	public function test_editor_can_be_granted_site_and_integrations_capabilities_while_retaining_admin_isolation(): void {
+		$delegated_caps = array(
 			'editor' => array(
-				'manage_performance'   => true,
+				'manage_site_settings' => true,
 				'manage_mail_delivery' => true,
 				'manage_location_data' => true,
+				'manage_performance'   => true,
 				'manage_updates'       => true,
+				'manage_webhooks'      => true,
+			),
+		);
+
+		$settings_api = $this->createMock( SettingsApi::class );
+		$settings_api->method( 'get_option' )
+			->with( Constants::SETTING_ROLE_CAPABILITIES )
+			->willReturn( (string) json_encode( $delegated_caps ) );
+
+		$roles = new Roles( $settings_api );
+		$auth  = new Authorization( $roles );
+
+		$editor = array(
+			'id'   => 'user-editor-1',
+			'role' => 'editor',
+		);
+
+		// Editor has the delegated Site & Integrations capabilities
+		$site_and_integrations = array(
+			'manage_site_settings',
+			'manage_mail_delivery',
+			'manage_location_data',
+			'manage_performance',
+			'manage_updates',
+			'manage_webhooks',
+		);
+
+		foreach ( $site_and_integrations as $cap ) {
+			$this->assertTrue(
+				$roles->has_capability( $editor, $cap ),
+				"Editor must possess delegated capability '{$cap}'"
+			);
+			$auth->require_capability( $editor, $cap );
+		}
+
+		// BUT Editor must strictly NOT be recognized as administrator
+		$this->assertFalse( $roles->is_admin( $editor ) );
+		$this->assertFalse( $auth->is_admin( $editor ) );
+
+		try {
+			$auth->require_admin( $editor );
+			$this->fail( 'require_admin must throw 403 for editor even with all Site & Integrations capabilities' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+			$this->assertSame( 'Administrator access required.', $e->getMessage() );
+		}
+
+		// Admin-reserved capabilities remain strictly false for editor
+		$this->assertFalse( $roles->has_capability( $editor, 'manage_users' ) );
+		$this->assertFalse( $roles->has_capability( $editor, 'empty_trash' ) );
+	}
+
+	public function test_editor_cannot_access_admin_reserved_capabilities_even_if_forged_in_storage(): void {
+		$forged_stored = array(
+			'editor' => array(
+				'manage_users' => true,
+				'empty_trash'  => true,
 			),
 		);
 
@@ -359,19 +421,52 @@ class AuthorizationMatrixTest extends TestCase {
 			$this->assertSame( 403, $e->getCode() );
 		}
 
-		// Inapplicable admin capabilities forged in storage must be rejected with 500 fail-closed
+		// Reserved capabilities forged in storage must be rejected with 500 fail-closed
 		try {
 			$roles->capabilities_for_role( 'editor' );
-			$this->fail( 'capabilities_for_role must reject forged inapplicable admin capabilities with 500' );
+			$this->fail( 'capabilities_for_role must reject forged reserved admin capabilities with 500' );
 		} catch ( ApiException $e ) {
 			$this->assertSame( 500, $e->getCode() );
 		}
 
 		try {
-			$roles->has_capability( $editor, 'manage_performance' );
-			$this->fail( 'has_capability must reject forged inapplicable admin capabilities with 500' );
+			$roles->has_capability( $editor, 'manage_users' );
+			$this->fail( 'has_capability must reject forged reserved admin capabilities with 500' );
 		} catch ( ApiException $e ) {
 			$this->assertSame( 500, $e->getCode() );
 		}
+	}
+
+	public function test_editor_with_manage_profile_disabled_is_denied_profile_mutation(): void {
+		$profile_disabled = array(
+			'editor' => array(
+				'manage_profile' => false,
+			),
+		);
+
+		$settings_api = $this->createMock( SettingsApi::class );
+		$settings_api->method( 'get_option' )
+			->with( Constants::SETTING_ROLE_CAPABILITIES )
+			->willReturn( (string) json_encode( $profile_disabled ) );
+
+		$roles = new Roles( $settings_api );
+		$auth  = new Authorization( $roles );
+
+		$editor = array(
+			'id'   => 'user-editor-1',
+			'role' => 'editor',
+		);
+
+		$this->assertFalse( $roles->has_capability( $editor, 'manage_profile' ) );
+
+		try {
+			$auth->require_capability( $editor, 'manage_profile' );
+			$this->fail( 'require_capability must throw 403 when manage_profile is false' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+		}
+
+		// Other default capabilities are preserved
+		$this->assertTrue( $roles->has_capability( $editor, 'create_links' ) );
 	}
 }

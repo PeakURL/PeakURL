@@ -1,5 +1,5 @@
 import type { ChangeEvent, SubmitEvent } from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { X } from "lucide-react";
 
@@ -7,6 +7,7 @@ import { Button, Input, Select, type SelectOption } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { getErrorMessage } from "@/shared/errors";
+import { useGetRolesQuery } from "@/state/slices/api";
 
 import { getInitialFormState, getRoleMeta } from "../../lib";
 import type {
@@ -27,10 +28,20 @@ export function UserDialog({
 }: UserDialogProps) {
 	const isRtl = isDocumentRtl();
 	const roleMeta = getRoleMeta();
-	const roleOptions: SelectOption<UserRole>[] = [
-		{ value: "admin", label: __("Admin") },
-		{ value: "editor", label: __("Editor") },
-	];
+	const { data: roles = [] } = useGetRolesQuery(undefined, { skip: !open });
+
+	const roleOptions = useMemo<SelectOption<UserRole>[]>(() => {
+		if (roles.length > 0) {
+			return roles.map((r) => ({
+				value: r.id,
+				label: r.name,
+			}));
+		}
+		return [
+			{ value: "admin", label: __("Admin") },
+			{ value: "editor", label: __("Editor") },
+		];
+	}, [roles]);
 
 	const [form, setForm] = useState<UserDialogFormState>(() =>
 		getInitialFormState(mode, initialUser)
@@ -252,7 +263,12 @@ export function UserDialog({
 									ariaLabel={__("User role")}
 								/>
 								<p className="users-page-dialog-help">
-									{roleMeta[form.role]?.description}
+									{roles.find((r) => r.id === form.role)
+										?.description ||
+										roleMeta[form.role]?.description ||
+										__(
+											"User role with custom configured permissions."
+										)}
 									{isEditingSelf
 										? ` ${__("Your own role is locked here.")}`
 										: ""}

@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace PeakURL\Core\Auth;
 
 use PeakURL\Api\SettingsApi;
+use PeakURL\Api\UsersApi;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Errors\ApiException;
-use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -25,43 +25,44 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * Mirrors the WordPress pattern of keeping role policy separate from the
  * persistence layer so stores, controllers, and UI payloads can all rely on a
- * single source of truth for admin/editor permissions.
+ * single source of truth for user permissions and custom roles.
  *
  * @since 1.0.0
  */
 class Roles {
 
 	/**
+	 * Canonical regular expression pattern for custom and registered role identifiers.
+	 *
+	 * Requires strict lowercase snake_case starting with an ASCII letter,
+	 * containing only lowercase letters, digits, and single underscore separators.
+	 *
+	 * @var string
+	 * @since 1.7.2
+	 */
+	public const ROLE_ID_PATTERN = '/\A[a-z][a-z0-9]*(?:_[a-z0-9]+)*\z/';
+
+	/**
+	 * Maximum allowed length for role identifiers (matching users.role VARCHAR(32)).
+	 *
+	 * @var int
+	 * @since 1.7.2
+	 */
+	public const MAX_ROLE_ID_LENGTH = 32;
+
+	/**
 	 * Default shipped role capability maps for PeakURL users.
 	 *
 	 * Action-oriented capability model:
-	 * - Administrators have complete site control by default: user management,
-	 *   system settings, and destructive capabilities (permanent link deletion, empty trash).
+	 * - Administrators have complete site control: immutable superuser access
+	 *   evaluated dynamically across all cataloged capabilities.
 	 * - Editors have content management capabilities by default: creating, viewing,
-	 *   and editing permitted links, trashing links, and viewing analytics.
+	 *   and editing permitted links, trashing links, viewing analytics, and profile management.
 	 *
 	 * @var array<string, array<string, bool>>
 	 * @since 1.0.0
 	 */
 	public const ROLE_CAPABILITIES = array(
-		'admin'  => array(
-			'manage_users'         => true,
-			'manage_site_settings' => true,
-			'manage_mail_delivery' => true,
-			'manage_location_data' => true,
-			'manage_performance'   => true,
-			'manage_updates'       => true,
-			'manage_webhooks'      => true,
-			'manage_api_keys'      => true,
-			'manage_profile'       => true,
-			'create_links'         => true,
-			'view_links'           => true,
-			'edit_links'           => true,
-			'trash_links'          => true,
-			'delete_links'         => true,
-			'empty_trash'          => true,
-			'view_analytics'       => true,
-		),
 		'editor' => array(
 			'create_links'   => true,
 			'view_links'     => true,
@@ -73,7 +74,7 @@ class Roles {
 	);
 
 	/**
-	 * Canonical role metadata for supported site roles.
+	 * Canonical role metadata for built-in site roles.
 	 *
 	 * @var array<string, array<string, string>>
 	 * @since 1.7.2
@@ -90,7 +91,7 @@ class Roles {
 	);
 
 	/**
-	 * Definitive catalog of all supported capabilities with grouping and protection metadata.
+	 * Definitive catalog of all supported capabilities with grouping and applicability metadata.
 	 *
 	 * @var array<string, array<string, mixed>>
 	 * @since 1.7.2
@@ -102,9 +103,7 @@ class Roles {
 			'group'            => 'user_access',
 			'group_label'      => 'User & Access',
 			'applicable_roles' => array( 'admin' ),
-			'protected_roles'  => array(
-				'admin' => 'Administrators must retain user management to prevent administrative lockout.',
-			),
+			'protected_roles'  => array(),
 		),
 		'manage_profile'       => array(
 			'label'            => 'Manage Profile',
@@ -112,9 +111,7 @@ class Roles {
 			'group'            => 'user_access',
 			'group_label'      => 'User & Access',
 			'applicable_roles' => array( 'admin', 'editor' ),
-			'protected_roles'  => array(
-				'admin' => 'Administrators must retain profile management.',
-			),
+			'protected_roles'  => array(),
 		),
 		'manage_api_keys'      => array(
 			'label'            => 'Manage API Keys',
@@ -129,17 +126,15 @@ class Roles {
 			'description'      => 'Configure general site settings, branding, timezone, and defaults.',
 			'group'            => 'site_integrations',
 			'group_label'      => 'Site & Integrations',
-			'applicable_roles' => array( 'admin' ),
-			'protected_roles'  => array(
-				'admin' => 'Administrators must retain site configuration access.',
-			),
+			'applicable_roles' => array( 'admin', 'editor' ),
+			'protected_roles'  => array(),
 		),
 		'manage_mail_delivery' => array(
 			'label'            => 'Manage Mail Delivery',
 			'description'      => 'Configure mail delivery transport, SMTP credentials, and send test emails.',
 			'group'            => 'site_integrations',
 			'group_label'      => 'Site & Integrations',
-			'applicable_roles' => array( 'admin' ),
+			'applicable_roles' => array( 'admin', 'editor' ),
 			'protected_roles'  => array(),
 		),
 		'manage_location_data' => array(
@@ -147,7 +142,7 @@ class Roles {
 			'description'      => 'Configure MaxMind GeoIP database credentials and automatic updates.',
 			'group'            => 'site_integrations',
 			'group_label'      => 'Site & Integrations',
-			'applicable_roles' => array( 'admin' ),
+			'applicable_roles' => array( 'admin', 'editor' ),
 			'protected_roles'  => array(),
 		),
 		'manage_performance'   => array(
@@ -155,7 +150,7 @@ class Roles {
 			'description'      => 'Configure cache drivers, default link TTLs, and cache purging.',
 			'group'            => 'site_integrations',
 			'group_label'      => 'Site & Integrations',
-			'applicable_roles' => array( 'admin' ),
+			'applicable_roles' => array( 'admin', 'editor' ),
 			'protected_roles'  => array(),
 		),
 		'manage_updates'       => array(
@@ -163,7 +158,7 @@ class Roles {
 			'description'      => 'Check for and apply application software and database upgrades.',
 			'group'            => 'site_integrations',
 			'group_label'      => 'Site & Integrations',
-			'applicable_roles' => array( 'admin' ),
+			'applicable_roles' => array( 'admin', 'editor' ),
 			'protected_roles'  => array(),
 		),
 		'manage_webhooks'      => array(
@@ -220,9 +215,7 @@ class Roles {
 			'group'            => 'links',
 			'group_label'      => 'Links',
 			'applicable_roles' => array( 'admin' ),
-			'protected_roles'  => array(
-				'admin' => 'Administrator capability cannot be disabled.',
-			),
+			'protected_roles'  => array(),
 		),
 		'view_analytics'       => array(
 			'label'            => 'View Analytics',
@@ -243,9 +236,17 @@ class Roles {
 	private ?SettingsApi $settings_api = null;
 
 	/**
+	 * Users API helper for querying role user assignments.
+	 *
+	 * @var UsersApi|null
+	 * @since 1.7.2
+	 */
+	private ?UsersApi $users_api = null;
+
+	/**
 	 * In-memory memoized stored capabilities map.
 	 *
-	 * @var array<string, array<string, bool>>|null
+	 * @var array<string, mixed>|null
 	 * @since 1.7.2
 	 */
 	private ?array $cached_capabilities = null;
@@ -254,10 +255,13 @@ class Roles {
 	 * Create a new Roles registry instance.
 	 *
 	 * @param SettingsApi|null $settings_api Optional Settings API for persisted capabilities.
+	 * @param UsersApi|null    $users_api    Optional Users API for user assignment queries.
 	 * @since 1.0.0
+	 * @since 1.7.2 Added optional UsersApi parameter.
 	 */
-	public function __construct( ?SettingsApi $settings_api = null ) {
+	public function __construct( ?SettingsApi $settings_api = null, ?UsersApi $users_api = null ) {
 		$this->settings_api = $settings_api;
+		$this->users_api    = $users_api;
 	}
 
 	/**
@@ -273,6 +277,17 @@ class Roles {
 	}
 
 	/**
+	 * Set or update the Users API instance.
+	 *
+	 * @param UsersApi|null $users_api Users API instance.
+	 * @return void
+	 * @since 1.7.2
+	 */
+	public function set_users_api( ?UsersApi $users_api ): void {
+		$this->users_api = $users_api;
+	}
+
+	/**
 	 * Clear in-memory memoized capabilities.
 	 *
 	 * @return void
@@ -283,36 +298,100 @@ class Roles {
 	}
 
 	/**
-	 * Normalise a user role string to a supported PeakURL role.
+	 * Validate that a role identifier conforms to the canonical lowercase snake_case contract.
 	 *
-	 * @param string $role Raw role input.
-	 * @return string Canonical role value.
-	 * @since 1.0.0
+	 * - Length between 1 and 32 ASCII characters.
+	 * - Starts with a lowercase letter.
+	 * - Contains only lowercase letters, digits, and single underscore separators.
+	 *
+	 * @param string $role Role identifier to test.
+	 * @return bool True if valid canonical role identifier syntax.
+	 * @since 1.7.2
 	 */
-	public function normalize_role( string $role ): string {
-		$role = sanitize_key( $role );
-
-		if ( in_array( $role, array( 'admin', 'editor' ), true ) ) {
-			return $role;
+	public static function is_valid_role_id( string $role ): bool {
+		$len = strlen( $role );
+		if ( $len < 1 || $len > self::MAX_ROLE_ID_LENGTH ) {
+			return false;
 		}
 
-		return 'editor';
+		return 1 === preg_match( self::ROLE_ID_PATTERN, $role );
+	}
+
+	/**
+	 * Check whether a role identifier represents a recognized system or custom role.
+	 *
+	 * @param string $role Role identifier to test.
+	 * @return bool True if recognized as admin, editor, or an existing custom role.
+	 * @since 1.7.2
+	 */
+	public function is_registered_role( string $role ): bool {
+		if ( ! self::is_valid_role_id( $role ) ) {
+			return false;
+		}
+
+		return in_array( $role, array( 'admin', 'editor' ), true ) || $this->is_custom_role( $role );
+	}
+
+	/**
+	 * Determine whether a role identifier represents a registered custom role.
+	 *
+	 * @param string $role Role identifier to test.
+	 * @return bool True if the role is a registered custom role.
+	 * @since 1.7.2
+	 */
+	public function is_custom_role( string $role ): bool {
+		if ( ! self::is_valid_role_id( $role ) ) {
+			return false;
+		}
+
+		if ( in_array( $role, array( 'admin', 'editor' ), true ) ) {
+			return false;
+		}
+
+		$custom_roles = $this->get_custom_roles();
+
+		return isset( $custom_roles[ $role ] );
+	}
+
+	/**
+	 * Return registered custom role definitions from storage.
+	 *
+	 * @return array<string, array<string, mixed>> Registered custom roles map keyed by slug.
+	 * @since 1.7.2
+	 */
+	public function get_custom_roles(): array {
+		$stored = $this->get_role_settings();
+
+		return $stored['custom_roles'] ?? array();
 	}
 
 	/**
 	 * Authoritative parser and validator for the role_capabilities JSON storage format.
 	 *
-	 * Distinguishes an absent setting (returns null) from present valid JSON or corrupt storage.
-	 * Enforces that the stored document is a JSON object ({}) rather than a JSON list ([]),
-	 * and validates that each role entry is an associative capability map.
+	 * Storage shape:
+	 * {
+	 *   "editor": { "create_links": true, ... },
+	 *   "custom_roles": {
+	 *     "content_manager": {
+	 *       "name": "Content Manager",
+	 *       "description": "...",
+	 *       "initial_capabilities": { ... },
+	 *       "capabilities": { ... }
+	 *     }
+	 *   }
+	 * }
+	 *
+	 * Rejects any unknown top-level keys or legacy keys.
+	 * Enforces that non-admin capability overrides only map recognized, delegable capabilities.
+	 * Requires \stdClass for capability maps (rejecting JSON arrays []).
 	 *
 	 * @param string|null $raw Stored JSON string or null if absent.
-	 * @return array<string, array<string, bool>>|null Parsed role configuration map or null if absent.
+	 * @return array<string, mixed>|null Parsed role configuration map or null if absent.
 	 *
 	 * @throws ApiException When stored JSON is malformed, top-level list, or corrupt.
 	 * @since 1.7.2
 	 */
-	public function parse_stored_role_capabilities( ?string $raw ): ?array {
+	public function parse_role_settings( ?string $raw ): ?array {
 		if ( null === $raw ) {
 			return null;
 		}
@@ -332,17 +411,19 @@ class Roles {
 			);
 		}
 
-		$result = array();
-		foreach ( (array) $raw_obj as $role_key => $role_val ) {
-			$role_key = (string) $role_key;
-			if ( ! in_array( $role_key, array( 'admin', 'editor' ), true ) ) {
-				throw new ApiException(
-					__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
-					500
-				);
-			}
+		$top_keys         = array_keys( (array) $raw_obj );
+		$unknown_top_keys = array_diff( $top_keys, array( 'editor', 'custom_roles' ) );
+		if ( ! empty( $unknown_top_keys ) ) {
+			throw new ApiException(
+				__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+				500
+			);
+		}
 
-			if ( ! ( $role_val instanceof \stdClass ) ) {
+		$result = array();
+
+		if ( property_exists( $raw_obj, 'editor' ) ) {
+			if ( ! ( $raw_obj->editor instanceof \stdClass ) ) {
 				throw new ApiException(
 					__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
 					500
@@ -350,7 +431,7 @@ class Roles {
 			}
 
 			$role_caps = array();
-			foreach ( (array) $role_val as $cap_id => $cap_val ) {
+			foreach ( (array) $raw_obj->editor as $cap_id => $cap_val ) {
 				$cap_id = (string) $cap_id;
 				if ( ! is_bool( $cap_val ) ) {
 					throw new ApiException(
@@ -368,15 +449,7 @@ class Roles {
 
 				$meta             = self::CAPABILITIES_CATALOG[ $cap_id ];
 				$applicable_roles = $meta['applicable_roles'] ?? array( 'admin', 'editor' );
-				if ( ! in_array( $role_key, $applicable_roles, true ) ) {
-					throw new ApiException(
-						__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
-						500
-					);
-				}
-
-				// Protected roles cannot disable protected capabilities in stored overrides
-				if ( isset( $meta['protected_roles'][ $role_key ] ) && false === $cap_val ) {
+				if ( ! in_array( 'editor', $applicable_roles, true ) ) {
 					throw new ApiException(
 						__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
 						500
@@ -386,19 +459,205 @@ class Roles {
 				$role_caps[ $cap_id ] = $cap_val;
 			}
 
-			$result[ $role_key ] = $role_caps;
+			$result['editor'] = $role_caps;
+		}
+
+		if ( property_exists( $raw_obj, 'custom_roles' ) ) {
+			if ( ! ( $raw_obj->custom_roles instanceof \stdClass ) ) {
+				throw new ApiException(
+					__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+					500
+				);
+			}
+
+			$custom_roles = array();
+			foreach ( (array) $raw_obj->custom_roles as $slug => $entry ) {
+				$slug = (string) $slug;
+				if ( ! self::is_valid_role_id( $slug ) || in_array( $slug, array( 'admin', 'editor' ), true ) ) {
+					throw new ApiException(
+						__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+						500
+					);
+				}
+
+				if ( ! ( $entry instanceof \stdClass ) ) {
+					throw new ApiException(
+						__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+						500
+					);
+				}
+
+				$entry_props   = array_keys( (array) $entry );
+				$unknown_props = array_diff( $entry_props, array( 'name', 'description', 'initial_capabilities', 'capabilities' ) );
+				if ( ! empty( $unknown_props ) ) {
+					throw new ApiException(
+						__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+						500
+					);
+				}
+
+				if ( ! property_exists( $entry, 'name' ) || ! is_string( $entry->name ) ) {
+					throw new ApiException(
+						__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+						500
+					);
+				}
+
+				$name = trim( $entry->name );
+				if ( '' === $name || mb_strlen( $name ) > 100 ) {
+					throw new ApiException(
+						__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+						500
+					);
+				}
+
+				$description = '';
+				if ( property_exists( $entry, 'description' ) ) {
+					if ( ! is_string( $entry->description ) ) {
+						throw new ApiException(
+							__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+							500
+						);
+					}
+					$description = trim( $entry->description );
+					if ( mb_strlen( $description ) > 500 ) {
+						throw new ApiException(
+							__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+							500
+						);
+					}
+				}
+
+				if ( ! property_exists( $entry, 'initial_capabilities' ) || ! ( $entry->initial_capabilities instanceof \stdClass ) ) {
+					throw new ApiException(
+						__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+						500
+					);
+				}
+
+				if ( ! property_exists( $entry, 'capabilities' ) || ! ( $entry->capabilities instanceof \stdClass ) ) {
+					throw new ApiException(
+						__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+						500
+					);
+				}
+
+				$parse_cap_map = function ( \stdClass $raw_map ): array {
+					$parsed_caps = array();
+					foreach ( (array) $raw_map as $c_id => $c_val ) {
+						$c_id = (string) $c_id;
+						if ( ! is_bool( $c_val ) ) {
+							throw new ApiException(
+								__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+								500
+							);
+						}
+
+						if ( ! array_key_exists( $c_id, self::CAPABILITIES_CATALOG ) ) {
+							throw new ApiException(
+								__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+								500
+							);
+						}
+
+						$meta             = self::CAPABILITIES_CATALOG[ $c_id ];
+						$applicable_roles = $meta['applicable_roles'] ?? array( 'admin', 'editor' );
+						if ( ! in_array( 'editor', $applicable_roles, true ) ) {
+							throw new ApiException(
+								__( 'Invalid or corrupted role capabilities configuration in storage.', 'peakurl' ),
+								500
+							);
+						}
+
+						$parsed_caps[ $c_id ] = $c_val;
+					}
+
+					return $parsed_caps;
+				};
+
+				$custom_roles[ $slug ] = array(
+					'name'                 => $name,
+					'description'          => $description,
+					'initial_capabilities' => $parse_cap_map( $entry->initial_capabilities ),
+					'capabilities'         => $parse_cap_map( $entry->capabilities ),
+				);
+			}
+
+			$result['custom_roles'] = $custom_roles;
 		}
 
 		return $result;
 	}
 
 	/**
-	 * Fetch stored custom role capabilities from the settings table.
+	 * Serialize role settings to JSON for storage.
 	 *
-	 * @return array<string, array<string, bool>> Stored capability overrides keyed by role.
+	 * Guarantees that:
+	 * - If settings are empty (no editor overrides and no custom roles), returns null.
+	 * - Empty custom_roles is omitted (never serialized as []).
+	 * - Editor overrides, custom_roles, capabilities, and initial_capabilities maps
+	 *   serialize as JSON objects (\stdClass), never lists ([]).
+	 *
+	 * @param array<string, mixed> $settings Raw settings array.
+	 * @return string|null JSON string or null if empty.
 	 * @since 1.7.2
 	 */
-	public function get_stored_role_capabilities(): array {
+	public static function serialize_role_settings( array $settings ): ?string {
+		$has_editor       = ! empty( $settings['editor'] ) && is_array( $settings['editor'] );
+		$has_custom_roles = ! empty( $settings['custom_roles'] ) && is_array( $settings['custom_roles'] );
+
+		if ( ! $has_editor && ! $has_custom_roles ) {
+			return null;
+		}
+
+		$payload = new \stdClass();
+
+		if ( $has_editor ) {
+			$editor_obj = new \stdClass();
+			foreach ( $settings['editor'] as $k => $v ) {
+				$editor_obj->{ (string) $k} = (bool) $v;
+			}
+			$payload->editor = $editor_obj;
+		}
+
+		if ( $has_custom_roles ) {
+			$roles_obj = new \stdClass();
+			foreach ( $settings['custom_roles'] as $slug => $def ) {
+				$role_obj              = new \stdClass();
+				$role_obj->name        = (string) ( $def['name'] ?? '' );
+				$role_obj->description = (string) ( $def['description'] ?? '' );
+
+				$init_caps = new \stdClass();
+				if ( ! empty( $def['initial_capabilities'] ) && is_array( $def['initial_capabilities'] ) ) {
+					foreach ( $def['initial_capabilities'] as $ck => $cv ) {
+						$init_caps->{ (string) $ck} = (bool) $cv;
+					}
+				}
+				$role_obj->initial_capabilities = $init_caps;
+
+				$caps = new \stdClass();
+				if ( ! empty( $def['capabilities'] ) && is_array( $def['capabilities'] ) ) {
+					foreach ( $def['capabilities'] as $ck => $cv ) {
+						$caps->{ (string) $ck} = (bool) $cv;
+					}
+				}
+				$role_obj->capabilities = $caps;
+
+				$roles_obj->{ (string) $slug} = $role_obj;
+			}
+			$payload->custom_roles = $roles_obj;
+		}
+
+		return \peakurl_json_encode( $payload );
+	}
+
+	/**
+	 * Fetch stored role capabilities and custom role definitions from the settings table.
+	 *
+	 * @return array<string, mixed> Stored role configurations map.
+	 * @since 1.7.2
+	 */
+	public function get_role_settings(): array {
 		if ( null !== $this->cached_capabilities ) {
 			return $this->cached_capabilities;
 		}
@@ -409,56 +668,121 @@ class Roles {
 		}
 
 		$raw    = $this->settings_api->get_option( Constants::SETTING_ROLE_CAPABILITIES );
-		$parsed = $this->parse_stored_role_capabilities( $raw );
+		$parsed = $this->parse_role_settings( $raw );
 
 		$this->cached_capabilities = $parsed ?? array();
 		return $this->cached_capabilities;
 	}
 
 	/**
+	 * Resolve the effective delegable Editor capabilities from shipped defaults and optional overrides.
+	 *
+	 * @param array<string, bool> $editor_overrides Persisted Editor overrides.
+	 * @return array<string, bool> Delegable Editor capability map.
+	 * @since 1.7.2
+	 */
+	public function resolve_editor_capabilities( array $editor_overrides = array() ): array {
+		$defaults = self::ROLE_CAPABILITIES['editor'] ?? array();
+		$resolved = array();
+
+		foreach ( self::CAPABILITIES_CATALOG as $cap_id => $cap_meta ) {
+			$applicable_roles = $cap_meta['applicable_roles'] ?? array( 'admin', 'editor' );
+			if ( ! in_array( 'editor', $applicable_roles, true ) ) {
+				continue;
+			}
+
+			if ( isset( $editor_overrides[ $cap_id ] ) && is_bool( $editor_overrides[ $cap_id ] ) ) {
+				$resolved[ $cap_id ] = $editor_overrides[ $cap_id ];
+			} else {
+				$resolved[ $cap_id ] = ! empty( $defaults[ $cap_id ] );
+			}
+		}
+
+		return $resolved;
+	}
+
+	/**
 	 * Return the effective capability map for a given role.
 	 *
-	 * Combines default shipped definitions with any persisted administrative
-	 * overrides while ensuring immutable protections on the administrator role
-	 * and strict enforcement of capability applicability across roles.
+	 * - Administrators always have every recognized capability set to true.
+	 *   Evaluated directly without reading stored non-admin JSON, so storage
+	 *   corruption cannot lock an administrator out.
+	 * - Editors merge shipped defaults with persisted capability overrides.
+	 * - Custom roles evaluate against their persisted capability maps.
+	 * - Inapplicable capabilities (such as manage_users or empty_trash) always resolve
+	 *   to false for non-admin roles.
+	 * - Unknown or deleted roles resolve to false for all capabilities (fail closed).
 	 *
 	 * @param string $role Raw role input.
 	 * @return array<string, bool> Capability flags keyed by capability name.
 	 * @since 1.0.0
+	 * @since 1.7.2 Added custom role support and immutable admin resolution.
 	 */
 	public function capabilities_for_role( string $role ): array {
-		$role     = $this->normalize_role( $role );
-		$defaults = self::ROLE_CAPABILITIES[ $role ] ?? array();
-		$stored   = $this->get_stored_role_capabilities();
-
-		$caps = array();
-		foreach ( self::CAPABILITIES_CATALOG as $key => $meta ) {
-			$caps[ $key ] = ! empty( $defaults[ $key ] );
-		}
-
-		if ( isset( $stored[ $role ] ) && is_array( $stored[ $role ] ) ) {
-			foreach ( $stored[ $role ] as $key => $val ) {
-				if ( array_key_exists( $key, self::CAPABILITIES_CATALOG ) && is_bool( $val ) ) {
-					$caps[ $key ] = $val;
-				}
-			}
-		}
-
-		// Enforce capability applicability: inapplicable capabilities always resolve to false
-		foreach ( self::CAPABILITIES_CATALOG as $key => $meta ) {
-			$applicable_roles = $meta['applicable_roles'] ?? array( 'admin', 'editor' );
-			if ( ! in_array( $role, $applicable_roles, true ) ) {
+		if ( ! self::is_valid_role_id( $role ) ) {
+			$caps = array();
+			foreach ( self::CAPABILITIES_CATALOG as $key => $meta ) {
 				$caps[ $key ] = false;
 			}
+			return $caps;
 		}
 
-		// Enforce immutable protections on administrator role.
+		// 1. Immutable Administrator superuser
 		if ( 'admin' === $role ) {
+			$caps = array();
 			foreach ( self::CAPABILITIES_CATALOG as $key => $meta ) {
-				if ( isset( $meta['protected_roles']['admin'] ) ) {
-					$caps[ $key ] = true;
+				$caps[ $key ] = true;
+			}
+			return $caps;
+		}
+
+		$stored = $this->get_role_settings();
+
+		// 2. Editor role resolution
+		if ( 'editor' === $role ) {
+			$editor_caps = $this->resolve_editor_capabilities( $stored['editor'] ?? array() );
+			$caps        = array();
+
+			foreach ( self::CAPABILITIES_CATALOG as $key => $meta ) {
+				$caps[ $key ] = $editor_caps[ $key ] ?? false;
+			}
+
+			return $caps;
+		}
+
+		// 3. Custom roles resolution
+		$custom_roles = $stored['custom_roles'] ?? array();
+		if ( isset( $custom_roles[ $role ] ) && is_array( $custom_roles[ $role ] ) ) {
+			$custom_def = $custom_roles[ $role ];
+			$caps       = array();
+
+			foreach ( self::CAPABILITIES_CATALOG as $key => $meta ) {
+				$caps[ $key ] = false;
+			}
+
+			if ( isset( $custom_def['capabilities'] ) && is_array( $custom_def['capabilities'] ) ) {
+				foreach ( $custom_def['capabilities'] as $key => $val ) {
+					if ( array_key_exists( $key, self::CAPABILITIES_CATALOG ) && is_bool( $val ) ) {
+						$caps[ $key ] = $val;
+					}
 				}
 			}
+
+			// Enforce capability applicability ceiling (same as editor)
+			foreach ( self::CAPABILITIES_CATALOG as $key => $meta ) {
+				$applicable_roles = $meta['applicable_roles'] ?? array( 'admin', 'editor' );
+				if ( ! in_array( 'editor', $applicable_roles, true ) ) {
+					$caps[ $key ] = false;
+				}
+			}
+
+			return $caps;
+		}
+
+		// 4. Unknown or deleted role: all capabilities false (fail closed)
+		$caps = array();
+		foreach ( self::CAPABILITIES_CATALOG as $key => $meta ) {
+			$caps[ $key ] = false;
 		}
 
 		return $caps;
@@ -467,15 +791,24 @@ class Roles {
 	/**
 	 * Return whether a user row has a specific capability.
 	 *
+	 * Canonical administrators always have all recognized capabilities without
+	 * parsing stored JSON. For non-admin accounts, checks effective role capabilities.
+	 * Unknown capability names always return false.
+	 *
 	 * @param array<string, mixed> $user       Formatted or raw user row.
 	 * @param string               $capability Capability name to test.
 	 * @return bool True when the capability is granted.
 	 * @since 1.0.0
+	 * @since 1.7.2 Fast-path immutable admin superuser check.
 	 */
 	public function has_capability( array $user, string $capability ): bool {
-		$capabilities = $this->capabilities_for_role(
-			(string) ( $user['role'] ?? 'editor' ),
-		);
+		$role = (string) ( $user['role'] ?? '' );
+
+		if ( 'admin' === $role ) {
+			return array_key_exists( $capability, self::CAPABILITIES_CATALOG );
+		}
+
+		$capabilities = $this->capabilities_for_role( $role );
 
 		return ! empty( $capabilities[ $capability ] );
 	}
@@ -495,9 +828,55 @@ class Roles {
 	}
 
 	/**
+	 * Build structured capability descriptors for role definition API responses.
+	 *
+	 * @param array<string, bool> $current_caps  Effective capability map.
+	 * @param array<string, bool> $baseline_caps Baseline capability map (shipped defaults or initial snapshot).
+	 * @param bool                $is_admin      Whether building for an admin descriptor.
+	 * @return array<int, array<string, mixed>> List of structured capability objects.
+	 * @since 1.7.2
+	 */
+	private function get_capability_descriptors(
+		array $current_caps,
+		array $baseline_caps,
+		bool $is_admin
+	): array {
+		$capabilities = array();
+
+		foreach ( self::CAPABILITIES_CATALOG as $cap_id => $cap_meta ) {
+			$applicable_roles  = $cap_meta['applicable_roles'] ?? array( 'admin', 'editor' );
+			$is_applicable     = $is_admin || in_array( 'editor', $applicable_roles, true );
+			$applicable_reason = ! $is_applicable ? __( 'Reserved for administrators.', 'peakurl' ) : null;
+			$default_val       = ! empty( $baseline_caps[ $cap_id ] );
+			$enabled_val       = ! empty( $current_caps[ $cap_id ] );
+
+			$capabilities[] = array(
+				'id'                => $cap_id,
+				'label'             => $cap_meta['label'],
+				'description'       => $cap_meta['description'],
+				'group'             => $cap_meta['group'],
+				'group_label'       => $cap_meta['group_label'],
+				'enabled'           => $enabled_val,
+				'default'           => $default_val,
+				'protected'         => false,
+				'protected_reason'  => null,
+				'applicable'        => $is_applicable,
+				'applicable_reason' => $applicable_reason,
+			);
+		}
+
+		return $capabilities;
+	}
+
+	/**
 	 * Return rich definition objects for all supported roles and their capabilities.
 	 *
-	 * Suitable for API responses and the dashboard Manage Roles & Capabilities drawer.
+	 * Returns:
+	 * 1. Minimal read-only, non-configurable administrator descriptor.
+	 * 2. Configurable Editor definition.
+	 * 3. Configurable custom roles.
+	 *
+	 * Suitable for API responses and the dashboard user and role management screens.
 	 *
 	 * @return array<int, array<string, mixed>> List of role definition objects.
 	 * @since 1.7.2
@@ -505,50 +884,80 @@ class Roles {
 	public function get_role_definitions(): array {
 		$result = array();
 
-		foreach ( array( 'admin', 'editor' ) as $role ) {
-			$meta         = self::ROLES_METADATA[ $role ];
-			$defaults     = self::ROLE_CAPABILITIES[ $role ] ?? array();
-			$current_caps = $this->capabilities_for_role( $role );
+		// 1. Read-only non-configurable admin descriptor for user assignment/display
+		$result[] = array(
+			'id'              => 'admin',
+			'name'            => self::ROLES_METADATA['admin']['name'],
+			'description'     => self::ROLES_METADATA['admin']['description'],
+			'is_builtin'      => true,
+			'is_configurable' => false,
+			'is_customized'   => false,
+			'capabilities'    => array(),
+			'user_count'      => $this->users_api ? $this->users_api->count_users_by_role( 'admin' ) : 0,
+		);
 
-			$is_custom = false;
+		// 2. Configurable Editor definition
+		$editor_defaults     = self::ROLE_CAPABILITIES['editor'] ?? array();
+		$editor_current_caps = $this->capabilities_for_role( 'editor' );
+		$editor_customized   = false;
+
+		foreach ( self::CAPABILITIES_CATALOG as $cap_id => $cap_meta ) {
+			if ( ! in_array( 'editor', $cap_meta['applicable_roles'] ?? array(), true ) ) {
+				continue;
+			}
+			if ( ( $editor_current_caps[ $cap_id ] ?? false ) !== ( $editor_defaults[ $cap_id ] ?? false ) ) {
+				$editor_customized = true;
+				break;
+			}
+		}
+
+		$result[] = array(
+			'id'              => 'editor',
+			'name'            => self::ROLES_METADATA['editor']['name'],
+			'description'     => self::ROLES_METADATA['editor']['description'],
+			'is_builtin'      => true,
+			'is_configurable' => true,
+			'is_customized'   => $editor_customized,
+			'capabilities'    => $this->get_capability_descriptors(
+				$editor_current_caps,
+				$editor_defaults,
+				false
+			),
+			'user_count'      => $this->users_api ? $this->users_api->count_users_by_role( 'editor' ) : 0,
+		);
+
+		// 3. Registered custom roles
+		$stored       = $this->get_role_settings();
+		$custom_roles = $stored['custom_roles'] ?? array();
+
+		foreach ( $custom_roles as $role_id => $custom_def ) {
+			$initial_caps  = $custom_def['initial_capabilities'] ?? array();
+			$current_caps  = $this->capabilities_for_role( $role_id );
+			$is_customized = false;
+
 			foreach ( self::CAPABILITIES_CATALOG as $cap_id => $cap_meta ) {
-				if ( ( $current_caps[ $cap_id ] ?? false ) !== ( $defaults[ $cap_id ] ?? false ) ) {
-					$is_custom = true;
+				if ( ! in_array( 'editor', $cap_meta['applicable_roles'] ?? array(), true ) ) {
+					continue;
+				}
+				if ( ( $current_caps[ $cap_id ] ?? false ) !== ( $initial_caps[ $cap_id ] ?? false ) ) {
+					$is_customized = true;
 					break;
 				}
 			}
 
-			$capabilities = array();
-			foreach ( self::CAPABILITIES_CATALOG as $cap_id => $cap_meta ) {
-				$is_protected      = isset( $cap_meta['protected_roles'][ $role ] );
-				$protected_reason  = $is_protected ? (string) $cap_meta['protected_roles'][ $role ] : null;
-				$applicable_roles  = $cap_meta['applicable_roles'] ?? array( 'admin', 'editor' );
-				$is_applicable     = in_array( $role, $applicable_roles, true );
-				$applicable_reason = ! $is_applicable ? __( 'Reserved for administrators.', 'peakurl' ) : null;
-				$default_val       = ! empty( $defaults[ $cap_id ] );
-				$enabled_val       = ! empty( $current_caps[ $cap_id ] );
-
-				$capabilities[] = array(
-					'id'                => $cap_id,
-					'label'             => $cap_meta['label'],
-					'description'       => $cap_meta['description'],
-					'group'             => $cap_meta['group'],
-					'group_label'       => $cap_meta['group_label'],
-					'enabled'           => $enabled_val,
-					'default'           => $default_val,
-					'protected'         => $is_protected,
-					'protected_reason'  => $protected_reason,
-					'applicable'        => $is_applicable,
-					'applicable_reason' => $applicable_reason,
-				);
-			}
-
 			$result[] = array(
-				'id'            => $role,
-				'name'          => $meta['name'],
-				'description'   => $meta['description'],
-				'is_customized' => $is_custom,
-				'capabilities'  => $capabilities,
+				'id'              => $role_id,
+				'name'            => $custom_def['name'],
+				'description'     => $custom_def['description'] ?? '',
+				'is_builtin'      => false,
+				'is_configurable' => true,
+				'is_customized'   => $is_customized,
+				'capabilities'    => $this->get_capability_descriptors(
+					$current_caps,
+					$initial_caps,
+					false
+				),
+				'user_count'      => $this->users_api ? $this->users_api->count_users_by_role( $role_id ) : 0,
 			);
 		}
 
@@ -556,84 +965,95 @@ class Roles {
 	}
 
 	/**
-	 * Update capability configuration for a specific role.
+	 * Return the definition object for a single role.
 	 *
-	 * Validates role identity, known capability identifiers, boolean values,
-	 * immutable protections on administrator recovery capabilities, and applicability
-	 * of capabilities to the target role. Persists changes atomically.
+	 * @param string $role Target role identifier.
+	 * @return array<string, mixed> Role definition object.
 	 *
-	 * @param string               $role    Target role identifier ('admin' or 'editor').
-	 * @param array<string, mixed> $payload Input payload containing 'capabilities' map.
-	 * @return array<string, mixed> Updated role definition object.
-	 *
-	 * @throws ApiException When role is invalid, keys are unknown, or values are invalid.
+	 * @throws ApiException When role is not found.
 	 * @since 1.7.2
 	 */
-	public function update_role_capabilities( string $role, array $payload ): array {
-		$role = sanitize_key( $role );
-		if ( ! in_array( $role, array( 'admin', 'editor' ), true ) ) {
+	public function get_role_definition( string $role ): array {
+		if ( ! self::is_valid_role_id( $role ) ) {
+			throw new ApiException( __( 'Role not found.', 'peakurl' ), 404 );
+		}
+
+		foreach ( $this->get_role_definitions() as $def ) {
+			if ( $def['id'] === $role ) {
+				return $def;
+			}
+		}
+
+		throw new ApiException( __( 'Role not found.', 'peakurl' ), 404 );
+	}
+
+	/**
+	 * Get the human-readable display name for a role.
+	 *
+	 * @param string $role Role identifier.
+	 * @return string Display name.
+	 * @since 1.7.2
+	 */
+	public function get_role_name( string $role ): string {
+		if ( 'admin' === $role ) {
+			return __( 'Administrator', 'peakurl' );
+		}
+
+		if ( 'editor' === $role ) {
+			return __( 'Editor', 'peakurl' );
+		}
+
+		if ( self::is_valid_role_id( $role ) ) {
+			$stored = $this->get_role_settings();
+			if ( isset( $stored['custom_roles'][ $role ]['name'] ) && '' !== trim( (string) $stored['custom_roles'][ $role ]['name'] ) ) {
+				return trim( (string) $stored['custom_roles'][ $role ]['name'] );
+			}
+		}
+
+		return ucwords( str_replace( array( '-', '_' ), ' ', $role ) );
+	}
+
+	/**
+	 * Create a new custom role derived from the current Editor capabilities snapshot.
+	 *
+	 * @param string $id          Unique machine slug (max 32 lowercase letters/numbers/underscores).
+	 * @param string $name        Display name (1-100 characters).
+	 * @param string $description Optional description (max 500 characters).
+	 * @return array<string, mixed> Created role definition object.
+	 *
+	 * @throws ApiException On validation failure (422), duplicate ID (409), or storage failure (500).
+	 * @since 1.7.2
+	 */
+	public function create_custom_role( string $id, string $name, string $description = '' ): array {
+		$name        = trim( $name );
+		$description = trim( $description );
+
+		if ( ! self::is_valid_role_id( $id ) ) {
 			throw new ApiException(
-				__( 'Invalid role identifier.', 'peakurl' ),
+				__( 'Role ID must be between 1 and 32 lowercase letters, numbers, and single underscores, starting with a letter.', 'peakurl' ),
 				422
 			);
 		}
 
-		if ( ! isset( $payload['capabilities'] ) || ! is_array( $payload['capabilities'] ) ) {
+		if ( in_array( $id, array( 'admin', 'editor' ), true ) ) {
 			throw new ApiException(
-				__( 'Capabilities payload must be an object with boolean values.', 'peakurl' ),
+				__( 'The role ID is reserved.', 'peakurl' ),
 				422
 			);
 		}
 
-		$input_caps = $payload['capabilities'];
-		$defaults   = self::ROLE_CAPABILITIES[ $role ] ?? array();
+		if ( '' === $name || mb_strlen( $name ) > 100 ) {
+			throw new ApiException(
+				__( 'Role name must be between 1 and 100 characters.', 'peakurl' ),
+				422
+			);
+		}
 
-		foreach ( $input_caps as $key => $value ) {
-			if ( ! array_key_exists( $key, self::CAPABILITIES_CATALOG ) ) {
-				throw new ApiException(
-					sprintf(
-						/* translators: %s is the capability key */
-						__( 'Unknown capability: %s', 'peakurl' ),
-						$key
-					),
-					422
-				);
-			}
-
-			if ( ! is_bool( $value ) ) {
-				throw new ApiException(
-					sprintf(
-						/* translators: %s is the capability key */
-						__( 'Capability value for %s must be a boolean.', 'peakurl' ),
-						$key
-					),
-					422
-				);
-			}
-
-			$cap_meta         = self::CAPABILITIES_CATALOG[ $key ];
-			$applicable_roles = $cap_meta['applicable_roles'] ?? array( 'admin', 'editor' );
-
-			if ( ! in_array( $role, $applicable_roles, true ) ) {
-				throw new ApiException(
-					sprintf(
-						/* translators: %s is the capability key */
-						__( 'Capability "%s" is reserved for administrators and cannot be assigned to editors.', 'peakurl' ),
-						$key
-					),
-					422
-				);
-			}
-
-			// Protected capabilities on admin cannot be disabled.
-			if ( 'admin' === $role && false === $value ) {
-				if ( isset( $cap_meta['protected_roles']['admin'] ) ) {
-					throw new ApiException(
-						__( 'Protected administrator capabilities cannot be disabled.', 'peakurl' ),
-						422
-					);
-				}
-			}
+		if ( mb_strlen( $description ) > 500 ) {
+			throw new ApiException(
+				__( 'Role description must not exceed 500 characters.', 'peakurl' ),
+				422
+			);
 		}
 
 		if ( null === $this->settings_api ) {
@@ -643,67 +1063,290 @@ class Roles {
 			);
 		}
 
+		$created_def = null;
+
 		$this->settings_api->update_option_with_lock(
 			Constants::SETTING_ROLE_CAPABILITIES,
-			function ( ?string $raw ) use ( $role, $input_caps, $defaults ): ?string {
-				$current_stored = $this->parse_stored_role_capabilities( $raw ) ?? array();
+			function ( ?string $raw ) use ( $id, $name, $description, &$created_def ): ?string {
+				$stored_settings = $this->parse_role_settings( $raw ) ?? array();
+				$custom_roles    = $stored_settings['custom_roles'] ?? array();
 
-				$role_caps = $current_stored[ $role ] ?? $defaults;
-				foreach ( $input_caps as $k => $v ) {
-					$role_caps[ $k ] = (bool) $v;
+				if ( count( $custom_roles ) >= 50 ) {
+					throw new ApiException(
+						__( 'Maximum number of custom roles reached (50).', 'peakurl' ),
+						422
+					);
 				}
 
-				// Check if updated role capabilities effectively match shipped defaults
-				$matches_defaults = true;
-				foreach ( self::CAPABILITIES_CATALOG as $cap_id => $cap_meta ) {
-					$eff_val = ! empty( $role_caps[ $cap_id ] );
-					$def_val = ! empty( $defaults[ $cap_id ] );
-					if ( $eff_val !== $def_val ) {
-						$matches_defaults = false;
-						break;
-					}
+				if ( isset( $custom_roles[ $id ] ) ) {
+					throw new ApiException(
+						sprintf(
+							/* translators: %s is the role ID */
+							__( 'A custom role with identifier "%s" already exists.', 'peakurl' ),
+							$id
+						),
+						409
+					);
 				}
 
-				if ( $matches_defaults ) {
-					unset( $current_stored[ $role ] );
-				} else {
-					$current_stored[ $role ] = $role_caps;
-				}
+				$snapshot = $this->resolve_editor_capabilities( $stored_settings['editor'] ?? array() );
 
-				if ( empty( $current_stored ) ) {
-					return null;
-				}
+				$custom_roles[ $id ] = array(
+					'name'                 => $name,
+					'description'          => $description,
+					'initial_capabilities' => $snapshot,
+					'capabilities'         => $snapshot,
+				);
 
-				return \peakurl_json_encode( $current_stored );
+				$stored_settings['custom_roles'] = $custom_roles;
+
+				$created_def = array(
+					'id'              => $id,
+					'name'            => $name,
+					'description'     => $description,
+					'is_builtin'      => false,
+					'is_configurable' => true,
+					'is_customized'   => false,
+					'capabilities'    => $this->get_capability_descriptors( $snapshot, $snapshot, false ),
+					'user_count'      => 0,
+				);
+
+				return self::serialize_role_settings( $stored_settings );
 			}
 		);
 
 		$this->clear_cache();
 
-		$definitions = $this->get_role_definitions();
-		foreach ( $definitions as $def ) {
-			if ( $def['id'] === $role ) {
-				return $def;
-			}
-		}
-
-		return array();
+		return $created_def ?? $this->get_role_definition( $id );
 	}
 
 	/**
-	 * Reset capability configuration for a specific role to shipped defaults.
+	 * Update metadata and/or capability configuration for a role.
 	 *
-	 * Does not affect customizations for other roles and performs atomic mutations.
+	 * - Rejects admin role modifications with 403 (immutable superuser).
+	 * - For Editor: updates delegable capabilities.
+	 * - For custom roles: updates name, description, and/or capabilities.
 	 *
-	 * @param string $role Target role identifier ('admin' or 'editor').
+	 * @param string               $role    Target role identifier.
+	 * @param array<string, mixed> $payload Input payload containing 'capabilities', 'name', or 'description'.
+	 * @return array<string, mixed> Updated role definition object.
+	 *
+	 * @throws ApiException On validation failure (422), permission failure (403), or not found (404).
+	 * @since 1.7.2
+	 */
+	public function update_role_definition( string $role, array $payload ): array {
+		if ( 'admin' === $role ) {
+			throw new ApiException(
+				__( 'Administrator capabilities are immutable.', 'peakurl' ),
+				403
+			);
+		}
+
+		if ( ! self::is_valid_role_id( $role ) || ( 'editor' !== $role && ! $this->is_custom_role( $role ) ) ) {
+			throw new ApiException(
+				__( 'Invalid role identifier.', 'peakurl' ),
+				422
+			);
+		}
+
+		if ( null === $this->settings_api ) {
+			throw new ApiException(
+				__( 'Settings storage is unavailable.', 'peakurl' ),
+				500
+			);
+		}
+
+		$input_caps = null;
+		if ( array_key_exists( 'capabilities', $payload ) ) {
+			if ( ! is_array( $payload['capabilities'] ) ) {
+				throw new ApiException(
+					__( 'Capabilities payload must be an object with boolean values.', 'peakurl' ),
+					422
+				);
+			}
+
+			$input_caps = $payload['capabilities'];
+			foreach ( $input_caps as $key => $value ) {
+				if ( ! array_key_exists( $key, self::CAPABILITIES_CATALOG ) ) {
+					throw new ApiException(
+						sprintf(
+							/* translators: %s is the capability key */
+							__( 'Unknown capability: %s', 'peakurl' ),
+							$key
+						),
+						422
+					);
+				}
+
+				if ( ! is_bool( $value ) ) {
+					throw new ApiException(
+						sprintf(
+							/* translators: %s is the capability key */
+							__( 'Capability value for %s must be a boolean.', 'peakurl' ),
+							$key
+						),
+						422
+					);
+				}
+
+				$cap_meta         = self::CAPABILITIES_CATALOG[ $key ];
+				$applicable_roles = $cap_meta['applicable_roles'] ?? array( 'admin', 'editor' );
+
+				if ( ! in_array( 'editor', $applicable_roles, true ) ) {
+					throw new ApiException(
+						sprintf(
+							/* translators: %s is the capability key */
+							__( 'Capability "%s" is reserved for administrators and cannot be assigned to editors.', 'peakurl' ),
+							$key
+						),
+						422
+					);
+				}
+			}
+		}
+
+		$new_name = null;
+		if ( array_key_exists( 'name', $payload ) ) {
+			if ( 'editor' === $role ) {
+				throw new ApiException(
+					__( 'Built-in role name cannot be modified.', 'peakurl' ),
+					422
+				);
+			}
+			if ( ! is_string( $payload['name'] ) ) {
+				throw new ApiException(
+					__( 'Role name must be a string.', 'peakurl' ),
+					422
+				);
+			}
+			$name_str = trim( $payload['name'] );
+			if ( '' === $name_str || mb_strlen( $name_str ) > 100 ) {
+				throw new ApiException(
+					__( 'Role name must be between 1 and 100 characters.', 'peakurl' ),
+					422
+				);
+			}
+			$new_name = $name_str;
+		}
+
+		$new_description = null;
+		if ( array_key_exists( 'description', $payload ) ) {
+			if ( 'editor' === $role ) {
+				throw new ApiException(
+					__( 'Built-in role description cannot be modified.', 'peakurl' ),
+					422
+				);
+			}
+			if ( ! is_string( $payload['description'] ) ) {
+				throw new ApiException(
+					__( 'Role description must be a string.', 'peakurl' ),
+					422
+				);
+			}
+			$desc_str = trim( $payload['description'] );
+			if ( mb_strlen( $desc_str ) > 500 ) {
+				throw new ApiException(
+					__( 'Role description must not exceed 500 characters.', 'peakurl' ),
+					422
+				);
+			}
+			$new_description = $desc_str;
+		}
+
+		$this->settings_api->update_option_with_lock(
+			Constants::SETTING_ROLE_CAPABILITIES,
+			function ( ?string $raw ) use ( $role, $input_caps, $new_name, $new_description ): ?string {
+				$stored_settings = $this->parse_role_settings( $raw ) ?? array();
+
+				if ( 'editor' === $role ) {
+					$defaults  = self::ROLE_CAPABILITIES['editor'] ?? array();
+					$role_caps = $stored_settings['editor'] ?? $defaults;
+
+					if ( null !== $input_caps ) {
+						foreach ( $input_caps as $k => $v ) {
+							$role_caps[ $k ] = (bool) $v;
+						}
+					}
+
+					// Check if updated role capabilities effectively match shipped defaults
+					$matches_defaults = true;
+					foreach ( self::CAPABILITIES_CATALOG as $cap_id => $cap_meta ) {
+						if ( ! in_array( 'editor', $cap_meta['applicable_roles'] ?? array(), true ) ) {
+							continue;
+						}
+						$eff_val = ! empty( $role_caps[ $cap_id ] );
+						$def_val = ! empty( $defaults[ $cap_id ] );
+						if ( $eff_val !== $def_val ) {
+							$matches_defaults = false;
+							break;
+						}
+					}
+
+					if ( $matches_defaults ) {
+						unset( $stored_settings['editor'] );
+					} else {
+						$stored_settings['editor'] = $role_caps;
+					}
+				} else {
+					$custom_roles = $stored_settings['custom_roles'] ?? array();
+					if ( ! isset( $custom_roles[ $role ] ) ) {
+						throw new ApiException( __( 'Role not found.', 'peakurl' ), 404 );
+					}
+
+					if ( null !== $new_name ) {
+						$custom_roles[ $role ]['name'] = $new_name;
+					}
+
+					if ( null !== $new_description ) {
+						$custom_roles[ $role ]['description'] = $new_description;
+					}
+
+					if ( null !== $input_caps ) {
+						$caps = $custom_roles[ $role ]['capabilities'] ?? array();
+						foreach ( $input_caps as $k => $v ) {
+							$caps[ $k ] = (bool) $v;
+						}
+						$custom_roles[ $role ]['capabilities'] = $caps;
+					}
+
+					$stored_settings['custom_roles'] = $custom_roles;
+				}
+
+				if ( empty( $stored_settings['editor'] ) && empty( $stored_settings['custom_roles'] ) ) {
+					return null;
+				}
+
+				return self::serialize_role_settings( $stored_settings );
+			}
+		);
+
+		$this->clear_cache();
+
+		return $this->get_role_definition( $role );
+	}
+
+	/**
+	 * Reset capability configuration for a specific role.
+	 *
+	 * - Editor is restored to shipped Editor defaults.
+	 * - Custom roles are restored to their own creation-time snapshot.
+	 * - Administrator reset requests are rejected with 403 (immutable superuser).
+	 *
+	 * @param string $role Target role identifier.
 	 * @return array<string, mixed> Reset role definition object.
 	 *
-	 * @throws ApiException When role is invalid or settings storage is unavailable.
+	 * @throws ApiException When role is invalid, administrator, or settings unavailable.
 	 * @since 1.7.2
 	 */
 	public function reset_role_capabilities( string $role ): array {
-		$role = sanitize_key( $role );
-		if ( ! in_array( $role, array( 'admin', 'editor' ), true ) ) {
+		if ( 'admin' === $role ) {
+			throw new ApiException(
+				__( 'Administrator capabilities are immutable.', 'peakurl' ),
+				403
+			);
+		}
+
+		if ( ! self::is_valid_role_id( $role ) || ( 'editor' !== $role && ! $this->is_custom_role( $role ) ) ) {
 			throw new ApiException(
 				__( 'Invalid role identifier.', 'peakurl' ),
 				422
@@ -720,30 +1363,109 @@ class Roles {
 		$this->settings_api->update_option_with_lock(
 			Constants::SETTING_ROLE_CAPABILITIES,
 			function ( ?string $raw ) use ( $role ): ?string {
-				$current_stored = $this->parse_stored_role_capabilities( $raw );
-				if ( null === $current_stored ) {
+				$stored_settings = $this->parse_role_settings( $raw );
+				if ( null === $stored_settings ) {
 					return null;
 				}
 
-				unset( $current_stored[ $role ] );
+				if ( 'editor' === $role ) {
+					unset( $stored_settings['editor'] );
+				} else {
+					$custom_roles = $stored_settings['custom_roles'] ?? array();
+					if ( isset( $custom_roles[ $role ] ) ) {
+						// Reset capabilities to its own creation snapshot
+						$custom_roles[ $role ]['capabilities'] = $custom_roles[ $role ]['initial_capabilities'];
+						$stored_settings['custom_roles']       = $custom_roles;
+					}
+				}
 
-				if ( empty( $current_stored ) ) {
+				if ( empty( $stored_settings['editor'] ) && empty( $stored_settings['custom_roles'] ) ) {
 					return null;
 				}
 
-				return \peakurl_json_encode( $current_stored );
+				return self::serialize_role_settings( $stored_settings );
 			}
 		);
 
 		$this->clear_cache();
 
-		$definitions = $this->get_role_definitions();
-		foreach ( $definitions as $def ) {
-			if ( $def['id'] === $role ) {
-				return $def;
-			}
+		return $this->get_role_definition( $role );
+	}
+
+	/**
+	 * Delete a custom role from the registry.
+	 *
+	 * Built-in roles (admin, editor) cannot be deleted.
+	 * Custom roles cannot be deleted while assigned to any users (409 Conflict).
+	 *
+	 * @param string $role Target custom role identifier.
+	 * @return void
+	 *
+	 * @throws ApiException On built-in deletion (403), not found (404), assigned users (409), or storage unavailable (500).
+	 * @since 1.7.2
+	 */
+	public function delete_custom_role( string $role ): void {
+		if ( in_array( $role, array( 'admin', 'editor' ), true ) ) {
+			throw new ApiException(
+				__( 'Built-in roles cannot be deleted.', 'peakurl' ),
+				403
+			);
 		}
 
-		return array();
+		if ( ! self::is_valid_role_id( $role ) || ! $this->is_custom_role( $role ) ) {
+			throw new ApiException(
+				__( 'Role not found.', 'peakurl' ),
+				404
+			);
+		}
+
+		if ( null === $this->settings_api || null === $this->users_api ) {
+			throw new ApiException(
+				__( 'Required storage or user services are unavailable.', 'peakurl' ),
+				500
+			);
+		}
+
+		$this->settings_api->update_option_with_lock(
+			Constants::SETTING_ROLE_CAPABILITIES,
+			function ( ?string $raw ) use ( $role ): ?string {
+				$stored_settings = $this->parse_role_settings( $raw ) ?? array();
+
+				$custom_roles = $stored_settings['custom_roles'] ?? array();
+				if ( ! isset( $custom_roles[ $role ] ) ) {
+					throw new ApiException( __( 'Role not found.', 'peakurl' ), 404 );
+				}
+
+				$role_name = (string) ( $custom_roles[ $role ]['name'] ?? $role );
+
+				$assigned_count = $this->users_api->count_role_assignments_for_update( $role );
+				if ( $assigned_count > 0 ) {
+					throw new ApiException(
+						sprintf(
+							/* translators: 1: role name, 2: user count */
+							__( 'Cannot delete role "%1$s" because it is assigned to %2$d user(s). Reassign them first.', 'peakurl' ),
+							$role_name,
+							$assigned_count
+						),
+						409
+					);
+				}
+
+				unset( $custom_roles[ $role ] );
+				if ( empty( $custom_roles ) ) {
+					unset( $stored_settings['custom_roles'] );
+				} else {
+					$stored_settings['custom_roles'] = $custom_roles;
+				}
+
+				if ( empty( $stored_settings['editor'] ) && empty( $stored_settings['custom_roles'] ) ) {
+					return null;
+				}
+
+				return self::serialize_role_settings( $stored_settings );
+			}
+		);
+
+		$this->clear_cache();
 	}
 }

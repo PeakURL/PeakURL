@@ -1,4 +1,5 @@
 import { ConfirmDialog, Input } from "@/components";
+import { useAdminAccess } from "@/hooks";
 import { __, sprintf } from "@/i18n";
 import {
 	ActiveSessions,
@@ -18,20 +19,39 @@ function SecurityTab({
 	isUpdating,
 	notification,
 }: SecurityTabProps) {
+	const { canManageProfile } = useAdminAccess();
 	const security = useSecurityTab({ notification });
 	const { activeSessions, direction, isRtl, twoFactor } = security;
 
 	return (
 		<div className="settings-security">
-			<PasswordSettings
-				securityForm={securityForm}
-				setSecurityForm={setSecurityForm}
-				onSubmit={onSubmit}
-				isUpdating={isUpdating}
-				isRtl={isRtl}
-			/>
+			{canManageProfile ? (
+				<>
+					<PasswordSettings
+						securityForm={securityForm}
+						setSecurityForm={setSecurityForm}
+						onSubmit={onSubmit}
+						isUpdating={isUpdating}
+						isRtl={isRtl}
+					/>
 
-			<TwoFactorSettings direction={direction} {...twoFactor.section} />
+					<TwoFactorSettings
+						direction={direction}
+						{...twoFactor.section}
+					/>
+				</>
+			) : (
+				<div className="rounded-xl border border-stroke bg-surface p-5 text-start space-y-1 mb-6">
+					<h2 className="text-sm font-semibold text-heading">
+						{__("Account Security")}
+					</h2>
+					<p className="text-xs text-text-muted">
+						{__(
+							"Password and two-factor authentication management are disabled for your role."
+						)}
+					</p>
+				</div>
+			)}
 
 			<ActiveSessions direction={direction} {...activeSessions.section} />
 

@@ -264,7 +264,7 @@ class Authorization {
 		string $acting_user_id,
 		?callable $admin_count_check = null
 	): void {
-		$current_role = $this->roles->normalize_role( $current_role );
+		$current_role = sanitize_key( $current_role );
 
 		if ( 'admin' !== $current_role ) {
 			return;

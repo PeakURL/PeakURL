@@ -22,11 +22,11 @@
 
 	/* Hero Section */
 	.users-page-hero {
-		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between px-1 pt-1;
+		@apply flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between px-1 pt-1;
 	}
 
 	.users-page-hero-copy {
-		@apply min-w-0 flex flex-col;
+		@apply min-w-0 flex-1 max-w-2xl flex flex-col;
 		text-align: start;
 	}
 
@@ -41,6 +41,14 @@
 	.users-page-summary {
 		@apply mt-1 text-sm leading-relaxed text-text-muted;
 		text-align: start;
+	}
+
+	.users-page-hero-actions {
+		@apply flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-2.5 shrink-0 w-full sm:w-auto;
+	}
+
+	.users-page-hero-action-button {
+		@apply whitespace-nowrap justify-center w-full sm:w-auto;
 	}
 
 	/* Overview Metric Cards - Uniform 4-column grid */
@@ -259,6 +267,10 @@
 
 	.users-page-role-badge-editor {
 		@apply border-blue-500/20 bg-blue-500/10 text-blue-700 dark:text-blue-400;
+	}
+
+	.users-page-role-badge-custom {
+		@apply border-purple-500/20 bg-purple-500/10 text-purple-700 dark:text-purple-400;
 	}
 
 	.users-page-date-primary {

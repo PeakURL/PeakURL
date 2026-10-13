@@ -13,6 +13,8 @@ import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { getErrorMessage } from "@/shared/errors";
 import {
+	useCreateRoleMutation,
+	useDeleteRoleMutation,
 	useGetRolesQuery,
 	useResetRoleCapabilitiesMutation,
 	useUpdateRoleCapabilitiesMutation,
@@ -20,7 +22,9 @@ import {
 
 import {
 	CapabilityGroupCard,
+	CreateRoleDialog,
 	DrawerFooter,
+	EditRoleDialog,
 	RoleMetadataCard,
 	RolesHeader,
 	RolesTabs,
@@ -54,20 +58,37 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 		useUpdateRoleCapabilitiesMutation();
 	const [resetRole, { isLoading: isResetting }] =
 		useResetRoleCapabilitiesMutation();
+	const [createRole, { isLoading: isCreating }] = useCreateRoleMutation();
+	const [deleteRole, { isLoading: isDeleting }] = useDeleteRoleMutation();
 
-	const isSaving = isUpdating || isResetting;
+	const isSaving = isUpdating || isResetting || isCreating || isDeleting;
 
-	const [selectedRoleId, setSelectedRoleId] = useState<string>("admin");
+	// Redesign: Administrator is an immutable superuser.
+	// Only Editor and independent custom roles are configurable in this drawer.
+	const configurableRoles = useMemo(() => {
+		return roles.filter(
+			(r) => r.isConfigurable !== false && r.id !== "admin"
+		);
+	}, [roles]);
+
+	const [selectedRoleId, setSelectedRoleId] = useState<string>("editor");
 	const [roleDrafts, setRoleDrafts] = useState<
 		Record<string, Record<string, boolean>>
 	>({});
 	const [confirmResetOpen, setConfirmResetOpen] = useState(false);
 	const [confirmDiscardOpen, setConfirmDiscardOpen] = useState(false);
+	const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+	const [createDialogOpen, setCreateDialogOpen] = useState(false);
+	const [editDialogOpen, setEditDialogOpen] = useState(false);
 
 	const activeRole: RoleDefinition | undefined = useMemo(() => {
-		if (!roles.length) return undefined;
-		return roles.find((r) => r.id === selectedRoleId) || roles[0];
-	}, [roles, selectedRoleId]);
+		if (!configurableRoles.length) return undefined;
+		return (
+			configurableRoles.find((r) => r.id === selectedRoleId) ||
+			configurableRoles.find((r) => r.id === "editor") ||
+			configurableRoles[0]
+		);
+	}, [configurableRoles, selectedRoleId]);
 
 	const activeDraft = useMemo<Record<string, boolean>>(() => {
 		if (!activeRole) return {};
@@ -93,9 +114,9 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 		);
 	}, [activeRole, roleDrafts]);
 
-	// Global dirty tracking across all roles for close confirmation
+	// Global dirty tracking across all configurable roles for close confirmation
 	const hasAnyUnsavedChanges = useMemo(() => {
-		for (const role of roles) {
+		for (const role of configurableRoles) {
 			const drafts = roleDrafts[role.id];
 			if (drafts) {
 				const isRoleDirty = role.capabilities.some(
@@ -111,7 +132,7 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 			}
 		}
 		return false;
-	}, [roles, roleDrafts]);
+	}, [configurableRoles, roleDrafts]);
 
 	const handleToggleCapability = (capId: string, nextValue: boolean) => {
 		if (!activeRole) return;
@@ -130,7 +151,6 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 		const targetRoleId = activeRole.id;
 		const targetRoleName = activeRole.name;
 
-		// Submit only changed, applicable, editable capability keys as partial/delta payload
 		const changedCapabilities: Record<string, boolean> = {};
 		for (const cap of activeRole.capabilities) {
 			if (cap.applicable === false || cap.protected) continue;
@@ -148,7 +168,6 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 				capabilities: changedCapabilities,
 			}).unwrap();
 
-			// Clear drafts for this role now that saved server state matches
 			setRoleDrafts((prev) => {
 				const next = { ...prev };
 				delete next[targetRoleId];
@@ -179,11 +198,11 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 
 		const targetRoleId = activeRole.id;
 		const targetRoleName = activeRole.name;
+		const isBuiltin = activeRole.isBuiltin;
 
 		try {
 			await resetRole({ role: targetRoleId }).unwrap();
 
-			// Clear local drafts for this role
 			setRoleDrafts((prev) => {
 				const next = { ...prev };
 				delete next[targetRoleId];
@@ -193,12 +212,18 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 			setConfirmResetOpen(false);
 
 			notification.success(
-				__("Role reset to defaults"),
+				isBuiltin
+					? __("Role reset to defaults")
+					: __("Role reset to snapshot"),
 				sprintf(
 					/* translators: %s is the role display name */
-					__(
-						"Capabilities for %s have been restored to shipped defaults."
-					),
+					isBuiltin
+						? __(
+								"Capabilities for %s have been restored to shipped defaults."
+							)
+						: __(
+								"Capabilities for %s have been restored to its creation snapshot."
+							),
 					targetRoleName
 				)
 			);
@@ -213,7 +238,112 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 		}
 	};
 
-	// Consistent close handler routed through unsaved change guard
+	const handleCreateRole = async (payload: {
+		id: string;
+		name: string;
+		description: string;
+	}) => {
+		try {
+			await createRole(payload).unwrap();
+			setSelectedRoleId(payload.id);
+			setCreateDialogOpen(false);
+			notification.success(
+				__("Custom role created"),
+				sprintf(
+					/* translators: %s is role display name */
+					__(
+						"Custom role '%s' created from current Editor permissions."
+					),
+					payload.name
+				)
+			);
+		} catch (error) {
+			notification.error(
+				__("Failed to create role"),
+				getErrorMessage(error, __("Could not create custom role."))
+			);
+			throw error;
+		}
+	};
+
+	const handleEditRole = async (payload: {
+		role: string;
+		name: string;
+		description: string;
+	}) => {
+		try {
+			await updateRole({
+				role: payload.role,
+				name: payload.name,
+				description: payload.description,
+			}).unwrap();
+			setEditDialogOpen(false);
+			notification.success(
+				__("Role updated"),
+				sprintf(
+					/* translators: %s is role display name */
+					__("Custom role '%s' details updated successfully."),
+					payload.name
+				)
+			);
+		} catch (error) {
+			notification.error(
+				__("Failed to update role"),
+				getErrorMessage(error, __("Could not update role details."))
+			);
+			throw error;
+		}
+	};
+
+	const handleConfirmDelete = async () => {
+		if (!activeRole || activeRole.isBuiltin || isSaving) return;
+
+		if (activeRole.userCount > 0) {
+			notification.error(
+				__("Cannot delete role"),
+				sprintf(
+					/* translators: %d is user count */
+					__(
+						"Cannot delete role: %d user(s) currently have this role assigned. Reassign all users first."
+					),
+					activeRole.userCount
+				)
+			);
+			setConfirmDeleteOpen(false);
+			return;
+		}
+
+		const deletedName = activeRole.name;
+		const deletedId = activeRole.id;
+
+		try {
+			await deleteRole({ role: deletedId }).unwrap();
+
+			setRoleDrafts((prev) => {
+				const next = { ...prev };
+				delete next[deletedId];
+				return next;
+			});
+
+			setSelectedRoleId("editor");
+			setConfirmDeleteOpen(false);
+
+			notification.success(
+				__("Role deleted"),
+				sprintf(
+					/* translators: %s is the role display name */
+					__("Custom role '%s' has been deleted successfully."),
+					deletedName
+				)
+			);
+		} catch (error) {
+			notification.error(
+				__("Failed to delete role"),
+				getErrorMessage(error, __("Could not delete custom role."))
+			);
+		}
+	};
+
 	const handleAttemptClose = () => {
 		if (isSaving) return;
 		if (hasAnyUnsavedChanges) {
@@ -230,7 +360,6 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 		onClose();
 	};
 
-	// Group capabilities by functional category
 	const groupedCapabilities = useMemo(() => {
 		if (!activeRole) return [];
 
@@ -243,7 +372,6 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 			groupsMap.get(groupKey)!.push(cap);
 		}
 
-		// Sort by canonical order
 		const sortedGroups: {
 			key: string;
 			label: string;
@@ -262,7 +390,6 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 			}
 		}
 
-		// Append any remaining unknown groups
 		for (const [key, caps] of groupsMap.entries()) {
 			sortedGroups.push({
 				key,
@@ -346,12 +473,15 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 									<div className="space-y-5">
 										{/* Role Selection Tabs */}
 										<RolesTabs
-											roles={roles}
+											roles={configurableRoles}
 											selectedRoleId={
-												activeRole?.id ?? "admin"
+												activeRole?.id ?? "editor"
 											}
 											onSelectRole={setSelectedRoleId}
 											roleDrafts={roleDrafts}
+											onCreateRoleClick={() =>
+												setCreateDialogOpen(true)
+											}
 											disabled={isSaving}
 										/>
 
@@ -359,6 +489,13 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 										{activeRole ? (
 											<RoleMetadataCard
 												role={activeRole}
+												onEditRoleClick={() =>
+													setEditDialogOpen(true)
+												}
+												onDeleteRoleClick={() =>
+													setConfirmDeleteOpen(true)
+												}
+												disabled={isSaving}
 											/>
 										) : null}
 
@@ -402,6 +539,23 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 				</div>
 			</Dialog>
 
+			{/* Create Role Modal */}
+			<CreateRoleDialog
+				isOpen={createDialogOpen}
+				onClose={() => setCreateDialogOpen(false)}
+				onSubmit={handleCreateRole}
+				isSubmitting={isCreating}
+			/>
+
+			{/* Edit Role Modal */}
+			<EditRoleDialog
+				isOpen={editDialogOpen}
+				role={activeRole}
+				onClose={() => setEditDialogOpen(false)}
+				onSubmit={handleEditRole}
+				isSubmitting={isUpdating}
+			/>
+
 			{/* Confirm Reset Dialog */}
 			<ConfirmDialog
 				open={confirmResetOpen}
@@ -416,22 +570,66 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 				}
 				description={
 					activeRole
-						? sprintf(
-								/* translators: %s is the role display name */
-								__(
-									"This will restore the shipped default permissions for the %s role. Any custom capabilities assigned to this role will be reverted. Other roles will remain unaffected."
-								),
-								activeRole.name
-							)
+						? activeRole.isBuiltin
+							? sprintf(
+									/* translators: %s is the role display name */
+									__(
+										"This will restore the shipped default permissions for the %s role. Any custom capabilities assigned to this role will be reverted. Other roles will remain unaffected."
+									),
+									activeRole.name
+								)
+							: sprintf(
+									/* translators: %s is the role display name */
+									__(
+										"This will restore the creation-time snapshot for the %s role. Any capability modifications made since this role was created will be reverted."
+									),
+									activeRole.name
+								)
 						: __(
-								"This will restore the shipped default permissions for the selected role."
+								"This will restore default capabilities for the selected role."
 							)
 				}
-				confirmText={__("Reset to Defaults")}
+				confirmText={
+					activeRole?.isBuiltin
+						? __("Reset to Defaults")
+						: __("Reset to Snapshot")
+				}
 				cancelText={__("Cancel")}
 				confirmVariant="danger"
 				onConfirm={handleConfirmReset}
 				onClose={() => setConfirmResetOpen(false)}
+			/>
+
+			{/* Confirm Delete Dialog */}
+			<ConfirmDialog
+				open={confirmDeleteOpen}
+				title={
+					activeRole
+						? sprintf(
+								/* translators: %s is role name */
+								__("Delete %s role?"),
+								activeRole.name
+							)
+						: __("Delete role?")
+				}
+				description={
+					activeRole
+						? sprintf(
+								/* translators: %s is role name */
+								__(
+									"Are you sure you want to delete the custom role '%s'? This action cannot be undone."
+								),
+								activeRole.name
+							)
+						: __(
+								"Are you sure you want to delete this custom role?"
+							)
+				}
+				confirmText={__("Delete Role")}
+				cancelText={__("Cancel")}
+				confirmVariant="danger"
+				onConfirm={handleConfirmDelete}
+				onClose={() => setConfirmDeleteOpen(false)}
 			/>
 
 			{/* Confirm Discard Dialog */}

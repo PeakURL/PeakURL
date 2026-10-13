@@ -209,7 +209,6 @@ class Service {
 	 */
 	private function get_update_user( Request $request ): array {
 		$user = $this->auth_service->get_current_user( $request );
-		$this->authorization->require_admin( $user, __( 'Admin access is required.', 'peakurl' ) );
 		$this->authorization->validate_capability(
 			$user,
 			'manage_updates',

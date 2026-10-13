@@ -22,8 +22,10 @@ export { default as baseApi } from "./base";
 export { rolesApi } from "./roles";
 export {
 	useGetRolesQuery,
+	useCreateRoleMutation,
 	useUpdateRoleCapabilitiesMutation,
 	useResetRoleCapabilitiesMutation,
+	useDeleteRoleMutation,
 } from "./roles";
 export { systemApi } from "./system";
 export {

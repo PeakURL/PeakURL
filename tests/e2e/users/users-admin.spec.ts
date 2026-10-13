@@ -229,7 +229,7 @@ test.describe("Users & Roles Admin Journeys", () => {
 		await expect(dialogTitle).not.toBeVisible();
 	});
 
-	test("manage roles drawer opens, shows role tabs, grouped capabilities and protected administrative badges", async ({
+	test("manage roles drawer opens, shows configurable role tabs without immutable administrator, and displays grouped capabilities with admin-only badges", async ({
 		authenticatedPage: page,
 	}) => {
 		await page.goto("/dashboard/users", { waitUntil: "commit" });
@@ -250,12 +250,15 @@ test.describe("Users & Roles Admin Journeys", () => {
 		});
 		await expect(drawerTitle).toBeVisible();
 
-		// Role tabs
+		// Role tabs: immutable administrator is not configurable; Editor and Create Role are available
 		await expect(
 			page.getByRole("button", { name: /administrator/i })
-		).toBeVisible();
+		).not.toBeVisible();
 		const editorTab = page.getByRole("button", { name: /editor/i });
 		await expect(editorTab).toBeVisible();
+		await expect(
+			page.getByRole("button", { name: /create role/i })
+		).toBeVisible();
 
 		// Group headers
 		await expect(page.getByText(/user & access/i).first()).toBeVisible();
@@ -265,14 +268,11 @@ test.describe("Users & Roles Admin Journeys", () => {
 		await expect(page.getByText(/^links$/i).first()).toBeVisible();
 		await expect(page.getByText(/^analytics$/i).first()).toBeVisible();
 
-		// Protected badge on administrator role
-		await expect(page.getByText(/protected/i).first()).toBeVisible();
-
-		// Switch to Editor tab
-		await editorTab.click();
-
 		// Editor tab displays Admin only badge for reserved capabilities
 		await expect(page.getByText(/admin only/i).first()).toBeVisible();
+
+		// Protected badges are not displayed (immutable superuser is not configurable)
+		await expect(page.getByText(/protected/i)).not.toBeVisible();
 
 		// Close drawer without edits closes cleanly
 		await page.keyboard.press("Escape");

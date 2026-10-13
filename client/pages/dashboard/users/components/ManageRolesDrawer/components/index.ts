@@ -16,3 +16,9 @@ export type { CapabilityGroupCardProps } from "./CapabilityGroupCard";
 
 export { DrawerFooter } from "./DrawerFooter";
 export type { DrawerFooterProps } from "./DrawerFooter";
+
+export { CreateRoleDialog } from "./CreateRoleDialog";
+export type { CreateRoleDialogProps } from "./CreateRoleDialog";
+
+export { EditRoleDialog } from "./EditRoleDialog";
+export type { EditRoleDialogProps } from "./EditRoleDialog";

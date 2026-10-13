@@ -151,6 +151,38 @@ class UsersApi {
 	}
 
 	/**
+	 * Count users with a specific role.
+	 *
+	 * @param string $role Target role identifier.
+	 * @return int Number of user rows with this role.
+	 * @since 1.7.2
+	 */
+	public function count_users_by_role( string $role ): int {
+		return $this->db->count(
+			'users',
+			array( 'role' => $role ),
+		);
+	}
+
+	/**
+	 * Count assigned users for a given role under exclusive row locks in deterministic ID order.
+	 *
+	 * Executes within the caller's active transaction.
+	 *
+	 * @param string $role Target role identifier.
+	 * @return int Number of locked user rows assigned to this role.
+	 * @since 1.7.2
+	 */
+	public function count_role_assignments_for_update( string $role ): int {
+		return count(
+			$this->db->get_results(
+				'SELECT id FROM users WHERE role = ? ORDER BY id ASC FOR UPDATE',
+				array( $role )
+			)
+		);
+	}
+
+	/**
 	 * Count admin users.
 	 *
 	 * Performs an ordinary non-locking count of admin accounts. For exclusive locking
@@ -188,7 +220,7 @@ class UsersApi {
 	 */
 	public function list_users(): array {
 		return $this->db->get_results(
-			'SELECT * FROM users ORDER BY FIELD(role, \'admin\', \'editor\'), created_at ASC'
+			'SELECT * FROM users ORDER BY CASE WHEN role = \'admin\' THEN 0 WHEN role = \'editor\' THEN 1 ELSE 2 END, created_at ASC'
 		);
 	}
 }

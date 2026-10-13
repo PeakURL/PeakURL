@@ -277,7 +277,6 @@ class Service {
 	 */
 	private function get_settings_user( Request $request ): array {
 		$user = $this->auth_service->get_current_user( $request );
-		$this->authorization->require_admin( $user, __( 'Admin access is required.', 'peakurl' ) );
 		$this->authorization->validate_capability(
 			$user,
 			'manage_site_settings',
@@ -296,7 +295,6 @@ class Service {
 	 */
 	private function get_mail_user( Request $request ): array {
 		$user = $this->auth_service->get_current_user( $request );
-		$this->authorization->require_admin( $user, __( 'Admin access is required.', 'peakurl' ) );
 		$this->authorization->validate_capability(
 			$user,
 			'manage_mail_delivery',
@@ -315,7 +313,6 @@ class Service {
 	 */
 	private function get_geoip_user( Request $request ): array {
 		$user = $this->auth_service->get_current_user( $request );
-		$this->authorization->require_admin( $user, __( 'Admin access is required.', 'peakurl' ) );
 		$this->authorization->validate_capability(
 			$user,
 			'manage_location_data',
@@ -334,7 +331,6 @@ class Service {
 	 */
 	private function get_performance_user( Request $request ): array {
 		$user = $this->auth_service->get_current_user( $request );
-		$this->authorization->require_admin( $user, __( 'Admin access is required.', 'peakurl' ) );
 		$this->authorization->validate_capability(
 			$user,
 			'manage_performance',

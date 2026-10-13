@@ -6,7 +6,7 @@ import { getDocumentDirection } from "@/i18n/direction";
 import { cn, formatDate } from "@/shared/formatting";
 import { formatLocalizedDateTime } from "@/shared/dates";
 
-import { getRoleMeta, getUserDisplayName } from "../../lib";
+import { getUserDisplayName, resolveUserRoleMeta } from "../../lib";
 import type { UserRowProps } from "../../types";
 
 export function UserRow({
@@ -16,15 +16,13 @@ export function UserRow({
 	onDelete,
 	isDeleting,
 }: UserRowProps) {
-	const roleMeta = getRoleMeta();
 	const displayName =
 		user.displayName ||
 		`${user.firstName || ""} ${user.lastName || ""}`.trim() ||
 		user.username ||
 		__("User");
 	const isSelf = Boolean(currentUser?.id && user.id === currentUser.id);
-	const userRole = user.role === "admin" ? "admin" : "editor";
-	const roleInfo = roleMeta[userRole];
+	const roleInfo = resolveUserRoleMeta(user.role, user.roleName);
 	const direction = getDocumentDirection();
 
 	return (

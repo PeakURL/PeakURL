@@ -2,7 +2,7 @@
 /**
  * Roles endpoints controller.
  *
- * Handles HTTP requests for listing, updating, and resetting role capabilities.
+ * Handles HTTP requests for listing, creating, updating, resetting, and deleting roles.
  *
  * @package PeakURL\Features\Roles
  * @since 1.7.2
@@ -64,7 +64,27 @@ class Controller extends BaseController {
 	}
 
 	/**
-	 * Update capability configuration for a role.
+	 * Create a new custom role derived from the current Editor capabilities snapshot.
+	 *
+	 * Admin-only endpoint.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON envelope with created role definition.
+	 * @since 1.7.2
+	 */
+	public function create( Request $request ): array {
+		return $this->success_response(
+			$this->roles_service->create_role(
+				$request,
+				$request->get_body_params(),
+			),
+			__( 'Custom role created successfully.', 'peakurl' ),
+			201
+		);
+	}
+
+	/**
+	 * Update capability configuration and/or metadata for a role.
 	 *
 	 * Admin-only endpoint.
 	 *
@@ -86,7 +106,7 @@ class Controller extends BaseController {
 	}
 
 	/**
-	 * Reset capability configuration for a role to shipped defaults.
+	 * Reset capability configuration for a role to baseline defaults.
 	 *
 	 * Admin-only endpoint.
 	 *
@@ -103,6 +123,27 @@ class Controller extends BaseController {
 				$role,
 			),
 			__( 'Role capabilities reset to defaults.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Delete a custom role from the registry.
+	 *
+	 * Admin-only endpoint.
+	 *
+	 * @param Request $request Incoming HTTP request with route param `role`.
+	 * @return array<string, mixed> JSON envelope with deletion result.
+	 * @since 1.7.2
+	 */
+	public function delete( Request $request ): array {
+		$role = $this->route_param( $request, 'role' );
+
+		return $this->success_response(
+			$this->roles_service->delete_role(
+				$request,
+				$role,
+			),
+			__( 'Custom role deleted successfully.', 'peakurl' ),
 		);
 	}
 }

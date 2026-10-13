@@ -8,11 +8,15 @@ export const useAdminAccess = () => {
 	const user = selectSessionUser(data);
 	const capabilities = user?.capabilities || DEFAULT_USER_CAPABILITIES;
 
+	const isAdmin = user?.role === "admin";
+	const canManageUsers = isAdmin && Boolean(capabilities.manageUsers);
+	const canEmptyTrash = isAdmin && Boolean(capabilities.emptyTrash);
+
 	return {
 		user,
 		capabilities,
-		isAdmin: Boolean(capabilities.manageUsers),
-		canManageUsers: Boolean(capabilities.manageUsers),
+		isAdmin,
+		canManageUsers,
 		canManageSiteSettings: Boolean(capabilities.manageSiteSettings),
 		canManageApiKeys: Boolean(capabilities.manageApiKeys),
 		canManageWebhooks: Boolean(capabilities.manageWebhooks),
@@ -20,9 +24,10 @@ export const useAdminAccess = () => {
 		canManageLocationData: Boolean(capabilities.manageLocationData),
 		canManagePerformance: Boolean(capabilities.managePerformance),
 		canManageUpdates: Boolean(capabilities.manageUpdates),
+		canManageProfile: Boolean(capabilities.manageProfile),
 		canDeleteLinks: Boolean(capabilities.deleteLinks),
 		canTrashLinks: Boolean(capabilities.trashLinks),
-		canEmptyTrash: Boolean(capabilities.emptyTrash),
+		canEmptyTrash,
 		isLoading: (isLoading || isFetching) && !user,
 	};
 };

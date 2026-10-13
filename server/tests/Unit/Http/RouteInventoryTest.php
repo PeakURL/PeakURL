@@ -177,7 +177,22 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'admin_role',
 			'coverage'   => array( 'contract', 'e2e' ),
 		),
+		'POST /api/v1/roles'                               => array(
+			'area'       => 'Roles',
+			'capability' => 'admin_role',
+			'coverage'   => array( 'contract', 'e2e' ),
+		),
 		'PUT /api/v1/roles/{role}'                         => array(
+			'area'       => 'Roles',
+			'capability' => 'admin_role',
+			'coverage'   => array( 'contract', 'e2e' ),
+		),
+		'PATCH /api/v1/roles/{role}'                       => array(
+			'area'       => 'Roles',
+			'capability' => 'admin_role',
+			'coverage'   => array( 'contract', 'e2e' ),
+		),
+		'DELETE /api/v1/roles/{role}'                      => array(
 			'area'       => 'Roles',
 			'capability' => 'admin_role',
 			'coverage'   => array( 'contract', 'e2e' ),

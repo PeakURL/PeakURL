@@ -148,7 +148,7 @@ class Application {
 		$captcha_service        = new Captcha( $config, $settings_api, $crypto_service );
 		$social_preview_service = new SocialPreview( $config, $settings_api );
 		$favicon_service        = new Favicon( $config, $settings_api );
-		$roles                  = new Roles( $settings_api );
+		$roles                  = new Roles( $settings_api, $users_api );
 		$authorization          = new Authorization( $roles );
 
 		$auth_credentials = new AuthCredentials( $db );
@@ -296,7 +296,8 @@ class Application {
 		);
 		$roles_service           = new RolesService(
 			$roles,
-			$auth_service
+			$auth_service,
+			$users_api
 		);
 
 		$this->register_routes(
@@ -684,8 +685,11 @@ class Application {
 		$this->add_routes(
 			array(
 				array( 'get', '/roles', array( $roles, 'index' ) ),
+				array( 'post', '/roles', array( $roles, 'create' ) ),
 				array( 'put', '/roles/{role}', array( $roles, 'update' ) ),
+				array( 'patch', '/roles/{role}', array( $roles, 'update' ) ),
 				array( 'post', '/roles/{role}/reset', array( $roles, 'reset' ) ),
+				array( 'delete', '/roles/{role}', array( $roles, 'delete' ) ),
 			)
 		);
 	}

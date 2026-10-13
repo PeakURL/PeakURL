@@ -68,6 +68,7 @@ export interface ApiProfileUser {
 	jobTitle?: string | null;
 	bio?: string | null;
 	role?: string | null;
+	roleName?: string | null;
 	updatedAt?: string | null;
 	baseApiUrl?: string | null;
 	siteUrl?: string | null;
@@ -155,9 +156,9 @@ export interface RevokeOtherSessionsResponse {
 }
 
 /**
- * Canonical roles supported by the self-hosted dashboard.
+ * Canonical and custom roles supported by the self-hosted dashboard.
  */
-export type UserRole = "admin" | "editor";
+export type UserRole = "admin" | "editor" | string;
 
 /**
  * User row returned by the user-management endpoint.
@@ -170,6 +171,7 @@ export interface UserSummary {
 	username?: string | null;
 	email?: string | null;
 	role?: UserRole | null;
+	roleName?: string | null;
 	createdAt?: string | null;
 }
 

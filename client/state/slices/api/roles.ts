@@ -2,6 +2,8 @@ import { API_ROUTES, mapApiRoleDefinition } from "@/api";
 import type {
 	ApiRoleDefinition,
 	RoleDefinition,
+	CreateRolePayload,
+	DeleteRolePayload,
 	ResetRoleCapabilitiesPayload,
 	UpdateRoleCapabilitiesPayload,
 } from "@/api";
@@ -25,14 +27,26 @@ export const rolesApi = baseApi.injectEndpoints({
 			providesTags: ROLES_TAGS,
 		}),
 
+		createRole: builder.mutation<RoleDefinition, CreateRolePayload>({
+			query: (body) => ({
+				url: API_ROUTES.roles.create,
+				method: "POST",
+				body,
+			}),
+			transformResponse: (response: ApiDataResponse<ApiRoleDefinition>) =>
+				mapApiRoleDefinition(response.data),
+			invalidatesTags: (_result, error) =>
+				error ? [] : ROLES_CHANGE_TAGS,
+		}),
+
 		updateRoleCapabilities: builder.mutation<
 			RoleDefinition,
 			UpdateRoleCapabilitiesPayload
 		>({
-			query: ({ role, capabilities }) => ({
+			query: ({ role, ...body }) => ({
 				url: API_ROUTES.roles.byRole(role),
 				method: "PUT",
-				body: { capabilities },
+				body,
 			}),
 			transformResponse: (response: ApiDataResponse<ApiRoleDefinition>) =>
 				mapApiRoleDefinition(response.data),
@@ -53,11 +67,28 @@ export const rolesApi = baseApi.injectEndpoints({
 			invalidatesTags: (_result, error) =>
 				error ? [] : ROLES_CHANGE_TAGS,
 		}),
+
+		deleteRole: builder.mutation<
+			{ success?: boolean; id?: string },
+			DeleteRolePayload
+		>({
+			query: ({ role }) => ({
+				url: API_ROUTES.roles.delete(role),
+				method: "DELETE",
+			}),
+			transformResponse: (
+				response: ApiDataResponse<{ success?: boolean; id?: string }>
+			) => response.data ?? { success: true },
+			invalidatesTags: (_result, error) =>
+				error ? [] : ROLES_CHANGE_TAGS,
+		}),
 	}),
 });
 
 export const {
 	useGetRolesQuery,
+	useCreateRoleMutation,
 	useUpdateRoleCapabilitiesMutation,
 	useResetRoleCapabilitiesMutation,
+	useDeleteRoleMutation,
 } = rolesApi;

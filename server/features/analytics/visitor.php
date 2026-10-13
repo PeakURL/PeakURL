@@ -40,11 +40,18 @@ class Visitor {
 
 		foreach (
 			array(
-				'edge'    => 'Edge',
-				'opr/'    => 'Opera',
-				'chrome'  => 'Chrome',
-				'firefox' => 'Firefox',
-				'safari'  => 'Safari',
+				'edg/'           => 'Edge',
+				'edga/'          => 'Edge',
+				'edgios/'        => 'Edge',
+				'edge/'          => 'Edge',
+				'opr/'           => 'Opera',
+				'opt/'           => 'Opera',
+				'samsungbrowser' => 'Samsung Internet',
+				'crios/'         => 'Chrome',
+				'chrome'         => 'Chrome',
+				'fxios/'         => 'Firefox',
+				'firefox'        => 'Firefox',
+				'safari'         => 'Safari',
 			)
 			as $needle => $label
 		) {
@@ -57,10 +64,11 @@ class Visitor {
 		foreach (
 			array(
 				'windows'   => 'Windows',
+				'iphone'    => 'iOS',
+				'ipod'      => 'iOS',
+				'ipad'      => 'iPadOS',
 				'mac os'    => 'macOS',
 				'macintosh' => 'macOS',
-				'iphone'    => 'iOS',
-				'ipad'      => 'iPadOS',
 				'android'   => 'Android',
 				'linux'     => 'Linux',
 			)

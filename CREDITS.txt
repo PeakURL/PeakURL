@@ -16,8 +16,12 @@ PHP runtime libraries shipped in the release
   https://github.com/php-gettext/Gettext
 - gettext/languages 2.12.2 — MIT
   https://github.com/php-gettext/Languages
+- matomo/device-detector 6.5.2 — LGPL-3.0-or-later
+  https://github.com/matomo-org/device-detector
 - maxmind-db/reader 1.13.1 — Apache-2.0
   https://github.com/maxmind/MaxMind-DB-Reader-php
+- mustangostang/spyc 0.6.3 — MIT
+  https://github.com/mustangostang/spyc
 - phpmailer/phpmailer 6.12.0 — LGPL-2.1-only
   https://github.com/PHPMailer/PHPMailer
 

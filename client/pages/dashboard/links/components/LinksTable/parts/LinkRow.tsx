@@ -40,8 +40,13 @@ function LinkRow({
 	formatNumber,
 	isTrashTab = false,
 	sortBy,
-	canDeleteLinks,
-	canTrashLinks,
+	canDeleteLinks = false,
+	canDeleteAnyLink = false,
+	canTrashLinks = false,
+	canEditLinks = false,
+	canEditAnyLink = false,
+	canViewAnalytics = false,
+	isAdmin = false,
 	currentUserId,
 }: LinkRowProps) {
 	const isTrashed = isTrashTab || "trashed" === link.status;
@@ -50,9 +55,26 @@ function LinkRow({
 		currentUserId &&
 		String(link.userId) === String(currentUserId)
 	);
-	const canTrash = canTrashLinks && (canDeleteLinks || isOwner);
-	const canPermanentDelete = canDeleteLinks;
-	const canDelete = isTrashed ? canPermanentDelete : canTrash;
+	const canTrashThisLink =
+		Boolean(canTrashLinks) && (isOwner || Boolean(isAdmin));
+	const canPermanentlyDeleteThisLink =
+		Boolean(canDeleteLinks) &&
+		(isOwner || Boolean(canDeleteAnyLink) || Boolean(isAdmin));
+	const canDeleteThisLink = isTrashed
+		? canPermanentlyDeleteThisLink
+		: canTrashThisLink || canPermanentlyDeleteThisLink;
+	const canRestoreThisLink =
+		Boolean(canEditLinks) && (isOwner || Boolean(isAdmin));
+	const canEdit =
+		Boolean(canEditLinks) &&
+		(isOwner || Boolean(canEditAnyLink) || Boolean(isAdmin));
+	const canViewStats =
+		Boolean(canViewAnalytics) && (isOwner || Boolean(isAdmin));
+	const showPerformance =
+		Boolean(canViewAnalytics) &&
+		(isOwner || Boolean(isAdmin)) &&
+		link.clicks !== null &&
+		link.clicks !== undefined;
 	const { isExpired: isExpiredLink, relativeTime: expirationRelativeTime } =
 		getLinkExpirationState(link);
 	const statusLabel = isTrashed
@@ -261,25 +283,31 @@ function LinkRow({
 				</div>
 			</td>
 			<td className="links-row-cell links-row-cell-performance">
-				<div className="links-row-performance">
-					<div className="links-row-performance-block">
-						<div className="links-row-performance-value">
-							{formatNumber(link.clicks || 0)}
+				{showPerformance ? (
+					<div className="links-row-performance">
+						<div className="links-row-performance-block">
+							<div className="links-row-performance-value">
+								{formatNumber(link.clicks || 0)}
+							</div>
+							<div className="links-row-performance-label">
+								{__("Clicks")}
+							</div>
 						</div>
-						<div className="links-row-performance-label">
-							{__("Clicks")}
+						<div className="links-row-performance-divider"></div>
+						<div className="links-row-performance-block">
+							<div className="links-row-performance-value-accent">
+								{formatNumber(link.uniqueClicks || 0)}
+							</div>
+							<div className="links-row-performance-label">
+								{__("Visitors")}
+							</div>
 						</div>
 					</div>
-					<div className="links-row-performance-divider"></div>
-					<div className="links-row-performance-block">
-						<div className="links-row-performance-value-accent">
-							{formatNumber(link.uniqueClicks || 0)}
-						</div>
-						<div className="links-row-performance-label">
-							{__("Visitors")}
-						</div>
+				) : (
+					<div className="links-row-performance text-text-muted text-xs">
+						—
 					</div>
-				</div>
+				)}
 			</td>
 			<td className="links-row-cell links-row-cell-created">
 				{(() => {
@@ -335,14 +363,16 @@ function LinkRow({
 				<div className="links-row-actions">
 					{isTrashed ? (
 						<>
-							<button
-								onClick={() => onRestore?.(link)}
-								className="links-row-action links-row-action-restore text-primary-600 hover:text-primary-700"
-								title={__("Restore Link")}
-							>
-								<RotateCcw size={14} />
-							</button>
-							{canPermanentDelete && (
+							{canRestoreThisLink && (
+								<button
+									onClick={() => onRestore?.(link)}
+									className="links-row-action links-row-action-restore text-primary-600 hover:text-primary-700"
+									title={__("Restore Link")}
+								>
+									<RotateCcw size={14} />
+								</button>
+							)}
+							{canPermanentlyDeleteThisLink && (
 								<button
 									onClick={() => onDelete(link)}
 									className="links-row-action links-row-action-delete text-error hover:text-error"
@@ -361,25 +391,34 @@ function LinkRow({
 							>
 								<QrCode size={14} />
 							</button>
-							<button
-								onClick={() => onOpenStats(link)}
-								className="links-row-action links-row-action-stats"
-								title={__("Analytics")}
-							>
-								<BarChart3 size={14} />
-							</button>
-							<button
-								onClick={() => onEdit(link)}
-								className="links-row-action links-row-action-edit"
-								title={__("Edit")}
-							>
-								<Pencil size={14} />
-							</button>
-							{canDelete && (
+							{canViewStats && (
+								<button
+									onClick={() => onOpenStats(link)}
+									className="links-row-action links-row-action-stats"
+									title={__("Analytics")}
+								>
+									<BarChart3 size={14} />
+								</button>
+							)}
+							{canEdit && (
+								<button
+									onClick={() => onEdit(link)}
+									className="links-row-action links-row-action-edit"
+									title={__("Edit")}
+								>
+									<Pencil size={14} />
+								</button>
+							)}
+							{canDeleteThisLink && (
 								<button
 									onClick={() => onDelete(link)}
 									className="links-row-action links-row-action-delete"
-									title={__("Delete")}
+									title={
+										!canTrashThisLink &&
+										canPermanentlyDeleteThisLink
+											? __("Delete Permanently")
+											: __("Delete")
+									}
 								>
 									<Trash2 size={14} />
 								</button>

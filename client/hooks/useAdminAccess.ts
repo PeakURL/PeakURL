@@ -11,6 +11,12 @@ export const useAdminAccess = () => {
 	const isAdmin = user?.role === "admin";
 	const canManageUsers = isAdmin && Boolean(capabilities.manageUsers);
 	const canEmptyTrash = isAdmin && Boolean(capabilities.emptyTrash);
+	const canEditLinks = Boolean(capabilities.editLinks);
+	const canEditAnyLink = canEditLinks && Boolean(capabilities.editAnyLink);
+	const canDeleteLinks = Boolean(capabilities.deleteLinks);
+	const canDeleteAnyLink =
+		canDeleteLinks && Boolean(capabilities.deleteAnyLink);
+	const canManageIntegrations = Boolean(capabilities.manageIntegrations);
 
 	return {
 		user,
@@ -19,15 +25,20 @@ export const useAdminAccess = () => {
 		canManageUsers,
 		canManageSiteSettings: Boolean(capabilities.manageSiteSettings),
 		canManageApiKeys: Boolean(capabilities.manageApiKeys),
-		canManageWebhooks: Boolean(capabilities.manageWebhooks),
+		canManageIntegrations,
 		canManageMailDelivery: Boolean(capabilities.manageMailDelivery),
 		canManageLocationData: Boolean(capabilities.manageLocationData),
 		canManagePerformance: Boolean(capabilities.managePerformance),
 		canManageUpdates: Boolean(capabilities.manageUpdates),
-		canManageProfile: Boolean(capabilities.manageProfile),
-		canDeleteLinks: Boolean(capabilities.deleteLinks),
+		canViewLinks: Boolean(capabilities.viewLinks),
+		canCreateLinks: Boolean(capabilities.createLinks),
+		canEditLinks,
+		canEditAnyLink,
 		canTrashLinks: Boolean(capabilities.trashLinks),
+		canDeleteLinks,
+		canDeleteAnyLink,
 		canEmptyTrash,
+		canViewAnalytics: Boolean(capabilities.viewAnalytics),
 		isLoading: (isLoading || isFetching) && !user,
 	};
 };

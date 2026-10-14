@@ -13,6 +13,7 @@ import {
 	useGetAnalyticsQuery,
 	useGetRecentClicksQuery,
 } from "@/state/slices/api";
+import { useAdminAccess } from "@/hooks";
 
 const MIN_REFRESH_DURATION_MS = 700;
 const RECENT_CLICKS_LIMIT = 8;
@@ -105,26 +106,30 @@ export function useDashboardAnalytics() {
 		};
 	}, []);
 
+	const { canViewAnalytics, canManageUsers } = useAdminAccess();
+
 	const {
 		data: analyticsRes,
 		refetch: refetchAnalytics,
 		isFetching: isAnalyticsFetching,
 		isLoading: isAnalyticsLoading,
-	} = useGetAnalyticsQuery(timeRange);
+	} = useGetAnalyticsQuery(timeRange, { skip: !canViewAnalytics });
 
 	const {
 		data: activityRes,
 		refetch: refetchActivity,
 		isFetching: isActivityFetching,
 		isLoading: isActivityLoading,
-	} = useGetActivityQuery(undefined);
+	} = useGetActivityQuery(undefined, { skip: !canManageUsers });
 
 	const {
 		data: recentClicksRes,
 		refetch: refetchRecentClicks,
 		isFetching: isRecentClicksFetching,
 		isLoading: isRecentClicksLoading,
-	} = useGetRecentClicksQuery(RECENT_CLICKS_LIMIT);
+	} = useGetRecentClicksQuery(RECENT_CLICKS_LIMIT, {
+		skip: !canViewAnalytics,
+	});
 
 	const handleRefresh = async () => {
 		if (isRefreshing) {
@@ -141,9 +146,9 @@ export function useDashboardAnalytics() {
 
 		try {
 			await Promise.allSettled([
-				refetchAnalytics(),
-				refetchActivity(),
-				refetchRecentClicks(),
+				canViewAnalytics ? refetchAnalytics() : Promise.resolve(),
+				canManageUsers ? refetchActivity() : Promise.resolve(),
+				canViewAnalytics ? refetchRecentClicks() : Promise.resolve(),
 			]);
 		} finally {
 			const remaining =
@@ -161,7 +166,9 @@ export function useDashboardAnalytics() {
 	};
 
 	const stats: DashboardStats = analyticsRes?.data ?? EMPTY_STATS;
-	const activities: RecentActivity[] = activityRes?.data ?? [];
+	const activities: RecentActivity[] = canManageUsers
+		? (activityRes?.data ?? [])
+		: [];
 	const recentClicks: RecentClick[] = recentClicksRes?.data ?? [];
 	const recentActivities = activities.slice(0, RECENT_ACTIVITIES_LIMIT);
 
@@ -179,15 +186,17 @@ export function useDashboardAnalytics() {
 	);
 
 	const isLoading =
-		isAnalyticsLoading || isActivityLoading || isRecentClicksLoading;
+		(canViewAnalytics && (isAnalyticsLoading || isRecentClicksLoading)) ||
+		(canManageUsers && isActivityLoading);
 
 	const isBusy =
 		isRefreshing ||
-		isAnalyticsFetching ||
-		isActivityFetching ||
-		isRecentClicksFetching;
+		(canViewAnalytics && (isAnalyticsFetching || isRecentClicksFetching)) ||
+		(canManageUsers && isActivityFetching);
 
 	return {
+		canViewAnalytics,
+		canManageUsers,
 		timeRange,
 		setTimeRange,
 		isRefreshing: isBusy,

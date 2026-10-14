@@ -35,6 +35,7 @@ import {
 	Pagination,
 	LinksSkeleton,
 } from "./components";
+import { computeFilterContextKey } from "./components/LinksTable/lib";
 import { useLinksFilter } from "./hooks";
 import type { LinkRecord, LinksDateRange, LinksMeta } from "./types";
 
@@ -103,6 +104,15 @@ function LinksPage() {
 	const notifications = useNotification();
 
 	const {
+		canCreateLinks,
+		canViewLinks,
+		canViewAnalytics,
+		isAdmin,
+		isLoading: isAuthLoading,
+		user,
+	} = useAdminAccess();
+
+	const {
 		sortBy,
 		setSortBy,
 		sortOrder,
@@ -122,9 +132,19 @@ function LinksPage() {
 		setSearchQuery,
 		statsShortId,
 		urlsQueryArgs,
-	} = useLinksFilter();
+	} = useLinksFilter({ isAdmin, isAuthLoading });
 
-	const { isAdmin } = useAdminAccess();
+	const filterContextKey = computeFilterContextKey({
+		currentPage,
+		statusFilter,
+		isTrashTab,
+		searchQuery,
+		sortBy,
+		sortOrder,
+		clickRange,
+		customClickRange,
+		userId: user?.id,
+	});
 	const [restoreUrl] = useRestoreUrlMutation();
 	const [bulkRestoreUrls] = useBulkRestoreUrlsMutation();
 	const [emptyTrash] = useEmptyTrashMutation();
@@ -133,7 +153,7 @@ function LinksPage() {
 		data: urlsRes,
 		refetch: refetchUrls,
 		isLoading: isUrlsLoading,
-	} = useGetUrlsQuery(urlsQueryArgs);
+	} = useGetUrlsQuery(urlsQueryArgs, { skip: !canViewLinks });
 
 	const apiItems: LinkRecord[] = urlsRes?.data?.items ?? [];
 	const apiMeta: LinksMeta = {
@@ -151,20 +171,18 @@ function LinksPage() {
 	};
 	const { data: statsLinkRes, refetch: refetchStatsLookup } = useGetUrlQuery(
 		statsShortId || "",
-		{ skip: !statsShortId || isTrashTab }
+		{
+			skip:
+				!statsShortId ||
+				isTrashTab ||
+				!canViewLinks ||
+				!canViewAnalytics,
+		}
 	);
 	const statsLink = statsLinkRes?.data ?? null;
 	const { data: siteSettingsRes } = useGetGeneralSettingsQuery();
 	const trashRetentionDays = siteSettingsRes?.data?.trashRetentionDays ?? 30;
 	const [isRefreshing, setIsRefreshing] = useState(false);
-
-	// Reset to page 1 during render when query, pagination, status, or date filters change
-	const filterKey = `${statusFilter}:${searchQuery}:${limit}:${sortBy}:${sortOrder}:${clickRange}:${customClickRange.from}:${customClickRange.to}`;
-	const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
-	if (prevFilterKey !== filterKey) {
-		setPrevFilterKey(filterKey);
-		setCurrentPage(1);
-	}
 
 	const handleRefresh = async () => {
 		if (isRefreshing) {
@@ -176,14 +194,18 @@ function LinksPage() {
 
 		try {
 			await Promise.allSettled([
-				refetchUrls(),
-				dispatch(
-					urlsApi.endpoints.getUrls.initiate(undefined, {
-						subscribe: false,
-						forceRefetch: true,
-					})
-				),
-				statsShortId ? refetchStatsLookup() : Promise.resolve(),
+				canViewLinks ? refetchUrls() : Promise.resolve(),
+				canViewLinks
+					? dispatch(
+							urlsApi.endpoints.getUrls.initiate(undefined, {
+								subscribe: false,
+								forceRefetch: true,
+							})
+						)
+					: Promise.resolve(),
+				statsShortId && canViewLinks && canViewAnalytics
+					? refetchStatsLookup()
+					: Promise.resolve(),
 			]);
 		} finally {
 			const remaining = 700 - (Date.now() - startedAt);
@@ -249,7 +271,34 @@ function LinksPage() {
 	const endItem = Math.min(apiMeta.page * apiMeta.limit, totalItems);
 	const paginatedLinks = sortedLinks;
 
-	const isLoading = isUrlsLoading;
+	const isLoading = canViewLinks && isUrlsLoading;
+
+	if (!canCreateLinks && !canViewLinks) {
+		return (
+			<div className="links-page">
+				<Header
+					onRefresh={handleRefresh}
+					isRefreshing={false}
+					clickRange={clickRange}
+					customClickRange={customClickRange}
+					onClickRangeChange={setClickRange}
+					onCustomClickRangeChange={setCustomClickRange}
+					canViewLinks={false}
+					canViewAnalytics={false}
+				/>
+				<div className="rounded-xl border border-stroke bg-surface p-8 text-center max-w-lg mx-auto my-12">
+					<h2 className="text-base font-semibold text-heading mb-2">
+						{__("Access Restricted")}
+					</h2>
+					<p className="text-sm text-text-muted">
+						{__(
+							"You do not have permission to create or view links."
+						)}
+					</p>
+				</div>
+			</div>
+		);
+	}
 
 	if (isLoading) {
 		return (
@@ -261,6 +310,8 @@ function LinksPage() {
 					customClickRange={customClickRange}
 					onClickRangeChange={setClickRange}
 					onCustomClickRangeChange={setCustomClickRange}
+					canViewLinks={canViewLinks}
+					canViewAnalytics={canViewAnalytics}
 				/>
 				<LinksSkeleton />
 			</div>
@@ -303,40 +354,49 @@ function LinksPage() {
 		return __("No visitors recorded");
 	};
 
-	const statsData: LinkStatCardData[] = [
-		{
-			title: __("Total Clicks"),
-			value: formatCount(totalClicks),
-			change: clicksChange,
-			note: getClicksFallbackNote(),
-			icon: MousePointerClick,
-			tone: "clicks",
-		},
-		{
-			title: __("Visitors"),
-			value: formatCount(totalUniqueClicks),
-			change: visitorsChange,
-			note: getVisitorsFallbackNote(),
-			icon: Users,
-			tone: "visitors",
-		},
-		{
-			title: __("Total Links"),
-			value: formatCount(totalItems),
-			change: null,
-			note: __("Total created links"),
-			icon: Link2,
-			tone: "links",
-		},
-		{
-			title: __("Active Links"),
-			value: formatCount(activeLinks),
-			change: null,
-			note: __("Currently active"),
-			icon: CircleCheckBig,
-			tone: "active",
-		},
-	];
+	const statsData: LinkStatCardData[] = [];
+
+	if (canViewAnalytics) {
+		statsData.push(
+			{
+				title: __("Total Clicks"),
+				value: formatCount(totalClicks),
+				change: clicksChange,
+				note: getClicksFallbackNote(),
+				icon: MousePointerClick,
+				tone: "clicks",
+			},
+			{
+				title: __("Visitors"),
+				value: formatCount(totalUniqueClicks),
+				change: visitorsChange,
+				note: getVisitorsFallbackNote(),
+				icon: Users,
+				tone: "visitors",
+			}
+		);
+	}
+
+	if (canViewLinks) {
+		statsData.push(
+			{
+				title: __("Total Links"),
+				value: formatCount(totalItems),
+				change: null,
+				note: __("Total created links"),
+				icon: Link2,
+				tone: "links",
+			},
+			{
+				title: __("Active Links"),
+				value: formatCount(activeLinks),
+				change: null,
+				note: __("Currently active"),
+				icon: CircleCheckBig,
+				tone: "active",
+			}
+		);
+	}
 
 	return (
 		<div className="links-page">
@@ -347,142 +407,173 @@ function LinksPage() {
 				customClickRange={customClickRange}
 				onClickRangeChange={setClickRange}
 				onCustomClickRangeChange={setCustomClickRange}
+				canViewLinks={canViewLinks}
+				canViewAnalytics={canViewAnalytics}
 			/>
 
 			{/* Quick Stats Grid */}
-			<div className="links-page-stats">
-				{statsData.map((stat) => {
-					const StatIcon = stat.icon;
+			{statsData.length > 0 && (
+				<div className="links-page-stats">
+					{statsData.map((stat) => {
+						const StatIcon = stat.icon;
 
-					return (
-						<div key={stat.title} className="links-page-stat-card">
-							<div className="links-page-stat-header">
-								<div className="links-page-stat-copy">
-									<p className="links-page-stat-title">
-										{stat.title}
-									</p>
-									<p className="links-page-stat-value">
-										{stat.value}
-									</p>
-								</div>
-								<div
-									className={cn(
-										"links-page-stat-icon",
-										`links-page-stat-icon-${stat.tone}`
-									)}
-								>
-									<StatIcon
-										className={cn(
-											"links-page-stat-icon-glyph",
-											`links-page-stat-icon-glyph-${stat.tone}`
-										)}
-									/>
-								</div>
-							</div>
-
-							<div className="links-page-stat-footer">
-								{stat.change ? (
-									<div className="links-page-stat-change">
-										<span
-											className={cn(
-												"links-page-stat-change-badge",
-												stat.change.type === "positive"
-													? "links-page-stat-change-badge-positive"
-													: "links-page-stat-change-badge-negative"
-											)}
-										>
-											{stat.change.type === "positive" ? (
-												<ArrowUp className="links-page-stat-change-icon" />
-											) : (
-												<ArrowDown className="links-page-stat-change-icon" />
-											)}
-											{stat.change.text}
-										</span>
-										<span className="links-page-stat-change-note">
-											{periodNote}
-										</span>
+						return (
+							<div
+								key={stat.title}
+								className="links-page-stat-card"
+							>
+								<div className="links-page-stat-header">
+									<div className="links-page-stat-copy">
+										<p className="links-page-stat-title">
+											{stat.title}
+										</p>
+										<p className="links-page-stat-value">
+											{stat.value}
+										</p>
 									</div>
-								) : (
-									<span className="links-page-stat-change-note">
-										{stat.note}
-									</span>
-								)}
-							</div>
-						</div>
-					);
-				})}
-			</div>
+									<div
+										className={cn(
+											"links-page-stat-icon",
+											`links-page-stat-icon-${stat.tone}`
+										)}
+									>
+										<StatIcon
+											className={cn(
+												"links-page-stat-icon-glyph",
+												`links-page-stat-icon-glyph-${stat.tone}`
+											)}
+										/>
+									</div>
+								</div>
 
-			<UrlShorteningForm />
-
-			{/* Trash Info Notice - clean informational notice without redundant buttons */}
-			{isTrashTab && trashedLinksCount > 0 && (
-				<div className="links-trash-banner">
-					<div className="links-trash-banner-content">
-						<Trash2 size={16} />
-						<span>
-							{trashRetentionDays === 0
-								? __(
-										"Items in the trash are retained indefinitely until emptied."
-									)
-								: sprintf(
-										__(
-											"Items in the trash will be automatically deleted after %d days."
-										),
-										trashRetentionDays
+								<div className="links-page-stat-footer">
+									{stat.change ? (
+										<div className="links-page-stat-change">
+											<span
+												className={cn(
+													"links-page-stat-change-badge",
+													stat.change.type ===
+														"positive"
+														? "links-page-stat-change-badge-positive"
+														: "links-page-stat-change-badge-negative"
+												)}
+											>
+												{stat.change.type ===
+												"positive" ? (
+													<ArrowUp className="links-page-stat-change-icon" />
+												) : (
+													<ArrowDown className="links-page-stat-change-icon" />
+												)}
+												{stat.change.text}
+											</span>
+											<span className="links-page-stat-change-note">
+												{periodNote}
+											</span>
+										</div>
+									) : (
+										<span className="links-page-stat-change-note">
+											{stat.note}
+										</span>
 									)}
-						</span>
-					</div>
+								</div>
+							</div>
+						);
+					})}
 				</div>
 			)}
 
-			<LinksTable
-				links={paginatedLinks}
-				totalCount={totalItems}
-				searchQuery={searchQuery}
-				onSearchChange={setSearchQuery}
-				statsShortId={statsShortId}
-				statsLink={statsLink}
-				sortBy={sortBy}
-				sortOrder={sortOrder}
-				onSortChange={(newSortBy, newSortOrder) => {
-					setSortBy(newSortBy);
-					setSortOrder(newSortOrder);
-				}}
-				statusFilter={statusFilter}
-				clickRange={clickRange}
-				customClickRange={customClickRange}
-				isTrashTab={isTrashTab}
-				trashedCount={trashedLinksCount}
-				onRestore={handleRestoreLink}
-				onBulkRestore={handleBulkRestoreLinks}
-				onEmptyTrash={isAdmin ? handleEmptyTrash : undefined}
-			/>
+			{canCreateLinks && <UrlShorteningForm />}
 
-			<TableFooter
-				totalLinks={totalItems}
-				totalClicks={totalClicks}
-				sortBy={sortBy}
-				setSortBy={setSortBy}
-				sortOrder={sortOrder}
-				setSortOrder={setSortOrder}
-				limit={limit}
-				setLimit={setLimit}
-				statusFilter={statusFilter}
-				setStatusFilter={setStatusFilter}
-				trashedCount={trashedLinksCount}
-				expiredCount={expiredLinksCount}
-			/>
+			{canViewLinks ? (
+				<>
+					{/* Trash Info Notice - clean informational notice without redundant buttons */}
+					{isTrashTab && trashedLinksCount > 0 && (
+						<div className="links-trash-banner">
+							<div className="links-trash-banner-content">
+								<Trash2 size={16} />
+								<span>
+									{trashRetentionDays === 0
+										? __(
+												"Items in the trash are retained indefinitely until emptied."
+											)
+										: sprintf(
+												__(
+													"Items in the trash will be automatically deleted after %d days."
+												),
+												trashRetentionDays
+											)}
+								</span>
+							</div>
+						</div>
+					)}
 
-			{totalPages > 1 && (
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPages}
-					onPageChange={setCurrentPage}
-					startItem={startItem}
-					endItem={endItem}
-					totalItems={totalItems}
-				/>
+					<LinksTable
+						key={filterContextKey}
+						links={paginatedLinks}
+						totalCount={totalItems}
+						searchQuery={searchQuery}
+						onSearchChange={setSearchQuery}
+						statsShortId={statsShortId}
+						statsLink={statsLink}
+						sortBy={sortBy}
+						sortOrder={sortOrder}
+						onSortChange={(newSortBy, newSortOrder) => {
+							setSortBy(newSortBy);
+							setSortOrder(newSortOrder);
+						}}
+						statusFilter={statusFilter}
+						clickRange={clickRange}
+						customClickRange={customClickRange}
+						isTrashTab={isTrashTab}
+						trashedCount={trashedLinksCount}
+						onRestore={handleRestoreLink}
+						onBulkRestore={handleBulkRestoreLinks}
+						onEmptyTrash={isAdmin ? handleEmptyTrash : undefined}
+						currentPage={currentPage}
+						isAdmin={isAdmin}
+					/>
+
+					<TableFooter
+						totalLinks={totalItems}
+						totalClicks={totalClicks}
+						sortBy={sortBy}
+						setSortBy={setSortBy}
+						sortOrder={sortOrder}
+						setSortOrder={setSortOrder}
+						limit={limit}
+						setLimit={setLimit}
+						statusFilter={statusFilter}
+						setStatusFilter={setStatusFilter}
+						trashedCount={trashedLinksCount}
+						expiredCount={expiredLinksCount}
+						canViewAnalytics={canViewAnalytics}
+						isAdmin={isAdmin}
+					/>
+
+					{totalPages > 1 && (
+						<Pagination
+							currentPage={currentPage}
+							totalPages={totalPages}
+							onPageChange={setCurrentPage}
+							startItem={startItem}
+							endItem={endItem}
+							totalItems={totalItems}
+						/>
+					)}
+				</>
+			) : (
+				canCreateLinks && (
+					<div className="rounded-xl border border-stroke bg-surface p-6 text-center max-w-lg mx-auto my-6">
+						<h2 className="text-sm font-semibold text-heading mb-1">
+							{__("Link Inventory Hidden")}
+						</h2>
+						<p className="text-xs text-text-muted">
+							{__(
+								"You have permission to create links, but viewing the link table is disabled for your role."
+							)}
+						</p>
+					</div>
+				)
 			)}
 		</div>
 	);

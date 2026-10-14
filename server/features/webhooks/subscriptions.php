@@ -213,11 +213,8 @@ class Subscriptions {
 	 */
 	public function list_webhooks( Request $request ): array {
 		$user = $this->get_webhook_user( $request );
-		$rows = $this->db->get_results_by(
-			'webhooks',
-			array( 'user_id' => $user['id'] ),
-			array( '*' ),
-			array( 'created_at' => 'DESC' ),
+		$rows = $this->db->get_results(
+			'SELECT * FROM webhooks ORDER BY created_at DESC'
 		);
 
 		if ( empty( $rows ) || ! is_array( $rows ) ) {
@@ -343,14 +340,8 @@ class Subscriptions {
 	 * @since 1.0.0
 	 */
 	public function delete_webhook( Request $request, string $id ): bool {
-		$user = $this->get_webhook_user( $request );
-
-		$criteria = array( 'id' => $id );
-		if ( ! $this->roles->has_capability( $user, 'manage_webhooks' ) ) {
-			$criteria['user_id'] = $user['id'];
-		}
-
-		$deleted = $this->db->delete( 'webhooks', $criteria ) > 0;
+		$user    = $this->get_webhook_user( $request );
+		$deleted = $this->db->delete( 'webhooks', array( 'id' => $id ) ) > 0;
 
 		if ( $deleted ) {
 			$this->clear_active_webhooks_cache();
@@ -373,18 +364,8 @@ class Subscriptions {
 		$user    = $this->get_webhook_user( $request );
 		$webhook = $this->db->get_row_by(
 			'webhooks',
-			array(
-				'id'      => $id,
-				'user_id' => $user['id'],
-			),
+			array( 'id' => $id ),
 		);
-
-		if ( ! $webhook && $this->roles->has_capability( $user, 'manage_webhooks' ) ) {
-			$webhook = $this->db->get_row_by(
-				'webhooks',
-				array( 'id' => $id ),
-			);
-		}
 
 		if ( ! $webhook ) {
 			throw new ApiException( __( 'Webhook not found.', 'peakurl' ), 404 );
@@ -472,8 +453,8 @@ class Subscriptions {
 		$user = $this->auth_service->get_current_user( $request );
 		$this->authorization->validate_capability(
 			$user,
-			'manage_webhooks',
-			'You do not have permission to manage webhooks.',
+			'manage_integrations',
+			__( 'You do not have permission to manage webhooks.', 'peakurl' ),
 		);
 
 		return $user;

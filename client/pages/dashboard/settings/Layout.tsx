@@ -15,7 +15,7 @@ function Layout({ children }: SettingsLayoutProps) {
 	const activeTab = (params.tab as SettingsTabId | undefined) || "general";
 	const {
 		canManageApiKeys,
-		canManageWebhooks,
+		canManageIntegrations,
 		canManageMailDelivery,
 		canManageLocationData,
 		canManagePerformance,
@@ -31,7 +31,7 @@ function Layout({ children }: SettingsLayoutProps) {
 		tabs.push({ id: "api", name: __("API Keys"), icon: "key" });
 	}
 
-	if (canManageWebhooks) {
+	if (canManageIntegrations) {
 		tabs.push({
 			id: "integrations",
 			name: __("Integrations"),

@@ -29,6 +29,8 @@ export interface LinksTableProps {
 	onRestore?: (link: LinkRecord) => Promise<void> | void;
 	onBulkRestore?: (ids: string[]) => Promise<void> | void;
 	onEmptyTrash?: () => Promise<void> | void;
+	currentPage?: number;
+	isAdmin?: boolean;
 }
 
 /**
@@ -53,7 +55,12 @@ export interface LinkRowProps {
 	isTrashTab?: boolean;
 	sortBy?: LinksSortBy;
 	canDeleteLinks: boolean;
+	canDeleteAnyLink?: boolean;
 	canTrashLinks: boolean;
+	canEditLinks?: boolean;
+	canEditAnyLink?: boolean;
+	canViewAnalytics?: boolean;
+	isAdmin?: boolean;
 	currentUserId?: string | null;
 }
 
@@ -72,6 +79,7 @@ export interface TableHeaderRowProps {
 	sortBy?: LinksSortBy;
 	sortOrder?: LinksSortOrder;
 	onSortChange?: (sortBy: LinksSortBy, sortOrder: LinksSortOrder) => void;
-	canDeleteLinks: boolean;
-	canTrashLinks: boolean;
+	canTrashSelected?: boolean;
+	canViewAnalytics?: boolean;
+	isAdmin?: boolean;
 }

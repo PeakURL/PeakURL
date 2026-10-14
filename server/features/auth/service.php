@@ -925,11 +925,6 @@ class Service {
 	 */
 	public function get_security_settings( Request $request ): array {
 		$user = $this->get_current_user( $request );
-		$this->authorization->validate_capability(
-			$user,
-			'manage_profile',
-			__( 'You do not have permission to manage account security.', 'peakurl' ),
-		);
 
 		$sessions     = $this->list_user_sessions(
 			(string) $user['id'],
@@ -963,11 +958,6 @@ class Service {
 	 */
 	public function start_two_factor_setup( Request $request ): array {
 		$user = $this->get_current_user( $request );
-		$this->authorization->validate_capability(
-			$user,
-			'manage_profile',
-			__( 'You do not have permission to manage account security.', 'peakurl' ),
-		);
 
 		$secret = $this->totp->generate_secret();
 
@@ -1007,11 +997,6 @@ class Service {
 	 */
 	public function verify_two_factor( Request $request, string $token ): array {
 		$user = $this->get_current_user( $request );
-		$this->authorization->validate_capability(
-			$user,
-			'manage_profile',
-			__( 'You do not have permission to manage account security.', 'peakurl' ),
-		);
 
 		if ( '' === trim( $token ) ) {
 			throw new ApiException(
@@ -1077,11 +1062,6 @@ class Service {
 		string $current_password
 	): void {
 		$user = $this->get_current_user( $request );
-		$this->authorization->validate_capability(
-			$user,
-			'manage_profile',
-			__( 'You do not have permission to manage account security.', 'peakurl' ),
-		);
 
 		$user_row = $this->confirm_current_password(
 			$this->users_api->get_user( (string) $user['id'] ),
@@ -1119,11 +1099,6 @@ class Service {
 		string $current_password
 	): array {
 		$user = $this->get_current_user( $request );
-		$this->authorization->validate_capability(
-			$user,
-			'manage_profile',
-			__( 'You do not have permission to manage account security.', 'peakurl' ),
-		);
 
 		$user_row = $this->confirm_current_password(
 			$this->users_api->get_user( (string) $user['id'] ),
@@ -1148,11 +1123,6 @@ class Service {
 		string $current_password
 	): array {
 		$user = $this->get_current_user( $request );
-		$this->authorization->validate_capability(
-			$user,
-			'manage_profile',
-			__( 'You do not have permission to manage account security.', 'peakurl' ),
-		);
 
 		$user_row = $this->confirm_current_password(
 			$this->users_api->get_user( (string) $user['id'] ),
@@ -1174,11 +1144,6 @@ class Service {
 	 */
 	public function revoke_session( Request $request, string $id ): bool {
 		$user = $this->get_current_user( $request );
-		$this->authorization->validate_capability(
-			$user,
-			'manage_profile',
-			__( 'You do not have permission to manage account security.', 'peakurl' ),
-		);
 		$this->prune_stale_sessions();
 
 		$deleted = $this->db->query(
@@ -1207,11 +1172,6 @@ class Service {
 	 */
 	public function revoke_other_sessions( Request $request ): int {
 		$user = $this->get_current_user( $request );
-		$this->authorization->validate_capability(
-			$user,
-			'manage_profile',
-			__( 'You do not have permission to manage account security.', 'peakurl' ),
-		);
 		$this->prune_stale_sessions();
 		$current_session = $this->find_session_by_request( $request );
 

@@ -69,6 +69,15 @@ class LifecycleTest extends TestCase {
 				'destinationUrl' => (string) ( $row['destination_url'] ?? '' ),
 				'status'         => (string) ( $row['status'] ?? 'active' ),
 			),
+			fn( array $url, array $user, ?string $owner_id ): array => ( new Roles() )->can_view_link_analytics( $user, $owner_id )
+				? $url
+				: array_merge(
+					$url,
+					array(
+						'clicks'       => null,
+						'uniqueClicks' => null,
+					)
+				),
 			function ( string $link_id ): void {
 				$this->scheduled_health_checks[] = $link_id;
 			},
@@ -516,5 +525,90 @@ class LifecycleTest extends TestCase {
 		$count   = $this->lifecycle->clear_urls( $request, 'trash' );
 
 		$this->assertSame( 1, $count );
+	}
+
+	public function test_lifecycle_fails_closed_when_analytics_filter_is_omitted(): void {
+		$this->expectException( \TypeError::class );
+		/** @phpstan-ignore-next-line */
+		new Lifecycle(
+			$this->repository,
+			$this->validator,
+			$this->auth_service,
+			$this->analytics_service,
+			$this->webhooks_service,
+			$this->social_preview,
+			$this->roles,
+			$this->authorization,
+			fn( ?array $row ): array => array()
+		);
+	}
+
+	public function test_lifecycle_fails_closed_when_analytics_filter_is_null(): void {
+		$this->expectException( \TypeError::class );
+		/** @phpstan-ignore-next-line */
+		new Lifecycle(
+			$this->repository,
+			$this->validator,
+			$this->auth_service,
+			$this->analytics_service,
+			$this->webhooks_service,
+			$this->social_preview,
+			$this->roles,
+			$this->authorization,
+			fn( ?array $row ): array => array(),
+			null
+		);
+	}
+
+	public function test_update_applies_injected_analytics_filter(): void {
+		$filter_invoked = false;
+		$custom_filter  = function ( array $url, array $user, ?string $owner_id ) use ( &$filter_invoked ): array {
+			$filter_invoked      = true;
+			$url['clicks']       = null;
+			$url['uniqueClicks'] = null;
+			return $url;
+		};
+
+		$lifecycle = new Lifecycle(
+			$this->repository,
+			$this->validator,
+			$this->auth_service,
+			$this->analytics_service,
+			$this->webhooks_service,
+			$this->social_preview,
+			$this->roles,
+			$this->authorization,
+			fn( ?array $row ): array => array(
+				'id'           => 'link_filtered',
+				'clicks'       => 10,
+				'uniqueClicks' => 5,
+				'title'        => (string) ( $row['title'] ?? '' ),
+			),
+			$custom_filter
+		);
+
+		$user = array(
+			'id'   => 'user_owner',
+			'role' => 'editor',
+		);
+		$row  = array(
+			'id'      => 'link_filtered',
+			'user_id' => 'user_owner',
+			'title'   => 'Old Title',
+			'status'  => 'active',
+		);
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_filtered' )->willReturn( $row );
+		$this->repository->method( 'find_url_row' )->with( 'link_filtered' )->willReturn( $row );
+		$this->repository->method( 'update_url_fields' );
+
+		$request = new Request( 'PUT', '/link_filtered', array(), array() );
+		$result  = $lifecycle->update_url( $request, 'link_filtered', array( 'title' => 'New Title' ) );
+
+		$this->assertTrue( $filter_invoked, 'Injected analytics filter must be invoked' );
+		$this->assertNotNull( $result );
+		$this->assertNull( $result['clicks'] );
+		$this->assertNull( $result['uniqueClicks'] );
 	}
 }

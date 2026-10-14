@@ -109,6 +109,8 @@ class LinksDatabasePersistenceTest extends TestCase {
 		);
 		$mock_health_checker = new Checker( $resolver, $probe );
 
+		$this->pdo->exec( "DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'" );
+
 		$this->app    = new Application( $connection, $config, $mock_health_checker );
 		$this->router = $this->app->get_router();
 	}
@@ -123,6 +125,7 @@ class LinksDatabasePersistenceTest extends TestCase {
 				)
 			);
 			$this->pdo->exec( "DELETE FROM peakurl_api_keys WHERE id IN ('test_admin_key_id', 'test_editor_key_id')" );
+			$this->pdo->exec( "DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'" );
 		}
 
 		\remove_all_filters( 'site_url' );
@@ -562,17 +565,15 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$admin_id = $res_admin['body']['data']['id'];
 		$ed_id    = $res_ed['body']['data']['id'];
 
-		// Editor attempts bulk delete of both IDs
+		// Editor attempts bulk delete of both IDs (mixed ownership) -> rejected as whole with 403 Forbidden
 		$bulk_res = $this->dispatch( $this->editor_request( 'DELETE', '/api/v1/urls/bulk', array(), array( 'ids' => array( $admin_id, $ed_id ) ) ) );
-		$this->assertSame( 200, $bulk_res['status'] );
-		$this->assertSame( 1, $bulk_res['body']['data']['deletedCount'], 'Only Editor-owned link should be deleted.' );
+		$this->assertSame( 403, $bulk_res['status'], 'Mixed-ownership bulk delete batch must be rejected with 403.' );
 
-		// Check database directly: Editor link is trashed
+		// Check database directly: both links remain ACTIVE and untouched
 		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
 		$stmt->execute( array( 'id' => $ed_id ) );
-		$this->assertSame( 'trashed', $stmt->fetchColumn() );
+		$this->assertSame( 'active', $stmt->fetchColumn(), 'Editor link must remain active after 403 batch rejection.' );
 
-		// Check database directly: Admin link remains ACTIVE and untouched
 		$stmt->execute( array( 'id' => $admin_id ) );
 		$this->assertSame( 'active', $stmt->fetchColumn(), 'Admin link must remain active and untrashed.' );
 	}
@@ -728,7 +729,36 @@ class LinksDatabasePersistenceTest extends TestCase {
 		);
 		$link_id = $res['body']['data']['id'];
 
-		// Editor edits admin-created link -> permitted
+		// Editor attempts to edit admin-created link without edit_any_link -> 403 Forbidden
+		$denied_res = $this->dispatch(
+			$this->editor_request(
+				'PUT',
+				'/api/v1/urls/' . $link_id,
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/editor-updated',
+					'title'          => 'Editor Updated Title',
+				)
+			)
+		);
+		$this->assertSame( 403, $denied_res['status'] );
+
+		// Grant edit_any_link to editor via admin roles endpoint
+		$grant_res = $this->dispatch(
+			$this->admin_request(
+				'PUT',
+				'/api/v1/roles/editor',
+				array(),
+				array(
+					'capabilities' => array(
+						'edit_any_link' => true,
+					),
+				)
+			)
+		);
+		$this->assertSame( 200, $grant_res['status'] );
+
+		// Editor edits admin-created link with edit_any_link -> permitted
 		$edit_res = $this->dispatch(
 			$this->editor_request(
 				'PUT',
@@ -750,6 +780,16 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$this->assertSame( 'https://example.com/editor-updated', $row['destination_url'] );
 		$this->assertSame( 'Editor Updated Title', $row['title'] );
 		$this->assertSame( '1', (string) $row['user_id'], 'Ownership must remain with the Administrator.' );
+
+		// Reset editor role back to defaults
+		$this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/roles/editor/reset',
+				array(),
+				array()
+			)
+		);
 	}
 
 	public function test_editor_cannot_edit_other_editor_link_in_database(): void {
@@ -933,5 +973,1458 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$this->assertSame( 'twitter', $exp2['utmSource'] );
 		$this->assertSame( 'social', $exp2['utmMedium'] );
 		$this->assertSame( 'launch', $exp2['utmCampaign'] );
+	}
+
+	public function test_bulk_restore_mixed_ownership_fails_with_403_and_mutates_zero_rows(): void {
+		$alias1 = $this->test_prefix . 'restore_own';
+		$alias2 = $this->test_prefix . 'restore_other';
+
+		$res1 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ro1',
+					'alias'          => $alias1,
+				)
+			)
+		);
+		$res2 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ro2',
+					'alias'          => $alias2,
+				)
+			)
+		);
+
+		$id1 = $res1['body']['data']['id'];
+		$id2 = $res2['body']['data']['id'];
+
+		// Assign link 1 to editor (9999) and link 2 to other editor (8888), both trashed
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'trashed' WHERE id = '{$id1}'" );
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 8888, status = 'trashed' WHERE id = '{$id2}'" );
+
+		// Editor (9999) attempts to bulk restore both links
+		$req = $this->editor_request(
+			'POST',
+			'/api/v1/urls/restore',
+			array(),
+			array( 'ids' => array( $id1, $id2 ) )
+		);
+
+		$res = $this->dispatch( $req );
+		$this->assertSame( 403, $res['status'] );
+
+		// Verify zero rows were restored in the database
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2) AND status = "trashed"' );
+		$stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$this->assertSame( 2, (int) $stmt->fetchColumn(), 'Both records must remain trashed in database after 403 denial.' );
+	}
+
+	public function test_bulk_delete_trashed_links_succeeds_when_user_has_delete_links_even_without_trash_links(): void {
+		// Grant editor delete_links=true and revoke trash_links=false in settings
+		$editor_caps = array(
+			'editor' => array(
+				'trash_links'  => false,
+				'delete_links' => true,
+				'view_links'   => true,
+				'create_links' => true,
+				'edit_links'   => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, autoload, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $editor_caps ) . "', 1, NOW())
+			ON DUPLICATE KEY UPDATE setting_value = '" . json_encode( $editor_caps ) . "'"
+		);
+
+		$alias = $this->test_prefix . 'trash_del';
+		$res   = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/td1',
+					'alias'          => $alias,
+				)
+			)
+		);
+		$id    = $res['body']['data']['id'];
+
+		// Assign to editor (9999) and set status to trashed
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'trashed' WHERE id = '{$id}'" );
+
+		// Call bulk delete without force=true; because link is already trashed, effective action is permanent delete
+		$req = $this->editor_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array(),
+			array( 'ids' => array( $id ) )
+		);
+
+		$del_res = $this->dispatch( $req );
+		$this->assertSame( 200, $del_res['status'] );
+
+		// Verify record is permanently removed from database table
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $id ) );
+		$this->assertSame( 0, (int) $stmt->fetchColumn(), 'Record must be permanently deleted from database table.' );
+
+		// Cleanup setting
+		$this->pdo->exec( "DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'" );
+	}
+
+	public function test_bulk_delete_mixed_ownership_fails_with_403_and_mutates_zero_rows(): void {
+		$alias1 = $this->test_prefix . 'del_own';
+		$alias2 = $this->test_prefix . 'del_other';
+
+		$res1 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/do1',
+					'alias'          => $alias1,
+				)
+			)
+		);
+		$res2 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/do2',
+					'alias'          => $alias2,
+				)
+			)
+		);
+
+		$id1 = $res1['body']['data']['id'];
+		$id2 = $res2['body']['data']['id'];
+
+		// Assign link 1 to editor (9999) and link 2 to other editor (8888), both active
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'active' WHERE id = '{$id1}'" );
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 8888, status = 'active' WHERE id = '{$id2}'" );
+
+		// Editor (9999) attempts to bulk trash both links
+		$req = $this->editor_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array(),
+			array( 'ids' => array( $id1, $id2 ) )
+		);
+
+		$res = $this->dispatch( $req );
+		$this->assertSame( 403, $res['status'] );
+
+		// Verify zero rows were mutated in the database
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2) AND status = "active"' );
+		$stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$this->assertSame( 2, (int) $stmt->fetchColumn(), 'Both records must remain active in database after 403 denial.' );
+	}
+
+	public function test_bulk_delete_without_force_fails_with_403_when_editor_has_delete_links_but_not_trash_links(): void {
+		$editor_caps = array(
+			'editor' => array(
+				'trash_links'  => false,
+				'delete_links' => true,
+				'view_links'   => true,
+				'create_links' => true,
+				'edit_links'   => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, autoload, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $editor_caps ) . "', 1, NOW())
+			ON DUPLICATE KEY UPDATE setting_value = '" . json_encode( $editor_caps ) . "'"
+		);
+
+		$alias = $this->test_prefix . 'no_trash_act';
+		$res   = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/nta',
+					'alias'          => $alias,
+				)
+			)
+		);
+		$id    = $res['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'active' WHERE id = '{$id}'" );
+
+		// Editor attempts bulk delete without force on active link -> 403 Forbidden because trash_links=false
+		$req = $this->editor_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array(),
+			array( 'ids' => array( $id ) )
+		);
+
+		$del_res = $this->dispatch( $req );
+		$this->assertSame( 403, $del_res['status'] );
+
+		// Verify record remains ACTIVE and untouched in database table
+		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $id ) );
+		$this->assertSame( 'active', $stmt->fetchColumn(), 'Record must remain active when user lacks trash_links.' );
+
+		$this->pdo->exec( "DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'" );
+	}
+
+	public function test_bulk_delete_with_force_succeeds_when_editor_has_delete_links_even_without_trash_links(): void {
+		$editor_caps = array(
+			'editor' => array(
+				'trash_links'  => false,
+				'delete_links' => true,
+				'view_links'   => true,
+				'create_links' => true,
+				'edit_links'   => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, autoload, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $editor_caps ) . "', 1, NOW())
+			ON DUPLICATE KEY UPDATE setting_value = '" . json_encode( $editor_caps ) . "'"
+		);
+
+		$alias = $this->test_prefix . 'force_act';
+		$res   = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/fa',
+					'alias'          => $alias,
+				)
+			)
+		);
+		$id    = $res['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'active' WHERE id = '{$id}'" );
+
+		// Editor calls bulk delete with force=true on active link -> succeeds because delete_links=true
+		$req = $this->editor_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array( 'force' => 'true' ),
+			array( 'ids' => array( $id ) )
+		);
+
+		$del_res = $this->dispatch( $req );
+		$this->assertSame( 200, $del_res['status'] );
+
+		// Verify record is permanently removed from database table
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $id ) );
+		$this->assertSame( 0, (int) $stmt->fetchColumn(), 'Record must be permanently deleted from database table.' );
+
+		$this->pdo->exec( "DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'" );
+	}
+
+	public function test_bulk_delete_trashed_links_without_force_fails_with_403_when_editor_has_trash_links_but_not_delete_links(): void {
+		// Default editor role has trash_links=true and delete_links=false
+		$alias = $this->test_prefix . 'trash_no_del';
+		$res   = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/tnd',
+					'alias'          => $alias,
+				)
+			)
+		);
+		$id    = $res['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'trashed' WHERE id = '{$id}'" );
+
+		// Bulk delete on trashed links without force is permanent deletion -> requires delete_links -> 403 Forbidden
+		$req = $this->editor_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array(),
+			array( 'ids' => array( $id ) )
+		);
+
+		$del_res = $this->dispatch( $req );
+		$this->assertSame( 403, $del_res['status'] );
+
+		// Verify record remains in database as trashed
+		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $id ) );
+		$this->assertSame( 'trashed', $stmt->fetchColumn(), 'Record must remain trashed in database after 403 denial.' );
+	}
+
+	public function test_bulk_delete_with_force_fails_with_403_when_mixed_ownership_and_user_lacks_delete_any_link(): void {
+		$editor_caps = array(
+			'editor' => array(
+				'delete_links'    => true,
+				'delete_any_link' => false,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, autoload, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $editor_caps ) . "', 1, NOW())
+			ON DUPLICATE KEY UPDATE setting_value = '" . json_encode( $editor_caps ) . "'"
+		);
+
+		$alias1 = $this->test_prefix . 'force_mix1';
+		$alias2 = $this->test_prefix . 'force_mix2';
+
+		$res1 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/fm1',
+					'alias'          => $alias1,
+				)
+			)
+		);
+		$res2 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/fm2',
+					'alias'          => $alias2,
+				)
+			)
+		);
+		$id1  = $res1['body']['data']['id'];
+		$id2  = $res2['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'active' WHERE id = '{$id1}'" );
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 8888, status = 'active' WHERE id = '{$id2}'" );
+
+		// Force permanent delete with mixed ownership without delete_any_link -> 403 Forbidden
+		$req = $this->editor_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array( 'force' => 'true' ),
+			array( 'ids' => array( $id1, $id2 ) )
+		);
+
+		$res = $this->dispatch( $req );
+		$this->assertSame( 403, $res['status'] );
+
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2)' );
+		$stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$this->assertSame( 2, (int) $stmt->fetchColumn(), 'Both rows must remain untouched.' );
+
+		$this->pdo->exec( "DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'" );
+	}
+
+	public function test_bulk_delete_with_force_succeeds_when_mixed_ownership_and_user_has_delete_any_link(): void {
+		$editor_caps = array(
+			'editor' => array(
+				'delete_links'    => true,
+				'delete_any_link' => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, autoload, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $editor_caps ) . "', 1, NOW())
+			ON DUPLICATE KEY UPDATE setting_value = '" . json_encode( $editor_caps ) . "'"
+		);
+
+		$alias1 = $this->test_prefix . 'force_any1';
+		$alias2 = $this->test_prefix . 'force_any2';
+
+		$res1 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/fa1',
+					'alias'          => $alias1,
+				)
+			)
+		);
+		$res2 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/fa2',
+					'alias'          => $alias2,
+				)
+			)
+		);
+		$id1  = $res1['body']['data']['id'];
+		$id2  = $res2['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'active' WHERE id = '{$id1}'" );
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 8888, status = 'active' WHERE id = '{$id2}'" );
+
+		// Force permanent delete with mixed ownership with delete_any_link -> 200 OK
+		$req = $this->editor_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array( 'force' => 'true' ),
+			array( 'ids' => array( $id1, $id2 ) )
+		);
+
+		$res = $this->dispatch( $req );
+		$this->assertSame( 200, $res['status'] );
+
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2)' );
+		$stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$this->assertSame( 0, (int) $stmt->fetchColumn(), 'Both rows must be permanently deleted from database.' );
+
+		$this->pdo->exec( "DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'" );
+	}
+
+	public function test_bulk_delete_without_force_fails_with_403_when_mixed_ownership_even_with_delete_any_link(): void {
+		$editor_caps = array(
+			'editor' => array(
+				'trash_links'     => true,
+				'delete_links'    => true,
+				'delete_any_link' => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, autoload, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $editor_caps ) . "', 1, NOW())
+			ON DUPLICATE KEY UPDATE setting_value = '" . json_encode( $editor_caps ) . "'"
+		);
+
+		$alias1 = $this->test_prefix . 'trash_cross1';
+		$alias2 = $this->test_prefix . 'trash_cross2';
+
+		$res1 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/tc1',
+					'alias'          => $alias1,
+				)
+			)
+		);
+		$res2 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/tc2',
+					'alias'          => $alias2,
+				)
+			)
+		);
+		$id1  = $res1['body']['data']['id'];
+		$id2  = $res2['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'active' WHERE id = '{$id1}'" );
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 8888, status = 'active' WHERE id = '{$id2}'" );
+
+		// Trash operation across accounts is forbidden for non-admins even with delete_any_link -> 403 Forbidden
+		$req = $this->editor_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array(),
+			array( 'ids' => array( $id1, $id2 ) )
+		);
+
+		$res = $this->dispatch( $req );
+		$this->assertSame( 403, $res['status'] );
+
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2) AND status = "active"' );
+		$stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$this->assertSame( 2, (int) $stmt->fetchColumn(), 'Both rows must remain active and untrashed.' );
+
+		$this->pdo->exec( "DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'" );
+	}
+
+	public function test_bulk_restore_mixed_ownership_fails_with_403_even_with_edit_any_link(): void {
+		$editor_caps = array(
+			'editor' => array(
+				'edit_links'    => true,
+				'edit_any_link' => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, autoload, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $editor_caps ) . "', 1, NOW())
+			ON DUPLICATE KEY UPDATE setting_value = '" . json_encode( $editor_caps ) . "'"
+		);
+
+		$alias1 = $this->test_prefix . 'rest_cross1';
+		$alias2 = $this->test_prefix . 'rest_cross2';
+
+		$res1 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/rc1',
+					'alias'          => $alias1,
+				)
+			)
+		);
+		$res2 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/rc2',
+					'alias'          => $alias2,
+				)
+			)
+		);
+		$id1  = $res1['body']['data']['id'];
+		$id2  = $res2['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'trashed' WHERE id = '{$id1}'" );
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 8888, status = 'trashed' WHERE id = '{$id2}'" );
+
+		// Restore across accounts is forbidden for non-admins even with edit_any_link -> 403 Forbidden
+		$req = $this->editor_request(
+			'POST',
+			'/api/v1/urls/restore',
+			array(),
+			array( 'ids' => array( $id1, $id2 ) )
+		);
+
+		$res = $this->dispatch( $req );
+		$this->assertSame( 403, $res['status'] );
+
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2) AND status = "trashed"' );
+		$stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$this->assertSame( 2, (int) $stmt->fetchColumn(), 'Both rows must remain trashed in database.' );
+
+		$this->pdo->exec( "DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'" );
+	}
+
+	public function test_administrator_bulk_delete_across_multiple_owners_succeeds(): void {
+		$alias1 = $this->test_prefix . 'adm_multi1';
+		$alias2 = $this->test_prefix . 'adm_multi2';
+
+		$res1 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/am1',
+					'alias'          => $alias1,
+				)
+			)
+		);
+		$res2 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/am2',
+					'alias'          => $alias2,
+				)
+			)
+		);
+		$id1  = $res1['body']['data']['id'];
+		$id2  = $res2['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'active' WHERE id = '{$id1}'" );
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 8888, status = 'active' WHERE id = '{$id2}'" );
+
+		// Admin bulk trash multiple owners -> succeeds
+		$req = $this->admin_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array(),
+			array( 'ids' => array( $id1, $id2 ) )
+		);
+
+		$res = $this->dispatch( $req );
+		$this->assertSame( 200, $res['status'] );
+
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2) AND status = "trashed"' );
+		$stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$this->assertSame( 2, (int) $stmt->fetchColumn(), 'Admin must trash both links regardless of owner.' );
+	}
+
+	public function test_bulk_delete_mixed_active_and_trashed_links_without_force_fails_with_400(): void {
+		$alias1 = $this->test_prefix . 'mix_act';
+		$alias2 = $this->test_prefix . 'mix_trsh';
+
+		$res1 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/ma',
+					'alias'          => $alias1,
+				)
+			)
+		);
+		$res2 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/mt',
+					'alias'          => $alias2,
+				)
+			)
+		);
+		$id1  = $res1['body']['data']['id'];
+		$id2  = $res2['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'active' WHERE id = '{$id1}'" );
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 9999, status = 'trashed' WHERE id = '{$id2}'" );
+
+		// Mixed active and trashed selection without force -> 400 Bad Request
+		$req = $this->editor_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array(),
+			array( 'ids' => array( $id1, $id2 ) )
+		);
+
+		$res = $this->dispatch( $req );
+		$this->assertSame( 400, $res['status'] );
+
+		// Verify zero mutation
+		$stmt1 = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt1->execute( array( 'id' => $id1 ) );
+		$this->assertSame( 'active', $stmt1->fetchColumn(), 'Active link must remain active.' );
+
+		$stmt2 = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt2->execute( array( 'id' => $id2 ) );
+		$this->assertSame( 'trashed', $stmt2->fetchColumn(), 'Trashed link must remain trashed.' );
+	}
+
+	public function test_bulk_delete_mixed_active_and_trashed_links_with_force_succeeds(): void {
+		$alias1 = $this->test_prefix . 'mix_f_act';
+		$alias2 = $this->test_prefix . 'mix_f_trsh';
+
+		$res1 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/mfa',
+					'alias'          => $alias1,
+				)
+			)
+		);
+		$res2 = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/mft',
+					'alias'          => $alias2,
+				)
+			)
+		);
+		$id1  = $res1['body']['data']['id'];
+		$id2  = $res2['body']['data']['id'];
+
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 1, status = 'active' WHERE id = '{$id1}'" );
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 1, status = 'trashed' WHERE id = '{$id2}'" );
+
+		// Mixed active and trashed selection with force=true -> permanent delete of all
+		$req = $this->admin_request(
+			'DELETE',
+			'/api/v1/urls/bulk',
+			array( 'force' => 'true' ),
+			array( 'ids' => array( $id1, $id2 ) )
+		);
+
+		$res = $this->dispatch( $req );
+		$this->assertSame( 200, $res['status'] );
+
+		$stmt = $this->pdo->prepare( 'SELECT COUNT(*) FROM peakurl_urls WHERE id IN (:id1, :id2)' );
+		$stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$this->assertSame( 0, (int) $stmt->fetchColumn(), 'Both rows must be permanently deleted.' );
+	}
+
+	public function test_analytics_matrix_cross_account_isolation_and_redaction(): void {
+		// 1. Seed 3 links across 3 owners:
+		// Link A: Admin A (id: 1)
+		$alias_a = $this->test_prefix . 'analytics_a';
+		$res_a   = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/dest-a',
+					'alias'          => $alias_a,
+					'title'          => 'Link A Admin',
+				)
+			)
+		);
+		$id_a    = $res_a['body']['data']['id'];
+
+		// Link B: Editor B (id: 9999)
+		$alias_b = $this->test_prefix . 'analytics_b';
+		$res_b   = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/dest-b',
+					'alias'          => $alias_b,
+					'title'          => 'Link B Editor',
+				)
+			)
+		);
+		$id_b    = $res_b['body']['data']['id'];
+
+		// Link C: Other Editor / Custom Role C (id: 8888)
+		$alias_c = $this->test_prefix . 'analytics_c';
+		$res_c   = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/dest-c',
+					'alias'          => $alias_c,
+					'title'          => 'Link C Other',
+				)
+			)
+		);
+		$id_c    = $res_c['body']['data']['id'];
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 8888 WHERE id = '{$id_c}'" );
+
+		// 2. Insert clicks into peakurl_clicks:
+		// Link A: 12 total clicks, 8 unique visitors
+		for ( $i = 1; $i <= 8; $i++ ) {
+			$click_id = bin2hex( random_bytes( 16 ) );
+			$vis      = hash( 'sha256', "vis_a_{$i}" );
+			$this->pdo->exec(
+				"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+				VALUES ('{$click_id}', '{$id_a}', NOW() - INTERVAL {$i} MINUTE, '{$vis}')"
+			);
+		}
+		for ( $i = 1; $i <= 4; $i++ ) {
+			$click_id = bin2hex( random_bytes( 16 ) );
+			$vis      = hash( 'sha256', "vis_a_{$i}" );
+			$this->pdo->exec(
+				"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+				VALUES ('{$click_id}', '{$id_a}', NOW() - INTERVAL {$i} HOUR, '{$vis}')"
+			);
+		}
+
+		// Link B: 3 total clicks, 2 unique visitors
+		for ( $i = 1; $i <= 2; $i++ ) {
+			$click_id = bin2hex( random_bytes( 16 ) );
+			$vis      = hash( 'sha256', "vis_b_{$i}" );
+			$this->pdo->exec(
+				"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+				VALUES ('{$click_id}', '{$id_b}', NOW() - INTERVAL {$i} MINUTE, '{$vis}')"
+			);
+		}
+		$click_id = bin2hex( random_bytes( 16 ) );
+		$vis      = hash( 'sha256', 'vis_b_1' );
+		$this->pdo->exec(
+			"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+			VALUES ('{$click_id}', '{$id_b}', NOW() - INTERVAL 1 HOUR, '{$vis}')"
+		);
+
+		// Link C: 7 total clicks, 5 unique visitors
+		for ( $i = 1; $i <= 5; $i++ ) {
+			$click_id = bin2hex( random_bytes( 16 ) );
+			$vis      = hash( 'sha256', "vis_c_{$i}" );
+			$this->pdo->exec(
+				"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+				VALUES ('{$click_id}', '{$id_c}', NOW() - INTERVAL {$i} MINUTE, '{$vis}')"
+			);
+		}
+		for ( $i = 1; $i <= 2; $i++ ) {
+			$click_id = bin2hex( random_bytes( 16 ) );
+			$vis      = hash( 'sha256', "vis_c_{$i}" );
+			$this->pdo->exec(
+				"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+				VALUES ('{$click_id}', '{$id_c}', NOW() - INTERVAL {$i} HOUR, '{$vis}')"
+			);
+		}
+
+		// 3. Admin Request: Sees all metrics in list, detail, and export; aggregate metadata includes site-wide totals
+		$admin_list_req = $this->admin_request( 'GET', '/api/v1/urls', array( 'search' => $this->test_prefix ) );
+		$admin_list_res = $this->dispatch( $admin_list_req );
+		$this->assertSame( 200, $admin_list_res['status'] );
+		$admin_items = array_column( $admin_list_res['body']['data']['items'], null, 'id' );
+
+		$this->assertSame( 12, $admin_items[ $id_a ]['clicks'] );
+		$this->assertSame( 8, $admin_items[ $id_a ]['uniqueClicks'] );
+		$this->assertSame( 3, $admin_items[ $id_b ]['clicks'] );
+		$this->assertSame( 2, $admin_items[ $id_b ]['uniqueClicks'] );
+		$this->assertSame( 7, $admin_items[ $id_c ]['clicks'] );
+		$this->assertSame( 5, $admin_items[ $id_c ]['uniqueClicks'] );
+
+		$this->assertSame( 22, $admin_list_res['body']['data']['meta']['totalClicks'] );
+		$this->assertSame( 15, $admin_list_res['body']['data']['meta']['uniqueClicks'] );
+		$this->assertSame( 3, $admin_list_res['body']['data']['meta']['activeLinks'] );
+
+		// Admin can sort by clicks and uniqueClicks
+		$admin_sort_clicks = $this->dispatch(
+			$this->admin_request(
+				'GET',
+				'/api/v1/urls',
+				array(
+					'search'    => $this->test_prefix,
+					'sortBy'    => 'clicks',
+					'sortOrder' => 'desc',
+				)
+			)
+		);
+		$this->assertSame( 200, $admin_sort_clicks['status'] );
+		$this->assertSame( $id_a, $admin_sort_clicks['body']['data']['items'][0]['id'] );
+
+		$admin_sort_uniq = $this->dispatch(
+			$this->admin_request(
+				'GET',
+				'/api/v1/urls',
+				array(
+					'search'    => $this->test_prefix,
+					'sortBy'    => 'uniqueClicks',
+					'sortOrder' => 'desc',
+				)
+			)
+		);
+		$this->assertSame( 200, $admin_sort_uniq['status'] );
+		$this->assertSame( $id_a, $admin_sort_uniq['body']['data']['items'][0]['id'] );
+
+		// 4. Editor B Request (view_links=true, view_analytics=true):
+		// Sees all 3 inventory rows, but ONLY B's metrics are numeric. Link A and Link C have clicks=null and uniqueClicks=null.
+		$editor_list_req = $this->editor_request( 'GET', '/api/v1/urls', array( 'search' => $this->test_prefix ) );
+		$editor_list_res = $this->dispatch( $editor_list_req );
+		$this->assertSame( 200, $editor_list_res['status'] );
+		$editor_items = array_column( $editor_list_res['body']['data']['items'], null, 'id' );
+
+		// Non-owned Link A: clicks and uniqueClicks are null
+		$this->assertNull( $editor_items[ $id_a ]['clicks'] );
+		$this->assertNull( $editor_items[ $id_a ]['uniqueClicks'] );
+
+		// Non-owned Link C: clicks and uniqueClicks are null
+		$this->assertNull( $editor_items[ $id_c ]['clicks'] );
+		$this->assertNull( $editor_items[ $id_c ]['uniqueClicks'] );
+
+		// Owned Link B: metrics retained
+		$this->assertSame( 3, $editor_items[ $id_b ]['clicks'] );
+		$this->assertSame( 2, $editor_items[ $id_b ]['uniqueClicks'] );
+
+		// Aggregates for Editor B: ONLY Link B's clicks (3 total, 2 unique), while general inventory count is site-wide (3 active)
+		$this->assertSame( 3, $editor_list_res['body']['data']['meta']['totalClicks'] );
+		$this->assertSame( 2, $editor_list_res['body']['data']['meta']['uniqueClicks'] );
+		$this->assertSame( 3, $editor_list_res['body']['data']['meta']['activeLinks'] );
+
+		// 5. Editor B Export Request:
+		$editor_export_res = $this->dispatch( $this->editor_request( 'GET', '/api/v1/urls/export', array( 'search' => $this->test_prefix ) ) );
+		$this->assertSame( 200, $editor_export_res['status'] );
+		$export_items = array_column( $editor_export_res['body']['data']['items'], null, 'id' );
+
+		$this->assertNull( $export_items[ $id_a ]['clicks'] );
+		$this->assertNull( $export_items[ $id_a ]['uniqueClicks'] );
+		$this->assertNull( $export_items[ $id_c ]['clicks'] );
+		$this->assertNull( $export_items[ $id_c ]['uniqueClicks'] );
+		$this->assertSame( 3, $export_items[ $id_b ]['clicks'] );
+		$this->assertSame( 2, $export_items[ $id_b ]['uniqueClicks'] );
+
+		// 6. Editor B Single-Link Details:
+		$detail_a = $this->dispatch( $this->editor_request( 'GET', "/api/v1/urls/{$id_a}" ) );
+		$this->assertSame( 200, $detail_a['status'] );
+		$this->assertNull( $detail_a['body']['data']['clicks'] );
+		$this->assertNull( $detail_a['body']['data']['uniqueClicks'] );
+
+		$detail_c = $this->dispatch( $this->editor_request( 'GET', "/api/v1/urls/{$id_c}" ) );
+		$this->assertSame( 200, $detail_c['status'] );
+		$this->assertNull( $detail_c['body']['data']['clicks'] );
+		$this->assertNull( $detail_c['body']['data']['uniqueClicks'] );
+
+		$detail_b = $this->dispatch( $this->editor_request( 'GET', "/api/v1/urls/{$id_b}" ) );
+		$this->assertSame( 200, $detail_b['status'] );
+		$this->assertSame( 3, $detail_b['body']['data']['clicks'] );
+		$this->assertSame( 2, $detail_b['body']['data']['uniqueClicks'] );
+
+		// 7. Editor B Click Sorting Rejection:
+		$sort_clicks_res = $this->dispatch(
+			$this->editor_request(
+				'GET',
+				'/api/v1/urls',
+				array(
+					'search' => $this->test_prefix,
+					'sortBy' => 'clicks',
+				)
+			)
+		);
+		$this->assertSame( 403, $sort_clicks_res['status'] );
+
+		$sort_uniq_res = $this->dispatch(
+			$this->editor_request(
+				'GET',
+				'/api/v1/urls',
+				array(
+					'search' => $this->test_prefix,
+					'sortBy' => 'uniqueClicks',
+				)
+			)
+		);
+		$this->assertSame( 403, $sort_uniq_res['status'] );
+
+		$export_sort_clicks = $this->dispatch(
+			$this->editor_request(
+				'GET',
+				'/api/v1/urls/export',
+				array(
+					'search' => $this->test_prefix,
+					'sortBy' => 'clicks',
+				)
+			)
+		);
+		$this->assertSame( 403, $export_sort_clicks['status'] );
+
+		$export_sort_uniq = $this->dispatch(
+			$this->editor_request(
+				'GET',
+				'/api/v1/urls/export',
+				array(
+					'search' => $this->test_prefix,
+					'sortBy' => 'uniqueClicks',
+				)
+			)
+		);
+		$this->assertSame( 403, $export_sort_uniq['status'] );
+
+		// Ordinary sorts work fine
+		$sort_created_res = $this->dispatch(
+			$this->editor_request(
+				'GET',
+				'/api/v1/urls',
+				array(
+					'search' => $this->test_prefix,
+					'sortBy' => 'createdAt',
+				)
+			)
+		);
+		$this->assertSame( 200, $sort_created_res['status'] );
+
+		// 8. Direct Stats Endpoint /api/v1/analytics/url/:id/stats and /location:
+		// Non-owned Link A -> 403
+		$stats_a_res = $this->dispatch( $this->editor_request( 'GET', "/api/v1/analytics/url/{$id_a}/stats" ) );
+		$this->assertSame( 403, $stats_a_res['status'] );
+
+		$loc_a_res = $this->dispatch( $this->editor_request( 'GET', "/api/v1/analytics/url/{$id_a}/location" ) );
+		$this->assertSame( 403, $loc_a_res['status'] );
+
+		// Non-owned Link C -> 403
+		$stats_c_res = $this->dispatch( $this->editor_request( 'GET', "/api/v1/analytics/url/{$id_c}/stats" ) );
+		$this->assertSame( 403, $stats_c_res['status'] );
+
+		// Owned Link B -> 200 OK
+		$stats_b_res = $this->dispatch( $this->editor_request( 'GET', "/api/v1/analytics/url/{$id_b}/stats" ) );
+		$this->assertSame( 200, $stats_b_res['status'] );
+		$this->assertSame( 3, $stats_b_res['body']['data']['totalClicks'] );
+
+		$loc_b_res = $this->dispatch( $this->editor_request( 'GET', "/api/v1/analytics/url/{$id_b}/location" ) );
+		$this->assertSame( 200, $loc_b_res['status'] );
+
+		// Admin requesting Link B stats and location -> 200 OK
+		$admin_stats_b = $this->dispatch( $this->admin_request( 'GET', "/api/v1/analytics/url/{$id_b}/stats" ) );
+		$this->assertSame( 200, $admin_stats_b['status'] );
+		$this->assertSame( 3, $admin_stats_b['body']['data']['totalClicks'] );
+
+		$admin_loc_b = $this->dispatch( $this->admin_request( 'GET', "/api/v1/analytics/url/{$id_b}/location" ) );
+		$this->assertSame( 200, $admin_loc_b['status'] );
+
+		// 9. Non-admin with view_analytics=false:
+		$no_analytics_caps = array(
+			'editor' => array(
+				'view_analytics' => false,
+				'view_links'     => true,
+				'create_links'   => true,
+				'edit_links'     => true,
+				'trash_links'    => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $no_analytics_caps ) . "', NOW())
+			ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = NOW()"
+		);
+
+		// Fresh app instance to pick up settings
+		$config              = Configuration::get_current();
+		$connection          = Connection::get_instance( $config );
+		$resolver            = new Resolver( static fn() => array( '93.184.216.34' ) );
+		$probe               = new Probe(
+			new Context( $config ),
+			static fn() => array(
+				'response_code' => 200,
+				'duration_ms'   => 50,
+				'error_code'    => 0,
+				'error_message' => '',
+				'redirect_url'  => null,
+			)
+		);
+		$mock_health_checker = new Checker( $resolver, $probe );
+		$app                 = new Application( $connection, $config, $mock_health_checker );
+		$this->router        = $app->get_router();
+
+		$no_analytics_list = $this->dispatch( $this->editor_request( 'GET', '/api/v1/urls', array( 'search' => $this->test_prefix ) ) );
+		$this->assertSame( 200, $no_analytics_list['status'] );
+		$this->assertNull( $no_analytics_list['body']['data']['meta']['totalClicks'] );
+		$this->assertNull( $no_analytics_list['body']['data']['meta']['uniqueClicks'] );
+		$this->assertSame( 3, $no_analytics_list['body']['data']['meta']['activeLinks'] );
+
+		foreach ( $no_analytics_list['body']['data']['items'] as $item ) {
+			$this->assertNull( $item['clicks'] );
+			$this->assertNull( $item['uniqueClicks'] );
+		}
+
+		// Direct stats for owned Link B is now 403
+		$stats_b_no_analytics = $this->dispatch( $this->editor_request( 'GET', "/api/v1/analytics/url/{$id_b}/stats" ) );
+		$this->assertSame( 403, $stats_b_no_analytics['status'] );
+	}
+
+	public function test_mutation_responses_redact_analytics_metrics_for_unauthorized_actors(): void {
+		// Clean up any custom role capabilities to start from baseline
+		$this->pdo->exec(
+			"DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'"
+		);
+
+		// Helper to re-instantiate application to pick up database/settings changes
+		$boot_app = function (): Router {
+			$config              = Configuration::get_current();
+			$connection          = Connection::get_instance( $config );
+			$resolver            = new Resolver( static fn() => array( '93.184.216.34' ) );
+			$probe               = new Probe(
+				new Context( $config ),
+				static fn() => array(
+					'response_code' => 200,
+					'duration_ms'   => 50,
+					'error_code'    => 0,
+					'error_message' => '',
+					'redirect_url'  => null,
+				)
+			);
+			$mock_health_checker = new Checker( $resolver, $probe );
+			$app                 = new Application( $connection, $config, $mock_health_checker );
+			return $app->get_router();
+		};
+
+		$this->router = $boot_app();
+
+		// 1. Seed links with distinct owners:
+		// Link B: owned by Editor (9999)
+		$alias_b = $this->test_prefix . 'mut_b';
+		$res_b   = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/dest-mut-b',
+					'alias'          => $alias_b,
+					'title'          => 'Mutation Test Link B',
+				)
+			)
+		);
+		$this->assertSame( 201, $res_b['status'] );
+		$id_b = $res_b['body']['data']['id'];
+
+		// Link C: owned by Other Editor (8888)
+		$alias_c = $this->test_prefix . 'mut_c';
+		$res_c   = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/dest-mut-c',
+					'alias'          => $alias_c,
+					'title'          => 'Mutation Test Link C',
+				)
+			)
+		);
+		$this->assertSame( 201, $res_c['status'] );
+		$id_c = $res_c['body']['data']['id'];
+		$this->pdo->exec( "UPDATE peakurl_urls SET user_id = 8888 WHERE id = '{$id_c}'" );
+
+		// Seed clicks in peakurl_clicks with distinguishable values:
+		// Link B: 5 clicks, 3 unique visitors
+		for ( $i = 1; $i <= 3; $i++ ) {
+			$click_id = bin2hex( random_bytes( 16 ) );
+			$vis      = hash( 'sha256', "vis_mut_b_{$i}" );
+			$this->pdo->exec(
+				"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+				VALUES ('{$click_id}', '{$id_b}', NOW() - INTERVAL {$i} MINUTE, '{$vis}')"
+			);
+		}
+		for ( $i = 1; $i <= 2; $i++ ) {
+			$click_id = bin2hex( random_bytes( 16 ) );
+			$vis      = hash( 'sha256', "vis_mut_b_{$i}" );
+			$this->pdo->exec(
+				"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+				VALUES ('{$click_id}', '{$id_b}', NOW() - INTERVAL {$i} HOUR, '{$vis}')"
+			);
+		}
+
+		// Link C: 8 clicks, 4 unique visitors
+		for ( $i = 1; $i <= 4; $i++ ) {
+			$click_id = bin2hex( random_bytes( 16 ) );
+			$vis      = hash( 'sha256', "vis_mut_c_{$i}" );
+			$this->pdo->exec(
+				"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+				VALUES ('{$click_id}', '{$id_c}', NOW() - INTERVAL {$i} MINUTE, '{$vis}')"
+			);
+		}
+		for ( $i = 1; $i <= 4; $i++ ) {
+			$click_id = bin2hex( random_bytes( 16 ) );
+			$vis      = hash( 'sha256', "vis_mut_c_{$i}" );
+			$this->pdo->exec(
+				"INSERT INTO peakurl_clicks (id, url_id, clicked_at, visitor_hash)
+				VALUES ('{$click_id}', '{$id_c}', NOW() - INTERVAL {$i} HOUR, '{$vis}')"
+			);
+		}
+
+		// 2. Baseline update: Editor updates own Link B with default capabilities (view_analytics=true):
+		// Should succeed (200) and return numeric metrics (5 clicks, 3 uniqueClicks)
+		$update_b_res = $this->dispatch(
+			$this->editor_request(
+				'PUT',
+				"/api/v1/urls/{$id_b}",
+				array(),
+				array( 'title' => 'Updated B by Owner' )
+			)
+		);
+		$this->assertSame( 200, $update_b_res['status'] );
+		$this->assertSame( 'Updated B by Owner', $update_b_res['body']['data']['title'] );
+		$this->assertSame( 5, $update_b_res['body']['data']['clicks'] );
+		$this->assertSame( 3, $update_b_res['body']['data']['uniqueClicks'] );
+
+		// Admin updates Link B: returns numeric metrics
+		$admin_update_b = $this->dispatch(
+			$this->admin_request(
+				'PUT',
+				"/api/v1/urls/{$id_b}",
+				array(),
+				array( 'title' => 'Updated B by Admin' )
+			)
+		);
+		$this->assertSame( 200, $admin_update_b['status'] );
+		$this->assertSame( 5, $admin_update_b['body']['data']['clicks'] );
+		$this->assertSame( 3, $admin_update_b['body']['data']['uniqueClicks'] );
+
+		// 3. Non-admin with view_analytics=false updates own link:
+		$no_analytics_caps = array(
+			'editor' => array(
+				'view_analytics' => false,
+				'view_links'     => true,
+				'create_links'   => true,
+				'edit_links'     => true,
+				'trash_links'    => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $no_analytics_caps ) . "', NOW())
+			ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = NOW()"
+		);
+		$this->router = $boot_app();
+
+		$update_b_no_analytics = $this->dispatch(
+			$this->editor_request(
+				'PUT',
+				"/api/v1/urls/{$id_b}",
+				array(),
+				array( 'title' => 'Updated B without Analytics' )
+			)
+		);
+		$this->assertSame( 200, $update_b_no_analytics['status'] );
+		$this->assertSame( 'Updated B without Analytics', $update_b_no_analytics['body']['data']['title'] );
+		$this->assertNull( $update_b_no_analytics['body']['data']['clicks'] );
+		$this->assertNull( $update_b_no_analytics['body']['data']['uniqueClicks'] );
+
+		// Also test empty updates (no fields changed) returns null metrics when unauthorized
+		$empty_update_res = $this->dispatch(
+			$this->editor_request(
+				'PUT',
+				"/api/v1/urls/{$id_b}",
+				array(),
+				array()
+			)
+		);
+		$this->assertSame( 200, $empty_update_res['status'] );
+		$this->assertNull( $empty_update_res['body']['data']['clicks'] );
+		$this->assertNull( $empty_update_res['body']['data']['uniqueClicks'] );
+
+		// 4. Non-admin with edit_any_link=true and view_analytics=true updates another account's link (Link C owned by 8888):
+		$cross_edit_caps = array(
+			'editor' => array(
+				'view_analytics' => true,
+				'view_links'     => true,
+				'create_links'   => true,
+				'edit_links'     => true,
+				'edit_any_link'  => true,
+				'trash_links'    => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $cross_edit_caps ) . "', NOW())
+			ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = NOW()"
+		);
+		$this->router = $boot_app();
+
+		$cross_update_res = $this->dispatch(
+			$this->editor_request(
+				'PUT',
+				"/api/v1/urls/{$id_c}",
+				array(),
+				array( 'title' => 'Updated C by Cross Editor' )
+			)
+		);
+		$this->assertSame( 200, $cross_update_res['status'] );
+		$this->assertSame( 'Updated C by Cross Editor', $cross_update_res['body']['data']['title'] );
+		// Editor has view_analytics=true BUT does NOT own Link C -> metrics must be REDACTED (null)
+		$this->assertNull( $cross_update_res['body']['data']['clicks'] );
+		$this->assertNull( $cross_update_res['body']['data']['uniqueClicks'] );
+
+		// Cross editor updating Admin-owned Link A:
+		$alias_a        = $this->test_prefix . 'mut_a';
+		$res_a          = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/dest-mut-a',
+					'alias'          => $alias_a,
+					'title'          => 'Mutation Test Link A',
+				)
+			)
+		);
+		$id_a           = $res_a['body']['data']['id'];
+		$cross_update_a = $this->dispatch(
+			$this->editor_request(
+				'PUT',
+				"/api/v1/urls/{$id_a}",
+				array(),
+				array( 'title' => 'Updated Admin Link A by Editor' )
+			)
+		);
+		$this->assertSame( 200, $cross_update_a['status'] );
+		$this->assertNull( $cross_update_a['body']['data']['clicks'] );
+		$this->assertNull( $cross_update_a['body']['data']['uniqueClicks'] );
+
+		// 5. Restore own link with view_analytics=false:
+		// First trash Link B
+		$this->pdo->exec( "UPDATE peakurl_urls SET status = 'trashed' WHERE id = '{$id_b}'" );
+
+		// Restore as Editor with view_analytics=false
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $no_analytics_caps ) . "', NOW())
+			ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = NOW()"
+		);
+		$this->router = $boot_app();
+
+		$restore_res = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				"/api/v1/urls/{$id_b}/restore"
+			)
+		);
+		$this->assertSame( 200, $restore_res['status'] );
+		$this->assertSame( 'active', $restore_res['body']['data']['status'] );
+		$this->assertNull( $restore_res['body']['data']['clicks'] );
+		$this->assertNull( $restore_res['body']['data']['uniqueClicks'] );
+
+		// Trash Link B again and restore as Admin: Admin receives numeric metrics
+		$this->pdo->exec( "UPDATE peakurl_urls SET status = 'trashed' WHERE id = '{$id_b}'" );
+		$admin_restore = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				"/api/v1/urls/{$id_b}/restore"
+			)
+		);
+		$this->assertSame( 200, $admin_restore['status'] );
+		$this->assertSame( 'active', $admin_restore['body']['data']['status'] );
+		$this->assertSame( 5, $admin_restore['body']['data']['clicks'] );
+		$this->assertSame( 3, $admin_restore['body']['data']['uniqueClicks'] );
+
+		// 5b. Activity log restoration delegates through restore_url and protects metrics:
+		$this->pdo->exec( "UPDATE peakurl_urls SET status = 'trashed' WHERE id = '{$id_b}'" );
+		$act_id    = bin2hex( random_bytes( 16 ) );
+		$link_meta = array(
+			'id'             => $id_b,
+			'destinationUrl' => 'https://example.com/dest-mut-b',
+			'title'          => 'Mutation Test Link B',
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_audit_logs (id, user_id, type, message, link_id, metadata, created_at)
+			VALUES ('{$act_id}', 9999, 'link.deleted', 'Link deleted', '{$id_b}', '" . json_encode( array( 'link' => $link_meta ) ) . "', NOW())"
+		);
+
+		// Non-admin with view_analytics=false restores from activity log: metrics are null
+		$act_restore_editor = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				"/api/v1/analytics/activity/{$act_id}/restore"
+			)
+		);
+		$this->assertSame( 200, $act_restore_editor['status'] );
+		$this->assertSame( 'active', $act_restore_editor['body']['data']['status'] );
+		$this->assertNull( $act_restore_editor['body']['data']['clicks'] );
+		$this->assertNull( $act_restore_editor['body']['data']['uniqueClicks'] );
+
+		// Trash Link B again, Admin restores from activity log: metrics are preserved
+		$this->pdo->exec( "UPDATE peakurl_urls SET status = 'trashed' WHERE id = '{$id_b}'" );
+		$act_restore_admin = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				"/api/v1/analytics/activity/{$act_id}/restore"
+			)
+		);
+		$this->assertSame( 200, $act_restore_admin['status'] );
+		$this->assertSame( 'active', $act_restore_admin['body']['data']['status'] );
+		$this->assertSame( 5, $act_restore_admin['body']['data']['clicks'] );
+		$this->assertSame( 3, $act_restore_admin['body']['data']['uniqueClicks'] );
+
+		// 6. Create and bulk-create links with view_analytics=false:
+		$create_res = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/created-no-analytics',
+					'alias'          => $this->test_prefix . 'new_no_analytics',
+				)
+			)
+		);
+		$this->assertSame( 201, $create_res['status'] );
+		$this->assertNull( $create_res['body']['data']['clicks'] );
+		$this->assertNull( $create_res['body']['data']['uniqueClicks'] );
+
+		$bulk_create_res = $this->dispatch(
+			$this->editor_request(
+				'POST',
+				'/api/v1/urls/bulk',
+				array(),
+				array(
+					'urls' => array(
+						array(
+							'destinationUrl' => 'https://example.com/bulk-no-analytics-1',
+							'alias'          => $this->test_prefix . 'bulk_na_1',
+						),
+						array(
+							'destinationUrl' => 'https://example.com/bulk-no-analytics-2',
+							'alias'          => $this->test_prefix . 'bulk_na_2',
+						),
+					),
+				)
+			)
+		);
+		$this->assertSame( 200, $bulk_create_res['status'] );
+		$this->assertCount( 2, $bulk_create_res['body']['data']['results'] );
+		foreach ( $bulk_create_res['body']['data']['results'] as $created_item ) {
+			$this->assertNull( $created_item['clicks'] );
+			$this->assertNull( $created_item['uniqueClicks'] );
+		}
+
+		// 7. Verify blocked mutations fail as expected (redaction does not bypass authorization)
+		// Editor without edit_links trying to update:
+		$no_edit_caps = array(
+			'editor' => array(
+				'view_links'     => true,
+				'create_links'   => true,
+				'edit_links'     => false,
+				'view_analytics' => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO peakurl_settings (setting_key, setting_value, updated_at)
+			VALUES ('" . Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $no_edit_caps ) . "', NOW())
+			ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = NOW()"
+		);
+		$this->router = $boot_app();
+
+		$blocked_update = $this->dispatch(
+			$this->editor_request(
+				'PUT',
+				"/api/v1/urls/{$id_b}",
+				array(),
+				array( 'title' => 'Attempted Unauthorized Update' )
+			)
+		);
+		$this->assertSame( 403, $blocked_update['status'] );
+
+		// Clean up settings to restore clean baseline
+		$this->pdo->exec(
+			"DELETE FROM peakurl_settings WHERE setting_key = '" . Constants::SETTING_ROLE_CAPABILITIES . "'"
+		);
 	}
 }

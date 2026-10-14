@@ -49,16 +49,17 @@ export const DEFAULT_USER_CAPABILITIES: Readonly<UserCapabilities> =
 		manageLocationData: false,
 		managePerformance: false,
 		manageUpdates: false,
-		manageProfile: false,
 		manageApiKeys: false,
-		manageWebhooks: false,
+		manageIntegrations: false,
 		viewLinks: false,
+		createLinks: false,
 		editLinks: false,
+		editAnyLink: false,
 		trashLinks: false,
 		deleteLinks: false,
+		deleteAnyLink: false,
 		emptyTrash: false,
 		viewAnalytics: false,
-		createLinks: false,
 	});
 
 /**
@@ -81,16 +82,17 @@ export function mapApiCapabilities(
 		manageLocationData: Boolean(apiCapabilities.manage_location_data),
 		managePerformance: Boolean(apiCapabilities.manage_performance),
 		manageUpdates: Boolean(apiCapabilities.manage_updates),
-		manageProfile: Boolean(apiCapabilities.manage_profile),
 		manageApiKeys: Boolean(apiCapabilities.manage_api_keys),
-		manageWebhooks: Boolean(apiCapabilities.manage_webhooks),
+		manageIntegrations: Boolean(apiCapabilities.manage_integrations),
 		viewLinks: Boolean(apiCapabilities.view_links),
+		createLinks: Boolean(apiCapabilities.create_links),
 		editLinks: Boolean(apiCapabilities.edit_links),
+		editAnyLink: Boolean(apiCapabilities.edit_any_link),
 		trashLinks: Boolean(apiCapabilities.trash_links),
 		deleteLinks: Boolean(apiCapabilities.delete_links),
+		deleteAnyLink: Boolean(apiCapabilities.delete_any_link),
 		emptyTrash: Boolean(apiCapabilities.empty_trash),
 		viewAnalytics: Boolean(apiCapabilities.view_analytics),
-		createLinks: Boolean(apiCapabilities.create_links),
 	};
 }
 
@@ -133,32 +135,40 @@ export function mapUserCapabilitiesToApi(
 			capabilities.manageUpdates
 		);
 	}
-	if (undefined !== capabilities.manageProfile) {
-		apiCapabilitiesPayload.manage_profile = Boolean(
-			capabilities.manageProfile
-		);
-	}
 	if (undefined !== capabilities.manageApiKeys) {
 		apiCapabilitiesPayload.manage_api_keys = Boolean(
 			capabilities.manageApiKeys
 		);
 	}
-	if (undefined !== capabilities.manageWebhooks) {
-		apiCapabilitiesPayload.manage_webhooks = Boolean(
-			capabilities.manageWebhooks
+	if (undefined !== capabilities.manageIntegrations) {
+		apiCapabilitiesPayload.manage_integrations = Boolean(
+			capabilities.manageIntegrations
 		);
 	}
 	if (undefined !== capabilities.viewLinks) {
 		apiCapabilitiesPayload.view_links = Boolean(capabilities.viewLinks);
 	}
+	if (undefined !== capabilities.createLinks) {
+		apiCapabilitiesPayload.create_links = Boolean(capabilities.createLinks);
+	}
 	if (undefined !== capabilities.editLinks) {
 		apiCapabilitiesPayload.edit_links = Boolean(capabilities.editLinks);
+	}
+	if (undefined !== capabilities.editAnyLink) {
+		apiCapabilitiesPayload.edit_any_link = Boolean(
+			capabilities.editAnyLink
+		);
 	}
 	if (undefined !== capabilities.trashLinks) {
 		apiCapabilitiesPayload.trash_links = Boolean(capabilities.trashLinks);
 	}
 	if (undefined !== capabilities.deleteLinks) {
 		apiCapabilitiesPayload.delete_links = Boolean(capabilities.deleteLinks);
+	}
+	if (undefined !== capabilities.deleteAnyLink) {
+		apiCapabilitiesPayload.delete_any_link = Boolean(
+			capabilities.deleteAnyLink
+		);
 	}
 	if (undefined !== capabilities.emptyTrash) {
 		apiCapabilitiesPayload.empty_trash = Boolean(capabilities.emptyTrash);
@@ -167,9 +177,6 @@ export function mapUserCapabilitiesToApi(
 		apiCapabilitiesPayload.view_analytics = Boolean(
 			capabilities.viewAnalytics
 		);
-	}
-	if (undefined !== capabilities.createLinks) {
-		apiCapabilitiesPayload.create_links = Boolean(capabilities.createLinks);
 	}
 
 	return apiCapabilitiesPayload;

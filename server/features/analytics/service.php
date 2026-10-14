@@ -18,6 +18,7 @@ use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Auth\Service as AuthService;
+use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Http\Request;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Database\Query;
@@ -85,12 +86,31 @@ class Service {
 	private LinksApi $links_api;
 
 	/**
+	 * Links domain service for activity link restoration.
+	 *
+	 * @var LinksService|null
+	 * @since 1.7.2
+	 */
+	private ?LinksService $links_service = null;
+
+	/**
 	 * Runtime configuration map.
 	 *
 	 * @var array<string, mixed>
 	 * @since 1.0.0
 	 */
 	private array $config;
+
+	/**
+	 * Set the links domain service.
+	 *
+	 * @param LinksService $links_service Links domain service.
+	 * @return void
+	 * @since 1.7.2
+	 */
+	public function set_links_service( LinksService $links_service ): void {
+		$this->links_service = $links_service;
+	}
 
 	/**
 	 * Create a new Analytics Service instance.
@@ -154,7 +174,13 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function analytics_summary( Request $request, int $days = 7 ): array {
-		$user              = $this->auth_service->get_current_user( $request );
+		$user = $this->auth_service->get_current_user( $request );
+		$this->authorization->validate_capability(
+			$user,
+			'view_analytics',
+			__( 'You do not have permission to view analytics.', 'peakurl' ),
+		);
+
 		$days              = max( 1, $days );
 		$period            = $this->data->get_analytics_period( $days );
 		$last_month_period = $this->data->get_last_month_period( $period, $days );
@@ -266,7 +292,13 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function recent_clicks( Request $request, int $limit = 8 ): array {
-		$user          = $this->auth_service->get_current_user( $request );
+		$user = $this->auth_service->get_current_user( $request );
+		$this->authorization->validate_capability(
+			$user,
+			'view_analytics',
+			__( 'You do not have permission to view analytics.', 'peakurl' ),
+		);
+
 		$default_limit = 8;
 		$max_limit     = 20;
 		$limit         = max(
@@ -492,10 +524,12 @@ class Service {
 			return null;
 		}
 
-		$this->authorization->validate_capability(
+		$this->authorization->validate_record_access(
 			$user,
+			(string) ( $url['user_id'] ?? '' ),
 			'view_analytics',
 			__( 'You do not have permission to view analytics for this link.', 'peakurl' ),
+			true
 		);
 
 		$stats_period     = $this->data->get_link_stats_period(
@@ -668,6 +702,7 @@ class Service {
 			(string) ( $url['user_id'] ?? '' ),
 			'view_analytics',
 			__( 'You do not have permission to view analytics for this link.', 'peakurl' ),
+			true
 		);
 
 		$stats_period    = $this->data->get_link_stats_period(
@@ -812,7 +847,7 @@ class Service {
 		if ( '' !== $link_id ) {
 			$existing_link = $this->db->get_row_by( 'urls', array( 'id' => $link_id ) );
 			if ( $existing_link && $this->links_service ) {
-				return $this->links_service->restore( $request, $link_id );
+				return $this->links_service->restore_url( $request, $link_id );
 			}
 		}
 

@@ -226,7 +226,6 @@ class ApiRouteContractsTest extends TestCase {
 			'edit_links',
 			'trash_links',
 			'view_analytics',
-			'manage_profile',
 			'create_links',
 		);
 
@@ -279,7 +278,6 @@ class ApiRouteContractsTest extends TestCase {
 			'edit_links',
 			'trash_links',
 			'view_analytics',
-			'manage_profile',
 			'create_links',
 		);
 

@@ -100,42 +100,42 @@ class RouteInventoryTest extends TestCase {
 		),
 		'GET /api/v1/auth/security'                        => array(
 			'area'       => 'Auth',
-			'capability' => 'manage_profile',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/auth/security/two-factor/setup'      => array(
 			'area'       => 'Auth',
-			'capability' => 'manage_profile',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/auth/security/two-factor/verify'     => array(
 			'area'       => 'Auth',
-			'capability' => 'manage_profile',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/auth/security/two-factor/disable'    => array(
 			'area'       => 'Auth',
-			'capability' => 'manage_profile',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/auth/security/two-factor/backup-codes' => array(
 			'area'       => 'Auth',
-			'capability' => 'manage_profile',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/auth/security/backup-codes/download' => array(
 			'area'       => 'Auth',
-			'capability' => 'manage_profile',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'DELETE /api/v1/auth/security/sessions'            => array(
 			'area'       => 'Auth',
-			'capability' => 'manage_profile',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'DELETE /api/v1/auth/security/sessions/{id}'       => array(
 			'area'       => 'Auth',
-			'capability' => 'manage_profile',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 
@@ -157,7 +157,7 @@ class RouteInventoryTest extends TestCase {
 		),
 		'PUT /api/v1/users/me'                             => array(
 			'area'       => 'Users',
-			'capability' => 'manage_profile',
+			'capability' => 'authenticated',
 			'coverage'   => array( 'contract', 'auth', 'e2e' ),
 		),
 		'PUT /api/v1/users/{username}'                     => array(
@@ -330,62 +330,62 @@ class RouteInventoryTest extends TestCase {
 		// Webhooks
 		'GET /api/v1/webhooks'                             => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'GET /api/v1/webhooks/events'                      => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/webhooks'                            => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/webhooks/test'                       => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/webhooks/{id}/test'                  => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'POST /api/v1/webhooks/{id}/rotate-secret'         => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'GET /api/v1/webhooks/{id}/deliveries'             => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'DELETE /api/v1/webhooks/{id}/deliveries'          => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth', 'integration' ),
 		),
 		'DELETE /api/v1/webhooks/{id}/deliveries/{delivery_id}' => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth', 'integration' ),
 		),
 		'POST /api/v1/webhooks/{id}/deliveries/{delivery_id}/retry' => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'PUT /api/v1/webhooks/{id}'                        => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 		'DELETE /api/v1/webhooks/{id}'                     => array(
 			'area'       => 'Webhooks',
-			'capability' => 'manage_webhooks',
+			'capability' => 'manage_integrations',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
 

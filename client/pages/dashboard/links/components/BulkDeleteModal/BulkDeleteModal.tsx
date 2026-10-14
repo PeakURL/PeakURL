@@ -15,15 +15,28 @@ function BulkDeleteModal({
 	setOpen,
 	selectedIds,
 	isTrashTab = false,
+	canTrash,
+	canPermanentlyDelete,
+	onConfirm,
 	onSuccess,
 }: BulkDeleteModalProps) {
 	const direction = getDocumentDirection();
 	const { canDeleteLinks, canTrashLinks } = useAdminAccess();
+	const effectiveCanTrash =
+		canTrash !== undefined ? canTrash : Boolean(canTrashLinks);
+	const effectiveCanDelete =
+		canPermanentlyDelete !== undefined
+			? canPermanentlyDelete
+			: Boolean(canDeleteLinks);
 	const [error, setError] = useState("");
 	const [activeAction, setActiveAction] = useState<
 		"trash" | "permanent" | null
 	>(null);
 	const [bulkDeleteUrl, { isLoading }] = useBulkDeleteUrlMutation();
+
+	const isDirectPermanent =
+		!isTrashTab && !effectiveCanTrash && effectiveCanDelete;
+	const isPermanentMode = isTrashTab || isDirectPermanent;
 
 	const handleClose = () => {
 		if (isLoading) return;
@@ -35,13 +48,18 @@ function BulkDeleteModal({
 		if (!selectedIds || selectedIds.length === 0) {
 			return;
 		}
+		if (permanent ? !effectiveCanDelete : !effectiveCanTrash) {
+			return;
+		}
 
 		const idsToDelete = [...selectedIds];
 		setError("");
 		setActiveAction(permanent ? "permanent" : "trash");
 
 		try {
-			if (permanent) {
+			if (onConfirm) {
+				await onConfirm(idsToDelete, permanent);
+			} else if (permanent) {
 				await bulkDeleteUrl({ ids: idsToDelete, force: true }).unwrap();
 			} else {
 				await bulkDeleteUrl(idsToDelete).unwrap();
@@ -63,8 +81,8 @@ function BulkDeleteModal({
 	};
 
 	const hasAnyPermission = isTrashTab
-		? canDeleteLinks
-		: canDeleteLinks || canTrashLinks;
+		? effectiveCanDelete
+		: effectiveCanDelete || effectiveCanTrash;
 
 	if (!selectedIds || selectedIds.length === 0 || !hasAnyPermission)
 		return null;
@@ -84,7 +102,7 @@ function BulkDeleteModal({
 							<div className="links-modal-title-icon links-bulk-delete-modal-title-icon">
 								<AlertTriangle className="links-bulk-delete-modal-title-icon-svg" />
 							</div>
-							{isTrashTab || (!canTrashLinks && canDeleteLinks)
+							{isPermanentMode
 								? __("Delete Links Permanently")
 								: __("Move Links to Trash")}
 						</DialogTitle>
@@ -108,7 +126,7 @@ function BulkDeleteModal({
 						)}
 
 						<p className="links-bulk-delete-modal-copy">
-							{isTrashTab || (!canTrashLinks && canDeleteLinks)
+							{isPermanentMode
 								? selectedIds.length === 1
 									? __(
 											"Are you sure you want to delete 1 selected link permanently? This action cannot be undone."
@@ -131,14 +149,6 @@ function BulkDeleteModal({
 										)}
 						</p>
 
-						{!canDeleteLinks && !isTrashTab && (
-							<p className="mt-2 text-xs text-text-muted">
-								{__(
-									"Only links you have permission to remove will be affected. Admin-owned links will remain unchanged."
-								)}
-							</p>
-						)}
-
 						{/* Action Buttons */}
 						<div className="links-modal-actions-responsive">
 							<button
@@ -151,16 +161,12 @@ function BulkDeleteModal({
 							</button>
 
 							<div className="links-modal-actions-group">
-								{!isTrashTab && canDeleteLinks && (
+								{!isPermanentMode && effectiveCanDelete && (
 									<button
 										type="button"
 										onClick={() => handleDelete(true)}
 										disabled={isLoading}
-										className={
-											canTrashLinks
-												? "links-modal-button links-modal-button-danger-outline"
-												: "links-modal-button links-modal-button-danger"
-										}
+										className="links-modal-button links-modal-button-danger-outline"
 									>
 										{isLoading &&
 										activeAction === "permanent" ? (
@@ -182,48 +188,50 @@ function BulkDeleteModal({
 									</button>
 								)}
 
-								{(isTrashTab
-									? canDeleteLinks
-									: canTrashLinks) && (
-									<button
-										type="button"
-										onClick={() => handleDelete(isTrashTab)}
-										disabled={isLoading}
-										className="links-modal-button links-modal-button-danger"
-									>
-										{isLoading &&
-										(activeAction === "trash" ||
-											(isTrashTab &&
-												activeAction ===
-													"permanent")) ? (
-											<span className="links-modal-button-content">
-												<div className="links-modal-spinner"></div>
-												{__("Deleting...")}
-											</span>
-										) : (
-											<span className="links-modal-button-content">
-												<Trash2 className="links-modal-button-icon" />
-												{isTrashTab
-													? sprintf(
-															__(
-																"Delete Permanently (%s)"
-															),
-															String(
-																selectedIds.length
-															)
+								<button
+									type="button"
+									onClick={() =>
+										handleDelete(isPermanentMode)
+									}
+									disabled={
+										isLoading ||
+										(isPermanentMode
+											? !effectiveCanDelete
+											: !effectiveCanTrash)
+									}
+									className="links-modal-button links-modal-button-danger"
+								>
+									{isLoading &&
+									(activeAction === "trash" ||
+										(isPermanentMode &&
+											activeAction === "permanent")) ? (
+										<span className="links-modal-button-content">
+											<div className="links-modal-spinner"></div>
+											{__("Deleting...")}
+										</span>
+									) : (
+										<span className="links-modal-button-content">
+											<Trash2 className="links-modal-button-icon" />
+											{isPermanentMode
+												? sprintf(
+														__(
+															"Delete Permanently (%s)"
+														),
+														String(
+															selectedIds.length
 														)
-													: sprintf(
-															__(
-																"Move to Trash (%s)"
-															),
-															String(
-																selectedIds.length
-															)
-														)}
-											</span>
-										)}
-									</button>
-								)}
+													)
+												: sprintf(
+														__(
+															"Move to Trash (%s)"
+														),
+														String(
+															selectedIds.length
+														)
+													)}
+										</span>
+									)}
+								</button>
 							</div>
 						</div>
 					</div>

@@ -199,10 +199,20 @@ class Repository {
 		?callable $filter_callback,
 		callable $period_resolver
 	): array {
-		$search       = trim( (string) ( $query['search'] ?? '' ) );
+		$search         = trim( (string) ( $query['search'] ?? '' ) );
+		$requested_sort = (string) ( $query['sortBy'] ?? 'createdAt' );
+		if ( in_array( strtolower( $requested_sort ), array( 'clicks', 'uniqueclicks' ), true ) ) {
+			if ( ! $this->authorization->is_admin( $user ) ) {
+				throw new ApiException(
+					__( 'You do not have permission to sort by analytics metrics.', 'peakurl' ),
+					403
+				);
+			}
+		}
+
 		$sort_by      = Query::sort_column(
 			$this->get_link_sort_columns(),
-			$query['sortBy'] ?? 'createdAt',
+			$requested_sort,
 			'u.created_at',
 		);
 		$sort_order   = Query::sort_direction(
@@ -372,21 +382,30 @@ class Repository {
 	/**
 	 * Calculate total click aggregates for a link collection query.
 	 *
-	 * @param string                $where        Prepared WHERE clause.
-	 * @param array<string, mixed>  $params       Query parameters.
-	 * @param array<string, string> $stats_params Bound click-stat parameters.
-	 * @return array<string, int> Click aggregates.
+	 * @param string                    $where          Prepared WHERE clause.
+	 * @param array<string, mixed>      $params         Query parameters.
+	 * @param array<string, string>     $stats_params   Bound click-stat parameters.
+	 * @param string|null               $click_where    Optional specific WHERE clause for click aggregation.
+	 * @param array<string, mixed>|null $click_params   Optional query parameters for click aggregation.
+	 * @param bool                      $include_clicks Whether to compute click metrics.
+	 * @return array<string, int|null> Click aggregates.
 	 * @since 1.5.2
 	 */
 	public function get_link_collection_stats(
 		string $where,
 		array $params,
-		array $stats_params
+		array $stats_params,
+		?string $click_where = null,
+		?array $click_params = null,
+		bool $include_clicks = true
 	): array {
 		return $this->links_api->aggregate_link_stats(
 			$where,
 			$params,
 			$stats_params,
+			$click_where,
+			$click_params,
+			$include_clicks,
 		);
 	}
 

@@ -585,8 +585,10 @@ test.describe("Users & Roles Admin Journeys", () => {
 			).toBeChecked();
 			await expect(page.getByText(/customized/i).first()).toBeVisible();
 
-			// Mutate another capability: toggle Manage Webhooks (unconditional assertion, no silent skipping)
-			const webhooksToggle = page.locator("#cap-toggle-manage_webhooks");
+			// Mutate another capability: toggle Manage Integrations (unconditional assertion, no silent skipping)
+			const webhooksToggle = page.locator(
+				"#cap-toggle-manage_integrations"
+			);
 			await expect(webhooksToggle).toBeVisible();
 			await expect(webhooksToggle).toBeEnabled();
 			await webhooksToggle.click({ force: true });

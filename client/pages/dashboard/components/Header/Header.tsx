@@ -11,6 +11,7 @@ const Header = ({
 	onTimeRangeChange,
 	onRefresh,
 	isRefreshing = false,
+	canViewAnalytics = true,
 }: HeaderProps) => {
 	const timeRangeOptions: SelectOption<number>[] = [
 		{ value: 7, label: __("Last 7 days") },
@@ -46,14 +47,16 @@ const Header = ({
 						)}
 					/>
 				</button>
-				<Select
-					value={timeRange}
-					onChange={onTimeRangeChange}
-					options={timeRangeOptions}
-					ariaLabel={__("Dashboard time range")}
-					className="dashboard-overview-header-select"
-					buttonClassName="dashboard-overview-header-select-button"
-				/>
+				{canViewAnalytics && (
+					<Select
+						value={timeRange}
+						onChange={onTimeRangeChange}
+						options={timeRangeOptions}
+						ariaLabel={__("Dashboard time range")}
+						className="dashboard-overview-header-select"
+						buttonClassName="dashboard-overview-header-select-button"
+					/>
+				)}
 			</div>
 		</div>
 	);

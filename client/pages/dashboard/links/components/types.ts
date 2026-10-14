@@ -122,6 +122,8 @@ export interface LinksHeaderProps {
 	customClickRange: LinksCustomDateRange;
 	onClickRangeChange: (range: LinksDateRange) => void;
 	onCustomClickRangeChange: (range: LinksCustomDateRange) => void;
+	canViewLinks?: boolean;
+	canViewAnalytics?: boolean;
 }
 
 /**
@@ -152,6 +154,8 @@ export interface TableFooterProps {
 	setStatusFilter?: (value: LinksStatusFilter) => void;
 	trashedCount?: number;
 	expiredCount?: number;
+	canViewAnalytics?: boolean;
+	isAdmin?: boolean;
 }
 
 /**
@@ -162,6 +166,9 @@ export interface BulkDeleteModalProps {
 	setOpen: (open: boolean) => void;
 	selectedIds: string[];
 	isTrashTab?: boolean;
+	canTrash?: boolean;
+	canPermanentlyDelete?: boolean;
+	onConfirm?: (ids: string[], permanent: boolean) => Promise<void> | void;
 	onSuccess?: () => void;
 }
 
@@ -179,6 +186,7 @@ export interface DeleteAllModalProps {
  */
 export interface DeletableLink {
 	id: string;
+	userId?: string | null;
 	destinationUrl: string;
 	alias?: string | null;
 	shortCode?: string | null;
@@ -226,6 +234,7 @@ export interface QRCodeModalProps {
  */
 export interface EditableLink {
 	id: string;
+	userId?: string | null;
 	title?: string | null;
 	status?: LinkStatus | null;
 	expiresAt?: string | null;

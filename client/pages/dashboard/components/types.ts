@@ -74,6 +74,9 @@ export interface HeaderProps {
 
 	/** Marks the overview refresh action as busy. */
 	isRefreshing?: boolean;
+
+	/** Whether the user can view analytics. */
+	canViewAnalytics?: boolean;
 }
 
 /**

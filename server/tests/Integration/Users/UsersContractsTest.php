@@ -2997,36 +2997,31 @@ class UsersContractsTest extends TestCase {
 		$this->assertTrue( ( new Authorization( $corrupted_roles ) )->has_capability( array( 'role' => 'admin' ), 'manage_users' ) );
 	}
 
-	public function test_manage_profile_capability_controls_profile_mutation_on_editor_and_custom_role(): void {
+	public function test_own_profile_mutation_is_inherent_self_service_on_editor_and_custom_roles(): void {
 		list( $setup_connection, $setup_db, $setup_pdo, $prefix ) = $this->setup_isolated_db();
 
 		$custom_roles_data = array(
-			'editor'       => array(
-				'manage_profile' => false,
-			),
 			'custom_roles' => array(
 				'restricted_agent' => array(
 					'name'                 => 'Restricted Agent',
-					'description'          => 'Cannot manage profile',
+					'description'          => 'Custom role without extra privileges',
 					'initial_capabilities' => array(
-						'manage_profile' => false,
-						'view_links'     => true,
+						'view_links' => true,
 					),
 					'capabilities'         => array(
-						'manage_profile' => false,
-						'view_links'     => true,
+						'view_links' => true,
 					),
 				),
 				'full_agent'       => array(
 					'name'                 => 'Full Agent',
-					'description'          => 'Can manage profile',
+					'description'          => 'Full Agent role',
 					'initial_capabilities' => array(
-						'manage_profile' => true,
-						'view_links'     => true,
+						'view_links'   => true,
+						'create_links' => true,
 					),
 					'capabilities'         => array(
-						'manage_profile' => true,
-						'view_links'     => true,
+						'view_links'   => true,
+						'create_links' => true,
 					),
 				),
 			),
@@ -3087,28 +3082,23 @@ class UsersContractsTest extends TestCase {
 
 		$req = new Request( 'PUT', '/api/v1/users/me', array(), array() );
 
-		// 1. Restricted agent cannot update profile -> 403 Forbidden
+		// 1. Restricted agent can update own profile
 		$current_user_state = array(
 			'id'       => '88020',
 			'username' => 'restricted_u',
 			'email'    => 'restricted@example.com',
 			'role'     => 'restricted_agent',
 		);
-		try {
-			$users_service->update_current_user( $req, array( 'bio' => 'Hacked Bio' ) );
-			$this->fail( 'Must reject profile update when manage_profile is disabled.' );
-		} catch ( ApiException $e ) {
-			$this->assertSame( 403, $e->getCode() );
-			$this->assertStringContainsString( 'permission to update this profile', $e->getMessage() );
-		}
+		$updated_restricted = $users_service->update_current_user( $req, array( 'bio' => 'Restricted Updated Bio' ) );
+		$this->assertSame( 'Restricted Updated Bio', $updated_restricted['bio'] );
 		$db_restricted = $users_api->get_user( '88020' );
-		$this->assertSame( 'Initial Bio', $db_restricted['bio'] );
+		$this->assertSame( 'Restricted Updated Bio', $db_restricted['bio'] );
 
 		// Read-only profile view is still safe and accessible
 		$profile = $users_service->get_current_profile( $req );
 		$this->assertSame( 'restricted_u', $profile['username'] );
 
-		// 2. Full agent with manage_profile = true succeeds
+		// 2. Full agent succeeds
 		$current_user_state = array(
 			'id'       => '88021',
 			'username' => 'full_u',
@@ -3120,20 +3110,17 @@ class UsersContractsTest extends TestCase {
 		$db_full = $users_api->get_user( '88021' );
 		$this->assertSame( 'Updated Full Bio', $db_full['bio'] );
 
-		// 3. Editor with revoked manage_profile is rejected with 403
+		// 3. Editor succeeds
 		$current_user_state = array(
 			'id'       => '88022',
 			'username' => 'editor_u',
 			'email'    => 'editor@example.com',
 			'role'     => 'editor',
 		);
-		try {
-			$users_service->update_current_user( $req, array( 'bio' => 'Editor New Bio' ) );
-			$this->fail( 'Must reject editor profile update when manage_profile is revoked.' );
-		} catch ( ApiException $e ) {
-			$this->assertSame( 403, $e->getCode() );
-			$this->assertStringContainsString( 'permission to update this profile', $e->getMessage() );
-		}
+		$updated_editor     = $users_service->update_current_user( $req, array( 'bio' => 'Editor New Bio' ) );
+		$this->assertSame( 'Editor New Bio', $updated_editor['bio'] );
+		$db_editor = $users_api->get_user( '88022' );
+		$this->assertSame( 'Editor New Bio', $db_editor['bio'] );
 	}
 
 	public function test_real_db_concurrent_role_assignment_wins_lock_blocks_role_deletion_with_409(): void {

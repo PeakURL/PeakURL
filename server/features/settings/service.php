@@ -287,6 +287,24 @@ class Service {
 	}
 
 	/**
+	 * Return the current integrations-management user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 * @since 1.7.2
+	 */
+	private function get_integrations_user( Request $request ): array {
+		$user = $this->auth_service->get_current_user( $request );
+		$this->authorization->validate_capability(
+			$user,
+			'manage_integrations',
+			__( 'You do not have permission to manage integrations.', 'peakurl' ),
+		);
+
+		return $user;
+	}
+
+	/**
 	 * Return the current mail-management user.
 	 *
 	 * @param Request $request Incoming HTTP request.
@@ -772,7 +790,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function get_captcha_status( Request $request ): array {
-		$this->get_settings_user( $request );
+		$this->get_integrations_user( $request );
 
 		return $this->captcha_service->get_status();
 	}
@@ -791,7 +809,7 @@ class Service {
 		Request $request,
 		array $payload
 	): array {
-		$this->get_settings_user( $request );
+		$this->get_integrations_user( $request );
 
 		$runtime_root = \PeakURL\Core\Config\Environment::get_instance()->get_runtime_root();
 

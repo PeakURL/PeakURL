@@ -63,7 +63,7 @@ class AuthorizationTest extends TestCase {
 		$this->authorization->require_admin( $editor_user );
 	}
 
-	public function test_editor_can_view_and_create_links_but_cannot_manage_webhooks(): void {
+	public function test_editor_can_view_and_create_links_but_cannot_manage_integrations(): void {
 		$editor_user = array(
 			'id'   => '2',
 			'role' => 'editor',
@@ -72,7 +72,7 @@ class AuthorizationTest extends TestCase {
 		$this->assertTrue( $this->roles->has_capability( $editor_user, 'view_links' ) );
 		$this->assertFalse( $this->roles->has_capability( $editor_user, 'delete_links' ) );
 		$this->assertFalse( $this->roles->has_capability( $editor_user, 'empty_trash' ) );
-		$this->assertFalse( $this->roles->has_capability( $editor_user, 'manage_webhooks' ) );
+		$this->assertFalse( $this->roles->has_capability( $editor_user, 'manage_integrations' ) );
 		$this->assertFalse( $this->roles->has_capability( $editor_user, 'manage_api_keys' ) );
 	}
 }

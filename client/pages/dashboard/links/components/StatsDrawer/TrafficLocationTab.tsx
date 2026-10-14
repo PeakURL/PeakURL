@@ -5,6 +5,7 @@ import { WorldMap } from "@/components";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { useGetLinkLocationQuery } from "@/state/slices/api";
+import { useAdminAccess } from "@/hooks";
 import { formatCount, getCountryFlagEmoji } from "@/shared/formatting";
 import { getErrorMessage } from "@/shared/errors";
 
@@ -149,8 +150,13 @@ function TrafficLocationTab({
 		[link?.id, timeRange, customDateRange?.from, customDateRange?.to]
 	);
 
+	const { canViewAnalytics, isAdmin, user } = useAdminAccess();
+	const isOwner = Boolean(user?.id && link?.userId === user.id);
+	const canViewStats = Boolean(canViewAnalytics && (isOwner || isAdmin));
+
 	// RTK Query hook
 	const canFetchLocation =
+		canViewStats &&
 		open &&
 		selectedTab === 1 &&
 		!!link?.id &&
@@ -162,7 +168,7 @@ function TrafficLocationTab({
 	);
 
 	// Add safety check
-	if (!link) {
+	if (!link || !canViewStats) {
 		return (
 			<div className="links-location-tab">
 				<div className="links-drawer-section">

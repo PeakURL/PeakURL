@@ -200,8 +200,14 @@ function getRouteTargets(
 			label: __("Integrations"),
 			description: __("Settings"),
 			section: "pages",
-			terms: [__("Integrations"), "integrations", "webhook", "webhooks"],
-			isAllowed: Boolean(capabilities.canManageWebhooks),
+			terms: [
+				__("Integrations"),
+				"integrations",
+				"webhook",
+				"webhooks",
+				"captcha",
+			],
+			isAllowed: Boolean(capabilities.canManageIntegrations),
 		}),
 		createRouteTarget({
 			id: "settings-email",

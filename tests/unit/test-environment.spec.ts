@@ -168,7 +168,7 @@ test.describe("Test Environment & Hostname Safety Utilities", () => {
 					protected: false,
 				},
 				{
-					id: "manage_webhooks",
+					id: "manage_integrations",
 					enabled: false,
 					applicable: true,
 					protected: false,
@@ -206,7 +206,7 @@ test.describe("Test Environment & Hostname Safety Utilities", () => {
 					protected: false,
 				},
 				{
-					id: "manage_webhooks",
+					id: "manage_integrations",
 					enabled: false,
 					applicable: true,
 					protected: false,
@@ -296,7 +296,7 @@ test.describe("Test Environment & Hostname Safety Utilities", () => {
 				expect(baseline.capabilities).toEqual({
 					create_links: true,
 					delete_links: false,
-					manage_webhooks: false,
+					manage_integrations: false,
 				});
 				expect(baseline.capabilities["manage_users"]).toBeUndefined();
 				expect(baseline.capabilities["empty_trash"]).toBeUndefined();
@@ -388,7 +388,7 @@ test.describe("Test Environment & Hostname Safety Utilities", () => {
 					capabilities: {
 						create_links: true,
 						delete_links: false,
-						manage_webhooks: false,
+						manage_integrations: false,
 					},
 					rawDefinition: mockDefaultEditorRole,
 				};
@@ -433,7 +433,7 @@ test.describe("Test Environment & Hostname Safety Utilities", () => {
 					capabilities: {
 						create_links: true,
 						delete_links: true,
-						manage_webhooks: false,
+						manage_integrations: false,
 					},
 					rawDefinition: mockCustomizedEditorRole,
 				};
@@ -446,7 +446,7 @@ test.describe("Test Environment & Hostname Safety Utilities", () => {
 						capabilities: {
 							create_links: true,
 							delete_links: true,
-							manage_webhooks: false,
+							manage_integrations: false,
 						},
 					},
 				});
@@ -547,7 +547,7 @@ test.describe("Test Environment & Hostname Safety Utilities", () => {
 					capabilities: {
 						create_links: true,
 						delete_links: false,
-						manage_webhooks: false,
+						manage_integrations: false,
 					},
 					rawDefinition: {},
 				};
@@ -584,7 +584,7 @@ test.describe("Test Environment & Hostname Safety Utilities", () => {
 											protected: false,
 										}, // mismatch!
 										{
-											id: "manage_webhooks",
+											id: "manage_integrations",
 											enabled: false,
 											applicable: true,
 											protected: false,
@@ -602,7 +602,7 @@ test.describe("Test Environment & Hostname Safety Utilities", () => {
 					capabilities: {
 						create_links: true,
 						delete_links: false,
-						manage_webhooks: false,
+						manage_integrations: false,
 					},
 					rawDefinition: {},
 				};

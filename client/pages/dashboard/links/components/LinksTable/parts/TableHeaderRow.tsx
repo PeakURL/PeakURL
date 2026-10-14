@@ -120,8 +120,9 @@ function TableHeaderRow({
 	sortBy,
 	sortOrder = "desc",
 	onSortChange,
-	canDeleteLinks,
-	canTrashLinks,
+	canTrashSelected,
+	canViewAnalytics = false,
+	isAdmin = false,
 }: TableHeaderRowProps) {
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
@@ -153,7 +154,7 @@ function TableHeaderRow({
 										<span>{__("Restore selected")}</span>
 									</button>
 								)}
-								{canDeleteLinks && onBulkDelete && (
+								{onBulkDelete && (
 									<button
 										type="button"
 										onClick={onBulkDelete}
@@ -176,22 +177,20 @@ function TableHeaderRow({
 							</>
 						) : (
 							<>
-								{(canTrashLinks || canDeleteLinks) &&
-									onBulkDelete && (
-										<button
-											type="button"
-											onClick={onBulkDelete}
-											className="links-table-header-delete-selected"
-										>
-											<Trash2 size={13} />
-											<span>
-												{!canTrashLinks &&
-												canDeleteLinks
-													? __("Delete permanently")
-													: __("Delete selected")}
-											</span>
-										</button>
-									)}
+								{onBulkDelete && (
+									<button
+										type="button"
+										onClick={onBulkDelete}
+										className="links-table-header-delete-selected"
+									>
+										<Trash2 size={13} />
+										<span>
+											{canTrashSelected === false
+												? __("Delete permanently")
+												: __("Delete selected")}
+										</span>
+									</button>
+								)}
 								{onDeleteAll && (
 									<button
 										type="button"
@@ -241,16 +240,22 @@ function TableHeaderRow({
 					onSort={onSortChange}
 				/>
 			</th>
-			<th className="links-table-header-cell links-table-header-cell-performance">
-				<SortableHeaderButton
-					label={__("Performance")}
-					targetSort="clicks"
-					activeSort={sortBy}
-					sortOrder={sortOrder}
-					onSort={onSortChange}
-					align="center"
-					className="w-full"
-				/>
+			<th className="links-table-header-cell links-table-header-cell-performance text-center">
+				{canViewAnalytics && isAdmin ? (
+					<SortableHeaderButton
+						label={__("Performance")}
+						targetSort="clicks"
+						activeSort={sortBy}
+						sortOrder={sortOrder}
+						onSort={onSortChange}
+						align="center"
+						className="w-full"
+					/>
+				) : (
+					<span className="w-full text-center block">
+						{__("Performance")}
+					</span>
+				)}
 			</th>
 			<th className="links-table-header-cell links-table-header-cell-created">
 				<SortableHeaderButton

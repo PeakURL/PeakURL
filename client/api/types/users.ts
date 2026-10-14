@@ -18,16 +18,17 @@ export interface ApiUserCapabilities {
 	manage_location_data?: boolean | null;
 	manage_performance?: boolean | null;
 	manage_updates?: boolean | null;
-	manage_profile?: boolean | null;
 	manage_api_keys?: boolean | null;
-	manage_webhooks?: boolean | null;
+	manage_integrations?: boolean | null;
 	view_links?: boolean | null;
+	create_links?: boolean | null;
 	edit_links?: boolean | null;
+	edit_any_link?: boolean | null;
 	trash_links?: boolean | null;
 	delete_links?: boolean | null;
+	delete_any_link?: boolean | null;
 	empty_trash?: boolean | null;
 	view_analytics?: boolean | null;
-	create_links?: boolean | null;
 }
 
 /**
@@ -40,16 +41,17 @@ export interface UserCapabilities {
 	manageLocationData: boolean;
 	managePerformance: boolean;
 	manageUpdates: boolean;
-	manageProfile: boolean;
 	manageApiKeys: boolean;
-	manageWebhooks: boolean;
+	manageIntegrations: boolean;
 	viewLinks: boolean;
+	createLinks: boolean;
 	editLinks: boolean;
+	editAnyLink: boolean;
 	trashLinks: boolean;
 	deleteLinks: boolean;
+	deleteAnyLink: boolean;
 	emptyTrash: boolean;
 	viewAnalytics: boolean;
-	createLinks: boolean;
 }
 
 /**

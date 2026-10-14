@@ -80,8 +80,8 @@ export function formatLinkExportItems(
 			utmTerm: link.utmTerm || "",
 			utmContent: link.utmContent || "",
 			shortUrl: getShortUrl(link),
-			clicks: link.clicks ?? 0,
-			uniqueClicks: link.uniqueClicks ?? 0,
+			clicks: link.clicks ?? null,
+			uniqueClicks: link.uniqueClicks ?? null,
 			createdAt: link.createdAt || "",
 		};
 	});

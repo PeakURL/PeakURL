@@ -69,7 +69,6 @@ class Roles {
 			'edit_links'     => true,
 			'trash_links'    => true,
 			'view_analytics' => true,
-			'manage_profile' => true,
 		),
 	);
 
@@ -103,14 +102,6 @@ class Roles {
 			'group'            => 'user_access',
 			'group_label'      => 'User & Access',
 			'applicable_roles' => array( 'admin' ),
-			'protected_roles'  => array(),
-		),
-		'manage_profile'       => array(
-			'label'            => 'Manage Profile',
-			'description'      => 'Update own personal profile credentials, name, email, and password.',
-			'group'            => 'user_access',
-			'group_label'      => 'User & Access',
-			'applicable_roles' => array( 'admin', 'editor' ),
 			'protected_roles'  => array(),
 		),
 		'manage_api_keys'      => array(
@@ -161,9 +152,9 @@ class Roles {
 			'applicable_roles' => array( 'admin', 'editor' ),
 			'protected_roles'  => array(),
 		),
-		'manage_webhooks'      => array(
-			'label'            => 'Manage Webhooks',
-			'description'      => 'Create, test, view deliveries, and manage webhook subscriptions.',
+		'manage_integrations'  => array(
+			'label'            => 'Manage Integrations',
+			'description'      => 'Manage site-wide webhook subscriptions and deliveries, and configure CAPTCHA protection.',
 			'group'            => 'site_integrations',
 			'group_label'      => 'Site & Integrations',
 			'applicable_roles' => array( 'admin', 'editor' ),
@@ -186,8 +177,16 @@ class Roles {
 			'protected_roles'  => array(),
 		),
 		'edit_links'           => array(
-			'label'            => 'Edit Links',
-			'description'      => 'Modify destination URLs, metadata, and link status for permitted links.',
+			'label'            => 'Edit Own Links',
+			'description'      => 'Edit short links owned by your account.',
+			'group'            => 'links',
+			'group_label'      => 'Links',
+			'applicable_roles' => array( 'admin', 'editor' ),
+			'protected_roles'  => array(),
+		),
+		'edit_any_link'        => array(
+			'label'            => 'Edit Links Across Accounts',
+			'description'      => 'Also edit short links owned by other users, including administrators. Requires Edit Own Links.',
 			'group'            => 'links',
 			'group_label'      => 'Links',
 			'applicable_roles' => array( 'admin', 'editor' ),
@@ -202,8 +201,16 @@ class Roles {
 			'protected_roles'  => array(),
 		),
 		'delete_links'         => array(
-			'label'            => 'Permanently Delete Links',
-			'description'      => 'Permanently remove individual short links.',
+			'label'            => 'Permanently Delete Own Links',
+			'description'      => 'Permanently remove short links owned by your account.',
+			'group'            => 'links',
+			'group_label'      => 'Links',
+			'applicable_roles' => array( 'admin', 'editor' ),
+			'protected_roles'  => array(),
+		),
+		'delete_any_link'      => array(
+			'label'            => 'Permanently Delete Links Across Accounts',
+			'description'      => 'Also permanently remove links owned by other users, including administrators. Requires Permanently Delete Own Links.',
 			'group'            => 'links',
 			'group_label'      => 'Links',
 			'applicable_roles' => array( 'admin', 'editor' ),
@@ -667,7 +674,8 @@ class Roles {
 			return array();
 		}
 
-		$raw    = $this->settings_api->get_option( Constants::SETTING_ROLE_CAPABILITIES );
+		$raw = $this->settings_api->get_option( Constants::SETTING_ROLE_CAPABILITIES );
+
 		$parsed = $this->parse_role_settings( $raw );
 
 		$this->cached_capabilities = $parsed ?? array();
@@ -696,6 +704,14 @@ class Roles {
 			} else {
 				$resolved[ $cap_id ] = ! empty( $defaults[ $cap_id ] );
 			}
+		}
+
+		if ( empty( $resolved['edit_links'] ) ) {
+			$resolved['edit_any_link'] = false;
+		}
+
+		if ( empty( $resolved['delete_links'] ) ) {
+			$resolved['delete_any_link'] = false;
 		}
 
 		return $resolved;
@@ -776,6 +792,14 @@ class Roles {
 				}
 			}
 
+			if ( empty( $caps['edit_links'] ) ) {
+				$caps['edit_any_link'] = false;
+			}
+
+			if ( empty( $caps['delete_links'] ) ) {
+				$caps['delete_any_link'] = false;
+			}
+
 			return $caps;
 		}
 
@@ -825,6 +849,35 @@ class Roles {
 	 */
 	public function is_admin( array $user ): bool {
 		return 'admin' === ( $user['role'] ?? '' );
+	}
+
+	/**
+	 * Determine whether a user can view analytics for a specific link.
+	 *
+	 * Administrators may view analytics for all links. Non-administrators require
+	 * the 'view_analytics' capability AND must own the link (matching user_id).
+	 * Fails closed when user ID or link user ID is absent or empty.
+	 *
+	 * @param array<string, mixed> $user         Authenticated user array.
+	 * @param string|null          $link_user_id Link owner user ID.
+	 * @return bool True if authorized to view analytics for the link.
+	 * @since 1.7.2
+	 */
+	public function can_view_link_analytics( array $user, ?string $link_user_id ): bool {
+		if ( $this->is_admin( $user ) ) {
+			return true;
+		}
+
+		if ( ! $this->has_capability( $user, 'view_analytics' ) ) {
+			return false;
+		}
+
+		$caller_id = (string) ( $user['id'] ?? '' );
+		if ( '' === $caller_id || null === $link_user_id || '' === $link_user_id ) {
+			return false;
+		}
+
+		return $caller_id === (string) $link_user_id;
 	}
 
 	/**
@@ -1166,6 +1219,7 @@ class Roles {
 			}
 
 			$input_caps = $payload['capabilities'];
+
 			foreach ( $input_caps as $key => $value ) {
 				if ( ! array_key_exists( $key, self::CAPABILITIES_CATALOG ) ) {
 					throw new ApiException(
@@ -1268,6 +1322,13 @@ class Roles {
 						}
 					}
 
+					if ( empty( $role_caps['edit_links'] ) ) {
+						$role_caps['edit_any_link'] = false;
+					}
+					if ( empty( $role_caps['delete_links'] ) ) {
+						$role_caps['delete_any_link'] = false;
+					}
+
 					// Check if updated role capabilities effectively match shipped defaults
 					$matches_defaults = true;
 					foreach ( self::CAPABILITIES_CATALOG as $cap_id => $cap_meta ) {
@@ -1305,6 +1366,12 @@ class Roles {
 						$caps = $custom_roles[ $role ]['capabilities'] ?? array();
 						foreach ( $input_caps as $k => $v ) {
 							$caps[ $k ] = (bool) $v;
+						}
+						if ( empty( $caps['edit_links'] ) ) {
+							$caps['edit_any_link'] = false;
+						}
+						if ( empty( $caps['delete_links'] ) ) {
+							$caps['delete_any_link'] = false;
 						}
 						$custom_roles[ $role ]['capabilities'] = $caps;
 					}

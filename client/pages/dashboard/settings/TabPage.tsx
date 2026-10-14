@@ -12,7 +12,7 @@ function TabPage() {
 	const tab = params.tab;
 	const {
 		canManageApiKeys,
-		canManageWebhooks,
+		canManageIntegrations,
 		canManagePerformance,
 		canManageMailDelivery,
 		canManageLocationData,
@@ -26,7 +26,7 @@ function TabPage() {
 
 	const restrictedTabs: Partial<Record<SettingsTabId, boolean>> = {
 		api: canManageApiKeys,
-		integrations: canManageWebhooks,
+		integrations: canManageIntegrations,
 		performance: canManagePerformance,
 		email: canManageMailDelivery,
 		location: canManageLocationData,

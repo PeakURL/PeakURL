@@ -229,6 +229,7 @@ class Application {
 			$health_checker
 		);
 		$analytics_repository->set_link_formatter( array( $links_service, 'format_url' ) );
+		$analytics_service->set_links_service( $links_service );
 		$settings_service = new SettingsService(
 			$db,
 			$connection,

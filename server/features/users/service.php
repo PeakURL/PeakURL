@@ -205,12 +205,7 @@ class Service {
 	 * @since 1.0.0
 	 */
 	public function update_current_user( Request $request, array $changes ): array {
-		$user = $this->auth_service->get_current_user( $request );
-		$this->authorization->validate_capability(
-			$user,
-			'manage_profile',
-			__( 'You do not have permission to update this profile.', 'peakurl' ),
-		);
+		$user             = $this->auth_service->get_current_user( $request );
 		$user_id          = (string) $user['id'];
 		$user_row         = $this->users_api->get_user( $user_id );
 		$user_email       = sanitize_email( (string) ( $user['email'] ?? '' ) );

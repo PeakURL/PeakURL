@@ -147,43 +147,61 @@ class LinksApi {
 	/**
 	 * Aggregate URL listing click, unique visitor, and active link totals.
 	 *
-	 * @param string               $where        Prepared WHERE clause.
-	 * @param array<string, mixed> $params       Query parameters.
-	 * @param array<string, mixed> $stats_params Optional click-stat query bounds.
-	 * @return array{totalClicks: int, uniqueClicks: int, activeLinks: int}
+	 * When $include_clicks is false, click metrics are skipped and returned as null.
+	 * When $click_where / $click_params are provided, click metrics are evaluated
+	 * against that specific scoped condition (e.g. caller ownership).
+	 *
+	 * @param string                    $where          Prepared WHERE clause for the link collection.
+	 * @param array<string, mixed>      $params         Query parameters for the link collection.
+	 * @param array<string, mixed>      $stats_params   Optional click-stat query bounds.
+	 * @param string|null               $click_where    Optional specific WHERE clause for click aggregation.
+	 * @param array<string, mixed>|null $click_params   Optional query parameters for click aggregation.
+	 * @param bool                      $include_clicks Whether to compute click metrics.
+	 * @return array{totalClicks: int|null, uniqueClicks: int|null, activeLinks: int}
 	 * @since 1.5.2
 	 */
 	public function aggregate_link_stats(
 		string $where,
 		array $params,
-		array $stats_params = array()
+		array $stats_params = array(),
+		?string $click_where = null,
+		?array $click_params = null,
+		bool $include_clicks = true
 	): array {
-		$sql = 'SELECT
-				COUNT(c.id) AS total_clicks,
-				COUNT(DISTINCT COALESCE(NULLIF(c.visitor_hash, \'\'), c.id)) AS unique_clicks
-			FROM urls u
-			INNER JOIN clicks c ON c.url_id = u.id
-			' . $where;
+		$click_stats = array();
 
-		$conditions = array();
-		if ( isset( $stats_params['stats_start_at'] ) ) {
-			$conditions[] = 'c.clicked_at >= :stats_start_at';
-		}
-		if ( isset( $stats_params['stats_end_at'] ) ) {
-			$conditions[] = 'c.clicked_at < :stats_end_at';
+		if ( $include_clicks ) {
+			$effective_click_where  = $click_where ?? $where;
+			$effective_click_params = $click_params ?? $params;
+
+			$sql = 'SELECT
+					COUNT(c.id) AS total_clicks,
+					COUNT(DISTINCT COALESCE(NULLIF(c.visitor_hash, \'\'), c.id)) AS unique_clicks
+				FROM urls u
+				INNER JOIN clicks c ON c.url_id = u.id
+				' . $effective_click_where;
+
+			$conditions = array();
+			if ( isset( $stats_params['stats_start_at'] ) ) {
+				$conditions[] = 'c.clicked_at >= :stats_start_at';
+			}
+			if ( isset( $stats_params['stats_end_at'] ) ) {
+				$conditions[] = 'c.clicked_at < :stats_end_at';
+			}
+
+			if ( ! empty( $conditions ) ) {
+				$sql .= ( '' === $effective_click_where ? ' WHERE ' : ' AND ' ) . implode( ' AND ', $conditions );
+			}
+
+			$click_stats = $this->db->get_row( $sql, array_merge( $effective_click_params, $stats_params ) ) ?? array();
 		}
 
-		if ( ! empty( $conditions ) ) {
-			$sql .= ( '' === $where ? ' WHERE ' : ' AND ' ) . implode( ' AND ', $conditions );
-		}
-
-		$click_stats  = $this->db->get_row( $sql, array_merge( $params, $stats_params ) ) ?? array();
 		$active_sql   = 'SELECT SUM(CASE WHEN u.status = \'active\' THEN 1 ELSE 0 END) AS active_links FROM urls u ' . $where;
 		$active_stats = $this->db->get_row( $active_sql, $params ) ?? array();
 
 		return array(
-			'totalClicks'  => (int) ( $click_stats['total_clicks'] ?? 0 ),
-			'uniqueClicks' => (int) ( $click_stats['unique_clicks'] ?? 0 ),
+			'totalClicks'  => $include_clicks ? (int) ( $click_stats['total_clicks'] ?? 0 ) : null,
+			'uniqueClicks' => $include_clicks ? (int) ( $click_stats['unique_clicks'] ?? 0 ) : null,
 			'activeLinks'  => (int) ( $active_stats['active_links'] ?? 0 ),
 		);
 	}

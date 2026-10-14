@@ -65,8 +65,8 @@ export interface LinkExportItem {
 	utmTerm: string;
 	utmContent: string;
 	shortUrl: string;
-	clicks: number | string;
-	uniqueClicks: number | string;
+	clicks: number | string | null;
+	uniqueClicks: number | string | null;
 	createdAt: string;
 }
 

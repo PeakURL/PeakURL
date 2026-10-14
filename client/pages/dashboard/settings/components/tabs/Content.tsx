@@ -243,9 +243,7 @@ const Content = ({ activeTab }: ContentProps) => {
 			generalSettingsResponse?.data?.trashRetentionDays ?? 30;
 		const currentAnalyticsRetentionDays =
 			generalSettingsResponse?.data?.analyticsRetentionDays ?? 0;
-		const canManageProfile = Boolean(user?.capabilities?.manageProfile);
-		const saveProfile =
-			canManageProfile && hasProfileChanges(user, profileForm);
+		const saveProfile = hasProfileChanges(user, profileForm);
 		const saveSiteName =
 			(generalSettingsResponse?.data?.canManageSiteSettings ?? false) &&
 			nextSiteName.trim() !== currentSiteName;

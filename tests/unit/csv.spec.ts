@@ -94,5 +94,56 @@ test.describe("CSV Utilities", () => {
 				'url,title\nhttps://a.com,Site A\nhttps://b.com,"Site, B"'
 			);
 		});
+
+		test("serializes null and undefined cell values as empty strings without fabrication", () => {
+			expect(stringifyCsvValue(null)).toBe("");
+			expect(stringifyCsvValue(undefined)).toBe("");
+			const headers = ["clicks", "uniqueClicks"];
+			const rows = [[null, null]];
+			expect(serializeCsv(headers, rows)).toBe("clicks,uniqueClicks\n,");
+		});
+	});
+
+	test.describe("Link Export Formatting & Redaction", () => {
+		test("preserves null clicks and uniqueClicks without fabricating zero", async () => {
+			const { formatLinkExportItems, serializeLinkExport } =
+				await import("../../client/pages/dashboard/tools/export/lib/linkExport");
+
+			const redactedLink = {
+				id: "l1",
+				userId: "user_a",
+				destinationUrl: "https://example.com/target",
+				shortCode: "redacted1",
+				alias: "redacted-alias",
+				title: "Sensitive Link",
+				status: "active",
+				clicks: null,
+				uniqueClicks: null,
+				createdAt: "2026-10-14T10:00:00Z",
+			};
+
+			const items = formatLinkExportItems([redactedLink]);
+			expect(items).toHaveLength(1);
+			expect(items[0]?.clicks).toBeNull();
+			expect(items[0]?.uniqueClicks).toBeNull();
+
+			// CSV serialization
+			const csv = serializeLinkExport("csv", items);
+			const csvLines = csv.trim().split("\n");
+			expect(csvLines[0]).toContain("clicks,uniqueClicks");
+			// Check that clicks and uniqueClicks columns are blank, not "0"
+			expect(csvLines[1]).toContain(",,2026-10-14T10:00:00Z");
+
+			// JSON serialization
+			const json = serializeLinkExport("json", items);
+			const parsed = JSON.parse(json);
+			expect(parsed[0].clicks).toBeNull();
+			expect(parsed[0].uniqueClicks).toBeNull();
+
+			// XML serialization
+			const xml = serializeLinkExport("xml", items);
+			expect(xml).toContain("<clicks></clicks>");
+			expect(xml).toContain("<uniqueClicks></uniqueClicks>");
+		});
 	});
 });

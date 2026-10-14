@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { Search, X } from "lucide-react";
 
@@ -10,7 +10,10 @@ import { copyToClipboard } from "@/shared/browser";
 import { getErrorMessage } from "@/shared/errors";
 import { formatCount, formatNumber } from "@/shared/formatting";
 import { getShortUrl } from "@/shared/links";
-import { useCheckLinkHealthMutation } from "@/state/slices/api";
+import {
+	useBulkDeleteUrlMutation,
+	useCheckLinkHealthMutation,
+} from "@/state/slices/api";
 
 import StatsDrawer from "../StatsDrawer";
 import QRCodeModal from "../QRCodeModal";
@@ -22,6 +25,13 @@ import HealthDetailModal from "../HealthDetailModal";
 import TableHeaderRow from "./parts/TableHeaderRow";
 import LinkRow from "./parts/LinkRow";
 import EmptyState from "./parts/EmptyState";
+import {
+	createBulkDeleteSnapshot,
+	getBulkSelectionState,
+	pruneStaleSelectedIds,
+	validateBulkDeleteSnapshot,
+	type BulkDeleteConfirmationSnapshot,
+} from "./lib";
 import type { LinkRecord } from "../types";
 import type { LinksTableProps } from "./types";
 
@@ -43,13 +53,17 @@ const LinksTable = ({
 	onRestore,
 	onBulkRestore,
 	onEmptyTrash,
+	isAdmin: isAdminProp,
 }: LinksTableProps) => {
 	const [copiedId, setCopiedId] = useState<string | null>(null);
 	const [statsDrawerOpen, setStatsDrawerOpen] = useState(false);
 	const [qrModalOpen, setQrModalOpen] = useState(false);
 	const [editDrawerOpen, setEditDrawerOpen] = useState(false);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-	const [bulkDeleteModalOpen, setBulkDeleteModalOpen] = useState(false);
+	const [bulkDeleteConfirmation, setBulkDeleteConfirmation] =
+		useState<BulkDeleteConfirmationSnapshot | null>(null);
+	const snapshotCounterRef = useRef<number>(0);
+	const cancelledSnapshotIdRef = useRef<number | null>(null);
 	const [deleteAllModalOpen, setDeleteAllModalOpen] = useState(false);
 	const [emptyTrashModalOpen, setEmptyTrashModalOpen] = useState(false);
 	const [healthModalOpen, setHealthModalOpen] = useState(false);
@@ -62,8 +76,19 @@ const LinksTable = ({
 	const [selectedLink, setSelectedLink] = useState<LinkRecord | null>(null);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [searchParams, setSearchParams] = useSearchParams();
-	const { canDeleteLinks, canTrashLinks, user } = useAdminAccess();
+	const {
+		canDeleteLinks,
+		canDeleteAnyLink,
+		canTrashLinks,
+		canEditLinks,
+		canEditAnyLink,
+		canViewAnalytics,
+		isAdmin,
+		user,
+	} = useAdminAccess();
+	const effectiveIsAdmin = Boolean(isAdminProp ?? isAdmin);
 	const [checkLinkHealth] = useCheckLinkHealthMutation();
+	const [bulkDeleteUrl] = useBulkDeleteUrlMutation();
 	const notification = useNotification();
 
 	const healthModalLink = healthModalLinkId
@@ -87,6 +112,9 @@ const LinksTable = ({
 		setSearchParams(params, { replace: true });
 
 		if (!link || link.status === "trashed" || isTrashTab) return;
+		if (!canViewAnalytics) return;
+		const isOwner = Boolean(user?.id && link.userId === user.id);
+		if (!effectiveIsAdmin && !isOwner) return;
 
 		setTimeout(() => {
 			setSelectedLink(link);
@@ -99,6 +127,9 @@ const LinksTable = ({
 		isTrashTab,
 		searchParams,
 		setSearchParams,
+		canViewAnalytics,
+		effectiveIsAdmin,
+		user?.id,
 	]);
 
 	const handleCopy = async (link: LinkRecord) => {
@@ -114,16 +145,34 @@ const LinksTable = ({
 
 	const handleOpenStats = (link: LinkRecord) => {
 		if (link.status === "trashed" || isTrashTab) return;
+		if (!canViewAnalytics) return;
+		const isOwner = Boolean(user?.id && link.userId === user.id);
+		if (!effectiveIsAdmin && !isOwner) return;
 		setSelectedLink(link);
 		setStatsDrawerOpen(true);
 	};
 
 	const handleDelete = (link: LinkRecord) => {
+		const isOwner = Boolean(user?.id && link.userId === user.id);
+		if (isTrashTab) {
+			if (!canDeleteLinks) return;
+			if (!effectiveIsAdmin && !isOwner && !canDeleteAnyLink) return;
+		} else {
+			const canTrashThis = canTrashLinks && (isOwner || effectiveIsAdmin);
+			const canPermDeleteThis =
+				canDeleteLinks &&
+				(isOwner || canDeleteAnyLink || effectiveIsAdmin);
+			if (!canTrashThis && !canPermDeleteThis) return;
+		}
 		setSelectedLink(link);
 		setDeleteModalOpen(true);
 	};
 
 	const handleEdit = (link: LinkRecord) => {
+		if (link.status === "trashed" || isTrashTab) return;
+		if (!canEditLinks) return;
+		const isOwner = Boolean(user?.id && link.userId === user.id);
+		if (!effectiveIsAdmin && !isOwner && !canEditAnyLink) return;
 		setSelectedLink(link);
 		setEditDrawerOpen(true);
 	};
@@ -148,6 +197,12 @@ const LinksTable = ({
 		}
 	};
 
+	// Derive active valid selections strictly from currently visible links (safe across refetches without render-phase mutation)
+	const validSelectedIds = useMemo(
+		() => pruneStaleSelectedIds(selectedIds, links),
+		[selectedIds, links]
+	);
+
 	const handleOpenHealthModal = (link: LinkRecord) => {
 		setHealthModalLinkId(link.id);
 		setHealthModalOpen(true);
@@ -162,26 +217,155 @@ const LinksTable = ({
 	};
 
 	const handleSelectRow = (id: string) => {
-		setSelectedIds((prev) =>
-			prev.includes(id)
-				? prev.filter((item) => item !== id)
-				: [...prev, id]
-		);
+		setSelectedIds((prev) => {
+			const currentValid = prev.filter((prevId) =>
+				links.some((l) => l.id === prevId)
+			);
+			return currentValid.includes(id)
+				? currentValid.filter((item) => item !== id)
+				: [...currentValid, id];
+		});
 	};
 
+	const {
+		hasCompleteSelection,
+		canTrashAllSelected,
+		canPermanentlyDeleteAllSelected,
+		canRestoreAllSelected,
+		canBulkDelete,
+	} = getBulkSelectionState({
+		selectedIds: validSelectedIds,
+		links,
+		isTrashTab,
+		user,
+		effectiveIsAdmin,
+		canTrashLinks,
+		canDeleteLinks,
+		canDeleteAnyLink,
+		canEditLinks,
+	});
+
+	// Synchronously validate active bulk-delete confirmation snapshot against current links, selection, and permissions
+	const isConfirmationValid = useMemo(() => {
+		if (!bulkDeleteConfirmation) return false;
+		return validateBulkDeleteSnapshot({
+			snapshot: bulkDeleteConfirmation,
+			currentLinks: links,
+			currentSelectedIds: selectedIds,
+			isTrashTab,
+			user,
+			effectiveIsAdmin,
+			canTrashLinks,
+			canDeleteLinks,
+			canDeleteAnyLink,
+		}).isValid;
+	}, [
+		bulkDeleteConfirmation,
+		links,
+		selectedIds,
+		isTrashTab,
+		user,
+		effectiveIsAdmin,
+		canTrashLinks,
+		canDeleteLinks,
+		canDeleteAnyLink,
+	]);
+
+	// Asynchronously clear invalidated confirmation state so no state mutation happens during render
+	useEffect(() => {
+		if (bulkDeleteConfirmation && !isConfirmationValid) {
+			queueMicrotask(() => {
+				setBulkDeleteConfirmation(null);
+			});
+		}
+	}, [bulkDeleteConfirmation, isConfirmationValid]);
+
 	const handleBulkDelete = () => {
-		setBulkDeleteModalOpen(true);
+		if (!hasCompleteSelection || !canBulkDelete) return;
+		const nextId = ++snapshotCounterRef.current;
+		const snapshot = createBulkDeleteSnapshot({
+			id: nextId,
+			selectedIds: validSelectedIds,
+			links,
+			isTrashTab,
+			canTrash: canTrashAllSelected,
+			canPermanentlyDelete: canPermanentlyDeleteAllSelected,
+		});
+		if (!snapshot) return;
+		cancelledSnapshotIdRef.current = null;
+		setBulkDeleteConfirmation(snapshot);
+	};
+
+	const handleBulkDeleteConfirm = async (
+		ids: string[],
+		permanent: boolean
+	) => {
+		if (
+			!bulkDeleteConfirmation ||
+			cancelledSnapshotIdRef.current === bulkDeleteConfirmation.id
+		) {
+			throw new Error(
+				__("Bulk delete confirmation is invalid or expired.")
+			);
+		}
+
+		const validation = validateBulkDeleteSnapshot({
+			snapshot: bulkDeleteConfirmation,
+			currentLinks: links,
+			currentSelectedIds: selectedIds,
+			isTrashTab,
+			user,
+			effectiveIsAdmin,
+			canTrashLinks,
+			canDeleteLinks,
+			canDeleteAnyLink,
+		});
+
+		if (!validation.isValid) {
+			cancelledSnapshotIdRef.current = bulkDeleteConfirmation.id;
+			setBulkDeleteConfirmation(null);
+			throw new Error(__("Bulk delete confirmation is no longer valid."));
+		}
+
+		if (permanent) {
+			if (!bulkDeleteConfirmation.canPermanentlyDelete) {
+				throw new Error(
+					__(
+						"Permanent deletion is not authorized for the selected links."
+					)
+				);
+			}
+			await bulkDeleteUrl({
+				ids: [...bulkDeleteConfirmation.selectedIds],
+				force: true,
+			}).unwrap();
+		} else {
+			if (!bulkDeleteConfirmation.canTrash) {
+				throw new Error(
+					__(
+						"Moving to trash is not authorized for the selected links."
+					)
+				);
+			}
+			await bulkDeleteUrl([
+				...bulkDeleteConfirmation.selectedIds,
+			]).unwrap();
+		}
 	};
 
 	const handleBulkDeleteSuccess = () => {
 		setSelectedIds([]);
+		if (bulkDeleteConfirmation) {
+			cancelledSnapshotIdRef.current = bulkDeleteConfirmation.id;
+		}
+		setBulkDeleteConfirmation(null);
 	};
 
 	const handleBulkRestoreAction = async () => {
-		if (selectedIds.length === 0) return;
+		if (!hasCompleteSelection || !canRestoreAllSelected) return;
 		try {
 			if (onBulkRestore) {
-				await onBulkRestore(selectedIds);
+				await onBulkRestore(validSelectedIds);
 			}
 			setSelectedIds([]);
 		} catch {}
@@ -246,16 +430,10 @@ const LinksTable = ({
 					<table className="links-table-element">
 						<thead className="links-table-head">
 							<TableHeaderRow
-								selectedCount={selectedIds.length}
+								selectedCount={validSelectedIds.length}
 								onSelectAll={handleSelectAll}
 								onBulkDelete={
-									(
-										isTrashTab
-											? canDeleteLinks
-											: canTrashLinks || canDeleteLinks
-									)
-										? handleBulkDelete
-										: undefined
+									canBulkDelete ? handleBulkDelete : undefined
 								}
 								onDeleteAll={
 									isTrashTab ||
@@ -263,7 +441,11 @@ const LinksTable = ({
 										? undefined
 										: () => setDeleteAllModalOpen(true)
 								}
-								onBulkRestore={handleBulkRestoreAction}
+								onBulkRestore={
+									canRestoreAllSelected && onBulkRestore
+										? handleBulkRestoreAction
+										: undefined
+								}
 								onEmptyTrash={
 									isTrashTab && onEmptyTrash
 										? () => setEmptyTrashModalOpen(true)
@@ -274,8 +456,9 @@ const LinksTable = ({
 								sortBy={sortBy}
 								sortOrder={sortOrder}
 								onSortChange={onSortChange}
-								canDeleteLinks={canDeleteLinks}
-								canTrashLinks={canTrashLinks}
+								canTrashSelected={canTrashAllSelected}
+								canViewAnalytics={canViewAnalytics}
+								isAdmin={effectiveIsAdmin}
 							/>
 						</thead>
 						<tbody className="links-table-body">
@@ -283,7 +466,9 @@ const LinksTable = ({
 								<LinkRow
 									key={link.id}
 									link={link}
-									selected={selectedIds.includes(link.id)}
+									selected={validSelectedIds.includes(
+										link.id
+									)}
 									onSelectRow={handleSelectRow}
 									onCopy={handleCopy}
 									copiedId={copiedId}
@@ -304,7 +489,12 @@ const LinksTable = ({
 									isTrashTab={isTrashTab}
 									sortBy={sortBy}
 									canDeleteLinks={canDeleteLinks}
+									canDeleteAnyLink={canDeleteAnyLink}
 									canTrashLinks={canTrashLinks}
+									canEditLinks={canEditLinks}
+									canEditAnyLink={canEditAnyLink}
+									canViewAnalytics={canViewAnalytics}
+									isAdmin={effectiveIsAdmin}
 									currentUserId={user?.id}
 								/>
 							))}
@@ -354,10 +544,33 @@ const LinksTable = ({
 				isTrashTab={isTrashTab}
 			/>
 			<BulkDeleteModal
-				open={bulkDeleteModalOpen && selectedIds.length > 0}
-				setOpen={setBulkDeleteModalOpen}
-				selectedIds={selectedIds}
+				open={Boolean(bulkDeleteConfirmation && isConfirmationValid)}
+				setOpen={(isOpen) => {
+					if (!isOpen) {
+						if (bulkDeleteConfirmation) {
+							cancelledSnapshotIdRef.current =
+								bulkDeleteConfirmation.id;
+						}
+						setBulkDeleteConfirmation(null);
+					}
+				}}
+				selectedIds={
+					bulkDeleteConfirmation
+						? bulkDeleteConfirmation.selectedIds
+						: []
+				}
 				isTrashTab={isTrashTab}
+				canTrash={
+					bulkDeleteConfirmation
+						? bulkDeleteConfirmation.canTrash
+						: false
+				}
+				canPermanentlyDelete={
+					bulkDeleteConfirmation
+						? bulkDeleteConfirmation.canPermanentlyDelete
+						: false
+				}
+				onConfirm={handleBulkDeleteConfirm}
 				onSuccess={handleBulkDeleteSuccess}
 			/>
 			<DeleteAllModal

@@ -19,8 +19,8 @@ export interface DashboardSearchCapabilities {
 	/** Whether the current user can manage API keys. */
 	canManageApiKeys?: boolean;
 
-	/** Whether the current user can manage webhooks. */
-	canManageWebhooks?: boolean;
+	/** Whether the current user can manage integrations. */
+	canManageIntegrations?: boolean;
 
 	/** Whether the current user can manage mail delivery settings. */
 	canManageMailDelivery?: boolean;

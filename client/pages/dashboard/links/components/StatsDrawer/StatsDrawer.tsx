@@ -18,7 +18,7 @@ import {
 	Copy,
 	Check,
 } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useGetLinkStatsQuery } from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -26,7 +26,7 @@ import { copyToClipboard } from "@/shared/browser";
 import { getLinkDisplayTitle, getShortUrl } from "@/shared/links";
 import { getLocalDateValue } from "../../lib";
 import { __ } from "@/i18n";
-import { useTemporaryState, usePerLinkState } from "@/hooks";
+import { useTemporaryState, usePerLinkState, useAdminAccess } from "@/hooks";
 
 import {
 	BestDay,
@@ -55,13 +55,16 @@ const isStatsQuerySkipped = ({
 	selectedTabUsesStatsQuery,
 	timeRange,
 	customDateRange,
+	canViewStats,
 }: {
 	linkId?: string;
 	open: boolean;
 	selectedTabUsesStatsQuery: boolean;
 	timeRange: StatsFilterRange;
 	customDateRange: StatsCustomDateRange;
+	canViewStats: boolean;
 }) =>
+	!canViewStats ||
 	!linkId ||
 	!open ||
 	!selectedTabUsesStatsQuery ||
@@ -91,6 +94,16 @@ export default function StatsDrawer({
 	pageClickRange,
 	pageCustomClickRange,
 }: StatsDrawerProps) {
+	const { canViewAnalytics, isAdmin, user } = useAdminAccess();
+	const isOwner = Boolean(user?.id && link?.userId === user.id);
+	const canViewStats = Boolean(canViewAnalytics && (isOwner || isAdmin));
+
+	useEffect(() => {
+		if (open && link && !canViewStats) {
+			setOpen(false);
+		}
+	}, [open, link, canViewStats, setOpen]);
+
 	const [selectedTab, setSelectedTab] = useState(0);
 	const [copiedKey, setCopiedKey] = useTemporaryState<
 		"short" | "destination" | null
@@ -206,6 +219,7 @@ export default function StatsDrawer({
 		selectedTabUsesStatsQuery,
 		timeRange,
 		customDateRange,
+		canViewStats,
 	});
 
 	const { data: statsData, isLoading } = useGetLinkStatsQuery(
@@ -215,7 +229,7 @@ export default function StatsDrawer({
 		}
 	);
 
-	if (!link) return null;
+	if (!open || !link || !canViewStats) return null;
 
 	const shortUrl = getShortUrl(link);
 	const statsPayload = statsData?.data;

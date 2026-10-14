@@ -126,6 +126,14 @@ class Lifecycle {
 	private $health_formatter;
 
 	/**
+	 * Canonical link analytics filter callback.
+	 *
+	 * @var callable
+	 * @since 1.7.2
+	 */
+	private $analytics_filter;
+
+	/**
 	 * Create a new Lifecycle instance.
 	 *
 	 * @param Repository        $repository        Repository handler.
@@ -137,6 +145,7 @@ class Lifecycle {
 	 * @param Roles             $roles             Roles registry.
 	 * @param Authorization     $authorization     Authorization helper.
 	 * @param callable          $link_formatter    Link formatter callback.
+	 * @param callable          $analytics_filter  Required canonical link analytics filter callback.
 	 * @param callable|null     $health_scheduler  Optional targeted health check scheduler callback.
 	 * @param callable|null     $health_formatter  Optional health payload formatter callback.
 	 * @since 1.7.2
@@ -151,6 +160,7 @@ class Lifecycle {
 		Roles $roles,
 		Authorization $authorization,
 		callable $link_formatter,
+		callable $analytics_filter,
 		?callable $health_scheduler = null,
 		?callable $health_formatter = null
 	) {
@@ -163,6 +173,7 @@ class Lifecycle {
 		$this->roles             = $roles;
 		$this->authorization     = $authorization;
 		$this->link_formatter    = $link_formatter;
+		$this->analytics_filter  = $analytics_filter;
 		$this->health_scheduler  = $health_scheduler;
 		$this->health_formatter  = $health_formatter;
 	}
@@ -201,8 +212,7 @@ class Lifecycle {
 		$is_admin = $this->roles->is_admin( $user );
 
 		if ( ! $is_admin && ! $is_owner ) {
-			$owner_role = $this->repository->get_user_role( $owner_id );
-			if ( 'admin' !== $owner_role ) {
+			if ( ! $this->roles->has_capability( $user, 'edit_any_link' ) ) {
 				throw new ApiException(
 					__( 'You do not have permission to edit this link.', 'peakurl' ),
 					403,
@@ -398,7 +408,12 @@ class Lifecycle {
 		}
 
 		if ( empty( $updates ) ) {
-			return ( $this->link_formatter )( $this->repository->find_url_row( $id ) );
+			$raw_row = $this->repository->find_url_row( $id );
+			if ( ! $raw_row ) {
+				return null;
+			}
+			$url = ( $this->link_formatter )( $raw_row );
+			return ( $this->analytics_filter )( $url, $user, $owner_id );
 		}
 
 		$updates[]            = 'updated_at = :updated_at';
@@ -475,7 +490,7 @@ class Lifecycle {
 			}
 		}
 
-		return $url;
+		return ( $this->analytics_filter )( $url, $user, $owner_id );
 	}
 
 
@@ -510,6 +525,15 @@ class Lifecycle {
 				'delete_links',
 				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
 			);
+
+			if ( ! $is_admin && ! $is_owner ) {
+				if ( ! $this->roles->has_capability( $user, 'delete_any_link' ) ) {
+					throw new ApiException(
+						__( 'You do not have permission to permanently delete this link.', 'peakurl' ),
+						403,
+					);
+				}
+			}
 		} else {
 			$this->authorization->validate_capability(
 				$user,
@@ -606,7 +630,9 @@ class Lifecycle {
 			);
 		}
 
-		return $this->restore_link( $row, Date::now(), $user, $request );
+		$restored = $this->restore_link( $row, Date::now(), $user, $request );
+
+		return ( $this->analytics_filter )( $restored, $user, $owner_id );
 	}
 
 
@@ -627,56 +653,112 @@ class Lifecycle {
 			return 0;
 		}
 
+		$is_admin = $this->roles->is_admin( $user );
+
 		if ( $force ) {
 			$this->authorization->validate_capability(
 				$user,
 				'delete_links',
 				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
+				403
 			);
 		} else {
-			$this->authorization->validate_capability(
-				$user,
-				'trash_links',
-				__( 'You do not have permission to delete links.', 'peakurl' ),
-			);
+			if ( ! $is_admin && ! $this->roles->has_capability( $user, 'trash_links' ) && ! $this->roles->has_capability( $user, 'delete_links' ) ) {
+				throw new ApiException(
+					__( 'You do not have permission to delete links.', 'peakurl' ),
+					403
+				);
+			}
 		}
 
-		$is_admin    = $this->roles->is_admin( $user );
-		$allowed_ids = $ids;
-
-		if ( ! $is_admin ) {
-			$allowed_ids = $this->repository->get_owned_link_ids(
-				$ids,
-				(string) $user['id'],
-			);
-		}
-
-		if ( empty( $allowed_ids ) ) {
-			return 0;
-		}
-
-		$target_rows = $this->repository->get_links_by_ids( $allowed_ids );
+		$target_rows = $this->repository->get_links_by_ids( $ids );
 
 		if ( empty( $target_rows ) ) {
 			return 0;
 		}
 
-		$all_trashed = true;
+		$has_active  = false;
+		$has_trashed = false;
 		foreach ( $target_rows as $target_row ) {
-			if ( 'trashed' !== (string) ( $target_row['status'] ?? 'active' ) ) {
-				$all_trashed = false;
-				break;
+			if ( 'trashed' === (string) ( $target_row['status'] ?? 'active' ) ) {
+				$has_trashed = true;
+			} else {
+				$has_active = true;
 			}
 		}
 
-		$permanent = $force || $all_trashed;
+		if ( ! $force && $has_active && $has_trashed ) {
+			throw new ApiException(
+				__( 'Cannot perform bulk delete on a mixed selection of active and trashed links without force.', 'peakurl' ),
+				400
+			);
+		}
 
-		if ( $permanent && ! $force ) {
+		$all_trashed = ( $has_trashed && ! $has_active );
+		$permanent   = $force || $all_trashed;
+
+		if ( $permanent ) {
 			$this->authorization->validate_capability(
 				$user,
 				'delete_links',
 				__( 'You do not have permission to permanently delete links.', 'peakurl' ),
+				403
 			);
+
+			$can_delete_any = $is_admin || $this->roles->has_capability( $user, 'delete_any_link' );
+
+			if ( ! $can_delete_any ) {
+				$owned_ids = $this->repository->get_owned_link_ids(
+					$ids,
+					(string) $user['id'],
+				);
+
+				if ( count( $owned_ids ) !== count( $ids ) ) {
+					throw new ApiException(
+						__( 'You do not have permission to permanently delete one or more of the selected links.', 'peakurl' ),
+						403,
+					);
+				}
+
+				foreach ( $target_rows as $target_row ) {
+					if ( isset( $target_row['user_id'] ) && (string) $target_row['user_id'] !== (string) $user['id'] ) {
+						throw new ApiException(
+							__( 'You do not have permission to permanently delete one or more of the selected links.', 'peakurl' ),
+							403,
+						);
+					}
+				}
+			}
+		} else {
+			$this->authorization->validate_capability(
+				$user,
+				'trash_links',
+				__( 'You do not have permission to delete links.', 'peakurl' ),
+				403
+			);
+
+			if ( ! $is_admin ) {
+				$owned_ids = $this->repository->get_owned_link_ids(
+					$ids,
+					(string) $user['id'],
+				);
+
+				if ( count( $owned_ids ) !== count( $ids ) ) {
+					throw new ApiException(
+						__( 'You do not have permission to move one or more of the selected links to trash.', 'peakurl' ),
+						403,
+					);
+				}
+
+				foreach ( $target_rows as $target_row ) {
+					if ( isset( $target_row['user_id'] ) && (string) $target_row['user_id'] !== (string) $user['id'] ) {
+						throw new ApiException(
+							__( 'You do not have permission to move one or more of the selected links to trash.', 'peakurl' ),
+							403,
+						);
+					}
+				}
+			}
 		}
 
 		if ( ! $permanent ) {
@@ -696,7 +778,7 @@ class Lifecycle {
 			return count( $trashed_ids );
 		}
 
-		return $this->delete_links_permanently( $target_rows, $allowed_ids, $user, $request );
+		return $this->delete_links_permanently( $target_rows, $ids, $user, $request );
 	}
 
 	/**
@@ -721,24 +803,35 @@ class Lifecycle {
 			__( 'You do not have permission to restore links.', 'peakurl' ),
 		);
 
-		$is_admin    = $this->roles->is_admin( $user );
-		$allowed_ids = $ids;
-
-		if ( ! $is_admin ) {
-			$allowed_ids = $this->repository->get_owned_link_ids(
-				$ids,
-				(string) $user['id'],
-			);
-		}
-
-		if ( empty( $allowed_ids ) ) {
-			return 0;
-		}
-
-		$target_rows = $this->repository->get_links_by_ids( $allowed_ids );
+		$target_rows = $this->repository->get_links_by_ids( $ids );
 
 		if ( empty( $target_rows ) ) {
 			return 0;
+		}
+
+		$is_admin = $this->roles->is_admin( $user );
+
+		if ( ! $is_admin ) {
+			$owned_ids = $this->repository->get_owned_link_ids(
+				$ids,
+				(string) $user['id'],
+			);
+
+			if ( count( $owned_ids ) !== count( $ids ) ) {
+				throw new ApiException(
+					__( 'You do not have permission to restore one or more of the selected links.', 'peakurl' ),
+					403,
+				);
+			}
+
+			foreach ( $target_rows as $target_row ) {
+				if ( isset( $target_row['user_id'] ) && (string) $target_row['user_id'] !== (string) $user['id'] ) {
+					throw new ApiException(
+						__( 'You do not have permission to restore one or more of the selected links.', 'peakurl' ),
+						403,
+					);
+				}
+			}
 		}
 
 		$now          = Date::now();
@@ -829,7 +922,17 @@ class Lifecycle {
 		$permanent = 'permanent' === $mode;
 
 		if ( $permanent ) {
-			$rows = $this->repository->get_accessible_links( $user );
+			$can_delete_any = $is_admin || $this->roles->has_capability( $user, 'delete_any_link' );
+
+			$rows = $this->repository->get_accessible_links(
+				$user,
+				function ( array $u, array &$conditions, array &$params, string $table_alias ) use ( $can_delete_any ) {
+					if ( ! $can_delete_any ) {
+						$conditions[]             = $table_alias . '.user_id = :filter_user_id';
+						$params['filter_user_id'] = (string) ( $u['id'] ?? '' );
+					}
+				}
+			);
 
 			if ( empty( $rows ) ) {
 				return 0;
@@ -932,7 +1035,9 @@ class Lifecycle {
 
 		\do_action( 'link_restored', $row, $request, $user );
 
-		$formatted_url = ( $this->link_formatter )( $row );
+		$restored_row  = $this->repository->find_url_row( $row_id );
+		$restored_row  = $restored_row ? $restored_row : $row;
+		$formatted_url = ( $this->link_formatter )( $restored_row );
 		$this->webhooks_service->dispatch_link_event( 'link.restored', $formatted_url, $user );
 
 		return $formatted_url;
@@ -982,6 +1087,8 @@ class Lifecycle {
 
 		return $deleted_count;
 	}
+
+
 
 	/**
 	 * Invalidate object cache entries associated with a link.

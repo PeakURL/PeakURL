@@ -353,8 +353,8 @@ class RolesApiTest extends TestCase {
 			'/api/v1/roles/editor',
 			array(
 				'capabilities' => array(
-					'manage_webhooks' => true,
-					'delete_links'    => true,
+					'manage_integrations' => true,
+					'delete_links'        => true,
 				),
 			)
 		);
@@ -364,8 +364,8 @@ class RolesApiTest extends TestCase {
 			'editor',
 			array(
 				'capabilities' => array(
-					'manage_webhooks' => true,
-					'delete_links'    => true,
+					'manage_integrations' => true,
+					'delete_links'        => true,
 				),
 			)
 		);
@@ -375,18 +375,18 @@ class RolesApiTest extends TestCase {
 
 		// Check updated capability states
 		$caps = array_column( $updated['capabilities'], 'enabled', 'id' );
-		$this->assertTrue( $caps['manage_webhooks'] );
+		$this->assertTrue( $caps['manage_integrations'] );
 		$this->assertTrue( $caps['delete_links'] );
 		$this->assertTrue( $caps['create_links'] ); // Preserves defaults
 
 		// Verify persisted JSON in SettingsApi
 		$this->assertArrayHasKey( Constants::SETTING_ROLE_CAPABILITIES, $this->stored_options );
 		$stored = json_decode( $this->stored_options[ Constants::SETTING_ROLE_CAPABILITIES ], true );
-		$this->assertTrue( $stored['editor']['manage_webhooks'] );
+		$this->assertTrue( $stored['editor']['manage_integrations'] );
 		$this->assertTrue( $stored['editor']['delete_links'] );
 
 		// Verify effective capability check directly on user
-		$this->assertTrue( $this->roles->has_capability( $this->editor_user, 'manage_webhooks' ) );
+		$this->assertTrue( $this->roles->has_capability( $this->editor_user, 'manage_integrations' ) );
 		$this->assertTrue( $this->roles->has_capability( $this->editor_user, 'delete_links' ) );
 	}
 
@@ -427,14 +427,14 @@ class RolesApiTest extends TestCase {
 			'editor',
 			array(
 				'capabilities' => array(
-					'manage_webhooks' => true,
-					'delete_links'    => true,
+					'manage_integrations' => true,
+					'delete_links'        => true,
 				),
 			)
 		);
 
 		// Editor has the capability flags
-		$this->assertTrue( $this->roles->has_capability( $this->editor_user, 'manage_webhooks' ) );
+		$this->assertTrue( $this->roles->has_capability( $this->editor_user, 'manage_integrations' ) );
 		$this->assertTrue( $this->roles->has_capability( $this->editor_user, 'delete_links' ) );
 
 		// BUT Roles::is_admin MUST strictly remain FALSE
@@ -1233,12 +1233,12 @@ class RolesApiTest extends TestCase {
 			)
 		);
 
-		// Connection 2 enables manage_webhooks
+		// Connection 2 enables manage_integrations
 		$roles2->update_role_definition(
 			'editor',
 			array(
 				'capabilities' => array(
-					'manage_webhooks' => true,
+					'manage_integrations' => true,
 				),
 			)
 		);
@@ -1248,7 +1248,7 @@ class RolesApiTest extends TestCase {
 		$stored = $roles1->get_role_settings();
 
 		$this->assertTrue( $stored['editor']['delete_links'] );
-		$this->assertTrue( $stored['editor']['manage_webhooks'] );
+		$this->assertTrue( $stored['editor']['manage_integrations'] );
 	}
 
 	public function test_sequential_real_db_reset_racing_with_update_serializes_cleanly(): void {
@@ -1367,7 +1367,7 @@ class RolesApiTest extends TestCase {
 				// Invokes the real production API/service method; will block until Process A commits
 				return $roles->update_role_definition(
 					'editor',
-					array( 'capabilities' => array( 'manage_webhooks' => true ) )
+					array( 'capabilities' => array( 'manage_integrations' => true ) )
 				);
 			}
 		);
@@ -1383,7 +1383,7 @@ class RolesApiTest extends TestCase {
 
 		$this->assertArrayHasKey( 'editor', $stored );
 		$this->assertTrue( $stored['editor']['delete_links'] );
-		$this->assertTrue( $stored['editor']['manage_webhooks'] );
+		$this->assertTrue( $stored['editor']['manage_integrations'] );
 	}
 
 	public function test_real_db_concurrent_updates_different_roles_overlapping_transactions(): void {
@@ -1537,7 +1537,7 @@ class RolesApiTest extends TestCase {
 
 				return $roles->update_role_definition(
 					'editor',
-					array( 'capabilities' => array( 'manage_webhooks' => true ) )
+					array( 'capabilities' => array( 'manage_integrations' => true ) )
 				);
 			}
 		);
@@ -1552,7 +1552,7 @@ class RolesApiTest extends TestCase {
 		$stored      = $roles->get_role_settings();
 
 		$this->assertTrue( $stored['editor']['delete_links'] );
-		$this->assertTrue( $stored['editor']['manage_webhooks'] );
+		$this->assertTrue( $stored['editor']['manage_integrations'] );
 	}
 
 	public function test_real_db_concurrent_reset_colliding_with_update_overlapping_transactions(): void {
@@ -1959,8 +1959,8 @@ class RolesApiTest extends TestCase {
 			'editor',
 			array(
 				'capabilities' => array(
-					'manage_webhooks' => true,
-					'delete_links'    => true,
+					'manage_integrations' => true,
+					'delete_links'        => true,
 				),
 			)
 		);
@@ -1975,7 +1975,7 @@ class RolesApiTest extends TestCase {
 
 		// Verify support inherited editor snapshot
 		$support_caps = $this->roles->capabilities_for_role( 'support' );
-		$this->assertTrue( $support_caps['manage_webhooks'] );
+		$this->assertTrue( $support_caps['manage_integrations'] );
 		$this->assertTrue( $support_caps['delete_links'] );
 		$this->assertTrue( $support_caps['create_links'] );
 		$this->assertFalse( $support_caps['manage_users'] );
@@ -1985,12 +1985,12 @@ class RolesApiTest extends TestCase {
 			'editor',
 			array(
 				'capabilities' => array(
-					'manage_webhooks' => false,
+					'manage_integrations' => false,
 				),
 			)
 		);
-		$this->assertFalse( $this->roles->capabilities_for_role( 'editor' )['manage_webhooks'] );
-		$this->assertTrue( $this->roles->capabilities_for_role( 'support' )['manage_webhooks'] );
+		$this->assertFalse( $this->roles->capabilities_for_role( 'editor' )['manage_integrations'] );
+		$this->assertTrue( $this->roles->capabilities_for_role( 'support' )['manage_integrations'] );
 
 		// 4. Mutate support: editor must NOT change
 		$this->roles->update_role_definition(
@@ -2009,18 +2009,18 @@ class RolesApiTest extends TestCase {
 	 * Verify that resetting a custom role restores its creation-time snapshot, not current editor.
 	 */
 	public function test_custom_role_reset_restores_creation_snapshot_not_current_editor(): void {
-		// Editor has manage_webhooks = true at clone time
+		// Editor has manage_integrations = true at clone time
 		$this->roles->update_role_definition(
 			'editor',
-			array( 'capabilities' => array( 'manage_webhooks' => true ) )
+			array( 'capabilities' => array( 'manage_integrations' => true ) )
 		);
 
 		$this->roles->create_custom_role( 'support', 'Support Specialist' );
 
-		// Editor changes afterwards to manage_webhooks = false
+		// Editor changes afterwards to manage_integrations = false
 		$this->roles->update_role_definition(
 			'editor',
-			array( 'capabilities' => array( 'manage_webhooks' => false ) )
+			array( 'capabilities' => array( 'manage_integrations' => false ) )
 		);
 
 		// Support is modified
@@ -2043,9 +2043,9 @@ class RolesApiTest extends TestCase {
 		$this->assertFalse( $reset_def['is_customized'] );
 
 		$support_caps_after = $this->roles->capabilities_for_role( 'support' );
-		// Restored to its creation snapshot: create_links = true, manage_webhooks = true, manage_site_settings = false
+		// Restored to its creation snapshot: create_links = true, manage_integrations = true, manage_site_settings = false
 		$this->assertTrue( $support_caps_after['create_links'] );
-		$this->assertTrue( $support_caps_after['manage_webhooks'] );
+		$this->assertTrue( $support_caps_after['manage_integrations'] );
 		$this->assertFalse( $support_caps_after['manage_site_settings'] );
 	}
 
@@ -2188,7 +2188,7 @@ class RolesApiTest extends TestCase {
 			'manage_location_data' => true,
 			'manage_performance'   => true,
 			'manage_updates'       => true,
-			'manage_webhooks'      => true,
+			'manage_integrations'  => true,
 		);
 
 		$updated = $this->roles->update_role_definition(
@@ -2929,6 +2929,78 @@ class RolesApiTest extends TestCase {
 		} catch ( ApiException $e ) {
 			$this->assertSame( 403, $e->getCode() );
 			$this->assertSame( 'Administrator capabilities are immutable.', $e->getMessage() );
+		}
+	}
+
+	public function test_stored_retired_manage_profile_throws_500_and_fails_closed(): void {
+		$raw_with_profile = array(
+			'editor' => array(
+				'manage_profile' => true,
+				'create_links'   => true,
+			),
+		);
+		$this->stored_options[ Constants::SETTING_ROLE_CAPABILITIES ] = (string) json_encode( $raw_with_profile );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 500 );
+		$this->expectExceptionMessage( 'Invalid or corrupted role capabilities configuration in storage.' );
+
+		$this->roles->get_role_settings();
+	}
+
+	public function test_stored_retired_manage_webhooks_throws_500_and_fails_closed(): void {
+		$raw_with_webhooks = array(
+			'editor' => array(
+				'manage_webhooks' => true,
+				'create_links'    => true,
+			),
+		);
+		$this->stored_options[ Constants::SETTING_ROLE_CAPABILITIES ] = (string) json_encode( $raw_with_webhooks );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 500 );
+		$this->expectExceptionMessage( 'Invalid or corrupted role capabilities configuration in storage.' );
+
+		$this->roles->get_role_settings();
+	}
+
+	public function test_update_role_definition_rejects_manage_webhooks_and_manage_profile_with_422(): void {
+		$req_webhooks = $this->make_request(
+			'PUT',
+			'/api/v1/roles/editor',
+			array(
+				'capabilities' => array(
+					'manage_webhooks' => true,
+				),
+			)
+		);
+		$req_webhooks->set_route_params( array( 'role' => 'editor' ) );
+
+		try {
+			$this->roles_controller->update( $req_webhooks );
+			$this->fail( 'Expected 422 for manage_webhooks capability' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'Unknown capability: manage_webhooks', $e->getMessage() );
+		}
+
+		$req_profile = $this->make_request(
+			'PUT',
+			'/api/v1/roles/editor',
+			array(
+				'capabilities' => array(
+					'manage_profile' => true,
+				),
+			)
+		);
+		$req_profile->set_route_params( array( 'role' => 'editor' ) );
+
+		try {
+			$this->roles_controller->update( $req_profile );
+			$this->fail( 'Expected 422 for manage_profile capability' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'Unknown capability: manage_profile', $e->getMessage() );
 		}
 	}
 }

@@ -25,6 +25,8 @@ const TableFooter = ({
 	setStatusFilter,
 	trashedCount = 0,
 	expiredCount = 0,
+	canViewAnalytics = true,
+	isAdmin = false,
 }: TableFooterProps) => {
 	const pageDirection = isDocumentRtl() ? "rtl" : "ltr";
 	const statusOptions: SelectOption<LinksStatusFilter>[] = [
@@ -51,8 +53,18 @@ const TableFooter = ({
 	const sortOptions: SelectOption<LinksSortBy>[] = [
 		{ value: "createdAt", label: __("Sort: Date Created") },
 		{ value: "updatedAt", label: __("Sort: Date Modified") },
-		{ value: "clicks", label: __("Sort: Most Clicks") },
-		{ value: "uniqueClicks", label: __("Sort: Unique Visitors") },
+		...(canViewAnalytics && isAdmin
+			? [
+					{
+						value: "clicks" as const,
+						label: __("Sort: Most Clicks"),
+					},
+					{
+						value: "uniqueClicks" as const,
+						label: __("Sort: Unique Visitors"),
+					},
+				]
+			: []),
 		{ value: "alias", label: __("Sort: Alias") },
 		{ value: "title", label: __("Sort: Title") },
 		{ value: "health", label: __("Sort: Health") },
@@ -76,16 +88,20 @@ const TableFooter = ({
 							{formatCount(totalLinks)}
 						</span>
 					</div>
-					<div className="links-table-footer-divider"></div>
-					<div className="links-table-footer-stat">
-						<MousePointerClick className="h-3 w-3 text-accent" />
-						<span className="links-table-footer-label">
-							{__("Total Clicks:")}
-						</span>
-						<span className="links-table-footer-value">
-							{formatCount(totalClicks)}
-						</span>
-					</div>
+					{canViewAnalytics && (
+						<>
+							<div className="links-table-footer-divider"></div>
+							<div className="links-table-footer-stat">
+								<MousePointerClick className="h-3 w-3 text-accent" />
+								<span className="links-table-footer-label">
+									{__("Total Clicks:")}
+								</span>
+								<span className="links-table-footer-value">
+									{formatCount(totalClicks)}
+								</span>
+							</div>
+						</>
+					)}
 				</div>
 
 				{/* Filters */}

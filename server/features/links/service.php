@@ -224,6 +224,7 @@ class Service {
 			$roles,
 			$authorization,
 			fn( ?array $row ): array => $this->format_url( $row ),
+			fn( array $url, array $user, ?string $owner_id ): array => $this->filter_link_analytics( $url, $user, $owner_id ),
 			function ( string $link_id ): void {
 				$this->schedule_health_check( $link_id );
 			},
@@ -234,6 +235,8 @@ class Service {
 			$auth_service,
 			$analytics_service,
 			fn( ?array $row ): array => $this->format_url( $row ),
+			$roles,
+			fn( array $url, array $user, ?string $owner_id ): array => $this->filter_link_analytics( $url, $user, $owner_id ),
 			fn( ?array $row ): ?array => $this->format_health( $row )
 		);
 	}
@@ -390,7 +393,7 @@ class Service {
 		$health_row          = $this->repository->get_link_health( (string) $row['id'] );
 		$formatted['health'] = $this->format_health( $health_row );
 
-		return $formatted;
+		return $this->filter_link_analytics( $formatted, $user, (string) ( $row['user_id'] ?? '' ) );
 	}
 
 	/**
@@ -672,7 +675,9 @@ class Service {
 
 		$this->webhooks_service->dispatch_link_event( 'link.created', $url, $user );
 
-		return $url;
+		$owner_id = (string) ( $row['user_id'] ?? $user['id'] ?? '' );
+
+		return $this->filter_link_analytics( $url, $user, $owner_id );
 	}
 
 	/**
@@ -780,6 +785,7 @@ class Service {
 	public function restore_url( Request $request, string $id ): array {
 		return $this->lifecycle->restore_url( $request, $id );
 	}
+
 
 	/**
 	 * Bulk-delete or bulk-trash short URLs by an array of IDs.
@@ -980,17 +986,24 @@ class Service {
 	}
 
 	/**
-	 * Format a list of raw URL rows into API-ready items.
+	 * Filter link analytics metrics according to actor authorization.
 	 *
-	 * @param array<int, array<string, mixed>> $rows Raw URL rows.
-	 * @return array<int, array<string, mixed>> Formatted URL items.
-	 * @since 1.0.0
+	 * Preserves numeric metrics for Administrators and non-administrators with view_analytics on owned links.
+	 * Returns null (never 0 or omitted) for clicks and uniqueClicks when unauthorized.
+	 *
+	 * @param array<string, mixed> $url      Formatted link array.
+	 * @param array<string, mixed> $user     Acting user array.
+	 * @param string|null          $owner_id Trusted owner ID from persisted link row.
+	 * @return array<string, mixed> Filtered link array with preserved or nullified metrics.
+	 * @since 1.7.2
 	 */
-	private function format_url_list( array $rows ): array {
-		return array_map(
-			fn( array $row ): array => $this->format_url( $row ),
-			$rows,
-		);
+	public function filter_link_analytics( array $url, array $user, ?string $owner_id ): array {
+		if ( ! $this->roles->can_view_link_analytics( $user, $owner_id ) ) {
+			$url['clicks']       = null;
+			$url['uniqueClicks'] = null;
+		}
+
+		return $url;
 	}
 
 	/**

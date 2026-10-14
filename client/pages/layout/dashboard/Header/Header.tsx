@@ -30,7 +30,7 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	const { useAuthCheckQuery } = authApi;
 	const { data: sessionData } = useAuthCheckQuery(undefined);
 	const user = selectSessionUser(sessionData);
-	const { canManageUsers, canManageProfile } = useAdminAccess();
+	const { canManageUsers } = useAdminAccess();
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -135,30 +135,28 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 										)}
 									</MenuItem>
 								) : null}
-								{canManageProfile ? (
-									<MenuItem>
-										{({ focus }) => (
-											<button
-												onClick={() =>
-													navigate(
-														`${basePath}/settings/general`
-													)
-												}
-												className={cn(
-													"dashboard-header-user-item",
-													focus &&
-														"dashboard-header-user-item-active"
-												)}
-											>
-												<User
-													size={16}
-													className="dashboard-header-user-item-icon"
-												/>
-												{__("Profile")}
-											</button>
-										)}
-									</MenuItem>
-								) : null}
+								<MenuItem>
+									{({ focus }) => (
+										<button
+											onClick={() =>
+												navigate(
+													`${basePath}/settings/general`
+												)
+											}
+											className={cn(
+												"dashboard-header-user-item",
+												focus &&
+													"dashboard-header-user-item-active"
+											)}
+										>
+											<User
+												size={16}
+												className="dashboard-header-user-item-icon"
+											/>
+											{__("Profile")}
+										</button>
+									)}
+								</MenuItem>
 								<MenuItem>
 									{({ focus }) => (
 										<button

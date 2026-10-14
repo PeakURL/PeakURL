@@ -38,6 +38,7 @@ class WebhookDeliveryTest extends TestCase {
 	private string $table_prefix;
 	private array $config;
 	private AuthService $auth_service;
+	private Roles $roles;
 	private array $admin_user;
 	private array $editor_user;
 
@@ -50,7 +51,9 @@ class WebhookDeliveryTest extends TestCase {
 		$this->pdo          = $this->connection->get_connection();
 		$this->table_prefix = $this->connection->get_table_prefix();
 		$this->db           = new PeakURL_DB( $this->connection );
-		$roles              = new Roles();
+		$settings_api       = new \PeakURL\Api\SettingsApi( $this->db );
+		$roles              = new Roles( $settings_api );
+		$this->roles        = $roles;
 		$authorization      = new Authorization( $roles );
 
 		$auth_service       = new AuthService(
@@ -139,11 +142,12 @@ class WebhookDeliveryTest extends TestCase {
 		$this->webhooks_service->set_http_sender( null );
 		$this->pdo->exec( "DELETE FROM {$this->table_prefix}webhook_deliveries" );
 		$this->pdo->exec( "DELETE FROM {$this->table_prefix}webhooks WHERE url LIKE '%example.com%' OR url LIKE '%test.local%' OR url LIKE '%test.destination%'" );
-		$this->pdo->exec( "DELETE FROM {$this->table_prefix}sessions WHERE user_id IN (99981, 99982)" );
-		$this->pdo->exec( "DELETE FROM {$this->table_prefix}users WHERE id IN (99981, 99982)" );
+		$this->pdo->exec( "DELETE FROM {$this->table_prefix}sessions WHERE user_id IN (99981, 99982, 99983)" );
+		$this->pdo->exec( "DELETE FROM {$this->table_prefix}users WHERE id IN (99981, 99982, 99983)" );
+		$this->pdo->exec( "DELETE FROM {$this->table_prefix}settings WHERE setting_key = '" . \PeakURL\Core\Config\Constants::SETTING_ROLE_CAPABILITIES . "'" );
 	}
 
-	private function create_request_for_user( array $user, string $method = 'GET', string $path = '/' ): Request {
+	private function create_request_for_user( array $user, string $method = 'GET', string $path = '/', array $body = array() ): Request {
 		$session_token = Str::random_id( 32 );
 		$session_id    = Str::random_id( 16 );
 		$now           = Date::now();
@@ -160,23 +164,26 @@ class WebhookDeliveryTest extends TestCase {
 			$method,
 			$path,
 			array(),
-			array(),
+			$body,
 			array(
 				'peakurl_session' => $signed_cookie,
 			)
 		);
 	}
 
-	private function create_test_webhook( string $url = 'https://example.com/webhook', bool $is_active = true, int $user_id = 99981, int $retention_days = 30 ): string {
+	private function create_test_webhook( string $url = 'https://example.com/webhook', bool $is_active = true, int $user_id = 99981, int $retention_days = 30, string $raw_secret = 'test_sec_123' ): string {
 		$webhook_id       = Str::random_id( 16 );
 		$now              = Date::now();
 		$active_val       = $is_active ? 1 : 0;
 		$crypto           = new Crypto( Configuration::get_current() );
-		$encrypted_secret = $crypto->encrypt( 'test_sec_123' );
+		$encrypted_secret = $crypto->encrypt( $raw_secret );
+		$secret_hint      = str_starts_with( $raw_secret, 'peakurl_whsec_' )
+			? substr( $raw_secret, 0, 18 ) . str_repeat( '•', 18 )
+			: 'test_sec_••••••••••••';
 
 		$this->pdo->exec(
-			"INSERT INTO {$this->table_prefix}webhooks (id, user_id, label, url, secret, events, is_active, delivery_retention_days, created_at, updated_at)
-			VALUES ('{$webhook_id}', {$user_id}, 'Test Webhook', '{$url}', '{$encrypted_secret}', '[\"link.created\"]', {$active_val}, {$retention_days}, '{$now}', '{$now}')"
+			"INSERT INTO {$this->table_prefix}webhooks (id, user_id, label, url, secret, secret_hint, events, is_active, delivery_retention_days, created_at, updated_at)
+			VALUES ('{$webhook_id}', {$user_id}, 'Test Webhook', '{$url}', '{$encrypted_secret}', '{$secret_hint}', '[\"link.created\"]', {$active_val}, {$retention_days}, '{$now}', '{$now}')"
 		);
 
 		return $webhook_id;
@@ -1013,7 +1020,7 @@ class WebhookDeliveryTest extends TestCase {
 
 		$controller = new WebhooksController( $this->webhooks_service );
 
-		// 1. Editor user without manage_webhooks cannot retry -> 403.
+		// 1. Editor user without manage_integrations cannot retry -> 403.
 		$editor_request = $this->create_request_for_user(
 			$this->editor_user,
 			'POST',
@@ -1893,7 +1900,7 @@ class WebhookDeliveryTest extends TestCase {
 
 		$controller = new WebhooksController( $this->webhooks_service );
 
-		// 1. Editor user without manage_webhooks cannot delete delivery -> 403
+		// 1. Editor user without manage_integrations cannot delete delivery -> 403
 		$editor_request = $this->create_request_for_user(
 			$this->editor_user,
 			'DELETE',
@@ -1958,5 +1965,156 @@ class WebhookDeliveryTest extends TestCase {
 		$this->assertSame( 200, $clear_response['status'] );
 		$this->assertTrue( $clear_response['body']['success'] );
 		$this->assertSame( 0, $clear_response['body']['data']['deletedCount'] );
+	}
+
+	public function test_site_wide_integrations_management_and_multi_owner_isolation(): void {
+		$now = Date::now();
+		// 1. Seed user 99983 (Creator 2)
+		$creator2_user = array(
+			'id'                => 99983,
+			'username'          => 'webhookcreator2',
+			'email'             => 'creator2@example.com',
+			'first_name'        => 'Creator',
+			'last_name'         => 'Two',
+			'display_name'      => 'Creator Two',
+			'password_hash'     => password_hash( 'password123', PASSWORD_DEFAULT ),
+			'role'              => 'editor',
+			'is_email_verified' => 1,
+			'created_at'        => $now,
+			'updated_at'        => $now,
+		);
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}users (id, username, email, first_name, last_name, display_name, password_hash, role, is_email_verified, created_at, updated_at)
+			VALUES (99983, 'webhookcreator2', 'creator2@example.com', 'Creator', 'Two', 'Creator Two', '{$creator2_user['password_hash']}', 'editor', 1, '{$now}', '{$now}')
+			ON DUPLICATE KEY UPDATE username = VALUES(username), role = 'editor'"
+		);
+
+		// 2. Create webhooks for two different creators:
+		// Webhook 1 owned by Admin (99981)
+		$wh1_id = $this->create_test_webhook( 'https://example.com/c1-webhook', true, 99981, 30, 'peakurl_whsec_' . Str::random_id( 18 ) );
+		// Webhook 2 owned by Creator 2 (99983)
+		$wh2_id = $this->create_test_webhook( 'https://example.com/c2-webhook', true, 99983, 30, 'peakurl_whsec_' . Str::random_id( 18 ) );
+
+		$controller = new WebhooksController( $this->webhooks_service );
+
+		// 3. Editor without manage_integrations: rejected with 403 on all endpoints
+		$editor_req = $this->create_request_for_user( $this->editor_user, 'GET', '/api/v1/webhooks' );
+		try {
+			$controller->index( $editor_req );
+			$this->fail( 'Expected 403 when index called without manage_integrations' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+		}
+
+		$editor_update_req = $this->create_request_for_user( $this->editor_user, 'PUT', "/api/v1/webhooks/{$wh2_id}" );
+		$editor_update_req->set_route_params( array( 'id' => $wh2_id ) );
+		try {
+			$controller->update( $editor_update_req );
+			$this->fail( 'Expected 403 when update called without manage_integrations' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+		}
+
+		$editor_rotate_req = $this->create_request_for_user( $this->editor_user, 'POST', "/api/v1/webhooks/{$wh2_id}/rotate-secret" );
+		$editor_rotate_req->set_route_params( array( 'id' => $wh2_id ) );
+		try {
+			$controller->rotate_secret( $editor_rotate_req );
+			$this->fail( 'Expected 403 when rotate_secret called without manage_integrations' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+		}
+
+		$editor_delete_req = $this->create_request_for_user( $this->editor_user, 'DELETE', "/api/v1/webhooks/{$wh2_id}" );
+		$editor_delete_req->set_route_params( array( 'id' => $wh2_id ) );
+		try {
+			$controller->delete( $editor_delete_req );
+			$this->fail( 'Expected 403 when delete called without manage_integrations' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 403, $e->getCode() );
+		}
+
+		// 4. Now delegate manage_integrations capability to editor role
+		$delegated_caps = array(
+			'editor' => array(
+				'manage_integrations' => true,
+				'view_links'          => true,
+				'create_links'        => true,
+				'edit_links'          => true,
+				'trash_links'         => true,
+				'view_analytics'      => true,
+			),
+		);
+		$this->pdo->exec(
+			"INSERT INTO {$this->table_prefix}settings (setting_key, setting_value, updated_at)
+			VALUES ('" . \PeakURL\Core\Config\Constants::SETTING_ROLE_CAPABILITIES . "', '" . json_encode( $delegated_caps ) . "', NOW())
+			ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value), updated_at = NOW()"
+		);
+		$this->roles->set_settings_api( new \PeakURL\Api\SettingsApi( $this->db ) );
+
+		// 5. Delegated editor can list site-wide webhooks across owners
+		$delegated_list_req = $this->create_request_for_user( $this->editor_user, 'GET', '/api/v1/webhooks' );
+		$list_response      = $controller->index( $delegated_list_req );
+		$this->assertSame( 200, $list_response['status'] );
+		$items = $list_response['body']['data'];
+		$this->assertIsArray( $items );
+		$item_ids = array_column( $items, 'id' );
+		$this->assertContains( $wh1_id, $item_ids, 'Delegated editor must see Admin webhook in site-wide list.' );
+		$this->assertContains( $wh2_id, $item_ids, 'Delegated editor must see Creator 2 webhook in site-wide list.' );
+
+		// Verify secrets remain masked on list response (no raw secrets exposed)
+		foreach ( $items as $item ) {
+			if ( in_array( $item['id'], array( $wh1_id, $wh2_id ), true ) ) {
+				$this->assertArrayNotHasKey( 'secret', $item, 'List response must not disclose raw webhook signing secret.' );
+				$this->assertArrayHasKey( 'secretHint', $item );
+				$this->assertStringStartsWith( 'peakurl_whsec_', $item['secretHint'] );
+				$this->assertStringContainsString( '••••', $item['secretHint'] );
+			}
+		}
+
+		// 6. Delegated editor can update Creator 2's webhook without modifying original user_id
+		$delegated_update_req = $this->create_request_for_user(
+			$this->editor_user,
+			'PUT',
+			"/api/v1/webhooks/{$wh2_id}",
+			array(
+				'label' => 'Updated by Delegated Editor',
+				'url'   => 'https://example.com/c2-updated',
+			)
+		);
+		$delegated_update_req->set_route_params( array( 'id' => $wh2_id ) );
+		$update_response = $controller->update( $delegated_update_req );
+		$this->assertSame( 200, $update_response['status'] );
+		$this->assertSame( 'Updated by Delegated Editor', $update_response['body']['data']['label'] );
+		$this->assertSame( 'https://example.com/c2-updated', $update_response['body']['data']['url'] );
+		$this->assertArrayNotHasKey( 'secret', $update_response['body']['data'], 'Update response must not disclose secret.' );
+
+		// Database verify: user_id must remain 99983 (Creator 2)
+		$stmt = $this->pdo->prepare( "SELECT user_id, label, url FROM {$this->table_prefix}webhooks WHERE id = :id" );
+		$stmt->execute( array( 'id' => $wh2_id ) );
+		$row = $stmt->fetch( \PDO::FETCH_ASSOC );
+		$this->assertSame( 99983, (int) $row['user_id'], 'Webhook creator user_id must remain unchanged after update.' );
+		$this->assertSame( 'Updated by Delegated Editor', $row['label'] );
+
+		// 7. Delegated editor can rotate secret for Creator 2's webhook
+		$delegated_rotate_req = $this->create_request_for_user( $this->editor_user, 'POST', "/api/v1/webhooks/{$wh2_id}/rotate-secret" );
+		$delegated_rotate_req->set_route_params( array( 'id' => $wh2_id ) );
+		$rotate_response = $controller->rotate_secret( $delegated_rotate_req );
+		$this->assertSame( 200, $rotate_response['status'] );
+		$this->assertArrayHasKey( 'secret', $rotate_response['body']['data'], 'Rotate secret must return one-time secret.' );
+		$this->assertStringStartsWith( 'peakurl_whsec_', $rotate_response['body']['data']['secret'] );
+
+		// Database verify: user_id must remain 99983 (Creator 2)
+		$stmt->execute( array( 'id' => $wh2_id ) );
+		$row = $stmt->fetch( \PDO::FETCH_ASSOC );
+		$this->assertSame( 99983, (int) $row['user_id'], 'Webhook creator user_id must remain unchanged after secret rotation.' );
+
+		// 8. Delegated editor can delete Creator 2's webhook
+		$delegated_delete_req = $this->create_request_for_user( $this->editor_user, 'DELETE', "/api/v1/webhooks/{$wh2_id}" );
+		$delegated_delete_req->set_route_params( array( 'id' => $wh2_id ) );
+		$delete_response = $controller->delete( $delegated_delete_req );
+		$this->assertSame( 200, $delete_response['status'] );
+
+		$stmt->execute( array( 'id' => $wh2_id ) );
+		$this->assertFalse( $stmt->fetch(), 'Webhook row must be deleted from database.' );
 	}
 }

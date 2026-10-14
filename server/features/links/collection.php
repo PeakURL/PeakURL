@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace PeakURL\Features\Links;
 
+use PeakURL\Core\Auth\Roles;
+use PeakURL\Core\Errors\ApiException;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Http\Request;
@@ -71,12 +73,30 @@ class LinkCollection {
 	private $health_formatter;
 
 	/**
+	 * Roles capability authority service.
+	 *
+	 * @var Roles
+	 * @since 1.7.2
+	 */
+	private Roles $roles;
+
+	/**
+	 * Canonical link analytics filter callback.
+	 *
+	 * @var callable
+	 * @since 1.7.2
+	 */
+	private $analytics_filter;
+
+	/**
 	 * Create a new LinkCollection instance.
 	 *
 	 * @param Repository       $repository        Repository handler.
 	 * @param AuthService      $auth_service      Authentication domain service.
 	 * @param AnalyticsService $analytics_service Analytics domain service.
 	 * @param callable         $link_formatter    Link formatter callback.
+	 * @param Roles            $roles             Roles authority.
+	 * @param callable         $analytics_filter  Required canonical link analytics filter callback.
 	 * @param callable|null    $health_formatter  Optional health payload formatter callback.
 	 * @since 1.7.2
 	 */
@@ -85,12 +105,16 @@ class LinkCollection {
 		AuthService $auth_service,
 		AnalyticsService $analytics_service,
 		callable $link_formatter,
+		Roles $roles,
+		callable $analytics_filter,
 		?callable $health_formatter = null
 	) {
 		$this->repository        = $repository;
 		$this->auth_service      = $auth_service;
 		$this->analytics_service = $analytics_service;
 		$this->link_formatter    = $link_formatter;
+		$this->roles             = $roles;
+		$this->analytics_filter  = $analytics_filter;
 		$this->health_formatter  = $health_formatter;
 	}
 
@@ -103,12 +127,25 @@ class LinkCollection {
 	 * @since 1.7.2
 	 */
 	public function list_urls( Request $request, array $query ): array {
+		$user = $this->auth_service->get_current_user( $request );
+
+		$requested_sort = (string) ( $query['sortBy'] ?? '' );
+		if ( in_array( strtolower( $requested_sort ), array( 'clicks', 'uniqueclicks' ), true ) ) {
+			if ( ! $this->roles->is_admin( $user ) ) {
+				throw new ApiException(
+					__( 'You do not have permission to sort by analytics metrics.', 'peakurl' ),
+					403
+				);
+			}
+		}
+
+		$can_view_analytics = $this->roles->has_capability( $user, 'view_analytics' );
+
 		$pagination = Query::pagination( $query, 25 );
 		$page       = $pagination['page'];
 		$limit      = $pagination['limit'];
 		$offset     = $pagination['offset'];
 
-		$user       = $this->auth_service->get_current_user( $request );
 		$link_query = $this->repository->get_link_collection_query(
 			$user,
 			$query,
@@ -121,10 +158,12 @@ class LinkCollection {
 			$link_query['params'],
 		);
 		$stats = $this->get_link_collection_stats(
+			$user,
 			$query,
 			$link_query['where'],
 			$link_query['params'],
 			$link_query['statsParams'],
+			$can_view_analytics
 		);
 		$rows  = $this->repository->get_link_rows(
 			$link_query['where'],
@@ -133,7 +172,7 @@ class LinkCollection {
 			$link_query['sortOrder'],
 			$limit,
 			$offset,
-			$link_query['statsParams'],
+			$can_view_analytics ? $link_query['statsParams'] : array(),
 		);
 
 		$meta = array(
@@ -141,29 +180,29 @@ class LinkCollection {
 			'limit'        => $limit,
 			'totalItems'   => $count,
 			'totalPages'   => max( 1, (int) ceil( $count / $limit ) ),
-			'totalClicks'  => $stats['totalClicks'],
-			'uniqueClicks' => $stats['uniqueClicks'],
+			'totalClicks'  => $can_view_analytics ? $stats['totalClicks'] : null,
+			'uniqueClicks' => $can_view_analytics ? $stats['uniqueClicks'] : null,
 			'activeLinks'  => $stats['activeLinks'],
 			'trashedLinks' => $this->count_trashed_links( $request ),
 			'expiredLinks' => $this->count_expired_links( $request ),
 		);
 
-		if ( isset( $stats['lastPeriodTotalClicks'] ) ) {
-			$meta['lastPeriodTotalClicks']  = $stats['lastPeriodTotalClicks'];
-			$meta['lastPeriodUniqueClicks'] = $stats['lastPeriodUniqueClicks'];
+		if ( isset( $stats['lastPeriodTotalClicks'] ) || ( ! $can_view_analytics && in_array( trim( (string) ( $query['range'] ?? '' ) ), array( '24h', '7d', '30d' ), true ) ) ) {
+			$meta['lastPeriodTotalClicks']  = $can_view_analytics ? ( $stats['lastPeriodTotalClicks'] ?? null ) : null;
+			$meta['lastPeriodUniqueClicks'] = $can_view_analytics ? ( $stats['lastPeriodUniqueClicks'] ?? null ) : null;
 		}
 
 		$row_ids    = array_map( 'strval', array_column( $rows, 'id' ) );
 		$health_map = ! empty( $row_ids ) ? $this->repository->get_link_health_by_ids( $row_ids ) : array();
 
 		$items = array_map(
-			function ( array $row ) use ( $health_map ): array {
+			function ( array $row ) use ( $health_map, $user ): array {
 				$formatted           = ( $this->link_formatter )( $row );
 				$id                  = (string) ( $row['id'] ?? '' );
 				$formatted['health'] = isset( $health_map[ $id ] ) && null !== $this->health_formatter
 					? ( $this->health_formatter )( $health_map[ $id ] )
 					: null;
-				return $formatted;
+				return ( $this->analytics_filter )( $formatted, $user, (string) ( $row['user_id'] ?? '' ) );
 			},
 			$rows
 		);
@@ -183,7 +222,20 @@ class LinkCollection {
 	 * @since 1.7.2
 	 */
 	public function export_urls( Request $request, array $query = array() ): array {
-		$user       = $this->auth_service->get_current_user( $request );
+		$user = $this->auth_service->get_current_user( $request );
+
+		$requested_sort = (string) ( $query['sortBy'] ?? '' );
+		if ( in_array( strtolower( $requested_sort ), array( 'clicks', 'uniqueclicks' ), true ) ) {
+			if ( ! $this->roles->is_admin( $user ) ) {
+				throw new ApiException(
+					__( 'You do not have permission to sort by analytics metrics.', 'peakurl' ),
+					403
+				);
+			}
+		}
+
+		$can_view_analytics = $this->roles->has_capability( $user, 'view_analytics' );
+
 		$link_query = $this->repository->get_link_collection_query(
 			$user,
 			$query,
@@ -197,10 +249,14 @@ class LinkCollection {
 			$link_query['sortOrder'],
 			null,
 			null,
-			$link_query['statsParams'],
+			$can_view_analytics ? $link_query['statsParams'] : array(),
 		);
-		$items      = array_map(
-			fn( array $row ): array => ( $this->link_formatter )( $row ),
+
+		$items = array_map(
+			function ( array $row ) use ( $user ): array {
+				$formatted = ( $this->link_formatter )( $row );
+				return ( $this->analytics_filter )( $formatted, $user, (string) ( $row['user_id'] ?? '' ) );
+			},
 			$rows,
 		);
 
@@ -241,24 +297,50 @@ class LinkCollection {
 	/**
 	 * Retrieve total statistics and comparison values for a link collection query.
 	 *
-	 * @param array<string, mixed>  $query        Raw query parameters.
-	 * @param string                $where        Prepared WHERE clause.
-	 * @param array<string, mixed>  $params       Query parameters.
-	 * @param array<string, string> $stats_params Optional click-stat query bounds.
-	 * @return array<string, int> Link collection statistics.
+	 * Scopes click metrics strictly to links owned by the caller when the caller
+	 * is not an administrator. General inventory active links count remains site-wide.
+	 *
+	 * @param array<string, mixed>  $user               Current user array.
+	 * @param array<string, mixed>  $query              Raw query parameters.
+	 * @param string                $where              Prepared WHERE clause.
+	 * @param array<string, mixed>  $params             Query parameters.
+	 * @param array<string, string> $stats_params       Optional click-stat query bounds.
+	 * @param bool                  $can_view_analytics Whether analytics metrics should be computed.
+	 * @return array<string, int|null> Link collection statistics.
 	 * @since 1.7.2
 	 */
 	private function get_link_collection_stats(
+		array $user,
 		array $query,
 		string $where,
 		array $params,
-		array $stats_params
+		array $stats_params,
+		bool $can_view_analytics = true
 	): array {
+		$is_admin     = $this->roles->is_admin( $user );
+		$click_where  = null;
+		$click_params = null;
+
+		if ( ! $is_admin && $can_view_analytics ) {
+			$click_owner_id = (string) ( $user['id'] ?? '' );
+			$click_where    = '' === $where
+				? 'WHERE u.user_id = :stats_owner_user_id'
+				: $where . ' AND u.user_id = :stats_owner_user_id';
+			$click_params   = array_merge( $params, array( 'stats_owner_user_id' => $click_owner_id ) );
+		}
+
 		$stats = $this->repository->get_link_collection_stats(
 			$where,
 			$params,
-			$stats_params,
+			$can_view_analytics ? $stats_params : array(),
+			$click_where,
+			$click_params,
+			$can_view_analytics
 		);
+
+		if ( ! $can_view_analytics ) {
+			return $stats;
+		}
 
 		$range = trim( (string) ( $query['range'] ?? '' ) );
 		if ( in_array( $range, array( '24h', '7d', '30d' ), true ) ) {
@@ -271,9 +353,12 @@ class LinkCollection {
 				'stats_end_at'   => $last_period['end_at'],
 			);
 
+			$effective_where  = $click_where ?? $where;
+			$effective_params = $click_params ?? $params;
+
 			$last_stats = $this->repository->get_link_click_totals(
-				$where,
-				$params,
+				$effective_where,
+				$effective_params,
 				$last_stats_params,
 			);
 

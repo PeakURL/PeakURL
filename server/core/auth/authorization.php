@@ -246,6 +246,18 @@ class Authorization {
 	}
 
 	/**
+	 * Determine whether a user can view analytics for a specific link.
+	 *
+	 * @param array<string, mixed> $user         Authenticated user array.
+	 * @param string|null          $link_user_id Link owner user ID.
+	 * @return bool True if authorized.
+	 * @since 1.7.2
+	 */
+	public function can_view_link_analytics( array $user, ?string $link_user_id ): bool {
+		return $this->roles->can_view_link_analytics( $user, $link_user_id );
+	}
+
+	/**
 	 * Validate that a role change keeps at least one admin.
 	 *
 	 * @param string        $target_user_id    User being changed.

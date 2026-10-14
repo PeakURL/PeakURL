@@ -32,7 +32,7 @@ export const useDashboardSearch = () => {
 			canManageUsers: capabilities.canManageUsers,
 			canManagePlugins: capabilities.canManageUsers,
 			canManageApiKeys: capabilities.canManageApiKeys,
-			canManageWebhooks: capabilities.canManageWebhooks,
+			canManageIntegrations: capabilities.canManageIntegrations,
 			canManageMailDelivery: capabilities.canManageMailDelivery,
 			canManageLocationData: capabilities.canManageLocationData,
 			canManageUpdates: capabilities.canManageUpdates,
@@ -43,7 +43,7 @@ export const useDashboardSearch = () => {
 		[
 			capabilities.canManageUsers,
 			capabilities.canManageApiKeys,
-			capabilities.canManageWebhooks,
+			capabilities.canManageIntegrations,
 			capabilities.canManageMailDelivery,
 			capabilities.canManageLocationData,
 			capabilities.canManageUpdates,

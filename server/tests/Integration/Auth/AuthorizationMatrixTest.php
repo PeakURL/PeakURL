@@ -40,14 +40,15 @@ class AuthorizationMatrixTest extends TestCase {
 			'manage_location_data',
 			'manage_performance',
 			'manage_updates',
-			'manage_webhooks',
+			'manage_integrations',
 			'manage_api_keys',
-			'manage_profile',
 			'create_links',
 			'view_links',
 			'edit_links',
+			'edit_any_link',
 			'trash_links',
 			'delete_links',
+			'delete_any_link',
 			'empty_trash',
 			'view_analytics',
 		);
@@ -77,9 +78,11 @@ class AuthorizationMatrixTest extends TestCase {
 			'manage_location_data',
 			'manage_performance',
 			'manage_updates',
-			'manage_webhooks',
+			'manage_integrations',
 			'manage_api_keys',
+			'edit_any_link',
 			'delete_links',
+			'delete_any_link',
 			'empty_trash',
 		);
 
@@ -112,7 +115,6 @@ class AuthorizationMatrixTest extends TestCase {
 			'edit_links',
 			'trash_links',
 			'view_analytics',
-			'manage_profile',
 		);
 
 		foreach ( $allowed_caps as $cap ) {
@@ -155,7 +157,7 @@ class AuthorizationMatrixTest extends TestCase {
 
 		// When user does NOT have capability -> denied
 		$this->assertFalse(
-			$this->auth->can_access_record( $editor, 'other-user-99', 'manage_webhooks' )
+			$this->auth->can_access_record( $editor, 'other-user-99', 'manage_integrations' )
 		);
 	}
 
@@ -307,14 +309,15 @@ class AuthorizationMatrixTest extends TestCase {
 			'manage_location_data',
 			'manage_performance',
 			'manage_updates',
-			'manage_webhooks',
+			'manage_integrations',
 			'manage_api_keys',
-			'manage_profile',
 			'create_links',
 			'view_links',
 			'edit_links',
+			'edit_any_link',
 			'trash_links',
 			'delete_links',
+			'delete_any_link',
 			'empty_trash',
 			'view_analytics',
 		);
@@ -337,7 +340,7 @@ class AuthorizationMatrixTest extends TestCase {
 				'manage_location_data' => true,
 				'manage_performance'   => true,
 				'manage_updates'       => true,
-				'manage_webhooks'      => true,
+				'manage_integrations'  => true,
 			),
 		);
 
@@ -361,7 +364,7 @@ class AuthorizationMatrixTest extends TestCase {
 			'manage_location_data',
 			'manage_performance',
 			'manage_updates',
-			'manage_webhooks',
+			'manage_integrations',
 		);
 
 		foreach ( $site_and_integrations as $cap ) {
@@ -437,7 +440,7 @@ class AuthorizationMatrixTest extends TestCase {
 		}
 	}
 
-	public function test_editor_with_manage_profile_disabled_is_denied_profile_mutation(): void {
+	public function test_stored_manage_profile_fails_closed_with_500(): void {
 		$profile_disabled = array(
 			'editor' => array(
 				'manage_profile' => false,
@@ -450,23 +453,11 @@ class AuthorizationMatrixTest extends TestCase {
 			->willReturn( (string) json_encode( $profile_disabled ) );
 
 		$roles = new Roles( $settings_api );
-		$auth  = new Authorization( $roles );
 
-		$editor = array(
-			'id'   => 'user-editor-1',
-			'role' => 'editor',
-		);
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 500 );
+		$this->expectExceptionMessage( 'Invalid or corrupted role capabilities configuration in storage.' );
 
-		$this->assertFalse( $roles->has_capability( $editor, 'manage_profile' ) );
-
-		try {
-			$auth->require_capability( $editor, 'manage_profile' );
-			$this->fail( 'require_capability must throw 403 when manage_profile is false' );
-		} catch ( ApiException $e ) {
-			$this->assertSame( 403, $e->getCode() );
-		}
-
-		// Other default capabilities are preserved
-		$this->assertTrue( $roles->has_capability( $editor, 'create_links' ) );
+		$roles->capabilities_for_role( 'editor' );
 	}
 }

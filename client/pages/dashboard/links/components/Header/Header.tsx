@@ -13,6 +13,8 @@ const Header = ({
 	customClickRange,
 	onClickRangeChange,
 	onCustomClickRangeChange,
+	canViewLinks = true,
+	canViewAnalytics = true,
 }: LinksHeaderProps) => {
 	const refreshButton = (
 		<button
@@ -47,13 +49,15 @@ const Header = ({
 			</div>
 
 			<div className="links-header-actions">
-				{refreshButton}
-				<DateRangeFilter
-					clickRange={clickRange}
-					customClickRange={customClickRange}
-					onClickRangeChange={onClickRangeChange}
-					onCustomClickRangeChange={onCustomClickRangeChange}
-				/>
+				{canViewLinks && refreshButton}
+				{canViewLinks && canViewAnalytics && (
+					<DateRangeFilter
+						clickRange={clickRange}
+						customClickRange={customClickRange}
+						onClickRangeChange={onClickRangeChange}
+						onCustomClickRangeChange={onCustomClickRangeChange}
+					/>
+				)}
 			</div>
 		</div>
 	);

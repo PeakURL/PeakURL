@@ -14,7 +14,6 @@ import {
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { getInstalledLanguageLabel } from "@/i18n/languages";
-import { useAdminAccess } from "@/hooks";
 import { cn } from "@/shared/formatting";
 import { getFaviconPreviewUrl, sanitizeImageUrl } from "@/shared/links";
 import { getTimeZoneOptions, normalizeSiteTimeFormat } from "./lib";
@@ -306,7 +305,6 @@ function GeneralTab({
 		}
 	};
 
-	const { canManageProfile } = useAdminAccess();
 	const canManageSiteSettings =
 		siteSettings?.canManageSiteSettings && !isLoadingSiteSettings;
 	const hasConfiguredFavicon = hasCustomFavicon;
@@ -343,228 +341,98 @@ function GeneralTab({
 	return (
 		<div className="settings-general">
 			<form onSubmit={handleSubmit} className="settings-form">
-				{canManageProfile ? (
-					<section className="settings-fieldset">
-						<h2 className="settings-legend">
-							{__("Profile Information")}
-						</h2>
-						<hr className="settings-separator" />
-						<div className="settings-grid">
-							<Input
-								label={__("First Name")}
-								name="firstName"
-								value={generalForm.firstName}
-								onChange={handleChange}
-								required
-							/>
-							<Input
-								label={__("Last Name")}
-								name="lastName"
-								value={generalForm.lastName}
-								onChange={handleChange}
-								required
-							/>
-							<Input
-								label={__("Display Name")}
-								name="displayName"
-								value={generalForm.displayName}
-								onChange={handleChange}
-								placeholder={`${generalForm.firstName} ${generalForm.lastName}`}
-							/>
-							<div className="form-field">
-								<label
-									htmlFor="settings-general-username"
-									className="form-field-label settings-general-readonly-label"
-								>
-									<span>{__("Username")}</span>
-									<span className="settings-general-readonly-note">
-										{__("Cannot be changed")}
-									</span>
-								</label>
-								<div className="form-field-control">
-									<input
-										id="settings-general-username"
-										type="text"
-										dir="ltr"
-										value={username || ""}
-										disabled
-										autoCapitalize="off"
-										spellCheck={false}
-										className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
-									/>
-								</div>
-							</div>
-							<Input
-								label={__("Email Address")}
-								type="email"
-								name="email"
-								valueDirection="ltr"
-								autoCapitalize="off"
-								spellCheck={false}
-								value={generalForm.email}
-								onChange={handleChange}
-								required
-							/>
-							<Input
-								label={__("Phone Number")}
-								type="tel"
-								name="phoneNumber"
-								value={generalForm.phoneNumber}
-								onChange={handleChange}
-							/>
-							<Input
-								label={__("Company")}
-								name="company"
-								value={generalForm.company}
-								onChange={handleChange}
-							/>
-							<Input
-								label={__("Job Title")}
-								name="jobTitle"
-								value={generalForm.jobTitle}
-								onChange={handleChange}
-							/>
-							<div className="settings-general-bio-field">
-								<TextArea
-									label={__("Bio")}
-									name="bio"
-									rows={3}
-									className="settings-general-bio-input"
-									value={generalForm.bio}
-									onChange={handleChange}
+				<section className="settings-fieldset">
+					<h2 className="settings-legend">
+						{__("Profile Information")}
+					</h2>
+					<hr className="settings-separator" />
+					<div className="settings-grid">
+						<Input
+							label={__("First Name")}
+							name="firstName"
+							value={generalForm.firstName}
+							onChange={handleChange}
+							required
+						/>
+						<Input
+							label={__("Last Name")}
+							name="lastName"
+							value={generalForm.lastName}
+							onChange={handleChange}
+							required
+						/>
+						<Input
+							label={__("Display Name")}
+							name="displayName"
+							value={generalForm.displayName}
+							onChange={handleChange}
+							placeholder={`${generalForm.firstName} ${generalForm.lastName}`}
+						/>
+						<div className="form-field">
+							<label
+								htmlFor="settings-general-username"
+								className="form-field-label settings-general-readonly-label"
+							>
+								<span>{__("Username")}</span>
+								<span className="settings-general-readonly-note">
+									{__("Cannot be changed")}
+								</span>
+							</label>
+							<div className="form-field-control">
+								<input
+									id="settings-general-username"
+									type="text"
+									dir="ltr"
+									value={username || ""}
+									disabled
+									autoCapitalize="off"
+									spellCheck={false}
+									className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
 								/>
 							</div>
 						</div>
-					</section>
-				) : (
-					<section className="settings-fieldset">
-						<div className="flex flex-wrap items-center justify-between gap-2">
-							<h2 className="settings-legend">
-								{__("Profile Information")}
-							</h2>
-							<span className="text-xs text-text-muted">
-								{__(
-									"Profile editing is disabled for your role"
-								)}
-							</span>
+						<Input
+							label={__("Email Address")}
+							type="email"
+							name="email"
+							valueDirection="ltr"
+							autoCapitalize="off"
+							spellCheck={false}
+							value={generalForm.email}
+							onChange={handleChange}
+							required
+						/>
+						<Input
+							label={__("Phone Number")}
+							type="tel"
+							name="phoneNumber"
+							value={generalForm.phoneNumber}
+							onChange={handleChange}
+						/>
+						<Input
+							label={__("Company")}
+							name="company"
+							value={generalForm.company}
+							onChange={handleChange}
+						/>
+						<Input
+							label={__("Job Title")}
+							name="jobTitle"
+							value={generalForm.jobTitle}
+							onChange={handleChange}
+						/>
+						<div className="settings-general-bio-field">
+							<TextArea
+								label={__("Bio")}
+								name="bio"
+								rows={3}
+								className="settings-general-bio-input"
+								value={generalForm.bio}
+								onChange={handleChange}
+							/>
 						</div>
-						<hr className="settings-separator" />
-						<div className="settings-grid">
-							<div className="form-field">
-								<label className="form-field-label settings-general-readonly-label">
-									<span>{__("Name")}</span>
-								</label>
-								<div className="form-field-control">
-									<input
-										type="text"
-										value={
-											generalForm.displayName ||
-											`${generalForm.firstName} ${generalForm.lastName}`.trim() ||
-											"—"
-										}
-										disabled
-										className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
-									/>
-								</div>
-							</div>
-							<div className="form-field">
-								<label
-									htmlFor="settings-general-username-ro"
-									className="form-field-label settings-general-readonly-label"
-								>
-									<span>{__("Username")}</span>
-									<span className="settings-general-readonly-note">
-										{__("Cannot be changed")}
-									</span>
-								</label>
-								<div className="form-field-control">
-									<input
-										id="settings-general-username-ro"
-										type="text"
-										dir="ltr"
-										value={username || "—"}
-										disabled
-										className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
-									/>
-								</div>
-							</div>
-							<div className="form-field">
-								<label className="form-field-label settings-general-readonly-label">
-									<span>{__("Email Address")}</span>
-								</label>
-								<div className="form-field-control">
-									<input
-										type="email"
-										dir="ltr"
-										value={generalForm.email || "—"}
-										disabled
-										className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
-									/>
-								</div>
-							</div>
-							{generalForm.phoneNumber ? (
-								<div className="form-field">
-									<label className="form-field-label settings-general-readonly-label">
-										<span>{__("Phone Number")}</span>
-									</label>
-									<div className="form-field-control">
-										<input
-											type="text"
-											value={generalForm.phoneNumber}
-											disabled
-											className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
-										/>
-									</div>
-								</div>
-							) : null}
-							{generalForm.company ? (
-								<div className="form-field">
-									<label className="form-field-label settings-general-readonly-label">
-										<span>{__("Company")}</span>
-									</label>
-									<div className="form-field-control">
-										<input
-											type="text"
-											value={generalForm.company}
-											disabled
-											className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
-										/>
-									</div>
-								</div>
-							) : null}
-							{generalForm.jobTitle ? (
-								<div className="form-field">
-									<label className="form-field-label settings-general-readonly-label">
-										<span>{__("Job Title")}</span>
-									</label>
-									<div className="form-field-control">
-										<input
-											type="text"
-											value={generalForm.jobTitle}
-											disabled
-											className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
-										/>
-									</div>
-								</div>
-							) : null}
-							{generalForm.bio ? (
-								<div className="settings-general-bio-field">
-									<label className="form-field-label settings-general-readonly-label">
-										<span>{__("Bio")}</span>
-									</label>
-									<div className="form-field-control">
-										<textarea
-											rows={3}
-											value={generalForm.bio}
-											disabled
-											className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input settings-general-bio-input resize-none"
-										/>
-									</div>
-								</div>
-							) : null}
-						</div>
-					</section>
-				)}
+					</div>
+				</section>
 				{canManageSiteSettings && (
 					<>
 						<section className="settings-fieldset">
@@ -1045,20 +913,18 @@ function GeneralTab({
 						</section>
 					</>
 				)}
-				{(canManageProfile || canManageSiteSettings) && (
-					<div
-						className={cn(
-							"settings-general-actions",
-							isRtl
-								? "settings-general-actions-start"
-								: "settings-general-actions-end"
-						)}
-					>
-						<Button size="sm" type="submit" disabled={isUpdating}>
-							{isUpdating ? __("Saving...") : __("Save Changes")}
-						</Button>
-					</div>
-				)}
+				<div
+					className={cn(
+						"settings-general-actions",
+						isRtl
+							? "settings-general-actions-start"
+							: "settings-general-actions-end"
+					)}
+				>
+					<Button size="sm" type="submit" disabled={isUpdating}>
+						{isUpdating ? __("Saving...") : __("Save Changes")}
+					</Button>
+				</div>
 			</form>
 		</div>
 	);

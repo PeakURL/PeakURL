@@ -367,4 +367,157 @@ class AnalyticsDatabaseTest extends TestCase {
 
 		$this->assertNull( $location );
 	}
+
+	public function test_record_click_persists_raw_user_agent_and_normalized_classification_fields(): void {
+		$db            = $this->createMock( PeakURL_DB::class );
+		$settings_api  = $this->createMock( SettingsApi::class );
+		$geoip         = $this->createMock( Geoip::class );
+		$roles         = new Roles();
+		$authorization = new Authorization( $roles );
+		$repository    = new Repository( $db, $settings_api, $geoip, $roles, $authorization );
+
+		$geoip->method( 'lookup_location' )->willReturn(
+			array(
+				'country_code' => 'US',
+				'country_name' => 'United States',
+				'city_name'    => 'New York',
+			)
+		);
+
+		// Dedup check: no recent click.
+		$db->method( 'get_var' )->willReturn( false );
+
+		$captured_payload = null;
+		$db->expects( $this->once() )
+			->method( 'insert' )
+			->with(
+				'clicks',
+				$this->callback(
+					function ( array $payload ) use ( &$captured_payload ): bool {
+						$captured_payload = $payload;
+						return true;
+					}
+				)
+			);
+
+		$raw_ua  = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4_1 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 Safari/604.1';
+		$request = new Request(
+			'GET',
+			'/test-short-code',
+			array(),
+			array(),
+			array(),
+			array(),
+			array(
+				'HTTP_USER_AGENT' => $raw_ua,
+				'REMOTE_ADDR'     => '192.0.2.1',
+			)
+		);
+
+		$url = array(
+			'id'           => 'url-test-123',
+			'utm_source'   => null,
+			'utm_medium'   => null,
+			'utm_campaign' => null,
+		);
+
+		$repository->record_click( $url, $request );
+
+		$this->assertNotNull( $captured_payload );
+		$this->assertSame( $raw_ua, $captured_payload['user_agent'] );
+		$this->assertSame( 'Safari', $captured_payload['browser'] );
+		$this->assertSame( 'iOS', $captured_payload['operating_system'] );
+		$this->assertSame( 'Mobile', $captured_payload['device'] );
+		$this->assertSame( 'US', $captured_payload['country_code'] );
+		$this->assertNotEmpty( $captured_payload['visitor_hash'] );
+	}
+
+	public function test_record_click_still_records_bot_requests_with_fallback_classification(): void {
+		$db            = $this->createMock( PeakURL_DB::class );
+		$settings_api  = $this->createMock( SettingsApi::class );
+		$geoip         = $this->createMock( Geoip::class );
+		$roles         = new Roles();
+		$authorization = new Authorization( $roles );
+		$repository    = new Repository( $db, $settings_api, $geoip, $roles, $authorization );
+
+		$geoip->method( 'lookup_location' )->willReturn(
+			array(
+				'country_code' => 'US',
+				'country_name' => 'United States',
+				'city_name'    => 'Mountain View',
+			)
+		);
+
+		$db->method( 'get_var' )->willReturn( false );
+
+		$captured_payload = null;
+		$db->expects( $this->once() )
+			->method( 'insert' )
+			->with(
+				'clicks',
+				$this->callback(
+					function ( array $payload ) use ( &$captured_payload ): bool {
+						$captured_payload = $payload;
+						return true;
+					}
+				)
+			);
+
+		$raw_bot_ua = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+		$request    = new Request(
+			'GET',
+			'/test-short-code',
+			array(),
+			array(),
+			array(),
+			array(),
+			array(
+				'HTTP_USER_AGENT' => $raw_bot_ua,
+				'REMOTE_ADDR'     => '66.249.66.1',
+			)
+		);
+
+		$url = array(
+			'id'           => 'url-test-456',
+			'utm_source'   => null,
+			'utm_medium'   => null,
+			'utm_campaign' => null,
+		);
+
+		$repository->record_click( $url, $request );
+
+		$this->assertNotNull( $captured_payload );
+		$this->assertSame( $raw_bot_ua, $captured_payload['user_agent'] );
+		$this->assertSame( 'Browser', $captured_payload['browser'] );
+		$this->assertSame( 'Unknown OS', $captured_payload['operating_system'] );
+		$this->assertSame( 'Unknown Device', $captured_payload['device'] );
+	}
+
+	public function test_record_click_suppresses_prefetch_requests(): void {
+		$db            = $this->createMock( PeakURL_DB::class );
+		$settings_api  = $this->createMock( SettingsApi::class );
+		$geoip         = $this->createMock( Geoip::class );
+		$roles         = new Roles();
+		$authorization = new Authorization( $roles );
+		$repository    = new Repository( $db, $settings_api, $geoip, $roles, $authorization );
+
+		// insert should NEVER be called on prefetch
+		$db->expects( $this->never() )->method( 'insert' );
+
+		$request = new Request(
+			'GET',
+			'/test-short-code',
+			array(),
+			array(),
+			array(),
+			array(),
+			array(
+				'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+				'HTTP_PURPOSE'    => 'prefetch',
+			)
+		);
+
+		$url = array( 'id' => 'url-test-789' );
+		$repository->record_click( $url, $request );
+	}
 }

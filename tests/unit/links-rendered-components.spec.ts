@@ -4,6 +4,9 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import LinkRow from "../../client/pages/dashboard/links/components/LinksTable/parts/LinkRow";
 import TableHeaderRow from "../../client/pages/dashboard/links/components/LinksTable/parts/TableHeaderRow";
+import DeviceStats from "../../client/pages/dashboard/links/components/StatsDrawer/DeviceStats";
+import SessionItem from "../../client/pages/dashboard/settings/components/tabs/pages/security/components/SessionItem";
+import { ThemeContext } from "../../client/providers/ThemeProvider/context";
 import {
 	computeFilterContextKey,
 	pruneStaleSelectedIds,
@@ -593,6 +596,101 @@ test.describe("Rendered Component Interaction & Permission Gating Tests", () => 
 			});
 			expect(validation.isValid).toBe(false);
 			expect(validation.reason).toBe("link_metadata_changed");
+		});
+	});
+
+	test.describe("Section 5: UI Component Rendering with Matomo Device Classifications", () => {
+		test("DeviceStats renders Unknown Device, Console, TV, Mobile, Tablet, Desktop without error", () => {
+			const devices = [
+				{ name: "Desktop", count: 120 },
+				{ name: "Mobile", count: 85 },
+				{ name: "Tablet", count: 15 },
+				{ name: "Console", count: 8 },
+				{ name: "TV", count: 4 },
+				{ name: "Unknown Device", count: 2 },
+			];
+			const browsers = [
+				{ name: "Chrome", count: 100 },
+				{ name: "Safari", count: 80 },
+				{ name: "Samsung Internet", count: 30 },
+				{ name: "Browser", count: 24 },
+			];
+			const oses = [
+				{ name: "macOS", count: 90 },
+				{ name: "iOS", count: 70 },
+				{ name: "Android", count: 45 },
+				{ name: "Windows", count: 25 },
+				{ name: "Unknown OS", count: 4 },
+			];
+
+			const html = renderToStaticMarkup(
+				React.createElement(
+					ThemeContext.Provider,
+					{ value: { theme: "light", toggleTheme: noop } },
+					React.createElement(DeviceStats, {
+						devices,
+						browsers,
+						os: oses,
+						isLoading: false,
+					})
+				)
+			);
+
+			expect(html).toContain("Unknown Device");
+			expect(html).toContain("Console");
+			expect(html).toContain("TV");
+			expect(html).toContain("Samsung Internet");
+			expect(html).toContain("Unknown OS");
+			expect(html).toContain("links-device-stats");
+		});
+
+		test("SessionItem renders Unknown Device, fallback Browser, and Unknown OS safely", () => {
+			const session = {
+				id: "sess_unknown_1",
+				device: "Unknown Device",
+				browser: "Browser",
+				os: "Unknown OS",
+				ipAddress: "192.0.2.1",
+				lastActiveAt: "2026-10-14T12:00:00Z",
+				isCurrent: true,
+			};
+
+			const html = renderToStaticMarkup(
+				React.createElement(SessionItem, {
+					direction: "ltr",
+					session,
+					revokingId: null,
+					onRevokeSession: noop,
+				})
+			);
+
+			expect(html).toContain("Browser");
+			expect(html).toContain("Unknown OS");
+			expect(html).toContain("settings-security-session-row");
+		});
+
+		test("SessionItem renders Console and TV device sessions safely", () => {
+			const consoleSession = {
+				id: "sess_console_1",
+				device: "Console",
+				browser: "NetFront",
+				os: "PlayStation",
+				ipAddress: "192.0.2.2",
+				lastActiveAt: "2026-10-14T12:00:00Z",
+				isCurrent: false,
+			};
+
+			const html = renderToStaticMarkup(
+				React.createElement(SessionItem, {
+					direction: "ltr",
+					session: consoleSession,
+					revokingId: null,
+					onRevokeSession: noop,
+				})
+			);
+
+			expect(html).toContain("NetFront");
+			expect(html).toContain("PlayStation");
 		});
 	});
 });

@@ -12,6 +12,7 @@ namespace PeakURL\Features\Analytics;
 
 use PeakURL\Http\Request;
 use PeakURL\Utils\Str;
+use PeakURL\Utils\UserAgentParser;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,65 +29,14 @@ class Visitor {
 	/**
 	 * Extract browser, operating system, and device type from a user-agent.
 	 *
+	 * Delegates to PeakURL\Utils\UserAgentParser backed by Matomo DeviceDetector.
+	 *
 	 * @param string $user_agent Raw User-Agent header value.
 	 * @return array{browser: string, os: string, device: string}
 	 * @since 1.0.0
 	 */
 	public static function parse_user_agent( string $user_agent ): array {
-		$agent   = strtolower( $user_agent );
-		$browser = 'Browser';
-		$os      = 'Unknown OS';
-		$device  = 'Desktop';
-
-		foreach (
-			array(
-				'edge'    => 'Edge',
-				'opr/'    => 'Opera',
-				'chrome'  => 'Chrome',
-				'firefox' => 'Firefox',
-				'safari'  => 'Safari',
-			)
-			as $needle => $label
-		) {
-			if ( Str::contains( $agent, $needle ) ) {
-				$browser = $label;
-				break;
-			}
-		}
-
-		foreach (
-			array(
-				'windows'   => 'Windows',
-				'mac os'    => 'macOS',
-				'macintosh' => 'macOS',
-				'iphone'    => 'iOS',
-				'ipad'      => 'iPadOS',
-				'android'   => 'Android',
-				'linux'     => 'Linux',
-			)
-			as $needle => $label
-		) {
-			if ( Str::contains( $agent, $needle ) ) {
-				$os = $label;
-				break;
-			}
-		}
-
-		if ( Str::contains( $agent, 'tablet' ) || Str::contains( $agent, 'ipad' ) ) {
-			$device = 'Tablet';
-		} elseif (
-			Str::contains( $agent, 'mobile' ) ||
-			Str::contains( $agent, 'iphone' ) ||
-			Str::contains( $agent, 'android' )
-		) {
-			$device = 'Mobile';
-		}
-
-		return array(
-			'browser' => $browser,
-			'os'      => $os,
-			'device'  => $device,
-		);
+		return UserAgentParser::parse( $user_agent );
 	}
 
 	/**

@@ -66,6 +66,8 @@ remove_release_placeholder_files() {
 
 	find "$release_dir" -name '.DS_Store' -type f -delete
 	find "$release_dir" -name '.gitkeep' -type f -delete
+	find "$release_dir" -name '.git*' -delete
+	find "$release_dir" -name '.env*' -delete
 }
 
 verify_release_package() {
@@ -239,6 +241,7 @@ for server_dir in api bin core database features http services templates utils v
 	if [ -d "$ROOT_DIR/server/$server_dir" ]; then
 		copy_release_tree "$ROOT_DIR/server/$server_dir" "$RELEASE_DIR/$server_dir" \
 			--exclude='.DS_Store' \
+			--exclude='.git*' \
 			--exclude='.gitkeep' \
 			--exclude='tests' \
 			--exclude='Tests' \

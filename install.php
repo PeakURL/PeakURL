@@ -194,17 +194,11 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 		}
 
 		.topbar-icon {
-			display: flex;
-			align-items: center;
-			justify-content: center;
+			display: block;
 			width: 40px;
 			height: 40px;
-			border-radius: 12px;
-			background: var(--dark);
-			box-shadow: 0 2px 8px rgba(15,23,42,0.18);
+			flex-shrink: 0;
 		}
-
-		.topbar-icon svg { color: var(--white); }
 
 		.topbar-text {
 			font-size: 19px;
@@ -527,9 +521,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 	<div class="shell">
 		<!-- Logo -->
 		<div class="topbar">
-			<div class="topbar-icon">
-				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-			</div>
+			<img class="topbar-icon" width="40" height="40" alt="" src="<?php echo htmlspecialchars( \PeakURL\Services\Logo::get_data_url(), ENT_QUOTES, 'UTF-8' ); ?>">
 			<span class="topbar-text">PeakURL</span>
 		</div>
 

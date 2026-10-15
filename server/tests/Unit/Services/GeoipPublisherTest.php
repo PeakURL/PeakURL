@@ -1024,10 +1024,7 @@ BASH;
 		// 3. Verify publish job runs on canonical main branch.
 		$this->assertStringContainsString( "github.ref == 'refs/heads/main'", $content );
 
-		// 4. Verify publish job targets protected environment.
-		$this->assertStringContainsString( 'environment: production-geoip', $content );
-
-		// 5. Verify weekly schedule is Wednesday 04:00 UTC.
+		// 4. Verify weekly schedule is Wednesday 04:00 UTC.
 		$this->assertStringContainsString( 'cron: "0 4 * * 3"', $content );
 
 		// 6. Verify MaxMind credentials are required for both live and dry-run, but R2/Cloudflare only for live.

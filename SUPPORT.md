@@ -4,9 +4,9 @@
 
 For installation, deployment guides, configuration options, and user documentation, refer to the official documentation portal:
 
-- **Documentation**: [PeakURL Documentation](https://peakurl.org/docs)
-- **Getting Started**: [Getting Started Guide](https://peakurl.org/docs/getting-started)
-- **API Reference**: [API Reference](https://peakurl.org/docs/api)
+- **Documentation**: [PeakURL Documentation](https://go.peakurl.org/docs)
+- **Getting Started**: [Getting Started Guide](https://go.peakurl.org/getting-started)
+- **API Reference**: [API Reference](https://go.peakurl.org/d373f6)
 
 For local development setup and contributor workflows within this repository, consult:
 

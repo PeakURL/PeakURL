@@ -1,7 +1,7 @@
 blank_issues_enabled: false
 contact_links:
   - name: Official Documentation
-    url: https://peakurl.org/docs
+    url: https://go.peakurl.org/docs
     about: Installation, configuration guides, and API specifications.
   - name: Security Vulnerability Report
     url: https://peakurl.org/contact?topic=security&subject=Security+vulnerability+report

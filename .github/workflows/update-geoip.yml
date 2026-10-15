@@ -132,7 +132,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          bash scripts/geoip/publish-geoip.sh --dist-dir=/tmp/geoip-release --verify-cdn
+          bash scripts/geoip/publish-geoip.sh --dist-dir=/tmp/geoip-release
 
       - name: Clean up temporary runner artifacts
         if: always()

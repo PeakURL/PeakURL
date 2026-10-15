@@ -23,7 +23,6 @@ jobs:
     timeout-minutes: 30
     # Gated by canonical main branch.
     if: github.ref == 'refs/heads/main'
-    environment: production-geoip
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}

@@ -178,6 +178,16 @@ verify_release_archive() {
 		exit 1
 	fi
 
+	if ! printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'content/uploads/geoip/.htaccess'; then
+		printf 'Verification failure: archive missing content/uploads/geoip/.htaccess\n' >&2
+		exit 1
+	fi
+
+	if printf '%s\n' "$ARCHIVE_ENTRIES" | grep -Eq '\.(mmdb(\..*)?|tar\.gz|gz)$'; then
+		printf 'Verification failure: archive contains bundled database or archive file\n' >&2
+		exit 1
+	fi
+
 	printf 'Release archive verification passed.\n'
 }
 
@@ -266,6 +276,7 @@ cp "$ROOT_DIR/content/cache/.htaccess" "$RELEASE_DIR/content/cache/.htaccess"
 cp "$ROOT_DIR/content/plugins/index.php" "$RELEASE_DIR/content/plugins/index.php"
 cp "$ROOT_DIR/content/uploads/index.php" "$RELEASE_DIR/content/uploads/index.php"
 cp "$ROOT_DIR/content/uploads/geoip/index.php" "$RELEASE_DIR/content/uploads/geoip/index.php"
+cp "$ROOT_DIR/content/uploads/geoip/.htaccess" "$RELEASE_DIR/content/uploads/geoip/.htaccess"
 copy_release_language_packs "$ROOT_DIR/content/languages" "$RELEASE_DIR/content/languages"
 cp "$ROOT_DIR/content/landing-page.html" "$RELEASE_DIR/content/landing-page.html"
 

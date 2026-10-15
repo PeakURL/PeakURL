@@ -177,4 +177,5 @@ export interface LocationDataStatus {
 	canManageFromDashboard?: boolean;
 	manageDisabledReason?: string | null;
 	licenseKeyHint?: string | null;
+	isStale?: boolean;
 }

@@ -127,7 +127,10 @@ class Checks {
 				: 'warning',
 			'description' => ! empty( $location['locationAnalyticsReady'] )
 				? __( 'The GeoLite2 City database is available for visitor location analytics.', 'peakurl' )
-				: __( 'Visitor location analytics is not fully ready yet.', 'peakurl' ),
+				: ( ! empty( $location['credentialsConfigured'] )
+					? __( 'MaxMind credentials are saved, but the GeoLite2 City database is not installed. Download the database from Location Data settings.', 'peakurl' )
+					: __( 'The GeoLite2 City database is not installed. Download the database from Location Data settings.', 'peakurl' )
+				),
 		);
 
 		return $checks;

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import {
 	Activity,
 	AlertCircle,
 	AlertTriangle,
+	ArrowRight,
 	Check,
 	CheckCircle2,
 	ChevronDown,
@@ -229,6 +231,8 @@ function StatusTabs({ activeView, onChange }: StatusTabsProps) {
 }
 
 function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
+	const navigate = useNavigate();
+
 	return (
 		<div
 			className={cn(
@@ -261,7 +265,24 @@ function IssueRow({ check, isOpen, onToggle, showBorder }: IssueRowProps) {
 			</button>
 			{isOpen ? (
 				<div className="system-status-page-issue-body">
-					{check?.description || __("Not available")}
+					<p className="mb-0!">
+						{check?.description || __("Not available")}
+					</p>
+					{check?.id === "geoip" && (
+						<div className="mt-3">
+							<Button
+								size="xs"
+								variant="secondary"
+								icon={ArrowRight}
+								iconPosition="right"
+								onClick={() =>
+									navigate("/dashboard/settings/location")
+								}
+							>
+								{__("Manage Location Data")}
+							</Button>
+						</div>
+					)}
 				</div>
 			) : null}
 		</div>

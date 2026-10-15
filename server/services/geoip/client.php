@@ -19,11 +19,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Client — download the GeoLite2 archive from MaxMind.
+ * Client — stream the GeoLite2 archive from MaxMind directly to disk with bounded memory.
  *
  * @since 1.0.14
  */
 class Client {
+
+	/**
+	 * Maximum allowed archive size in bytes (200 MB).
+	 *
+	 * @var int
+	 * @since 1.7.2
+	 */
+	public const MAX_ARCHIVE_BYTES = 209715200;
+
+	/**
+	 * Stream chunk size in bytes (64 KB).
+	 *
+	 * @var int
+	 * @since 1.7.2
+	 */
+	public const CHUNK_SIZE = 65536;
+
+	/**
+	 * HTTP connection timeout in seconds.
+	 *
+	 * @var int
+	 * @since 1.7.2
+	 */
+	public const CONNECT_TIMEOUT_SECONDS = 15;
+
+	/**
+	 * HTTP transfer timeout in seconds.
+	 *
+	 * @var int
+	 * @since 1.7.2
+	 */
+	public const TIMEOUT_SECONDS = 90;
+
+	/**
+	 * Maximum number of redirects to follow.
+	 *
+	 * @var int
+	 * @since 1.7.2
+	 */
+	public const MAX_REDIRECTS = 5;
 
 	/**
 	 * Shared GeoIP context.
@@ -34,217 +74,233 @@ class Client {
 	private Context $context;
 
 	/**
+	 * Underlying bounded HTTP transport.
+	 *
+	 * @var Transport
+	 * @since 1.7.2
+	 */
+	private Transport $transport;
+
+	/**
 	 * Create a new download client.
 	 *
-	 * @param Context $context Shared GeoIP context.
+	 * @param Context        $context   Shared GeoIP context.
+	 * @param Transport|null $transport Optional HTTP transport dependency.
 	 * @since 1.0.14
 	 */
-	public function __construct( Context $context ) {
-		$this->context = $context;
+	public function __construct( Context $context, ?Transport $transport = null ) {
+		$this->context   = $context;
+		$this->transport = $transport ?? new Transport( $context );
 	}
 
 	/**
-	 * Download the GeoLite2 archive to a local file.
+	 * Configure a loopback test origin for unit test fixtures.
 	 *
-	 * @param string $archive_path Local archive file path.
+	 * Only permits loopback origins (127.0.0.1 or localhost) to prevent
+	 * arbitrary production origin manipulation.
+	 *
+	 * @param string|null $origin Loopback base URL (e.g. 'http://127.0.0.1:8080') or null to clear.
 	 * @return void
 	 *
-	 * @throws \RuntimeException When the request fails.
-	 * @since 1.0.14
+	 * @throws \InvalidArgumentException When a non-loopback origin is provided.
+	 * @since 1.7.2
 	 */
-	public function download_archive( string $archive_path ): void {
-		if ( function_exists( 'curl_init' ) ) {
-			$this->download_curl( $archive_path );
-			return;
-		}
-
-		$this->download_stream( $archive_path );
+	public function set_test_origin( ?string $origin ): void {
+		$this->transport->set_test_origin( $origin );
 	}
 
 	/**
-	 * Download the GeoLite2 archive through cURL.
+	 * Download the GeoLite2 archive to a local file using stream-to-disk transfers.
 	 *
-	 * @param string $archive_path Local archive file path.
+	 * @param string      $archive_path Local archive destination file path.
+	 * @param string|null $url          Optional download URL override.
 	 * @return void
 	 *
-	 * @throws \RuntimeException When the request fails.
+	 * @throws \RuntimeException When the download fails, times out, or exceeds size limits.
 	 * @since 1.0.14
 	 */
-	private function download_curl( string $archive_path ): void {
-		$handle = curl_init( GeoipService::DOWNLOAD_URL );
+	public function download_archive( string $archive_path, ?string $url = null ): void {
+		$target_url = ( null !== $url && '' !== trim( $url ) )
+			? trim( $url )
+			: GeoipService::DOWNLOAD_URL;
 
-		if ( false === $handle ) {
-			throw new \RuntimeException( __( 'PeakURL could not initialize cURL for the GeoLite2 download.', 'peakurl' ) );
-		}
+		$this->validate_request_url( $target_url, true );
 
-		curl_setopt_array(
-			$handle,
+		$this->transport->download_to_file(
+			$target_url,
+			$archive_path,
 			array(
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_FOLLOWLOCATION => true,
-				CURLOPT_MAXREDIRS      => 10,
-				CURLOPT_TIMEOUT        => 90,
-				CURLOPT_HTTPAUTH       => CURLAUTH_BASIC,
-				CURLOPT_USERPWD        => $this->context->get_account_id() . ':' . $this->context->get_license_key(),
-				CURLOPT_HTTPHEADER     => array(
-					'Accept: application/gzip, application/octet-stream',
-					'User-Agent: ' . UserAgent::format( $this->context->get_version() ),
-				),
-			),
+				'driver'                 => 'auto',
+				'max_bytes'              => self::MAX_ARCHIVE_BYTES,
+				'timeout'                => self::TIMEOUT_SECONDS,
+				'connect_timeout'        => self::CONNECT_TIMEOUT_SECONDS,
+				'max_redirects'          => self::MAX_REDIRECTS,
+				'headers'                => $this->build_headers( $target_url ),
+				'validate_url'           => array( $this, 'validate_request_url' ),
+				'on_redirect'            => function ( string $target_url ): array {
+					return $this->build_headers( $target_url );
+				},
+				'format_error_message'   => array( $this, 'get_http_error_message' ),
+				'sanitize_error_message' => array( $this, 'sanitize_error_message' ),
+			)
 		);
-
-		$body       = curl_exec( $handle );
-		$status     = (int) curl_getinfo( $handle, CURLINFO_RESPONSE_CODE );
-		$curl_error = curl_error( $handle );
-		unset( $handle );
-
-		if ( false === $body ) {
-			throw new \RuntimeException(
-				__( 'PeakURL could not download the GeoLite2 City database from MaxMind. ', 'peakurl' ) . $curl_error,
-			);
-		}
-
-		if ( $status < 200 || $status >= 300 ) {
-			throw new \RuntimeException( $this->get_http_error_message( $status ) );
-		}
-
-		if ( false === file_put_contents( $archive_path, $body, LOCK_EX ) ) {
-			throw new \RuntimeException(
-				__( 'PeakURL downloaded the GeoLite2 archive, but could not store it locally.', 'peakurl' ),
-			);
-		}
 	}
 
 	/**
-	 * Download the GeoLite2 archive through PHP streams.
+	 * Build HTTP request headers for a given URL, applying Basic Auth only to trusted auth hosts.
 	 *
-	 * @param string $archive_path Local archive file path.
-	 * @return void
-	 *
-	 * @throws \RuntimeException When the request fails.
-	 * @since 1.0.14
+	 * @param string $url Target URL.
+	 * @return array<int, string>
+	 * @since 1.7.2
 	 */
-	private function download_stream( string $archive_path ): void {
+	public function build_headers( string $url ): array {
 		$headers = array(
 			'Accept: application/gzip, application/octet-stream',
-			'Authorization: Basic ' . base64_encode(
-				$this->context->get_account_id() . ':' . $this->context->get_license_key(),
-			),
 			'User-Agent: ' . UserAgent::format( $this->context->get_version() ),
 		);
-		$result  = $this->send_stream_request(
-			GeoipService::DOWNLOAD_URL,
-			$headers,
-			false,
-		);
 
-		if ( $result['status'] >= 300 && $result['status'] < 400 ) {
-			$redirect_url = $this->get_redirect_url( $result['headers'] );
+		if ( $this->is_trusted_auth_host( $url ) ) {
+			$account_id  = $this->context->get_account_id();
+			$license_key = $this->context->get_license_key();
+			if ( '' !== $account_id && '' !== $license_key ) {
+				$headers[] = 'Authorization: Basic ' . base64_encode( $account_id . ':' . $license_key );
+			}
+		}
 
-			if ( null === $redirect_url ) {
+		return $headers;
+	}
+
+	/**
+	 * Validate that a request URL is well-formed, secure, and targets an authorized origin.
+	 *
+	 * @param string $url        Target URL.
+	 * @param bool   $is_initial True for initial download URL, false for redirect hop.
+	 * @return string Validated URL.
+	 *
+	 * @throws \RuntimeException When the URL fails syntax, protocol, port, or host verification.
+	 * @since 1.7.2
+	 */
+	public function validate_request_url( string $url, bool $is_initial ): string {
+		$parts = parse_url( $url );
+		if ( false === $parts || ! is_array( $parts ) || empty( $parts['scheme'] ) || empty( $parts['host'] ) ) {
+			throw new \RuntimeException(
+				__( 'Invalid download URL encountered during GeoLite2 download.', 'peakurl' ),
+			);
+		}
+
+		// Disallow userinfo in URL syntax.
+		if ( ! empty( $parts['user'] ) || ! empty( $parts['pass'] ) ) {
+			throw new \RuntimeException(
+				__( 'Download URLs containing embedded credentials are forbidden.', 'peakurl' ),
+			);
+		}
+
+		$scheme = strtolower( (string) $parts['scheme'] );
+		$host   = strtolower( (string) $parts['host'] );
+		$port   = isset( $parts['port'] ) ? (int) $parts['port'] : null;
+
+		// Check if this matches an explicitly configured loopback test origin.
+		$test_origin = $this->transport->get_test_origin();
+		if ( null !== $test_origin ) {
+			$test_parts = parse_url( $test_origin );
+			$test_host  = strtolower( (string) ( $test_parts['host'] ?? '' ) );
+			$test_port  = isset( $test_parts['port'] ) ? (int) $test_parts['port'] : null;
+
+			if ( $host === $test_host && $port === $test_port ) {
+				if ( ! in_array( $scheme, array( 'http', 'https' ), true ) ) {
+					throw new \RuntimeException(
+						__( 'GeoLite2 test downloads require HTTP or HTTPS.', 'peakurl' ),
+					);
+				}
+				return $url;
+			}
+		}
+
+		// Production enforcement: TLS only, standard port 443 only.
+		if ( 'https' !== $scheme ) {
+			throw new \RuntimeException(
+				__( 'GeoLite2 database downloads require an encrypted HTTPS connection.', 'peakurl' ),
+			);
+		}
+
+		if ( null !== $port && 443 !== $port ) {
+			throw new \RuntimeException(
+				__( 'GeoLite2 database downloads require standard HTTPS port 443.', 'peakurl' ),
+			);
+		}
+
+		if ( $is_initial ) {
+			if ( 'download.maxmind.com' !== $host && 'updates.maxmind.com' !== $host ) {
 				throw new \RuntimeException(
-					__( 'PeakURL could not follow a secure GeoLite2 download redirect from MaxMind.', 'peakurl' ),
+					sprintf(
+						/* translators: %s: unauthorized host */
+						__( 'Untrusted download origin rejected: %s.', 'peakurl' ),
+						$host,
+					),
 				);
 			}
-
-			$result = $this->send_stream_request(
-				$redirect_url,
-				array(
-					'Accept: application/gzip, application/octet-stream',
-					'User-Agent: ' . UserAgent::format( $this->context->get_version() ),
-				),
-				false,
-			);
+			return $url;
 		}
 
-		if ( false === $result['body'] || $result['status'] < 200 || $result['status'] >= 300 ) {
-			throw new \RuntimeException( $this->get_http_error_message( $result['status'] ) );
+		// Redirect hop host validation: MaxMind direct hosts or verified MaxMind S3 distribution buckets.
+		if ( $this->is_allowlisted_redirect_host( $host ) ) {
+			return $url;
 		}
 
-		if ( false === file_put_contents( $archive_path, $result['body'], LOCK_EX ) ) {
-			throw new \RuntimeException(
-				__( 'PeakURL downloaded the GeoLite2 archive, but could not store it locally.', 'peakurl' ),
-			);
-		}
-	}
-
-	/**
-	 * Execute a single stream-wrapper request.
-	 *
-	 * @param string             $url             Remote URL.
-	 * @param array<int, string> $headers         Request headers.
-	 * @param bool               $follow_location Whether redirects should be followed.
-	 * @return array{body: string|false, headers: array<int, string>, status: int}
-	 * @since 1.0.14
-	 */
-	private function send_stream_request(
-		string $url,
-		array $headers,
-		bool $follow_location
-	): array {
-		$context = stream_context_create(
-			array(
-				'http' => array(
-					'method'          => 'GET',
-					'header'          => implode( "\r\n", $headers ) . "\r\n",
-					'ignore_errors'   => true,
-					'follow_location' => $follow_location ? 1 : 0,
-					'max_redirects'   => $follow_location ? 10 : 0,
-					'timeout'         => 90,
-				),
+		throw new \RuntimeException(
+			sprintf(
+				/* translators: %s: untrusted host */
+				__( 'Untrusted redirect destination rejected: %s.', 'peakurl' ),
+				$host,
 			),
 		);
-		$body    = @file_get_contents( $url, false, $context );
-		$headers = $http_response_header ?? array();
-
-		return array(
-			'body'    => $body,
-			'headers' => $headers,
-			'status'  => $this->parse_http_status( $headers ),
-		);
 	}
 
 	/**
-	 * Parse the final HTTP status code from response headers.
+	 * Check whether a redirect host belongs to MaxMind or its verified distribution endpoints.
 	 *
-	 * @param array<int, string> $headers Wrapper response headers.
-	 * @return int
-	 * @since 1.0.14
+	 * @param string $host Lowercase hostname.
+	 * @return bool
+	 * @since 1.7.2
 	 */
-	private function parse_http_status( array $headers ): int {
-		foreach ( array_reverse( $headers ) as $header ) {
-			if ( preg_match( '/^HTTP\/\S+\s+(\d{3})\b/i', $header, $matches ) ) {
-				return (int) $matches[1];
-			}
+	public function is_allowlisted_redirect_host( string $host ): bool {
+		if ( 'download.maxmind.com' === $host || 'updates.maxmind.com' === $host || str_ends_with( $host, '.maxmind.com' ) ) {
+			return true;
 		}
 
-		return 0;
+		// MaxMind AWS S3 distribution buckets: geoip.maxmind.com.s3.amazonaws.com or geoip.maxmind.com.s3.<region>.amazonaws.com
+		if ( preg_match( '/^geoip\.maxmind\.com\.s3(\.[a-z0-9-]+)?\.amazonaws\.com$/', $host ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
-	 * Extract the redirect URL from response headers.
+	 * Check whether a destination URL is authorized to receive MaxMind Basic Auth credentials.
 	 *
-	 * @param array<int, string> $headers Wrapper response headers.
-	 * @return string|null
-	 * @since 1.0.14
+	 * @param string $url Destination URL.
+	 * @return bool
+	 * @since 1.7.2
 	 */
-	private function get_redirect_url( array $headers ): ?string {
-		foreach ( array_reverse( $headers ) as $header ) {
-			if ( 0 !== stripos( $header, 'Location:' ) ) {
-				continue;
+	public function is_trusted_auth_host( string $url ): bool {
+		$parts = parse_url( $url );
+		$host  = strtolower( (string) ( $parts['host'] ?? '' ) );
+		$port  = isset( $parts['port'] ) ? (int) $parts['port'] : null;
+
+		$test_origin = $this->transport->get_test_origin();
+		if ( null !== $test_origin ) {
+			$test_parts = parse_url( $test_origin );
+			$test_host  = strtolower( (string) ( $test_parts['host'] ?? '' ) );
+			$test_port  = isset( $test_parts['port'] ) ? (int) $test_parts['port'] : null;
+
+			if ( $host === $test_host && $port === $test_port ) {
+				$path = (string) ( $parts['path'] ?? '' );
+				return 0 !== strpos( $path, '/cdn' ) && 0 !== strpos( $path, '/redirect' );
 			}
-
-			$redirect_url = trim( substr( $header, 9 ) );
-			$scheme       = parse_url( $redirect_url, PHP_URL_SCHEME );
-
-			if ( 'https' !== $scheme ) {
-				return null;
-			}
-
-			return $redirect_url;
 		}
 
-		return null;
+		return 'download.maxmind.com' === $host || 'updates.maxmind.com' === $host;
 	}
 
 	/**
@@ -254,9 +310,21 @@ class Client {
 	 * @return string
 	 * @since 1.0.14
 	 */
-	private function get_http_error_message( int $status ): string {
+	public function get_http_error_message( int $status ): string {
 		if ( 401 === $status || 403 === $status ) {
 			return __( 'MaxMind rejected the download request. Check the account ID, license key, and GeoLite download permissions.', 'peakurl' );
+		}
+
+		if ( 429 === $status ) {
+			return __( 'MaxMind download rate limit exceeded. Please wait before retrying.', 'peakurl' );
+		}
+
+		if ( $status >= 500 && $status < 600 ) {
+			return sprintf(
+				/* translators: %d: HTTP status code. */
+				__( 'MaxMind download service temporarily unavailable (HTTP %d). Please try again later.', 'peakurl' ),
+				$status,
+			);
 		}
 
 		if ( 0 === $status ) {
@@ -268,5 +336,29 @@ class Client {
 			__( 'PeakURL could not download the GeoLite2 City database from MaxMind. HTTP %d.', 'peakurl' ),
 			$status,
 		);
+	}
+
+	/**
+	 * Strip any sensitive credential material from an error message.
+	 *
+	 * @param string $message Raw error message.
+	 * @return string Sanitized error message.
+	 * @since 1.7.2
+	 */
+	public function sanitize_error_message( string $message ): string {
+		$account_id  = $this->context->get_account_id();
+		$license_key = $this->context->get_license_key();
+
+		$sanitized = $message;
+
+		if ( '' !== $license_key ) {
+			$sanitized = str_replace( $license_key, '••••••••', $sanitized );
+		}
+
+		if ( '' !== $account_id ) {
+			$sanitized = str_replace( $account_id, '••••••••', $sanitized );
+		}
+
+		return $sanitized;
 	}
 }

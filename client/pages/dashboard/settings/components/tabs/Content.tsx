@@ -526,19 +526,24 @@ const Content = ({ activeTab }: ContentProps) => {
 	const handleSaveGeoipConfiguration = async (
 		values: GeoipConfigurationPayload
 	) => {
+		const isClearing = !values.accountId && !values.licenseKey;
 		try {
 			const result = await saveGeoipConfiguration(values).unwrap();
 			notification.success(
-				__("Saved"),
-				__("Location data settings were updated successfully.")
+				isClearing ? __("Credentials cleared") : __("Saved"),
+				isClearing
+					? __("MaxMind credentials were removed successfully.")
+					: __("Location data settings were updated successfully.")
 			);
 			return result?.data || undefined;
 		} catch (err) {
 			notification.error(
-				__("Save failed"),
+				isClearing ? __("Clear failed") : __("Save failed"),
 				getErrorMessage(
 					err,
-					__("PeakURL could not save the MaxMind settings.")
+					isClearing
+						? __("PeakURL could not clear the MaxMind credentials.")
+						: __("PeakURL could not save the MaxMind settings.")
 				)
 			);
 			throw err;

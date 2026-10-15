@@ -17,7 +17,7 @@ use RuntimeException;
 
 class GeoipUpdateJobTest extends TestCase {
 
-	public function test_skips_when_location_data_is_not_configured(): void {
+	public function test_updates_via_r2_when_credentials_not_configured(): void {
 		$geoip = $this->createMock( Geoip::class );
 		$geoip->expects( $this->once() )
 			->method( 'get_status' )
@@ -28,16 +28,22 @@ class GeoipUpdateJobTest extends TestCase {
 					'is_outdated'           => true,
 				)
 			);
-		$geoip->expects( $this->never() )
-			->method( 'download_database' );
+		$geoip->expects( $this->once() )
+			->method( 'download_database' )
+			->willReturn(
+				array(
+					'databasePath' => '/content/uploads/geoip/GeoLite2-City.mmdb',
+					'activated'    => true,
+				)
+			);
 
 		$job     = new GeoipUpdateJob( $geoip );
 		$context = new ExecutionContext( 'peakurl_geoip_update', 'run_1', 1, false, '2026-09-13 10:00:00' );
 
 		$result = $job->execute( $context );
 
-		$this->assertTrue( $result->is_skipped() );
-		$this->assertSame( 'Location data is not configured', $result->get_summary() );
+		$this->assertTrue( $result->is_success() );
+		$this->assertStringContainsString( 'GeoLite2 City database refreshed', (string) $result->get_summary() );
 	}
 
 	public function test_skips_when_database_is_fresh_and_not_forced(): void {
@@ -79,6 +85,7 @@ class GeoipUpdateJobTest extends TestCase {
 			->willReturn(
 				array(
 					'databasePath' => '/content/uploads/geoip/GeoLite2-City.mmdb',
+					'activated'    => true,
 				)
 			);
 
@@ -107,6 +114,7 @@ class GeoipUpdateJobTest extends TestCase {
 			->willReturn(
 				array(
 					'databasePath' => '/content/uploads/geoip/GeoLite2-City.mmdb',
+					'activated'    => true,
 				)
 			);
 
@@ -135,6 +143,7 @@ class GeoipUpdateJobTest extends TestCase {
 			->willReturn(
 				array(
 					'databasePath' => '/content/uploads/geoip/GeoLite2-City.mmdb',
+					'activated'    => true,
 				)
 			);
 
@@ -169,5 +178,63 @@ class GeoipUpdateJobTest extends TestCase {
 
 		$this->assertTrue( $result->is_failure() );
 		$this->assertStringContainsString( 'Network download timed out', (string) $result->get_error() );
+	}
+
+	public function test_updates_when_r2_source_downloads_new_build(): void {
+		$geoip = $this->createMock( Geoip::class );
+		$geoip->expects( $this->once() )
+			->method( 'get_status' )
+			->willReturn(
+				array(
+					'credentialsConfigured' => false,
+					'is_installed'          => false,
+					'is_outdated'           => true,
+				)
+			);
+		$geoip->expects( $this->once() )
+			->method( 'download_database' )
+			->willReturn(
+				array(
+					'databasePath' => '/content/uploads/geoip/GeoLite2-City.mmdb',
+					'activated'    => true,
+				)
+			);
+
+		$job     = new GeoipUpdateJob( $geoip );
+		$context = new ExecutionContext( 'peakurl_geoip_update', 'run_7', 1, false, '2026-09-13 10:00:00' );
+
+		$result = $job->execute( $context );
+
+		$this->assertTrue( $result->is_success() );
+		$this->assertStringContainsString( 'GeoLite2 City database refreshed', (string) $result->get_summary() );
+	}
+
+	public function test_skips_when_r2_reports_database_already_current(): void {
+		$geoip = $this->createMock( Geoip::class );
+		$geoip->expects( $this->once() )
+			->method( 'get_status' )
+			->willReturn(
+				array(
+					'credentialsConfigured' => false,
+					'is_installed'          => true,
+					'is_outdated'           => true,
+				)
+			);
+		$geoip->expects( $this->once() )
+			->method( 'download_database' )
+			->willReturn(
+				array(
+					'databasePath' => '/content/uploads/geoip/GeoLite2-City.mmdb',
+					'activated'    => false,
+				)
+			);
+
+		$job     = new GeoipUpdateJob( $geoip );
+		$context = new ExecutionContext( 'peakurl_geoip_update', 'run_8', 1, false, '2026-09-13 10:00:00' );
+
+		$result = $job->execute( $context );
+
+		$this->assertTrue( $result->is_skipped() );
+		$this->assertSame( 'GeoIP database is already up to date', $result->get_summary() );
 	}
 }

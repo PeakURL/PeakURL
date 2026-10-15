@@ -1,7 +1,7 @@
 DirectoryIndex index.php
 Options -Indexes
 
-<FilesMatch "^(config\.php|config-sample\.php)$">
+<FilesMatch "(^(config\.php|config-sample\.php|\.geoip_update\.lock|SOURCE\.json)$|\.(mmdb(\..*)?|lock|log|tar\.gz)$|\.part-[0-9a-f]+$)">
 <IfModule mod_authz_core.c>
 Require all denied
 </IfModule>

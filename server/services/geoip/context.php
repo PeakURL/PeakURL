@@ -207,6 +207,16 @@ class Context {
 	}
 
 	/**
+	 * Return the canonical managed GeoIP manifest URL.
+	 *
+	 * @return string
+	 * @since 1.7.2
+	 */
+	public function get_manifest_url(): string {
+		return Constants::DEFAULT_GEOIP_MANIFEST_URL;
+	}
+
+	/**
 	 * Return the current MaxMind account ID.
 	 *
 	 * @return string

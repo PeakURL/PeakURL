@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 
 import type {
@@ -149,7 +150,7 @@ export interface LocationDataTabProps {
 /**
  * Visual variants used by location-data state cards.
  */
-export type StateCardVariant = "info" | "success" | "error";
+export type StateCardVariant = "info" | "success" | "error" | "warning";
 
 /**
  * Props for a location-data state card.
@@ -157,7 +158,7 @@ export type StateCardVariant = "info" | "success" | "error";
 export interface StateCardProps {
 	icon: LucideIcon;
 	title: string;
-	description?: string | null;
+	description?: ReactNode;
 	variant?: StateCardVariant;
 }
 

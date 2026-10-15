@@ -116,7 +116,13 @@ class GeoipCrossEntryPointIntegrationTest extends TestCase {
 		// Mock the downloader so network archive downloading is bypassed in test.
 		$fake_downloader = $this->createMock( Downloader::class );
 		$fake_downloader->expects( $this->once() )
-			->method( 'download_database' );
+			->method( 'download_database' )
+			->willReturn(
+				array(
+					'activated'    => true,
+					'databasePath' => '/content/uploads/geoip/GeoLite2-City.mmdb',
+				)
+			);
 
 		$this->geoip->set_downloader( $fake_downloader );
 
@@ -205,7 +211,13 @@ class GeoipCrossEntryPointIntegrationTest extends TestCase {
 
 		$fake_downloader = $this->createMock( Downloader::class );
 		$fake_downloader->expects( $this->once() )
-			->method( 'download_database' );
+			->method( 'download_database' )
+			->willReturn(
+				array(
+					'activated'    => true,
+					'databasePath' => '/content/uploads/geoip/GeoLite2-City.mmdb',
+				)
+			);
 
 		$this->geoip->set_downloader( $fake_downloader );
 

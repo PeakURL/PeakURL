@@ -97,6 +97,7 @@ class Manager {
 				Initializer::prepare_release_values( $values ),
 			);
 			Initializer::send_install_welcome_once( $connection, $app_config );
+			Initializer::request_geoip_bootstrap( $connection, $app_config );
 		} catch ( \Throwable $exception ) {
 			Writer::write_config_file(
 				$app_path,

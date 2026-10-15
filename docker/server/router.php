@@ -54,6 +54,12 @@ if ( isset( $favicon_map[ $request_path ] ) ) {
 	return true;
 }
 
+if ( preg_match( '/(\.(mmdb|lock|log|tar\.gz)$|\.mmdb\.(staged|bak)-|\.part-|SOURCE\.json$)/i', $request_path ) || 0 === strpos( $request_path, '/content/uploads/geoip/' ) ) {
+	http_response_code( 403 );
+	echo 'Access denied.';
+	return true;
+}
+
 $candidate_path = realpath( $public_dir . $request_path );
 
 if (

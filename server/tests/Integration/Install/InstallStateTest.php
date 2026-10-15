@@ -496,6 +496,14 @@ class InstallStateTest extends TestCase {
 			symlink( $this->original_environment->get_source_root() . '/server', $this->temp_app_dir . '/server' );
 		}
 
+		if ( ! file_exists( $this->temp_app_dir . '/client' ) && file_exists( $this->original_environment->get_source_root() . '/client' ) ) {
+			symlink( $this->original_environment->get_source_root() . '/client', $this->temp_app_dir . '/client' );
+		}
+
+		if ( ! file_exists( $this->temp_app_dir . '/assets' ) && file_exists( $this->original_environment->get_source_root() . '/assets' ) ) {
+			symlink( $this->original_environment->get_source_root() . '/assets', $this->temp_app_dir . '/assets' );
+		}
+
 		$env_vars = array(
 			'PEAKURL_DEV' => 'true',
 			'PATH'        => (string) getenv( 'PATH' ),

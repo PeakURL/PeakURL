@@ -52,6 +52,7 @@ function StateCard({
 		info: "settings-notice-info",
 		success: "settings-notice-success",
 		error: "settings-notice-error",
+		warning: "settings-notice-warning",
 	};
 
 	return (

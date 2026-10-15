@@ -200,6 +200,10 @@ class Constants {
 	public const DEFAULT_TIME_FORMAT = '12';
 	/** Default GeoIP database path. */
 	public const DEFAULT_GEOIP_DB_PATH = 'content/uploads/geoip/GeoLite2-City.mmdb';
+	/** Default managed GeoIP manifest URL. */
+	public const DEFAULT_GEOIP_MANIFEST_URL = 'https://releases.peakurl.org/geoip/manifest.json';
+	/** Default managed GeoIP archive URL. */
+	public const DEFAULT_GEOIP_ARCHIVE_URL = 'https://releases.peakurl.org/geoip/GeoLite2-City.mmdb.gz';
 	/** Languages directory relative to the content root. */
 	public const LANGUAGES_DIRECTORY = 'languages';
 	/** Default session cookie name. */

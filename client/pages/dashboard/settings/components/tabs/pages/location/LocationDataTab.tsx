@@ -6,11 +6,11 @@ import {
 	Pencil,
 	CloudDownload,
 	MapPin,
-	RefreshCcw,
 	KeyRound,
+	Trash2,
 } from "lucide-react";
 
-import { Button, Input } from "@/components";
+import { Button, ConfirmDialog, Input } from "@/components";
 import {
 	DocumentationLink,
 	TabHeader,
@@ -41,6 +41,7 @@ function StateCard({
 		info: "settings-notice-info",
 		success: "settings-notice-success",
 		error: "settings-notice-error",
+		warning: "settings-notice-warning",
 	};
 
 	return (
@@ -49,7 +50,7 @@ function StateCard({
 				<Icon size={18} className="settings-notice-icon" />
 				<div className="settings-notice-content">
 					<h3 className="settings-notice-title">{title}</h3>
-					<p className="settings-notice-text">{description}</p>
+					<div className="settings-notice-text">{description}</div>
 				</div>
 			</div>
 		</div>
@@ -72,6 +73,8 @@ function LocationDataTab({
 	const [isEditingCredentials, setIsEditingCredentials] = useState(false);
 	const [savedStatusOverride, setSavedStatusOverride] =
 		useState<Partial<LocationDataStatus> | null>(null);
+	const [isConfirmingClear, setIsConfirmingClear] = useState(false);
+	const [isClearing, setIsClearing] = useState(false);
 	const effectiveStatus = status?.credentialsConfigured
 		? status
 		: savedStatusOverride
@@ -99,7 +102,91 @@ function LocationDataTab({
 		} catch {}
 	};
 
+	const handleClearCredentials = async () => {
+		setIsClearing(true);
+		try {
+			const nextStatus = await onSave({
+				accountId: "",
+				licenseKey: "",
+			});
+			if (nextStatus) {
+				setSavedStatusOverride(nextStatus);
+			} else {
+				setSavedStatusOverride({
+					credentialsConfigured: false,
+					accountId: "",
+					licenseKeyHint: null,
+				});
+			}
+			setIsConfirmingClear(false);
+			setIsEditingCredentials(false);
+			setAccountIdInput(null);
+			setLicenseKey("");
+		} catch {
+			// Retain UI state on failure
+		} finally {
+			setIsClearing(false);
+		}
+	};
+
 	const isReady = Boolean(effectiveStatus?.locationAnalyticsReady);
+	const hasCredentials = Boolean(effectiveStatus?.credentialsConfigured);
+	const isStale = Boolean(effectiveStatus?.isStale);
+	const canManageFromDashboard =
+		effectiveStatus?.canManageFromDashboard ?? true;
+	const canDownloadDatabase = Boolean(canManageFromDashboard);
+
+	const renderContextualNotice = () => {
+		if (isReady) {
+			if (isStale) {
+				return (
+					<StateCard
+						icon={AlertCircle}
+						title={__("Database update recommended")}
+						description={__(
+							"Your local GeoLite2 City database is over 30 days old. Update the database to maintain accurate location reporting."
+						)}
+						variant="warning"
+					/>
+				);
+			}
+
+			return (
+				<StateCard
+					icon={CheckCircle2}
+					title={__("Location analytics is enabled")}
+					description={__(
+						"PeakURL is using the local GeoLite2 City database for click locations."
+					)}
+					variant="success"
+				/>
+			);
+		}
+
+		if (hasCredentials) {
+			return (
+				<StateCard
+					icon={CloudDownload}
+					title={__("Database download required")}
+					description={__(
+						"Your MaxMind credentials have been saved. Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
+					)}
+					variant="info"
+				/>
+			);
+		}
+
+		return (
+			<StateCard
+				icon={CloudDownload}
+				title={__("Database download required")}
+				description={__(
+					"Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
+				)}
+				variant="info"
+			/>
+		);
+	};
 
 	return (
 		<div className="settings-location">
@@ -110,7 +197,6 @@ function LocationDataTab({
 					description={__(
 						"Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 					)}
-					documentationHref="https://go.peakurl.org/028e82"
 					actions={
 						<Button
 							size="sm"
@@ -119,13 +205,7 @@ function LocationDataTab({
 							loading={isDownloading}
 							icon={CloudDownload}
 							disabled={
-								isLoading ||
-								isSaving ||
-								!effectiveStatus?.credentialsConfigured ||
-								Boolean(
-									effectiveStatus &&
-									!effectiveStatus.canManageFromDashboard
-								)
+								isLoading || isSaving || !canDownloadDatabase
 							}
 						>
 							{isReady
@@ -173,26 +253,7 @@ function LocationDataTab({
 				/>
 			)}
 
-			{effectiveStatus && !errorMessage && (
-				<StateCard
-					icon={isReady ? CheckCircle2 : RefreshCcw}
-					title={
-						isReady
-							? __("Location analytics is enabled")
-							: __("Location analytics is disabled")
-					}
-					description={
-						isReady
-							? __(
-									"PeakURL is using the local GeoLite2 City database for click locations."
-								)
-							: __(
-									"Save your MaxMind credentials, then download the GeoLite2 City database to enable visitor country and city analytics."
-								)
-					}
-					variant={isReady ? "success" : "info"}
-				/>
-			)}
+			{effectiveStatus && !errorMessage && renderContextualNotice()}
 
 			{effectiveStatus?.manageDisabledReason && (
 				<StateCard
@@ -266,11 +327,29 @@ function LocationDataTab({
 								className="w-full sm:w-auto"
 								onClick={() => setIsEditingCredentials(true)}
 								disabled={Boolean(
-									effectiveStatus &&
-									!effectiveStatus.canManageFromDashboard
+									(effectiveStatus &&
+										!effectiveStatus.canManageFromDashboard) ||
+									isSaving ||
+									isClearing
 								)}
 							>
 								{__("Update Credentials")}
+							</Button>
+							<Button
+								type="button"
+								size="sm"
+								variant="outline"
+								icon={Trash2}
+								className="w-full sm:w-auto text-destructive hover:bg-destructive/10"
+								onClick={() => setIsConfirmingClear(true)}
+								disabled={Boolean(
+									(effectiveStatus &&
+										!effectiveStatus.canManageFromDashboard) ||
+									isSaving ||
+									isClearing
+								)}
+							>
+								{__("Clear Credentials")}
 							</Button>
 						</div>
 					</div>
@@ -356,6 +435,19 @@ function LocationDataTab({
 					</form>
 				)}
 			</section>
+
+			<ConfirmDialog
+				open={isConfirmingClear}
+				onClose={() => !isClearing && setIsConfirmingClear(false)}
+				title={__("Clear MaxMind credentials?")}
+				description={__(
+					"The saved account ID and license key will be removed. Your downloaded location database and existing analytics will remain available. Future updates will automatically use PeakURL's verified database archive."
+				)}
+				confirmText={__("Clear Credentials")}
+				confirmVariant="danger"
+				loading={isClearing}
+				onConfirm={handleClearCredentials}
+			/>
 		</div>
 	);
 }

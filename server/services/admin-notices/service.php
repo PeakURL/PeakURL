@@ -65,7 +65,6 @@ class AdminNotices {
 		array $context
 	): void {
 		$this->add_update_notice( $registry, $context );
-		$this->add_location_notice( $registry, $context );
 	}
 
 	/**
@@ -118,51 +117,6 @@ class AdminNotices {
 				'action'  => array(
 					'label' => __( 'Open Updates', 'peakurl' ),
 					'url'   => '/dashboard/settings/updates',
-				),
-			),
-		);
-	}
-
-	/**
-	 * Register the location-data notice when GeoIP is not ready.
-	 *
-	 * @param Registry             $registry Notice registry.
-	 * @param array<string, mixed> $context  Notice context.
-	 * @return void
-	 * @since 1.0.3
-	 */
-	private function add_location_notice(
-		Registry $registry,
-		array $context
-	): void {
-		$capabilities = is_array( $context['capabilities'] ?? null )
-			? $context['capabilities']
-			: array();
-		$geoip_status = is_array( $context['geoipStatus'] ?? null )
-			? $context['geoipStatus']
-			: array();
-
-		if (
-			empty( $capabilities['manageLocationData'] ) ||
-			empty( $geoip_status ) ||
-			! empty( $geoip_status['locationAnalyticsReady'] )
-		) {
-			return;
-		}
-
-		$registry->add(
-			array(
-				'id'      => 'location_data_setup',
-				'type'    => 'warning',
-				'title'   => __( 'Location analytics is not ready yet.', 'peakurl' ),
-				'message' => sprintf(
-					/* translators: 1: documentation URL. */
-					__( 'Add your MaxMind credentials and download the GeoLite2 City database to enable visitor country and city reporting across the dashboard. <a href="%1$s" target="_blank" rel="noopener noreferrer" class="underline hover:opacity-100">Read documentation</a>.', 'peakurl' ),
-					'https://go.peakurl.org/028e82',
-				),
-				'action'  => array(
-					'label' => __( 'Open Location Data', 'peakurl' ),
-					'url'   => '/dashboard/settings/location',
 				),
 			),
 		);

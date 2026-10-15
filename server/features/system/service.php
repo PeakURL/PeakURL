@@ -266,8 +266,7 @@ class Service {
 	 */
 	public function get_admin_notice_context( array $user ): array {
 		$capabilities = array(
-			'manageUpdates'      => $this->roles->has_capability( $user, 'manage_updates' ),
-			'manageLocationData' => $this->roles->has_capability( $user, 'manage_location_data' ),
+			'manageUpdates' => $this->roles->has_capability( $user, 'manage_updates' ),
 		);
 		$context      = array(
 			'user'         => $user,
@@ -276,10 +275,6 @@ class Service {
 
 		if ( ! empty( $capabilities['manageUpdates'] ) ) {
 			$context['updateStatus'] = $this->load_update_status( false );
-		}
-
-		if ( ! empty( $capabilities['manageLocationData'] ) ) {
-			$context['geoipStatus'] = $this->geoip_service->get_status();
 		}
 
 		return $context;

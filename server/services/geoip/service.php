@@ -168,25 +168,51 @@ class Geoip {
 	/**
 	 * Download or refresh the GeoLite2 City database.
 	 *
-	 * Persists the successful download timestamp into settings storage.
+	 * Persists the successful download timestamp into settings storage only when
+	 * a new database file was downloaded and activated.
 	 *
+	 * @param bool $force True to force download even if the local database is current.
 	 * @return array<string, mixed>
 	 *
 	 * @throws \RuntimeException When the download fails.
 	 * @since 1.0.14
 	 */
-	public function download_database(): array {
-		$this->downloader->download_database();
+	public function download_database( bool $force = false ): array {
+		$result = $this->downloader->download_database( $force );
 
-		$downloaded_at = Date::now();
-		$this->context->get_settings_api()->update_option(
-			'geoip_last_downloaded_at',
-			$downloaded_at,
-			$downloaded_at,
-			false
-		);
+		$downloaded_at = null;
+		$activated     = is_array( $result ) && isset( $result['activated'] ) && true === $result['activated'];
 
-		return $this->get_status( $downloaded_at );
+		if ( $activated ) {
+			$downloaded_at = Date::now();
+			try {
+				$this->context->get_settings_api()->update_option(
+					'geoip_last_downloaded_at',
+					$downloaded_at,
+					$downloaded_at,
+					false
+				);
+			} catch ( \Throwable $e ) {
+				// Settings timestamp update failure must not invalidate the successful activation.
+				error_log( 'PeakURL GeoIP: Failed to persist geoip_last_downloaded_at setting: ' . $e->getMessage() );
+			}
+		}
+
+		$status                   = $this->get_status( $downloaded_at );
+		$status['downloadResult'] = is_array( $result ) ? $result : array();
+		$status['activated']      = $activated;
+
+		return $status;
+	}
+
+	/**
+	 * Return the active downloader instance.
+	 *
+	 * @return Downloader
+	 * @since 1.7.2
+	 */
+	public function get_downloader(): Downloader {
+		return $this->downloader;
 	}
 
 	/**
@@ -203,17 +229,13 @@ class Geoip {
 	/**
 	 * Check whether GeoIP updates can be performed in this environment.
 	 *
-	 * Requires configured MaxMind credentials and a writable destination directory.
+	 * Checks that destination directories are writable.
 	 *
 	 * @return bool
 	 * @since 1.7.0
 	 */
 	public function is_update_available(): bool {
 		$status = $this->get_status();
-
-		if ( empty( $status['credentialsConfigured'] ) ) {
-			return false;
-		}
 
 		$content_dir = (string) ( $status['contentDir'] ?? '' );
 		if ( '' !== $content_dir && file_exists( $content_dir ) && ! is_writable( $content_dir ) ) {

@@ -498,6 +498,178 @@ for (const width of [1440, 390]) {
 		).toBe(true);
 	});
 
+	test(`location notice displays download required when database missing without credentials at ${width}px`, async ({
+		page,
+	}) => {
+		await page.route("**/api/v1/system/geoip", (route) =>
+			route.fulfill({
+				json: {
+					data: {
+						locationAnalyticsReady: false,
+						credentialsConfigured: false,
+						canManageFromDashboard: true,
+					},
+				},
+			})
+		);
+		await page.setViewportSize({ width, height: 900 });
+		await page.goto("/dashboard/settings/location");
+
+		await expect(
+			page.getByRole("heading", {
+				name: "Database download required",
+				exact: true,
+			})
+		).toBeVisible();
+
+		await expect(
+			page.getByText(
+				"Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
+			)
+		).toBeVisible();
+
+		await expect(
+			page.getByRole("button", {
+				name: "Download Database",
+				exact: true,
+			})
+		).toBeEnabled();
+
+		await expect(
+			page.getByRole("textbox", {
+				name: "MaxMind Account ID",
+				exact: true,
+			})
+		).toBeVisible();
+	});
+
+	test(`location notice displays download required when credentials configured at ${width}px`, async ({
+		page,
+	}) => {
+		await page.route("**/api/v1/system/geoip", (route) =>
+			route.fulfill({
+				json: {
+					data: {
+						locationAnalyticsReady: false,
+						credentialsConfigured: true,
+						accountId: "123456",
+						licenseKeyHint: "test••••key",
+						canManageFromDashboard: true,
+					},
+				},
+			})
+		);
+		await page.setViewportSize({ width, height: 900 });
+		await page.goto("/dashboard/settings/location");
+
+		await expect(
+			page.getByRole("heading", {
+				name: "Database download required",
+				exact: true,
+			})
+		).toBeVisible();
+
+		await expect(
+			page.getByText(
+				"Your MaxMind credentials have been saved. Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
+			)
+		).toBeVisible();
+
+		await expect(
+			page.getByRole("button", {
+				name: "Download Database",
+				exact: true,
+			})
+		).toBeEnabled();
+	});
+
+	test(`location notice shows ready state without warning when database ready even without credentials at ${width}px`, async ({
+		page,
+	}) => {
+		await page.route("**/api/v1/system/geoip", (route) =>
+			route.fulfill({
+				json: {
+					data: {
+						locationAnalyticsReady: true,
+						credentialsConfigured: false,
+						canManageFromDashboard: true,
+						isStale: false,
+					},
+				},
+			})
+		);
+		await page.setViewportSize({ width, height: 900 });
+		await page.goto("/dashboard/settings/location");
+
+		await expect(
+			page.getByRole("heading", {
+				name: "Location analytics is enabled",
+				exact: true,
+			})
+		).toBeVisible();
+	});
+
+	test(`location download button is disabled when management is disabled at ${width}px`, async ({
+		page,
+	}) => {
+		await page.route("**/api/v1/system/geoip", (route) =>
+			route.fulfill({
+				json: {
+					data: {
+						locationAnalyticsReady: false,
+						credentialsConfigured: false,
+						canManageFromDashboard: false,
+						manageDisabledReason: "Filesystem is read-only.",
+					},
+				},
+			})
+		);
+		await page.setViewportSize({ width, height: 900 });
+		await page.goto("/dashboard/settings/location");
+
+		await expect(
+			page.getByRole("button", {
+				name: "Download Database",
+				exact: true,
+			})
+		).toBeDisabled();
+
+		await expect(page.getByText("Filesystem is read-only.")).toBeVisible();
+	});
+
+	test(`location notice displays update recommended when database is stale at ${width}px`, async ({
+		page,
+	}) => {
+		await page.route("**/api/v1/system/geoip", (route) =>
+			route.fulfill({
+				json: {
+					data: {
+						locationAnalyticsReady: true,
+						credentialsConfigured: true,
+						canManageFromDashboard: true,
+						isStale: true,
+						databaseAgeDays: 45,
+					},
+				},
+			})
+		);
+		await page.setViewportSize({ width, height: 900 });
+		await page.goto("/dashboard/settings/location");
+
+		await expect(
+			page.getByRole("heading", {
+				name: "Database update recommended",
+				exact: true,
+			})
+		).toBeVisible();
+
+		await expect(
+			page.getByText(
+				"Your local GeoLite2 City database is over 30 days old. Update the database to maintain accurate location reporting."
+			)
+		).toBeVisible();
+	});
+
 	for (const failure of [false, true]) {
 		test(`update summary shows ${failure ? "failures and findings" : "available release and database upgrade"} at ${width}px`, async ({
 			page,

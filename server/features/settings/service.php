@@ -884,7 +884,7 @@ class Service {
 				$payload,
 			);
 		} catch ( \RuntimeException $exception ) {
-			throw new ApiException( $exception->getMessage(), 422 );
+			throw new ApiException( $this->sanitize_geoip_error_message( $exception->getMessage() ), 422 );
 		}
 
 		$this->config               = Configuration::load( $runtime_root );
@@ -895,7 +895,7 @@ class Service {
 			$crypto,
 		);
 		$status                     = $this->geoip_service->get_status();
-		$status['credentialsSaved'] = true;
+		$status['credentialsSaved'] = ! empty( $status['credentialsConfigured'] );
 
 		return $status;
 	}
@@ -916,12 +916,33 @@ class Service {
 		try {
 			$status = $this->geoip_service->download_database();
 		} catch ( \RuntimeException $exception ) {
-			throw new ApiException( $exception->getMessage(), 422 );
+			throw new ApiException( $this->sanitize_geoip_error_message( $exception->getMessage() ), 422 );
 		}
 
 		$status['downloaded'] = true;
 
 		return $status;
+	}
+
+	/**
+	 * Sanitize an error message to prevent leaking credentials or sensitive query strings.
+	 *
+	 * @param string $message Raw error message.
+	 * @return string Actionable sanitized error message.
+	 */
+	private function sanitize_geoip_error_message( string $message ): string {
+		$sanitized = $message;
+
+		// Redact Basic Auth headers or base64 tokens if present.
+		$sanitized = preg_replace( '/Authorization:\s*Basic\s+[A-Za-z0-9+\/=_]+/i', 'Authorization: Basic ••••••••', $sanitized );
+
+		// Redact URL userinfo (e.g. https://user:pass@host)
+		$sanitized = preg_replace( '#://([^:/@\s]+):([^@\s]+)@#', '://$1:••••••••@', (string) $sanitized );
+
+		// Redact query parameter secrets if present.
+		$sanitized = preg_replace( '/([?&](?:key|license_key|token|secret|password)=)[^&\s]+/i', '$1••••••••', (string) $sanitized );
+
+		return (string) $sanitized;
 	}
 
 	/**

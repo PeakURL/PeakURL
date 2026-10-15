@@ -161,6 +161,17 @@ class Credentials {
 			}
 		}
 
+		if ( '' === $account_id && '' === $license_key ) {
+			$this->context->get_settings_api()->delete_options(
+				array(
+					'maxmind_account_id',
+					'maxmind_license_key_encrypted',
+				)
+			);
+			$this->context->set_credentials( '', '' );
+			return;
+		}
+
 		$crypto_service = $this->context->get_crypto_service();
 
 		if ( '' !== $license_key && ! $crypto_service->is_configured() ) {
@@ -182,7 +193,7 @@ class Credentials {
 		);
 		$this->context->get_settings_api()->update_option(
 			'maxmind_license_key_encrypted',
-			'' === $license_key ? '' : $crypto_service->encrypt( $license_key ),
+			$crypto_service->encrypt( $license_key ),
 			$updated_at,
 			false,
 		);

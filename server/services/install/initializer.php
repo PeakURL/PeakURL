@@ -414,6 +414,95 @@ class Initializer {
 	}
 
 	/**
+	 * Request a durable, non-blocking GeoIP bootstrap run after installation.
+	 *
+	 * Idempotently schedules the existing weekly peakurl_geoip_update job to run
+	 * near-term if no valid local database exists and no credentials were supplied.
+	 * Never blocks installer completion or throws.
+	 *
+	 * @param Connection           $connection Database connection manager.
+	 * @param array<string, mixed> $config     Runtime configuration map.
+	 * @return void
+	 * @since 1.7.2
+	 */
+	public static function request_geoip_bootstrap(
+		Connection $connection,
+		array $config
+	): void {
+		$db_path = trim( (string) ( $config[ Constants::GEOIP_DB_PATH ] ?? '' ) );
+		if ( '' === $db_path ) {
+			$db_path = \PeakURL\Core\Config\Environment::get_instance()->get_content_path() . '/uploads/geoip/GeoLite2-City.mmdb';
+		}
+
+		if ( ( new \PeakURL\Services\Geoip\Filesystem() )->validate_database_file( $db_path ) ) {
+			return;
+		}
+
+		try {
+			$db = new PeakURL_DB( $connection, (string) ( $config[ Constants::DB_PREFIX ] ?? '' ) );
+			if ( ! $db->table_exists( 'cron_jobs' ) ) {
+				return;
+			}
+
+			$settings_api = new SettingsApi( $db );
+			$account_id   = (string) ( $settings_api->get_option( 'maxmind_account_id' ) ?? '' );
+			$license_key  = (string) ( $settings_api->get_option( 'maxmind_license_key_encrypted' ) ?? '' );
+			if ( '' !== trim( $account_id ) && '' !== trim( $license_key ) ) {
+				return;
+			}
+
+			$now      = Date::now();
+			$existing = $db->get_row_by( 'cron_jobs', array( 'id' => 'peakurl_geoip_update' ) );
+
+			if ( empty( $existing ) ) {
+				$db->insert(
+					'cron_jobs',
+					array(
+						'id'                => 'peakurl_geoip_update',
+						'title'             => 'GeoIP Database Refresh',
+						'schedule_interval' => 604800,
+						'retention_days'    => null,
+						'status'            => 'idle',
+						'next_run_at'       => $now,
+						'attempts'          => 0,
+						'max_attempts'      => 3,
+						'retry_delay'       => 60,
+						'is_enabled'        => 1,
+						'created_at'        => $now,
+						'updated_at'        => $now,
+					)
+				);
+			} else {
+				// Guard against clobbering an in-progress, user-disabled, or already valid scheduled job.
+				$is_enabled = ! empty( $existing['is_enabled'] );
+				$status     = (string) ( $existing['status'] ?? 'idle' );
+
+				if ( ! $is_enabled || 'running' === $status ) {
+					return;
+				}
+
+				$existing_next_run = (string) ( $existing['next_run_at'] ?? '' );
+				$is_already_due    = '' !== $existing_next_run && strtotime( $existing_next_run . ' UTC' ) <= strtotime( $now . ' UTC' );
+
+				if ( ! $is_already_due ) {
+					$db->update(
+						'cron_jobs',
+						array(
+							'next_run_at' => $now,
+							'updated_at'  => $now,
+						),
+						array( 'id' => 'peakurl_geoip_update' )
+					);
+				}
+			}
+		} catch ( \Throwable $exception ) {
+			error_log(
+				sprintf( 'PeakURL install: GeoIP bootstrap request failed: %s', $exception->getMessage() )
+			);
+		}
+	}
+
+	/**
 	 * Get a typed runtime configuration array from flat config values.
 	 *
 	 * @param array<string, string> $values Flat config values.

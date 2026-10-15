@@ -21,9 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * GeoipUpdateJob — downloads or refreshes the MaxMind GeoLite2 City database.
+ * GeoipUpdateJob — downloads or refreshes the GeoLite2 City database.
  *
- * Safe and idempotent. Cleanly no-ops if credentials are not configured.
+ * Uses direct MaxMind when credentials are configured; uses R2 when
+ * credentials are absent. Safe and idempotent.
  * Never interferes with normal URL resolution.
  *
  * @since 1.7.0
@@ -54,16 +55,18 @@ class GeoipUpdateJob implements JobHandlerInterface {
 	public function execute( ExecutionContext $context ): ExecutionResult {
 		$status = $this->geoip_service->get_status();
 
-		if ( empty( $status['credentialsConfigured'] ) ) {
-			return ExecutionResult::skipped( 'Location data is not configured' );
-		}
+		$has_credentials = ! empty( $status['credentialsConfigured'] );
 
-		if ( ! empty( $status['is_installed'] ) && empty( $status['is_outdated'] ) && ! $context->is_forced() ) {
+		if ( $has_credentials && ! empty( $status['is_installed'] ) && empty( $status['is_outdated'] ) && ! $context->is_forced() ) {
 			return ExecutionResult::skipped( 'GeoIP database is already up to date' );
 		}
 
 		try {
-			$result = $this->geoip_service->download_database();
+			$result = $this->geoip_service->download_database( $context->is_forced() );
+
+			if ( true !== ( $result['activated'] ?? null ) ) {
+				return ExecutionResult::skipped( 'GeoIP database is already up to date' );
+			}
 
 			return ExecutionResult::success(
 				sprintf(

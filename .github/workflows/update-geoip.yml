@@ -1,0 +1,164 @@
+name: Update GeoIP Database
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Validate and prepare upstream MaxMind artifacts locally without publishing to R2 or purging cache"
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    # Weekly schedule (Wednesday 04:00 UTC).
+    - cron: "0 4 * * 3"
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: geoip-r2-publisher
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish GeoIP to R2 and Cloudflare
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Gated by canonical main branch and one-time activation approval (or manual dry run).
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      (vars.PEAKURL_GEOIP_PUBLISH_APPROVED == 'true' || (github.event_name == 'workflow_dispatch' && inputs.dry_run == true))
+    environment: production-geoip
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+      R2_BUCKET: ${{ secrets.R2_BUCKET }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+      MAXMIND_ACCOUNT_ID: ${{ secrets.MAXMIND_ACCOUNT_ID }}
+      MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo, pdo_mysql, zip, phar
+          tools: composer
+
+      - name: Install server Composer dependencies
+        run: composer install --working-dir=server --no-interaction --prefer-dist
+
+      - name: Verify required publisher secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          IS_DRY_RUN=false
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            IS_DRY_RUN=true
+          fi
+
+          # MaxMind download credentials are required for BOTH live and dry-run workflow runs.
+          MISSING_MAXMIND=()
+          for secret_name in MAXMIND_ACCOUNT_ID MAXMIND_LICENSE_KEY; do
+            if [ -z "${!secret_name:-}" ]; then
+              MISSING_MAXMIND+=("$secret_name")
+            fi
+          done
+
+          if [ ${#MISSING_MAXMIND[@]} -ne 0 ]; then
+            echo "Error: Missing required MaxMind credentials: ${MISSING_MAXMIND[*]}" >&2
+            echo "Both live and dry-run workflow executions require official upstream download credentials." >&2
+            exit 1
+          fi
+
+          # R2 and Cloudflare credentials are required only for live publication.
+          if [ "$IS_DRY_RUN" = "true" ]; then
+            echo "Dry run requested: MaxMind credentials verified; skipping R2/Cloudflare publication credentials."
+            exit 0
+          fi
+
+          MISSING_PUBLISH=()
+          for secret_name in R2_ACCOUNT_ID R2_BUCKET AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY CLOUDFLARE_API_TOKEN CLOUDFLARE_ZONE_ID; do
+            if [ -z "${!secret_name:-}" ]; then
+              MISSING_PUBLISH+=("$secret_name")
+            fi
+          done
+
+          if [ ${#MISSING_PUBLISH[@]} -ne 0 ]; then
+            echo "Error: Missing required publisher secrets: ${MISSING_PUBLISH[*]}" >&2
+            echo "Ensure all R2 and Cloudflare publication credentials are configured in repository secrets (or production-geoip environment)." >&2
+            exit 1
+          fi
+
+          echo "All required publisher secrets verified."
+
+      - name: Download official GeoLite2 City archive
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DOWNLOAD_DIR="/tmp/geoip-download"
+          mkdir -p "$DOWNLOAD_DIR"
+          ARCHIVE_PATH="$DOWNLOAD_DIR/GeoLite2-City.tar.gz"
+
+          MAXMIND_URL="https://download.maxmind.com/geoip/databases/GeoLite2-City/download?suffix=tar.gz"
+
+          echo "Downloading official GeoLite2 City archive from MaxMind..."
+          curl --fail --silent --show-error --location \
+            --proto "=https" \
+            --proto-redir "=https" \
+            --max-redirs 5 \
+            --user "${MAXMIND_ACCOUNT_ID}:${MAXMIND_LICENSE_KEY}" \
+            --max-time 180 \
+            --max-filesize 104857600 \
+            --output "$ARCHIVE_PATH" \
+            "$MAXMIND_URL"
+
+          ARCHIVE_SIZE=$(wc -c < "$ARCHIVE_PATH" | tr -d ' ')
+          echo "Downloaded archive: $ARCHIVE_SIZE bytes."
+
+          if [ "$ARCHIVE_SIZE" -le 0 ]; then
+            echo "Error: Downloaded archive is empty." >&2
+            exit 1
+          fi
+
+      - name: Prepare and validate database artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          RELEASE_DIR="/tmp/geoip-release"
+          mkdir -p "$RELEASE_DIR"
+
+          php scripts/geoip/prepare-geoip.php \
+            --archive=/tmp/geoip-download/GeoLite2-City.tar.gz \
+            --output-dir="$RELEASE_DIR"
+
+      - name: Publish to R2 and purge Cloudflare cache
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PUBLISH_ARGS=(--dist-dir=/tmp/geoip-release --verify-cdn)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.dry_run }}" = "true" ]; then
+            PUBLISH_ARGS+=(--dry-run)
+          fi
+
+          bash scripts/geoip/publish-geoip.sh "${PUBLISH_ARGS[@]}"
+
+      - name: Clean up temporary runner artifacts
+        if: always()
+        shell: bash
+        run: |
+          rm -rf /tmp/geoip-download /tmp/geoip-release

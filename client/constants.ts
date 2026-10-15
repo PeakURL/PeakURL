@@ -5,8 +5,6 @@ import {
 	getPeakURLData,
 } from "@/data";
 
-declare const __PEAKURL_VERSION__: string | undefined;
-
 const DEFAULT_PEAKURL_ORIGIN = "https://peakurl.dev";
 const IS_BROWSER = "undefined" !== typeof window;
 
@@ -50,7 +48,6 @@ const fallbackApiPath = IS_BROWSER
 	? `${appBasePath}${DEFAULT_API_PATH}`
 	: DEFAULT_API_PATH;
 const appSiteName = IS_BROWSER ? getDataString(peakurlData.siteName) : "";
-const appVersion = IS_BROWSER ? getDataString(peakurlData.version) : "";
 const appDebug = import.meta.env?.DEV
 	? true
 	: IS_BROWSER
@@ -66,15 +63,6 @@ export const PEAKURL_NAME = "PeakURL";
  * Site name shown in UI copy and page titles.
  */
 export const PEAKURL_SITE_NAME = appSiteName || PEAKURL_NAME;
-
-/**
- * Current application version available to the dashboard.
- * The tracked .version source (via Vite define) is authoritative, with runtime data fallback.
- */
-export const PEAKURL_VERSION =
-	(typeof __PEAKURL_VERSION__ !== "undefined" && __PEAKURL_VERSION__) ||
-	appVersion ||
-	"1.0.0";
 
 /**
  * Whether debug mode is enabled for the current install.
@@ -172,3 +160,7 @@ export const FORGOT_PASSWORD_LOGO_URL =
  */
 export const RESET_PASSWORD_LOGO_URL =
 	"https://peakurl.org?utm_source=peakurl_reset_password&utm_medium=reset_password&utm_campaign=logo_link";
+
+/** Public sponsorship page shared by navigation and search. */
+export const SPONSOR_URL =
+	"https://peakurl.org/sponsor?utm_source=peakurl_dashboard&utm_medium=dashboard&utm_campaign=sponsor_link";

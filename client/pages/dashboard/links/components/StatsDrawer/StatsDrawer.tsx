@@ -1,5 +1,5 @@
 import {
-	Dialog,
+	DialogBackdrop,
 	DialogPanel,
 	DialogTitle,
 	Tab,
@@ -10,7 +10,6 @@ import {
 } from "@headlessui/react";
 import {
 	X,
-	Link2,
 	BarChart3,
 	Globe,
 	Share2,
@@ -20,6 +19,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+import { DrawerDialog } from "@/components";
 import { useGetLinkStatsQuery } from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
 import { copyToClipboard } from "@/shared/browser";
@@ -229,7 +229,7 @@ export default function StatsDrawer({
 		}
 	);
 
-	if (!open || !link || !canViewStats) return null;
+	if (!link || !canViewStats) return null;
 
 	const shortUrl = getShortUrl(link);
 	const statsPayload = statsData?.data;
@@ -246,12 +246,8 @@ export default function StatsDrawer({
 		: destinationUnavailableLabel;
 
 	return (
-		<Dialog
-			open={open}
-			onClose={() => setOpen(false)}
-			className="relative z-50"
-		>
-			<div className="links-modal-backdrop" aria-hidden="true" />
+		<DrawerDialog open={open} onClose={() => setOpen(false)}>
+			<DialogBackdrop transition className="dialog-backdrop" />
 
 			<div className="fixed inset-0 overflow-hidden">
 				<div className="absolute inset-0 overflow-hidden">
@@ -265,20 +261,20 @@ export default function StatsDrawer({
 						<DialogPanel
 							dir={direction}
 							transition
-							className={`links-drawer-panel ${
+							className={`drawer-panel drawer-transition links-drawer-panel ${
 								isRtl
 									? "data-closed:-translate-x-full"
 									: "data-closed:translate-x-full"
 							}`}
 						>
-							<div className="flex h-full flex-col overflow-y-auto bg-surface shadow-xl">
+							<div className="links-drawer-layout">
 								{/* Header */}
 								<div className="links-drawer-header">
-									<div className="links-drawer-header-inner">
+									<div className="drawer-header links-drawer-header-inner">
 										<div className="links-drawer-header-copy min-w-0 flex-1">
-											<DialogTitle className="links-drawer-title">
-												<div className="links-drawer-title-icon">
-													<Link2 className="w-4 h-4 text-accent" />
+											<DialogTitle className="drawer-title links-drawer-title">
+												<div className="drawer-title-icon links-drawer-title-icon">
+													<BarChart3 />
 												</div>
 												{__("Link Analytics")}
 											</DialogTitle>
@@ -298,7 +294,7 @@ export default function StatsDrawer({
 												<span className="links-drawer-description-separator">
 													&bull;
 												</span>
-												<span className="links-drawer-short-link">
+												<span className="links-drawer-short-link links-short-url">
 													<span>
 														/
 														{link.alias ||
@@ -406,7 +402,7 @@ export default function StatsDrawer({
 										<button
 											type="button"
 											onClick={() => setOpen(false)}
-											className="links-drawer-close"
+											className="drawer-icon-button links-drawer-close"
 										>
 											<span className="sr-only">
 												{__("Close panel")}
@@ -417,7 +413,7 @@ export default function StatsDrawer({
 								</div>
 
 								{/* Content */}
-								<div className="links-drawer-content">
+								<div className="drawer-content links-drawer-content">
 									{/* Tabs */}
 									<TabGroup
 										selectedIndex={selectedTab}
@@ -536,7 +532,7 @@ export default function StatsDrawer({
 								</div>
 
 								{/* Footer */}
-								<div className="links-drawer-footer">
+								<div className="drawer-footer links-drawer-footer">
 									<div className="links-drawer-footer-actions">
 										<button
 											type="button"
@@ -552,6 +548,6 @@ export default function StatsDrawer({
 					</div>
 				</div>
 			</div>
-		</Dialog>
+		</DrawerDialog>
 	);
 }

@@ -58,7 +58,9 @@ export function ActivityRow({
 					<input
 						type="checkbox"
 						checked={isSelected}
-						onChange={() => onToggleSelect(activity.id as string)}
+						onChange={() =>
+							activity.id && onToggleSelect(activity.id)
+						}
 						className="links-checkbox"
 						aria-label={message}
 					/>

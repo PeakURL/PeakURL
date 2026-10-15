@@ -102,7 +102,7 @@ function DeleteLinkModal({
 
 	return (
 		<Dialog open={open} onClose={handleClose} className="relative z-50">
-			<div className="links-modal-backdrop" aria-hidden="true" />
+			<div className="dialog-backdrop" aria-hidden="true" />
 
 			<div className="links-modal-shell">
 				<DialogPanel

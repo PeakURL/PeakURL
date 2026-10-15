@@ -1,11 +1,11 @@
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Database, DatabaseZap } from "lucide-react";
 
 import { Button } from "@/components";
 import { __ } from "@/i18n";
 import { formatRelativeTime } from "@/shared/dates";
 
 import type { DatabaseSchemaProps } from "../types";
-import InlineNotice from "./InlineNotice";
+import UpdateStatus from "./UpdateStatus";
 import IssueList from "./IssueList";
 import MetricGrid from "./MetricGrid";
 import SectionHeader from "./SectionHeader";
@@ -35,30 +35,36 @@ function DatabaseSchema({
 	return (
 		<UpdateSection>
 			<SectionHeader
+				icon={Database}
 				direction={direction}
 				title={__("Database Schema")}
 				description={__(
-					"PeakURL can repair missing tables, columns, indexes, and legacy leftovers so the current release runs against the expected schema."
+					"Keep the database structure compatible with this PeakURL release."
 				)}
 				badge={databaseState}
-				primaryAction={
-					<Button
-						variant={
-							databaseStatus?.upgradeRequired
-								? "primary"
-								: "outline"
-						}
-						size="sm"
-						className="settings-updates-repair-button"
-						onClick={onRepair}
-						loading={isRepairing}
-						disabled={isLoading || isChecking || isApplying}
-					>
-						{__("Run Database Upgrade")}
-					</Button>
-				}
 			/>
-
+			<div className="settings-updates-maintenance">
+				<UpdateStatus
+					direction={direction}
+					icon={noticeIcon}
+					title={databaseState.title}
+					description={databaseState.description}
+					tone={databaseState.tone}
+				/>
+				<Button
+					variant={
+						databaseStatus?.upgradeRequired ? "primary" : "outline"
+					}
+					size="sm"
+					className="settings-updates-repair-button"
+					icon={DatabaseZap}
+					onClick={onRepair}
+					loading={isRepairing}
+					disabled={isLoading || isChecking || isApplying}
+				>
+					{__("Run Database Upgrade")}
+				</Button>
+			</div>
 			<MetricGrid
 				direction={direction}
 				items={[
@@ -85,17 +91,6 @@ function DatabaseSchema({
 					},
 				]}
 			/>
-
-			<div className="settings-updates-block">
-				<InlineNotice
-					direction={direction}
-					icon={noticeIcon}
-					title={databaseState.title}
-					description={databaseState.description}
-					tone={databaseState.tone}
-				/>
-			</div>
-
 			{showDatabaseDetails ? (
 				<div className="settings-updates-divider">
 					{databaseStatus?.lastError ? (

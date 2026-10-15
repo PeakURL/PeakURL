@@ -8,7 +8,7 @@
 	}
 
 	.import-layout-tab-active {
-		@apply bg-accent text-white font-medium shadow-sm hover:text-white;
+		@apply bg-action text-white font-medium shadow-sm hover:text-white;
 	}
 
 	.import-layout-tab-icon {

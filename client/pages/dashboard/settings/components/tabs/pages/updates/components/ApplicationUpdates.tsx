@@ -1,14 +1,18 @@
-import { useState } from "react";
-import { AlertCircle, CheckCircle2, Download } from "lucide-react";
+import { Link } from "react-router";
+import {
+	AlertCircle,
+	ExternalLink,
+	PackageCheck,
+	PackagePlus,
+} from "lucide-react";
 
 import { __ } from "@/i18n";
 import { formatRelativeTime } from "@/shared/dates";
-import UpdateDetailsModal from "@/pages/layout/dashboard/AdminNotices/UpdateDetailsModal";
+import { sanitizeUrl } from "@/shared/links";
 
 import type { ApplicationUpdatesProps } from "../types";
-import InlineNotice from "./InlineNotice";
+import UpdateStatus from "./UpdateStatus";
 import MetricGrid from "./MetricGrid";
-import SectionHeader from "./SectionHeader";
 import UpdateActions from "./UpdateActions";
 import UpdateSection from "./UpdateSection";
 
@@ -32,104 +36,101 @@ function ApplicationUpdates({
 	onApply,
 	onReinstall,
 }: ApplicationUpdatesProps) {
-	const [updateModalOpen, setUpdateModalOpen] = useState(false);
+	// Available updates link to their published notes; otherwise show the installed release.
+	const releaseNotesUrl = updateAvailable
+		? sanitizeUrl(status?.releaseNotesUrl) ||
+			"https://go.peakurl.org/release-notes"
+		: "";
 
 	// Match the notice icon to the strongest application update state.
 	const noticeIcon =
 		appState.tone === "error"
 			? AlertCircle
 			: updateAvailable
-				? Download
-				: CheckCircle2;
+				? PackagePlus
+				: PackageCheck;
 
 	return (
-		<>
-			<UpdateSection>
-				<SectionHeader
+		<UpdateSection>
+			<div className="settings-updates-release">
+				<UpdateStatus
 					direction={direction}
-					title={__("PeakURL Updates")}
-					description={__(
-						"Check for new PeakURL releases, install updates, or reinstall the latest packaged release from the dashboard."
-					)}
-					badge={appState}
-					badgeAction={
-						<button
-							type="button"
-							onClick={() => setUpdateModalOpen(true)}
-							className="settings-updates-detail-link"
-						>
-							{__("Release notes")}
-						</button>
-					}
-					primaryAction={
-						<UpdateActions
-							direction={direction}
-							updateAvailable={updateAvailable}
-							reinstallAvailable={reinstallAvailable}
-							canApply={canApply}
-							isLoading={isLoading}
-							isChecking={isChecking}
-							isApplying={isApplying}
-							isReinstalling={isReinstalling}
-							isRepairing={isRepairing}
-							disabledReason={status?.applyDisabledReason || ""}
-							onCheck={onCheck}
-							onApply={onApply}
-							onReinstall={onReinstall}
-						/>
+					icon={noticeIcon}
+					title={appState.title}
+					description={appState.description}
+					tone={appState.tone}
+					prominent
+					details={
+						releaseNotesUrl ? (
+							<a
+								href={releaseNotesUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="settings-updates-detail-link"
+							>
+								{__("Release notes")}{" "}
+								<ExternalLink size={13} aria-hidden="true" />
+							</a>
+						) : (
+							<Link
+								to="/dashboard/about?tab=releases"
+								className="settings-updates-detail-link"
+							>
+								{__("Release notes")}
+							</Link>
+						)
 					}
 				/>
-
-				<MetricGrid
+				<UpdateActions
 					direction={direction}
-					items={[
-						{
-							label: __("Installed Version"),
-							value: status?.currentVersion || __("Unknown"),
-							valueDirection: "ltr",
-						},
-						{
-							label: __("Latest Version"),
-							value: status?.latestVersion || __("Unknown"),
-							valueDirection: "ltr",
-						},
-						...(showReleaseMeta && status?.releasedAt
-							? [
-									{
-										label: __("Released"),
-										value: formatRelativeTime(
-											status.releasedAt
-										),
-										valueDirection: "ltr" as const,
-									},
-								]
-							: []),
-						{
-							label: __("Last Checked"),
-							value: status?.lastCheckedAt
-								? formatRelativeTime(status.lastCheckedAt)
-								: __("Never"),
-							valueDirection: "ltr",
-						},
-					]}
+					updateAvailable={updateAvailable}
+					reinstallAvailable={reinstallAvailable}
+					canApply={canApply}
+					isLoading={isLoading}
+					isChecking={isChecking}
+					isApplying={isApplying}
+					isReinstalling={isReinstalling}
+					isRepairing={isRepairing}
+					disabledReason={status?.applyDisabledReason || ""}
+					onCheck={onCheck}
+					onApply={onApply}
+					onReinstall={onReinstall}
 				/>
-
-				<div className="settings-updates-block">
-					<InlineNotice
-						direction={direction}
-						icon={noticeIcon}
-						title={appState.title}
-						description={appState.description}
-						tone={appState.tone}
-					/>
-				</div>
-			</UpdateSection>
-
-			<UpdateDetailsModal
-				open={updateModalOpen}
-				setOpen={setUpdateModalOpen}
+			</div>
+			<MetricGrid
+				direction={direction}
+				items={[
+					{
+						label: __("Installed Version"),
+						value: status?.currentVersion || __("Unknown"),
+						valueDirection: "ltr",
+					},
+					{
+						label: __("Latest Version"),
+						value: status?.latestVersion || __("Unknown"),
+						valueDirection: "ltr",
+					},
+					...(showReleaseMeta && status?.releasedAt
+						? [
+								{
+									label: __("Released"),
+									value: formatRelativeTime(
+										status.releasedAt
+									),
+									valueDirection: "ltr" as const,
+								},
+							]
+						: []),
+					{
+						label: __("Last Checked"),
+						value: status?.lastCheckedAt
+							? formatRelativeTime(status.lastCheckedAt)
+							: __("Never"),
+						valueDirection: "ltr",
+					},
+				]}
 			/>
-		</>
+		</UpdateSection>
 	);
 }
 

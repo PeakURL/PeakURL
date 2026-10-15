@@ -1,4 +1,5 @@
 @layer components {
+	.integrations-tab,
 	.settings-general,
 	.settings-api,
 	.settings-email,
@@ -6,22 +7,94 @@
 	.settings-performance,
 	.settings-security,
 	.settings-updates {
-		@apply space-y-5;
+		@apply space-y-6;
 	}
 
 	.settings-form {
 		@apply flex flex-col gap-6;
 	}
 
-	.settings-fieldset {
-		@apply flex min-w-0 flex-col gap-5 rounded-xl bg-surface p-5 shadow-sm ring-1 ring-inset ring-stroke sm:p-6;
-		border: none;
+	.settings-section {
+		@apply flex min-w-0 flex-col gap-5 border-b border-stroke/80 pb-6;
 	}
 
-	.settings-legend {
-		@apply block w-full text-lg font-semibold text-heading;
-		float: none;
-		padding: 0;
+	.settings-section:last-child {
+		@apply border-b-0 pb-0;
+	}
+
+	.settings-section:has(+ .settings-general-actions),
+	.settings-section:has(+ .settings-email-actions) {
+		@apply border-b-0 pb-0;
+	}
+
+	.settings-tab-header {
+		@apply flex min-w-0 flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between;
+	}
+	.settings-tab-header-copy {
+		@apply min-w-0 flex-1 space-y-2;
+		min-width: min(100%, 18rem);
+	}
+	.settings-tab-header .settings-section-title {
+		@apply text-xl;
+	}
+	.settings-tab-header-actions {
+		@apply flex flex-wrap items-center gap-2;
+	}
+	.settings-documentation-link {
+		@apply inline-flex h-9 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-stroke bg-surface px-3 text-xs font-medium text-accent transition-colors hover:bg-selected focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+	}
+
+	.settings-section-header {
+		@apply flex min-w-0 flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between;
+	}
+
+	.settings-section-tools {
+		@apply flex flex-wrap items-center gap-3;
+	}
+	.settings-section-copy {
+		@apply min-w-0 flex-1 space-y-1 text-start;
+	}
+
+	.settings-section-header > .settings-section-copy {
+		min-width: min(100%, 18rem);
+	}
+
+	.settings-section-header > .settings-section-title {
+		@apply w-auto flex-1;
+	}
+
+	.settings-section-title-row {
+		@apply flex flex-wrap items-center gap-2;
+	}
+
+	.settings-section-title-row > .settings-section-title {
+		@apply w-auto;
+	}
+
+	.settings-intro {
+		@apply flex min-w-0 items-start gap-3;
+	}
+
+	.settings-section-title {
+		@apply flex w-full min-w-0 items-center gap-2.5 text-lg font-semibold leading-7 text-heading;
+	}
+
+	.settings-section-icon {
+		@apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-selected-border/70 bg-selected text-accent;
+	}
+	.settings-section-heading {
+		@apply rounded-lg bg-surface-alt/60 p-3 sm:p-4;
+	}
+	.settings-section-heading .settings-group-description {
+		@apply leading-6;
+	}
+	.settings-section-heading
+		.settings-section-title
+		+ .settings-group-description {
+		@apply mt-2;
+	}
+	.settings-section > .settings-section-title {
+		@apply rounded-lg bg-surface-alt/60 p-3 sm:p-4;
 	}
 
 	.settings-group-description {
@@ -29,7 +102,7 @@
 	}
 
 	.settings-grid {
-		@apply grid grid-cols-1 gap-5 md:grid-cols-2;
+		@apply grid grid-cols-1 gap-4 md:grid-cols-2;
 	}
 
 	.settings-section-label {
@@ -41,7 +114,7 @@
 	.settings-email-actions,
 	.settings-location-actions,
 	.settings-security-password-actions {
-		@apply mt-6 flex flex-wrap gap-3;
+		@apply flex flex-wrap gap-3 border-t border-stroke pt-4;
 	}
 
 	.settings-general-actions-start,
@@ -59,31 +132,54 @@
 	}
 
 	.settings-stat-grid {
-		@apply grid grid-cols-1 gap-4 md:grid-cols-3;
+		@apply grid gap-4 rounded-lg border border-stroke/70 bg-surface-alt/60 p-4;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
 	}
 
-	.settings-stat-card {
+	.settings-statistic {
 		text-align: start;
-		@apply rounded-xl bg-surface p-4 sm:p-5 shadow-sm ring-1 ring-inset ring-stroke;
+		@apply min-w-0;
 	}
 
 	.settings-stat-label {
-		@apply text-xs font-semibold tracking-[0.14em] text-text-muted;
+		@apply text-xs font-medium text-text-muted;
 	}
 
 	.settings-stat-value {
-		@apply mt-3 text-lg font-semibold text-heading;
-	}
-
-	.settings-updates-block {
-		@apply mt-0;
+		@apply mt-2 text-lg font-semibold text-heading;
 	}
 
 	.settings-updates-divider {
 		@apply mt-5 space-y-3 border-t border-stroke pt-5;
 	}
-
-	.settings-separator {
-		@apply m-0 w-full border-t border-stroke;
+	.settings-notice {
+		@apply rounded-lg border-s-2 p-3;
+	}
+	.settings-notice-layout {
+		@apply flex items-start gap-3;
+	}
+	.settings-notice-icon {
+		@apply mt-0.5 shrink-0;
+	}
+	.settings-notice-content {
+		@apply min-w-0 space-y-1 text-start;
+	}
+	.settings-notice-title {
+		@apply text-sm font-semibold;
+	}
+	.settings-notice-text {
+		@apply text-xs leading-5 opacity-80;
+	}
+	.settings-notice-success {
+		@apply border-emerald-500/50 bg-emerald-50/60 text-emerald-900 dark:border-emerald-500/40 dark:bg-emerald-500/10 dark:text-emerald-200;
+	}
+	.settings-notice-info {
+		@apply border-blue-500/40 bg-blue-50/60 text-blue-900 dark:border-blue-500/40 dark:bg-blue-500/10 dark:text-blue-200;
+	}
+	.settings-notice-error {
+		@apply border-red-500/50 bg-red-50/60 text-red-900 dark:border-red-500/40 dark:bg-red-500/10 dark:text-red-200;
+	}
+	.settings-notice-warning {
+		@apply border-amber-500/50 bg-amber-50/60 text-amber-900 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-200;
 	}
 }

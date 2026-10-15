@@ -120,7 +120,7 @@
 	}
 
 	.links-detail-marker-primary {
-		@apply h-2.5 w-2.5 bg-accent;
+		@apply h-2.5 w-2.5 bg-action;
 	}
 
 	.links-detail-marker-secondary {

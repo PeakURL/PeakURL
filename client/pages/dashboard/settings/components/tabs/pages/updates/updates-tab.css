@@ -1,164 +1,161 @@
 @layer components {
-	.settings-updates-status-badge {
-		@apply inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold;
+	.settings-updates .settings-updates-section {
+		@apply gap-0 overflow-hidden rounded-2xl border border-stroke bg-surface p-0;
 	}
-
+	.settings-updates-section-header {
+		@apply flex min-w-0 flex-wrap items-start justify-between gap-3 border-b border-stroke/70 p-4 sm:px-5;
+	}
+	.settings-updates-intro {
+		@apply min-w-0 flex-1;
+		min-width: min(100%, 15rem);
+	}
+	.settings-updates-section-header .settings-group-description {
+		@apply mt-2 text-xs leading-5;
+	}
+	.settings-updates-release {
+		@apply grid min-w-0 grid-cols-1 items-center gap-5 p-4 sm:p-6;
+		background: linear-gradient(
+			125deg,
+			color-mix(in srgb, var(--color-selected) 55%, var(--color-surface)),
+			var(--color-surface)
+		);
+	}
+	.settings-update-status {
+		@apply flex min-w-0 items-start gap-3;
+	}
+	.settings-update-status-icon {
+		@apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border;
+	}
+	.settings-update-status-success .settings-update-status-icon {
+		@apply border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300;
+	}
+	.settings-update-status-info .settings-update-status-icon {
+		@apply border-selected-border bg-selected text-accent;
+	}
+	.settings-update-status-error .settings-update-status-icon {
+		@apply border-red-500/20 bg-red-500/10 text-red-700 dark:text-red-300;
+	}
+	.settings-update-status-copy {
+		@apply min-w-0 flex-1 space-y-1;
+	}
+	.settings-update-status-title {
+		@apply text-sm font-semibold leading-6 text-heading;
+	}
+	.settings-update-status-description {
+		@apply max-w-2xl text-xs leading-5 text-text-muted;
+	}
+	.settings-update-status-details {
+		@apply pt-2;
+	}
+	.settings-update-status-prominent {
+		@apply flex-col gap-4;
+	}
+	.settings-update-status-prominent .settings-update-status-icon {
+		@apply h-14 w-14 rounded-2xl;
+	}
+	.settings-update-status-prominent .settings-update-status-title {
+		@apply text-[22px] leading-8;
+	}
+	.settings-update-status-prominent .settings-update-status-description {
+		@apply text-sm leading-6;
+	}
+	.settings-updates-maintenance {
+		@apply flex min-w-0 flex-col items-start gap-4 p-4 sm:p-5;
+	}
+	.settings-updates-status-badge {
+		@apply inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold;
+	}
 	.settings-updates-status-badge-info {
 		@apply border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200;
 	}
-
 	.settings-updates-status-badge-success {
 		@apply border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
 	}
-
 	.settings-updates-status-badge-error {
 		@apply border-red-200 bg-red-50 text-red-800 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
 	}
-
-	.settings-updates-card-header {
-		@apply flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between border-b border-stroke pb-5;
-	}
-
-	.settings-updates-card-title-row {
-		@apply flex flex-wrap items-center gap-3;
-	}
-
-	.settings-updates-card-actions {
-		@apply flex flex-col sm:flex-row sm:flex-wrap w-full sm:w-auto gap-3;
-	}
-
 	.settings-updates-metric-grid {
-		@apply mt-0! flex flex-col md:flex-row md:flex-wrap gap-3;
+		@apply grid grid-cols-2 gap-4 border-t border-stroke/70 bg-surface-alt/40 p-4 sm:px-5;
 	}
-
 	.settings-updates-metric-item {
-		text-align: start;
-		@apply flex-1 min-w-50 rounded-lg border border-stroke bg-bg px-4 py-4;
+		@apply min-w-0 text-start;
 	}
-
 	.settings-updates-metric-label {
-		@apply text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted;
+		@apply text-xs font-medium text-text-muted;
 	}
-
+	.settings-updates-metric-content {
+		@apply flex items-center justify-between gap-3;
+	}
 	.settings-updates-metric-value {
-		@apply mt-2 text-lg font-semibold text-heading;
+		@apply mt-1 text-base font-semibold text-heading;
 	}
-
-	.settings-updates-notice {
-		@apply rounded-lg border p-4;
-	}
-
-	.settings-updates-notice-info {
-		@apply border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200;
-	}
-
-	.settings-updates-notice-success {
-		@apply border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
-	}
-
-	.settings-updates-notice-error {
-		@apply border-red-200 bg-red-50 text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
-	}
-
-	.settings-updates-notice-layout {
-		@apply flex items-start gap-3;
-	}
-
-	.settings-updates-notice-icon {
-		@apply mt-0.5 shrink-0;
-	}
-
-	.settings-updates-notice-content {
-		text-align: start;
-		@apply space-y-1;
-	}
-
-	.settings-updates-notice-title {
-		@apply text-sm font-semibold;
-	}
-
-	.settings-updates-notice-text {
-		@apply text-sm leading-6 opacity-80;
-	}
-
 	.settings-updates-actions {
-		@apply flex flex-col gap-3;
+		@apply flex w-full min-w-0 flex-col gap-2;
 	}
-
-	.settings-updates-actions-start {
-		@apply sm:items-start;
-	}
-
 	.settings-updates-actions-row {
-		@apply flex flex-col gap-3 sm:flex-row sm:items-center;
+		@apply flex flex-col gap-2;
 	}
-
-	.settings-updates-actions-row-start {
-		@apply sm:justify-start;
-	}
-
-	.settings-updates-actions-container {
-		@apply mt-6 flex flex-wrap gap-3;
-	}
-
 	.settings-updates-check-button,
-	.settings-updates-install-button {
-		@apply w-full sm:w-auto sm:min-w-44 whitespace-nowrap;
+	.settings-updates-install-button,
+	.settings-updates-reinstall-button {
+		@apply w-full justify-center whitespace-nowrap;
 	}
-
-	.settings-updates-reinstall-button,
 	.settings-updates-repair-button {
-		@apply w-full sm:w-auto sm:min-w-52 whitespace-nowrap;
+		@apply w-full shrink-0 whitespace-nowrap sm:w-auto;
 	}
-
 	.settings-updates-disabled-reason {
-		text-align: start;
-		@apply max-w-sm rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-5 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200;
+		@apply text-start text-xs leading-5 text-text-muted;
 	}
-
-	.settings-updates-detail-row {
-		@apply flex flex-col gap-2 rounded-lg border border-stroke bg-bg px-4 py-3 sm:flex-row sm:items-center sm:justify-between;
-	}
-
-	.settings-updates-detail-label {
-		@apply flex items-center gap-2 text-sm text-text-muted;
-	}
-
 	.settings-updates-detail-link {
-		@apply inline-flex items-center gap-2 text-[13px] font-normal text-accent hover:underline;
+		@apply inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-stroke bg-surface px-3 text-xs font-medium text-accent transition-colors hover:bg-selected focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
-
-	.settings-updates-detail-value {
-		text-align: start;
-		@apply text-sm font-medium text-heading;
-	}
-
 	.settings-updates-issues {
-		text-align: start;
-		@apply rounded-lg border border-stroke bg-bg p-4;
+		@apply border-s-2 border-stroke ps-4 text-start;
 	}
-
 	.settings-updates-issues-title {
 		@apply text-sm font-semibold text-heading;
 	}
-
 	.settings-updates-issues-list {
 		@apply mt-3 list-disc space-y-2 ps-5 text-sm leading-6 text-text-muted;
 	}
-
 	.settings-updates-loading {
 		@apply rounded-xl border border-stroke bg-surface p-5 text-sm text-text-muted;
 	}
-
 	.settings-updates-error-card {
 		@apply rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
 	}
-
 	.settings-updates-error-title {
 		@apply font-semibold;
 	}
-
 	.settings-updates-error-text {
 		@apply mt-1 opacity-80;
+	}
+	.settings-updates-section .settings-updates-divider {
+		@apply m-0 border-t border-stroke/70 p-4 sm:p-5;
+	}
+	@container settings-content (min-width: 36rem) {
+		.settings-update-status-prominent {
+			@apply flex-row items-start;
+		}
+		.settings-update-status-prominent .settings-update-status-icon {
+			@apply mt-1;
+		}
+	}
+	@container settings-content (min-width: 42rem) {
+		.settings-updates-release {
+			grid-template-columns: minmax(0, 1fr) 15rem;
+		}
+		.settings-updates-maintenance {
+			@apply flex-row items-center justify-between;
+		}
+		.settings-updates-metric-grid {
+			@apply grid-cols-4;
+		}
+		.settings-updates-metric-grid:not(:has(> :nth-child(4))) {
+			@apply grid-cols-3;
+		}
+		.settings-updates-metric-item + .settings-updates-metric-item {
+			@apply border-s border-stroke/80 ps-4;
+		}
 	}
 }

@@ -28,7 +28,8 @@ function UpdateActions({
 		(updateAvailable || reinstallAvailable) &&
 		!canApply &&
 		Boolean(disabledReason);
-	const primaryVariant: ButtonVariant = canApply ? "primary" : "outline";
+	const primaryVariant: ButtonVariant =
+		updateAvailable && canApply ? "primary" : "outline";
 	const primaryAction = updateAvailable ? (
 		<Button
 			variant={primaryVariant}
@@ -71,11 +72,15 @@ function UpdateActions({
 	const showCheckButton = reinstallAvailable || !updateAvailable;
 
 	return (
-		<div className="settings-updates-actions settings-updates-actions-start">
-			<div className="settings-updates-actions-row settings-updates-actions-row-start">
+		<div className="settings-updates-actions">
+			<div className="settings-updates-actions-row">
 				{showCheckButton ? (
 					<Button
-						variant="outline"
+						variant={
+							updateAvailable && canApply
+								? "secondary"
+								: "primary"
+						}
 						size="sm"
 						className="settings-updates-check-button"
 						onClick={onCheck}

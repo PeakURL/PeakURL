@@ -13,7 +13,7 @@ import { Button } from "@/components/ui";
 import { __, sprintf } from "@/i18n";
 import { extractErrorMessage, getErrorStatus } from "@/shared/errors";
 
-import { BrandLockup } from "../BrandLockup";
+import { Logo } from "../Logo";
 import type { ApiErrorPageProps } from "../types";
 
 function getStatusText(error: unknown): string {
@@ -132,7 +132,7 @@ export function ApiErrorPage({
 		<main id="page-container" className="api-error-page">
 			<div className="api-error-container">
 				<header className="api-error-header">
-					<BrandLockup size="md" />
+					<Logo size="md" />
 					<span className="api-error-status-pill">
 						{__("Service unavailable")}
 					</span>

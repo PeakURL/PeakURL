@@ -1,42 +1,35 @@
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
+
 import type { SectionHeaderProps } from "../types";
 import StatusBadge from "./StatusBadge";
 
 /**
- * Renders the title, description, badge, and action area for an update section.
+ * Renders the title, description, and status badge for an update section.
  */
 function SectionHeader({
+	icon: Icon,
 	direction,
 	title,
 	description,
 	badge,
-	badgeAction,
-	primaryAction,
-	secondaryAction,
 }: SectionHeaderProps) {
 	return (
-		<>
-			<h2 className="settings-legend flex items-center gap-2">
-				{title}
-				{badge ? (
-					<StatusBadge tone={badge.tone} label={badge.label} />
-				) : null}
-				{badgeAction}
-			</h2>
-			<div dir={direction} className="settings-updates-card-header">
-				<div className="settings-updates-card-copy">
-					<p className="settings-group-description mb-0! mt-0!">
-						{description}
-					</p>
-				</div>
-
-				{primaryAction || secondaryAction ? (
-					<div className="settings-updates-card-actions">
-						{secondaryAction}
-						{primaryAction}
+		<div dir={direction} className="settings-updates-section-header">
+			<div className="settings-updates-intro">
+				<div className="settings-section-copy">
+					<div className="settings-section-title-row">
+						<SectionTitle icon={Icon}>{title}</SectionTitle>
+						{badge ? (
+							<StatusBadge
+								tone={badge.tone}
+								label={badge.label}
+							/>
+						) : null}
 					</div>
-				) : null}
+					<p className="settings-group-description">{description}</p>
+				</div>
 			</div>
-		</>
+		</div>
 	);
 }
 

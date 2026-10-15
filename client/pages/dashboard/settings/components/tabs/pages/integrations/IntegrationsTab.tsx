@@ -3,7 +3,6 @@ import {
 	CheckCircle2,
 	Clock,
 	Copy,
-	ExternalLink,
 	FlaskConical,
 	History,
 	KeyRound,
@@ -18,6 +17,11 @@ import {
 } from "lucide-react";
 
 import { Button, ConfirmDialog, Modal, ReadOnlyValueBlock } from "@/components";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
+import {
+	DocumentationLink,
+	TabHeader,
+} from "@/pages/dashboard/settings/components/TabHeader";
 import {
 	useDeleteWebhookMutation,
 	useGetWebhookEventsQuery,
@@ -291,110 +295,90 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 	return (
 		<div className="integrations-tab">
-			{/* Integrations Intro Header Card */}
-			<section className="settings-fieldset">
-				<div dir={direction} className="integrations-tab-intro-row">
-					<div className="integrations-tab-intro-icon">
-						<WebhookIcon className="integrations-tab-intro-icon-glyph" />
-					</div>
-					<div className="integrations-tab-intro-copy">
-						<h2 className="settings-legend mb-0!">
-							{__("Integrations")}
-						</h2>
-						<p className="settings-group-description mb-0! mt-0!">
-							{__(
-								"Connect PeakURL to your automations with outbound webhooks for link activity."
-							)}
-						</p>
-					</div>
-				</div>
+			<section className="settings-section">
+				<TabHeader
+					icon={WebhookIcon}
+					title={__("Integrations")}
+					description={__(
+						"Connect PeakURL to your automations with outbound webhooks for link activity."
+					)}
+				/>
 			</section>
-
-			{/* Webhooks Section */}
-			<section dir={direction} className="settings-fieldset">
-				<div className="integrations-tab-panel-header">
-					<div className="integrations-tab-panel-copy">
-						<h3 className="integrations-tab-panel-title">
+			<section dir={direction} className="settings-section">
+				<div className="settings-section-header settings-section-heading">
+					<div className="settings-section-copy">
+						<SectionTitle icon={WebhookIcon}>
 							{__("Webhooks")}
-						</h3>
-						<p className="integrations-tab-panel-description">
+						</SectionTitle>
+						<p className="settings-group-description">
 							{__(
 								"PeakURL sends HMAC-SHA256 signed POST requests to your endpoint when selected link events occur."
 							)}
 						</p>
-						<div className="mt-2">
-							<a
-								href="https://go.peakurl.org/5f866a"
-								target="_blank"
-								rel="noopener noreferrer"
-								dir={direction}
-								className="integrations-tab-docs-link"
-							>
-								{__("Read documentation")}
-								<ExternalLink size={13} className="shrink-0" />
-							</a>
-						</div>
 					</div>
 
-					<div className="flex items-center gap-3">
-						{isWebhooksEnabled && webhooks.length > 0 && (
-							<Button
-								size="sm"
-								icon={Plus}
-								onClick={() => {
-									setDrawerWebhook(null);
-									setIsFormDrawerOpen(true);
-								}}
-							>
-								{__("Add Webhook")}
-							</Button>
-						)}
-						<span className="integrations-tab-status-pill">
-							{!isWebhooksEnabled
-								? __("Disabled")
-								: webhooks.length > 0
-									? sprintf(
-											_n(
-												"%d configured",
-												"%d configured",
+					<div className="settings-section-tools">
+						<DocumentationLink href="https://go.peakurl.org/5f866a" />
+						<div className="integrations-tab-controls">
+							{isWebhooksEnabled && webhooks.length > 0 && (
+								<Button
+									size="sm"
+									icon={Plus}
+									onClick={() => {
+										setDrawerWebhook(null);
+										setIsFormDrawerOpen(true);
+									}}
+								>
+									{__("Add Webhook")}
+								</Button>
+							)}
+							<span className="integrations-tab-status-pill">
+								{!isWebhooksEnabled
+									? __("Disabled")
+									: webhooks.length > 0
+										? sprintf(
+												_n(
+													"%d configured",
+													"%d configured",
+													webhooks.length
+												),
 												webhooks.length
-											),
-											webhooks.length
-										)
-									: __("Not configured")}
-						</span>
-						<div className="integrations-tab-switch">
-							<span
-								id="webhooks-toggle-label"
-								className="sr-only"
-							>
-								{__("Enable webhooks")}
+											)
+										: __("Not configured")}
 							</span>
-							<button
-								type="button"
-								role="switch"
-								aria-checked={isWebhooksEnabled}
-								aria-labelledby="webhooks-toggle-label"
-								disabled={isLoading}
-								onClick={() =>
-									setIsWebhooksToggled(!isWebhooksEnabled)
-								}
-								className={cn(
-									"integrations-tab-switch-track",
-									isWebhooksEnabled
-										? "integrations-tab-switch-track-active"
-										: "integrations-tab-switch-track-inactive"
-								)}
-							>
+							<div className="integrations-tab-switch">
 								<span
+									id="webhooks-toggle-label"
+									className="sr-only"
+								>
+									{__("Enable webhooks")}
+								</span>
+								<button
+									type="button"
+									role="switch"
+									aria-checked={isWebhooksEnabled}
+									aria-labelledby="webhooks-toggle-label"
+									disabled={isLoading}
+									onClick={() =>
+										setIsWebhooksToggled(!isWebhooksEnabled)
+									}
 									className={cn(
-										"integrations-tab-switch-thumb",
+										"integrations-tab-switch-track",
 										isWebhooksEnabled
-											? "integrations-tab-switch-thumb-active"
-											: "integrations-tab-switch-thumb-inactive"
+											? "integrations-tab-switch-track-active"
+											: "integrations-tab-switch-track-inactive"
 									)}
-								/>
-							</button>
+								>
+									<span
+										className={cn(
+											"integrations-tab-switch-thumb",
+											isWebhooksEnabled
+												? "integrations-tab-switch-thumb-active"
+												: "integrations-tab-switch-thumb-inactive"
+										)}
+									/>
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -404,7 +388,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 						{__("Loading webhook configuration…")}
 					</p>
 				) : error ? (
-					<div className="py-4 text-sm text-red-600 dark:text-red-400">
+					<div className="settings-notice settings-notice-error text-sm">
 						{getErrorMessage(
 							error,
 							__("Failed to load webhook configuration.")
@@ -418,10 +402,8 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									key={webhook.id}
 									className="integrations-tab-webhook-card"
 								>
-									{/* Webhook Card Primary Row */}
 									<div className="integrations-tab-webhook-header">
 										<div className="integrations-tab-webhook-main">
-											{/* 1. Label as Primary Heading */}
 											<div className="integrations-tab-webhook-title-row">
 												<span
 													className={cn(
@@ -438,8 +420,6 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 													{webhook.label}
 												</h3>
 											</div>
-
-											{/* 2. Secondary Endpoint URL */}
 											<div className="integrations-tab-webhook-url-row">
 												<code
 													className="integrations-tab-webhook-url"
@@ -509,8 +489,6 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 												/>
 											</div>
 										</div>
-
-										{/* Compact Sleek Action Toolbar */}
 										<div className="integrations-tab-webhook-actions">
 											<Button
 												variant="secondary"

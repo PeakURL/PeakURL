@@ -1,0 +1,61 @@
+@layer components {
+	.drawer-dialog {
+		@apply relative z-50;
+	}
+
+	/* Shared appearance; each feature owns its width and content layout. */
+	.drawer-panel {
+		@apply pointer-events-auto flex h-full min-h-0 w-screen max-w-full flex-col overflow-hidden bg-surface shadow-2xl;
+		border-inline-start: 1px solid var(--color-stroke);
+	}
+
+	.drawer-header {
+		@apply flex shrink-0 items-start justify-between gap-3 border-b border-stroke bg-surface px-4 py-5 sm:px-6;
+	}
+
+	.drawer-title {
+		@apply min-w-0 text-lg font-semibold leading-6 text-heading;
+		overflow-wrap: anywhere;
+	}
+
+	.drawer-heading-group {
+		@apply flex min-w-0 flex-1 items-start gap-3;
+	}
+
+	.drawer-subtitle {
+		@apply mt-1 text-xs leading-5 text-text-muted;
+	}
+
+	.drawer-field-section {
+		@apply border-b border-stroke pb-5 last:border-0 last:pb-0;
+	}
+
+	.drawer-content {
+		@apply min-h-0 flex-1 overflow-y-auto overscroll-contain;
+	}
+
+	.drawer-title-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-selected-border bg-selected text-accent;
+	}
+
+	.drawer-title-icon svg {
+		@apply h-5 w-5;
+	}
+
+	.drawer-icon-button {
+		@apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted transition-colors hover:border-selected-border hover:bg-selected hover:text-selected-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50;
+	}
+
+	.drawer-footer {
+		@apply flex shrink-0 flex-wrap items-center justify-between gap-3 border-t border-stroke bg-surface px-4 py-4 sm:px-6;
+		padding-bottom: max(1rem, env(safe-area-inset-bottom));
+	}
+
+	.drawer-footer > * {
+		@apply min-w-0 max-w-full;
+	}
+
+	.drawer-footer > div {
+		@apply flex-wrap;
+	}
+}

@@ -14,7 +14,7 @@ import {
 import { LOGIN_LOGO_URL, LOGIN_POWERED_BY_URL } from "@constants";
 import {
 	ApiErrorPage,
-	BrandLockup,
+	Logo,
 	CaptchaWidget,
 	Input,
 	PageLoader,
@@ -129,11 +129,27 @@ function LoginPage() {
 			/>
 		);
 	}
+	const poweredByLink = (
+		<a
+			href={LOGIN_POWERED_BY_URL}
+			target="_blank"
+			rel="noopener noreferrer"
+			className="login-page-meta"
+		>
+			{sprintf(__("Powered by %s"), "PeakURL")}
+		</a>
+	);
+
 	return (
 		<main id="page-container" className="login-page-layout">
 			<aside className="login-page-aside">
 				<div className="login-page-brand">
-					<BrandLockup tone="dark" size="md" href={LOGIN_LOGO_URL} />
+					<Logo
+						tone="dark"
+						size="md"
+						href={LOGIN_LOGO_URL}
+						className="auth-page-logo"
+					/>
 				</div>
 
 				<div className="login-page-content">
@@ -169,15 +185,9 @@ function LoginPage() {
 					<LoginHighlights highlights={highlights} />
 				</div>
 
-				<a
-					href={LOGIN_POWERED_BY_URL}
-					target="_blank"
-					rel="noopener noreferrer"
-					dir={isRtl ? "rtl" : "ltr"}
-					className="login-page-meta"
-				>
-					{sprintf(__("Powered by %s"), "PeakURL")}
-				</a>
+				<footer className="login-page-aside-footer">
+					{poweredByLink}
+				</footer>
 			</aside>
 
 			<section
@@ -185,7 +195,11 @@ function LoginPage() {
 				aria-labelledby="page-heading"
 			>
 				<div className="login-page-mobile-header">
-					<BrandLockup size="sm" href={LOGIN_LOGO_URL} />
+					<Logo
+						size="sm"
+						href={LOGIN_LOGO_URL}
+						className="auth-page-logo"
+					/>
 				</div>
 
 				<div className="login-page-panel-content">
@@ -431,6 +445,9 @@ function LoginPage() {
 						</form>
 					</div>
 				</div>
+				<footer className="login-page-mobile-footer">
+					{poweredByLink}
+				</footer>
 			</section>
 		</main>
 	);

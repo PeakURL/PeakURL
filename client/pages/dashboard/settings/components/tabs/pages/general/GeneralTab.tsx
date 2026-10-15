@@ -1,13 +1,13 @@
+import { UserRound, Settings2, House, Palette } from "lucide-react";
 import type { ChangeEvent, SubmitEvent } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ImageOff, Trash2, X } from "lucide-react";
 
-import { PEAKURL_SITE_NAME } from "@constants";
+import { PEAKURL_SITE_NAME } from "@/constants";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import {
 	Button,
 	Input,
-	PreviewImage,
-	Select,
+	SelectField,
 	TextArea,
 	type SelectOption,
 } from "@/components";
@@ -18,6 +18,7 @@ import { cn } from "@/shared/formatting";
 import { getFaviconPreviewUrl, sanitizeImageUrl } from "@/shared/links";
 import { getTimeZoneOptions, normalizeSiteTimeFormat } from "./lib";
 import type { SiteTimeFormat } from "@/api";
+import { ImageUploadField } from "./ImageUploadField";
 
 import type { GeneralFormState } from "../../types";
 import type { GeneralTabProps } from "../types";
@@ -311,11 +312,6 @@ function GeneralTab({
 	const hasFaviconPreview = Boolean(faviconPreviewSource);
 	const showRemoveButton =
 		Boolean(faviconFile) || (!removeFavicon && hasCustomFavicon);
-	const previewSiteName =
-		siteName.trim() ||
-		PEAKURL_SITE_NAME ||
-		siteSettings?.siteName ||
-		"PeakURL";
 	const chooserLabel =
 		hasFaviconPreview || hasConfiguredFavicon
 			? __("Replace Favicon")
@@ -341,11 +337,11 @@ function GeneralTab({
 	return (
 		<div className="settings-general">
 			<form onSubmit={handleSubmit} className="settings-form">
-				<section className="settings-fieldset">
-					<h2 className="settings-legend">
+				<section className="settings-section">
+					<SectionTitle icon={UserRound}>
 						{__("Profile Information")}
-					</h2>
-					<hr className="settings-separator" />
+					</SectionTitle>
+
 					<div className="settings-grid">
 						<Input
 							label={__("First Name")}
@@ -435,11 +431,11 @@ function GeneralTab({
 				</section>
 				{canManageSiteSettings && (
 					<>
-						<section className="settings-fieldset">
-							<h2 className="settings-legend">
+						<section className="settings-section">
+							<SectionTitle icon={Settings2}>
 								{__("Site Configuration")}
-							</h2>
-							<hr className="settings-separator" />
+							</SectionTitle>
+
 							<div className="settings-grid">
 								<Input
 									label={__("Site title")}
@@ -461,123 +457,108 @@ function GeneralTab({
 										!canManageSiteSettings || isUpdating
 									}
 								/>
-								<div className="settings-general-field">
-									<label className="settings-section-label">
-										{__("Site Language")}
-									</label>
-									<Select
-										value={siteLanguage}
-										onChange={setSiteLanguage}
-										options={languageOptions}
-										disabled={
-											isLoadingSiteSettings ||
-											!siteSettings?.canManageSiteSettings ||
-											isUpdating
-										}
-										ariaLabel={__("Site language")}
-									/>
-								</div>
-								<div className="settings-general-field">
-									<label className="settings-section-label">
-										{__("Site Timezone")}
-									</label>
-									<Select
-										value={siteTimezone}
-										onChange={setSiteTimezone}
-										options={timezoneOptions}
-										disabled={
-											isLoadingSiteSettings ||
-											!siteSettings?.canManageSiteSettings ||
-											isUpdating
-										}
-										ariaLabel={__("Site timezone")}
-										optionsClassName="settings-general-timezone-options"
-									/>
-								</div>
-								<div className="settings-general-field">
-									<label className="settings-section-label">
-										{__("Time Format")}
-									</label>
-									<Select
-										value={siteTimeFormat}
-										onChange={setSiteTimeFormat}
-										options={timeFormatOptions}
-										disabled={
-											isLoadingSiteSettings ||
-											!siteSettings?.canManageSiteSettings ||
-											isUpdating
-										}
-										ariaLabel={__("Time format")}
-									/>
-								</div>
-								<div className="settings-general-field">
-									<label className="settings-section-label">
-										{__("Trash Retention Period")}
-									</label>
-									<Select
-										value={String(trashRetentionDays)}
-										onChange={(val) =>
-											setTrashRetentionDays(Number(val))
-										}
-										options={trashRetentionOptions}
-										disabled={
-											isLoadingSiteSettings ||
-											!siteSettings?.canManageSiteSettings ||
-											isUpdating
-										}
-										ariaLabel={__("Trash retention period")}
-									/>
-								</div>
-								<div className="settings-general-field">
-									<label className="settings-section-label">
-										{__("Analytics Click Retention Period")}
-									</label>
-									<Select
-										value={String(analyticsRetentionDays)}
-										onChange={(val) =>
-											setAnalyticsRetentionDays(
-												Number(val)
-											)
-										}
-										options={analyticsRetentionOptions}
-										disabled={
-											isLoadingSiteSettings ||
-											!siteSettings?.canManageSiteSettings ||
-											isUpdating
-										}
-										ariaLabel={__(
-											"Analytics click retention period"
-										)}
-									/>
-								</div>
+								<SelectField
+									label={__("Site Language")}
+									value={siteLanguage}
+									onChange={setSiteLanguage}
+									options={languageOptions}
+									disabled={
+										isLoadingSiteSettings ||
+										!siteSettings?.canManageSiteSettings ||
+										isUpdating
+									}
+									ariaLabel={__("Site language")}
+								/>
+								<SelectField
+									label={__("Site Timezone")}
+									value={siteTimezone}
+									onChange={setSiteTimezone}
+									options={timezoneOptions}
+									disabled={
+										isLoadingSiteSettings ||
+										!siteSettings?.canManageSiteSettings ||
+										isUpdating
+									}
+									ariaLabel={__("Site timezone")}
+									optionsClassName="settings-general-timezone-options"
+								/>
+								<SelectField
+									label={__("Time Format")}
+									value={siteTimeFormat}
+									onChange={setSiteTimeFormat}
+									options={timeFormatOptions}
+									disabled={
+										isLoadingSiteSettings ||
+										!siteSettings?.canManageSiteSettings ||
+										isUpdating
+									}
+									ariaLabel={__("Time format")}
+								/>
+								<SelectField
+									label={__("Trash Retention Period")}
+									value={String(trashRetentionDays)}
+									onChange={(val) =>
+										setTrashRetentionDays(Number(val))
+									}
+									options={trashRetentionOptions}
+									disabled={
+										isLoadingSiteSettings ||
+										!siteSettings?.canManageSiteSettings ||
+										isUpdating
+									}
+									ariaLabel={__("Trash retention period")}
+								/>
+								<SelectField
+									label={__(
+										"Analytics Click Retention Period"
+									)}
+									value={String(analyticsRetentionDays)}
+									onChange={(val) =>
+										setAnalyticsRetentionDays(Number(val))
+									}
+									options={analyticsRetentionOptions}
+									disabled={
+										isLoadingSiteSettings ||
+										!siteSettings?.canManageSiteSettings ||
+										isUpdating
+									}
+									ariaLabel={__(
+										"Analytics click retention period"
+									)}
+								/>
 							</div>
 						</section>
-						<section className="settings-fieldset">
-							<h2 className="settings-legend">
+						<section className="settings-section">
+							<SectionTitle icon={House}>
 								{__("Homepage Configuration")}
-							</h2>
-							<hr className="settings-separator" />
+							</SectionTitle>
+
 							<div className="settings-grid">
-								<div className="settings-general-field-full">
-									<label className="settings-section-label">
-										{__("Root URL Behavior")}
-									</label>
-									<Select
-										value={landingPageMode}
-										onChange={(val) =>
-											setLandingPageMode(
-												val as "login" | "url" | "html"
-											)
-										}
-										options={landingPageModeOptions}
-										disabled={
-											isLoadingSiteSettings ||
-											!siteSettings?.canManageSiteSettings ||
-											isUpdating
-										}
-										ariaLabel={__("Root URL Behavior")}
-									/>
-								</div>
+								<SelectField
+									className="settings-general-field-full"
+									label={__("Root URL Behavior")}
+									value={landingPageMode}
+									onChange={setLandingPageMode}
+									options={landingPageModeOptions}
+									disabled={
+										isLoadingSiteSettings ||
+										!siteSettings?.canManageSiteSettings ||
+										isUpdating
+									}
+									ariaLabel={__("Root URL Behavior")}
+									helperText={
+										landingPageMode === "html"
+											? sprintf(
+													__(
+														"Customize your landing page by editing %s. You can include HTML, styles, and scripts."
+													),
+													siteSettings?.contentDirectory
+														? `${siteSettings.contentDirectory}/landing-page.html`
+														: "content/landing-page.html"
+												)
+											: undefined
+									}
+								/>
 								{landingPageMode === "url" && (
 									<div className="settings-general-field-full">
 										<Input
@@ -603,312 +584,82 @@ function GeneralTab({
 										</p>
 									</div>
 								)}
-								{landingPageMode === "html" && (
-									<div className="settings-general-field-full">
-										<div className="settings-group-description settings-general-help-text">
-											<p>
-												{__(
-													"To customize your HTML landing page, edit the following file in your installation:"
-												)}
-											</p>
-											<code className="settings-general-code-block">
-												{siteSettings?.contentDirectory
-													? `${siteSettings.contentDirectory}/landing-page.html`
-													: "content/landing-page.html"}
-											</code>
-											<p className="settings-general-help-text">
-												{__(
-													"This raw HTML file will be served at the root domain. You can include custom styles, scripts, and branding."
-												)}
-											</p>
-										</div>
-									</div>
-								)}
 							</div>
 						</section>
-						<section className="settings-fieldset">
-							<h2 className="settings-legend">
-								{__("Branding")}
-							</h2>
-							<hr className="settings-separator" />
-							<div className="settings-general-favicon">
-								<div className="settings-general-favicon-header">
-									<div className="settings-general-favicon-content">
-										<div className="settings-general-favicon-copy">
-											<h3 className="settings-general-favicon-title">
-												{__("Site Favicon")}
-											</h3>
-											<p className="settings-group-description">
-												{__(
-													"Upload a square PNG favicon. PeakURL will use it for browser tabs, Apple touch icons, and the site web manifest."
-												)}
-											</p>
-										</div>
-										<div className="settings-general-favicon-field">
-											<label
-												htmlFor="settings-favicon-upload"
-												className="settings-section-label"
-											>
-												{__("Favicon PNG")}
-											</label>
-											<input
-												ref={fileInputRef}
-												id="settings-favicon-upload"
-												type="file"
-												accept="image/png"
-												onChange={handleFaviconChange}
-												disabled={
-													!canManageSiteSettings ||
-													isUpdating
-												}
-												className="settings-general-favicon-input-native"
-											/>
-											<div className="settings-general-favicon-picker">
-												<Button
-													type="button"
-													size="sm"
-													variant="outline"
-													onClick={() =>
-														fileInputRef.current?.click()
-													}
-													disabled={
-														!canManageSiteSettings ||
-														isUpdating
-													}
-												>
-													{chooserLabel}
-												</Button>
-												{faviconFile ? (
-													<span className="settings-general-favicon-filename">
-														{faviconFile.name}
-													</span>
-												) : null}
-											</div>
-											<p className="settings-general-favicon-note">
-												{sprintf(
-													__(
-														"Use a square PNG, ideally %s. The minimum supported size is 180 x 180."
-													),
-													siteSettings?.favicon
-														?.recommendedSize ||
-														"512x512"
-												)}
-											</p>
-										</div>
-									</div>
-									<div
-										className={cn(
-											"settings-general-favicon-preview",
-											hasFaviconPreview
-												? "settings-general-favicon-preview-filled"
-												: "settings-general-favicon-preview-empty-state"
-										)}
-									>
-										{faviconPreviewSource ? (
-											<div className="settings-general-favicon-browser">
-												{showRemoveButton ? (
-													<button
-														type="button"
-														onClick={
-															handleRemoveFavicon
-														}
-														disabled={
-															!canManageSiteSettings ||
-															isUpdating
-														}
-														className="settings-general-favicon-remove"
-														aria-label={__(
-															"Remove Favicon"
-														)}
-													>
-														<Trash2
-															aria-hidden="true"
-															className="settings-general-favicon-remove-icon"
-														/>
-													</button>
-												) : null}
-												<div
-													aria-hidden="true"
-													className="settings-general-favicon-glow"
-												/>
-												<div className="settings-general-favicon-browser-body">
-													<PreviewImage
-														source={
-															faviconPreviewSource
-														}
-														alt={__(
-															"Current favicon preview"
-														)}
-														className="settings-general-favicon-app-icon"
-													/>
-													<div className="settings-general-favicon-browser-window">
-														<div className="settings-general-favicon-browser-top">
-															<div
-																aria-hidden="true"
-																className="settings-general-favicon-browser-bar"
-															>
-																<span className="settings-general-favicon-browser-dot" />
-																<span className="settings-general-favicon-browser-dot" />
-																<span className="settings-general-favicon-browser-dot" />
-															</div>
-															<div className="settings-general-favicon-browser-tab">
-																<PreviewImage
-																	source={
-																		faviconPreviewSource
-																	}
-																	alt=""
-																	aria-hidden="true"
-																	className="settings-general-favicon-browser-icon"
-																/>
-																<span
-																	aria-hidden="true"
-																	className="settings-general-favicon-browser-title"
-																>
-																	{
-																		previewSiteName
-																	}
-																</span>
-																<X
-																	aria-hidden="true"
-																	className="settings-general-favicon-browser-close"
-																/>
-															</div>
-														</div>
-														<div
-															aria-hidden="true"
-															className="settings-general-favicon-browser-panel"
-														/>
-													</div>
-												</div>
-											</div>
-										) : (
-											<div className="settings-general-favicon-empty">
-												<ImageOff
-													aria-hidden="true"
-													className="settings-general-favicon-placeholder"
-												/>
-												<span className="sr-only">
-													{__(
-														"No favicon configured"
-													)}
-												</span>
-											</div>
-										)}
-									</div>
-								</div>
+						<section className="settings-section">
+							<div className="settings-section-copy settings-section-heading">
+								<SectionTitle icon={Palette}>
+									{__("Branding")}
+								</SectionTitle>
+								<p className="settings-group-description">
+									{__(
+										"Choose how PeakURL appears in browser tabs and shared links."
+									)}
+								</p>
 							</div>
-							<div className="settings-general-social-preview">
-								<div className="settings-general-social-preview-copy">
-									<h3 className="settings-general-social-preview-title">
-										{__("Social Preview")}
-									</h3>
-									<p className="settings-group-description">
-										{__(
-											"Upload the default image used when short links are shared on social platforms. Individual links can override it."
-										)}
-									</p>
-								</div>
-								<div className="settings-general-social-preview-grid">
-									<div className="settings-general-social-preview-field">
-										<label
-											htmlFor="settings-social-preview-upload"
-											className="settings-section-label"
-										>
-											{__("Preview Image")}
-										</label>
-										<input
-											ref={socialPreviewInputRef}
-											id="settings-social-preview-upload"
-											type="file"
-											accept="image/png,image/jpeg,image/webp"
-											onChange={handleSocialPreviewChange}
-											disabled={
-												!canManageSiteSettings ||
-												isUpdating
-											}
-											className="settings-general-favicon-input-native"
-										/>
-										<div className="settings-general-favicon-picker">
-											<Button
-												type="button"
-												size="sm"
-												variant="outline"
-												onClick={() =>
-													socialPreviewInputRef.current?.click()
-												}
-												disabled={
-													!canManageSiteSettings ||
-													isUpdating
-												}
-											>
-												{socialPreviewChooserLabel}
-											</Button>
-											{socialPreviewFile ? (
-												<span className="settings-general-favicon-filename">
-													{socialPreviewFile.name}
-												</span>
-											) : null}
-										</div>
-										<p className="settings-general-social-preview-note">
-											{sprintf(
-												__(
-													"Use a PNG, JPG, or WebP image, ideally %s, for clean previews on Facebook, X, LinkedIn, and messaging apps."
-												),
-												siteSettings?.socialPreview
-													?.recommendedSize ||
-													"1200x630"
-											)}
-										</p>
-									</div>
-									<div className="settings-general-social-preview-card">
-										{socialPreviewImageSource ? (
-											<div className="settings-general-social-preview-media">
-												{showSocialPreviewRemove ? (
-													<button
-														type="button"
-														onClick={
-															handleRemoveSocialPreview
-														}
-														disabled={
-															!canManageSiteSettings ||
-															isUpdating
-														}
-														className="settings-general-social-preview-remove"
-														aria-label={__(
-															"Remove Preview Image"
-														)}
-													>
-														<Trash2
-															aria-hidden="true"
-															className="settings-general-favicon-remove-icon"
-														/>
-													</button>
-												) : null}
-												<PreviewImage
-													source={
-														socialPreviewImageSource
-													}
-													alt={__(
-														"Default social preview image"
-													)}
-													className="settings-general-social-preview-image"
-												/>
-											</div>
-										) : (
-											<div className="settings-general-social-preview-empty">
-												<ImageOff
-													aria-hidden="true"
-													className="settings-general-social-preview-icon"
-												/>
-												<span>
-													{__(
-														"No default preview image"
-													)}
-												</span>
-											</div>
-										)}
-									</div>
-								</div>
+							<div className="settings-branding-fields">
+								<ImageUploadField
+									id="settings-favicon-upload"
+									siteName={siteName}
+									title={__("Site Favicon")}
+									description={__(
+										"Used in browser tabs, Apple touch icons, and the site web manifest."
+									)}
+									hint={sprintf(
+										__(
+											"Square PNG, ideally %s. Minimum 180 × 180 pixels."
+										),
+										siteSettings?.favicon
+											?.recommendedSize || "512 × 512"
+									)}
+									accept="image/png"
+									buttonLabel={chooserLabel}
+									removeLabel={__("Remove Favicon")}
+									previewLabel={__("Current favicon preview")}
+									preview={faviconPreviewSource || null}
+									fileName={faviconFile?.name}
+									disabled={
+										!canManageSiteSettings || isUpdating
+									}
+									inputRef={fileInputRef}
+									onChange={handleFaviconChange}
+									onRemove={
+										showRemoveButton
+											? handleRemoveFavicon
+											: undefined
+									}
+								/>
+								<ImageUploadField
+									id="settings-social-preview-upload"
+									landscape
+									title={__("Social Preview")}
+									description={__(
+										"The default image for shared links. Individual links can override it."
+									)}
+									hint={sprintf(
+										__("PNG, JPG, or WebP, ideally %s."),
+										siteSettings?.socialPreview
+											?.recommendedSize || "1200 × 630"
+									)}
+									accept="image/png,image/jpeg,image/webp"
+									buttonLabel={socialPreviewChooserLabel}
+									removeLabel={__("Remove Preview Image")}
+									previewLabel={__(
+										"Default social preview image"
+									)}
+									preview={socialPreviewImageSource || null}
+									fileName={socialPreviewFile?.name}
+									disabled={
+										!canManageSiteSettings || isUpdating
+									}
+									inputRef={socialPreviewInputRef}
+									onChange={handleSocialPreviewChange}
+									onRemove={
+										showSocialPreviewRemove
+											? handleRemoveSocialPreview
+											: undefined
+									}
+								/>
 							</div>
 						</section>
 					</>

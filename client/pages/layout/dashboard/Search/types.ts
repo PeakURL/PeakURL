@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import type { DashboardPageId } from "@/pages/dashboard/navigation";
 
 /**
  * Search result groups rendered in the dashboard command palette.
@@ -10,6 +10,12 @@ export type DashboardSearchSection = "pages" | "tools";
  * Capabilities passed to search matching to filter restricted routes.
  */
 export interface DashboardSearchCapabilities {
+	/** Whether the current user can access links and their search results. */
+	canViewLinks?: boolean;
+
+	/** Whether the current user can manage cache and runtime performance settings. */
+	canManagePerformance?: boolean;
+
 	/** Whether the current user can manage site users. */
 	canManageUsers?: boolean;
 
@@ -46,7 +52,7 @@ export interface DashboardSearchCapabilities {
  */
 export interface DashboardSearchRouteTarget {
 	/** Stable identifier for the route target. */
-	id: string;
+	id: DashboardPageId;
 
 	/** Destination path navigated to when the item is selected. */
 	href: string;
@@ -72,7 +78,7 @@ export interface DashboardSearchRouteTarget {
  */
 export interface DashboardSearchRouteMatch {
 	/** Stable identifier for the route result. */
-	id: string;
+	id: DashboardPageId;
 
 	/** Destination path for the selected result. */
 	href: string;
@@ -85,17 +91,6 @@ export interface DashboardSearchRouteMatch {
 
 	/** Group the route belongs to in the results list. */
 	section: DashboardSearchSection;
-}
-
-/**
- * Minimal location shape needed to read dashboard search query params.
- */
-export interface DashboardSearchLocationLike {
-	/** Current pathname from the router location. */
-	pathname?: string | null;
-
-	/** Raw query string from the router location. */
-	search?: string | null;
 }
 
 /**
@@ -144,15 +139,23 @@ export interface DashboardSearchUserMatch {
 	href: string;
 }
 
-export interface ResultButtonProps {
-	icon: LucideIcon;
+/** A selectable destination in the global search dialog. */
+export interface SearchResult {
+	id: string;
 	title: string;
 	description?: string;
 	meta?: string;
-	onClick: () => void;
+	href: string;
+	icon: LucideIcon;
+	external?: boolean;
 }
 
-export interface ResultSectionProps {
+/** One result source with an independent loading and retry state. */
+export interface SearchResultGroup {
+	id: string;
 	title: string;
-	children: ReactNode;
+	items: SearchResult[];
+	isLoading?: boolean;
+	isError?: boolean;
+	onRetry?: () => void;
 }

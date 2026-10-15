@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-	Plug,
 	ShieldCheck,
 	Sparkles,
 	TrendingUp,
@@ -17,6 +16,8 @@ import {
 } from "lucide-react";
 
 import { useAdminAccess } from "@/hooks";
+import { PageHeader } from "@/components";
+import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __ } from "@/i18n";
 import { cn } from "@/shared/formatting";
 import { PLUGINS_WAITLIST_URL } from "@constants";
@@ -103,23 +104,13 @@ function PluginsPage() {
 
 	return (
 		<div className="plugins-page">
-			{/* ════════════════════════════════════
-			    PAGE HERO
-			   ════════════════════════════════════ */}
-			<div className="plugins-page-hero">
-				<div className="plugins-page-hero-copy">
-					<div className="plugins-page-hero-badge">
-						<Plug size={13} />
-						<span>{__("Extensions")}</span>
-					</div>
-					<h1 className="plugins-page-title">{__("Plugins")}</h1>
-					<p className="plugins-page-summary">
-						{__(
-							"Extend PeakURL with plugins, install from the library, upload custom packages, and manage everything from one place."
-						)}
-					</p>
-				</div>
-			</div>
+			<PageHeader
+				icon={dashboardPageIcons["plugins"]}
+				title={__("Plugins")}
+				description={__(
+					"Extend PeakURL with plugins, install from the library, upload custom packages, and manage everything from one place."
+				)}
+			/>
 
 			{/* ════════════════════════════════════
 			    WAITLIST BANNER

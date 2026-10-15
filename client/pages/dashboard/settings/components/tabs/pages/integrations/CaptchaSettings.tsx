@@ -1,7 +1,16 @@
 import { useMemo, useState } from "react";
-import { ExternalLink, Pencil, Save, Trash2, X } from "lucide-react";
+import {
+	ExternalLink,
+	Pencil,
+	Save,
+	Trash2,
+	X,
+	ShieldCheck,
+} from "lucide-react";
 
-import { Button, Input, Select, type SelectOption } from "@/components";
+import { Button, Input, SelectField, type SelectOption } from "@/components";
+import { DocumentationLink } from "@/pages/dashboard/settings/components/TabHeader";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import {
 	useGetCaptchaStatusQuery,
 	useSaveCaptchaConfigurationMutation,
@@ -261,74 +270,67 @@ function CaptchaSettingsContent({
 	};
 
 	return (
-		<div dir={direction} className="integrations-tab-panel">
-			<div className="integrations-tab-panel-header">
-				<div className="integrations-tab-panel-copy">
-					<h3 className="integrations-tab-panel-title">
+		<div dir={direction} className="settings-section">
+			<div className="settings-section-header settings-section-heading">
+				<div className="settings-section-copy">
+					<SectionTitle icon={ShieldCheck}>
 						{__("CAPTCHA Protection")}
-					</h3>
-					<p className="integrations-tab-panel-description">
+					</SectionTitle>
+					<p className="settings-group-description">
 						{__(
 							"Require a verification challenge on the authentication pages and before public short links redirect."
 						)}
 					</p>
-					<div className="mt-2">
-						<a
-							href="https://go.peakurl.org/7dcc41"
-							target="_blank"
-							rel="noopener noreferrer"
-							dir={direction}
-							className="integrations-tab-docs-link"
-						>
-							{__("Read documentation")}
-							<ExternalLink size={13} className="shrink-0" />
-						</a>
-					</div>
 				</div>
-				<div className="flex items-center gap-3">
-					<span className="integrations-tab-status-pill">
-						{statusLabel}
-					</span>
-					<div className="integrations-tab-switch">
-						<span
-							id="captcha-protection-toggle-label"
-							className="sr-only"
-						>
-							{__("Enable CAPTCHA protection")}
+				<div className="settings-section-tools">
+					<DocumentationLink href="https://go.peakurl.org/7dcc41" />
+					<div className="integrations-tab-controls">
+						<span className="integrations-tab-status-pill">
+							{statusLabel}
 						</span>
-						<button
-							type="button"
-							role="switch"
-							aria-checked={form.enabled}
-							aria-labelledby="captcha-protection-toggle-label"
-							disabled={!canManage || isLoading}
-							onClick={() => setProtectionEnabled(!form.enabled)}
-							className={cn(
-								"integrations-tab-switch-track",
-								form.enabled
-									? "integrations-tab-switch-track-active"
-									: "integrations-tab-switch-track-inactive"
-							)}
-						>
+						<div className="integrations-tab-switch">
 							<span
+								id="captcha-protection-toggle-label"
+								className="sr-only"
+							>
+								{__("Enable CAPTCHA protection")}
+							</span>
+							<button
+								type="button"
+								role="switch"
+								aria-checked={form.enabled}
+								aria-labelledby="captcha-protection-toggle-label"
+								disabled={!canManage || isLoading}
+								onClick={() =>
+									setProtectionEnabled(!form.enabled)
+								}
 								className={cn(
-									"integrations-tab-switch-thumb",
+									"integrations-tab-switch-track",
 									form.enabled
-										? "integrations-tab-switch-thumb-active"
-										: "integrations-tab-switch-thumb-inactive"
+										? "integrations-tab-switch-track-active"
+										: "integrations-tab-switch-track-inactive"
 								)}
-							/>
-						</button>
+							>
+								<span
+									className={cn(
+										"integrations-tab-switch-thumb",
+										form.enabled
+											? "integrations-tab-switch-thumb-active"
+											: "integrations-tab-switch-thumb-inactive"
+									)}
+								/>
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			{isLoading ? (
-				<p className="integrations-tab-status-copy">
+				<p className="settings-group-description">
 					{__("Loading CAPTCHA settings…")}
 				</p>
 			) : error ? (
-				<p className="integrations-tab-status-copy integrations-tab-status-copy-error">
+				<p className="settings-notice settings-notice-error text-sm">
 					{getErrorMessage(
 						error,
 						__("Failed to load CAPTCHA settings.")
@@ -383,27 +385,17 @@ function CaptchaSettingsContent({
 						</div>
 					) : (
 						<div className="integrations-tab-form-grid integrations-tab-captcha-fields">
-							<div className="integrations-tab-captcha-provider form-field">
-								<label
-									htmlFor="captcha-provider"
-									className="form-field-label"
-								>
-									{__("Provider")}
-								</label>
-								<div className="form-field-control">
-									<Select
-										id="captcha-provider"
-										value={form.provider}
-										onChange={handleProviderChange}
-										disabled={!canManage}
-										options={providerOptions}
-										ariaLabel={__("CAPTCHA provider")}
-									/>
-								</div>
-								<p className="form-field-helper">
-									{providerNote}
-								</p>
-							</div>
+							<SelectField
+								className="integrations-tab-captcha-provider"
+								label={__("Provider")}
+								id="captcha-provider"
+								value={form.provider}
+								onChange={handleProviderChange}
+								disabled={!canManage}
+								options={providerOptions}
+								ariaLabel={__("CAPTCHA provider")}
+								helperText={providerNote}
+							/>
 
 							<Input
 								label={__("Site Key")}
@@ -428,31 +420,27 @@ function CaptchaSettingsContent({
 								}
 							/>
 
-							<div className="integrations-tab-captcha-secret">
-								<Input
-									label={__("Secret Key")}
-									type="password"
-									value={form.secretKey}
-									valueDirection="ltr"
-									disabled={!canManage}
-									autoCapitalize="off"
-									spellCheck={false}
-									placeholder={
-										canKeepSavedSecret
-											? __("Keep saved secret")
-											: __("Paste secret key")
-									}
-									onChange={(event) =>
-										setForm((current) => ({
-											...current,
-											secretKey: event.target.value,
-										}))
-									}
-								/>
-								<p className="integrations-tab-field-help">
-									{secretHelp}
-								</p>
-							</div>
+							<Input
+								label={__("Secret Key")}
+								type="password"
+								value={form.secretKey}
+								helperText={secretHelp}
+								valueDirection="ltr"
+								disabled={!canManage}
+								autoCapitalize="off"
+								spellCheck={false}
+								placeholder={
+									canKeepSavedSecret
+										? __("Keep saved secret")
+										: __("Paste secret key")
+								}
+								onChange={(event) =>
+									setForm((current) => ({
+										...current,
+										secretKey: event.target.value,
+									}))
+								}
+							/>
 						</div>
 					)}
 

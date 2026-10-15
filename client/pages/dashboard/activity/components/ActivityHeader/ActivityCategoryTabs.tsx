@@ -2,16 +2,15 @@ import { History, Link2, Users } from "lucide-react";
 
 import { PageSizeControl } from "@/components";
 import { __ } from "@/i18n";
-import { cn, formatCount } from "@/shared/formatting";
+import { cn } from "@/shared/formatting";
 
-import type { ActivityCategory, ActivitySummaryCounts } from "../../types";
+import type { ActivityCategory } from "../../types";
 
 interface ActivityCategoryTabsProps {
 	category: ActivityCategory;
 	onCategoryChange: (category: ActivityCategory) => void;
 	limit: number;
 	onLimitChange: (limit: number) => void;
-	summaryCounts: ActivitySummaryCounts;
 }
 
 export function ActivityCategoryTabs({
@@ -19,25 +18,21 @@ export function ActivityCategoryTabs({
 	onCategoryChange,
 	limit,
 	onLimitChange,
-	summaryCounts,
 }: ActivityCategoryTabsProps) {
 	const categoryOptions = [
 		{
 			value: "all" as const,
 			label: __("All"),
-			count: summaryCounts.all,
 			icon: History,
 		},
 		{
 			value: "links" as const,
 			label: __("Links"),
-			count: summaryCounts.links,
 			icon: Link2,
 		},
 		{
 			value: "users" as const,
 			label: __("Users"),
-			count: summaryCounts.users,
 			icon: Users,
 		},
 	];
@@ -68,9 +63,6 @@ export function ActivityCategoryTabs({
 						>
 							<Icon size={14} className="shrink-0" />
 							<span>{option.label}</span>
-							<span className="activity-page-filter-count">
-								{formatCount(option.count)}
-							</span>
 						</button>
 					);
 				})}

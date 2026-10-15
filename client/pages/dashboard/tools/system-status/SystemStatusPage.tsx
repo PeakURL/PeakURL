@@ -22,8 +22,14 @@ import {
 	Zap,
 } from "lucide-react";
 
-import { Button, ConfirmDialog, useNotification } from "@/components";
+import {
+	Button,
+	ConfirmDialog,
+	PageHeader,
+	useNotification,
+} from "@/components";
 import { useTemporaryState } from "@/hooks";
+import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __, sprintf } from "@/i18n";
 import {
 	useGetSystemStatusQuery,
@@ -1073,44 +1079,34 @@ function SystemStatusPage() {
 	return (
 		<div className="system-status-page">
 			{/* Hero Header */}
-			<div className="system-status-page-hero">
-				<div className="system-status-page-hero-copy">
-					<div className="system-status-page-hero-badge">
-						<Activity size={13} />
-						<span>{__("Site Health")}</span>
-					</div>
-					<h1 className="system-status-page-title">
-						{__("System Status")}
-					</h1>
-					<p className="system-status-page-summary">
-						{__(
-							"Monitor installation health, check server environment diagnostics, and review technical configuration details."
-						)}
-					</p>
-				</div>
-				<div className="system-status-page-hero-actions">
-					<StatusTabs
-						activeView={activeView}
-						onChange={setActiveView}
-					/>
-
-					<button
-						type="button"
-						onClick={() => refetch()}
-						disabled={isFetching}
-						className="dashboard-page-refresh"
-						aria-label={__("Refresh site health status")}
-						title={__("Refresh site health status")}
-					>
-						<RefreshCw
-							className={cn(
-								"dashboard-page-refresh-icon",
-								isFetching && "animate-spin"
-							)}
+			<PageHeader
+				icon={dashboardPageIcons["tools-system-status"]}
+				title={__("System Status")}
+				description={__(
+					"Monitor installation health, check server environment diagnostics, and review technical configuration details."
+				)}
+				actions={
+					<div className="system-status-page-hero-actions">
+						<StatusTabs
+							activeView={activeView}
+							onChange={setActiveView}
 						/>
-					</button>
-				</div>
-			</div>
+
+						<button
+							type="button"
+							onClick={() => refetch()}
+							disabled={isFetching}
+							className="page-header-icon-button"
+							aria-label={__("Refresh site health status")}
+							title={__("Refresh site health status")}
+						>
+							<RefreshCw
+								className={cn(isFetching && "animate-spin")}
+							/>
+						</button>
+					</div>
+				}
+			/>
 
 			{errorMessage ? <ErrorState errorMessage={errorMessage} /> : null}
 

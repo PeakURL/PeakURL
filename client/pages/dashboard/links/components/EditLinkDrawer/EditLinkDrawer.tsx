@@ -1,4 +1,8 @@
 import { useEffect } from "react";
+import { DialogBackdrop, DialogPanel } from "@headlessui/react";
+
+import { DrawerDialog } from "@/components";
+import { isDocumentRtl } from "@/i18n/direction";
 
 import { useAdminAccess } from "@/hooks";
 import { useGetUrlQuery } from "@/state/slices/api";
@@ -32,15 +36,34 @@ function EditLinkDrawer({ open, setOpen, link }: EditLinkDrawerProps) {
 		}
 	}, [open, activeLink, canEdit, setOpen]);
 
-	if (!open || !activeLink || !canEdit) return null;
+	if (!activeLink || !canEdit) return null;
+
+	const isRtl = isDocumentRtl();
+	const direction = isRtl ? "rtl" : "ltr";
 
 	return (
-		<Form
-			key={getEditLinkDrawerKey(activeLink)}
-			open={open}
-			setOpen={setOpen}
-			link={activeLink}
-		/>
+		<DrawerDialog open={open} onClose={() => setOpen(false)}>
+			<DialogBackdrop transition className="dialog-backdrop" />
+			<div className="fixed inset-0 overflow-hidden">
+				<div className="absolute inset-0 overflow-hidden">
+					<div
+						className={`links-edit-drawer-layout ${isRtl ? "links-edit-drawer-layout-rtl" : "links-edit-drawer-layout-ltr"}`}
+					>
+						<DialogPanel
+							dir={direction}
+							transition
+							className={`drawer-panel drawer-transition links-edit-drawer-panel ${isRtl ? "data-closed:-translate-x-full" : "data-closed:translate-x-full"}`}
+						>
+							<Form
+								key={getEditLinkDrawerKey(activeLink)}
+								setOpen={setOpen}
+								link={activeLink}
+							/>
+						</DialogPanel>
+					</div>
+				</div>
+			</div>
+		</DrawerDialog>
 	);
 }
 

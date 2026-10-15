@@ -1,4 +1,4 @@
-import { Shield } from "lucide-react";
+import { History, Link2, Users } from "lucide-react";
 
 import { __ } from "@/i18n";
 
@@ -9,10 +9,12 @@ interface ActivityEmptyStateProps {
 }
 
 export function ActivityEmptyState({ category }: ActivityEmptyStateProps) {
+	const Icon =
+		category === "users" ? Users : category === "links" ? Link2 : History;
 	return (
 		<div className="activity-page-empty">
 			<div className="activity-page-empty-icon">
-				<Shield size={24} />
+				<Icon size={24} />
 			</div>
 			<h3 className="activity-page-empty-title">
 				{"users" === category

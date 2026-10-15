@@ -39,9 +39,7 @@ function TabPage() {
 
 	return (
 		<div className="settings-tab-page">
-			<div className="settings-tab-page-panel">
-				<Content activeTab={tab || "general"} />
-			</div>
+			<Content activeTab={tab || "general"} />
 		</div>
 	);
 }

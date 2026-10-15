@@ -148,7 +148,7 @@ function LinkRow({
 					</div>
 					<div className="min-w-0">
 						<div className="flex items-center gap-1.5">
-							<code className="preserve-ltr-value text-sm font-mono font-semibold text-accent">
+							<code className="links-row-short-link links-short-url preserve-ltr-value">
 								/{link.alias || link.shortCode}
 							</code>
 							<button

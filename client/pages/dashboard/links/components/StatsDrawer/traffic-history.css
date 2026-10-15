@@ -53,7 +53,7 @@
 	}
 
 	.links-traffic-history-tool-button-current {
-		@apply bg-accent text-white shadow-sm;
+		@apply bg-action text-white shadow-sm;
 	}
 
 	.links-traffic-history-tool-button-idle {
@@ -73,7 +73,7 @@
 	}
 
 	.links-traffic-history-range-current {
-		@apply bg-accent text-white;
+		@apply bg-action text-white;
 	}
 
 	.links-traffic-history-range-idle {
@@ -127,7 +127,7 @@
 	}
 
 	.links-traffic-history-custom-apply {
-		@apply inline-flex h-8 items-center justify-center rounded bg-accent px-3 text-xs font-medium text-white transition-all hover:bg-accent/90;
+		@apply inline-flex h-8 items-center justify-center rounded bg-action px-3 text-xs font-medium text-white transition-all hover:bg-action/90;
 	}
 
 	.links-traffic-history-canvas-wrap {

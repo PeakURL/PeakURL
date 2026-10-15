@@ -42,6 +42,7 @@ class EnvironmentTest extends TestCase {
 		$this->assertSame( $repo_root . '/server/database/schema.sql', $environment->get_database_schema_path() );
 		$this->assertSame( $repo_root . '/server/bin', $environment->get_bin_path() );
 		$this->assertSame( $repo_root . '/server/public/default-favicon.png', $environment->get_default_favicon_path() );
+		$this->assertSame( $repo_root . '/client/assets/logo/peakurl.svg', $environment->get_logo_path() );
 		$this->assertSame( $repo_root . '/server/public/default-site.webmanifest', $environment->get_default_manifest_path() );
 		$this->assertSame( 'php server/bin/update-geoip.php', $environment->get_geoip_command() );
 	}
@@ -65,6 +66,7 @@ class EnvironmentTest extends TestCase {
 			$this->assertSame( $prod_root . '/database/schema.sql', $environment->get_database_schema_path() );
 			$this->assertSame( $prod_root . '/bin', $environment->get_bin_path() );
 			$this->assertSame( $prod_root . '/assets/default-favicon.png', $environment->get_default_favicon_path() );
+			$this->assertSame( $prod_root . '/assets/peakurl.svg', $environment->get_logo_path() );
 			$this->assertSame( $prod_root . '/assets/default-site.webmanifest', $environment->get_default_manifest_path() );
 			$this->assertSame( 'php bin/update-geoip.php', $environment->get_geoip_command() );
 		} finally {

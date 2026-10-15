@@ -1,13 +1,16 @@
 @layer components {
 	.settings-layout {
-		@apply flex flex-1 flex-col lg:-mt-6;
-	}
-
-	.dashboard-notices + .settings-layout {
-		@apply lg:mt-0;
+		@apply flex flex-1 flex-col;
+		--settings-header-top: calc(
+			var(--dashboard-header-height) + 1.5rem +
+				var(--admin-notices-height, 0px)
+		);
+		--settings-navigation-top: calc(
+			var(--settings-header-top) + 6rem + 1px
+		);
 	}
 
 	.settings-layout-grid {
-		@apply grid flex-1 grid-cols-1 gap-5 lg:grid-cols-4 lg:pt-5;
+		@apply grid flex-1 grid-cols-1 items-start gap-4 lg:grid-cols-[13rem_minmax(0,1fr)] lg:pt-4;
 	}
 }

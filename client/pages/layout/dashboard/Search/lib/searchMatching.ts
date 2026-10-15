@@ -1,7 +1,6 @@
 import { __ } from "@/i18n";
 import type {
 	DashboardSearchCapabilities,
-	DashboardSearchLocationLike,
 	DashboardSearchRouteMatch,
 	DashboardSearchRouteTarget,
 	DashboardSearchSection,
@@ -13,7 +12,7 @@ import type {
  * Input for creating a route search target.
  */
 interface CreateRouteTargetInput {
-	id: string;
+	id: DashboardSearchRouteTarget["id"];
 	href: string;
 	label: string;
 	description: string;
@@ -92,6 +91,7 @@ function getRouteTargets(
 		}),
 		createRouteTarget({
 			id: "links",
+			isAllowed: Boolean(capabilities.canViewLinks),
 			href: "/dashboard/links",
 			label: __("All Links"),
 			description: __("Links"),
@@ -240,6 +240,20 @@ function getRouteTargets(
 				"geolite",
 			],
 			isAllowed: Boolean(capabilities.canManageLocationData),
+		}),
+		createRouteTarget({
+			id: "settings-performance",
+			href: "/dashboard/settings/performance",
+			label: __("Performance"),
+			description: __("Settings"),
+			terms: [
+				__("Performance"),
+				"performance",
+				"cache",
+				"caching",
+				"redis",
+			],
+			isAllowed: Boolean(capabilities.canManagePerformance),
 		}),
 		createRouteTarget({
 			id: "settings-updates",
@@ -479,26 +493,6 @@ export function getLinkStatsPath(shortCode: string = ""): string {
 }
 
 /**
- * Read the active dashboard search value from the current router location.
- *
- * @param location - The current router location-like object.
- * @return The active search query, or an empty string.
- */
-export function getDashboardSearchValueFromLocation(
-	location?: DashboardSearchLocationLike | null
-): string {
-	const pathname = location?.pathname?.replace(/\/+$/, "") || "/";
-
-	/* Search values are only read from the main links directory. */
-	if ("/dashboard/links" !== pathname) {
-		return "";
-	}
-
-	const params = new URLSearchParams(location?.search || "");
-	return params.get("search") || "";
-}
-
-/**
  * Find the best matching dashboard routes for a search query.
  *
  * @param query        - The search query.
@@ -514,7 +508,7 @@ export function findDashboardRouteMatches(
 	const normalizedQuery = normalizeTerm(query);
 
 	if (!normalizedQuery) {
-		return [];
+		return getRouteTargets(capabilities).slice(0, limit);
 	}
 
 	return getRouteTargets(capabilities)
@@ -603,39 +597,4 @@ export function findDashboardUserMatches(
 		})
 		.slice(0, limit)
 		.map(({ score: _score, ...user }) => user);
-}
-
-/**
- * Resolve the best destination for a dashboard search submission.
- *
- * @param query        - The search query.
- * @param capabilities - The current user's capabilities.
- * @return The resolved destination path.
- */
-export function getDashboardSearchPath(
-	query: string,
-	capabilities: DashboardSearchCapabilities = {}
-): string {
-	const normalizedQuery = normalizeTerm(query);
-
-	if (!normalizedQuery) {
-		return "/dashboard/links";
-	}
-
-	/* Look for the best-matching internal route target. */
-	const [bestTarget] = getRouteTargets(capabilities)
-		.map<ScoredRouteTarget>((target) => ({
-			...target,
-			score: getTargetScore(normalizedQuery, target),
-		}))
-		.filter((target) => target.score > 0)
-		.sort((a, b) => b.score - a.score);
-
-	/* If a route target matches strongly, redirect to it directly. */
-	if (bestTarget && bestTarget.score >= 70) {
-		return bestTarget.href;
-	}
-
-	/* Fall back to a general links search. */
-	return getLinksSearchPath(query);
 }

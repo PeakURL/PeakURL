@@ -1,10 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import {
-	Dialog,
-	DialogBackdrop,
-	DialogPanel,
-	DialogTitle,
-} from "@headlessui/react";
+import { useMemo, useState } from "react";
+import { DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import {
 	ExternalLink,
 	Link2,
@@ -16,7 +11,13 @@ import {
 	X,
 } from "lucide-react";
 
-import { Button, Input, Select, type SelectOption } from "@/components";
+import {
+	DrawerDialog,
+	Button,
+	Input,
+	Select,
+	type SelectOption,
+} from "@/components";
 import {
 	useCreateWebhookMutation,
 	useUpdateWebhookMutation,
@@ -228,20 +229,23 @@ function FormInner({
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="flex h-full flex-col">
+		<form onSubmit={handleSubmit} className="flex h-full min-h-0 flex-col">
 			{/* Drawer Header */}
-			<div className="webhook-drawer-header">
-				<div className="flex items-start gap-3 min-w-0 flex-1">
-					<div className="webhook-drawer-title-icon">
+			<div className="drawer-header webhook-drawer-header">
+				<div className="drawer-heading-group">
+					<div className="drawer-title-icon webhook-drawer-title-icon">
 						<WebhookIcon className="w-5 h-5 text-accent" />
 					</div>
 					<div className="min-w-0 flex-1 text-start">
-						<DialogTitle as="h2" className="webhook-drawer-title">
+						<DialogTitle
+							as="h2"
+							className="drawer-title webhook-drawer-title"
+						>
 							{isEditing
 								? __("Edit Webhook")
 								: __("Add New Webhook")}
 						</DialogTitle>
-						<p className="webhook-drawer-subtitle truncate">
+						<p className="drawer-subtitle">
 							{isEditing
 								? webhook?.label
 								: __(
@@ -253,7 +257,7 @@ function FormInner({
 				<button
 					type="button"
 					onClick={onClose}
-					className="webhook-drawer-header-btn"
+					className="drawer-icon-button webhook-drawer-header-btn"
 					title={__("Close drawer")}
 					aria-label={__("Close drawer")}
 				>
@@ -262,9 +266,12 @@ function FormInner({
 			</div>
 
 			{/* Drawer Body */}
-			<div className="webhook-drawer-content" dir={direction}>
+			<div
+				className="drawer-content webhook-drawer-content"
+				dir={direction}
+			>
 				{/* 1. Webhook name */}
-				<div className="integrations-tab-field-group">
+				<div className="drawer-field-section integrations-tab-field-group">
 					<label className="integrations-tab-field-label">
 						{__("Webhook name")}
 					</label>
@@ -286,7 +293,7 @@ function FormInner({
 				</div>
 
 				{/* 2. Endpoint URL */}
-				<div className="integrations-tab-field-group">
+				<div className="drawer-field-section integrations-tab-field-group">
 					<label className="integrations-tab-field-label">
 						{__("Endpoint URL")}
 					</label>
@@ -315,7 +322,7 @@ function FormInner({
 				</div>
 
 				{/* 2. Subscribed Events */}
-				<div className="integrations-tab-field-group">
+				<div className="drawer-field-section integrations-tab-field-group">
 					<div className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
 						<div className="flex items-center gap-2">
 							<label className="integrations-tab-field-label mb-0!">
@@ -495,7 +502,7 @@ function FormInner({
 				</div>
 
 				{/* History Retention */}
-				<div className="integrations-tab-field-group">
+				<div className="drawer-field-section integrations-tab-field-group">
 					<label className="integrations-tab-field-label">
 						{__("History Retention")}
 					</label>
@@ -558,7 +565,7 @@ function FormInner({
 			</div>
 
 			{/* Drawer Footer */}
-			<div className="webhook-drawer-footer">
+			<div className="drawer-footer webhook-drawer-footer">
 				<a
 					href="https://go.peakurl.org/5f866a"
 					target="_blank"
@@ -609,25 +616,15 @@ export function WebhookFormDrawer({
 }: WebhookFormDrawerProps) {
 	const isRtl = isDocumentRtl();
 
-	// Cache the active webhook so closing animations stay smooth without jumping even if parent clears the webhook
+	// Include a null selection so a new webhook stays a new form throughout its exit.
 	const [cachedWebhook, setCachedWebhook] = useState(webhook);
-
-	useEffect(() => {
-		if (webhook) {
-			// eslint-disable-next-line react-hooks/set-state-in-effect -- Synchronize cached webhook on change
-			setCachedWebhook(webhook);
-		}
-	}, [webhook]);
-
-	const activeWebhook = webhook ?? cachedWebhook;
+	if (isOpen && webhook !== cachedWebhook) setCachedWebhook(webhook);
+	const activeWebhook = isOpen ? webhook : cachedWebhook;
 
 	return (
-		<Dialog open={isOpen} onClose={onClose} className="relative z-50">
+		<DrawerDialog open={isOpen} onClose={onClose}>
 			{/* Smooth backdrop fade transition */}
-			<DialogBackdrop
-				transition
-				className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-500 ease-in-out data-closed:opacity-0"
-			/>
+			<DialogBackdrop transition className="dialog-backdrop" />
 
 			<div className="fixed inset-0 overflow-hidden">
 				<div className="absolute inset-0 overflow-hidden">
@@ -640,19 +637,15 @@ export function WebhookFormDrawer({
 					>
 						<DialogPanel
 							transition
-							className={`webhook-form-drawer-panel ${
+							className={`drawer-panel drawer-transition webhook-form-drawer-panel ${
 								isRtl
 									? "data-closed:-translate-x-full"
 									: "data-closed:translate-x-full"
 							}`}
 						>
 							<FormInner
-								key={
-									isOpen
-										? webhook?.id || "new"
-										: activeWebhook?.id || "cached"
-								}
-								webhook={isOpen ? webhook : activeWebhook}
+								key={activeWebhook?.id || "new"}
+								webhook={activeWebhook}
 								onClose={onClose}
 								eventOptions={eventOptions}
 								notification={notification}
@@ -662,7 +655,7 @@ export function WebhookFormDrawer({
 					</div>
 				</div>
 			</div>
-		</Dialog>
+		</DrawerDialog>
 	);
 }
 

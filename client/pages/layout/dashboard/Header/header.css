@@ -16,7 +16,7 @@
 	}
 
 	.dashboard-header-actions {
-		@apply flex shrink-0 items-center gap-1.5 sm:gap-2;
+		@apply ms-auto flex shrink-0 items-center gap-1.5 sm:gap-2;
 	}
 
 	.dashboard-header-user-menu {

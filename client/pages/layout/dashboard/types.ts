@@ -38,37 +38,6 @@ export interface LayoutProps {
 }
 
 /**
- * Props for an individual search result button.
- */
-export interface ResultButtonProps {
-	/** Icon shown beside the result. */
-	icon: LucideIcon;
-
-	/** Primary result label. */
-	title: string;
-
-	/** Optional supporting description text. */
-	description?: string;
-
-	/** Optional metadata row shown below the description. */
-	meta?: string;
-
-	/** Click handler used to navigate to the result. */
-	onClick: () => void;
-}
-
-/**
- * Props for a grouped search result section.
- */
-export interface ResultSectionProps {
-	/** Visible section heading. */
-	title: string;
-
-	/** Result content rendered in the section body. */
-	children: ReactNode;
-}
-
-/**
  * Child navigation entry nested under a sidebar section.
  */
 export interface NavChild {

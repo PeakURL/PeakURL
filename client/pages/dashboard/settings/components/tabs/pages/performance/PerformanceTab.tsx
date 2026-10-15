@@ -2,18 +2,20 @@ import { useMemo, useState, type SubmitEvent } from "react";
 import {
 	AlertCircle,
 	CheckCircle2,
-	ExternalLink,
 	Trash2,
 	Zap,
+	SlidersHorizontal,
 } from "lucide-react";
 
 import {
 	Button,
 	ConfirmDialog,
 	Input,
-	Select,
+	SelectField,
 	type SelectOption,
 } from "@/components";
+import { TabHeader } from "@/pages/dashboard/settings/components/TabHeader";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import {
@@ -47,28 +49,18 @@ function StateCard({
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
 	const styles: Record<StateCardVariant, string> = {
-		info: "settings-performance-state-card-info",
-		success: "settings-performance-state-card-success",
-		error: "settings-performance-state-card-error",
+		info: "settings-notice-info",
+		success: "settings-notice-success",
+		error: "settings-notice-error",
 	};
 
 	return (
-		<div className={cn("settings-performance-state-card", styles[variant])}>
-			<div
-				dir={direction}
-				className="settings-performance-state-card-layout"
-			>
-				<Icon
-					size={18}
-					className="settings-performance-state-card-icon"
-				/>
-				<div className="settings-performance-state-card-content">
-					<h3 className="settings-performance-state-card-title">
-						{title}
-					</h3>
-					<p className="settings-performance-state-card-text">
-						{description}
-					</p>
+		<div className={cn("settings-notice", styles[variant])}>
+			<div dir={direction} className="settings-notice-layout">
+				<Icon size={18} className="settings-notice-icon" />
+				<div className="settings-notice-content">
+					<h3 className="settings-notice-title">{title}</h3>
+					<p className="settings-notice-text">{description}</p>
 				</div>
 			</div>
 		</div>
@@ -84,7 +76,7 @@ function StatCard({
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 
 	return (
-		<div dir={direction} className="settings-stat-card">
+		<div dir={direction} className="settings-statistic">
 			<p className="settings-stat-label">{label}</p>
 			<p className="settings-stat-value">
 				{"ltr" === valueDirection ? (
@@ -274,59 +266,28 @@ export function PerformanceTab({
 	return (
 		<div className="settings-performance">
 			{/* Intro & Overview Header */}
-			<div className="settings-performance-intro">
-				<div
-					dir={direction}
-					className="settings-performance-intro-layout"
-				>
-					<div className="settings-performance-intro-copy">
-						<div
-							dir={direction}
-							className="settings-performance-intro-title-row"
+			<div className="settings-section">
+				<TabHeader
+					icon={Zap}
+					title={__("Performance & Caching")}
+					description={__(
+						"Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
+					)}
+					documentationHref="https://go.peakurl.org/227c49"
+					actions={
+						<Button
+							size="sm"
+							variant="danger"
+							className="settings-performance-purge-button"
+							onClick={() => setIsPurgeModalOpen(true)}
+							loading={isPurging}
+							icon={Trash2}
+							disabled={isLoading || isSaving}
 						>
-							<div className="settings-performance-intro-icon">
-								<Zap size={18} />
-							</div>
-							<div>
-								<h2 className="block w-full text-lg font-semibold text-heading pb-4 mb-4 border-b border-stroke">
-									{__("Performance & Caching")}
-								</h2>
-								<p className="settings-group-description mb-0!">
-									{__(
-										"Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
-									)}
-								</p>
-								<div className="mt-2">
-									<a
-										href="https://go.peakurl.org/227c49"
-										target="_blank"
-										rel="noopener noreferrer"
-										dir={direction}
-										className="settings-performance-docs-link"
-									>
-										{__("Read documentation")}
-										<ExternalLink
-											size={13}
-											className="shrink-0"
-										/>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<Button
-						size="sm"
-						variant="danger"
-						className="settings-performance-purge-button"
-						onClick={() => setIsPurgeModalOpen(true)}
-						loading={isPurging}
-						icon={Trash2}
-						disabled={isLoading || isSaving}
-					>
-						{__("Purge Cache")}
-					</Button>
-				</div>
+							{__("Purge Cache")}
+						</Button>
+					}
+				/>
 			</div>
 
 			{/* Health & Metrics Stats Grid */}
@@ -416,41 +377,36 @@ export function PerformanceTab({
 
 			{/* Configuration Form */}
 			<form onSubmit={handleSubmit} className="settings-form">
-				<section className="settings-fieldset">
-					<h2 className="settings-legend">
-						{__("Cache Engine Settings")}
-					</h2>
-					<hr className="settings-separator" />
-					<p className="settings-group-description mb-0!">
-						{__(
-							"Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
-						)}
-					</p>
+				<section className="settings-section">
+					<div className="settings-section-copy settings-section-heading">
+						<SectionTitle icon={SlidersHorizontal}>
+							{__("Cache Engine Settings")}
+						</SectionTitle>
 
-					<div className="settings-grid">
-						<div>
-							<label className="settings-section-label">
-								{__("Preferred Cache Driver")}
-							</label>
-							<Select
+						<p className="settings-group-description mb-0!">
+							{__(
+								"Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
+							)}
+						</p>
+					</div>
+
+					<div className="settings-performance-policies">
+						<div className="settings-performance-policy">
+							<SelectField
+								label={__("Preferred Cache Driver")}
 								value={driver}
 								onChange={(val) => setDriver(String(val))}
 								options={driverOptions}
 								ariaLabel={__("Preferred Cache Driver")}
 								disabled={isSaving}
-							/>
-							<p className="settings-group-description settings-performance-help-text">
-								{__(
+								helperText={__(
 									"PeakURL prioritizes Redis if configured, APCu if loaded, and Filesystem storage as the universal fallback."
 								)}
-							</p>
+							/>
 						</div>
-
-						<div>
-							<label className="settings-section-label">
-								{__("Redirect Cache TTL")}
-							</label>
-							<Select
+						<div className="settings-performance-policy">
+							<SelectField
+								label={__("Redirect Cache TTL")}
 								value={selectedTtlPreset}
 								onChange={(val) =>
 									setSelectedTtlPreset(String(val))
@@ -458,38 +414,34 @@ export function PerformanceTab({
 								options={REDIRECT_TTL_PRESETS}
 								ariaLabel={__("Redirect Cache TTL")}
 								disabled={isSaving}
-							/>
-							<p className="settings-group-description settings-performance-help-text">
-								{__(
+								helperText={__(
 									"Time-to-Live duration for caching active short URL redirect destinations."
 								)}
-							</p>
+							/>
+							{"custom" === selectedTtlPreset ? (
+								<div>
+									<Input
+										type="number"
+										min={1}
+										max={31536000}
+										label={__(
+											"Custom Redirect TTL (seconds)"
+										)}
+										value={customTtl}
+										onChange={(e) =>
+											setCustomTtl(e.target.value)
+										}
+										helperText={__(
+											"Enter the redirect destination cache lifetime in seconds."
+										)}
+										disabled={isSaving}
+									/>
+								</div>
+							) : null}
 						</div>
-
-						{"custom" === selectedTtlPreset ? (
-							<div>
-								<Input
-									type="number"
-									min={1}
-									max={31536000}
-									label={__("Custom Redirect TTL (seconds)")}
-									value={customTtl}
-									onChange={(e) =>
-										setCustomTtl(e.target.value)
-									}
-									helperText={__(
-										"Enter the redirect destination cache lifetime in seconds."
-									)}
-									disabled={isSaving}
-								/>
-							</div>
-						) : null}
-
-						<div>
-							<label className="settings-section-label">
-								{__("Negative Lookup (404) TTL")}
-							</label>
-							<Select
+						<div className="settings-performance-policy">
+							<SelectField
+								label={__("Negative Lookup (404) TTL")}
 								value={selectedNegativePreset}
 								onChange={(val) =>
 									setSelectedNegativePreset(String(val))
@@ -497,32 +449,31 @@ export function PerformanceTab({
 								options={NEGATIVE_TTL_PRESETS}
 								ariaLabel={__("Negative Lookup (404) TTL")}
 								disabled={isSaving}
-							/>
-							<p className="settings-group-description settings-performance-help-text">
-								{__(
+								helperText={__(
 									"Time-to-Live duration for caching non-existent link lookups to mitigate database load from automated scans."
 								)}
-							</p>
+							/>
+							{"custom" === selectedNegativePreset ? (
+								<div>
+									<Input
+										type="number"
+										min={1}
+										max={86400}
+										label={__(
+											"Custom Negative TTL (seconds)"
+										)}
+										value={customNegativeTtl}
+										onChange={(e) =>
+											setCustomNegativeTtl(e.target.value)
+										}
+										helperText={__(
+											"Enter the 404 negative lookup cache lifetime in seconds."
+										)}
+										disabled={isSaving}
+									/>
+								</div>
+							) : null}
 						</div>
-
-						{"custom" === selectedNegativePreset ? (
-							<div>
-								<Input
-									type="number"
-									min={1}
-									max={86400}
-									label={__("Custom Negative TTL (seconds)")}
-									value={customNegativeTtl}
-									onChange={(e) =>
-										setCustomNegativeTtl(e.target.value)
-									}
-									helperText={__(
-										"Enter the 404 negative lookup cache lifetime in seconds."
-									)}
-									disabled={isSaving}
-								/>
-							</div>
-						) : null}
 					</div>
 
 					<div

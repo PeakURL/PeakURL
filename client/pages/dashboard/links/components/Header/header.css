@@ -1,38 +1,6 @@
 @layer components {
-	.links-header {
-		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between;
-	}
-
-	.links-header-brand {
-		@apply flex min-w-0 items-center gap-3;
-	}
-
-	.links-header-brand-icon {
-		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-600;
-	}
-
-	.links-header-brand-copy {
-		@apply min-w-0;
-	}
-
-	.links-header-title {
-		@apply text-xl font-bold text-heading;
-	}
-
-	.links-header-description {
-		@apply text-xs text-text-muted;
-	}
-
 	.links-header-actions {
 		@apply flex w-full sm:w-auto shrink-0 flex-wrap items-center gap-2 sm:justify-end;
-	}
-
-	.links-header-refresh {
-		@apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-stroke bg-surface text-text-muted transition-colors hover:border-accent/30 hover:text-accent disabled:cursor-wait disabled:opacity-60;
-	}
-
-	.links-header-refresh-icon {
-		@apply h-5 w-5;
 	}
 
 	.links-date-range {
@@ -44,7 +12,7 @@
 	}
 
 	.links-date-range-button-current {
-		@apply bg-accent text-white shadow-sm;
+		@apply bg-action text-white shadow-sm;
 	}
 
 	.links-date-range-button-idle {
@@ -98,6 +66,6 @@
 	}
 
 	.links-date-range-apply {
-		@apply inline-flex h-8 items-center justify-center rounded bg-accent px-3 text-xs font-medium text-white transition-all hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-60;
+		@apply inline-flex h-8 items-center justify-center rounded bg-action px-3 text-xs font-medium text-white transition-all hover:bg-action/90 disabled:cursor-not-allowed disabled:opacity-60;
 	}
 }

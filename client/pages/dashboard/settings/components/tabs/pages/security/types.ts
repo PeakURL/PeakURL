@@ -23,7 +23,6 @@ export interface PasswordSettingsProps {
 export interface TwoFactorSettingsProps {
 	direction: SecurityDirection;
 	twoFactorEnabled?: boolean;
-	actionLabel: string;
 	statusMessage: string;
 	backupCodesLastGeneratedAt?: string | null;
 	hasSetupDetails: boolean;

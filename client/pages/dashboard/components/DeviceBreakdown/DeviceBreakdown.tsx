@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 import { __ } from "@/i18n";
 import { formatCount } from "@/shared/formatting";
-import { MetricDonutChart } from "@/components";
+import { MetricDonutChart, PlatformIcon } from "@/components";
 
 import type { DeviceBreakdownProps, MetricItem } from "../types";
 
@@ -23,12 +23,20 @@ function getMetricTotal(metrics: MetricItem[]): number {
 function getMetricPercentage(count: number, total: number): number {
 	return total > 0 ? Math.round((count / total) * 100) : 0;
 }
-
 function formatMetricName(name: string): string {
 	const normalizedName = name.trim();
 
 	if (!normalizedName) {
 		return __("Unknown");
+	}
+
+	// Preserve lowercase 'm' for macOS
+	if (normalizedName.toLowerCase() === "macos") {
+		return "macOS";
+	}
+	// Preserve lowercase 'm' for iOS
+	if (normalizedName.toLowerCase() === "ios") {
+		return "iOS";
 	}
 
 	return normalizedName.charAt(0).toUpperCase() + normalizedName.slice(1);
@@ -128,6 +136,10 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 												}}
 											/>
 											<span className="dashboard-devices-legend-name">
+												<PlatformIcon
+													platform="device"
+													name={device.name}
+												/>
 												{device.name}
 											</span>
 											<span className="dashboard-devices-legend-value">
@@ -163,9 +175,15 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 												className="dashboard-devices-section-row"
 											>
 												<span className="dashboard-devices-section-label">
-													{formatMetricName(
-														browser.name
-													)}
+													<PlatformIcon
+														platform="browser"
+														name={browser.name}
+													/>
+													<span>
+														{formatMetricName(
+															browser.name
+														)}
+													</span>
 												</span>
 												<span className="dashboard-devices-section-count">
 													{formatCount(browser.count)}
@@ -191,7 +209,15 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 												className="dashboard-devices-section-row"
 											>
 												<span className="dashboard-devices-section-label">
-													{formatMetricName(os.name)}
+													<PlatformIcon
+														platform="os"
+														name={os.name}
+													/>
+													<span>
+														{formatMetricName(
+															os.name
+														)}
+													</span>
 												</span>
 												<span className="dashboard-devices-section-count">
 													{formatCount(os.count)}

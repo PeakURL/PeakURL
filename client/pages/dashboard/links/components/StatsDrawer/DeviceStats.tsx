@@ -1,82 +1,10 @@
-import type { ReactNode } from "react";
-import {
-	Compass,
-	Flame,
-	Globe,
-	Laptop,
-	Monitor,
-	Orbit,
-	Smartphone,
-	Tablet,
-} from "lucide-react";
+import { Globe, Laptop, Monitor } from "lucide-react";
+
+import { PlatformIcon } from "@/components";
 import { __, _n } from "@/i18n";
 import { formatCount } from "@/shared/formatting";
-import {
-	AppleIcon,
-	AndroidIcon,
-	WindowsIcon,
-	LinuxIcon,
-	DefaultOSIcon,
-} from "./Icons";
-import type {
-	BrowserIconProps,
-	DeviceStatsProps,
-	StatsMetricItem,
-} from "./types";
 
-// Browser icon type
-const getBrowserIcon = (browser: string) => {
-	const browserLower = browser.toLowerCase();
-	if (browserLower.includes("chrome")) return "chrome";
-	if (browserLower.includes("safari")) return "safari";
-	if (browserLower.includes("firefox")) return "firefox";
-	if (browserLower.includes("edge")) return "edge";
-	return "globe";
-};
-
-const BrowserIcon = ({ browser, className }: BrowserIconProps) => {
-	const iconType = getBrowserIcon(browser);
-
-	if (iconType === "chrome") {
-		return <Globe className={className} />;
-	}
-	if (iconType === "safari") {
-		return <Compass className={className} />;
-	}
-	if (iconType === "firefox") {
-		return <Flame className={className} />;
-	}
-	if (iconType === "edge") {
-		return <Orbit className={className} />;
-	}
-	return <Globe className={className} />;
-};
-
-// Device icon
-const getDeviceIcon = (deviceType: string) => {
-	const typeLower = deviceType.toLowerCase();
-	if (typeLower.includes("mobile")) return Smartphone;
-	if (typeLower.includes("tablet")) return Tablet;
-	return Monitor;
-};
-
-// OS icon
-const getOSIcon = (os: string): ReactNode => {
-	const osLower = os.toLowerCase();
-	if (osLower.includes("windows")) {
-		return <WindowsIcon className="w-4 h-4" />;
-	}
-	if (osLower.includes("mac") || osLower.includes("ios")) {
-		return <AppleIcon className="w-4 h-4" />;
-	}
-	if (osLower.includes("android")) {
-		return <AndroidIcon className="w-4 h-4" />;
-	}
-	if (osLower.includes("linux")) {
-		return <LinuxIcon className="w-4 h-4" />;
-	}
-	return <DefaultOSIcon className="w-4 h-4" />;
-};
+import type { DeviceStatsProps, StatsMetricItem } from "./types";
 
 function DeviceStats({
 	devices = [],
@@ -195,10 +123,12 @@ function DeviceStats({
 								>
 									<div className="links-device-list-row-header">
 										<div className="links-device-list-main">
-											<BrowserIcon
-												browser={browser.name}
-												className="w-4 h-4 text-accent"
-											/>
+											<span className="links-device-platform-icon">
+												<PlatformIcon
+													platform="browser"
+													name={browser.name}
+												/>
+											</span>
 											<span className="text-sm font-medium text-heading">
 												{browser.name}
 											</span>
@@ -214,7 +144,7 @@ function DeviceStats({
 									</div>
 									<div className="links-drawer-bar-track">
 										<div
-											className="links-drawer-bar-fill bg-accent"
+											className="links-drawer-bar-fill bg-action"
 											style={{
 												width: `${browser.percentage}%`,
 											}}
@@ -238,7 +168,6 @@ function DeviceStats({
 				<div className="links-device-types">
 					{displayDevices.map(
 						(device: StatsMetricItem & { percentage: string }) => {
-							const DeviceIcon = getDeviceIcon(device.name);
 							return (
 								<div
 									key={device.name}
@@ -246,7 +175,10 @@ function DeviceStats({
 								>
 									<div className="links-device-type-main">
 										<div className="links-device-type-icon">
-											<DeviceIcon className="w-5 h-5 text-accent" />
+											<PlatformIcon
+												platform="device"
+												name={device.name}
+											/>
 										</div>
 										<div>
 											<p className="text-sm font-medium text-heading">
@@ -287,8 +219,11 @@ function DeviceStats({
 						(os: StatsMetricItem & { percentage: string }) => (
 							<div key={os.name} className="links-device-os-item">
 								<div className="links-device-os-main">
-									<div className="links-device-os-icon">
-										{getOSIcon(os.name)}
+									<div className="links-device-platform-icon">
+										<PlatformIcon
+											platform="os"
+											name={os.name}
+										/>
 									</div>
 									<div>
 										<p className="text-sm font-medium text-heading">

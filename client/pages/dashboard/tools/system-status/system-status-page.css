@@ -4,27 +4,6 @@
 	}
 
 	/* Hero Section */
-	.system-status-page-hero {
-		@apply flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between px-1 pt-1;
-	}
-
-	.system-status-page-hero-copy {
-		@apply min-w-0 flex flex-col;
-		text-align: start;
-	}
-
-	.system-status-page-hero-badge {
-		@apply mb-2 w-max inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
-	}
-
-	.system-status-page-title {
-		@apply text-2xl font-bold tracking-tight text-heading sm:text-3xl;
-	}
-
-	.system-status-page-summary {
-		@apply mt-1 text-sm leading-relaxed text-text-muted;
-		text-align: start;
-	}
 
 	.system-status-page-hero-actions {
 		@apply flex items-center gap-2 w-full sm:w-auto shrink-0;
@@ -237,7 +216,7 @@
 	}
 
 	.system-status-page-tab-active {
-		@apply bg-accent text-white font-medium shadow-sm hover:text-white;
+		@apply bg-action text-white font-medium shadow-sm hover:text-white;
 	}
 
 	.system-status-page-tab-inactive {

@@ -24,11 +24,11 @@
 	}
 
 	.settings-skeleton-row-copy {
-		@apply flex-1 space-y-2;
+		@apply min-w-0 flex-1 space-y-2;
 	}
 
 	.settings-skeleton-row-title {
-		@apply h-5 w-48;
+		@apply h-5 w-48 max-w-full;
 	}
 
 	.settings-skeleton-row-description {

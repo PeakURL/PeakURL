@@ -1,8 +1,17 @@
 import type { SubmitEvent } from "react";
 import { useState } from "react";
-import { AlertCircle, ExternalLink, Mail, MailCheck } from "lucide-react";
+import {
+	AlertCircle,
+	Check,
+	Mail,
+	MailCheck,
+	Send,
+	Server,
+} from "lucide-react";
 
-import { Button, Input, Select, type SelectOption } from "@/components";
+import { Button, Input, SelectField, type SelectOption } from "@/components";
+import { TabHeader } from "@/pages/dashboard/settings/components/TabHeader";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn } from "@/shared/formatting";
@@ -27,6 +36,7 @@ function MethodButton({
 		<button
 			type="button"
 			onClick={onClick}
+			aria-pressed={isActive}
 			dir={direction}
 			className={cn(
 				"settings-email-method-button",
@@ -35,7 +45,15 @@ function MethodButton({
 					: "settings-email-method-button-inactive"
 			)}
 		>
-			<p className="settings-email-method-title">{title}</p>
+			<span className="settings-email-method-heading">
+				<span className="settings-email-method-title">{title}</span>
+				<span
+					className="settings-email-method-indicator"
+					aria-hidden="true"
+				>
+					{isActive && <Check size={12} />}
+				</span>
+			</span>
 			<p className="settings-email-method-description">{description}</p>
 		</button>
 	);
@@ -150,51 +168,29 @@ function EmailDeliveryTab({
 
 	return (
 		<div className="settings-email">
-			<section className="settings-fieldset">
-				<div dir={direction} className="settings-email-intro-layout">
-					<div className="settings-email-intro-icon">
-						<Mail size={18} />
-					</div>
-					<div className="settings-email-intro-content">
-						<h2 className="settings-legend mb-0!">
-							{__("Email Delivery")}
-						</h2>
-						<p className="settings-group-description mb-0! mt-0!">
-							{__(
-								"PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
-							)}
-						</p>
-						<div className="mt-2">
-							<a
-								href="https://go.peakurl.org/d80593"
-								target="_blank"
-								rel="noopener noreferrer"
-								dir={direction}
-								className="settings-email-docs-link"
-							>
-								{__("Read documentation")}
-								<ExternalLink size={13} className="shrink-0" />
-							</a>
-						</div>
-					</div>
-				</div>
+			<section className="settings-section">
+				<TabHeader
+					icon={Mail}
+					title={__("Email Delivery")}
+					description={__(
+						"PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
+					)}
+					documentationHref="https://go.peakurl.org/d80593"
+				/>
 			</section>
 
 			{errorMessage && (
-				<div className="settings-email-alert settings-email-alert-error">
-					<div
-						dir={direction}
-						className="settings-email-alert-layout"
-					>
+				<div className="settings-notice settings-notice-error">
+					<div dir={direction} className="settings-notice-layout">
 						<AlertCircle
 							size={18}
-							className="settings-email-alert-icon"
+							className="settings-notice-icon"
 						/>
-						<div className="settings-email-alert-content">
-							<p className="settings-email-alert-title">
+						<div className="settings-notice-content">
+							<p className="settings-notice-title">
 								{__("Mail status unavailable")}
 							</p>
-							<p className="settings-email-alert-text">
+							<p className="settings-notice-text">
 								{errorMessage}
 							</p>
 						</div>
@@ -203,20 +199,17 @@ function EmailDeliveryTab({
 			)}
 
 			{managementDisabled && (
-				<div className="settings-email-alert settings-email-alert-warning">
-					<div
-						dir={direction}
-						className="settings-email-alert-layout"
-					>
+				<div className="settings-notice settings-notice-warning">
+					<div dir={direction} className="settings-notice-layout">
 						<AlertCircle
 							size={18}
-							className="settings-email-alert-icon"
+							className="settings-notice-icon"
 						/>
-						<div className="settings-email-alert-content">
-							<p className="settings-email-alert-title">
+						<div className="settings-notice-content">
+							<p className="settings-notice-title">
 								{__("Dashboard management unavailable")}
 							</p>
-							<p className="settings-email-alert-text">
+							<p className="settings-notice-text">
 								{status?.manageDisabledReason}
 							</p>
 						</div>
@@ -225,8 +218,10 @@ function EmailDeliveryTab({
 			)}
 
 			<form onSubmit={handleSubmit} className="settings-form">
-				<section className="settings-fieldset">
-					<h2 className="settings-legend">{__("Delivery method")}</h2>
+				<section className="settings-section">
+					<SectionTitle icon={Send}>
+						{__("Delivery method")}
+					</SectionTitle>
 					<div className="settings-email-method-grid">
 						<MethodButton
 							isActive={"mail" === form.driver}
@@ -258,10 +253,10 @@ function EmailDeliveryTab({
 				</section>
 
 				{usingSmtp && (
-					<section className="settings-fieldset">
-						<h2 className="settings-legend">
+					<section className="settings-section">
+						<SectionTitle icon={Server}>
 							{__("SMTP Configuration")}
-						</h2>
+						</SectionTitle>
 						<div className="settings-grid">
 							<Input
 								label={__("From Name")}
@@ -321,22 +316,18 @@ function EmailDeliveryTab({
 						</div>
 
 						<div className="settings-grid">
-							<div className="settings-email-field">
-								<label className="settings-section-label">
-									{__("Encryption")}
-								</label>
-								<Select
-									value={form.smtpEncryption}
-									onChange={(value) =>
-										setForm((current) => ({
-											...current,
-											smtpEncryption: value,
-										}))
-									}
-									options={encryptionOptions}
-									ariaLabel={__("SMTP encryption")}
-								/>
-							</div>
+							<SelectField
+								label={__("Encryption")}
+								value={form.smtpEncryption}
+								onChange={(value) =>
+									setForm((current) => ({
+										...current,
+										smtpEncryption: value,
+									}))
+								}
+								options={encryptionOptions}
+								ariaLabel={__("SMTP encryption")}
+							/>
 							<div className="settings-email-field">
 								<label className="settings-section-label">
 									{__("Authentication")}

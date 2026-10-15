@@ -24,7 +24,7 @@
 	}
 
 	.links-form-main-button {
-		@apply h-11 w-full bg-accent font-medium text-white shadow-sm hover:bg-accent/90;
+		@apply h-11 w-full bg-action font-medium text-white shadow-sm hover:bg-action/90;
 	}
 
 	.links-form-main-button-label {

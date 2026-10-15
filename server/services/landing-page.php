@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
+use PeakURL\Services\Logo;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\I18n;
 
@@ -165,6 +166,15 @@ if ( ! function_exists( 'get_landing_page_html' ) ) {
 
 		if ( '' === trim( $html ) ) {
 			return '';
+		}
+
+		// Only templates that request the bundled logo receive PeakURL's artwork.
+		if ( str_contains( $html, '{{peakurl_logo_url}}' ) ) {
+			$html = str_replace(
+				'{{peakurl_logo_url}}',
+				htmlspecialchars( Logo::get_data_url(), ENT_QUOTES, 'UTF-8' ),
+				$html,
+			);
 		}
 
 		$html_lang      = htmlspecialchars( (string) ( $view_data['htmlLang'] ?? 'en-US' ), ENT_QUOTES, 'UTF-8' );

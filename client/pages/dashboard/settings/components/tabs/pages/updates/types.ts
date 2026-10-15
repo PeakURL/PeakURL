@@ -89,7 +89,7 @@ export interface StatusBadgeProps {
 }
 
 /**
- * Props for the section wrapper used by update-management cards.
+ * Props for the section container used by update management.
  */
 export interface UpdateSectionProps {
 	children: ReactNode;
@@ -99,13 +99,11 @@ export interface UpdateSectionProps {
  * Props for section headers in the updates tab.
  */
 export interface SectionHeaderProps {
+	icon: IconComponent;
 	direction: UpdatesDirection;
 	title: string;
 	description: string;
 	badge?: BadgeState | null;
-	badgeAction?: ReactNode;
-	primaryAction?: ReactNode;
-	secondaryAction?: ReactNode;
 }
 
 /**
@@ -135,14 +133,16 @@ export interface DirectionalValueProps {
 }
 
 /**
- * Props for an inline update notice banner.
+ * Props for the release or database status summary.
  */
-export interface InlineNoticeProps {
+export interface UpdateStatusProps {
 	direction: UpdatesDirection;
 	icon: IconComponent;
 	title: string;
 	description: string;
 	tone?: StatusTone;
+	prominent?: boolean;
+	details?: ReactNode;
 }
 
 /**
@@ -162,18 +162,6 @@ export interface UpdateActionsProps {
 	onCheck: () => void;
 	onApply: () => void;
 	onReinstall: () => void;
-}
-
-/**
- * Props for a label/value detail row.
- */
-export interface DetailRowProps {
-	direction: UpdatesDirection;
-	label: string;
-	value: string;
-	icon?: IconComponent;
-	href?: string;
-	valueDirection?: ValueDirection;
 }
 
 /**

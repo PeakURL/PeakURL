@@ -68,11 +68,7 @@ function Layout({ children }: SettingsLayoutProps) {
 			<Header />
 
 			<div className="settings-layout-grid">
-				<Sidebar
-					tabs={tabs}
-					activeTab={activeTab}
-					// Sidebar needs update to use Link or we pass a custom component/logic
-				/>
+				<Sidebar tabs={tabs} activeTab={activeTab} />
 
 				{children}
 			</div>

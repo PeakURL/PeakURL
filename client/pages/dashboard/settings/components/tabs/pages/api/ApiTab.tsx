@@ -1,17 +1,11 @@
-import {
-	Plus,
-	Trash2,
-	Info,
-	Key,
-	ExternalLink,
-	Copy,
-	Link2,
-} from "lucide-react";
+import { Plus, Info, Key, Copy, Globe, KeyRound } from "lucide-react";
 
-import { Button, ReadOnlyValueBlock } from "@/components";
+import { Button, Input } from "@/components";
+import { DocumentationLink } from "@/pages/dashboard/settings/components/TabHeader";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
-import { formatLocalizedDateTime } from "@/shared/dates";
+import { ApiKeyItem } from "./ApiKeyItem";
 
 import type { ApiTabProps } from "../types";
 
@@ -28,48 +22,33 @@ function ApiTab({
 	return (
 		<div className="settings-api">
 			{baseApiUrl && (
-				<section className="settings-fieldset border-accent/20!">
-					<div className="settings-api-endpoint-header">
-						<div className="settings-api-endpoint-summary">
-							<div className="settings-api-endpoint-title-row">
-								<div className="settings-api-endpoint-icon">
-									<Link2 size={18} />
-								</div>
-								<div className="settings-api-endpoint-copy">
-									<p className="settings-api-endpoint-kicker">
-										{__("Connection")}
-									</p>
-									<h2 className="settings-api-endpoint-title">
-										{__("Base API URL")}
-									</h2>
-								</div>
-							</div>
-							<p className="settings-api-endpoint-description">
+				<section className="settings-section settings-api-endpoint-section">
+					<div className="settings-section-header settings-section-heading">
+						<div className="settings-section-copy">
+							<SectionTitle icon={Globe}>
+								{__("Base API URL")}
+							</SectionTitle>
+							<p className="settings-group-description">
 								{__(
 									"Use this endpoint with WordPress, browser extensions, scripts, and other API clients."
 								)}
 							</p>
-							<div className="mt-2">
-								<a
-									href="https://go.peakurl.org/d373f6"
-									target="_blank"
-									rel="noopener noreferrer"
-									dir={direction}
-									className="settings-api-docs-link"
-								>
-									{__("Read documentation")}
-									<ExternalLink
-										size={13}
-										className="shrink-0"
-									/>
-								</a>
-							</div>
 						</div>
-						<Button
-							size="sm"
-							variant="secondary"
-							icon={Copy}
+						<DocumentationLink href="https://go.peakurl.org/d373f6" />
+					</div>
+					<div className="settings-api-endpoint">
+						<Input
+							aria-label={__("Base API URL")}
+							value={baseApiUrl}
+							valueDirection="ltr"
+							readOnly
+							className="settings-api-endpoint-value"
+						/>
+						<button
+							type="button"
 							className="settings-api-endpoint-copy-button"
+							aria-label={__("Copy API URL")}
+							title={__("Copy API URL")}
 							onClick={() =>
 								copyToClipboard(
 									baseApiUrl,
@@ -77,21 +56,24 @@ function ApiTab({
 								)
 							}
 						>
-							{__("Copy API URL")}
-						</Button>
+							<Copy size={18} aria-hidden="true" />
+						</button>
 					</div>
-					<ReadOnlyValueBlock
-						value={baseApiUrl}
-						className="settings-api-endpoint-value"
-					/>
 				</section>
 			)}
 
-			<section className="settings-fieldset">
-				<div className="settings-api-keys-header">
-					<h2 className="settings-api-keys-title">
-						{__("API Keys")}
-					</h2>
+			<section className="settings-section">
+				<div className="settings-section-header settings-section-heading">
+					<div className="settings-section-copy">
+						<SectionTitle icon={KeyRound}>
+							{__("API Keys")}
+						</SectionTitle>
+						<p className="settings-group-description">
+							{__(
+								"Create separate keys for your scripts and integrations."
+							)}
+						</p>
+					</div>
 					<Button
 						size="sm"
 						icon={Plus}
@@ -103,86 +85,47 @@ function ApiTab({
 				</div>
 
 				{user?.apiKeys && user.apiKeys.length > 0 ? (
-					<div className="settings-api-keys-list">
-						{user.apiKeys.map((key) => (
-							<div
-								key={key.id}
-								dir={direction}
-								className="settings-api-key-row"
-							>
-								<div className="settings-api-key-details">
-									<div className="settings-api-key-title-row">
-										<p className="settings-api-key-title">
-											{key.label || __("API Key")}
-										</p>
-										<span className="settings-api-key-status">
-											{__("Active")}
-										</span>
-									</div>
-									<div className="settings-api-key-value-row">
-										<p className="settings-api-key-value preserve-ltr-value">
-											{key.maskedKey || "••••••••"}
-										</p>
-									</div>
-									<p className="settings-api-key-meta">
-										{__("Created:")}{" "}
-										<bdi className="preserve-ltr-value inline-block">
-											{key.createdAt
-												? formatLocalizedDateTime(
-														key.createdAt,
-														{
-															dateStyle: "medium",
-														}
-													)
-												: __("Unknown")}
-										</bdi>
-									</p>
-								</div>
-								<div className="settings-api-key-actions">
-									<button
-										type="button"
-										className="settings-api-key-delete-button"
-										aria-label={__("Delete")}
-										onClick={() => onDeleteKey(key)}
-										disabled={isDeletingKey}
-										title={__("Delete API Key")}
-									>
-										<Trash2 size={16} />
-									</button>
-								</div>
-							</div>
+					<ul
+						className="settings-api-keys-list"
+						aria-label={__("Saved API keys")}
+						dir={direction}
+					>
+						{user.apiKeys.map((apiKey) => (
+							<ApiKeyItem
+								key={apiKey.id}
+								apiKey={apiKey}
+								isDeleting={isDeletingKey}
+								onDelete={onDeleteKey}
+							/>
 						))}
-					</div>
+					</ul>
 				) : (
 					<div className="settings-api-empty">
-						<Key size={32} className="settings-api-empty-icon" />
-						<h3 className="settings-api-empty-title">
-							{__("No API Keys Generated")}
-						</h3>
-						<p className="settings-api-empty-text">
-							{__(
-								"Generate an API key to access endpoints programmatically."
-							)}
-						</p>
-						<Button
-							size="sm"
-							onClick={() => setShowCreateModal(true)}
-							disabled={isGeneratingKey}
-						>
-							{__("Create New Key")}
-						</Button>
+						<div className="settings-api-empty-icon">
+							<Key size={22} aria-hidden="true" />
+						</div>
+						<div>
+							<h3 className="settings-api-empty-title">
+								{__("No API keys yet")}
+							</h3>
+							<p className="settings-api-empty-text">
+								{__(
+									"Create your first key to connect an integration or use the API."
+								)}
+							</p>
+						</div>
 					</div>
 				)}
 			</section>
 
-			<div className="settings-api-note">
-				<div className="settings-api-note-layout">
-					<Info size={18} className="settings-api-note-icon" />
-					<div className="settings-api-note-content">
-						<p className="settings-api-note-title">
+			<div className="settings-notice settings-notice-info">
+				<div className="settings-notice-layout">
+					<Info size={18} className="settings-notice-icon" />
+					<div className="settings-notice-content">
+						<p className="settings-notice-title">
 							{__("Keep your API keys secure")}
 						</p>
-						<p className="settings-api-note-text">
+						<p className="settings-notice-text">
 							{__(
 								"PeakURL only shows the full token once, at creation time. Store it in a password manager or secret store, and revoke it immediately if you think it has been exposed."
 							)}

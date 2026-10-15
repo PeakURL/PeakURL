@@ -40,15 +40,19 @@
 	}
 
 	.links-device-list-row-header {
-		@apply flex items-center justify-between;
+		@apply flex min-w-0 items-center justify-between gap-3;
 	}
 
 	.links-device-list-main {
-		@apply flex items-center gap-2;
+		@apply flex min-w-0 items-center gap-2.5;
+	}
+
+	.links-device-list-main > span:last-child {
+		@apply truncate;
 	}
 
 	.links-device-list-meta {
-		@apply flex items-center gap-3;
+		@apply flex shrink-0 items-center gap-2;
 	}
 
 	.links-device-list-percentage {
@@ -56,7 +60,7 @@
 	}
 
 	.links-device-list-count {
-		@apply min-w-12 text-sm font-semibold text-heading;
+		@apply min-w-8 text-sm font-semibold tabular-nums text-heading;
 		text-align: end;
 	}
 
@@ -90,23 +94,31 @@
 	}
 
 	.links-device-os-item {
-		@apply flex items-center justify-between rounded-lg px-3 py-2 transition-all hover:bg-surface;
+		@apply flex min-w-0 items-center justify-between gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-surface;
 	}
 
 	.links-device-os-main {
-		@apply flex items-center gap-3;
+		@apply flex min-w-0 items-center gap-2.5;
 	}
 
-	.links-device-os-icon {
-		@apply flex h-8 w-8 items-center justify-center rounded-full bg-accent/10 text-lg;
+	.links-device-os-main > div:last-child {
+		@apply min-w-0;
+	}
+
+	.links-device-os-main p {
+		@apply truncate;
+	}
+
+	.links-device-platform-icon {
+		@apply flex size-8 shrink-0 items-center justify-center rounded-lg bg-selected;
 	}
 
 	.links-device-os-stats {
-		@apply flex items-center gap-3;
+		@apply flex shrink-0 items-center gap-2;
 		text-align: end;
 	}
 
 	.links-device-os-count {
-		@apply min-w-12 text-sm font-semibold text-heading;
+		@apply min-w-8 text-sm font-semibold tabular-nums text-heading;
 	}
 }

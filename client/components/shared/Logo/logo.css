@@ -1,42 +1,42 @@
 @layer components {
+	.logo {
+		@apply inline-flex items-center gap-2.5;
+	}
 	.logo-mark {
-		@apply flex items-center justify-center bg-linear-to-br from-primary-600 to-purple-600 text-white shadow-sm;
+		@apply block shrink-0;
 	}
-
-	.logo-mark-xs {
-		@apply h-7 w-7 rounded-lg;
+	.logo-name {
+		@apply overflow-hidden whitespace-nowrap font-semibold tracking-tight transition-[max-width,opacity] duration-200;
+		max-width: 200px;
 	}
-
-	.logo-mark-sm {
-		@apply h-8 w-8 rounded-lg;
+	.logo-light {
+		@apply text-heading;
 	}
-
-	.logo-mark-md {
-		@apply h-9 w-9 rounded-xl;
+	.logo-dark {
+		@apply text-white;
 	}
-
-	.logo-mark-lg {
-		@apply h-10 w-10 rounded-xl;
+	.logo-sm .logo-mark {
+		@apply h-7 w-7;
 	}
-
-	.logo-mark-icon {
-		@apply shrink-0;
+	.logo-sm .logo-name {
+		@apply text-sm;
 	}
-
-	.logo-mark-icon-xs {
-		@apply h-3.5 w-3.5;
+	.logo-md .logo-mark {
+		@apply h-8 w-8;
 	}
-
-	.logo-mark-icon-sm {
-		@apply h-4 w-4;
+	.logo-md .logo-name {
+		@apply text-base;
 	}
-
-	.logo-mark-icon-md {
-		height: 18px;
-		width: 18px;
+	.logo-lg .logo-mark {
+		@apply h-10 w-10;
 	}
-
-	.logo-mark-icon-lg {
-		@apply h-5 w-5;
+	.logo-lg .logo-name {
+		font-size: 17px;
+	}
+	.logo-xl .logo-mark {
+		@apply h-20 w-20 sm:h-24 sm:w-24;
+	}
+	.logo-xl .logo-name {
+		@apply text-3xl;
 	}
 }

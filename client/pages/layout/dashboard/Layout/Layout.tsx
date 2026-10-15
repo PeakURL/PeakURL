@@ -49,11 +49,10 @@ export const Layout = ({ children }: LayoutProps) => {
 	const basePath = "/dashboard";
 	const location = useLocation();
 	const { version } = getPeakURLData();
-	const headerKey = `${location.pathname}${location.search}`;
 	const footerLink =
 		"https://peakurl.org?utm_source=peakurl_dashboard&utm_medium=dashboard_footer&utm_campaign=app_footer";
 	const normalizedPath = location.pathname.replace(/\/+$/, "") || "/";
-	const showAdminNotices = normalizedPath !== "/dashboard/about";
+	const isAboutPage = normalizedPath === "/dashboard/about";
 	const footerCopy = sprintf(
 		__("Thank you for choosing %s."),
 		"__PEAKURL_NAME__"
@@ -78,44 +77,45 @@ export const Layout = ({ children }: LayoutProps) => {
 				)}
 			>
 				<Header
-					key={headerKey}
 					onMobileMenuToggle={() => setIsMobileSidebarOpen(true)}
 				/>
 
 				<div className="dashboard-layout-content">
 					<main className="dashboard-layout-main">
-						{showAdminNotices ? <AdminNotices /> : null}
+						{!isAboutPage && <AdminNotices />}
 						{children}
 					</main>
 
-					<footer className="dashboard-layout-footer">
-						<div className="dashboard-layout-footer-inner">
-							<p
-								dir={isRtl ? "rtl" : "ltr"}
-								className="dashboard-layout-footer-copy"
-							>
-								{footerCopyBeforeLink}
-								<a
-									href={footerLink}
-									target="_blank"
-									rel="noreferrer"
-									className="dashboard-layout-footer-link"
+					{!isAboutPage && (
+						<footer className="dashboard-layout-footer">
+							<div className="dashboard-layout-footer-inner">
+								<p
+									dir={isRtl ? "rtl" : "ltr"}
+									className="dashboard-layout-footer-copy"
 								>
-									{PEAKURL_NAME}
-								</a>
-								{footerCopyAfterLink}
-							</p>
-							<p
-								dir={isRtl ? "rtl" : "ltr"}
-								className="dashboard-layout-footer-version"
-							>
-								{__("Version")}{" "}
-								<bdi className="dashboard-layout-footer-version-value">
-									{version}
-								</bdi>
-							</p>
-						</div>
-					</footer>
+									{footerCopyBeforeLink}
+									<a
+										href={footerLink}
+										target="_blank"
+										rel="noreferrer"
+										className="dashboard-layout-footer-link"
+									>
+										{PEAKURL_NAME}
+									</a>
+									{footerCopyAfterLink}
+								</p>
+								<p
+									dir={isRtl ? "rtl" : "ltr"}
+									className="dashboard-layout-footer-version"
+								>
+									{__("Version")}{" "}
+									<bdi className="dashboard-layout-footer-version-value">
+										{version}
+									</bdi>
+								</p>
+							</div>
+						</footer>
+					)}
 				</div>
 			</div>
 		</div>

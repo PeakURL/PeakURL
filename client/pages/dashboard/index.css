@@ -1,5 +1,4 @@
 @import "./dashboard-page.css";
-@import "./components/shared.css";
 @import "./components/Header/header.css";
 @import "./components/DashboardSkeleton/dashboard-skeleton.css";
 @import "./components/StatsCards/stats-cards.css";

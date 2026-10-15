@@ -21,7 +21,7 @@ export const SettingsSkeleton = () => {
 				<Skeleton className="settings-skeleton-copy" />
 			</div>
 
-			<div className="skeleton-form settings-skeleton-panel">
+			<div className="settings-section settings-skeleton-panel">
 				{[1, 2, 3, 4].map((i) => (
 					<SettingRowSkeleton key={i} />
 				))}

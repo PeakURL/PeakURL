@@ -3,13 +3,19 @@ import { useState } from "react";
 import {
 	AlertCircle,
 	CheckCircle2,
+	Pencil,
 	CloudDownload,
-	ExternalLink,
 	MapPin,
 	RefreshCcw,
+	KeyRound,
 } from "lucide-react";
 
-import { Button, Input, ReadOnlyValueBlock } from "@/components";
+import { Button, Input } from "@/components";
+import {
+	DocumentationLink,
+	TabHeader,
+} from "@/pages/dashboard/settings/components/TabHeader";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn, formatByteSize } from "@/shared/formatting";
@@ -32,25 +38,18 @@ function StateCard({
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
 	const styles: Record<StateCardVariant, string> = {
-		info: "settings-location-state-card-info",
-		success: "settings-location-state-card-success",
-		error: "settings-location-state-card-error",
+		info: "settings-notice-info",
+		success: "settings-notice-success",
+		error: "settings-notice-error",
 	};
 
 	return (
-		<div className={cn("settings-location-state-card", styles[variant])}>
-			<div
-				dir={direction}
-				className="settings-location-state-card-layout"
-			>
-				<Icon size={18} className="settings-location-state-card-icon" />
-				<div className="settings-location-state-card-content">
-					<h3 className="settings-location-state-card-title">
-						{title}
-					</h3>
-					<p className="settings-location-state-card-text">
-						{description}
-					</p>
+		<div className={cn("settings-notice", styles[variant])}>
+			<div dir={direction} className="settings-notice-layout">
+				<Icon size={18} className="settings-notice-icon" />
+				<div className="settings-notice-content">
+					<h3 className="settings-notice-title">{title}</h3>
+					<p className="settings-notice-text">{description}</p>
 				</div>
 			</div>
 		</div>
@@ -104,65 +103,37 @@ function LocationDataTab({
 
 	return (
 		<div className="settings-location">
-			<div className="settings-location-intro">
-				<div dir={direction} className="settings-location-intro-layout">
-					<div className="settings-location-intro-copy">
-						<div
-							dir={direction}
-							className="settings-location-intro-title-row"
+			<div className="settings-section">
+				<TabHeader
+					icon={MapPin}
+					title={__("Location Database")}
+					description={__(
+						"Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
+					)}
+					documentationHref="https://go.peakurl.org/028e82"
+					actions={
+						<Button
+							size="sm"
+							className="settings-location-download-button"
+							onClick={onDownload}
+							loading={isDownloading}
+							icon={CloudDownload}
+							disabled={
+								isLoading ||
+								isSaving ||
+								!effectiveStatus?.credentialsConfigured ||
+								Boolean(
+									effectiveStatus &&
+									!effectiveStatus.canManageFromDashboard
+								)
+							}
 						>
-							<div className="settings-location-intro-icon">
-								<MapPin size={18} />
-							</div>
-							<div>
-								<h2 className="block w-full text-lg font-semibold text-heading pb-4 mb-4 border-b border-stroke">
-									{__("Location Database")}
-								</h2>
-								<p className="settings-group-description mb-0!">
-									{__(
-										"Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
-									)}
-								</p>
-								<div className="mt-2">
-									<a
-										href="https://go.peakurl.org/028e82"
-										target="_blank"
-										rel="noopener noreferrer"
-										dir={direction}
-										className="settings-location-docs-link"
-									>
-										{__("Read documentation")}
-										<ExternalLink
-											size={13}
-											className="shrink-0"
-										/>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<Button
-						size="sm"
-						className="settings-location-download-button"
-						onClick={onDownload}
-						loading={isDownloading}
-						icon={CloudDownload}
-						disabled={
-							isLoading ||
-							isSaving ||
-							!effectiveStatus?.credentialsConfigured ||
-							Boolean(
-								effectiveStatus &&
-								!effectiveStatus.canManageFromDashboard
-							)
-						}
-					>
-						{isReady
-							? __("Update Database")
-							: __("Download Database")}
-					</Button>
-				</div>
+							{isReady
+								? __("Update Database")
+								: __("Download Database")}
+						</Button>
+					}
+				/>
 			</div>
 
 			<div className="settings-stat-grid">
@@ -232,54 +203,56 @@ function LocationDataTab({
 				/>
 			)}
 
-			<section className="settings-fieldset">
-				<h2 className="settings-legend">{__("MaxMind Credentials")}</h2>
-				<hr className="settings-separator" />
-				<p className="settings-group-description mb-0!">
-					{__(
-						"PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
-					)}
-				</p>
-				<div className="mt-2">
-					<a
+			<section className="settings-section">
+				<div className="settings-section-header settings-section-heading">
+					<div className="settings-section-copy">
+						<SectionTitle icon={KeyRound}>
+							{__("MaxMind Credentials")}
+						</SectionTitle>
+
+						<p className="settings-group-description mb-0!">
+							{__(
+								"PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
+							)}
+						</p>
+					</div>
+					<DocumentationLink
 						href="https://go.peakurl.org/028e82"
-						target="_blank"
-						rel="noopener noreferrer"
-						dir={direction}
-						className="settings-location-docs-link"
-					>
-						{__("How to get credentials")}
-						<ExternalLink size={13} className="shrink-0" />
-					</a>
+						label={__("How to get credentials")}
+					/>
 				</div>
 
 				{hasSavedCredentials && !isEditingCredentials ? (
 					<div className="settings-location-credentials-view">
 						<div className="settings-location-credentials-panel">
-							<div className="settings-grid">
-								<div>
-									<p className="settings-location-credentials-label">
-										{__("Account ID")}
-									</p>
-									<ReadOnlyValueBlock
-										value={effectiveStatus?.accountId}
-										className="settings-location-credentials-value"
-										monospace={false}
-										valueClassName="settings-location-credentials-value-text"
-									/>
-								</div>
-								<div>
-									<p className="settings-location-credentials-label">
-										{__("License Key")}
-									</p>
-									<ReadOnlyValueBlock
-										value={effectiveStatus?.licenseKeyHint}
-										className="settings-location-credentials-value"
-										monospace={false}
-										valueClassName="settings-location-credentials-value-text"
-									/>
-								</div>
+							<div className="settings-location-credentials-status">
+								<CheckCircle2 size={16} aria-hidden="true" />
+								<span>{__("Credentials saved")}</span>
 							</div>
+							<dl className="settings-grid">
+								<div className="form-field">
+									<dt className="form-field-label">
+										{__("Account ID")}
+									</dt>
+									<dd
+										dir="ltr"
+										className="settings-location-credentials-value"
+									>
+										{effectiveStatus?.accountId || ""}
+									</dd>
+								</div>
+								<div className="form-field">
+									<dt className="form-field-label">
+										{__("License Key")}
+									</dt>
+									<dd
+										dir="ltr"
+										className="settings-location-credentials-value"
+									>
+										{effectiveStatus?.licenseKeyHint || ""}
+									</dd>
+								</div>
+							</dl>
 						</div>
 						<div
 							dir={direction}
@@ -288,6 +261,8 @@ function LocationDataTab({
 							<Button
 								type="button"
 								size="sm"
+								variant="secondary"
+								icon={Pencil}
 								className="w-full sm:w-auto"
 								onClick={() => setIsEditingCredentials(true)}
 								disabled={Boolean(
@@ -297,26 +272,6 @@ function LocationDataTab({
 							>
 								{__("Update Credentials")}
 							</Button>
-							<Button
-								type="button"
-								variant="outline"
-								size="sm"
-								className="w-full sm:w-auto"
-								onClick={onDownload}
-								loading={isDownloading}
-								disabled={
-									!effectiveStatus?.credentialsConfigured ||
-									Boolean(
-										effectiveStatus &&
-										!effectiveStatus.canManageFromDashboard
-									)
-								}
-								icon={CloudDownload}
-							>
-								{isReady
-									? __("Refresh Database")
-									: __("Download Database")}
-							</Button>
 						</div>
 					</div>
 				) : (
@@ -324,7 +279,7 @@ function LocationDataTab({
 						className="settings-location-form"
 						onSubmit={handleSubmit}
 					>
-						<div className="settings-grid mt-4!">
+						<div className="settings-grid">
 							<Input
 								label={__("MaxMind Account ID")}
 								type="text"
@@ -336,7 +291,6 @@ function LocationDataTab({
 									setAccountIdInput(event.target.value)
 								}
 								placeholder="123456"
-								className="settings-location-input"
 							/>
 
 							<Input
@@ -353,7 +307,6 @@ function LocationDataTab({
 										? __("Enter a new MaxMind license key")
 										: __("Enter your MaxMind license key")
 								}
-								className="settings-location-input"
 							/>
 						</div>
 
@@ -411,7 +364,7 @@ function StatCard({ label, value, valueDirection = "auto" }: StatCardProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 
 	return (
-		<div dir={direction} className="settings-stat-card">
+		<div dir={direction} className="settings-statistic">
 			<p className="settings-stat-label">{label}</p>
 			<p className="settings-stat-value">
 				{"ltr" === valueDirection ? (

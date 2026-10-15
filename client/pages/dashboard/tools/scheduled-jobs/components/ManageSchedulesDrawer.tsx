@@ -1,10 +1,5 @@
 import { useId, useState } from "react";
-import {
-	Dialog,
-	DialogBackdrop,
-	DialogPanel,
-	DialogTitle,
-} from "@headlessui/react";
+import { DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import {
 	Archive,
 	Clock,
@@ -21,6 +16,7 @@ import {
 
 import type { CronJob } from "@/api";
 import {
+	DrawerDialog,
 	Button,
 	ConfirmDialog,
 	Input,
@@ -255,12 +251,9 @@ export function ManageSchedulesDrawer({
 	};
 
 	return (
-		<Dialog open={isOpen} onClose={onClose} className="relative z-50">
+		<DrawerDialog open={isOpen} onClose={onClose}>
 			{/* Synchronized smooth backdrop fade transition */}
-			<DialogBackdrop
-				transition
-				className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-500 ease-in-out data-closed:opacity-0"
-			/>
+			<DialogBackdrop transition className="dialog-backdrop" />
 
 			<div className="fixed inset-0 overflow-hidden">
 				<div className="absolute inset-0 overflow-hidden">
@@ -274,22 +267,22 @@ export function ManageSchedulesDrawer({
 						<DialogPanel
 							dir={direction}
 							transition
-							className={`scheduled-jobs-manage-drawer-panel ${
+							className={`drawer-panel drawer-transition scheduled-jobs-manage-drawer-panel ${
 								isRtl
 									? "data-closed:-translate-x-full"
 									: "data-closed:translate-x-full"
 							}`}
 						>
 							{/* ─── Drawer Header ─── */}
-							<div className="scheduled-jobs-drawer-header">
-								<div className="flex items-start gap-3 min-w-0 flex-1">
-									<div className="scheduled-jobs-drawer-title-icon">
+							<div className="drawer-header scheduled-jobs-drawer-header">
+								<div className="drawer-heading-group">
+									<div className="drawer-title-icon scheduled-jobs-drawer-title-icon">
 										<SlidersHorizontal className="w-5 h-5 text-accent" />
 									</div>
 									<div className="min-w-0 flex-1">
 										<DialogTitle
 											as="h2"
-											className="scheduled-jobs-drawer-title"
+											className="drawer-title scheduled-jobs-drawer-title"
 										>
 											{__("Manage Schedules & Retention")}
 										</DialogTitle>
@@ -312,7 +305,7 @@ export function ManageSchedulesDrawer({
 								<button
 									type="button"
 									onClick={onClose}
-									className="scheduled-jobs-drawer-close"
+									className="drawer-icon-button scheduled-jobs-drawer-close"
 									aria-label={__("Close schedules drawer")}
 									title={__("Close schedules drawer")}
 								>
@@ -321,7 +314,7 @@ export function ManageSchedulesDrawer({
 							</div>
 
 							{/* ─── Drawer Body ─── */}
-							<div className="scheduled-jobs-drawer-content space-y-6">
+							<div className="drawer-content scheduled-jobs-drawer-content space-y-6">
 								{/* Execution History Retention Section */}
 								<div className="rounded-2xl border border-stroke bg-surface-alt/30 p-5 space-y-4">
 									<div className="flex items-start gap-3">
@@ -939,7 +932,7 @@ export function ManageSchedulesDrawer({
 							</div>
 
 							{/* ─── Drawer Footer ─── */}
-							<div className="scheduled-jobs-drawer-footer">
+							<div className="drawer-footer scheduled-jobs-drawer-footer">
 								<div className="text-xs text-text-muted">
 									{__(
 										"Background job schedules and retention rules are stored permanently."
@@ -984,7 +977,7 @@ export function ManageSchedulesDrawer({
 				loading={isResetting}
 				onConfirm={handleConfirmReset}
 			/>
-		</Dialog>
+		</DrawerDialog>
 	);
 }
 

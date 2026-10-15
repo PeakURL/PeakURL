@@ -3,10 +3,6 @@
 		@apply relative z-50;
 	}
 
-	.modal-backdrop {
-		@apply fixed inset-0 bg-black/50;
-	}
-
 	.modal-shell {
 		@apply fixed inset-0 z-50 flex items-center justify-center p-4;
 	}

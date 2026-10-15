@@ -9,22 +9,24 @@ interface HeaderProps {
 
 function Header({ onClose }: HeaderProps) {
 	return (
-		<div className="links-edit-drawer-header">
-			<div className="links-edit-drawer-header-copy">
-				<DialogTitle className="links-edit-drawer-title">
-					<span className="links-edit-drawer-title-icon">
-						<Link2 className="h-4 w-4" />
-					</span>
-					{__("Edit Link")}
-				</DialogTitle>
-				<p className="links-edit-drawer-description">
-					{__("Update link settings and sharing details.")}
-				</p>
+		<div className="drawer-header links-edit-drawer-header">
+			<div className="drawer-heading-group">
+				<span className="drawer-title-icon">
+					<Link2 />
+				</span>
+				<div className="links-edit-drawer-header-copy">
+					<DialogTitle className="drawer-title links-edit-drawer-title">
+						{__("Edit Link")}
+					</DialogTitle>
+					<p className="links-edit-drawer-description">
+						{__("Update link settings and sharing details.")}
+					</p>
+				</div>
 			</div>
 			<button
 				type="button"
 				onClick={onClose}
-				className="links-edit-drawer-close"
+				className="drawer-icon-button links-edit-drawer-close"
 			>
 				<span className="sr-only">{__("Close panel")}</span>
 				<X className="h-5 w-5" />

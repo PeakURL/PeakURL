@@ -50,7 +50,7 @@ export function ConfirmDialog({
 					leaveFrom="opacity-100"
 					leaveTo="opacity-0"
 				>
-					<div className="confirm-dialog-backdrop" />
+					<div className="dialog-backdrop" />
 				</TransitionChild>
 
 				<div className="confirm-dialog-viewport">

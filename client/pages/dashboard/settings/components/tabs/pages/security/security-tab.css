@@ -1,24 +1,11 @@
 @layer components {
-	.settings-security-password-fields {
-		@apply space-y-4;
-	}
-
-	.settings-security-two-factor-card,
-	.settings-security-sessions-card {
-		@apply space-y-4;
+	.settings-password-fields > .form-field:first-child {
+		@apply md:col-span-2;
 	}
 
 	.settings-security-two-factor-header,
 	.settings-security-sessions-header {
-		@apply flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between;
-	}
-
-	.settings-security-two-factor-copy {
-		text-align: start;
-	}
-
-	.settings-security-two-factor-description {
-		@apply mt-1 text-sm text-text-muted;
+		@apply flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between;
 	}
 
 	.settings-security-two-factor-actions,
@@ -44,12 +31,12 @@
 	}
 
 	.settings-security-two-factor-status-inactive {
-		@apply border-amber-200 bg-amber-50 dark:border-amber-500/30 dark:bg-amber-500/10;
+		@apply border-stroke bg-surface-alt/60;
 	}
 
 	.settings-security-two-factor-status-icon-panel,
 	.settings-security-two-factor-setup-icon-panel {
-		@apply rounded-lg bg-surface p-2 shadow-sm;
+		@apply shrink-0 rounded-md bg-surface p-2;
 	}
 
 	.settings-security-two-factor-status-icon-active {
@@ -57,7 +44,7 @@
 	}
 
 	.settings-security-two-factor-status-icon-inactive {
-		@apply text-amber-600 dark:text-amber-400;
+		@apply text-text-muted;
 	}
 
 	.settings-security-two-factor-status-content {
@@ -74,13 +61,12 @@
 
 	.settings-security-two-factor-status-text,
 	.settings-security-two-factor-setup-description,
-	.settings-security-backup-codes-description,
-	.settings-security-sessions-count {
+	.settings-security-backup-codes-description {
 		@apply mt-1 text-xs text-text-muted;
 	}
 
 	.settings-security-two-factor-setup {
-		@apply space-y-3 rounded-lg border border-stroke p-4;
+		@apply space-y-5 rounded-lg border border-stroke bg-surface-alt/40 p-4 sm:p-5;
 	}
 
 	.settings-security-two-factor-setup-header {
@@ -96,7 +82,13 @@
 	}
 
 	.settings-security-two-factor-setup-grid {
-		@apply grid grid-cols-1 items-center gap-4 md:grid-cols-2;
+		@apply grid min-w-0 grid-cols-1 items-start gap-5;
+	}
+
+	@container settings-content (min-width: 36rem) {
+		.settings-security-two-factor-setup-grid {
+			grid-template-columns: 12rem minmax(0, 1fr);
+		}
 	}
 
 	.settings-security-two-factor-qr {
@@ -112,11 +104,11 @@
 	}
 
 	.settings-security-two-factor-secret-stack {
-		@apply space-y-3;
+		@apply min-w-0 space-y-3;
 	}
 
 	.settings-security-two-factor-secret-card {
-		@apply rounded-lg border border-dashed border-stroke bg-surface-alt p-3;
+		@apply rounded-lg border border-stroke bg-surface p-3;
 	}
 
 	.settings-security-two-factor-secret-label {
@@ -144,7 +136,7 @@
 	}
 
 	.settings-security-backup-codes-header {
-		@apply flex items-center justify-between;
+		@apply flex flex-wrap items-start justify-between gap-3;
 	}
 
 	.settings-security-backup-codes-grid {
@@ -152,11 +144,11 @@
 	}
 
 	.settings-security-backup-code {
-		@apply rounded-md border border-stroke bg-surface-alt px-3 py-2 font-mono text-sm text-heading;
+		@apply rounded-md border border-stroke bg-surface-alt break-all px-3 py-2 font-mono text-sm text-heading;
 	}
 
 	.settings-security-sessions-list {
-		@apply space-y-3;
+		@apply space-y-0;
 	}
 
 	.settings-security-sessions-empty {
@@ -164,7 +156,7 @@
 	}
 
 	.settings-security-session-row {
-		@apply flex flex-col items-start justify-between gap-4 rounded-lg border border-stroke bg-surface p-4 sm:flex-row sm:items-center;
+		@apply flex flex-col items-start justify-between gap-4 border-b border-stroke py-4 last:border-b-0 sm:flex-row sm:items-center;
 	}
 
 	.settings-security-session-row-ended {

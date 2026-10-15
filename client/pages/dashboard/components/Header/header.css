@@ -1,20 +1,4 @@
 @layer components {
-	.dashboard-overview-header {
-		@apply flex items-center justify-between gap-4;
-	}
-
-	.dashboard-overview-header-copy {
-		@apply min-w-0;
-	}
-
-	.dashboard-overview-header-title {
-		@apply text-2xl font-bold text-heading;
-	}
-
-	.dashboard-overview-header-summary {
-		@apply mt-0.5 text-sm text-text-muted;
-	}
-
 	.dashboard-overview-header-actions {
 		@apply flex shrink-0 items-center gap-2;
 	}

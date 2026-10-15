@@ -67,7 +67,7 @@ export function RolesTabs({
 							)}
 							{roleHasDraftDirty ? (
 								<span
-									className="h-2 w-2 rounded-full bg-accent animate-pulse"
+									className="h-2 w-2 rounded-full bg-action animate-pulse"
 									title={__("Unsaved changes")}
 								/>
 							) : null}

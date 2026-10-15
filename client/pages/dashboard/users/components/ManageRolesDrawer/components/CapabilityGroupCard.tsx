@@ -163,8 +163,8 @@ export function CapabilityGroupCard({
 									/>
 									<div
 										className={cn(
-											"w-9 h-5 bg-stroke peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-accent",
-											isProtected && "bg-accent",
+											"capability-switch-track w-9 h-5 bg-stroke rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-action",
+											isProtected && "bg-action",
 											!isApplicable && "bg-stroke/60"
 										)}
 									/>

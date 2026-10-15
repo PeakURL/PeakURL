@@ -162,7 +162,6 @@ function ActivityPage() {
 				onCategoryChange={setCategory}
 				limit={limit}
 				onLimitChange={setLimit}
-				summaryCounts={summaryCounts}
 			/>
 
 			{isLoading ? (

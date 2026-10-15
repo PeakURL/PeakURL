@@ -1,4 +1,5 @@
 @import "./ApiErrorPage/api-error-page.css";
 @import "./Logo/logo.css";
-@import "./BrandLockup/brand-lockup.css";
+@import "./PlatformIcon/platform-icon.css";
 @import "./ThemeToggle/theme-toggle.css";
+@import "./PageHeader/page-header.css";

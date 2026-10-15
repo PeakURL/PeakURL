@@ -1,6 +1,8 @@
 @layer components {
 	.dashboard-layout {
 		@apply min-h-screen bg-bg;
+		/* The 4rem toolbar also has a one-pixel bottom border. */
+		--dashboard-header-height: calc(4rem + 1px);
 	}
 
 	.dashboard-layout-wrapper {

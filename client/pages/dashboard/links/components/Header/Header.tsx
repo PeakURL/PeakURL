@@ -1,6 +1,8 @@
-import { Link2, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
+import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __ } from "@/i18n";
+import { PageHeader } from "@/components";
 import { cn } from "@/shared/formatting";
 
 import type { LinksHeaderProps } from "../types";
@@ -21,45 +23,33 @@ const Header = ({
 			type="button"
 			onClick={onRefresh}
 			disabled={isRefreshing}
-			className="links-header-refresh"
+			className="page-header-icon-button"
 			aria-label={__("Refresh links")}
 			title={__("Refresh links")}
 		>
-			<RefreshCw
-				className={cn(
-					"links-header-refresh-icon",
-					isRefreshing && "animate-spin"
-				)}
-			/>
+			<RefreshCw className={cn(isRefreshing && "animate-spin")} />
 		</button>
 	);
 
 	return (
-		<div className="links-header">
-			<div className="links-header-brand">
-				<div className="links-header-brand-icon">
-					<Link2 className="h-5 w-5 text-white" />
+		<PageHeader
+			icon={dashboardPageIcons["links"]}
+			title={__("All Links")}
+			description={__("Manage and track your shortened URLs")}
+			actions={
+				<div className="links-header-actions">
+					{canViewLinks && refreshButton}
+					{canViewLinks && canViewAnalytics && (
+						<DateRangeFilter
+							clickRange={clickRange}
+							customClickRange={customClickRange}
+							onClickRangeChange={onClickRangeChange}
+							onCustomClickRangeChange={onCustomClickRangeChange}
+						/>
+					)}
 				</div>
-				<div className="links-header-brand-copy">
-					<h1 className="links-header-title">{__("All Links")}</h1>
-					<p className="links-header-description">
-						{__("Manage and track your shortened URLs")}
-					</p>
-				</div>
-			</div>
-
-			<div className="links-header-actions">
-				{canViewLinks && refreshButton}
-				{canViewLinks && canViewAnalytics && (
-					<DateRangeFilter
-						clickRange={clickRange}
-						customClickRange={customClickRange}
-						onClickRangeChange={onClickRangeChange}
-						onCustomClickRangeChange={onCustomClickRangeChange}
-					/>
-				)}
-			</div>
-		</div>
+			}
+		/>
 	);
 };
 

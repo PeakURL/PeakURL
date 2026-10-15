@@ -63,9 +63,12 @@ test.describe("Global Layout, Responsive & Theme Journeys", () => {
 	test("global search input accepts query and dismisses on escape", async ({
 		authenticatedPage: page,
 	}) => {
-		const searchInput = page.locator(
-			".dashboard-search-input, input[placeholder*='Search' i]"
-		);
+		await page
+			.getByRole("button", { name: "Search the dashboard", exact: true })
+			.click();
+		const searchInput = page.getByRole("combobox", {
+			name: "Search links, people, and pages",
+		});
 		await expect(searchInput).toBeVisible();
 
 		// Focus and type search query

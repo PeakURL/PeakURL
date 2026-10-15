@@ -35,7 +35,7 @@ const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 		cn(
 			"settings-sidebar-link",
 			isActive
-				? "settings-sidebar-link-active"
+				? "settings-sidebar-link-active navigation-active-indicator"
 				: "settings-sidebar-link-inactive"
 		);
 	const getIconClassName = (isActive: boolean) =>
@@ -59,6 +59,7 @@ const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 								to={`/dashboard/settings/${tab.id}`}
 								dir={direction}
 								className={getLinkClassName(isActive)}
+								aria-current={isActive ? "page" : undefined}
 							>
 								{IconComponent && (
 									<IconComponent

@@ -8,7 +8,7 @@
 	}
 
 	.button-primary {
-		@apply bg-accent text-white shadow-sm hover:bg-primary-600 hover:shadow-md active:scale-[0.98];
+		@apply bg-action text-white shadow-sm hover:bg-action-hover hover:shadow-md active:scale-[0.98];
 	}
 
 	.button-secondary {

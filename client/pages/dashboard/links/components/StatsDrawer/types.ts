@@ -157,14 +157,6 @@ export type TrafficCategory =
 	| "Unknown";
 
 /**
- * Props for the browser icon helper in the device stats card.
- */
-export interface BrowserIconProps {
-	browser: string;
-	className?: string;
-}
-
-/**
  * Props for the device statistics panel.
  */
 export interface DeviceStatsProps {

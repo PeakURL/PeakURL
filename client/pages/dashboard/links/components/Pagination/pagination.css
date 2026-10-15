@@ -28,6 +28,6 @@
 	}
 
 	.links-pagination-page-current {
-		@apply bg-accent text-white font-semibold hover:bg-accent hover:text-white shadow-xs;
+		@apply bg-action text-white font-semibold hover:bg-action hover:text-white shadow-xs;
 	}
 }

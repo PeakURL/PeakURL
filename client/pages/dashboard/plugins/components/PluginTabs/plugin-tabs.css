@@ -32,6 +32,6 @@
 	}
 
 	.plugins-tabs-indicator {
-		@apply absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-accent;
+		@apply absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-action;
 	}
 }

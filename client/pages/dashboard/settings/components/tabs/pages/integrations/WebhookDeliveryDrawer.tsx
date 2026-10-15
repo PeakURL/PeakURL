@@ -1,10 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-	Dialog,
-	DialogBackdrop,
-	DialogPanel,
-	DialogTitle,
-} from "@headlessui/react";
+import { DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import {
 	CheckCircle2,
 	ChevronDown,
@@ -22,7 +17,13 @@ import {
 	XCircle,
 } from "lucide-react";
 
-import { Button, ConfirmDialog, Select, type SelectOption } from "@/components";
+import {
+	DrawerDialog,
+	Button,
+	ConfirmDialog,
+	Select,
+	type SelectOption,
+} from "@/components";
 import {
 	useClearWebhookDeliveriesMutation,
 	useDeleteWebhookDeliveryMutation,
@@ -422,12 +423,9 @@ export function WebhookDeliveryDrawer({
 	}
 
 	return (
-		<Dialog open={isOpen} onClose={handleClose} className="relative z-50">
+		<DrawerDialog open={isOpen} onClose={handleClose}>
 			{/* Smooth backdrop fade transition */}
-			<DialogBackdrop
-				transition
-				className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-500 ease-in-out data-closed:opacity-0"
-			/>
+			<DialogBackdrop transition className="dialog-backdrop" />
 
 			<div className="fixed inset-0 overflow-hidden">
 				<div className="absolute inset-0 overflow-hidden">
@@ -441,22 +439,22 @@ export function WebhookDeliveryDrawer({
 						<DialogPanel
 							dir={direction}
 							transition
-							className={`webhook-drawer-panel ${
+							className={`drawer-panel drawer-transition webhook-drawer-panel ${
 								isRtl
 									? "data-closed:-translate-x-full"
 									: "data-closed:translate-x-full"
 							}`}
 						>
 							{/* Drawer Header */}
-							<div className="webhook-drawer-header">
-								<div className="flex items-start gap-3 min-w-0 flex-1">
-									<div className="webhook-drawer-title-icon">
+							<div className="drawer-header webhook-drawer-header">
+								<div className="drawer-heading-group">
+									<div className="drawer-title-icon webhook-drawer-title-icon">
 										<History className="w-5 h-5 text-accent" />
 									</div>
 									<div className="min-w-0 flex-1 text-start">
 										<DialogTitle
 											as="h2"
-											className="webhook-drawer-title truncate"
+											className="drawer-title webhook-drawer-title truncate"
 											title={activeWebhook.label}
 										>
 											{activeWebhook.label}
@@ -475,7 +473,7 @@ export function WebhookDeliveryDrawer({
 										type="button"
 										onClick={() => refetch()}
 										disabled={isFetching}
-										className="webhook-drawer-header-btn"
+										className="drawer-icon-button webhook-drawer-header-btn"
 										title={__("Refresh deliveries")}
 										aria-label={__("Refresh deliveries")}
 									>
@@ -489,7 +487,7 @@ export function WebhookDeliveryDrawer({
 									<button
 										type="button"
 										onClick={handleClose}
-										className="webhook-drawer-header-btn"
+										className="drawer-icon-button webhook-drawer-header-btn"
 										title={__("Close drawer")}
 										aria-label={__("Close drawer")}
 									>
@@ -499,7 +497,7 @@ export function WebhookDeliveryDrawer({
 							</div>
 
 							{/* Drawer Body */}
-							<div className="webhook-drawer-content">
+							<div className="drawer-content webhook-drawer-content">
 								{/* Metadata Cards Bar */}
 								<div className="webhook-drawer-meta-grid">
 									<div className="webhook-drawer-meta-card">
@@ -1026,7 +1024,7 @@ export function WebhookDeliveryDrawer({
 							</div>
 
 							{/* Drawer Footer */}
-							<div className="webhook-drawer-footer">
+							<div className="drawer-footer webhook-drawer-footer">
 								<a
 									href="https://go.peakurl.org/5f866a"
 									target="_blank"
@@ -1113,7 +1111,7 @@ export function WebhookDeliveryDrawer({
 					</div>
 				</div>
 			</div>
-		</Dialog>
+		</DrawerDialog>
 	);
 }
 

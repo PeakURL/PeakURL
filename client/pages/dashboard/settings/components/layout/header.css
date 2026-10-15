@@ -1,17 +1,11 @@
 @layer components {
 	.settings-page-header {
-		@apply text-start lg:sticky lg:top-[calc(4rem+var(--admin-notices-height,0px))] lg:z-20 lg:border-b lg:border-stroke/60 lg:bg-bg lg:pt-6 lg:pb-5;
+		@apply lg:sticky lg:top-(--settings-header-top) lg:z-20 lg:bg-bg;
 	}
 
-	.dashboard-notices + .settings-layout .settings-page-header {
-		@apply lg:pt-0;
-	}
-
-	.settings-page-title {
-		@apply mb-1 text-2xl font-bold text-heading;
-	}
-
-	.settings-page-description {
-		@apply mb-5 text-sm text-text-muted lg:mb-0;
+	/* Cover the page inset while preserving the heading's initial position. */
+	.settings-page-header::before {
+		@apply pointer-events-none absolute inset-x-0 bottom-full hidden h-6 bg-bg lg:block;
+		content: "";
 	}
 }

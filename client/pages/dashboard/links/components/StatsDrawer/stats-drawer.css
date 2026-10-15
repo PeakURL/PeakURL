@@ -1,4 +1,8 @@
 @layer components {
+	.links-drawer-layout {
+		@apply flex h-full min-h-0 flex-col overflow-hidden;
+	}
+
 	.links-drawer-shell {
 		@apply pointer-events-none fixed inset-y-0 flex max-w-full;
 	}
@@ -12,16 +16,15 @@
 	}
 
 	.links-drawer-panel {
-		@apply pointer-events-auto flex h-full w-screen transform flex-col overflow-y-auto bg-surface shadow-xl transition duration-500 ease-in-out sm:duration-700;
 		max-width: 60rem;
 	}
 
 	.links-drawer-header {
-		@apply bg-surface-alt px-4 py-6 sm:px-6;
+		@apply shrink-0;
 	}
 
 	.links-drawer-header-inner {
-		@apply flex items-start justify-between;
+		@apply gap-3;
 	}
 
 	.links-drawer-header-copy {
@@ -29,11 +32,7 @@
 	}
 
 	.links-drawer-title {
-		@apply flex items-center gap-2 text-lg font-semibold text-heading;
-	}
-
-	.links-drawer-title-icon {
-		@apply flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10;
+		@apply flex items-center gap-3;
 	}
 
 	.links-drawer-description {
@@ -49,7 +48,7 @@
 	}
 
 	.links-drawer-short-link {
-		@apply inline-flex shrink-0 items-center gap-1 font-mono font-semibold text-accent;
+		@apply inline-flex shrink-0 items-center gap-1 font-mono font-semibold;
 	}
 
 	.links-drawer-destination-link {
@@ -96,12 +95,8 @@
 		@apply text-success;
 	}
 
-	.links-drawer-close {
-		@apply ml-4 shrink-0 rounded-lg p-2 text-text-muted transition-all hover:bg-surface-alt hover:text-heading;
-	}
-
 	.links-drawer-content {
-		@apply flex-1 px-4 py-6 sm:px-6;
+		@apply px-4 py-5 sm:px-6;
 	}
 
 	.links-drawer-tabs {
@@ -115,11 +110,11 @@
 	}
 
 	.links-drawer-tab {
-		@apply -mb-px flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium outline-none transition-all;
+		@apply -mb-px flex items-center gap-2 whitespace-nowrap rounded-t-lg border-b-2 px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent;
 	}
 
 	.links-drawer-tab-active {
-		@apply border-accent text-accent;
+		@apply border-accent bg-selected text-selected-ink;
 	}
 
 	.links-drawer-tab-inactive {
@@ -135,7 +130,7 @@
 	}
 
 	.links-drawer-footer {
-		@apply border-t border-stroke bg-surface-alt px-4 py-4 sm:px-6;
+		@apply justify-end;
 	}
 
 	.links-drawer-footer-actions {

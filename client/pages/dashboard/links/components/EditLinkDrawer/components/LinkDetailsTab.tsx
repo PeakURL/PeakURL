@@ -44,7 +44,7 @@ function LinkDetailsTab({
 					<ReadOnlyValueBlock
 						value={shortUrl}
 						className="links-edit-drawer-readonly-value"
-						valueClassName="links-edit-drawer-readonly-text"
+						valueClassName="links-short-url"
 					/>
 				</div>
 			</div>

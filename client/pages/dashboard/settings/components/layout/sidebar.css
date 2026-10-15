@@ -1,28 +1,25 @@
 @layer components {
 	.settings-sidebar {
-		@apply lg:col-span-1;
+		@apply min-w-0 lg:self-stretch;
 	}
 
 	.settings-sidebar-panel {
 		@apply rounded-lg border border-stroke bg-surface p-2;
-	}
 
-	/* Sticky positioning only on desktop where the two-column grid is active */
-	.settings-sidebar-panel {
-		@apply lg:sticky lg:top-[calc(11.5rem+var(--admin-notices-height,0px))] lg:max-h-[calc(100vh-(11.5rem+var(--admin-notices-height,0px))-1.5rem)] lg:overflow-y-auto;
+		@apply lg:sticky lg:top-(--settings-navigation-top) lg:max-h-[calc(100dvh-var(--settings-navigation-top)-1.5rem)] lg:overflow-y-auto;
 	}
 
 	.settings-sidebar-nav {
-		@apply space-y-1;
+		@apply flex gap-1 overflow-x-auto lg:flex-col lg:overflow-visible;
 	}
 
 	.settings-sidebar-link {
 		text-align: start;
-		@apply flex w-full items-center justify-start gap-2.5 rounded-lg px-3 py-2.5 text-sm transition-all;
+		@apply flex shrink-0 items-center justify-start gap-2.5 whitespace-nowrap rounded-lg px-3 py-2 text-sm transition-colors lg:w-full;
 	}
 
 	.settings-sidebar-link-active {
-		@apply bg-accent/10 font-medium text-accent dark:bg-accent/20;
+		@apply bg-selected font-medium text-selected-ink ring-1 ring-inset ring-selected-border;
 	}
 
 	.settings-sidebar-link-inactive {
@@ -34,7 +31,7 @@
 	}
 
 	.settings-sidebar-icon-active {
-		@apply text-accent;
+		@apply text-selected-ink;
 	}
 
 	.settings-sidebar-icon-inactive {

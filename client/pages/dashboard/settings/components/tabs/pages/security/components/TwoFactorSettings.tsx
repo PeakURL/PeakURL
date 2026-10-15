@@ -1,6 +1,7 @@
 import { RefreshCw, ShieldCheck, ShieldOff } from "lucide-react";
 
 import { Button } from "@/components";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __ } from "@/i18n";
 
 import BackupCodesList from "./BackupCodesList";
@@ -14,7 +15,6 @@ import type { TwoFactorSettingsProps } from "../types";
 function TwoFactorSettings({
 	direction,
 	twoFactorEnabled,
-	actionLabel,
 	statusMessage,
 	backupCodesLastGeneratedAt,
 	hasSetupDetails,
@@ -37,16 +37,15 @@ function TwoFactorSettings({
 	onVerificationCodeChange,
 }: TwoFactorSettingsProps) {
 	return (
-		<section className="settings-fieldset">
-			<h2 className="settings-legend">
-				{__("Two-Factor Authentication")}
-			</h2>
-			<hr className="settings-separator" />
+		<section className="settings-section">
 			<div
 				dir={direction}
-				className="settings-security-two-factor-header"
+				className="settings-security-two-factor-header settings-section-heading"
 			>
-				<div className="settings-security-two-factor-copy">
+				<div className="settings-section-copy">
+					<SectionTitle icon={ShieldCheck}>
+						{__("Two-Factor Authentication")}
+					</SectionTitle>
 					<p className="settings-group-description">
 						{__(
 							"Add an extra layer of security with an authenticator app and backup codes."
@@ -77,16 +76,16 @@ function TwoFactorSettings({
 								{__("Disable")}
 							</Button>
 						</>
-					) : (
+					) : !hasSetupDetails ? (
 						<Button
 							size="sm"
 							onClick={onStartSetup}
 							loading={isStarting}
 						>
 							<ShieldCheck size={14} />
-							{actionLabel}
+							{__("Enable 2FA")}
 						</Button>
-					)}
+					) : null}
 				</div>
 			</div>
 

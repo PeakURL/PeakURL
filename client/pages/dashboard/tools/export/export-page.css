@@ -4,31 +4,6 @@
 	}
 
 	/* Hero Section */
-	.export-page-hero {
-		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between px-1 pt-1;
-	}
-
-	.export-page-hero-copy {
-		@apply min-w-0 flex flex-col;
-		text-align: start;
-	}
-
-	.export-page-hero-badge {
-		@apply mb-2 w-max inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-accent;
-	}
-
-	.export-page-title {
-		@apply text-2xl font-bold tracking-tight text-heading sm:text-3xl;
-	}
-
-	.export-page-summary {
-		@apply mt-1 text-sm leading-relaxed text-text-muted;
-		text-align: start;
-	}
-
-	.export-page-docs-link {
-		@apply inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline;
-	}
 
 	/* Intro / Banner Card */
 	.export-page-intro {

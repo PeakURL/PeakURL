@@ -1,6 +1,8 @@
-import { Clock, History, Link2, RefreshCw, Shield, Users } from "lucide-react";
+import { Clock, History, Link2, RefreshCw, Users } from "lucide-react";
 
+import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __ } from "@/i18n";
+import { PageHeader } from "@/components";
 import { cn, formatCount, formatDate } from "@/shared/formatting";
 
 import { formatExactTimestamp } from "../../lib";
@@ -28,25 +30,25 @@ export function ActivityHeader({
 	}> = [
 		{
 			key: "all",
-			label: __("Total events"),
+			label: __("Matching events"),
 			value: formatCount(summaryCounts.all),
 			icon: History,
 		},
 		{
 			key: "links",
-			label: __("Link events"),
+			label: __("Link events on this page"),
 			value: formatCount(summaryCounts.links),
 			icon: Link2,
 		},
 		{
 			key: "users",
-			label: __("User events"),
+			label: __("User events on this page"),
 			value: formatCount(summaryCounts.users),
 			icon: Users,
 		},
 		{
 			key: "latest",
-			label: __("Latest event"),
+			label: __("Latest on this page"),
 			value: mostRecentTimestamp
 				? formatDate(mostRecentTimestamp)
 				: __("No recent events"),
@@ -59,40 +61,28 @@ export function ActivityHeader({
 
 	return (
 		<>
-			<div className="activity-page-hero">
-				<div className="activity-page-hero-copy">
-					<p className="activity-page-hero-badge">
-						<Shield size={14} />
-						<span>{__("Audit Log")}</span>
-					</p>
-					<h1
-						className="activity-page-title"
-						aria-label={__("Activity Log")}
+			<PageHeader
+				icon={dashboardPageIcons["activity"]}
+				title={__("Activity")}
+				titleLabel={__("Activity Log")}
+				description={__(
+					"Review link changes and user-management events in one place with filters, timestamps, and actor details."
+				)}
+				actions={
+					<button
+						type="button"
+						onClick={onRefresh}
+						disabled={isRefreshing}
+						className="page-header-icon-button"
+						aria-label={__("Refresh activity history")}
+						title={__("Refresh activity history")}
 					>
-						{__("Activity")}
-					</h1>
-					<p className="activity-page-summary">
-						{__(
-							"Review link changes and user-management events in one place with filters, timestamps, and actor details."
-						)}
-					</p>
-				</div>
-				<button
-					type="button"
-					onClick={onRefresh}
-					disabled={isRefreshing}
-					className="dashboard-page-refresh mt-1 shrink-0"
-					aria-label={__("Refresh activity history")}
-					title={__("Refresh activity history")}
-				>
-					<RefreshCw
-						className={cn(
-							"dashboard-page-refresh-icon",
-							isRefreshing && "animate-spin"
-						)}
-					/>
-				</button>
-			</div>
+						<RefreshCw
+							className={cn(isRefreshing && "animate-spin")}
+						/>
+					</button>
+				}
+			/>
 
 			<div className="activity-page-overview">
 				<div className="activity-page-overview-grid">
@@ -121,12 +111,7 @@ export function ActivityHeader({
 											{item.value}
 										</p>
 									</div>
-									<div
-										className={cn(
-											"activity-page-overview-icon",
-											`activity-page-overview-icon-${item.key}`
-										)}
-									>
+									<div className="activity-page-overview-icon">
 										<Icon className="activity-page-overview-icon-glyph" />
 									</div>
 								</div>

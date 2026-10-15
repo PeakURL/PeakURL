@@ -14,10 +14,15 @@ import {
 } from "lucide-react";
 
 import type { CronJob } from "@/api";
-import { Button, ConfirmDialog, useNotification } from "@/components";
+import {
+	Button,
+	ConfirmDialog,
+	PageHeader,
+	useNotification,
+} from "@/components";
 import { useAdminAccess } from "@/hooks";
+import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __, _n, sprintf } from "@/i18n";
-import { isDocumentRtl } from "@/i18n/direction";
 import { extractErrorMessage } from "@/shared/errors";
 import { cn } from "@/shared/formatting";
 import {
@@ -42,8 +47,6 @@ import {
 const MIN_REFRESH_DURATION_MS = 700;
 
 export function ScheduledJobsPage() {
-	const isRtl = isDocumentRtl();
-	const direction = isRtl ? "rtl" : "ltr";
 	const { canManageUpdates, isLoading: isAccessLoading } = useAdminAccess();
 	const notification = useNotification();
 
@@ -247,114 +250,101 @@ export function ScheduledJobsPage() {
 			{/* ════════════════════════════════════
 			    PAGE HERO (Matching Activity Page)
 			   ════════════════════════════════════ */}
-			<div className="scheduled-jobs-page-hero">
-				<div className="scheduled-jobs-page-hero-copy">
-					<p className="scheduled-jobs-page-hero-badge">
-						<CalendarClock size={14} />
-						<span>{__("System Automation")}</span>
-					</p>
-					<h1
-						className="scheduled-jobs-page-title"
-						aria-label={__("Scheduled Jobs")}
-					>
-						{__("Scheduled Jobs")}
-					</h1>
-					<p className="scheduled-jobs-page-summary">
-						{__(
-							"Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
-						)}
-					</p>
-					<div className="mt-2">
+			<PageHeader
+				icon={dashboardPageIcons["tools-scheduled-jobs"]}
+				title={__("Scheduled Jobs")}
+				description={__(
+					"Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
+				)}
+				actions={
+					<div className="scheduled-jobs-page-hero-actions">
 						<a
 							href="https://go.peakurl.org/7a0e0b"
 							target="_blank"
 							rel="noopener noreferrer"
-							dir={direction}
-							className="scheduled-jobs-page-docs-link"
+							className="page-header-docs-link"
 						>
-							{__("Read documentation")}
-							<ExternalLink size={13} className="shrink-0" />
+							{__("Read documentation")}{" "}
+							<ExternalLink size={14} aria-hidden="true" />
 						</a>
-					</div>
-				</div>
-
-				<div className="scheduled-jobs-page-hero-actions">
-					<div className="scheduled-jobs-hero-actions-primary">
-						<button
-							type="button"
-							onClick={handleRefresh}
-							disabled={isRefreshing}
-							className="dashboard-page-refresh"
-							aria-label={__("Refresh")}
-							title={__("Refresh scheduled jobs status")}
-						>
-							<RefreshCw
-								className={cn(
-									"dashboard-page-refresh-icon",
-									isRefreshing && "animate-spin"
-								)}
-							/>
-						</button>
-						{canManageUpdates ? (
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => setIsManageSchedulesOpen(true)}
-								disabled={
-									isRunningDue ||
-									null !== runningJobId ||
-									isClearingHistory
-								}
-								className="scheduled-jobs-hero-btn text-heading hover:bg-surface-alt"
-								title={__(
-									"Configure job recurrence schedules, preferred times, and history retention"
-								)}
+						<div className="scheduled-jobs-hero-actions-primary">
+							<button
+								type="button"
+								onClick={handleRefresh}
+								disabled={isRefreshing}
+								className="page-header-icon-button"
+								aria-label={__("Refresh")}
+								title={__("Refresh scheduled jobs status")}
 							>
-								<SlidersHorizontal size={13} />
-								<span>{__("Manage Schedules")}</span>
-							</Button>
+								<RefreshCw
+									className={cn(
+										isRefreshing && "animate-spin"
+									)}
+								/>
+							</button>
+							{canManageUpdates ? (
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() =>
+										setIsManageSchedulesOpen(true)
+									}
+									disabled={
+										isRunningDue ||
+										null !== runningJobId ||
+										isClearingHistory
+									}
+									className="scheduled-jobs-hero-btn text-heading hover:bg-surface-alt"
+									title={__(
+										"Configure job recurrence schedules, preferred times, and history retention"
+									)}
+								>
+									<SlidersHorizontal size={13} />
+									<span>{__("Manage Schedules")}</span>
+								</Button>
+							) : null}
+						</div>
+						{canManageUpdates ? (
+							<div className="scheduled-jobs-hero-actions-secondary">
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={() => setIsClearAllModalOpen(true)}
+									disabled={
+										isRunningDue ||
+										null !== runningJobId ||
+										isClearingHistory
+									}
+									className="scheduled-jobs-hero-btn text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-200 dark:border-rose-900/40 dark:hover:bg-rose-950/20"
+									title={__(
+										"Clear execution run history for all jobs"
+									)}
+								>
+									<Trash2 size={13} />
+									<span>{__("Clear All History")}</span>
+								</Button>
+								<Button
+									variant="primary"
+									size="sm"
+									onClick={() => setIsRunDueModalOpen(true)}
+									disabled={
+										isRunningDue ||
+										null !== runningJobId ||
+										isClearingHistory
+									}
+									className="scheduled-jobs-hero-btn"
+									title={__(
+										"Execute all jobs that are currently due"
+									)}
+								>
+									<Play size={13} />
+									<span>{__("Run Due Jobs")}</span>
+								</Button>
+							</div>
 						) : null}
 					</div>
-					{canManageUpdates ? (
-						<div className="scheduled-jobs-hero-actions-secondary">
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => setIsClearAllModalOpen(true)}
-								disabled={
-									isRunningDue ||
-									null !== runningJobId ||
-									isClearingHistory
-								}
-								className="scheduled-jobs-hero-btn text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-200 dark:border-rose-900/40 dark:hover:bg-rose-950/20"
-								title={__(
-									"Clear execution run history for all jobs"
-								)}
-							>
-								<Trash2 size={13} />
-								<span>{__("Clear All History")}</span>
-							</Button>
-							<Button
-								variant="primary"
-								size="sm"
-								onClick={() => setIsRunDueModalOpen(true)}
-								disabled={
-									isRunningDue ||
-									null !== runningJobId ||
-									isClearingHistory
-								}
-								className="scheduled-jobs-hero-btn"
-								title={__(
-									"Execute all jobs that are currently due"
-								)}
-							>
-								<Play size={13} />
-								<span>{__("Run Due Jobs")}</span>
-							</Button>
-						</div>
-					) : null}
-				</div>
-			</div>
+				}
+			/>
 
 			{/* ════════════════════════════════════
 			    OVERVIEW METRIC CARDS (Matching Activity Page 4-column Grid)

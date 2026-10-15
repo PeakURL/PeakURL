@@ -1,4 +1,28 @@
 @layer components {
+	/* Dialogs and drawers dim the workspace without blurring its content. */
+	.dialog-backdrop {
+		@apply fixed inset-0 bg-overlay transition-opacity duration-300 data-leave:duration-250 data-enter:ease-in data-leave:ease-out data-closed:opacity-0 motion-reduce:transition-none;
+	}
+
+	/* data-closed controls position; enter/leave identify the direction of motion. */
+	.drawer-transition {
+		@apply transition-transform duration-500 data-leave:duration-400 data-enter:ease-in data-leave:ease-out motion-reduce:transition-none;
+	}
+
+	.navigation-active-indicator {
+		position: relative;
+	}
+	.navigation-active-indicator::before {
+		content: "";
+		position: absolute;
+		inset-inline-start: 0;
+		inset-block: 0.5rem;
+		width: 3px;
+		border-radius: 999px;
+		background-color: var(--color-navigation-indicator);
+		pointer-events: none;
+	}
+
 	.badge {
 		@apply inline-flex items-center gap-1 rounded-full border border-(--color-stroke) px-2 py-1 text-xs font-medium transition-colors select-none dark:border-(--color-stroke-strong);
 	}
@@ -166,7 +190,7 @@
 	}
 
 	.text-gradient-primary {
-		@apply bg-linear-to-r from-blue-600 via-primary-600 to-purple-600 bg-clip-text text-transparent;
+		@apply bg-linear-to-r from-primary-800 via-primary-600 to-primary-400 bg-clip-text text-transparent;
 	}
 
 	.text-gradient-success {

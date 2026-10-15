@@ -1,45 +1,6 @@
 @layer components {
-	.integrations-tab {
-		@apply space-y-6;
-	}
-
-	/* Intro Header Section */
-	.integrations-tab-intro-row {
-		@apply flex items-center gap-3.5;
-	}
-
-	.integrations-tab-intro-icon {
-		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent;
-	}
-
-	.integrations-tab-intro-icon-glyph {
-		@apply h-5 w-5 text-accent;
-	}
-
-	.integrations-tab-intro-copy {
-		@apply space-y-0.5 text-start min-w-0 flex-1;
-	}
-
-	/* Panel container (ensures Captcha and other sections render as full fieldsets) */
-	.integrations-tab-panel {
-		@apply flex min-w-0 flex-col gap-5 rounded-xl bg-surface p-5 shadow-sm ring-1 ring-inset ring-stroke sm:p-6;
-		border: none;
-	}
-
-	.integrations-tab-panel-header {
-		@apply flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between pb-2;
-	}
-
-	.integrations-tab-panel-copy {
-		@apply space-y-1 text-start min-w-0 flex-1;
-	}
-
-	.integrations-tab-panel-title {
-		@apply text-base font-semibold text-heading;
-	}
-
-	.integrations-tab-panel-description {
-		@apply text-sm leading-6 text-text-muted max-w-2xl;
+	.integrations-tab-controls {
+		@apply flex min-w-0 max-w-full flex-wrap items-center gap-3;
 	}
 
 	.integrations-tab-badge {
@@ -47,7 +8,7 @@
 	}
 
 	.integrations-tab-docs-link {
-		@apply inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:underline;
+		@apply inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline;
 	}
 
 	.integrations-tab-status-pill {
@@ -56,15 +17,15 @@
 
 	/* Webhook List & Card */
 	.integrations-tab-list {
-		@apply space-y-2.5;
+		@apply space-y-3;
 	}
 
 	.integrations-tab-webhook-card {
-		@apply rounded-xl border border-stroke bg-surface px-4 py-3 sm:py-3.5 transition-all hover:border-stroke-strong shadow-2xs;
+		@apply rounded-xl border border-stroke bg-surface-alt/30 p-4;
 	}
 
 	.integrations-tab-webhook-header {
-		@apply flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between;
+		@apply flex flex-col gap-4 xl:flex-row xl:flex-wrap xl:items-start xl:justify-between;
 	}
 
 	.integrations-tab-webhook-main {
@@ -103,7 +64,7 @@
 	}
 
 	.integrations-tab-webhook-actions {
-		@apply flex items-center gap-1 shrink-0 self-end sm:self-center;
+		@apply flex flex-wrap items-center gap-1.5 shrink-0 self-start sm:self-center;
 	}
 
 	.integrations-tab-action-btn {
@@ -115,18 +76,11 @@
 	}
 
 	.integrations-tab-webhook-footer {
-		@apply mt-2.5 pt-2 border-t border-stroke/40 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between text-xs text-text-muted;
+		@apply mt-4 pt-3 border-t border-stroke/70 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between text-xs text-text-muted;
 	}
 
 	.integrations-tab-webhook-events {
 		@apply flex flex-wrap items-center gap-1.5;
-	}
-
-	.integrations-tab-event-pill {
-		@apply inline-flex items-center rounded bg-surface-alt px-1.5 py-0.5 font-mono text-[10px] text-text-muted border border-stroke/60 font-medium;
-		direction: ltr;
-		unicode-bidi: -moz-plaintext;
-		unicode-bidi: plaintext;
 	}
 
 	.integrations-tab-webhook-meta {
@@ -246,15 +200,6 @@
 	}
 
 	/* Signing Secret Display Card in Settings */
-	.integrations-tab-secret-card {
-		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-lg border border-stroke bg-surface p-3.5;
-		text-align: start;
-	}
-
-	.integrations-tab-secret-card-content {
-		@apply flex items-start gap-3 min-w-0;
-	}
-
 	.integrations-tab-secret-code {
 		@apply font-mono bg-surface-alt px-2 py-0.5 rounded border border-stroke/50 text-text-muted text-xs inline-block;
 		direction: ltr;
@@ -263,14 +208,6 @@
 	}
 
 	/* Form Footer Actions */
-	.integrations-tab-footer-actions {
-		@apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-stroke;
-	}
-
-	.integrations-tab-delete-button {
-		@apply border-red-200! text-red-600! hover:border-red-300! hover:bg-red-50! hover:text-red-700! dark:border-red-900/50! dark:text-red-400! dark:hover:border-red-800! dark:hover:bg-red-900/20! dark:hover:text-red-300!;
-	}
-
 	/* Health Badges */
 	.integrations-tab-item-health-pill {
 		@apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
@@ -310,31 +247,11 @@
 	}
 
 	.webhook-form-drawer-panel {
-		@apply pointer-events-auto flex h-full w-screen max-w-2xl transform flex-col overflow-hidden bg-surface shadow-2xl transition-transform duration-500 ease-out;
-	}
-
-	.webhook-form-drawer-panel[data-closed] {
-		@apply ease-in;
+		@apply max-w-2xl;
 	}
 
 	.webhook-drawer-panel {
-		@apply pointer-events-auto flex h-full w-screen max-w-3xl lg:max-w-4xl transform flex-col overflow-hidden bg-surface shadow-2xl transition-transform duration-500 ease-out;
-	}
-
-	.webhook-drawer-panel[data-closed] {
-		@apply ease-in;
-	}
-
-	.webhook-drawer-header {
-		@apply flex items-start justify-between gap-4 border-b border-stroke bg-surface-alt px-4 py-5 sm:px-6;
-	}
-
-	.webhook-drawer-title-icon {
-		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent;
-	}
-
-	.webhook-drawer-title {
-		@apply text-base font-semibold text-heading;
+		@apply max-w-3xl lg:max-w-4xl;
 	}
 
 	.webhook-drawer-subtitle {
@@ -344,12 +261,8 @@
 		unicode-bidi: plaintext;
 	}
 
-	.webhook-drawer-header-btn {
-		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-surface hover:text-heading disabled:opacity-50;
-	}
-
 	.webhook-drawer-content {
-		@apply min-h-0 flex-1 overflow-y-auto p-4 sm:p-6 space-y-6;
+		@apply p-4 sm:p-6 space-y-6;
 	}
 
 	.webhook-drawer-meta-grid {
@@ -420,10 +333,6 @@
 		@apply text-xs text-text-muted;
 	}
 
-	.webhook-drawer-footer {
-		@apply flex items-center justify-between border-t border-stroke bg-surface-alt px-4 py-3 sm:px-6;
-	}
-
 	.integrations-delivery-badge {
 		@apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium;
 		font-size: 11px;
@@ -480,7 +389,7 @@
 
 	/* Captcha Settings Styles */
 	.integrations-tab-form {
-		@apply rounded-xl border border-stroke bg-surface-alt/40 p-5 mt-2 space-y-4;
+		@apply space-y-4;
 	}
 
 	.integrations-tab-captcha-form {
@@ -500,19 +409,15 @@
 	}
 
 	.integrations-tab-captcha-fields {
-		@apply gap-4 sm:grid-cols-2 lg:grid-cols-3;
+		@apply gap-4;
 	}
 
 	.integrations-tab-captcha-provider {
 		@apply min-w-0;
 	}
 
-	.integrations-tab-captcha-secret {
-		@apply min-w-0;
-	}
-
 	.integrations-tab-captcha-summary {
-		@apply rounded-lg border border-stroke bg-surface p-4 space-y-3;
+		@apply space-y-3;
 	}
 
 	.integrations-tab-captcha-summary-grid {
@@ -632,5 +537,10 @@
 
 	.integrations-test-result-value {
 		@apply font-mono font-medium text-heading block;
+	}
+	@container settings-content (min-width: 48rem) {
+		.integrations-tab-captcha-fields {
+			@apply grid-cols-3;
+		}
 	}
 }

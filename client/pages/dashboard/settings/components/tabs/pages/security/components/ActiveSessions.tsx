@@ -1,4 +1,6 @@
+import { Monitor } from "lucide-react";
 import { Button } from "@/components";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __, sprintf } from "@/i18n";
 import type { SecuritySession } from "../../types";
 import SessionItem from "./SessionItem";
@@ -18,18 +20,24 @@ function ActiveSessions({
 	onRevokeSession,
 }: ActiveSessionsProps) {
 	return (
-		<section className="settings-fieldset">
-			<h2 className="settings-legend">{__("Active Sessions")}</h2>
-			<hr className="settings-separator" />
-			<div dir={direction} className="settings-security-sessions-header">
-				<p className="settings-group-description mb-0! mt-0!">
-					{sessions.length === 1
-						? __("1 active session")
-						: sprintf(
-								__("%s active sessions"),
-								String(sessions.length)
-							)}
-				</p>
+		<section className="settings-section">
+			<div
+				dir={direction}
+				className="settings-security-sessions-header settings-section-heading"
+			>
+				<div className="settings-section-copy">
+					<SectionTitle icon={Monitor}>
+						{__("Active Sessions")}
+					</SectionTitle>
+					<p className="settings-group-description">
+						{sessions.length === 1
+							? __("1 active session")
+							: sprintf(
+									__("%s active sessions"),
+									String(sessions.length)
+								)}
+					</p>
+				</div>
 				{otherActiveSessions.length > 0 ? (
 					<Button
 						variant="secondary"

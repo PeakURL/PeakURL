@@ -1,10 +1,10 @@
 @layer components {
 	.dashboard-sidebar-overlay {
-		@apply fixed inset-0 z-40 bg-black/50 backdrop-blur-xs transition-opacity duration-300 ease-in-out lg:hidden;
+		@apply fixed inset-0 z-40 bg-overlay transition-opacity duration-300 ease-out motion-reduce:transition-none lg:hidden;
 	}
 
 	.dashboard-sidebar-overlay-open {
-		@apply opacity-100 pointer-events-auto;
+		@apply opacity-100 pointer-events-auto ease-in;
 	}
 
 	.dashboard-sidebar-overlay-closed {
@@ -12,7 +12,7 @@
 	}
 
 	.dashboard-sidebar {
-		@apply fixed inset-y-0 left-0 z-50 flex w-60 -translate-x-full flex-col border-r border-stroke bg-surface overflow-x-hidden transition-all duration-300 ease-in-out lg:z-30 lg:translate-x-0;
+		@apply fixed inset-y-0 left-0 z-50 flex w-60 -translate-x-full flex-col border-r border-stroke bg-surface overflow-x-hidden transition-all duration-400 ease-out motion-reduce:transition-none lg:z-30 lg:translate-x-0;
 	}
 
 	.dashboard-sidebar-rtl {
@@ -20,14 +20,20 @@
 	}
 
 	.dashboard-sidebar-open {
-		@apply translate-x-0 shadow-2xl;
+		@apply translate-x-0 shadow-2xl duration-500 ease-in;
+	}
+
+	@media (min-width: 1024px) {
+		.dashboard-sidebar {
+			transition-duration: 300ms;
+		}
 	}
 
 	.dashboard-sidebar-header {
 		@apply flex h-16 shrink-0 items-center justify-between border-b border-stroke px-4;
 	}
 
-	.dashboard-sidebar-brand {
+	.dashboard-sidebar-logo {
 		@apply flex-1 min-w-0 overflow-hidden;
 	}
 
@@ -121,11 +127,11 @@
 	}
 
 	.dashboard-sidebar-submenu-link-active {
-		@apply bg-accent text-white shadow-sm;
+		@apply bg-selected text-selected-ink ring-1 ring-inset ring-selected-border;
 	}
 
 	.dashboard-sidebar-submenu-link-active:hover {
-		@apply bg-accent text-white;
+		@apply bg-selected text-selected-ink;
 	}
 
 	.dashboard-sidebar-link {
@@ -133,11 +139,11 @@
 	}
 
 	.dashboard-sidebar-link-active {
-		@apply bg-accent text-white shadow-sm;
+		@apply bg-selected text-selected-ink ring-1 ring-inset ring-selected-border;
 	}
 
 	.dashboard-sidebar-link-active:hover {
-		@apply bg-accent text-white;
+		@apply bg-selected text-selected-ink;
 	}
 
 	.dashboard-sidebar-link-icon {
@@ -145,7 +151,7 @@
 	}
 
 	.dashboard-sidebar-link-icon-active {
-		@apply text-white;
+		@apply text-selected-ink;
 	}
 
 	.dashboard-sidebar-link-label {
@@ -161,7 +167,7 @@
 	}
 
 	.dashboard-sidebar-link-badge-active {
-		@apply bg-white/20 text-white;
+		@apply bg-selected-ink/10 text-selected-ink;
 	}
 
 	.dashboard-sidebar-footer {
@@ -185,11 +191,11 @@
 	}
 
 	.dashboard-sidebar-about-link-active {
-		@apply bg-accent text-white shadow-sm;
+		@apply bg-selected text-selected-ink ring-1 ring-inset ring-selected-border;
 	}
 
 	.dashboard-sidebar-about-link-active:hover {
-		@apply bg-accent text-white;
+		@apply bg-selected text-selected-ink;
 	}
 
 	.dashboard-sidebar-about-link-icon {
@@ -211,7 +217,7 @@
 			@apply w-18;
 		}
 
-		.dashboard-sidebar-collapsed .brand-lockup-text {
+		.dashboard-sidebar-collapsed .logo-name {
 			max-width: 0;
 			opacity: 0;
 			pointer-events: none;

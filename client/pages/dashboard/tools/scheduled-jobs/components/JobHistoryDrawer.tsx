@@ -1,13 +1,13 @@
 import { useState } from "react";
-import {
-	Dialog,
-	DialogBackdrop,
-	DialogPanel,
-	DialogTitle,
-} from "@headlessui/react";
+import { DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { AlertTriangle, Clock, History, Play, Trash2, X } from "lucide-react";
 
-import { Button, ConfirmDialog, useNotification } from "@/components";
+import {
+	DrawerDialog,
+	Button,
+	ConfirmDialog,
+	useNotification,
+} from "@/components";
 import { __, _n, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { extractErrorMessage } from "@/shared/errors";
@@ -120,12 +120,9 @@ export function JobHistoryDrawer({
 	};
 
 	return (
-		<Dialog open={isOpen} onClose={onClose} className="relative z-50">
+		<DrawerDialog open={isOpen} onClose={onClose}>
 			{/* Synchronized smooth backdrop fade transition */}
-			<DialogBackdrop
-				transition
-				className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-500 ease-in-out data-closed:opacity-0"
-			/>
+			<DialogBackdrop transition className="dialog-backdrop" />
 
 			<div className="fixed inset-0 overflow-hidden">
 				<div className="absolute inset-0 overflow-hidden">
@@ -139,22 +136,22 @@ export function JobHistoryDrawer({
 						<DialogPanel
 							dir={direction}
 							transition
-							className={`scheduled-jobs-drawer-panel ${
+							className={`drawer-panel drawer-transition scheduled-jobs-drawer-panel ${
 								isRtl
 									? "data-closed:-translate-x-full"
 									: "data-closed:translate-x-full"
 							}`}
 						>
 							{/* ─── Drawer Header ─── */}
-							<div className="scheduled-jobs-drawer-header">
-								<div className="flex items-start gap-3 min-w-0 flex-1">
-									<div className="scheduled-jobs-drawer-title-icon">
+							<div className="drawer-header scheduled-jobs-drawer-header">
+								<div className="drawer-heading-group">
+									<div className="drawer-title-icon scheduled-jobs-drawer-title-icon">
 										<History className="w-5 h-5 text-accent" />
 									</div>
 									<div className="min-w-0 flex-1">
 										<DialogTitle
 											as="h2"
-											className="scheduled-jobs-drawer-title"
+											className="drawer-title scheduled-jobs-drawer-title"
 										>
 											{sprintf(
 												/* translators: %s is the background job title */
@@ -173,7 +170,7 @@ export function JobHistoryDrawer({
 								<button
 									type="button"
 									onClick={onClose}
-									className="scheduled-jobs-drawer-close"
+									className="drawer-icon-button scheduled-jobs-drawer-close"
 									aria-label={__("Close history drawer")}
 									title={__("Close history drawer")}
 								>
@@ -182,7 +179,7 @@ export function JobHistoryDrawer({
 							</div>
 
 							{/* ─── Drawer Body ─── */}
-							<div className="scheduled-jobs-drawer-content">
+							<div className="drawer-content scheduled-jobs-drawer-content">
 								{/* Job Metadata Cards */}
 								<div className="scheduled-jobs-drawer-meta-grid">
 									<div className="scheduled-jobs-drawer-meta-card col-span-2 sm:col-span-1">
@@ -448,7 +445,7 @@ export function JobHistoryDrawer({
 							</div>
 
 							{/* ─── Drawer Footer ─── */}
-							<div className="scheduled-jobs-drawer-footer">
+							<div className="drawer-footer scheduled-jobs-drawer-footer">
 								<div className="text-xs text-text-muted">
 									{sprintf(
 										/* translators: %s is the job title */
@@ -510,7 +507,7 @@ export function JobHistoryDrawer({
 				loading={isClearingHistory}
 				onConfirm={handleClearJobHistory}
 			/>
-		</Dialog>
+		</DrawerDialog>
 	);
 }
 

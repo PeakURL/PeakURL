@@ -10,10 +10,10 @@ import {
 } from "lucide-react";
 
 import { API_ROUTES } from "@/api";
-import { Button, useNotification } from "@/components";
+import { Button, PageHeader, useNotification } from "@/components";
 import { API_SERVER_BASE_URL } from "@/constants";
+import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __, sprintf } from "@/i18n";
-import { isDocumentRtl } from "@/i18n/direction";
 import { useGetUrlsQuery, useLazyGetUrlsExportQuery } from "@/state/slices/api";
 import { formatCount } from "@/shared/formatting";
 import { getErrorMessage } from "@/shared/errors";
@@ -64,8 +64,6 @@ function ExportCard({
 }
 
 function ExportPage() {
-	const isRtl = isDocumentRtl();
-	const direction = isRtl ? "rtl" : "ltr";
 	const notification = useNotification();
 	const [activeFormat, setActiveFormat] = useState<ExportFormat | "">("");
 	const { data: urlsResponse, isLoading: isCountLoading } = useGetUrlsQuery({
@@ -148,32 +146,24 @@ function ExportPage() {
 
 	return (
 		<div className="export-page">
-			<div className="export-page-hero">
-				<div className="export-page-hero-copy">
-					<div className="export-page-hero-badge">
-						<Download size={13} />
-						<span>{__("Data Export")}</span>
-					</div>
-					<h1 className="export-page-title">{__("Export")}</h1>
-					<p className="export-page-summary">
-						{__(
-							"Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
-						)}
-					</p>
-					<div className="mt-2">
-						<a
-							href="https://go.peakurl.org/979434"
-							target="_blank"
-							rel="noopener noreferrer"
-							dir={direction}
-							className="export-page-docs-link"
-						>
-							{__("Read documentation")}
-							<ExternalLink size={13} className="shrink-0" />
-						</a>
-					</div>
-				</div>
-			</div>
+			<PageHeader
+				icon={dashboardPageIcons["tools-export"]}
+				title={__("Export")}
+				description={__(
+					"Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
+				)}
+				actions={
+					<a
+						href="https://go.peakurl.org/979434"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="page-header-docs-link"
+					>
+						{__("Read documentation")}{" "}
+						<ExternalLink size={14} aria-hidden="true" />
+					</a>
+				}
+			/>
 
 			<div className="export-page-intro">
 				<div className="export-page-intro-layout">

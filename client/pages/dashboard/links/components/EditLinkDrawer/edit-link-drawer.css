@@ -12,15 +12,11 @@
 	}
 
 	.links-edit-drawer-panel {
-		@apply pointer-events-auto flex h-full w-screen max-w-2xl transform flex-col overflow-hidden bg-surface shadow-xl transition duration-500 ease-in-out sm:duration-700;
+		@apply max-w-2xl;
 	}
 
 	.links-edit-drawer-form {
 		@apply flex h-full min-h-0 flex-col;
-	}
-
-	.links-edit-drawer-header {
-		@apply flex items-start justify-between gap-4 border-b border-stroke bg-surface-alt px-4 py-6 sm:px-6;
 	}
 
 	.links-edit-drawer-header-copy,
@@ -29,23 +25,15 @@
 	}
 
 	.links-edit-drawer-title {
-		@apply flex items-center gap-2 text-lg font-semibold text-heading;
-	}
-
-	.links-edit-drawer-title-icon {
-		@apply flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent;
+		@apply flex items-center gap-3;
 	}
 
 	.links-edit-drawer-description {
-		@apply text-sm text-text-muted;
-	}
-
-	.links-edit-drawer-close {
-		@apply rounded-lg p-2 text-text-muted transition-all hover:bg-surface-alt hover:text-heading;
+		@apply text-xs leading-5 text-text-muted;
 	}
 
 	.links-edit-drawer-content {
-		@apply min-h-0 flex-1 overflow-y-auto px-4 sm:px-6;
+		@apply px-4 sm:px-6;
 	}
 
 	.links-edit-drawer-section {
@@ -91,10 +79,6 @@
 
 	.links-edit-drawer-readonly-value {
 		@apply border-0 bg-transparent p-0;
-	}
-
-	.links-edit-drawer-readonly-text {
-		@apply text-sm text-heading;
 	}
 
 	.links-edit-drawer-image-field {
@@ -165,7 +149,7 @@
 	}
 
 	.links-edit-drawer-footer {
-		@apply flex shrink-0 justify-end gap-3 border-t border-stroke bg-surface-alt px-4 py-4 sm:px-6;
+		@apply justify-end;
 	}
 
 	.links-edit-drawer-action,
@@ -182,7 +166,7 @@
 	}
 
 	.links-edit-drawer-footer-button-primary {
-		@apply bg-accent text-white shadow-sm hover:bg-accent/90;
+		@apply bg-action text-white shadow-sm hover:bg-action/90;
 	}
 
 	html[dir="rtl"] .links-edit-drawer-footer {

@@ -65,7 +65,7 @@ function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
 
 	return (
 		<Dialog open={open} onClose={setOpen} className="relative z-50">
-			<div className="links-modal-backdrop" aria-hidden="true" />
+			<div className="dialog-backdrop" aria-hidden="true" />
 
 			<div className="links-modal-shell">
 				<DialogPanel

@@ -4,7 +4,7 @@
 		background:
 			radial-gradient(
 				circle at top left,
-				rgb(99 102 241 / 0.16),
+				rgb(181 200 250 / 0.12),
 				transparent 28%
 			),
 			linear-gradient(180deg, #020617 0%, #0f172a 45%, #111827 100%);
@@ -30,7 +30,7 @@
 	}
 
 	.login-page-heading-accent {
-		@apply text-indigo-400;
+		@apply text-primary-300;
 	}
 
 	.login-page-summary {
@@ -51,7 +51,7 @@
 	}
 
 	.login-page-highlight-icon {
-		@apply shrink-0 text-indigo-400;
+		@apply shrink-0 text-primary-300;
 	}
 
 	.login-page-highlight-title {
@@ -63,9 +63,19 @@
 	}
 
 	.login-page-meta {
-		@apply text-xs text-slate-600 transition-colors duration-150 hover:text-slate-400;
-		-webkit-animation: auth-page-fade-up 0.5s ease-out 0.24s both;
-		animation: auth-page-fade-up 0.5s ease-out 0.24s both;
+		@apply inline-flex min-h-8 items-center rounded text-[13px] font-medium leading-5 text-slate-400 transition-colors duration-150 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-300;
+	}
+
+	.login-page-aside-footer {
+		@apply pt-6;
+	}
+
+	.login-page-mobile-footer {
+		@apply flex justify-center px-6 pb-6 pt-2 lg:hidden;
+	}
+
+	.login-page-mobile-footer .login-page-meta {
+		@apply text-slate-500 hover:text-slate-900 focus-visible:outline-primary-500;
 	}
 
 	.login-page-panel {
@@ -124,7 +134,7 @@
 
 	.login-page-link,
 	.login-page-secondary-link {
-		@apply text-sm font-medium text-indigo-600 transition-colors duration-150 hover:text-indigo-700;
+		@apply text-sm font-medium text-primary-700 transition-colors duration-150 hover:text-primary-800;
 	}
 
 	.login-page-secondary-link {

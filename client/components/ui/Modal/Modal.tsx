@@ -37,7 +37,7 @@ export function Modal({
 
 	return (
 		<Dialog open={isOpen} onClose={onClose} className="modal-root">
-			<div className="modal-backdrop" aria-hidden="true" />
+			<div className="dialog-backdrop" aria-hidden="true" />
 
 			<div className="modal-shell">
 				<DialogPanel

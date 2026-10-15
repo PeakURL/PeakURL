@@ -1,119 +1,84 @@
 @layer components {
-	.dashboard-search {
-		@apply relative max-w-xl min-w-0 flex-1;
+	.dashboard-search-trigger {
+		@apply inline-flex h-10 w-10 items-center justify-center rounded-xl bg-surface-alt text-heading transition-colors hover:bg-stroke focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
-
-	.dashboard-search-section-wrapper {
-		@apply block;
+	.dashboard-search-dialog {
+		@apply fixed inset-0 z-50;
 	}
-
-	.dashboard-search-field {
-		@apply relative;
+	.dashboard-search-position {
+		@apply fixed inset-0 flex items-start justify-center overflow-y-auto px-3 pb-6 sm:px-6;
+		--search-top: clamp(1rem, 12dvh, 7rem);
+		padding-top: var(--search-top);
 	}
-
-	.dashboard-search-field-icon {
-		@apply absolute top-1/2 -translate-y-1/2 text-text-muted;
-		inset-inline-start: 0.75rem;
-	}
-
-	.dashboard-search-input {
-		@apply w-full rounded-lg border border-stroke bg-bg py-2 text-sm text-heading placeholder:text-text-muted focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20;
-		-webkit-padding-start: 2.5rem;
-		padding-inline-start: 2.5rem;
-		-webkit-padding-end: 4.25rem;
-		padding-inline-end: 4.25rem;
-		text-align: start;
-	}
-
-	.dashboard-search-clear {
-		@apply absolute top-1/2 -translate-y-1/2 rounded-full p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
-		inset-inline-end: 0.75rem;
-	}
-
-	.dashboard-search-shortcuts {
-		@apply pointer-events-none absolute top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center gap-1 select-none;
-		inset-inline-end: 0.625rem;
-	}
-
-	.dashboard-search-shortcut-key {
-		@apply inline-flex h-5 min-w-5 items-center justify-center rounded-md border border-stroke/90 bg-surface-alt/70 px-1.5 font-mono text-[11px] font-semibold text-text-muted/90 shadow-xs;
-	}
-
-	.dashboard-search-shortcut {
-		@apply pointer-events-none absolute top-1/2 -translate-y-1/2 hidden sm:inline-flex items-center rounded border border-stroke bg-surface px-1.5 py-0.5 font-mono text-[11px] font-medium text-text-muted select-none;
-		inset-inline-end: 0.75rem;
-	}
-
 	.dashboard-search-panel {
-		@apply absolute left-0 right-0 top-full z-40 mt-2 overflow-hidden rounded-xl border border-stroke bg-surface shadow-xl;
+		@apply flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-stroke bg-surface shadow-[0_20px_70px_-15px_rgba(0,0,0,0.35)];
+		max-height: calc(100dvh - var(--search-top) - 1.5rem);
 	}
-
-	.dashboard-search-panel-body {
-		@apply max-h-112 overflow-y-auto p-2;
+	.dashboard-search-field {
+		@apply flex shrink-0 items-center gap-3 border-b border-stroke px-4 py-5 text-text-muted sm:px-5;
 	}
-
-	.dashboard-search-section-wrapper-spaced {
-		@apply mt-3;
+	.dashboard-search-field > svg {
+		@apply shrink-0;
 	}
-
-	.dashboard-search-section {
-		@apply space-y-1;
-	}
-
-	.dashboard-search-section-title {
-		@apply px-3 pt-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-text-muted;
-	}
-
-	.dashboard-search-section-body {
-		@apply space-y-1;
-	}
-
-	.dashboard-search-result {
-		@apply flex w-full items-start gap-3 rounded-lg px-3 py-3 transition-colors hover:bg-surface-alt;
+	.dashboard-search-input {
+		@apply min-w-0 flex-1 border-0 bg-transparent py-1 text-base text-heading outline-none placeholder:text-text-muted sm:text-xl;
 		text-align: start;
 	}
-
-	.dashboard-search-result-icon {
-		@apply mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted;
+	.dashboard-search-shortcut {
+		@apply inline-flex h-6 shrink-0 items-center gap-1 rounded-md border border-stroke bg-surface-alt px-1.5 font-mono text-[11px] font-medium text-text-muted;
 	}
-
-	.dashboard-search-result-content {
+	.dashboard-search-close {
+		@apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-surface-alt hover:text-heading focus-visible:outline-2 focus-visible:outline-accent;
+	}
+	.dashboard-search-results {
+		@apply min-h-0 overflow-y-auto overscroll-contain p-2;
+		max-height: 30rem;
+	}
+	.dashboard-search-group + .dashboard-search-group {
+		@apply mt-2 border-t border-stroke pt-2;
+	}
+	.dashboard-search-group-title {
+		@apply px-3 py-2 text-xs font-medium text-text-muted;
+	}
+	.dashboard-search-result {
+		@apply flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-heading outline-none data-focus:bg-selected data-focus:text-selected-ink;
+		text-align: start;
+	}
+	.dashboard-search-result-icon {
+		@apply inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-text-muted;
+	}
+	.dashboard-search-result[data-focus] .dashboard-search-result-icon {
+		@apply bg-selected text-selected-ink;
+	}
+	.dashboard-search-result-copy {
 		@apply min-w-0 flex-1;
 	}
-
 	.dashboard-search-result-title {
-		@apply truncate text-sm font-medium text-heading;
+		@apply truncate text-sm font-medium;
 	}
-
-	.dashboard-search-result-description {
-		@apply truncate text-xs text-text-muted;
-	}
-
+	.dashboard-search-result-description,
 	.dashboard-search-result-meta {
-		@apply truncate text-xs text-text-muted/80;
+		@apply truncate text-xs leading-5 text-text-muted;
 	}
-
 	.dashboard-search-result-arrow {
-		@apply mt-1 shrink-0 text-text-muted;
+		@apply shrink-0 text-text-muted;
 	}
-
 	.dashboard-search-status {
-		@apply flex items-center gap-2 px-3 py-3 text-sm text-text-muted;
+		@apply flex flex-wrap items-center gap-2 px-3 py-3 text-sm text-text-muted;
 	}
-
-	.dashboard-search-status-icon {
+	.dashboard-search-loading {
 		@apply animate-spin;
 	}
-
-	.dashboard-search-empty {
-		@apply px-3 py-3 text-sm text-text-muted;
+	.dashboard-search-retry {
+		@apply ms-auto inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-accent hover:bg-surface-alt focus-visible:outline-2 focus-visible:outline-accent;
 	}
-
-	.dashboard-search-footer-bordered {
-		@apply mt-3 border-t border-stroke pt-2;
+	.dashboard-search-footer {
+		@apply flex shrink-0 flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-stroke bg-surface-alt/40 px-4 py-3 text-[11px] text-text-muted;
 	}
-
-	.dashboard-search-helper {
-		@apply px-3 pb-2 pt-1 text-xs text-text-muted;
+	.dashboard-search-keyboard {
+		@apply hidden sm:inline-flex items-center gap-1.5;
+	}
+	.dashboard-search-keyboard kbd {
+		@apply inline-flex h-5 items-center justify-center rounded border border-stroke bg-surface px-1 font-mono text-[10px];
 	}
 }

@@ -1,12 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 import {
-	PieChart,
-	Link2,
-	Plug,
 	Wrench,
-	Users,
-	Settings,
 	ChevronDown,
 	X,
 	Info,
@@ -19,11 +14,13 @@ import {
 	PanelRightOpen,
 } from "lucide-react";
 
+import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { useGetUrlsQuery } from "@/state/slices/api";
 import { useAdminAccess } from "@/hooks";
-import { BrandLockup } from "@/components";
+import { Logo } from "@/components";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __ } from "@/i18n";
+import { SPONSOR_URL } from "@/constants";
 import { cn, formatCount } from "@/shared/formatting";
 
 import type { NavItem, SidebarProps } from "../types";
@@ -42,23 +39,23 @@ const getNavItems = (
 		{
 			name: __("Overview"),
 			href: base || "/",
-			icon: PieChart,
+			icon: dashboardPageIcons.overview,
 		},
 		{
 			name: __("Links"),
 			href: `${base || ""}/links`,
-			icon: Link2,
+			icon: dashboardPageIcons.links,
 		},
 		{
 			name: __("Users"),
 			href: `${base || ""}/users`,
-			icon: Users,
+			icon: dashboardPageIcons.users,
 			adminOnly: true,
 		},
 		{
 			name: __("Plugins"),
 			href: `${base || ""}/plugins`,
-			icon: Plug,
+			icon: dashboardPageIcons.plugins,
 			adminOnly: true,
 		},
 		{
@@ -97,7 +94,7 @@ const getNavItems = (
 			name: __("Settings"),
 			href: `${base || ""}/settings/general`,
 			activeBasePath: `${base || ""}/settings`,
-			icon: Settings,
+			icon: dashboardPageIcons.settings,
 		},
 	];
 
@@ -147,11 +144,15 @@ const getSubmenuClassName = (isOpen: boolean): string =>
 const getSubmenuLinkClassName = (isActive: boolean): string =>
 	cn(
 		"dashboard-sidebar-submenu-link",
-		isActive && "dashboard-sidebar-submenu-link-active"
+		isActive &&
+			"dashboard-sidebar-submenu-link-active navigation-active-indicator"
 	);
 
 const getLinkClassName = (isActive: boolean): string =>
-	cn("dashboard-sidebar-link", isActive && "dashboard-sidebar-link-active");
+	cn(
+		"dashboard-sidebar-link",
+		isActive && "dashboard-sidebar-link-active navigation-active-indicator"
+	);
 
 const getLinkIconClassName = (isActive: boolean): string =>
 	cn(
@@ -174,7 +175,8 @@ const getAboutPanelClassName = (isOpen: boolean): string =>
 const getAboutLinkClassName = (isActive: boolean): string =>
 	cn(
 		"dashboard-sidebar-about-link",
-		isActive && "dashboard-sidebar-about-link-active"
+		isActive &&
+			"dashboard-sidebar-about-link-active navigation-active-indicator"
 	);
 
 const getSidebarTargetHref = (href: string | undefined, base: string): string =>
@@ -265,10 +267,10 @@ export const Sidebar = ({
 				)}
 			>
 				<div className="dashboard-sidebar-header">
-					<BrandLockup
+					<Logo
 						to={base || "/dashboard"}
-						size="md"
-						className="dashboard-sidebar-brand"
+						size="lg"
+						className="dashboard-sidebar-logo"
 					/>
 					<button
 						onClick={onMobileClose}
@@ -342,6 +344,7 @@ export const Sidebar = ({
 														],
 												}))
 											}
+											aria-expanded={isOpen}
 											className={getSectionToggleClassName(
 												isSectionActive
 											)}
@@ -395,6 +398,11 @@ export const Sidebar = ({
 														<Link
 															key={child.href}
 															to={child.href}
+															aria-current={
+																isChildLinkActive
+																	? "page"
+																	: undefined
+															}
 															onClick={
 																onMobileClose
 															}
@@ -418,6 +426,7 @@ export const Sidebar = ({
 									to={itemHref}
 									onClick={onMobileClose}
 									className={getLinkClassName(isActive)}
+									aria-current={isActive ? "page" : undefined}
 									dir={direction}
 									title={isCollapsed ? item.name : undefined}
 								>
@@ -494,7 +503,7 @@ export const Sidebar = ({
 								</span>
 							</Link>
 							<a
-								href="https://peakurl.org/sponsor"
+								href={SPONSOR_URL}
 								target="_blank"
 								rel="noreferrer"
 								className="dashboard-sidebar-about-link"
@@ -537,6 +546,7 @@ export const Sidebar = ({
 					<button
 						type="button"
 						onClick={() => setIsAboutOpen((prev) => !prev)}
+						aria-expanded={isAboutOpen}
 						className={getSectionToggleClassName(isAboutOpen)}
 						dir={direction}
 						title={isCollapsed ? __("About PeakURL") : undefined}

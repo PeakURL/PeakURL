@@ -117,21 +117,33 @@
 	}
 
 	.auth-page-card {
-		@apply rounded-[28px] border border-slate-200/80 bg-white p-8 text-slate-950 shadow-2xl shadow-slate-950/10;
+		@apply min-w-0 rounded-[28px] border border-slate-200/80 bg-white p-6 text-slate-950 shadow-2xl shadow-slate-950/10 sm:p-8;
 		-webkit-animation: auth-page-scale-in 0.45s ease-out 0.08s both;
 		animation: auth-page-scale-in 0.45s ease-out 0.08s both;
 	}
 
 	.auth-page-card-header {
-		@apply mb-6 flex items-center justify-between gap-4;
+		@apply mb-7 flex flex-wrap items-center justify-between gap-x-4 gap-y-3;
 	}
 
-	.auth-page-brand {
-		@apply inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700;
+	.auth-page-logo {
+		@apply gap-3;
 	}
 
-	.auth-page-brand-dot {
-		@apply h-2 w-2 rounded-full bg-emerald-500;
+	.auth-page-logo .logo-mark {
+		@apply size-10;
+	}
+
+	.auth-page-logo .logo-name {
+		@apply text-xl leading-7 text-slate-900;
+	}
+
+	.auth-page-logo.logo-dark .logo-name {
+		@apply text-white;
+	}
+
+	.auth-page-logo:focus-visible {
+		@apply rounded-lg outline-2 outline-offset-4 outline-primary-400;
 	}
 
 	.auth-page-back-link {
@@ -162,7 +174,7 @@
 
 	.auth-page-input,
 	.login-page-input {
-		@apply rounded-xl! border-slate-200! bg-slate-50! py-3! text-sm! text-slate-900! caret-slate-900 transition-colors duration-150 placeholder:text-slate-400 focus:border-indigo-400! focus:bg-white! focus:ring-2! focus:ring-indigo-500/15!;
+		@apply rounded-xl! border-slate-200! bg-slate-50! py-3! text-sm! text-slate-900! caret-slate-900 transition-colors duration-150 placeholder:text-slate-400 focus:border-primary-400! focus:bg-white! focus:ring-2! focus:ring-primary-500/15!;
 	}
 
 	.auth-page-input:-webkit-autofill,

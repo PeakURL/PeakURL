@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
-import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import { DialogBackdrop, DialogPanel } from "@headlessui/react";
 import { ShieldAlert } from "lucide-react";
 
 import type { RoleCapability, RoleDefinition } from "@/api";
 import {
+	DrawerDialog,
 	Button,
 	ConfirmDialog,
 	LoadingSpinner,
@@ -403,15 +404,8 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 
 	return (
 		<>
-			<Dialog
-				open={isOpen}
-				onClose={handleAttemptClose}
-				className="relative z-50"
-			>
-				<DialogBackdrop
-					transition
-					className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-300 ease-out data-closed:opacity-0"
-				/>
+			<DrawerDialog open={isOpen} onClose={handleAttemptClose}>
+				<DialogBackdrop transition className="dialog-backdrop" />
 
 				<div className="fixed inset-0 overflow-hidden">
 					<div
@@ -424,7 +418,7 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 						<DialogPanel
 							dir={direction}
 							transition
-							className={`users-roles-drawer-panel ${
+							className={`drawer-panel drawer-transition users-roles-drawer-panel ${
 								isRtl
 									? "data-closed:-translate-x-full"
 									: "data-closed:translate-x-full"
@@ -437,7 +431,7 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 							/>
 
 							{/* Drawer Body */}
-							<div className="users-roles-drawer-content">
+							<div className="drawer-content users-roles-drawer-content">
 								{isRolesLoading ? (
 									<div className="flex flex-col items-center justify-center py-16 space-y-3">
 										<LoadingSpinner size="lg" />
@@ -537,7 +531,7 @@ export function ManageRolesDrawer({ isOpen, onClose }: ManageRolesDrawerProps) {
 						</DialogPanel>
 					</div>
 				</div>
-			</Dialog>
+			</DrawerDialog>
 
 			{/* Create Role Modal */}
 			<CreateRoleDialog

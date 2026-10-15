@@ -73,9 +73,8 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 					/>
 				</button>
 
-				<Search />
-
 				<div className="dashboard-header-actions">
+					<Search />
 					<ThemeToggle />
 
 					<Menu as="div" className="dashboard-header-user-menu">

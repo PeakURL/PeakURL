@@ -30,7 +30,7 @@ export function DrawerFooter({
 		: __("Reset this role's capabilities to shipped defaults");
 
 	return (
-		<div className="users-roles-drawer-footer">
+		<div className="drawer-footer users-roles-drawer-footer">
 			<div>
 				{activeRole ? (
 					<Button

@@ -33,11 +33,11 @@ function TwoFactorSetup({
 				</div>
 				<div className="settings-security-two-factor-setup-copy">
 					<p className="settings-security-two-factor-setup-title">
-						{__("Scan the QR code")}
+						{__("Connect your authenticator app")}
 					</p>
 					<p className="settings-security-two-factor-setup-description">
 						{__(
-							"Use an authenticator app (Google Authenticator, Authy, etc.) then enter the 6-digit code."
+							"Scan the QR code or enter the setup key in your authenticator app. Verify a code below to finish enabling 2FA."
 						)}
 					</p>
 				</div>
@@ -56,7 +56,7 @@ function TwoFactorSetup({
 					) : (
 						<div className="settings-security-two-factor-qr-fallback">
 							{__(
-								"QR preview is unavailable in this browser. Use the secret or authenticator URI below."
+								"QR preview unavailable. Enter the setup key in your authenticator app."
 							)}
 						</div>
 					)}
@@ -64,7 +64,7 @@ function TwoFactorSetup({
 				<div className="settings-security-two-factor-secret-stack">
 					<div className="settings-security-two-factor-secret-card">
 						<p className="settings-security-two-factor-secret-label">
-							{__("Secret")}
+							{__("Setup key")}
 						</p>
 						<ReadOnlyValueBlock
 							value={secret}
@@ -86,12 +86,16 @@ function TwoFactorSetup({
 					) : null}
 					<Input
 						label={__("6-digit code")}
+						inputMode="numeric"
+						autoComplete="one-time-code"
+						maxLength={6}
 						valueDirection="ltr"
 						value={verificationCode}
 						onChange={(event) =>
 							onVerificationCodeChange(event.target.value)
 						}
 						placeholder={__("123456")}
+						disabled={isVerifying}
 					/>
 					<div className="settings-security-two-factor-verify-actions">
 						<Button
@@ -106,6 +110,7 @@ function TwoFactorSetup({
 							variant="ghost"
 							size="sm"
 							onClick={onCancelSetup}
+							disabled={isVerifying}
 						>
 							{__("Cancel")}
 						</Button>

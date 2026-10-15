@@ -192,7 +192,7 @@ class Notifications {
 		$site_url      = \get_site_url();
 		$login_url     = \get_site_url( 'login' );
 		$dashboard_url = \get_site_url( 'dashboard' );
-		$docs_url      = 'https://peakurl.org/docs/getting-started';
+		$docs_url      = 'https://go.peakurl.org/getting-started';
 		$api_docs_url  = 'https://peakurl.org/docs/api';
 		$support_url   = 'https://peakurl.org/contact';
 		$display_name  = \get_user_display_name( $user );

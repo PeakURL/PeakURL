@@ -1,4 +1,5 @@
 @import "./shared.css";
+@import "./drawer.css";
 @import "../../components/charts/index.css";
 @import "../../components/shared/index.css";
 @import "../../providers/index.css";

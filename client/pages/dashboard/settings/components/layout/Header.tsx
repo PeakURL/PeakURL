@@ -1,14 +1,16 @@
+import { PageHeader } from "@/components";
+import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __ } from "@/i18n";
 
-const Header = () => {
+export default function Header() {
 	return (
-		<div className="settings-page-header">
-			<h1 className="settings-page-title">{__("Account Settings")}</h1>
-			<p className="settings-page-description">
-				{__("Manage your account preferences and configurations")}
-			</p>
-		</div>
+		<PageHeader
+			icon={dashboardPageIcons["settings"]}
+			className="settings-page-header"
+			title={__("Settings")}
+			description={__(
+				"Manage your account, integrations, and PeakURL installation."
+			)}
+		/>
 	);
-};
-
-export default Header;
+}

@@ -1,0 +1,16 @@
+@layer components {
+	.analytics-platform-icon {
+		@apply inline-flex size-5 shrink-0 items-center justify-center text-accent;
+	}
+
+	.analytics-platform-mark {
+		@apply block size-full bg-current;
+		mask-position: center;
+		mask-repeat: no-repeat;
+		mask-size: contain;
+	}
+
+	.analytics-platform-icon > svg {
+		@apply size-full;
+	}
+}

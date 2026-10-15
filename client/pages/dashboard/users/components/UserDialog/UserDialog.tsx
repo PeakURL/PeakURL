@@ -117,7 +117,7 @@ export function UserDialog({
 
 	return (
 		<Dialog open={open} onClose={onClose} className="users-page-dialog">
-			<div className="users-page-dialog-backdrop" aria-hidden="true" />
+			<div className="dialog-backdrop" aria-hidden="true" />
 			<div className="users-page-dialog-wrapper">
 				<DialogPanel className="users-page-dialog-panel">
 					<div className="users-page-dialog-header">

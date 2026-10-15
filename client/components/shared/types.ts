@@ -1,59 +1,24 @@
 import type { To } from "react-router";
 
-/**
- * Supported size presets for the shared logo component.
- */
-export type LogoSize = "xs" | "sm" | "md" | "lg";
+/** The logo uses the same artwork with an optional name and navigation target. */
+export type LogoSize = "sm" | "md" | "lg" | "xl";
+export type LogoTone = "light" | "dark";
 
-/**
- * Props for the standalone logo mark.
- */
-export interface LogoProps {
-	/** Visual size preset applied to the logo. */
+type LogoAppearance = {
 	size?: LogoSize;
-
-	/** Additional utility classes for the outer wrapper. */
+	tone?: LogoTone;
+	/** Hide the wordmark when the adjacent heading already names PeakURL. */
+	showName?: boolean;
 	className?: string;
-}
+};
 
-/**
- * Supported size presets for the combined icon-and-wordmark lockup.
- */
-export type BrandLockupSize = "sm" | "md" | "lg";
-
-/**
- * Supported color treatments for the brand lockup.
- */
-export type BrandLockupTone = "light" | "dark";
-
-/**
- * Props for the brand lockup component.
- */
-export interface BrandLockupProps {
-	/** Visual size preset applied to the lockup. */
-	size?: BrandLockupSize;
-
-	/** Color treatment used for the icon and wordmark. */
-	tone?: BrandLockupTone;
-
-	/** Optional route destination when the lockup should render as an internal link. */
-	to?: To;
-
-	/** Optional external URL destination when the lockup should render as an external link. */
-	href?: string;
-
-	/** Target attribute when rendering with href (defaults to _blank for external URLs). */
-	target?: string;
-
-	/** Rel attribute when rendering with href (defaults to noopener noreferrer when target is _blank). */
-	rel?: string;
-
-	/** Additional utility classes for the outer wrapper. */
-	className?: string;
-
-	/** Additional utility classes for the text node. */
-	textClassName?: string;
-}
+/** Internal and external destinations are mutually exclusive. */
+export type LogoProps = LogoAppearance &
+	(
+		| { to: To; href?: never }
+		| { href: string; to?: never }
+		| { to?: never; href?: never }
+	);
 
 /**
  * Props for the page shown when the UI cannot reach the PHP API.

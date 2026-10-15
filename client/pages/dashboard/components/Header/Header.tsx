@@ -1,6 +1,7 @@
 import { RefreshCw } from "lucide-react";
 
-import { Select, type SelectOption } from "@/components";
+import { PageHeader, Select, type SelectOption } from "@/components";
+import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __ } from "@/i18n";
 import { cn } from "@/shared/formatting";
 
@@ -20,45 +21,39 @@ const Header = ({
 	];
 
 	return (
-		<div className="dashboard-overview-header">
-			<div className="dashboard-overview-header-copy">
-				<h1 className="dashboard-overview-header-title">
-					{__("Dashboard")}
-				</h1>
-				<p className="dashboard-overview-header-summary">
-					{__(
-						"Welcome back! Here's what's happening with your links."
+		<PageHeader
+			icon={dashboardPageIcons["overview"]}
+			title={__("Dashboard")}
+			description={__(
+				"Welcome back! Here's what's happening with your links."
+			)}
+			actions={
+				<div className="dashboard-overview-header-actions">
+					<button
+						type="button"
+						onClick={onRefresh}
+						disabled={isRefreshing}
+						className="page-header-icon-button"
+						aria-label={__("Refresh dashboard data")}
+						title={__("Refresh dashboard data")}
+					>
+						<RefreshCw
+							className={cn(isRefreshing && "animate-spin")}
+						/>
+					</button>
+					{canViewAnalytics && (
+						<Select
+							value={timeRange}
+							onChange={onTimeRangeChange}
+							options={timeRangeOptions}
+							ariaLabel={__("Dashboard time range")}
+							className="dashboard-overview-header-select"
+							buttonClassName="dashboard-overview-header-select-button"
+						/>
 					)}
-				</p>
-			</div>
-			<div className="dashboard-overview-header-actions">
-				<button
-					type="button"
-					onClick={onRefresh}
-					disabled={isRefreshing}
-					className="dashboard-page-refresh"
-					aria-label={__("Refresh dashboard data")}
-					title={__("Refresh dashboard data")}
-				>
-					<RefreshCw
-						className={cn(
-							"dashboard-page-refresh-icon",
-							isRefreshing && "animate-spin"
-						)}
-					/>
-				</button>
-				{canViewAnalytics && (
-					<Select
-						value={timeRange}
-						onChange={onTimeRangeChange}
-						options={timeRangeOptions}
-						ariaLabel={__("Dashboard time range")}
-						className="dashboard-overview-header-select"
-						buttonClassName="dashboard-overview-header-select-button"
-					/>
-				)}
-			</div>
-		</div>
+				</div>
+			}
+		/>
 	);
 };
 

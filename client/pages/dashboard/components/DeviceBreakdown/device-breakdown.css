@@ -52,7 +52,7 @@
 	}
 
 	.dashboard-devices-legend-name {
-		@apply truncate font-medium text-heading;
+		@apply flex min-w-0 items-center gap-2 truncate font-medium text-heading;
 	}
 
 	.dashboard-devices-legend-value {
@@ -85,7 +85,11 @@
 	}
 
 	.dashboard-devices-section-label {
-		@apply min-w-0 truncate text-text-muted;
+		@apply flex min-w-0 items-center gap-2.5 text-text-muted;
+	}
+
+	.dashboard-devices-section-label > span:last-child {
+		@apply truncate;
 	}
 
 	.dashboard-devices-section-count {

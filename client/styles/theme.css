@@ -1,17 +1,26 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-	--color-primary-50: var(--color-indigo-50);
-	--color-primary-100: var(--color-indigo-100);
-	--color-primary-200: var(--color-indigo-200);
-	--color-primary-300: var(--color-indigo-300);
-	--color-primary-400: var(--color-indigo-400);
-	--color-primary-500: var(--color-indigo-500);
-	--color-primary-600: var(--color-indigo-600);
-	--color-primary-700: var(--color-indigo-700);
-	--color-primary-800: var(--color-indigo-800);
-	--color-primary-900: var(--color-indigo-900);
-	--color-primary-950: var(--color-indigo-950);
+	--color-overlay: rgb(0 0 0 / 30%);
+	--color-navigation-indicator: var(--color-primary-900);
+	--color-primary-50: #f5f7fc;
+	--color-primary-100: #e9eef9;
+	--color-primary-200: #d5dff5;
+	--color-primary-300: #b5c8fa;
+	--color-primary-400: #8b9fc9;
+	--color-primary-500: #5c719f;
+	--color-primary-600: #4b5e88;
+	--color-primary-700: #3d4c6a;
+	--color-primary-800: #333d54;
+	--color-primary-900: #2b3040;
+	--color-primary-950: #191d29;
+
+	/* Charcoal actions keep white labels legible; the blue accent is for text and details. */
+	--color-action: var(--color-primary-900);
+	--color-action-hover: var(--color-primary-800);
+	--color-selected: var(--color-primary-100);
+	--color-selected-ink: var(--color-primary-900);
+	--color-selected-border: var(--color-primary-200);
 
 	--color-success: var(--color-green-500);
 	--color-success-50: var(--color-green-50);
@@ -26,14 +35,15 @@
 	--color-info-50: var(--color-blue-50);
 	--color-info-100: var(--color-blue-100);
 
-	--color-bg: var(--color-gray-50);
+	--color-bg: #f7f8fa;
 	--color-bg-alt: var(--color-gray-950);
 	--color-text: var(--color-gray-900);
 	--color-text-muted: var(--color-gray-600);
 	--color-text-subtle: var(--color-gray-500);
 	--color-muted: var(--color-gray-600);
-	--color-accent: var(--color-primary-500);
-	--color-heading: var(--color-gray-900);
+	--color-accent: var(--color-primary-700);
+	--color-field-focus: var(--color-primary-500);
+	--color-heading: var(--color-primary-900);
 	--color-surface: var(--color-white);
 	--color-surface-alt: var(--color-gray-100);
 	--color-stroke: var(--color-gray-200);
@@ -50,20 +60,23 @@
 	--brand-zapier: var(--color-orange-600);
 	--brand-google: var(--color-red-600);
 }
-/* Class-based Dark Mode */
-@custom-variant dark (&:where(.dark, .dark *));
 
 .dark {
-	--color-bg: var(--color-gray-950);
+	--color-navigation-indicator: var(--color-primary-300);
+	--color-selected: var(--color-primary-800);
+	--color-selected-ink: var(--color-primary-200);
+	--color-selected-border: var(--color-primary-700);
+	--color-bg: #151923;
 	--color-bg-alt: var(--color-gray-900);
 	--color-text: var(--color-gray-100);
 	--color-text-muted: var(--color-gray-400);
 	--color-text-subtle: var(--color-gray-500);
 	--color-muted: var(--color-gray-400);
-	--color-accent: var(--color-primary-500);
+	--color-accent: var(--color-primary-300);
+	--color-field-focus: var(--color-primary-300);
 	--color-heading: var(--color-white);
-	--color-surface: var(--color-gray-900);
-	--color-surface-alt: var(--color-gray-800);
+	--color-surface: #1c2230;
+	--color-surface-alt: #252c3b;
 	--color-stroke: var(--color-gray-800);
 	--color-stroke-strong: var(--color-gray-700);
 	--color-stroke-subtle: var(--color-gray-800);

@@ -60,15 +60,12 @@ export function useTwoFactorSettings({
 		useDownloadBackupCodesMutation();
 
 	const twoFactorEnabled = security.twoFactorEnabled;
-	const actionLabel = security.hasPendingSetup
-		? __("Continue 2FA setup")
-		: __("Set up 2FA");
 	const statusMessage = twoFactorEnabled
 		? sprintf(
 				__("Backup codes remaining: %s"),
 				String(security.backupCodesRemaining ?? 0)
 			)
-		: __("Enable to generate backup codes for account recovery.");
+		: __("Set up an authenticator app, then verify a code to enable 2FA.");
 	const hasSetupDetails = Boolean(qrDataUrl || secret || otpauthUrl);
 	const isProtectedActionLoading = protectedAction
 		? "download" === protectedAction
@@ -289,7 +286,6 @@ export function useTwoFactorSettings({
 			password: protectedActionPassword,
 		},
 		section: {
-			actionLabel,
 			backupCodesLastGeneratedAt: security.backupCodesLastGeneratedAt,
 			hasSetupDetails,
 			isDisabling,

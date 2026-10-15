@@ -1,4 +1,4 @@
-import { AlertCircle, Download, ShieldCheck } from "lucide-react";
+import { Shield, Download, ShieldCheck } from "lucide-react";
 
 import { Button } from "@/components";
 import { __ } from "@/i18n";
@@ -36,7 +36,7 @@ function TwoFactorStatus({
 							className="settings-security-two-factor-status-icon-active"
 						/>
 					) : (
-						<AlertCircle
+						<Shield
 							size={18}
 							className="settings-security-two-factor-status-icon-inactive"
 						/>
@@ -62,16 +62,17 @@ function TwoFactorStatus({
 					) : null}
 				</div>
 			</div>
-			<Button
-				variant="outline"
-				size="sm"
-				onClick={onDownloadRequest}
-				loading={isDownloading || isDownloadingFromApi}
-				disabled={!twoFactorEnabled}
-			>
-				<Download size={14} />
-				{__("Download")}
-			</Button>
+			{twoFactorEnabled && (
+				<Button
+					variant="outline"
+					size="sm"
+					onClick={onDownloadRequest}
+					loading={isDownloading || isDownloadingFromApi}
+				>
+					<Download size={14} />
+					{__("Download backup codes")}
+				</Button>
+			)}
 		</div>
 	);
 }

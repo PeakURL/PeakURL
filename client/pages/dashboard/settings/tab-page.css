@@ -1,9 +1,6 @@
 @layer components {
 	.settings-tab-page {
-		@apply flex flex-col lg:col-span-3;
-	}
-
-	.settings-tab-page-panel {
-		@apply flex-1 rounded-lg border border-stroke bg-surface-alt p-5;
+		@apply flex min-w-0 w-full flex-col rounded-xl border border-stroke bg-surface p-4 sm:p-6;
+		container: settings-content / inline-size;
 	}
 }

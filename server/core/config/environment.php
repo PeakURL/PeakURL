@@ -336,6 +336,17 @@ class Environment {
 	}
 
 	/**
+	 * Return the bundled vector shared by the dashboard and server-rendered branding.
+	 *
+	 * @return string
+	 */
+	public function get_logo_path(): string {
+		return $this->is_development
+			? $this->source_root . '/client/assets/logo/peakurl.svg'
+			: $this->source_root . '/assets/peakurl.svg';
+	}
+
+	/**
 	 * Return the absolute path to the bundled fallback site webmanifest.
 	 *
 	 * @return string

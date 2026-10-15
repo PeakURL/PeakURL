@@ -1,4 +1,6 @@
+import { LockKeyhole } from "lucide-react";
 import { Button, Input } from "@/components";
+import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __ } from "@/i18n";
 import { cn } from "@/shared/formatting";
 import type { SecurityFormState } from "../../types";
@@ -25,10 +27,17 @@ function PasswordSettings({
 	};
 
 	return (
-		<section className="settings-fieldset">
-			<h2 className="settings-legend">{__("Password")}</h2>
-			<hr className="settings-separator" />
-			<div className="flex flex-col gap-5 max-w-md">
+		<section className="settings-section">
+			<div className="settings-section-copy settings-section-heading">
+				<SectionTitle icon={LockKeyhole}>{__("Password")}</SectionTitle>
+				<p className="settings-group-description">
+					{__(
+						"Use a strong, unique password to protect your account."
+					)}
+				</p>
+			</div>
+
+			<div className="settings-grid settings-password-fields">
 				<Input
 					label={__("Current Password")}
 					type="password"
@@ -44,6 +53,7 @@ function PasswordSettings({
 				<Input
 					label={__("New Password")}
 					type="password"
+					autoComplete="new-password"
 					value={securityForm.newPassword}
 					onChange={(event) =>
 						updateSecurityForm("newPassword", event.target.value)
@@ -52,6 +62,7 @@ function PasswordSettings({
 				<Input
 					label={__("Confirm New Password")}
 					type="password"
+					autoComplete="new-password"
 					value={securityForm.confirmPassword}
 					onChange={(event) =>
 						updateSecurityForm(

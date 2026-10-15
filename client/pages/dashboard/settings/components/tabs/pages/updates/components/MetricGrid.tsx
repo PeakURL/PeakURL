@@ -6,17 +6,17 @@ import DirectionalValue from "./DirectionalValue";
  */
 function MetricGrid({ direction, items }: MetricGridProps) {
 	return (
-		<div className="settings-updates-metric-grid">
+		<dl className="settings-updates-metric-grid">
 			{items.map((item) => (
 				<div
 					key={item.label}
 					dir={direction}
 					className="settings-updates-metric-item"
 				>
-					<p className="settings-updates-metric-label">
+					<dt className="settings-updates-metric-label">
 						{item.label}
-					</p>
-					<div className="flex items-center justify-between gap-3">
+					</dt>
+					<dd className="settings-updates-metric-content">
 						<p className="settings-updates-metric-value">
 							<DirectionalValue direction={item.valueDirection}>
 								{item.value}
@@ -25,10 +25,10 @@ function MetricGrid({ direction, items }: MetricGridProps) {
 						{item.action ? (
 							<div className="shrink-0 pt-2">{item.action}</div>
 						) : null}
-					</div>
+					</dd>
 				</div>
 			))}
-		</div>
+		</dl>
 	);
 }
 

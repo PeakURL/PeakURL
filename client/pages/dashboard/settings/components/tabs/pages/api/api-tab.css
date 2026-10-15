@@ -1,101 +1,93 @@
 @layer components {
-	/* Replaced with standard .settings-fieldset */
-
-	.settings-api-endpoint-header {
-		@apply flex flex-col gap-4 md:flex-row md:items-start md:justify-between;
-	}
-
-	.settings-api-endpoint-summary {
-		@apply space-y-3;
-	}
-
-	.settings-api-endpoint-title-row {
-		@apply flex items-center gap-2 text-heading;
-	}
-
-	.settings-api-endpoint-icon {
-		@apply flex h-9 w-9 items-center justify-center rounded-lg bg-accent/12 text-accent;
-	}
-
-	.settings-api-endpoint-copy {
-		@apply space-y-1;
-	}
-
-	.settings-api-endpoint-kicker {
-		@apply text-xs font-medium uppercase tracking-[0.18em] text-text-muted;
-	}
-
-	.settings-api-endpoint-title {
-		@apply text-base font-semibold text-heading;
-	}
-
-	.settings-api-endpoint-description {
-		@apply max-w-2xl text-sm text-text-muted;
-	}
-
 	.settings-api-endpoint-copy-button {
-		@apply whitespace-nowrap;
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-accent transition-colors hover:bg-selected focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
 
+	.settings-api-endpoint {
+		@apply flex min-w-0 items-center gap-2;
+	}
+	.settings-api-endpoint > .form-field {
+		@apply flex-1;
+	}
 	.settings-api-endpoint-value {
-		@apply mt-4 border-accent/15 bg-surface/90 shadow-sm;
+		@apply border-stroke bg-surface-alt font-mono;
 	}
 
-	.settings-api-keys-header {
-		@apply mb-5 flex items-center justify-between;
+	.settings-api .settings-api-endpoint-section {
+		@apply gap-0 overflow-hidden rounded-xl border border-stroke p-0;
 	}
-
+	.settings-api-endpoint-section > .settings-section-header {
+		@apply rounded-none border-b border-stroke/70 bg-surface p-4;
+	}
+	.settings-api-endpoint-section > .settings-api-endpoint {
+		@apply bg-surface-alt/30 p-4;
+	}
 	.settings-api-keys-list {
-		@apply space-y-3;
+		@apply m-0 list-none overflow-hidden rounded-xl border border-stroke bg-surface-alt/30 p-0;
 	}
-
 	.settings-api-key-row {
-		@apply flex items-center justify-between rounded-lg border border-stroke p-4 transition-colors hover:border-accent/50;
+		@apply grid min-w-0 grid-cols-[minmax(0,1fr)_2.5rem] items-start gap-4 p-4;
 	}
-
+	.settings-api-key-row + .settings-api-key-row {
+		@apply border-t border-stroke/70;
+	}
+	.settings-api-key-identity {
+		@apply flex min-w-0 items-start gap-3;
+	}
+	.settings-api-key-icon {
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-selected-border bg-selected text-accent;
+	}
 	.settings-api-key-details {
-		text-align: start;
-		@apply min-w-0 flex-1;
+		@apply min-w-0 flex-1 text-start;
 	}
-
 	.settings-api-key-title-row {
-		@apply mb-1 flex items-center gap-2;
+		@apply flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1;
 	}
-
 	.settings-api-key-title {
-		@apply text-sm font-medium text-heading;
+		@apply text-sm font-semibold leading-6 text-heading;
+		overflow-wrap: anywhere;
 	}
-
 	.settings-api-key-status {
-		@apply rounded bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300;
+		@apply inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-300;
 	}
-
-	.settings-api-key-value-row {
-		@apply flex items-center gap-2;
-	}
-
-	.settings-api-key-value {
-		@apply truncate font-mono text-xs text-text-muted;
-	}
-
 	.settings-api-key-meta {
-		@apply mt-1 text-xs text-text-muted;
+		@apply mt-1 flex items-start gap-1.5 text-xs leading-5 text-text-muted;
 	}
-
-	.settings-api-key-actions {
-		@apply flex shrink-0 items-center gap-1;
+	.settings-api-key-meta > svg {
+		@apply mt-1 shrink-0;
 	}
-
+	.settings-api-key-token {
+		@apply col-span-2 min-w-0 space-y-1.5;
+	}
+	.settings-api-key-token-label {
+		@apply text-xs font-medium text-text-muted;
+	}
+	.settings-api-key-value {
+		@apply block min-w-0 rounded-lg border border-stroke bg-surface px-3 py-2.5 text-start font-mono text-xs leading-5 text-heading;
+		overflow-wrap: anywhere;
+	}
 	.settings-api-key-delete-button {
-		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20;
+		@apply col-start-2 row-start-1 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50 dark:hover:border-red-500/40 dark:hover:bg-red-500/10 dark:hover:text-red-400;
+	}
+	@container settings-content (min-width: 42rem) {
+		.settings-api-key-row {
+			grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.85fr) 2.5rem;
+			@apply items-center gap-5 p-5;
+		}
+		.settings-api-key-token {
+			@apply col-span-1;
+		}
+		.settings-api-key-delete-button {
+			@apply col-start-3;
+		}
 	}
 
 	.settings-api-empty {
-		@apply rounded-lg border border-dashed border-stroke bg-surface-alt py-8 text-center;
+		@apply flex items-start gap-3 rounded-xl border border-dashed border-stroke bg-surface-alt/30 p-5 text-start;
 	}
 
 	.settings-api-empty-icon {
-		@apply mx-auto mb-3 text-text-muted;
+		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted;
 	}
 
 	.settings-api-empty-title {
@@ -103,58 +95,6 @@
 	}
 
 	.settings-api-empty-text {
-		@apply mb-4 text-xs text-text-muted;
-	}
-
-	.settings-api-note {
-		@apply rounded-lg border border-blue-500/20 bg-blue-500/10 p-4 dark:border-blue-500/30 dark:bg-blue-500/20;
-	}
-
-	.settings-api-note-layout {
-		@apply flex items-start gap-3;
-	}
-
-	.settings-api-note-icon {
-		@apply mt-0.5 text-blue-600 dark:text-blue-400;
-	}
-
-	.settings-api-note-content {
-		@apply space-y-1;
-	}
-
-	.settings-api-note-title {
-		@apply text-sm font-medium text-blue-700 dark:text-blue-300;
-	}
-
-	.settings-api-note-text {
-		@apply text-xs text-blue-700 dark:text-blue-300;
-	}
-
-	.settings-api-docs-header {
-		@apply flex flex-col gap-4 md:flex-row md:items-center md:justify-between;
-	}
-
-	.settings-api-docs-summary {
-		@apply space-y-1;
-	}
-
-	.settings-api-docs-title-row {
-		@apply flex items-center gap-2 text-heading;
-	}
-
-	.settings-api-docs-icon {
-		@apply text-accent;
-	}
-
-	.settings-api-docs-title {
-		@apply text-sm font-semibold;
-	}
-
-	.settings-api-docs-description {
-		@apply max-w-2xl text-sm text-text-muted;
-	}
-
-	.settings-api-docs-link {
-		@apply text-accent inline-flex items-center gap-1.5 text-sm font-medium hover:underline;
+		@apply text-sm leading-6 text-text-muted;
 	}
 }

@@ -1,510 +1,271 @@
 @layer components {
 	.about-page {
-		@apply pb-12;
-	}
-
-	.about-page-hero {
-		@apply relative -mx-4 -mt-4 mb-12 overflow-hidden bg-slate-950 px-4 pt-16 pb-14 text-white sm:-mx-6 sm:-mt-6 sm:px-6 sm:pt-20 sm:pb-18 lg:pt-24 lg:pb-20;
-	}
-
-	.about-page-hero-glow {
-		@apply pointer-events-none absolute inset-0;
-		background-image: radial-gradient(
-			ellipse at center,
-			rgba(99, 102, 241, 0.08),
-			transparent 70%
-		);
-	}
-
-	.about-page-hero-content {
-		@apply relative z-10 mx-auto max-w-4xl text-center lg:max-w-5xl;
-	}
-
-	.about-page-hero-version {
-		@apply mb-6 inline-flex items-center gap-2 rounded-full border border-slate-700/60 bg-slate-800/80 px-4 py-1.5 text-sm font-medium text-slate-300;
-	}
-
-	.about-page-hero-version-icon {
-		@apply text-indigo-400;
-	}
-
-	.about-page-hero-mark {
-		@apply mb-6 flex justify-center;
-	}
-
-	.about-page-hero-mark-panel {
-		@apply flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-700/50 bg-slate-800/80;
-	}
-
-	.about-page-hero-mark-icon {
-		@apply text-indigo-400;
-	}
-
-	.about-page-hero-title {
-		@apply mb-4 text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-5xl leading-tight;
-	}
-
-	.about-page-hero-summary {
-		@apply mx-auto max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg;
-	}
-
-	.about-page-hero-actions {
-		@apply mt-8 flex flex-wrap justify-center gap-2.5 sm:gap-3;
-	}
-
-	.about-page-hero-link {
-		@apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-semibold transition-colors sm:px-5 sm:text-sm;
-	}
-
-	.about-page-hero-link-primary {
-		@apply bg-indigo-600 text-white hover:bg-indigo-500;
-	}
-
-	.about-page-hero-link-secondary {
-		@apply border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700;
-	}
-
-	.about-page-hero-addons {
-		@apply mt-6 flex flex-wrap justify-center gap-2 sm:gap-3;
-	}
-
-	.about-page-hero-addon {
-		@apply inline-flex items-center gap-1.5 rounded-full border border-slate-700/70 bg-slate-900/70 px-3 py-1.5 text-xs font-medium text-slate-200 transition-colors hover:border-slate-500 hover:bg-slate-800 sm:gap-2 sm:px-3.5 sm:py-2 sm:text-sm;
-	}
-
-	.about-page-hero-addon-icon {
-		@apply flex h-5 w-5 items-center justify-center;
-	}
-
-	.about-page-hero-addon-link-icon {
-		@apply text-slate-500;
-	}
-
-	.about-page-body {
-		@apply mx-auto max-w-5xl space-y-0;
-	}
-
-	.about-page-landing {
-		@apply mb-8 rounded-2xl border border-accent/20 bg-accent/5 p-6;
-	}
-
-	.about-page-landing-eyebrow {
-		@apply text-xs font-semibold uppercase text-accent;
-		letter-spacing: 0.18em;
-	}
-
-	.about-page-landing-title {
-		@apply mt-3 text-2xl font-semibold text-heading;
-	}
-
-	.about-page-landing-copy {
-		@apply mt-3 max-w-3xl text-sm leading-6 text-text-muted;
-	}
-
-	.about-page-landing-actions {
-		@apply mt-5 flex flex-wrap gap-3;
-	}
-
-	.about-page-landing-action {
-		@apply inline-flex items-center gap-2 rounded-lg border border-stroke bg-surface px-4 py-2 text-sm font-medium text-heading transition-colors hover:border-accent/30 hover:text-accent;
-	}
-
-	.about-page-section-heading {
-		@apply mb-10 text-center;
-	}
-
-	.about-page-section-title {
-		@apply text-2xl font-bold text-heading sm:text-3xl;
-	}
-
-	.about-page-section-summary {
-		@apply mx-auto mt-2 max-w-2xl text-text-muted;
-	}
-
-	.about-page-divider {
-		@apply my-16 flex items-center gap-4;
-	}
-
-	.about-page-divider-line {
-		@apply h-px flex-1 bg-stroke;
-	}
-
-	.about-page-divider-logo {
-		@apply opacity-30;
-	}
-
-	/* ─── Metrics Grid (Matching Site Dashboard Cards) ────────── */
-	.about-page-metrics-grid {
-		@apply mb-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
-	}
-
-	.about-page-metric-card {
-		@apply flex flex-col justify-between rounded-2xl border border-stroke bg-surface p-5 shadow-xs transition-all duration-200 hover:border-accent/40 hover:shadow-sm;
-	}
-
-	.about-page-metric-card-header {
-		@apply mb-3 flex items-center justify-between;
-	}
-
-	.about-page-metric-card-label {
-		@apply text-xs font-semibold uppercase tracking-wider text-text-muted;
-	}
-
-	.about-page-metric-card-icon {
-		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-xl;
-	}
-
-	.about-page-metric-card-icon-blue {
-		@apply bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400;
-	}
-
-	.about-page-metric-card-icon-purple {
-		@apply bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400;
-	}
-
-	.about-page-metric-card-icon-emerald {
-		@apply bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400;
-	}
-
-	.about-page-metric-card-icon-amber {
-		@apply bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400;
-	}
-
-	.about-page-metric-card-value {
-		@apply text-2xl font-extrabold tracking-tight text-heading sm:text-3xl;
-	}
-
-	.about-page-metric-card-caption {
-		@apply mt-1.5 text-xs text-text-muted;
-	}
-
-	.about-page-features-grid {
-		@apply grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3;
-	}
-
-	.about-page-feature-card {
-		@apply relative flex flex-col justify-between rounded-2xl border border-stroke bg-surface p-5 sm:p-6 transition-all duration-200 hover:border-accent/40 hover:shadow-sm;
-	}
-
-	.about-page-feature-header {
-		@apply mb-4 flex items-center justify-between gap-3;
-	}
-
-	.about-page-feature-icon {
-		@apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent transition-colors;
-	}
-
-	.about-page-feature-tag {
-		@apply inline-flex items-center rounded-full border border-stroke/70 bg-surface-alt/70 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-text-muted;
-	}
-
-	.about-page-feature-title {
-		@apply mb-2 text-[15px] sm:text-base font-semibold tracking-tight text-heading leading-snug;
-	}
-
-	.about-page-feature-copy {
-		@apply text-sm leading-relaxed text-text-muted;
-	}
-
-	.about-page-principles-grid {
-		@apply grid grid-cols-1 gap-6 md:grid-cols-3;
-	}
-
-	.about-page-principle-card {
-		@apply rounded-xl border border-stroke bg-surface p-6 text-center;
-	}
-
-	.about-page-principle-icon {
-		@apply mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10;
-	}
-
-	.about-page-principle-title {
-		@apply mb-2 text-base font-semibold text-heading;
-	}
-
-	.about-page-principle-copy {
-		@apply text-sm leading-relaxed text-text-muted;
-	}
-
-	.about-page-freedoms-grid {
-		@apply grid grid-cols-1 gap-5 sm:grid-cols-2;
-	}
-
-	.about-page-freedom-card {
-		@apply relative flex items-start gap-5 rounded-xl border border-stroke bg-surface p-6 transition-all duration-200 hover:border-accent/30;
-	}
-
-	.about-page-freedom-number {
-		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-lg font-bold text-accent;
-	}
-
-	.about-page-freedom-copy {
-		@apply min-w-0;
-	}
-
-	.about-page-freedom-title {
-		@apply mb-1 text-base font-semibold text-heading;
-	}
-
-	.about-page-freedom-description {
-		@apply text-sm leading-relaxed text-text-muted;
-	}
-
-	.about-page-sponsors {
-		@apply mt-10;
-	}
-
-	.about-page-sponsor-founder {
-		@apply border-stroke bg-surface hover:border-accent/30 mx-auto mt-12 flex max-w-3xl flex-col justify-between gap-10 rounded-3xl border p-8 transition-all duration-300 sm:p-12 md:flex-row md:items-center;
-	}
-
-	.about-page-sponsor-founder-info {
-		@apply text-left md:max-w-xs;
-	}
-
-	.about-page-sponsor-founder-title {
-		@apply text-heading text-xl font-bold;
-	}
-
-	.about-page-sponsor-founder-desc {
-		@apply text-text-muted mt-3 text-sm leading-relaxed;
-	}
-
-	.about-page-sponsor-founder-profile {
-		@apply flex items-center gap-5;
-	}
-
-	.about-page-sponsor-author-logo {
-		@apply drop-shadow-sm;
-	}
-
-	.about-page-sponsor-founder-details {
-		@apply text-left;
-	}
-
-	.about-page-sponsor-founder-name {
-		@apply text-heading text-base font-bold;
-	}
-
-	.about-page-sponsor-founder-badge {
-		@apply text-text-muted mt-0.5 text-[13px] font-medium;
-	}
-
-	.about-page-sponsor-founder-socials {
-		@apply text-text-muted mt-3 flex items-center gap-3;
-	}
-
-	.about-page-sponsor-founder-socials a {
-		@apply hover:text-heading transition-colors;
-	}
-
-	.about-page-sponsor-section {
-		@apply border-stroke mt-16 border-t pt-12;
-	}
-
-	.about-page-sponsor-section-header {
-		@apply mb-8 text-center;
-	}
-
-	.about-page-sponsor-section-title {
-		@apply text-heading mb-2 text-xl font-bold;
-	}
-
-	.about-page-sponsor-section-desc {
-		@apply text-text-muted mx-auto max-w-lg text-sm leading-relaxed;
-	}
-
-	.about-page-sponsor-companies {
-		@apply grid grid-cols-2 gap-4 md:grid-cols-4;
-	}
-
-	.about-page-sponsor-company-slot {
-		@apply border-stroke bg-surface hover:bg-accent/5 hover:border-accent/30 relative flex h-24 items-center justify-center rounded-2xl border-2 border-dashed transition-all duration-300;
-	}
-
-	.about-page-sponsor-company-slot-bg {
-		@apply from-accent/0 to-accent/0 group-hover:from-accent/5 absolute inset-0 rounded-2xl bg-linear-to-br transition-all duration-300 group-hover:to-transparent;
-	}
-
-	.about-page-sponsor-company-slot-content {
-		@apply text-text-muted/50 group-hover:text-accent/70 z-10 flex flex-col items-center gap-2 transition-colors;
-	}
-
-	.about-page-sponsor-company-slot-content svg {
-		@apply h-5 w-5;
-	}
-
-	.about-page-sponsor-company-slot-content span {
-		@apply text-[10px] font-bold uppercase tracking-wider;
-	}
-
-	.about-page-sponsor-btn {
-		@apply border-stroke bg-surface text-heading hover:border-accent/30 hover:text-accent mt-6 inline-block rounded-xl border px-6 py-2.5 text-sm font-semibold transition-colors;
-	}
-
-	.about-page-sponsor-community {
-		@apply mt-10 flex flex-wrap items-center justify-center gap-8;
-	}
-
-	.about-page-sponsor-supporter {
-		@apply flex flex-col items-center;
-	}
-
-	.about-page-sponsor-supporter-avatar {
-		@apply border-stroke relative mb-3 flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border bg-white shadow-sm transition-transform group-hover:-translate-y-1;
-	}
-
-	.about-page-sponsor-supporter-avatar svg {
-		@apply h-8 w-8 object-contain;
-	}
-
-	.about-page-sponsor-supporter-info {
-		@apply mt-1 text-center;
-	}
-
-	.about-page-sponsor-supporter-name {
-		@apply text-heading text-sm font-bold;
-	}
-
-	.about-page-sponsor-supporter-socials {
-		@apply text-text-muted mt-1.5 flex items-center justify-center gap-2.5;
-	}
-
-	.about-page-sponsor-supporter-socials a {
-		@apply hover:text-heading transition-colors;
-	}
-
-	.about-page-footer {
-		@apply pb-2 pt-4 text-center;
-	}
-
-	.about-page-footer-brand {
-		@apply mb-3 flex justify-center;
-	}
-
-	.about-page-footer-tagline {
-		@apply text-sm italic tracking-wide text-text-muted;
-	}
-
-	.about-page-footer-links {
-		@apply mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-text-muted;
-	}
-
-	.about-page-footer-link {
-		@apply inline-flex items-center gap-1 transition-colors hover:text-accent;
-	}
-
-	.about-page-footer-separator {
-		@apply opacity-30;
-	}
-
-	.about-page-release-notes {
-		@apply mb-12 rounded-xl border border-stroke bg-surface p-6 text-left shadow-sm;
-	}
-
-	.about-page-release-meta {
-		@apply mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-accent;
-	}
-
-	.about-page-release-meta-icon {
-		@apply h-4 w-4;
-	}
-
-	.about-page-release-meta-separator {
-		@apply px-1 text-stroke;
-	}
-
-	.about-page-release-meta-date {
-		@apply normal-case text-text-muted;
-	}
-
-	.about-page-release-title {
-		@apply mb-2 text-base font-semibold text-heading;
-	}
-
-	.about-page-release-summary {
-		@apply mb-6 text-sm leading-relaxed text-text-muted;
-	}
-
-	.about-page-release-highlights {
-		@apply mb-6 space-y-3 rounded-lg border border-stroke/50 bg-bg p-5;
-	}
-
-	.about-page-release-highlight-item {
-		@apply flex items-start gap-3 text-sm text-text-muted;
-	}
-
-	.about-page-release-highlight-bullet {
-		@apply text-sm leading-relaxed text-accent;
-	}
-
-	.about-page-release-highlight-text {
-		@apply leading-relaxed;
-	}
-
-	.about-page-release-footer {
-		@apply mt-2 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-stroke/50 pt-5 text-sm;
-	}
-
-	.about-page-release-footer-link {
-		@apply inline-flex items-center gap-1.5 font-medium transition-colors;
-	}
-
-	.about-page-release-footer-link-primary {
-		@apply text-accent hover:opacity-80;
-	}
-
-	.about-page-release-footer-link-secondary {
-		@apply text-text-muted hover:text-text;
-	}
-
-	.about-page-release-footer-link-icon {
-		@apply h-4 w-4;
-	}
-
-	/* ─── Dedicated Status Hero (Update / Reinstall / Setup) ─── */
-	.about-page-hero-status {
-		@apply relative -mx-4 -mt-4 mb-12 overflow-hidden bg-slate-950 px-4 pt-16 pb-14 text-white sm:-mx-6 sm:-mt-6 sm:px-6 sm:pt-20 sm:pb-18 lg:pt-24 lg:pb-20;
-	}
-
-	.about-page-hero-status-badge {
-		@apply mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-semibold text-emerald-300 shadow-xs;
-	}
-
-	.about-page-hero-status-icon {
-		@apply text-emerald-400 shrink-0;
-	}
-
-	.about-page-hero-status-title {
-		@apply mb-4 text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl lg:text-[2.65rem] leading-tight;
-	}
-
-	.about-page-hero-status-summary {
-		@apply mx-auto max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg;
-	}
-
-	/* ─── Tab Navigation (Default View) ───────────────────────── */
-	.about-page-tabs-wrapper {
-		@apply mb-10 flex justify-center overflow-x-auto px-2 py-1;
-	}
-
-	.about-page-tabs {
-		@apply inline-flex max-w-full items-center gap-1 sm:gap-1.5 rounded-2xl border border-stroke bg-surface-alt/70 p-1 sm:p-1.5 shadow-xs overflow-x-auto;
-	}
-
-	.about-page-tab-button {
-		@apply inline-flex shrink-0 items-center gap-1.5 sm:gap-2 rounded-xl px-3 py-1.5 sm:px-4 sm:py-2 text-xs font-medium transition-all duration-200 cursor-pointer sm:text-sm whitespace-nowrap;
-	}
-
-	.about-page-tab-button-active {
-		@apply bg-surface text-heading font-semibold shadow-xs;
-	}
-
-	.about-page-tab-button-inactive {
-		@apply text-text-muted hover:bg-surface/50 hover:text-heading;
-	}
-
-	.about-page-tab-icon {
+		@apply mx-auto flex w-full max-w-7xl flex-1 flex-col;
+	}
+	.about-header {
+		@apply px-1 pb-6 pt-3 sm:pt-4;
+	}
+	.about-identity {
+		@apply flex flex-wrap items-center gap-x-5 gap-y-4;
+	}
+	.about-identity-copy {
+		@apply min-w-0 flex-1;
+	}
+	.about-identity h1 {
+		@apply text-3xl font-semibold tracking-tight text-heading;
+	}
+	.about-identity-copy p {
+		@apply mt-1 text-sm leading-6 text-text-muted;
+	}
+	.about-version {
+		@apply mt-2 block text-xs text-text-muted;
+	}
+	.about-website {
+		@apply ms-auto hidden items-center sm:inline-flex gap-1.5 text-xs font-medium text-text-muted transition-colors hover:text-accent;
+	}
+	.about-columns {
+		@apply grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_16rem];
+	}
+	.about-content {
+		@apply min-w-0 overflow-hidden rounded-2xl border border-stroke bg-surface;
+	}
+	.about-content h2 {
+		@apply text-xl font-semibold leading-snug tracking-tight text-heading;
+	}
+	.about-content h3 {
+		@apply text-sm font-semibold leading-6 text-heading;
+	}
+	.about-section-intro {
+		@apply mt-3 text-sm leading-7 text-text-muted;
+	}
+	.about-panel {
+		@apply px-5 py-5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent sm:px-7;
+	}
+	.about-tabs {
+		@apply flex gap-1 overflow-x-auto border-b border-stroke;
+	}
+	.about-tab {
+		@apply relative inline-flex shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap border-b-2 border-transparent px-2 py-3 text-xs font-medium text-text-muted transition-colors hover:text-heading focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent sm:px-3 sm:text-sm;
+	}
+	.about-tab-active {
+		@apply border-selected-border bg-selected text-selected-ink;
+	}
+	.about-tab-icon {
 		@apply h-4 w-4 shrink-0;
+	}
+	.about-capabilities {
+		@apply mt-5 space-y-4;
+	}
+	.about-capabilities li {
+		@apply flex items-start gap-3.5;
+	}
+	.about-capability-icon {
+		@apply mt-1 shrink-0 text-accent;
+	}
+	.about-capabilities p {
+		@apply mt-1 text-sm leading-6 text-text-muted;
+	}
+	.about-license {
+		@apply mt-5 border-t border-stroke pt-4;
+	}
+	.about-license p {
+		@apply mt-2 text-sm leading-7 text-text-muted;
+	}
+	.about-text-link {
+		@apply inline-flex items-center gap-1.5 text-sm font-medium text-accent underline-offset-4 hover:underline;
+	}
+	.about-license .about-text-link {
+		@apply mt-3;
+	}
+	.about-resources {
+		@apply rounded-2xl border border-stroke bg-surface px-5 py-4;
+	}
+	.about-resources h2 {
+		@apply mb-3 text-xs font-semibold text-heading;
+	}
+	.about-resource-links {
+		@apply space-y-1;
+	}
+	.about-resource-links a {
+		@apply -mx-2 flex items-start gap-3 rounded-lg px-2 py-2.5 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
+	}
+	.about-resource-links svg {
+		@apply mt-0.5 shrink-0;
+	}
+	.about-resource-links strong {
+		@apply block text-sm font-medium text-heading;
+	}
+	.about-resource-links span span {
+		@apply mt-1 block text-xs leading-5;
+	}
+	.about-integrations {
+		@apply mt-4 border-t border-stroke pt-4;
+	}
+	.about-integrations ul {
+		@apply grid grid-cols-2 gap-x-3 gap-y-1 lg:grid-cols-1;
+	}
+	.about-integrations a {
+		@apply -mx-2 flex items-center gap-2.5 rounded-lg px-2 py-2 text-xs font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
+	}
+	.about-integrations a > svg:last-child {
+		@apply ms-auto opacity-50;
+	}
+	.about-integration-icon {
+		@apply h-4 w-4 shrink-0;
+	}
+	.about-completion {
+		@apply mb-5 flex items-start gap-3 rounded-xl border border-success/20 bg-success-soft/40 px-5 py-4;
+	}
+	.about-completion-icon {
+		@apply mt-0.5 shrink-0 text-green-700 dark:text-green-400;
+	}
+	.about-completion-copy {
+		@apply min-w-0 flex-1;
+	}
+	.about-completion h2 {
+		@apply text-sm font-semibold text-heading;
+	}
+	.about-completion p {
+		@apply mt-1 text-sm leading-6 text-text-muted;
+	}
+	.about-completion-actions {
+		@apply mt-4 flex flex-wrap items-center gap-x-5 gap-y-3;
+	}
+	.about-primary-link {
+		@apply inline-flex items-center justify-center gap-2 rounded-lg bg-action px-3.5 py-2.5 text-xs font-medium text-white transition-colors hover:bg-action-hover;
+	}
+	.about-secondary-link {
+		@apply inline-flex items-center justify-center gap-2 rounded-lg border border-stroke bg-surface px-3.5 py-2.5 text-xs font-medium text-heading transition-colors hover:bg-surface-alt;
+	}
+	.about-release-meta {
+		@apply mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-text-muted;
+	}
+	.about-release-meta span {
+		@apply font-medium text-accent;
+	}
+	.about-release-highlights {
+		@apply my-6 list-disc space-y-3 ps-5 text-sm leading-7 text-text-muted marker:text-accent;
+	}
+	.about-release-state {
+		@apply flex min-h-72 flex-col items-center justify-center gap-3 text-center text-text-muted;
+	}
+	.about-release-state h2 {
+		@apply text-base;
+	}
+	.about-release-state p {
+		@apply max-w-xs text-sm leading-6;
+	}
+	.about-release-state .about-secondary-link {
+		@apply mt-2;
+	}
+	.about-loading-icon {
+		@apply animate-spin;
+	}
+	.about-author {
+		@apply mt-6 flex items-start gap-4;
+	}
+	.about-author-logo {
+		@apply h-16 w-16 shrink-0;
+	}
+	.about-author p {
+		@apply text-xs leading-6 text-text-muted;
+	}
+	.about-author-links {
+		@apply mt-2 flex flex-wrap gap-x-3 gap-y-2;
+	}
+	.about-author-links a {
+		@apply inline-flex items-center gap-1 text-xs text-text-muted hover:text-accent;
+	}
+	.about-supporters {
+		@apply mt-5 border-t border-stroke pt-4;
+	}
+	.about-supporters > p {
+		@apply mt-2 text-sm leading-6 text-text-muted;
+	}
+	.about-supporters ul {
+		@apply mt-4 space-y-2;
+	}
+	.about-supporters a {
+		@apply inline-flex items-center gap-2 text-sm text-heading hover:text-accent;
+	}
+	.about-contribute {
+		@apply mt-7 flex items-start gap-3 border-t border-stroke pt-6;
+	}
+	.about-contribute > svg {
+		@apply mt-1 shrink-0 text-text-muted;
+	}
+	.about-contribute p {
+		@apply mt-1 text-sm leading-6 text-text-muted;
+	}
+	.about-contribute a {
+		@apply mt-3;
+	}
+	.about-footer {
+		@apply mt-auto flex flex-wrap justify-between gap-x-5 gap-y-2 px-1 pt-5 text-xs leading-6 text-text-muted;
+	}
+	.about-footer-credit {
+		@apply inline-flex items-center gap-1.5;
+	}
+	.about-footer-heart {
+		@apply shrink-0 text-red-500 dark:text-red-400;
+		animation: about-heartbeat 2.8s ease-in-out infinite;
+		transform-origin: center;
+	}
+	.about-footer a {
+		@apply font-medium text-heading hover:underline;
+	}
+	.about-page a:focus-visible {
+		@apply rounded outline-2 outline-offset-2 outline-accent;
+	}
+}
+
+@keyframes about-heartbeat {
+	0%,
+	30%,
+	100% {
+		transform: scale(1);
+	}
+	10%,
+	22% {
+		transform: scale(1.12);
+	}
+	16% {
+		transform: scale(1.02);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.about-footer-heart {
+		animation: none;
+	}
+}
+
+/* Longer tabs expand naturally; only the reading controls and resources stay visible. */
+@media (min-width: 1024px) {
+	.about-page {
+		--about-header-height: 8.5rem;
+	}
+	.about-header {
+		position: sticky;
+		top: 4rem;
+		z-index: 20;
+		min-height: var(--about-header-height);
+		background: var(--color-bg);
+	}
+	.about-content {
+		overflow: clip;
+	}
+	.about-tabs {
+		position: sticky;
+		top: calc(4rem + var(--about-header-height));
+		z-index: 10;
+		background: var(--color-surface);
+	}
+	.about-resources {
+		position: sticky;
+		top: calc(4rem + var(--about-header-height));
+		max-height: calc(100dvh - 4rem - var(--about-header-height) - 1.5rem);
+		overflow-y: auto;
+		overscroll-behavior: contain;
 	}
 }

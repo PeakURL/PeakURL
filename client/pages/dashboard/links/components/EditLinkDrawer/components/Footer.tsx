@@ -9,7 +9,7 @@ interface FooterProps {
 
 function Footer({ isLoading, onCancel }: FooterProps) {
 	return (
-		<div className="links-edit-drawer-footer">
+		<div className="drawer-footer links-edit-drawer-footer">
 			<button
 				type="button"
 				onClick={onCancel}

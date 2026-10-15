@@ -2,7 +2,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 
 import { DEFAULT_AUTH_LOGO_URL } from "@constants";
-import { BrandLockup } from "@/components";
+import { Logo } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 
@@ -56,7 +56,11 @@ function AuthLayout({
 						aria-labelledby="page-heading"
 					>
 						<header className="auth-page-card-header">
-							<BrandLockup size="md" href={brandHref} />
+							<Logo
+								size="md"
+								href={brandHref}
+								className="auth-page-logo"
+							/>
 							<Link to={backTo} className="auth-page-back-link">
 								<BackArrow size={16} />
 								{backLabel}

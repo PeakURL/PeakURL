@@ -1,43 +1,63 @@
+import { Link } from "react-router";
+import { peakurlLogoUrl } from "@/assets/logo";
+import { PEAKURL_NAME } from "@/constants";
 import { cn } from "@/shared/formatting";
-
 import type { LogoProps } from "../types";
-export type { LogoProps, LogoSize } from "../types";
 
-const sizeMap = {
-	xs: { box: "logo-mark-xs", icon: "logo-mark-icon-xs" },
-	sm: { box: "logo-mark-sm", icon: "logo-mark-icon-sm" },
-	md: { box: "logo-mark-md", icon: "logo-mark-icon-md" },
-	lg: { box: "logo-mark-lg", icon: "logo-mark-icon-lg" },
-} as const;
+export type { LogoProps, LogoSize, LogoTone } from "../types";
 
-/**
- * Global PeakURL logo component.
- *
- * Uses the same link-chain icon used on the login page branding panel,
- * rendered inside a gradient pill.
- *
- * @param props Logo props
- * @param props.size Visual size preset
- * @param props.className Additional container classes
- */
-export function Logo({ size = "lg", className = "" }: LogoProps) {
-	const sizing = sizeMap[size];
+/** Shared artwork and optional wordmark, with an accessible name in either form. */
+export function Logo({
+	size = "md",
+	tone = "light",
+	showName = true,
+	to,
+	href,
+	className,
+}: LogoProps) {
+	const classes = cn("logo", `logo-${size}`, `logo-${tone}`, className);
+	const label = showName ? undefined : PEAKURL_NAME;
+	const artwork = (
+		<>
+			<img
+				src={peakurlLogoUrl}
+				alt=""
+				aria-hidden="true"
+				width="72"
+				height="72"
+				className="logo-mark"
+			/>
+			{showName && <span className="logo-name">{PEAKURL_NAME}</span>}
+		</>
+	);
 
-	return (
-		<div className={cn("logo-mark", sizing.box, className)}>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-				fill="none"
-				stroke="currentColor"
-				strokeWidth="2.5"
-				strokeLinecap="round"
-				strokeLinejoin="round"
-				className={cn("logo-mark-icon", sizing.icon)}
+	if (href) {
+		const external = /^https?:\/\//.test(href);
+		return (
+			<a
+				href={href}
+				className={classes}
+				aria-label={label}
+				target={external ? "_blank" : undefined}
+				rel={external ? "noopener noreferrer" : undefined}
 			>
-				<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-				<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-			</svg>
+				{artwork}
+			</a>
+		);
+	}
+	if (to)
+		return (
+			<Link to={to} className={classes} aria-label={label}>
+				{artwork}
+			</Link>
+		);
+	return (
+		<div
+			className={classes}
+			role={showName ? undefined : "img"}
+			aria-label={label}
+		>
+			{artwork}
 		</div>
 	);
 }

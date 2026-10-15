@@ -4,7 +4,7 @@
 	}
 
 	.links-form-header-icon {
-		@apply flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent shadow-md;
+		@apply flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-action shadow-md;
 	}
 
 	.links-form-header-copy {

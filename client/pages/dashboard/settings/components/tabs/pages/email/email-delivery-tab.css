@@ -1,15 +1,25 @@
 @layer components {
+	.settings-email-method-heading {
+		@apply flex items-center justify-between gap-3;
+	}
+	.settings-email-method-indicator {
+		@apply inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-stroke bg-surface;
+	}
+	.settings-email-method-button-active .settings-email-method-indicator {
+		@apply border-action bg-action text-white;
+	}
+
 	.settings-email-method-button {
 		text-align: start;
 		@apply rounded-lg border p-4 transition;
 	}
 
 	.settings-email-method-button-active {
-		@apply border-accent bg-accent/10 text-heading;
+		@apply border-selected-border bg-selected text-heading;
 	}
 
 	.settings-email-method-button-inactive {
-		@apply border-stroke bg-surface-alt text-text-muted hover:border-accent/40 hover:text-heading;
+		@apply border-stroke bg-surface text-text-muted hover:border-accent/40 hover:text-heading;
 	}
 
 	.settings-email-method-title {
@@ -18,59 +28,6 @@
 
 	.settings-email-method-description {
 		@apply mt-1 text-sm leading-6;
-	}
-
-	.settings-email-intro-layout {
-		@apply flex items-start gap-3;
-	}
-
-	.settings-email-intro-icon {
-		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600 dark:bg-primary-500/20 dark:text-primary-400;
-	}
-
-	.settings-email-intro-content {
-		text-align: start;
-		@apply space-y-1;
-	}
-
-	.settings-email-intro-title {
-		@apply text-base font-semibold text-heading;
-	}
-
-	.settings-email-intro-description {
-		@apply text-sm leading-6 text-text-muted;
-	}
-
-	.settings-email-alert {
-		@apply rounded-lg border p-4 text-sm;
-	}
-
-	.settings-email-alert-error {
-		@apply border-red-200 bg-red-50 text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
-	}
-
-	.settings-email-alert-warning {
-		@apply border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200;
-	}
-
-	.settings-email-alert-layout {
-		@apply flex items-start gap-3;
-	}
-
-	.settings-email-alert-icon {
-		@apply mt-0.5;
-	}
-
-	.settings-email-alert-content {
-		text-align: start;
-	}
-
-	.settings-email-alert-title {
-		@apply font-semibold;
-	}
-
-	.settings-email-alert-text {
-		@apply mt-1 leading-6 opacity-80;
 	}
 
 	.settings-email-method-grid {
@@ -86,7 +43,7 @@
 	}
 
 	.settings-email-auth-toggle-active {
-		@apply border-accent bg-accent/10 text-heading;
+		@apply border-selected-border bg-selected text-heading;
 	}
 
 	.settings-email-auth-toggle-inactive {
@@ -98,7 +55,7 @@
 	}
 
 	.settings-email-auth-switch-active {
-		@apply bg-accent;
+		@apply bg-action;
 	}
 
 	.settings-email-auth-switch-inactive {
@@ -124,9 +81,5 @@
 	.settings-email-test-note {
 		text-align: start;
 		@apply text-sm leading-6 text-text-muted;
-	}
-
-	.settings-email-docs-link {
-		@apply text-accent inline-flex items-center gap-1.5 text-sm font-medium hover:underline;
 	}
 }

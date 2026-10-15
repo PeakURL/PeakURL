@@ -371,8 +371,8 @@ Help keep PeakURL actively maintained and free for everyone. [Become a sponsor](
 
 #### Community Supporters
 
-- [Abdellah Chelli](https://github.com/sneetsher)
-- [Sapperlott](https://github.com/Sapperloettchen)
+- [Abdellah Chelli](https://go.peakurl.org/bmc1)
+- [Sapperlott](https://go.peakurl.org/bmc2)
 
 [Buy Me a Coffee](https://buymeacoffee.com/PeakURL) to join the community supporters.
 

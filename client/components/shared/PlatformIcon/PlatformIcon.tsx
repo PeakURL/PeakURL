@@ -8,19 +8,21 @@ import {
 	Tv,
 } from "lucide-react";
 
-import android from "@/assets/platforms/android.svg";
-import apple from "@/assets/platforms/apple.svg";
-import brave from "@/assets/platforms/brave.svg";
-import chrome from "@/assets/platforms/chrome.svg";
-import edge from "@/assets/platforms/edge.svg";
-import firefox from "@/assets/platforms/firefox-browser.svg";
-import internetExplorer from "@/assets/platforms/internet-explorer.svg";
-import linux from "@/assets/platforms/linux.svg";
-import opera from "@/assets/platforms/opera.svg";
-import playstation from "@/assets/platforms/playstation.svg";
-import safari from "@/assets/platforms/safari.svg";
-import samsungInternet from "@/assets/platforms/samsung-internet.svg";
-import windows from "@/assets/platforms/windows.svg";
+import {
+	android,
+	apple,
+	brave,
+	chrome,
+	edge,
+	firefox,
+	internetExplorer,
+	linux,
+	opera,
+	playstation,
+	safari,
+	samsungInternet,
+	windows,
+} from "./icons";
 
 interface PlatformIconProps {
 	name: string;

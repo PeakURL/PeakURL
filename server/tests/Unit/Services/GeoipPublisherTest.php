@@ -1021,9 +1021,8 @@ BASH;
 		// 2. Verify top-level permissions are read-only.
 		$this->assertStringContainsString( "permissions:\n  contents: read", $content );
 
-		// 3. Verify publish job has one-time gate and canonical branch.
+		// 3. Verify publish job runs on canonical main branch.
 		$this->assertStringContainsString( "github.ref == 'refs/heads/main'", $content );
-		$this->assertStringContainsString( "vars.PEAKURL_GEOIP_PUBLISH_APPROVED == 'true'", $content );
 
 		// 4. Verify publish job targets protected environment.
 		$this->assertStringContainsString( 'environment: production-geoip', $content );

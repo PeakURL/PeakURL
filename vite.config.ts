@@ -1,13 +1,7 @@
-import fs from "node:fs";
 import path from "node:path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-
-const versionFile = path.resolve(import.meta.dirname, ".version");
-const peakurlVersion = fs.existsSync(versionFile)
-	? fs.readFileSync(versionFile, "utf-8").trim()
-	: "1.0.0";
 
 const devProxyTarget =
 	process.env.VITE_DEV_PROXY_TARGET || "http://127.0.0.1:8000";
@@ -39,9 +33,6 @@ const fallbackProxyPattern = `^/(?!${excludedProxyPaths
 export default defineConfig({
 	base: "./",
 	plugins: [react({ include: /\.[jt]sx?$/ }), tailwindcss()],
-	define: {
-		__PEAKURL_VERSION__: JSON.stringify(peakurlVersion),
-	},
 	build: {
 		outDir: "build",
 		cssCodeSplit: false,

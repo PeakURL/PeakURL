@@ -3,6 +3,16 @@ name: CI Quality Gate
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".github/FUNDING.yml"
+      - ".github/ISSUE_TEMPLATE/**"
+      - ".github/pull_request_template.md"
+      - "LICENSE"
+      - "CREDITS.txt"
+      - ".gitignore"
+      - ".editorconfig"
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -12,16 +22,84 @@ env:
 
 permissions:
   contents: read
+  pull-requests: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  quality-gate:
-    name: Backend, Unit & Release Quality Gate
+  detect-changes:
+    name: Detect Changed Files
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      release: ${{ steps.filter.outputs.release }}
+      any_code: ${{ steps.filter.outputs.any_code }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Categorize changed files
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'server/**'
+              - 'content/**'
+              - 'scripts/**'
+              - 'docker/**'
+              - 'compose.yaml'
+              - 'phpcs.xml'
+              - 'index.php'
+              - 'install.php'
+              - 'setup-config.php'
+              - 'database-error.php'
+              - 'load.php'
+              - '.htaccess'
+              - '.version'
+              - 'server/composer.json'
+              - 'server/composer.lock'
+              - '.github/workflows/ci.yml'
+            frontend:
+              - 'client/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'vite.config.ts'
+              - 'tsconfig*.json'
+              - 'eslint.config.js'
+              - 'playwright.config.ts'
+              - 'tests/unit/**'
+              - '.github/workflows/ci.yml'
+            release:
+              - 'scripts/build-release.sh'
+              - '.version'
+              - 'package.json'
+              - 'server/composer.json'
+              - '.github/workflows/release-r2.yml'
+            any_code:
+              - 'server/**'
+              - 'client/**'
+              - 'content/**'
+              - 'scripts/**'
+              - 'docker/**'
+              - 'compose.yaml'
+              - 'tests/**'
+              - '*.php'
+              - '*.json'
+              - '*.ts'
+              - '*.js'
+              - '.github/workflows/**'
+
+  backend:
+    name: Backend Lint, Syntax & PHPUnit
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    needs: detect-changes
+    if: needs.detect-changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
 
     services:
       mysql:
@@ -32,6 +110,93 @@ jobs:
         ports:
           - 3307:3306
         options: --health-cmd="mysqladmin ping -proot" --health-interval=5s --health-timeout=5s --health-retries=10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo, pdo_mysql, zip
+          tools: composer
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache/files
+          key: ${{ runner.os }}-composer-${{ hashFiles('server/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install PHP dependencies
+        run: composer --working-dir=server install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Run PHP CodeSniffer (WordPressCS)
+        run: composer --working-dir=server run phpcs
+
+      - name: Check PHP syntax
+        run: find server -path 'server/vendor' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l && php -l index.php install.php setup-config.php database-error.php load.php
+
+      - name: Provision backend test database
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3307
+          DB_DATABASE: peakurl_test
+          DB_USERNAME: root
+          DB_PASSWORD: root
+          DB_PREFIX: peakurl_
+          PEAKURL_DEV: "true"
+          PEAKURL_OWNER_FIRST_NAME: Workspace
+          PEAKURL_OWNER_LAST_NAME: Owner
+          PEAKURL_OWNER_USERNAME: admin
+          PEAKURL_OWNER_EMAIL: owner@example.com
+          PEAKURL_OWNER_PASSWORD: admin12345
+          PEAKURL_WORKSPACE_NAME: Workspace
+          PEAKURL_WORKSPACE_SLUG: workspace
+        run: php server/bin/setup-database.php
+
+      - name: Run PHPUnit backend test suite
+        run: composer --working-dir=server test
+
+  frontend:
+    name: Frontend Lint, Typecheck & Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: detect-changes
+    if: needs.detect-changes.outputs.frontend == 'true' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Check Prettier formatting
+        run: npm run format:web:check
+
+      - name: Run ESLint
+        run: npm run lint:web
+
+      - name: Run Playwright unit tests
+        run: npm run test:unit
+
+      - name: Build UI & Verify TypeScript
+        run: npm run build
+
+  release-check:
+    name: Release Packaging Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: detect-changes
+    if: needs.detect-changes.outputs.release == 'true' || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Check out repository
@@ -56,124 +221,46 @@ jobs:
       - name: Install PHP dependencies
         run: composer --working-dir=server install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Check formatting (Prettier & PHPCS)
-        run: npm run format:check
-
-      - name: Run linters (ESLint & PHPCS)
-        run: npm run lint
-
-      - name: Check PHP syntax
-        run: npm run lint:php:syntax
-
-      - name: Provision backend test database
-        env:
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3307
-          DB_DATABASE: peakurl_test
-          DB_USERNAME: root
-          DB_PASSWORD: root
-          DB_PREFIX: peakurl_
-          PEAKURL_DEV: "true"
-          PEAKURL_OWNER_FIRST_NAME: Workspace
-          PEAKURL_OWNER_LAST_NAME: Owner
-          PEAKURL_OWNER_USERNAME: admin
-          PEAKURL_OWNER_EMAIL: owner@example.com
-          PEAKURL_OWNER_PASSWORD: admin12345
-          PEAKURL_WORKSPACE_NAME: Workspace
-          PEAKURL_WORKSPACE_SLUG: workspace
-        run: php server/bin/setup-database.php
-
-      - name: Run PHPUnit backend test suite
-        run: npm run test:server
-
-      - name: Compile translation catalogs
-        run: npm run i18n:compile
-
-      - name: Run Playwright unit tests
-        run: npm run test:unit
-
-      - name: Build UI & Verify TypeScript
-        run: npm run build
-
       - name: Build release package
         run: npm run release:build
 
-  e2e:
-    name: End-to-End Test Matrix
+  quality-gate:
+    name: Quality Gate Summary
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    needs: quality-gate
-
+    timeout-minutes: 5
+    needs: [detect-changes, backend, frontend, release-check]
+    if: always()
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install Node dependencies
-        run: npm ci
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Configure local DNS for PeakURL
+      - name: Evaluate gate results
+        shell: bash
         run: |
-          echo "127.0.0.1 peakurl.dev api.peakurl.dev peakurl.test" | sudo tee -a /etc/hosts
+          set -euo pipefail
 
-      - name: Generate and trust local SSL certificates for proxy
-        run: |
-          mkdir -p docker/proxy/certs
-          openssl req -x509 -newkey rsa:2048 -nodes \
-            -keyout docker/proxy/certs/peakurl-local-key.pem \
-            -out docker/proxy/certs/peakurl-local.pem \
-            -subj "/CN=peakurl.dev" \
-            -days 365 \
-            -addext "subjectAltName=DNS:peakurl.dev,DNS:api.peakurl.dev,DNS:peakurl.test,DNS:localhost"
-          sudo cp docker/proxy/certs/peakurl-local.pem /usr/local/share/ca-certificates/peakurl-local.crt
-          sudo update-ca-certificates
+          echo "=== Quality Gate Summary ==="
+          echo "Detect changes: ${{ needs.detect-changes.result }}"
+          echo "Backend:        ${{ needs.backend.result }}"
+          echo "Frontend:       ${{ needs.frontend.result }}"
+          echo "Release check:  ${{ needs.release-check.result }}"
 
-      - name: Start Docker Stack
-        run: docker compose up -d --build
+          FAILED=()
+          for job_result in \
+            "backend:${{ needs.backend.result }}" \
+            "frontend:${{ needs.frontend.result }}" \
+            "release-check:${{ needs.release-check.result }}"; do
+            job="${job_result%%:*}"
+            res="${job_result#*:}"
+            if [ "$res" = "failure" ] || [ "$res" = "cancelled" ]; then
+              FAILED+=("$job ($res)")
+            fi
+          done
 
-      - name: Wait for container health
-        run: |
-          echo "Waiting for peakurl-server and peakurl-client to become healthy..."
-          if ! timeout 180s bash -c 'until docker compose ps | grep -q "peakurl-server.*(healthy)" && docker compose ps | grep -q "peakurl-client.*(healthy)"; do sleep 3; done'; then
-            echo "::error::Docker containers failed to become healthy within 180 seconds."
+          if [ "${{ needs.detect-changes.result }}" = "failure" ] || [ "${{ needs.detect-changes.result }}" = "cancelled" ]; then
+            FAILED+=("detect-changes (${{ needs.detect-changes.result }})")
+          fi
+
+          if [ ${#FAILED[@]} -ne 0 ]; then
+            echo "::error::Quality gate failed because one or more jobs failed: ${FAILED[*]}"
             exit 1
           fi
-          docker compose ps
 
-      - name: Run Auth Smoke Tests
-        env:
-          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
-          PEAKURL_TEST_IDENTIFIER: admin
-        run: npm run smoke:auth
-
-      - name: Run Playwright E2E Tests
-        env:
-          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
-          PEAKURL_TEST_IDENTIFIER: admin
-        run: npm run test:e2e
-
-      - name: Dump container diagnostics on failure
-        if: failure()
-        run: |
-          echo "=== Docker Compose Status ==="
-          docker compose ps -a
-          echo "=== PeakURL Server Logs ==="
-          docker compose logs server --tail=100
-          echo "=== PeakURL Client Logs ==="
-          docker compose logs client --tail=100
-          echo "=== PeakURL Proxy Logs ==="
-          docker compose logs proxy --tail=100
-          echo "=== PeakURL Database Logs ==="
-          docker compose logs db --tail=100
-
-      - name: Teardown Docker Stack
-        if: always()
-        run: docker compose down -v
+          echo "All required checks passed or were safely skipped."

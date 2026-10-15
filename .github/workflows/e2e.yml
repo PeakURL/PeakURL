@@ -1,0 +1,115 @@
+name: End-to-End Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "client/**"
+      - "server/**"
+      - "docker/**"
+      - "compose.yaml"
+      - "tests/e2e/**"
+      - "scripts/smoke-auth.sh"
+      - "index.php"
+      - "install.php"
+      - "setup-config.php"
+      - "database-error.php"
+      - "load.php"
+      - ".htaccess"
+      - "package.json"
+      - "package-lock.json"
+      - "server/composer.json"
+      - "server/composer.lock"
+      - "playwright.config.ts"
+      - ".github/workflows/e2e.yml"
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: Playwright E2E & Auth Smoke Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Configure local DNS for PeakURL
+        run: |
+          echo "127.0.0.1 peakurl.dev api.peakurl.dev peakurl.test" | sudo tee -a /etc/hosts
+
+      - name: Generate and trust local SSL certificates for proxy
+        run: |
+          mkdir -p docker/proxy/certs
+          openssl req -x509 -newkey rsa:2048 -nodes \
+            -keyout docker/proxy/certs/peakurl-local-key.pem \
+            -out docker/proxy/certs/peakurl-local.pem \
+            -subj "/CN=peakurl.dev" \
+            -days 365 \
+            -addext "subjectAltName=DNS:peakurl.dev,DNS:api.peakurl.dev,DNS:peakurl.test,DNS:localhost"
+          sudo cp docker/proxy/certs/peakurl-local.pem /usr/local/share/ca-certificates/peakurl-local.crt
+          sudo update-ca-certificates
+
+      - name: Start Docker Stack
+        run: docker compose up -d --build
+
+      - name: Wait for container health
+        run: |
+          echo "Waiting for peakurl-server and peakurl-client to become healthy..."
+          if ! timeout 180s bash -c 'until docker compose ps | grep -q "peakurl-server.*(healthy)" && docker compose ps | grep -q "peakurl-client.*(healthy)"; do sleep 3; done'; then
+            echo "::error::Docker containers failed to become healthy within 180 seconds."
+            exit 1
+          fi
+          docker compose ps
+
+      - name: Run Auth Smoke Tests
+        env:
+          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
+          PEAKURL_TEST_IDENTIFIER: admin
+        run: npm run smoke:auth
+
+      - name: Run Playwright E2E Tests
+        env:
+          PEAKURL_TEST_PASSWORD: ${{ secrets.PEAKURL_TEST_PASSWORD }}
+          PEAKURL_TEST_IDENTIFIER: admin
+        run: npx playwright test --project=chromium
+
+      - name: Dump container diagnostics on failure
+        if: failure()
+        run: |
+          echo "=== Docker Compose Status ==="
+          docker compose ps -a
+          echo "=== PeakURL Server Logs ==="
+          docker compose logs server --tail=100
+          echo "=== PeakURL Client Logs ==="
+          docker compose logs client --tail=100
+          echo "=== PeakURL Proxy Logs ==="
+          docker compose logs proxy --tail=100
+          echo "=== PeakURL Database Logs ==="
+          docker compose logs db --tail=100
+
+      - name: Teardown Docker Stack
+        if: always()
+        run: docker compose down -v

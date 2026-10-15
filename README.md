@@ -17,6 +17,7 @@ Built with a modern React dashboard, a high-throughput in-memory caching engine 
 
 ## Why PeakURL
 
+- **Global Dashboard Search**: Use the header search icon or Cmd/Ctrl+K to find links, people, settings, and tools, with results limited to your permissions.
 - **Branded Short Links**: Create custom, memorable short URLs with customized slugs, titles, and social share metadata.
 - **Microsecond Redirection**: Multi-tier in-memory caching with Redis, APCu, and Filesystem drivers delivering redirects in `< 0.1ms`.
 - **Data Safeguards & Trash Protection**: Built-in soft-delete safety net with configurable retention windows (7–90 days or indefinite) and 1-click link restoration.
@@ -182,7 +183,7 @@ If you want the fastest path to a working install:
 
 For installation, setup, usage, and product documentation, start here:
 
-- [PeakURL.org Docs](https://peakurl.org/docs)
+- [PeakURL.org Docs](https://go.peakurl.org/docs)
 - [Full Setup Tutorial (Video)](https://youtu.be/Xal8Qp5VPrc)
 
 If you are migrating from YOURLS, you can export your links with the
@@ -268,10 +269,10 @@ Dashboard highlights include:
 - self-hosted operations for settings, mail delivery, updates, and location data
 
 For the full product guide and current feature details, visit
-[peakurl.org/docs](https://peakurl.org/docs).
+[peakurl.org/docs](https://go.peakurl.org/docs).
 
 If you want the latest public install package, use
-[peakurl.org/latest.zip](https://peakurl.org/latest.zip).
+[peakurl.org/latest.zip](https://go.peakurl.org/latest.zip).
 
 ### Alternative: Docker Deployment
 

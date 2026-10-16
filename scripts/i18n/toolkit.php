@@ -68,7 +68,7 @@ final class I18nToolkit {
 		$this->root_path      = $root_path ?? dirname( __DIR__, 2 );
 		$this->languages_dir  = $this->root_path . '/content/languages';
 		$this->template_path  = $this->languages_dir . '/peakurl.pot';
-		$this->version       = trim( (string) @file_get_contents( $this->root_path . '/.version' ) ) ?: '1.0.0';
+		$this->version        = trim( (string) @file_get_contents( $this->root_path . '/.version' ) ) ?: '1.0.0';
 		$this->headers_config = $this->load_headers_config();
 	}
 
@@ -403,89 +403,97 @@ final class I18nToolkit {
 			$relative_path = ltrim( str_replace( $this->root_path, '', $path ), '/' );
 			$extension     = strtolower( (string) pathinfo( $path, PATHINFO_EXTENSION ) );
 
-				if ( ! in_array( $extension, $extensions, true ) ) {
-					continue;
-				}
+			if ( ! in_array( $extension, $extensions, true ) ) {
+				continue;
+			}
 
 				$should_skip = false;
-				foreach ( $skip_paths as $skip_path ) {
-					if ( false !== strpos( $path, $skip_path ) ) {
-						$should_skip = true;
-						break;
-					}
+			foreach ( $skip_paths as $skip_path ) {
+				if ( false !== strpos( $path, $skip_path ) ) {
+					$should_skip = true;
+					break;
 				}
+			}
 
-				if ( $should_skip ) {
-					continue;
-				}
+			if ( $should_skip ) {
+				continue;
+			}
 
 				$contents = file_get_contents( $path );
-				if ( false === $contents || '' === $contents ) {
+			if ( false === $contents || '' === $contents ) {
+				continue;
+			}
+
+			foreach ( $patterns as $definition ) {
+				$match_count = preg_match_all(
+					$definition['pattern'],
+					$contents,
+					$matches,
+					PREG_SET_ORDER | PREG_OFFSET_CAPTURE,
+				);
+
+				if ( false === $match_count || 0 === $match_count ) {
 					continue;
 				}
 
-				foreach ( $patterns as $definition ) {
-					$match_count = preg_match_all(
-						$definition['pattern'],
-						$contents,
-						$matches,
-						PREG_SET_ORDER | PREG_OFFSET_CAPTURE,
-					);
+				foreach ( $matches as $match ) {
+					$domain = $match['domain'][0] ?? 'peakurl';
 
-					if ( false === $match_count || 0 === $match_count ) {
+					if ( '' === $domain || 'peakurl' !== $domain ) {
 						continue;
 					}
 
-					foreach ( $matches as $match ) {
-						$domain = $match['domain'][0] ?? 'peakurl';
+					$line = 1 + substr_count(
+						substr( $contents, 0, (int) $match[0][1] ),
+						"\n",
+					);
 
-						if ( '' === $domain || 'peakurl' !== $domain ) {
-							continue;
-						}
-
-						$line = 1 + substr_count(
-							substr( $contents, 0, (int) $match[0][1] ),
-							"\n",
-						);
-
-						switch ( $definition['type'] ) {
-							case 'singular':
-								$translation = Translation::create(
-									null,
-									stripcslashes( (string) $match['text'][0] ),
-								);
-								break;
-							case 'context':
-								$translation = Translation::create(
-									stripcslashes( (string) $match['context'][0] ),
-									stripcslashes( (string) $match['text'][0] ),
-								);
-								break;
-							case 'plural':
-								$translation = Translation::create(
-									null,
-									stripcslashes( (string) $match['single'][0] ),
-								)->setPlural(
-									stripcslashes( (string) $match['plural'][0] ),
-								);
-								break;
-							case 'plural_context':
-								$translation = Translation::create(
-									stripcslashes( (string) $match['context'][0] ),
-									stripcslashes( (string) $match['single'][0] ),
-								)->setPlural(
-									stripcslashes( (string) $match['plural'][0] ),
-								);
-								break;
-							default:
-								continue 2;
-						}
-
-						$translation->getReferences()->add( $relative_path, $line );
-						$translations->addOrMerge( $translation );
+					switch ( $definition['type'] ) {
+						case 'singular':
+							$translation = Translation::create(
+								null,
+								stripcslashes( (string) $match['text'][0] ),
+							);
+							break;
+						case 'context':
+							$translation = Translation::create(
+								stripcslashes( (string) $match['context'][0] ),
+								stripcslashes( (string) $match['text'][0] ),
+							);
+							break;
+						case 'plural':
+							$translation = Translation::create(
+								null,
+								stripcslashes( (string) $match['single'][0] ),
+							)->setPlural(
+								stripcslashes( (string) $match['plural'][0] ),
+							);
+							break;
+						case 'plural_context':
+							$translation = Translation::create(
+								stripcslashes( (string) $match['context'][0] ),
+								stripcslashes( (string) $match['single'][0] ),
+							)->setPlural(
+								stripcslashes( (string) $match['plural'][0] ),
+							);
+							break;
+						default:
+							continue 2;
 					}
+
+					$translation->getReferences()->add( $relative_path, $line );
+					$translations->addOrMerge( $translation );
 				}
 			}
+		}
+
+		$brand_path = $this->root_path . '/server/services/brand.json';
+		$brand_data = json_decode( (string) file_get_contents( $brand_path ), true, 512, JSON_THROW_ON_ERROR );
+		if ( is_array( $brand_data ) && is_string( $brand_data['tagline'] ?? null ) ) {
+			$tagline = Translation::create( null, $brand_data['tagline'] );
+			$tagline->getReferences()->add( 'server/services/brand.json', 2 );
+			$translations->addOrMerge( $tagline );
+		}
 
 		if ( ! is_dir( dirname( $this->template_path ) ) ) {
 			mkdir( dirname( $this->template_path ), 0777, true );
@@ -623,7 +631,7 @@ final class I18nToolkit {
 						array( (string) $translation->getTranslation() ),
 						$translation->getPluralTranslations()
 					);
-					$values = array_values(
+					$values       = array_values(
 						array_filter(
 							array_map(
 								static fn( $value ): string => (string) $value,

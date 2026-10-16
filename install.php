@@ -496,14 +496,14 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			color: var(--gray-400);
 		}
 
-		.footer a {
+		.footer a:not(.powered-by) {
 			color: var(--gray-500);
 			text-decoration: none;
 			font-weight: 600;
 			transition: color 0.15s;
 		}
 
-		.footer a:hover { color: var(--accent); }
+		.footer a:not(.powered-by):hover { color: var(--accent); }
 
 		/* ── Responsive ── */
 		@media (max-width: 640px) {
@@ -515,6 +515,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			.stepper-line { width: 28px; margin: 0 8px; }
 			.card-header { flex-direction: column; gap: 12px; }
 		}
+		<?php echo \PeakURL\Services\Brand::get_badge_styles(); ?>
 	</style>
 </head>
 <body>
@@ -615,32 +616,7 @@ if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 		<!-- Footer -->
 		<div class="footer">
-			<?php
-			$powered_by_link = PeakURL_sanitize_html(
-				'<a href="https://peakurl.org?utm_source=peakurl_install&utm_medium=installer&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a>',
-				array(
-					'a' => array(
-						'href'   => true,
-						'target' => true,
-						'rel'    => true,
-					),
-				)
-			);
-			echo PeakURL_sanitize_html(
-				sprintf(
-					/* translators: %s: PeakURL website link. */
-					__( 'Powered by %s', 'peakurl' ),
-					$powered_by_link
-				),
-				array(
-					'a' => array(
-						'href'   => true,
-						'target' => true,
-						'rel'    => true,
-					),
-				)
-			);
-			?>
+			<?php echo \PeakURL\Services\Brand::get_powered_by_badge(); ?>
 		</div>
 	</div>
 	<script>

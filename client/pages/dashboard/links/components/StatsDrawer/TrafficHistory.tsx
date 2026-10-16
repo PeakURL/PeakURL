@@ -274,6 +274,7 @@ function TrafficHistory({
 												<span>{__("From")}</span>
 												<input
 													type="date"
+													className="form-control-base"
 													value={
 														draftCustomDateRange.from
 													}
@@ -295,6 +296,7 @@ function TrafficHistory({
 												<span>{__("To")}</span>
 												<input
 													type="date"
+													className="form-control-base"
 													value={
 														draftCustomDateRange.to
 													}

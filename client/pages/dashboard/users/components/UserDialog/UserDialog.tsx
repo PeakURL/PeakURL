@@ -1,9 +1,9 @@
 import type { ChangeEvent, SubmitEvent } from "react";
 import { useMemo, useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { X } from "lucide-react";
+import { UserRound, UserRoundPlus, X } from "lucide-react";
 
-import { Button, Input, Select, type SelectOption } from "@/components";
+import { Button, Input, SelectField, type SelectOption } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { getErrorMessage } from "@/shared/errors";
@@ -121,21 +121,33 @@ export function UserDialog({
 			<div className="users-page-dialog-wrapper">
 				<DialogPanel className="users-page-dialog-panel">
 					<div className="users-page-dialog-header">
-						<div>
-							<DialogTitle className="users-page-dialog-title">
-								{"create" === mode
-									? __("Add User")
-									: __("Edit User")}
-							</DialogTitle>
-							<p className="users-page-dialog-summary">
-								{"create" === mode
-									? __(
-											"Create a new account with admin or editor access."
-										)
-									: __(
-											"Update the account details and role for this user."
-										)}
-							</p>
+						<div className="users-page-dialog-heading">
+							<span
+								className="users-page-dialog-icon"
+								aria-hidden="true"
+							>
+								{mode === "create" ? (
+									<UserRoundPlus size={20} />
+								) : (
+									<UserRound size={20} />
+								)}
+							</span>
+							<div>
+								<DialogTitle className="users-page-dialog-title">
+									{"create" === mode
+										? __("Add User")
+										: __("Edit User")}
+								</DialogTitle>
+								<p className="users-page-dialog-summary">
+									{"create" === mode
+										? __(
+												"Create a new account with admin or editor access."
+											)
+										: __(
+												"Update the account details and role for this user."
+											)}
+								</p>
+							</div>
 						</div>
 						<button
 							type="button"
@@ -172,7 +184,7 @@ export function UserDialog({
 							/>
 						</div>
 
-						<div className="users-page-dialog-grid">
+						<div className="users-page-dialog-row">
 							<Input
 								label={__("Display Name")}
 								value={form.displayName}
@@ -245,35 +257,31 @@ export function UserDialog({
 							/>
 						</div>
 
-						<div className="users-page-dialog-grid">
-							<div className="users-page-dialog-field">
-								<label className="users-page-dialog-label">
-									{__("Role")}
-								</label>
-								<Select
-									value={form.role}
-									onChange={(value) =>
-										setForm((previous) => ({
-											...previous,
-											role: value,
-										}))
-									}
-									options={roleOptions}
-									disabled={isEditingSelf}
-									ariaLabel={__("User role")}
-								/>
-								<p className="users-page-dialog-help">
-									{roles.find((r) => r.id === form.role)
+						<div className="users-page-dialog-row">
+							<SelectField
+								label={__("Role")}
+								value={form.role}
+								onChange={(value) =>
+									setForm((previous) => ({
+										...previous,
+										role: value,
+									}))
+								}
+								options={roleOptions}
+								disabled={isEditingSelf}
+								ariaLabel={__("User role")}
+								helperText={
+									(roles.find((role) => role.id === form.role)
 										?.description ||
 										roleMeta[form.role]?.description ||
 										__(
 											"User role with custom configured permissions."
-										)}
-									{isEditingSelf
+										)) +
+									(isEditingSelf
 										? ` ${__("Your own role is locked here.")}`
-										: ""}
-								</p>
-							</div>
+										: "")
+								}
+							/>
 						</div>
 
 						<div

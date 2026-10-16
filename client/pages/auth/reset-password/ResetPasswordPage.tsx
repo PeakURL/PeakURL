@@ -197,7 +197,6 @@ function ResetPasswordPage() {
 						required
 						error={formError}
 						disabled={isCheckingResetLink}
-						className="auth-page-input"
 					/>
 					<Input
 						label={__("Confirm new password")}
@@ -214,7 +213,6 @@ function ResetPasswordPage() {
 						autoComplete="new-password"
 						required
 						disabled={isCheckingResetLink}
-						className="auth-page-input"
 					/>
 					<CaptchaWidget ref={captchaRef} />
 					<Button

@@ -6,8 +6,4 @@
 	.dashboard-overview-header-select {
 		@apply min-w-40;
 	}
-
-	.dashboard-overview-header-select-button {
-		@apply rounded-lg border-stroke bg-surface focus:border-primary-500 focus:ring-primary-500/20;
-	}
 }

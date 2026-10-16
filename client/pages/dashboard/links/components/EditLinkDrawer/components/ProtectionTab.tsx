@@ -29,7 +29,7 @@ function ProtectionTab({
 						? __("Enter a new password to replace the current one")
 						: __("Set a password to protect this link")
 				}
-				className="form-control-surface-alt form-control-compact form-control-strong-focus"
+				className="form-control-compact"
 			/>
 			{hasExistingPassword && (
 				<div className="links-edit-drawer-password-options">

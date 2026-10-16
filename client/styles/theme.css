@@ -40,15 +40,24 @@
 	--color-text: var(--color-gray-900);
 	--color-text-muted: var(--color-gray-600);
 	--color-text-subtle: var(--color-gray-500);
-	--color-muted: var(--color-gray-600);
+	--color-muted: var(--color-text-muted);
 	--color-accent: var(--color-primary-700);
 	--color-field-focus: var(--color-primary-500);
+	--color-field-bg: var(--color-surface);
+	--color-field-border: var(--color-navigation-stroke);
+	--color-field-border-hover: #aeb8ca;
+	--color-field-placeholder: #596579;
+	--color-field-readonly-bg: var(--color-surface-alt);
+	--color-field-disabled-text: var(--color-field-placeholder);
+	--color-navigation-stroke: #d5dce7;
+	--color-table-head: var(--color-surface-alt);
+	--color-table-head-text: #475569;
 	--color-heading: var(--color-primary-900);
 	--color-surface: var(--color-white);
-	--color-surface-alt: var(--color-gray-100);
-	--color-stroke: var(--color-gray-200);
-	--color-stroke-strong: var(--color-gray-300);
-	--color-stroke-subtle: var(--color-gray-100);
+	--color-surface-alt: #f0f3f8;
+	--color-stroke: #d9dee7;
+	--color-stroke-strong: #b8c2d0;
+	--color-stroke-subtle: #edf0f5;
 
 	--color-success-soft: var(--color-green-100);
 	--color-error-soft: var(--color-red-100);
@@ -69,17 +78,26 @@
 	--color-bg: #151923;
 	--color-bg-alt: var(--color-gray-900);
 	--color-text: var(--color-gray-100);
-	--color-text-muted: var(--color-gray-400);
-	--color-text-subtle: var(--color-gray-500);
-	--color-muted: var(--color-gray-400);
+	--color-text-muted: #b1bbcc;
+	--color-text-subtle: #8c99af;
+	--color-muted: var(--color-text-muted);
 	--color-accent: var(--color-primary-300);
 	--color-field-focus: var(--color-primary-300);
+	--color-field-bg: #151b27;
+	--color-field-border: var(--color-stroke-strong);
+	--color-field-border-hover: #6d7c94;
+	--color-field-placeholder: #a1adc2;
+	--color-field-readonly-bg: var(--color-surface-alt);
+	--color-field-disabled-text: var(--color-field-placeholder);
+	--color-navigation-stroke: #3b465c;
+	--color-table-head: var(--color-surface-alt);
+	--color-table-head-text: #d0d8e8;
 	--color-heading: var(--color-white);
 	--color-surface: #1c2230;
-	--color-surface-alt: #252c3b;
-	--color-stroke: var(--color-gray-800);
-	--color-stroke-strong: var(--color-gray-700);
-	--color-stroke-subtle: var(--color-gray-800);
+	--color-surface-alt: #252d3e;
+	--color-stroke: #364155;
+	--color-stroke-strong: #536078;
+	--color-stroke-subtle: #2b3446;
 
 	--color-success-soft: color-mix(
 		in srgb,

@@ -4,10 +4,6 @@
 		text-align: start;
 	}
 
-	.select-trigger-open {
-		@apply border-accent ring-2 ring-accent/20;
-	}
-
 	.select-label {
 		@apply truncate;
 	}

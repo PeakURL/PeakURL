@@ -1,5 +1,6 @@
 import { test, expect, type Locator } from "@playwright/test";
 import { mockDrawerPages, drawerScenarios } from "../fixtures/drawer.fixture";
+import { getContrastRatio } from "../fixtures/theme.fixture";
 
 const settings = [
 	"general",
@@ -24,7 +25,38 @@ const paths = [
 	...settings.map((tab) => `/dashboard/settings/${tab}`),
 ];
 
-async function expectBlueFocus(field: Locator, color: string) {
+async function expectBlueFocus(
+	field: Locator,
+	color: string,
+	minimumBorderContrast = 1.2
+) {
+	await field.evaluate(async (element) => {
+		if (element instanceof HTMLElement) element.blur();
+		await Promise.all(
+			element.getAnimations().map((animation) => animation.finished)
+		);
+	});
+	const appearance = await field.evaluate((element) => {
+		const style = getComputedStyle(element);
+		return {
+			border: style.borderColor,
+			background: style.backgroundColor,
+			text: style.color,
+			readonly: element.hasAttribute("readonly"),
+			name:
+				element.getAttribute("aria-label") ||
+				element.getAttribute("placeholder") ||
+				element.getAttribute("id"),
+		};
+	});
+	if (!appearance.readonly)
+		expect(
+			getContrastRatio(appearance.border, appearance.background),
+			JSON.stringify(appearance)
+		).toBeGreaterThanOrEqual(minimumBorderContrast);
+	expect(
+		getContrastRatio(appearance.text, appearance.background)
+	).toBeGreaterThanOrEqual(4.5);
 	await field.focus();
 	await expect(field).toBeFocused();
 	await expect(field).toHaveCSS("border-color", color);
@@ -36,6 +68,145 @@ async function expectBlueFocus(field: Locator, color: string) {
 }
 
 for (const theme of ["light", "dark"] as const) {
+	test(`settings and Add User have visible unfocused fields and aligned navigation in ${theme} mode`, async ({
+		page,
+	}) => {
+		await page.addInitScript(
+			(theme) => localStorage.setItem("theme", theme),
+			theme
+		);
+		await mockDrawerPages(page);
+		await page.goto("/dashboard/settings/general");
+		const header = page.locator(".dashboard-header");
+		const sidebarHeader = page.locator(".dashboard-sidebar-header");
+		const headerBounds = await header.boundingBox();
+		const sidebarBounds = await sidebarHeader.boundingBox();
+		if (!headerBounds || !sidebarBounds)
+			throw new Error("Navigation header is missing");
+		expect(headerBounds.y + headerBounds.height).toBe(
+			sidebarBounds.y + sidebarBounds.height
+		);
+		if (theme === "light")
+			await expect(
+				page.getByLabel("First Name", { exact: false })
+			).toHaveCSS(
+				"border-color",
+				await header.evaluate(
+					(node) => getComputedStyle(node).borderBottomColor
+				)
+			);
+		const divider = await header.evaluate(
+			(node) => getComputedStyle(node).borderBottomColor
+		);
+		await expect(sidebarHeader).toHaveCSS("border-bottom-color", divider);
+		const username = page.getByLabel("Username", { exact: false });
+		await expect(username).toBeDisabled();
+		await expect(username).toHaveCSS("opacity", "1");
+		if (process.env.PEAKURL_UI_PREVIEW)
+			await page.screenshot({
+				path: `/tmp/peakurl-fields-settings-${theme}.png`,
+			});
+		for (const width of [1440, 320]) {
+			await page.setViewportSize({ width, height: 1000 });
+			await page.goto("/dashboard/users");
+			await page
+				.getByRole("button", { name: "Add User", exact: true })
+				.click();
+			const dialog = page.getByRole("dialog", {
+				name: "Add User",
+				exact: true,
+			});
+			await expect(
+				dialog.locator(".users-page-dialog-panel")
+			).toBeVisible();
+			for (const field of await dialog
+				.locator("input, .select-trigger")
+				.all())
+				await expectBlueFocus(
+					field,
+					theme === "dark"
+						? "rgb(181, 200, 250)"
+						: "rgb(92, 113, 159)",
+					theme === "dark" ? 2.5 : 1.2
+				);
+			await dialog
+				.getByRole("button", { name: "Show password" })
+				.first()
+				.click();
+			await expect(
+				dialog.getByRole("button", { name: "Hide password" }).first()
+			).toBeVisible();
+			await dialog
+				.locator("input")
+				.first()
+				.evaluate((node) => node.blur());
+			if (process.env.PEAKURL_UI_PREVIEW)
+				await page.screenshot({
+					path: `/tmp/peakurl-fields-add-user-${theme}-${width}.png`,
+				});
+			const bounds = await dialog
+				.locator(".users-page-dialog-panel")
+				.evaluate((node) => ({
+					width: node.clientWidth,
+					scroll: node.scrollWidth,
+				}));
+			expect(bounds.scroll).toBeLessThanOrEqual(bounds.width);
+			await page.keyboard.press("Escape");
+			await expect(dialog).toHaveCount(0);
+		}
+	});
+	test(`public auth fields use the shared colors and single focus stroke in ${theme} mode`, async ({
+		page,
+	}) => {
+		await page.addInitScript(
+			(theme) => localStorage.setItem("theme", theme),
+			theme
+		);
+		await mockDrawerPages(page);
+		await page.route("**/api/v1/users/me", (route) =>
+			route.fulfill({ status: 401, json: { message: "Not signed in" } })
+		);
+		await page.route(
+			"**/api/v1/auth/reset-password/preview-token",
+			(route) => route.fulfill({ json: { data: { valid: true } } })
+		);
+		for (const width of [1440, 320]) {
+			await page.setViewportSize({ width, height: 1000 });
+			for (const path of [
+				"/login",
+				"/forgot-password",
+				"/reset-password/preview-token",
+			]) {
+				await page.goto(path);
+				if (theme === "dark")
+					await expect(page.locator("html")).toHaveClass(/dark/);
+				const field = page.locator(".form-control-base").first();
+				await expect(field).toBeVisible();
+				for (const control of await page
+					.locator(".form-control-base")
+					.all()) {
+					await expectBlueFocus(
+						control,
+						theme === "dark"
+							? "rgb(181, 200, 250)"
+							: "rgb(92, 113, 159)",
+						theme === "dark" ? 2.5 : 1.2
+					);
+				}
+				await field.evaluate((node) => node.blur());
+				expect(
+					await page.evaluate(
+						() => document.documentElement.scrollWidth <= innerWidth
+					)
+				).toBe(true);
+				if (process.env.PEAKURL_UI_PREVIEW)
+					await page.screenshot({
+						path: `/tmp/peakurl-sweep-auth-${path.split("/")[1]}-${theme}-${width}.png`,
+					});
+			}
+		}
+	});
+
 	test(`dashboard fields and drawer controls share the logo blue focus ring in ${theme} mode`, async ({
 		page,
 	}) => {
@@ -92,7 +263,11 @@ for (const theme of ["light", "dark"] as const) {
 						page.locator(".settings-tab-page h2").first()
 					).toBeVisible();
 				for (const field of await page.locator(fieldsSelector).all()) {
-					await expectBlueFocus(field, color);
+					await expectBlueFocus(
+						field,
+						color,
+						theme === "dark" ? 2.5 : 1.2
+					);
 					focusedCount++;
 				}
 			});
@@ -104,7 +279,11 @@ for (const theme of ["light", "dark"] as const) {
 			const panel = page.locator(drawer.panel);
 			await expect(panel).toBeVisible();
 			for (const field of await panel.locator(fieldsSelector).all())
-				await expectBlueFocus(field, color);
+				await expectBlueFocus(
+					field,
+					color,
+					theme === "dark" ? 2.5 : 1.2
+				);
 			await page.keyboard.press("Escape");
 			await expect(panel).toHaveCount(0);
 		}

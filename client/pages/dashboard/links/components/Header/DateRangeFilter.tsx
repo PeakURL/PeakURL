@@ -118,6 +118,7 @@ const DateRangeFilter = ({
 									<span>{__("From")}</span>
 									<input
 										type="date"
+										className="form-control-base"
 										value={draftRange.from}
 										max={draftRange.to}
 										onChange={(event) =>
@@ -132,6 +133,7 @@ const DateRangeFilter = ({
 									<span>{__("To")}</span>
 									<input
 										type="date"
+										className="form-control-base"
 										value={draftRange.to}
 										min={draftRange.from}
 										onChange={(event) =>

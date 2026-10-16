@@ -1,9 +1,11 @@
-import { RefreshCw } from "lucide-react";
-
-import { PageHeader, Select, type SelectOption } from "@/components";
+import {
+	PageHeader,
+	RefreshButton,
+	Select,
+	type SelectOption,
+} from "@/components";
 import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __ } from "@/i18n";
-import { cn } from "@/shared/formatting";
 
 import type { HeaderProps } from "../types";
 
@@ -29,18 +31,12 @@ const Header = ({
 			)}
 			actions={
 				<div className="dashboard-overview-header-actions">
-					<button
-						type="button"
-						onClick={onRefresh}
-						disabled={isRefreshing}
-						className="page-header-icon-button"
-						aria-label={__("Refresh dashboard data")}
-						title={__("Refresh dashboard data")}
-					>
-						<RefreshCw
-							className={cn(isRefreshing && "animate-spin")}
-						/>
-					</button>
+					<RefreshButton
+						onRefresh={onRefresh}
+						isRefreshing={isRefreshing}
+						label={__("Refresh dashboard data")}
+					/>
+
 					{canViewAnalytics && (
 						<Select
 							value={timeRange}
@@ -48,7 +44,6 @@ const Header = ({
 							options={timeRangeOptions}
 							ariaLabel={__("Dashboard time range")}
 							className="dashboard-overview-header-select"
-							buttonClassName="dashboard-overview-header-select-button"
 						/>
 					)}
 				</div>

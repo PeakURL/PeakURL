@@ -142,11 +142,11 @@
 	}
 
 	.users-page-table-head {
-		@apply bg-surface-alt/70 border-b border-stroke;
+		@apply bg-table-head border-b border-stroke;
 	}
 
 	.users-page-table-head-row {
-		@apply text-[11px] font-semibold uppercase tracking-[0.14em] text-text-muted;
+		@apply text-xs font-semibold uppercase tracking-wide text-table-head-text;
 		text-align: start;
 	}
 
@@ -290,15 +290,21 @@
 	}
 
 	.users-page-dialog-header {
-		@apply flex shrink-0 items-start justify-between border-b border-stroke px-6 py-4.5;
+		@apply flex shrink-0 items-start justify-between gap-4 border-b border-stroke px-6 py-5;
 	}
 
+	.users-page-dialog-heading {
+		@apply flex min-w-0 items-start gap-3;
+	}
+	.users-page-dialog-icon {
+		@apply flex size-10 shrink-0 items-center justify-center rounded-xl border border-selected-border bg-selected text-accent;
+	}
 	.users-page-dialog-title {
-		@apply text-base font-semibold text-heading;
+		@apply text-lg font-semibold leading-6 text-heading;
 	}
 
 	.users-page-dialog-summary {
-		@apply mt-0.5 text-xs text-text-muted;
+		@apply mt-1 text-[13px] leading-5 text-text-muted;
 	}
 
 	.users-page-dialog-close {
@@ -317,16 +323,8 @@
 		@apply grid gap-3.5 sm:grid-cols-2;
 	}
 
-	.users-page-dialog-field {
-		@apply space-y-1.5;
-	}
-
-	.users-page-dialog-label {
-		@apply block text-xs font-semibold text-heading;
-	}
-
-	.users-page-dialog-help {
-		@apply text-[11px] text-text-muted;
+	.users-page-dialog-row {
+		@apply min-w-0;
 	}
 
 	.users-page-dialog-actions {

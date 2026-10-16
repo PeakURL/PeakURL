@@ -20,16 +20,13 @@
 		@apply pointer-events-none absolute inset-y-0 flex items-center text-muted;
 	}
 
+	.form-field-password-toggle {
+		@apply pointer-events-auto cursor-pointer rounded-md p-2 text-text-muted transition-colors hover:text-heading focus-visible:outline-2 focus-visible:outline-accent;
+	}
+
 	.form-field-control-error,
 	.form-field-input-error {
 		@apply border-red-500;
-	}
-
-	.form-field-control-error:focus,
-	.form-field-input-error:focus {
-		border-color: var(--color-error);
-		box-shadow: 0 0 0 1px
-			color-mix(in srgb, var(--color-error) 35%, transparent);
 	}
 
 	.form-field-input-no-icon {

@@ -1,0 +1,290 @@
+.status-page {
+	--accent: var(--status-action);
+	--accent-hover: #333d54;
+	--bg: var(--status-surface);
+	--surface: var(--status-surface);
+	--border: var(--status-line);
+	--border-focus: var(--status-accent);
+	--heading: var(--status-ink);
+	--text: var(--status-muted);
+	--error-text: light-dark(#b42318, #fecaca);
+	--error-bg: light-dark(#fff0ee, #2b1111);
+	--error-border: light-dark(#fecaca, #7f1d1d);
+	--radius: 8px;
+}
+.hero-icon-wrap {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 12px;
+	background: var(--status-soft);
+	color: var(--status-accent);
+	margin-bottom: 20px;
+}
+.hero-icon {
+	width: 24px;
+	height: 24px;
+}
+.title {
+	margin: 0;
+	font-size: clamp(28px, 3vw, 38px);
+	line-height: 1.2;
+	letter-spacing: -0.03em;
+}
+.subtitle {
+	margin: 16px 0 0;
+	color: var(--status-muted);
+	font-size: 15px;
+	line-height: 1.8;
+}
+.status-copy form {
+	max-width: 460px;
+}
+form {
+	margin-top: 28px;
+	text-align: start;
+}
+.field {
+	margin-bottom: 20px;
+}
+.label {
+	display: block;
+	margin-bottom: 6px;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--heading);
+}
+.input-wrap {
+	position: relative;
+}
+.input-icon {
+	position: absolute;
+	inset-inline-start: 14px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 16px;
+	height: 16px;
+	color: var(--status-muted);
+	pointer-events: none;
+}
+.input {
+	width: 100%;
+	padding: 12px 14px;
+	padding-inline-start: 40px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: var(--bg);
+	color: var(--heading);
+	font-size: 14px;
+	font-family: inherit;
+	outline: none;
+	transition:
+		border-color 0.15s ease,
+		box-shadow 0.15s ease;
+}
+.input::placeholder {
+	color: var(--status-muted);
+}
+.input:focus {
+	border-color: var(--border-focus);
+	box-shadow: inset 0 0 0 1px var(--border-focus);
+	background: var(--surface);
+}
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	width: 100%;
+	padding: 12px 20px;
+	border: 0;
+	border-radius: var(--radius);
+	background: var(--accent);
+	color: #fff;
+	font-size: 14px;
+	font-weight: 600;
+	font-family: inherit;
+	cursor: pointer;
+	transition:
+		background 0.15s ease,
+		transform 0.1s ease,
+		box-shadow 0.15s ease;
+}
+.btn:hover {
+	background: var(--accent-hover);
+	box-shadow: 0 4px 12px rgba(92, 113, 159, 0.15);
+}
+.btn:active {
+	transform: scale(0.985);
+}
+.btn-arrow {
+	width: 16px;
+	height: 16px;
+	transition: transform 0.15s ease;
+}
+.btn:hover .btn-arrow {
+	transform: translateX(2px);
+}
+.alert {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	margin-top: 0;
+	margin-bottom: 20px;
+	padding: 12px 14px;
+	border-radius: var(--radius);
+	background: var(--error-bg);
+	border: 1px solid var(--error-border);
+	color: var(--error-text);
+	font-size: 13px;
+	line-height: 1.5;
+	text-align: start;
+}
+.alert-icon {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+/* Keep CAPTCHA status text and retry actions clear without widening the card. */
+.captcha-form {
+	margin-top: 24px;
+}
+.captcha-status-panel {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	margin-bottom: 18px;
+	padding: 14px 16px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: var(--bg);
+	color: var(--text);
+	font-size: 13px;
+	font-weight: 500;
+	line-height: 1.5;
+	text-align: start;
+}
+.captcha-status-panel[hidden] {
+	display: none;
+}
+.captcha-status-content {
+	display: flex;
+	flex: 1;
+	min-width: 0;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 10px;
+}
+.captcha-status-text {
+	display: block;
+	min-width: 0;
+}
+.captcha-status-panel-warning {
+	border-color: light-dark(#fed7aa, #7c2d12);
+	background: light-dark(#fff7ed, #2d1b10);
+	color: light-dark(#9a3412, #fed7aa);
+}
+.captcha-status-panel-error {
+	border-color: var(--error-border);
+	background: var(--error-bg);
+	color: var(--error-text);
+}
+
+.captcha-spinner {
+	width: 16px;
+	height: 16px;
+	border-radius: 999px;
+	border: 2px solid rgba(92, 113, 159, 0.22);
+	border-top-color: var(--accent);
+	animation: captcha-spin 0.8s linear infinite;
+	flex-shrink: 0;
+}
+.captcha-status-panel-warning .captcha-spinner {
+	border-color: #f97316;
+	border-top-color: #f97316;
+	animation: none;
+}
+.captcha-status-panel-error .captcha-spinner {
+	border-color: #ef4444;
+	background: #ef4444;
+	animation: none;
+}
+.captcha-retry-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 34px;
+	margin: 0;
+	padding: 7px 14px;
+	border: 1px solid currentColor;
+	border-radius: 10px;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 1.2;
+	text-align: center;
+	white-space: nowrap;
+	cursor: pointer;
+	transition:
+		background 0.15s ease,
+		transform 0.1s ease;
+}
+.captcha-retry-button:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+.captcha-retry-button:active {
+	transform: scale(0.98);
+}
+.captcha-retry-button[hidden] {
+	display: none;
+}
+.captcha-widget {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 78px;
+	overflow: hidden;
+}
+.captcha-widget[hidden] {
+	display: none;
+}
+.captcha-widget iframe {
+	max-width: 100%;
+}
+.captcha-noscript {
+	margin-top: 14px;
+	color: var(--error-text);
+	font-size: 13px;
+	line-height: 1.5;
+	text-align: center;
+}
+@keyframes captcha-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.captcha-spinner {
+		animation: none;
+	}
+}
+@media (max-width: 480px) {
+	.captcha-status-panel {
+		padding: 14px;
+	}
+	.captcha-retry-button {
+		width: 100%;
+	}
+}
+
+.btn:focus-visible,
+.captcha-retry-button:focus-visible {
+	outline: 2px solid var(--status-accent);
+	outline-offset: 3px;
+}

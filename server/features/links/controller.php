@@ -477,8 +477,8 @@ class Controller extends BaseController {
 
 		return JsonResponse::text(
 			$this->format_status_page(
-				__( 'This link is unavailable', 'peakurl' ),
-				__( 'The short link you requested is not available right now.', 'peakurl' ),
+				__( 'Link not found', 'peakurl' ),
+				__( 'Check that the address is complete and correct. This short link may have been removed or is no longer available.', 'peakurl' ),
 			),
 			404,
 			'text/html; charset=utf-8',
@@ -1031,7 +1031,7 @@ HTML;
 	}
 
 	/**
-	 * Get a simple public status page for expired or unavailable links.
+	 * Get a branded public status page for expired or unavailable links.
 	 *
 	 * @param string $title       Page title.
 	 * @param string $description Supporting description.
@@ -1044,34 +1044,21 @@ HTML;
 		string $description,
 		string $icon_type = 'unavailable'
 	): string {
-		if ( 'expired' === $icon_type ) {
-			$icon =
-				'<svg class="hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' .
-				'<circle cx="12" cy="12" r="10"/>' .
-				'<polyline points="12 6 12 12 16 14"/>' .
-				'</svg>';
-		} else {
-			$icon =
-				'<svg class="hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' .
-				'<circle cx="12" cy="12" r="10"/>' .
-				'<line x1="15" y1="9" x2="9" y2="15"/>' .
-				'<line x1="9" y1="9" x2="15" y2="15"/>' .
-				'</svg>';
-		}
+		$is_expired = 'expired' === $icon_type;
 
-		$content_html =
-			'<div class="hero-icon-wrap hero-icon-wrap--muted">' . $icon . '</div>' .
-			'<h1 class="title">' . htmlspecialchars( $title, ENT_QUOTES, 'UTF-8' ) . '</h1>' .
-			'<p class="subtitle">' . htmlspecialchars( $description, ENT_QUOTES, 'UTF-8' ) . '</p>';
-
-		return $this->format_public_page( $title, $content_html );
+		return \PeakURL\Services\StatusPage::render(
+			$title,
+			$description,
+			$is_expired ? __( '410 · Link expired', 'peakurl' ) : __( '404 · Link not found', 'peakurl' ),
+			__( 'Contact the person who shared this link to request a new address. You do not need an account to open a public short link.', 'peakurl' ),
+		);
 	}
 
 	/**
 	 * Get shared branded markup for public short-link pages.
 	 *
 	 * @param string $page_title   Browser page title.
-	 * @param string $content_html Safe inner HTML for the card body.
+	 * @param string $content_html Safe inner HTML for the public page.
 	 * @return string HTML page markup.
 	 * @since 1.0.0
 	 */
@@ -1079,203 +1066,6 @@ HTML;
 		string $page_title,
 		string $content_html
 	): string {
-		$page_title     = htmlspecialchars( $page_title, ENT_QUOTES, 'UTF-8' );
-		$generator_meta = get_generator_tag();
-		$generator_line = '' !== $generator_meta ? "\n" . $generator_meta : '';
-
-		return <<<HTML
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>{$page_title} &mdash; PeakURL</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">{$generator_line}
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  color-scheme:light;
-  --accent:#6366f1;--accent-hover:#4f46e5;
-  --bg:#fafafa;--surface:#fff;
-  --border:#e5e7eb;--border-focus:#6366f1;
-  --heading:#111827;--text:#6b7280;
-  --error:#ef4444;--error-bg:#fef2f2;--error-border:#fecaca;--error-text:#991b1b;
-  --radius:12px;--radius-lg:20px;
-}
-@media(prefers-color-scheme:dark){
-  :root{
-    color-scheme:dark;
-    --accent:#818cf8;--accent-hover:#6366f1;
-    --bg:#111113;--surface:#18181b;
-    --border:#2d2d32;--border-focus:#818cf8;
-    --heading:#f8fafc;--text:#a1a1aa;
-    --error:#f87171;--error-bg:#2a1518;--error-border:#7f1d1d;--error-text:#fecaca;
-  }
-}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-  background:var(--bg);min-height:100vh;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:24px 16px;color:var(--heading);
-  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
-}
-.card{
-  width:100%;max-width:420px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:40px 36px;
-  box-shadow:0 1px 3px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.04);
-  text-align:center;
-}
-@media(prefers-color-scheme:dark){
-  .card{box-shadow:0 1px 3px rgba(0,0,0,.25),0 18px 40px rgba(0,0,0,.28)}
-}
-.hero-icon-wrap{
-  display:inline-flex;align-items:center;justify-content:center;
-  width:56px;height:56px;border-radius:16px;
-  background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(99,102,241,.05));
-  margin-bottom:20px;
-}
-.hero-icon-wrap--muted{
-  background:linear-gradient(135deg,rgba(107,114,128,.1),rgba(107,114,128,.05));
-}
-.hero-icon-wrap--muted .hero-icon{color:#9ca3af}
-.hero-icon{width:26px;height:26px;color:var(--accent)}
-.title{
-  font-size:22px;font-weight:700;letter-spacing:0;
-  color:var(--heading);line-height:1.2;margin-bottom:8px;
-}
-.subtitle{
-  font-size:14px;line-height:1.6;color:var(--text);margin-bottom:0;
-}
-form{margin-top:28px;text-align:left}
-.field{margin-bottom:20px}
-.label{
-  display:block;margin-bottom:6px;
-  font-size:13px;font-weight:600;color:var(--heading);
-}
-.input-wrap{position:relative}
-.input-icon{
-  position:absolute;left:14px;top:50%;transform:translateY(-50%);
-  width:16px;height:16px;color:#9ca3af;pointer-events:none;
-}
-.input{
-  width:100%;padding:12px 14px 12px 40px;
-  border:1px solid var(--border);border-radius:var(--radius);
-  background:var(--bg);color:var(--heading);
-  font-size:14px;font-family:inherit;outline:none;
-  transition:border-color .15s ease,box-shadow .15s ease;
-}
-.input::placeholder{color:#9ca3af}
-.input:focus{
-  border-color:var(--border-focus);
-  box-shadow:0 0 0 3px rgba(99,102,241,.1);
-  background:var(--surface);
-}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;padding:12px 20px;border:0;
-  border-radius:var(--radius);
-  background:var(--accent);color:#fff;
-  font-size:14px;font-weight:600;font-family:inherit;
-  cursor:pointer;
-  transition:background .15s ease,transform .1s ease,box-shadow .15s ease;
-}
-.btn:hover{background:var(--accent-hover);box-shadow:0 4px 12px rgba(99,102,241,.25)}
-.btn:active{transform:scale(.985)}
-.btn-arrow{width:16px;height:16px;transition:transform .15s ease}
-.btn:hover .btn-arrow{transform:translateX(2px)}
-.alert{
-  display:flex;align-items:flex-start;gap:8px;
-  margin-top:0;margin-bottom:20px;
-  padding:12px 14px;border-radius:var(--radius);
-  background:var(--error-bg);border:1px solid var(--error-border);
-  color:var(--error-text);font-size:13px;line-height:1.5;text-align:left;
-}
-.alert-icon{width:16px;height:16px;flex-shrink:0;margin-top:1px}
-/* Keep CAPTCHA status text and retry actions clear without widening the card. */
-.captcha-form{margin-top:24px}
-.captcha-status-panel{
-  display:flex;align-items:flex-start;gap:12px;
-  margin-bottom:18px;padding:14px 16px;
-  border:1px solid var(--border);border-radius:var(--radius);
-  background:var(--bg);color:var(--text);
-  font-size:13px;font-weight:500;line-height:1.5;text-align:left;
-}
-.captcha-status-panel[hidden]{display:none}
-.captcha-status-content{
-  display:flex;flex:1;min-width:0;flex-direction:column;align-items:flex-start;gap:10px;
-}
-.captcha-status-text{display:block;min-width:0}
-.captcha-status-panel-warning{
-  border-color:#fed7aa;background:#fff7ed;color:#9a3412;
-}
-.captcha-status-panel-error{
-  border-color:#fecaca;background:#fef2f2;color:#991b1b;
-}
-@media(prefers-color-scheme:dark){
-  .captcha-status-panel-warning{
-    border-color:#7c2d12;background:#2d1b10;color:#fed7aa;
-  }
-  .captcha-status-panel-error{
-    border-color:#7f1d1d;background:#2b1111;color:#fecaca;
-  }
-}
-.captcha-spinner{
-  width:16px;height:16px;border-radius:999px;
-  border:2px solid rgba(99,102,241,.22);
-  border-top-color:var(--accent);
-  animation:captcha-spin .8s linear infinite;flex-shrink:0;
-}
-.captcha-status-panel-warning .captcha-spinner{
-  border-color:#f97316;border-top-color:#f97316;animation:none;
-}
-.captcha-status-panel-error .captcha-spinner{
-  border-color:#ef4444;background:#ef4444;animation:none;
-}
-.captcha-retry-button{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-height:34px;margin:0;padding:7px 14px;border:1px solid currentColor;
-  border-radius:10px;background:transparent;color:inherit;
-  font:inherit;font-size:12px;font-weight:700;line-height:1.2;text-align:center;white-space:nowrap;cursor:pointer;
-  transition:background .15s ease,transform .1s ease;
-}
-.captcha-retry-button:hover{background:rgba(0,0,0,.05)}
-.captcha-retry-button:active{transform:scale(.98)}
-.captcha-retry-button[hidden]{display:none}
-.captcha-widget{
-  display:flex;justify-content:center;align-items:center;
-  min-height:78px;overflow:hidden;
-}
-.captcha-widget[hidden]{display:none}
-.captcha-widget iframe{max-width:100%}
-.captcha-noscript{
-  margin-top:14px;color:var(--error-text);font-size:13px;line-height:1.5;text-align:center;
-}
-@keyframes captcha-spin{to{transform:rotate(360deg)}}
-.footer{
-  margin-top:24px;
-  font-size:12px;color:#9ca3af;
-}
-.footer a{color:#9ca3af;text-decoration:none;transition:color .15s}
-.footer a:hover{color:var(--heading)}
-@media(max-width:480px){
-  .card{padding:28px 24px;border-radius:16px}
-  .title{font-size:20px}
-  .captcha-status-panel{padding:14px}
-  .captcha-retry-button{width:100%}
-}
-@media(prefers-color-scheme:dark){
-  .captcha-retry-button:hover{background:rgba(255,255,255,.12)}
-}
-</style>
-</head>
-<body>
-<main class="card">{$content_html}</main>
-<p class="footer">Powered by <a href="https://peakurl.org?utm_source=peakurl_urls_controller&utm_medium=public_page&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">PeakURL</a></p>
-</body>
-</html>
-HTML;
+		return \PeakURL\Services\StatusPage::render_document( $page_title, $content_html );
 	}
 }

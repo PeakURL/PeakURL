@@ -491,7 +491,7 @@ export function ScheduledJobsPage() {
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 								placeholder={__("Search jobs...")}
-								className="w-full rounded-lg border border-stroke bg-surface ps-9 pe-3 py-1.5 text-xs text-heading placeholder:text-text-muted/60 transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+								className="form-control-base scheduled-jobs-search-input"
 							/>
 						</div>
 					</div>

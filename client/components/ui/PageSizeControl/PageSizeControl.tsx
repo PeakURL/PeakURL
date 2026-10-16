@@ -165,7 +165,7 @@ export function PageSizeControl({
 					options={selectOptions}
 					className="page-size-control-select"
 					ariaLabel={ariaLabel}
-					buttonClassName="form-control-surface-alt form-control-compact"
+					buttonClassName="form-control-compact"
 				/>
 			)}
 		</div>

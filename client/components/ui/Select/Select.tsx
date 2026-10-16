@@ -42,9 +42,7 @@ export function Select<T extends SelectValue>({
 							className={cn(
 								"form-control-base",
 								"select-trigger",
-								open
-									? "select-trigger-open"
-									: "form-control-accent-focus",
+								open && "select-trigger-open",
 								buttonClassName
 							)}
 						>

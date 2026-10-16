@@ -12,7 +12,7 @@
 	}
 
 	.dashboard-sidebar {
-		@apply fixed inset-y-0 left-0 z-50 flex w-60 -translate-x-full flex-col border-r border-stroke bg-surface overflow-x-hidden transition-all duration-400 ease-out motion-reduce:transition-none lg:z-30 lg:translate-x-0;
+		@apply fixed inset-y-0 left-0 z-50 flex w-60 -translate-x-full flex-col border-r border-navigation-stroke bg-surface overflow-x-hidden transition-all duration-400 ease-out motion-reduce:transition-none lg:z-30 lg:translate-x-0;
 	}
 
 	.dashboard-sidebar-rtl {
@@ -30,7 +30,8 @@
 	}
 
 	.dashboard-sidebar-header {
-		@apply flex h-16 shrink-0 items-center justify-between border-b border-stroke px-4;
+		@apply flex shrink-0 items-center justify-between border-b border-navigation-stroke px-4;
+		height: var(--dashboard-header-height);
 	}
 
 	.dashboard-sidebar-logo {
@@ -171,7 +172,7 @@
 	}
 
 	.dashboard-sidebar-footer {
-		@apply shrink-0 space-y-0.5 border-t border-stroke px-3 py-1.5;
+		@apply shrink-0 space-y-0.5 border-t border-navigation-stroke px-3 py-1.5;
 	}
 
 	.dashboard-sidebar-about-panel {

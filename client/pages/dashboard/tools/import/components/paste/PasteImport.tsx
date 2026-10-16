@@ -137,7 +137,7 @@ const PasteImport = () => {
 							</label>
 							<TextArea
 								valueDirection="ltr"
-								className="form-control-surface-alt form-control-roomy form-control-strong-focus import-paste-textarea font-mono"
+								className="form-control-roomy import-paste-textarea font-mono"
 								placeholder={`https://example.com/page1
 https://example.com/page2, my-alias, Page Title
 https://example.com/page3 custom-alias Custom Title`}

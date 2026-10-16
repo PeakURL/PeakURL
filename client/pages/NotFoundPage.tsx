@@ -1,104 +1,50 @@
-import {
-	Gauge,
-	ArrowLeft,
-	ArrowRight,
-	Link2 as Link2Icon,
-	Wrench,
-	Settings,
-	FileX,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Gauge } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 
 import { Button } from "@/components";
-import { isDocumentRtl } from "@/i18n/direction";
+import { StatusLayout } from "@/components/shared/StatusLayout";
 import { __ } from "@/i18n";
+import { isDocumentRtl } from "@/i18n/direction";
 
 const NotFoundPage = () => {
 	const navigate = useNavigate();
-	const isRtl = isDocumentRtl();
-	const BackArrow = isRtl ? ArrowRight : ArrowLeft;
+	const BackArrow = isDocumentRtl() ? ArrowRight : ArrowLeft;
 
 	return (
-		<div className="not-found-page">
-			<div className="not-found-page-inner">
-				<div className="not-found-page-layout">
-					<div className="not-found-page-graphic">
-						<FileX
-							size={40}
-							className="not-found-page-graphic-icon"
-							strokeWidth={2}
-						/>
-					</div>
-
-					<h1 className="not-found-page-title">
-						{__("Page Not Found")}
-					</h1>
-
-					<p className="not-found-page-summary">
-						{__(
-							"The admin page you're looking for doesn't exist. It might have been moved, deleted, or you may not have permission."
-						)}
-					</p>
-
-					<div className="not-found-page-actions">
-						<Button
-							variant="secondary"
-							onClick={() => navigate(-1)}
-							className="not-found-page-action"
-						>
-							<BackArrow size={16} />
-							{__("Go Back")}
-						</Button>
-						<Button
-							variant="primary"
-							onClick={() => navigate("/dashboard")}
-							className="not-found-page-action"
-						>
-							<Gauge size={16} />
-							{__("Go to Dashboard")}
-						</Button>
-					</div>
-
-					<div className="not-found-page-links">
-						<p className="not-found-page-links-title">
-							{__("Popular Destinations")}
-						</p>
-						<div className="not-found-page-link-grid">
-							<Link
-								to="/dashboard/links"
-								className="not-found-page-link"
-							>
-								<Link2Icon
-									size={16}
-									className="not-found-page-link-icon"
-								/>
-								{__("All Links")}
-							</Link>
-							<Link
-								to="/dashboard/tools/import/file"
-								className="not-found-page-link"
-							>
-								<Wrench
-									size={16}
-									className="not-found-page-link-icon"
-								/>
-								{__("Import")}
-							</Link>
-							<Link
-								to="/dashboard/settings/general"
-								className="not-found-page-link"
-							>
-								<Settings
-									size={16}
-									className="not-found-page-link-icon"
-								/>
-								{__("Settings")}
-							</Link>
-						</div>
-					</div>
+		<StatusLayout
+			embedded
+			label={__("404 · Missing page")}
+			title={__("Page not found")}
+			description={__(
+				"We couldn’t find the dashboard page you’re looking for. Check the address, or return to your dashboard to keep going."
+			)}
+			actions={
+				<>
+					<Button icon={Gauge} onClick={() => navigate("/dashboard")}>
+						{__("Go to Dashboard")}
+					</Button>
+					<Button
+						variant="secondary"
+						icon={BackArrow}
+						onClick={() => navigate(-1)}
+					>
+						{__("Go Back")}
+					</Button>
+				</>
+			}
+		>
+			<nav className="status-support" aria-label={__("Helpful links")}>
+				<h2 className="status-support-title">
+					{__("Pick up where you left off")}
+				</h2>
+				<div className="status-support-links">
+					<Link to="/dashboard/links">{__("All Links")}</Link>
+					<Link to="/dashboard/settings/general">
+						{__("General Settings")}
+					</Link>
 				</div>
-			</div>
-		</div>
+			</nav>
+		</StatusLayout>
 	);
 };
 

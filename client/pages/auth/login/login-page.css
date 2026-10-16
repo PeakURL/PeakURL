@@ -1,13 +1,6 @@
 @layer components {
 	.login-page-layout {
 		@apply flex min-h-screen;
-		background:
-			radial-gradient(
-				circle at top left,
-				rgb(181 200 250 / 0.12),
-				transparent 28%
-			),
-			linear-gradient(180deg, #020617 0%, #0f172a 45%, #111827 100%);
 	}
 
 	.login-page-aside {
@@ -59,11 +52,7 @@
 	}
 
 	.login-page-highlight-copy {
-		@apply text-[12px] text-slate-500;
-	}
-
-	.login-page-meta {
-		@apply inline-flex min-h-8 items-center rounded text-[13px] font-medium leading-5 text-slate-400 transition-colors duration-150 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-300;
+		@apply text-[12px] text-slate-400;
 	}
 
 	.login-page-aside-footer {
@@ -74,12 +63,8 @@
 		@apply flex justify-center px-6 pb-6 pt-2 lg:hidden;
 	}
 
-	.login-page-mobile-footer .login-page-meta {
-		@apply text-slate-500 hover:text-slate-900 focus-visible:outline-primary-500;
-	}
-
 	.login-page-panel {
-		@apply flex flex-1 flex-col bg-white text-slate-950;
+		@apply flex flex-1 flex-col bg-surface text-heading;
 	}
 
 	.login-page-mobile-header {
@@ -97,19 +82,19 @@
 	}
 
 	.login-page-card-icon {
-		@apply inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-700;
+		@apply inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-selected text-accent;
 	}
 
 	.login-page-card-title {
-		@apply mt-5 text-2xl font-bold tracking-tight text-slate-900;
+		@apply mt-5 text-2xl font-bold tracking-tight text-heading;
 	}
 
 	.login-page-card-copy {
-		@apply mt-2 text-sm leading-relaxed text-slate-500;
+		@apply mt-2 text-sm leading-relaxed text-text-muted;
 	}
 
 	.login-page-alert {
-		@apply mt-5 flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-3;
+		@apply mt-5 flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/30 dark:bg-red-500/10;
 	}
 
 	.login-page-alert-marker {
@@ -117,7 +102,7 @@
 	}
 
 	.login-page-alert-text {
-		@apply text-sm leading-relaxed text-red-700;
+		@apply text-sm leading-relaxed text-red-700 dark:text-red-300;
 	}
 
 	.login-page-form {
@@ -134,7 +119,7 @@
 
 	.login-page-link,
 	.login-page-secondary-link {
-		@apply text-sm font-medium text-primary-700 transition-colors duration-150 hover:text-primary-800;
+		@apply text-sm font-medium text-accent transition-colors duration-150 hover:text-heading;
 	}
 
 	.login-page-secondary-link {
@@ -150,15 +135,15 @@
 	}
 
 	.login-page-code-panel {
-		@apply rounded-2xl border border-slate-200 bg-slate-50/80 p-4;
+		@apply rounded-2xl border border-stroke bg-surface-alt p-4;
 	}
 
 	.login-page-muted-link {
-		@apply text-xs font-medium text-slate-500 transition-colors duration-150 hover:text-slate-700;
+		@apply text-xs font-medium text-text-muted transition-colors duration-150 hover:text-heading;
 	}
 
 	.login-page-submit {
-		@apply w-full rounded-xl bg-slate-900 px-5 py-3.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-slate-800 disabled:pointer-events-none disabled:opacity-60;
+		@apply w-full rounded-xl bg-action px-5 py-3.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-action-hover disabled:pointer-events-none disabled:opacity-60;
 	}
 
 	.login-page-submit-content {
@@ -174,7 +159,7 @@
 	}
 
 	.login-page-back-action {
-		@apply inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors duration-150 hover:text-slate-700;
+		@apply inline-flex items-center gap-1.5 text-xs font-medium text-text-muted transition-colors duration-150 hover:text-heading;
 	}
 	.login-page-remember-me {
 		@apply mb-4;
@@ -185,10 +170,10 @@
 	}
 
 	.login-page-remember-me-checkbox {
-		@apply h-4 w-4 rounded border-slate-300 text-accent transition-colors focus:ring-accent;
+		@apply h-4 w-4 rounded border-field-border text-accent transition-colors focus:ring-accent;
 	}
 
 	.login-page-remember-me-text {
-		@apply select-none text-sm font-medium text-slate-600 dark:text-slate-400;
+		@apply select-none text-sm font-medium text-text-muted;
 	}
 }

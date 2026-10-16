@@ -417,8 +417,40 @@ class Application {
 			);
 		}
 
+		$response = $this->format_public_error_response( $response, $request );
+
 		$this->send_response( $response, $request );
 		$this->background_runner->dispatch_post_response();
+	}
+
+	/**
+	 * Adapt browser failures while preserving API responses, status, and headers.
+	 *
+	 * @param array<string, mixed> $response Structured handler response.
+	 * @param Request              $request  Original request.
+	 * @return array<string, mixed> Browser HTML or the unchanged response.
+	 */
+	private function format_public_error_response( array $response, Request $request ): array {
+		// Browser-facing failures share the public status layout; API contracts stay JSON.
+		$status = (int) ( $response['status'] ?? 200 );
+		$is_api = preg_match( '#^/api(?:/|$)#', $request->get_path() );
+		if ( ! $is_api && $status >= 400 && is_array( $response['body'] ?? null ) ) {
+			$debug               = 'development' === ( $this->config[ Constants::ENV ] ?? 'production' )
+				|| ! empty( $this->config[ Constants::DEBUG ] );
+			$headers             = $response['headers'] ?? array();
+			$response            = JsonResponse::text(
+				\PeakURL\Services\StatusPage::render_http_error(
+					$status,
+					$request->get_base_path(),
+					$debug ? (string) ( $response['body']['message'] ?? '' ) : '',
+				),
+				$status,
+				'text/html; charset=utf-8',
+			);
+			$response['headers'] = array_merge( $headers, $response['headers'] );
+		}
+
+		return $response;
 	}
 
 	/**

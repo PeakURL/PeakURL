@@ -2,7 +2,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 
 import { DEFAULT_AUTH_LOGO_URL } from "@constants";
-import { Logo } from "@/components";
+import { Logo, PoweredBy } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 
@@ -75,6 +75,9 @@ function AuthLayout({
 						{children}
 					</section>
 				</div>
+				<footer className="auth-page-powered">
+					<PoweredBy />
+				</footer>
 			</div>
 		</main>
 	);

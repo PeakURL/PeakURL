@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
 	ArrowDown,
@@ -153,6 +152,7 @@ function LinksPage() {
 		data: urlsRes,
 		refetch: refetchUrls,
 		isLoading: isUrlsLoading,
+		isFetching: isRefreshing,
 	} = useGetUrlsQuery(urlsQueryArgs, { skip: !canViewLinks });
 
 	const apiItems: LinkRecord[] = urlsRes?.data?.items ?? [];
@@ -182,40 +182,21 @@ function LinksPage() {
 	const statsLink = statsLinkRes?.data ?? null;
 	const { data: siteSettingsRes } = useGetGeneralSettingsQuery();
 	const trashRetentionDays = siteSettingsRes?.data?.trashRetentionDays ?? 30;
-	const [isRefreshing, setIsRefreshing] = useState(false);
-
 	const handleRefresh = async () => {
-		if (isRefreshing) {
-			return;
-		}
-
-		setIsRefreshing(true);
-		const startedAt = Date.now();
-
-		try {
-			await Promise.allSettled([
-				canViewLinks ? refetchUrls() : Promise.resolve(),
-				canViewLinks
-					? dispatch(
-							urlsApi.endpoints.getUrls.initiate(undefined, {
-								subscribe: false,
-								forceRefetch: true,
-							})
-						)
-					: Promise.resolve(),
-				statsShortId && canViewLinks && canViewAnalytics
-					? refetchStatsLookup()
-					: Promise.resolve(),
-			]);
-		} finally {
-			const remaining = 700 - (Date.now() - startedAt);
-
-			if (remaining > 0) {
-				window.setTimeout(() => setIsRefreshing(false), remaining);
-			} else {
-				setIsRefreshing(false);
-			}
-		}
+		await Promise.allSettled([
+			canViewLinks ? refetchUrls() : Promise.resolve(),
+			canViewLinks
+				? dispatch(
+						urlsApi.endpoints.getUrls.initiate(undefined, {
+							subscribe: false,
+							forceRefetch: true,
+						})
+					)
+				: Promise.resolve(),
+			statsShortId && canViewLinks && canViewAnalytics
+				? refetchStatsLookup()
+				: Promise.resolve(),
+		]);
 	};
 
 	const handleRestoreLink = async (link: LinkRecord) => {

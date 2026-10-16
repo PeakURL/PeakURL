@@ -1,20 +1,16 @@
-import {
-	AlertTriangle,
-	Database,
-	RefreshCw,
-	Route,
-	ServerCog,
-	ServerOff,
-} from "lucide-react";
+import { Database, RefreshCw, Route, ServerCog } from "lucide-react";
 import { useState } from "react";
 
-import { API_CLIENT_BASE_URL, PEAKURL_DEBUG, PEAKURL_NAME } from "@constants";
+import { API_CLIENT_BASE_URL, PEAKURL_DEBUG } from "@constants";
 import { Button } from "@/components/ui";
 import { __, sprintf } from "@/i18n";
 import { extractErrorMessage, getErrorStatus } from "@/shared/errors";
 
-import { Logo } from "../Logo";
+import { StatusLayout } from "../StatusLayout";
 import type { ApiErrorPageProps } from "../types";
+
+// Keep retry feedback visible long enough to avoid a flicker on fast failures.
+const RETRY_FEEDBACK_MS = 800;
 
 function getStatusText(error: unknown): string {
 	const status = getErrorStatus(error);
@@ -87,13 +83,12 @@ export function ApiErrorPage({
 	error,
 	onRetry,
 	isRetrying = false,
-	title = sprintf(__("%s cannot connect to the backend"), PEAKURL_NAME),
+	title = __("Unable to connect to the backend"),
 	description = __(
-		"The dashboard could not complete the session check. Start the PHP service and database, then retry."
+		"PeakURL couldn’t complete the connection to your server. Please try again."
 	),
 }: ApiErrorPageProps) {
 	const [localRetrying, setLocalRetrying] = useState(false);
-	const [isFlashing, setIsFlashing] = useState(false);
 	const retrying = isRetrying || localRetrying;
 	const [prevError, setPrevError] = useState(error);
 	const [lastError, setLastError] = useState(error);
@@ -112,145 +107,108 @@ export function ApiErrorPage({
 			return;
 		}
 
-		setIsFlashing(true);
 		setLocalRetrying(true);
 
-		// Ensure at least one full rotation (800ms per CSS animation)
+		// Match the spinner cycle while the session check retries.
 		const minRotationTime = new Promise((resolve) =>
-			setTimeout(resolve, 800)
+			setTimeout(resolve, RETRY_FEEDBACK_MS)
 		);
 
 		try {
 			await Promise.all([onRetry(), minRotationTime]);
 		} finally {
 			setLocalRetrying(false);
-			setTimeout(() => setIsFlashing(false), 400);
 		}
 	};
 
 	return (
-		<main id="page-container" className="api-error-page">
-			<div className="api-error-container">
-				<header className="api-error-header">
-					<Logo size="md" />
-					<span className="api-error-status-pill">
-						{__("Service unavailable")}
-					</span>
-				</header>
+		<StatusLayout
+			title={title}
+			description={description}
+			label={__("Backend connection error")}
+			note={__(
+				"If the problem persists, contact your site administrator."
+			)}
+			actions={
+				<Button
+					size="md"
+					icon={RefreshCw}
+					onClick={handleRetry}
+					disabled={retrying}
+					className={`api-error-retry ${retrying ? "api-error-retry-checking" : ""}`}
+				>
+					{retrying
+						? __("Checking connection")
+						: __("Retry connection")}
+				</Button>
+			}
+		>
+			{PEAKURL_DEBUG ? (
+				<section
+					className="api-error-debug"
+					aria-labelledby="connection-details-heading"
+				>
+					<header className="api-error-debug-header">
+						<h2
+							id="connection-details-heading"
+							className="api-error-debug-title-group"
+						>
+							{__("Connection details")}
+						</h2>
+						<span className="api-error-debug-status">
+							{statusText}
+						</span>
+					</header>
 
-				<div className="api-error-main">
-					<div className="api-error-hero">
-						<div className="api-error-icon">
-							<ServerOff size={32} aria-hidden="true" />
-						</div>
+					<div className="api-error-debug-body">
+						<dl className="api-error-details-grid">
+							<div className="api-error-detail">
+								<dt>{__("API endpoint")}</dt>
+								<dd>
+									<code>{API_CLIENT_BASE_URL}</code>
+								</dd>
+							</div>
+							<div className="api-error-detail">
+								<dt>{__("What went wrong")}</dt>
+								<dd>{detailText}</dd>
+							</div>
+						</dl>
 
-						<div className="api-error-copy">
-							<p className="api-error-kicker">
-								{__("Connection issue")}
+						<div className="api-error-checks">
+							<p className="api-error-checks-title">
+								{__("Check these first")}
 							</p>
-							<h1 id="page-heading" className="api-error-title">
-								{title}
-							</h1>
-							<p className="api-error-description">
-								{description}
-							</p>
-						</div>
+							<ul className="api-error-check-list">
+								{checks.map((item) => {
+									const Icon = item.icon;
 
-						<div className="api-error-actions">
-							<Button
-								size="md"
-								icon={RefreshCw}
-								onClick={handleRetry}
-								disabled={retrying}
-								className={`api-error-retry ${
-									retrying ? "api-error-retry-checking" : ""
-								} ${
-									isFlashing ? "api-error-retry-flashing" : ""
-								}`}
-							>
-								{retrying
-									? __("Checking connection")
-									: __("Retry connection")}
-							</Button>
+									return (
+										<li
+											key={item.title}
+											className="api-error-check-item"
+										>
+											<span className="api-error-check-icon-box">
+												<Icon
+													size={18}
+													aria-hidden="true"
+												/>
+											</span>
+											<span className="api-error-check-text">
+												<span className="api-error-check-title">
+													{item.title}
+												</span>
+												<span className="api-error-check-description">
+													{item.description}
+												</span>
+											</span>
+										</li>
+									);
+								})}
+							</ul>
 						</div>
-
-						<p className="api-error-note">
-							{__(
-								"If the problem continues, ask the site administrator to check the server."
-							)}
-						</p>
 					</div>
-
-					{PEAKURL_DEBUG ? (
-						<div className="api-error-debug">
-							<div className="api-error-debug-header">
-								<div className="api-error-debug-title-group">
-									<div className="api-error-debug-icon">
-										<AlertTriangle
-											size={16}
-											aria-hidden="true"
-										/>
-									</div>
-									<div className="api-error-debug-title">
-										{__("Debug details")}
-									</div>
-								</div>
-								<span className="api-error-badge">
-									{statusText}
-								</span>
-							</div>
-
-							<div className="api-error-debug-body">
-								<dl className="api-error-details-grid">
-									<div className="api-error-detail">
-										<dt>{__("API endpoint")}</dt>
-										<dd>
-											<code>{API_CLIENT_BASE_URL}</code>
-										</dd>
-									</div>
-									<div className="api-error-detail">
-										<dt>{__("What went wrong")}</dt>
-										<dd>{detailText}</dd>
-									</div>
-								</dl>
-
-								<div className="api-error-checks">
-									<p className="api-error-checks-title">
-										{__("Check these first")}
-									</p>
-									<ul className="api-error-check-list">
-										{checks.map((item) => {
-											const Icon = item.icon;
-
-											return (
-												<li
-													key={item.title}
-													className="api-error-check-item"
-												>
-													<span className="api-error-check-icon-box">
-														<Icon
-															size={18}
-															aria-hidden="true"
-														/>
-													</span>
-													<span className="api-error-check-text">
-														<span className="api-error-check-title">
-															{item.title}
-														</span>
-														<span className="api-error-check-description">
-															{item.description}
-														</span>
-													</span>
-												</li>
-											);
-										})}
-									</ul>
-								</div>
-							</div>
-						</div>
-					) : null}
-				</div>
-			</div>
-		</main>
+				</section>
+			) : null}
+		</StatusLayout>
 	);
 }

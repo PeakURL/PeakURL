@@ -15,12 +15,13 @@ import { LOGIN_LOGO_URL, LOGIN_POWERED_BY_URL } from "@constants";
 import {
 	ApiErrorPage,
 	Logo,
+	PoweredBy,
 	CaptchaWidget,
 	Input,
 	PageLoader,
 	VerificationCodeInput,
 } from "@/components";
-import { __, sprintf } from "@/i18n";
+import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import {
 	requestClosestFormSubmit,
@@ -119,26 +120,12 @@ function LoginPage() {
 	if (isApiError) {
 		return (
 			<ApiErrorPage
-				title={__("Authentication is temporarily unavailable")}
-				description={__(
-					"PeakURL could not verify your signed-in state. The server may be restarting or unreachable."
-				)}
 				error={error}
 				isRetrying={isRetryingApiCheck}
 				onRetry={refetch}
 			/>
 		);
 	}
-	const poweredByLink = (
-		<a
-			href={LOGIN_POWERED_BY_URL}
-			target="_blank"
-			rel="noopener noreferrer"
-			className="login-page-meta"
-		>
-			{sprintf(__("Powered by %s"), "PeakURL")}
-		</a>
-	);
 
 	return (
 		<main id="page-container" className="login-page-layout">
@@ -186,7 +173,7 @@ function LoginPage() {
 				</div>
 
 				<footer className="login-page-aside-footer">
-					{poweredByLink}
+					<PoweredBy href={LOGIN_POWERED_BY_URL} inverse />
 				</footer>
 			</aside>
 
@@ -260,7 +247,6 @@ function LoginPage() {
 								disabled={submitPending || twoFactorRequired}
 								placeholder={__("you@company.com")}
 								required
-								className="login-page-input"
 							/>
 
 							<Input
@@ -278,7 +264,6 @@ function LoginPage() {
 								disabled={submitPending || twoFactorRequired}
 								placeholder="••••••••"
 								required
-								className="login-page-input"
 							/>
 
 							{!twoFactorRequired ? (
@@ -338,7 +323,6 @@ function LoginPage() {
 												placeholder={__(
 													"xxxx-xxxx-xxxx"
 												)}
-												className="login-page-input"
 											/>
 											<button
 												type="button"
@@ -446,7 +430,7 @@ function LoginPage() {
 					</div>
 				</div>
 				<footer className="login-page-mobile-footer">
-					{poweredByLink}
+					<PoweredBy href={LOGIN_POWERED_BY_URL} />
 				</footer>
 			</section>
 		</main>

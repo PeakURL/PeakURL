@@ -45,7 +45,7 @@ function SocialPreviewTab({
 					value={socialTitle}
 					onChange={(event) => setSocialTitle(event.target.value)}
 					placeholder={__("Use link title")}
-					className="form-control-surface-alt form-control-compact form-control-strong-focus"
+					className="form-control-compact"
 				/>
 				<TextArea
 					label={__("Preview Description")}
@@ -57,7 +57,7 @@ function SocialPreviewTab({
 					placeholder={__(
 						"Short description for Facebook, X, LinkedIn, and messaging apps"
 					)}
-					className="form-control-surface-alt form-control-compact form-control-strong-focus"
+					className="form-control-compact"
 				/>
 			</div>
 			<div className="links-edit-drawer-image-field">
@@ -69,7 +69,7 @@ function SocialPreviewTab({
 						onSocialImageUrlChange(event.target.value)
 					}
 					placeholder="https://example.com/image.jpg"
-					className="form-control-surface-alt form-control-compact form-control-strong-focus"
+					className="form-control-compact"
 				/>
 				<div className="links-edit-drawer-separator">
 					<div className="links-edit-drawer-separator-line"></div>

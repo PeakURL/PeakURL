@@ -9,7 +9,7 @@
 	}
 
 	.links-table-header-cell {
-		@apply px-4 py-3 align-middle text-xs font-semibold uppercase tracking-wide text-text-muted text-start;
+		@apply px-4 py-3 align-middle text-xs font-semibold uppercase tracking-wide text-table-head-text text-start;
 	}
 
 	.links-table-header-cell-select {
@@ -29,7 +29,7 @@
 	}
 
 	.links-table-header-sort-btn {
-		@apply inline-flex items-center gap-1.5 uppercase tracking-wide text-xs font-semibold text-text-muted hover:text-heading transition-colors cursor-pointer select-none focus:outline-hidden;
+		@apply inline-flex items-center gap-1.5 uppercase tracking-wide text-xs font-semibold text-table-head-text hover:text-heading transition-colors cursor-pointer select-none rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
 
 	.links-table-header-sort-btn:hover .links-table-sort-triangle-inactive {

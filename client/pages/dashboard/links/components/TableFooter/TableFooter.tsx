@@ -119,7 +119,7 @@ const TableFooter = ({
 							options={statusOptions}
 							className="links-table-footer-select-wide"
 							ariaLabel={__("Filter links by status")}
-							buttonClassName="form-control-surface-alt form-control-compact"
+							buttonClassName="form-control-compact"
 						/>
 					)}
 
@@ -129,7 +129,7 @@ const TableFooter = ({
 						options={sortOptions}
 						className="links-table-footer-select-wide"
 						ariaLabel={__("Sort links")}
-						buttonClassName="form-control-surface-alt form-control-compact"
+						buttonClassName="form-control-compact"
 					/>
 
 					<Select
@@ -138,7 +138,7 @@ const TableFooter = ({
 						options={sortOrderOptions}
 						className="links-table-footer-select"
 						ariaLabel={__("Sort order")}
-						buttonClassName="form-control-surface-alt form-control-compact"
+						buttonClassName="form-control-compact"
 					/>
 
 					<PageSizeControl

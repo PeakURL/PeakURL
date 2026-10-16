@@ -121,7 +121,6 @@ function ForgotPasswordPage() {
 						onKeyDown={submitFormOnEnter}
 						required
 						error={formError}
-						className="auth-page-input"
 					/>
 					<CaptchaWidget ref={captchaRef} />
 					<Button

@@ -113,7 +113,7 @@
 	}
 
 	.activity-page-table-head {
-		@apply grid items-center gap-3 border-b border-stroke bg-surface-alt/60 px-4 py-3 text-xs font-medium text-text-muted sm:px-5;
+		@apply grid items-center gap-3 border-b border-stroke bg-table-head px-4 py-3 text-xs font-semibold text-table-head-text sm:px-5;
 		grid-template-columns: 40px minmax(0, 1fr);
 		text-align: start;
 	}

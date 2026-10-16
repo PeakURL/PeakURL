@@ -186,12 +186,16 @@ function PluginsPage() {
 							<div className="plugins-page-view-toggle">
 								<button
 									onClick={() => setViewMode("grid")}
+									aria-label={__("Grid view")}
+									aria-pressed={viewMode === "grid"}
 									className={getViewButtonClassName("grid")}
 								>
 									<Grid3X3 size={14} />
 								</button>
 								<button
 									onClick={() => setViewMode("list")}
+									aria-label={__("List view")}
+									aria-pressed={viewMode === "list"}
 									className={getViewButtonClassName("list")}
 								>
 									<LayoutList size={14} />

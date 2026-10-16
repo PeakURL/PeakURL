@@ -56,7 +56,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 						aria-describedby={describedBy}
 						className={cn(
 							"form-control-base",
-							"form-control-accent-focus",
 							"text-page-start",
 							"form-field-textarea",
 							placeholderFollowsPageDirection &&

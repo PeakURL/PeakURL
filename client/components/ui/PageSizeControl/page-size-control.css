@@ -1,20 +1,14 @@
 @layer components {
 	.page-size-control {
-		@apply min-w-44;
+		@apply min-w-0 sm:min-w-44;
 	}
 
 	.page-size-control-select {
-		@apply min-w-44;
+		@apply min-w-0 sm:min-w-44;
 	}
 
 	.page-size-control-editor {
-		@apply flex min-w-44 items-center gap-1 rounded-lg border border-stroke bg-surface-alt p-1;
-	}
-
-	.page-size-control-editor:focus-within {
-		border-color: var(--color-accent);
-		box-shadow: 0 0 0 1px
-			color-mix(in srgb, var(--color-accent) 28%, transparent);
+		@apply flex min-w-0 items-center gap-1 rounded-lg border border-field-border bg-field-bg p-1;
 	}
 
 	.page-size-control-input {

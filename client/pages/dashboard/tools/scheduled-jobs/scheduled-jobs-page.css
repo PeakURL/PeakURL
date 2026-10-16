@@ -1,4 +1,8 @@
 @layer components {
+	.scheduled-jobs-search-input {
+		@apply ps-9 pe-3;
+	}
+
 	/* ─── Page Container ─── */
 	.scheduled-jobs-page {
 		@apply space-y-4 pb-8 sm:space-y-5;
@@ -155,7 +159,7 @@
 
 	.scheduled-jobs-table th,
 	.jobs-table th {
-		@apply bg-surface-alt px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted border-b border-stroke/70 text-start;
+		@apply bg-table-head px-4 py-3 text-xs font-semibold uppercase tracking-wide text-table-head-text border-b border-stroke/70 text-start;
 	}
 
 	.scheduled-jobs-table td,
@@ -401,7 +405,7 @@
 
 	.scheduled-jobs-drawer-table th,
 	.history-table th {
-		@apply bg-surface-alt px-3.5 py-2.5 text-[11px] font-semibold text-text-muted uppercase tracking-wider border-b border-stroke/60 text-start;
+		@apply bg-table-head px-3.5 py-2.5 text-xs font-semibold text-table-head-text uppercase tracking-wider border-b border-stroke/60 text-start;
 	}
 
 	.scheduled-jobs-drawer-table td,

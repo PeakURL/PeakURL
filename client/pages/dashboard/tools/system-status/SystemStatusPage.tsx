@@ -349,6 +349,7 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 			<button
 				type="button"
 				onClick={onToggle}
+				aria-expanded={isOpen}
 				className="system-status-page-info-toggle"
 			>
 				<span className="system-status-page-info-title">
@@ -377,7 +378,10 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 												: ""
 										}
 									>
-										<th className="system-status-page-info-heading">
+										<th
+											scope="row"
+											className="system-status-page-info-heading"
+										>
 											{item.label}
 										</th>
 										<td className="system-status-page-info-value-cell">

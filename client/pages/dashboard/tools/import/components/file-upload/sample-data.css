@@ -21,7 +21,8 @@
 	}
 
 	.import-sample-header-cell {
-		@apply bg-surface-alt px-3 py-2 text-xs font-semibold text-heading;
+		@apply bg-table-head px-3 py-2 text-xs font-semibold text-table-head-text;
+		text-align: start;
 	}
 
 	.import-sample-row {

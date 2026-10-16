@@ -1,8 +1,8 @@
-import { Clock, History, Link2, RefreshCw, Users } from "lucide-react";
+import { Clock, History, Link2, Users } from "lucide-react";
 
 import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __ } from "@/i18n";
-import { PageHeader } from "@/components";
+import { PageHeader, RefreshButton } from "@/components";
 import { cn, formatCount, formatDate } from "@/shared/formatting";
 
 import { formatExactTimestamp } from "../../lib";
@@ -11,7 +11,7 @@ import type { ActivitySummaryCounts } from "../../types";
 interface ActivityHeaderProps {
 	summaryCounts: ActivitySummaryCounts;
 	isRefreshing: boolean;
-	onRefresh: () => void;
+	onRefresh: () => void | Promise<unknown>;
 }
 
 export function ActivityHeader({
@@ -69,18 +69,11 @@ export function ActivityHeader({
 					"Review link changes and user-management events in one place with filters, timestamps, and actor details."
 				)}
 				actions={
-					<button
-						type="button"
-						onClick={onRefresh}
-						disabled={isRefreshing}
-						className="page-header-icon-button"
-						aria-label={__("Refresh activity history")}
-						title={__("Refresh activity history")}
-					>
-						<RefreshCw
-							className={cn(isRefreshing && "animate-spin")}
-						/>
-					</button>
+					<RefreshButton
+						onRefresh={onRefresh}
+						isRefreshing={isRefreshing}
+						label={__("Refresh activity history")}
+					/>
 				}
 			/>
 

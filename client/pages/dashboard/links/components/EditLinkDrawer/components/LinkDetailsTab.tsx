@@ -57,7 +57,7 @@ function LinkDetailsTab({
 				autoCapitalize="off"
 				spellCheck={false}
 				required
-				className="form-control-surface-alt form-control-compact form-control-strong-focus"
+				className="form-control-compact"
 			/>
 			<Input
 				label={__("Title (Optional)")}
@@ -65,7 +65,7 @@ function LinkDetailsTab({
 				value={title}
 				onChange={(event) => setTitle(event.target.value)}
 				placeholder={__("Enter a title for this link")}
-				className="form-control-surface-alt form-control-compact form-control-strong-focus"
+				className="form-control-compact"
 			/>
 			<div className="links-edit-drawer-field-grid">
 				<div>
@@ -78,7 +78,7 @@ function LinkDetailsTab({
 						onChange={(event) => setExpiresAt(event.target.value)}
 						min={getLocalDateTimeValue()}
 						step="60"
-						className="form-control-surface-alt form-control-compact form-control-strong-focus"
+						className="form-control-compact"
 					/>
 				</div>
 				<div>
@@ -90,7 +90,7 @@ function LinkDetailsTab({
 						onChange={setStatus}
 						options={statusOptions}
 						ariaLabel={__("Link status")}
-						buttonClassName="form-control-surface-alt form-control-compact"
+						buttonClassName="form-control-compact"
 					/>
 				</div>
 			</div>

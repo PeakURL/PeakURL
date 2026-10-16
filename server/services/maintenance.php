@@ -139,83 +139,16 @@ if ( ! function_exists( 'render_maintenance_page' ) ) {
 	 * @since 1.0.8
 	 */
 	function render_maintenance_page( array $maintenance_view_data ): string {
-		$html_lang          = htmlspecialchars(
-			(string) ( $maintenance_view_data['htmlLang'] ?? 'en-US' ),
-			ENT_QUOTES,
-			'UTF-8',
-		);
-		$text_direction     = 'rtl' === strtolower( (string) ( $maintenance_view_data['textDirection'] ?? 'ltr' ) )
-			? 'rtl'
-			: 'ltr';
-		$title              = htmlspecialchars(
-			(string) ( $maintenance_view_data['title'] ?? 'PeakURL is briefly unavailable' ),
-			ENT_QUOTES,
-			'UTF-8',
-		);
-		$status_label       = htmlspecialchars(
-			(string) ( $maintenance_view_data['statusLabel'] ?? 'Update in progress' ),
-			ENT_QUOTES,
-			'UTF-8',
-		);
-		$heading            = htmlspecialchars(
-			(string) ( $maintenance_view_data['heading'] ?? 'Briefly unavailable' ),
-			ENT_QUOTES,
-			'UTF-8',
-		);
-		$message            = htmlspecialchars(
-			(string) ( $maintenance_view_data['message'] ?? 'We are finishing an update right now. Please refresh this page in a moment.' ),
-			ENT_QUOTES,
-			'UTF-8',
-		);
-		$supporting_message = htmlspecialchars(
-			(string) ( $maintenance_view_data['supportingMessage'] ?? 'Your dashboard and short links will be back shortly.' ),
-			ENT_QUOTES,
-			'UTF-8',
-		);
-		$loading_label      = htmlspecialchars(
-			(string) ( $maintenance_view_data['loadingLabel'] ?? 'Loading' ),
-			ENT_QUOTES,
-			'UTF-8',
-		);
-		$generator_meta     = get_generator_tag(
-			! empty( $maintenance_view_data['version'] ) ? (string) $maintenance_view_data['version'] : null
-		);
+		$heading = (string) ( $maintenance_view_data['heading'] ?? 'Briefly unavailable' );
+		$content = '<p class="status-eyebrow">' . htmlspecialchars( (string) ( $maintenance_view_data['statusLabel'] ?? 'Update in progress' ), ENT_QUOTES, 'UTF-8' ) . '</p>' .
+			'<h1 class="status-title">' . htmlspecialchars( $heading, ENT_QUOTES, 'UTF-8' ) . '</h1>' .
+			'<p class="status-description">' . htmlspecialchars( (string) ( $maintenance_view_data['message'] ?? 'We are finishing an update right now. Please refresh this page in a moment.' ), ENT_QUOTES, 'UTF-8' ) . '</p>' .
+			'<p class="status-note">' . htmlspecialchars( (string) ( $maintenance_view_data['supportingMessage'] ?? 'Your dashboard and short links will be back shortly.' ), ENT_QUOTES, 'UTF-8' ) . '</p>';
 
-		return '<!doctype html>' .
-			'<html lang="' . $html_lang . '" dir="' . $text_direction . '">' .
-			'<head>' .
-			'<meta charset="utf-8">' .
-			'<title>' . $title . '</title>' .
-			'<meta name="viewport" content="width=device-width, initial-scale=1">' .
-			( '' !== $generator_meta ? "\n\t\t" . $generator_meta : '' ) .
-			'<style>' .
-			'body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top,#eef2ff 0,#f8fafc 38%,#eef2ff 100%);color:#0f172a;min-height:100vh}' .
-			'.shell{min-height:100vh;display:grid;place-items:center;padding:24px}' .
-			'.card{width:min(100%,540px);background:rgba(255,255,255,.96);border:1px solid rgba(99,102,241,.14);border-radius:28px;box-shadow:0 28px 90px rgba(15,23,42,.12);padding:36px 32px}' .
-			'.status{display:flex;align-items:center;gap:14px;margin-bottom:22px}' .
-			'.status-label{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#6366f1}' .
-			'.loader{width:18px;height:18px;border-radius:999px;border:2px solid rgba(99,102,241,.18);border-top-color:#6366f1;animation:peakurl-spin .8s linear infinite;flex:none}' .
-			'h1{margin:0 0 14px;font-size:clamp(2rem,4vw,2.6rem);line-height:1.04;letter-spacing:-.04em;color:#111827}' .
-			'p{margin:0;font-size:1rem;line-height:1.75;color:#475569}' .
-			'.supporting{margin-top:14px;color:#64748b}' .
-			'@keyframes peakurl-spin{to{transform:rotate(360deg)}}' .
-			'@media (max-width:640px){.shell{padding:18px}.card{padding:30px 22px;border-radius:24px}}' .
-			'</style>' .
-			'</head>' .
-			'<body>' .
-			'<main class="shell">' .
-			'<section class="card">' .
-			'<div class="status">' .
-			'<div class="loader" aria-hidden="true"></div>' .
-			'<span class="status-label">' . $status_label . '</span>' .
-			'<span class="screen-reader-text" style="position:absolute;left:-9999px">' . $loading_label . '</span>' .
-			'</div>' .
-			'<h1>' . $heading . '</h1>' .
-			'<p>' . $message . '</p>' .
-			'<p class="supporting">' . $supporting_message . '</p>' .
-			'</section>' .
-			'</main>' .
-			'</body>' .
-			'</html>';
+		return \PeakURL\Services\StatusPage::render_document(
+			(string) ( $maintenance_view_data['title'] ?? $heading ),
+			$content,
+			$maintenance_view_data,
+		);
 	}
 }

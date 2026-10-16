@@ -1,6 +1,6 @@
 @layer components {
 	.dashboard-header {
-		@apply sticky top-0 z-30 w-full border-b border-stroke bg-surface;
+		@apply sticky top-0 z-30 w-full border-b border-navigation-stroke bg-surface;
 	}
 
 	.dashboard-header-inner {

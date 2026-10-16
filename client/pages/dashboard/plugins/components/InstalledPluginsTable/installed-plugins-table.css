@@ -44,12 +44,13 @@
 	}
 
 	.plugins-table-head-row {
-		@apply border-b border-stroke bg-surface-alt/60;
+		@apply border-b border-stroke bg-table-head;
 		text-align: start;
 	}
 
 	.plugins-table-head-cell {
-		@apply px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted;
+		@apply px-4 py-3 text-xs font-semibold uppercase tracking-wide text-table-head-text;
+		text-align: start;
 	}
 
 	.plugins-table-head-cell-end {

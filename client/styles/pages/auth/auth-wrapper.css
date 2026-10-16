@@ -47,20 +47,20 @@
 }
 
 @layer components {
-	.auth-page {
+	.auth-page,
+	.login-page-layout {
 		@apply min-h-screen text-white;
 		background:
 			radial-gradient(
 				circle at top left,
-				rgb(99 102 241 / 0.18),
+				color-mix(in srgb, var(--color-primary-300) 16%, transparent),
 				transparent 32%
 			),
-			radial-gradient(
-				circle at bottom right,
-				rgb(16 185 129 / 0.12),
-				transparent 28%
-			),
-			linear-gradient(180deg, #020617 0%, #0f172a 48%, #111827 100%);
+			linear-gradient(
+				180deg,
+				var(--color-primary-950),
+				var(--color-primary-900)
+			);
 	}
 
 	.auth-page-recovery {
@@ -117,7 +117,7 @@
 	}
 
 	.auth-page-card {
-		@apply min-w-0 rounded-[28px] border border-slate-200/80 bg-white p-6 text-slate-950 shadow-2xl shadow-slate-950/10 sm:p-8;
+		@apply min-w-0 rounded-[28px] border border-stroke bg-surface p-6 text-heading shadow-2xl shadow-slate-950/10 sm:p-8;
 		-webkit-animation: auth-page-scale-in 0.45s ease-out 0.08s both;
 		animation: auth-page-scale-in 0.45s ease-out 0.08s both;
 	}
@@ -135,7 +135,7 @@
 	}
 
 	.auth-page-logo .logo-name {
-		@apply text-xl leading-7 text-slate-900;
+		@apply text-xl leading-7 text-heading;
 	}
 
 	.auth-page-logo.logo-dark .logo-name {
@@ -147,53 +147,27 @@
 	}
 
 	.auth-page-back-link {
-		@apply inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-900;
+		@apply inline-flex items-center gap-2 text-sm font-medium text-text-muted transition hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent;
 	}
 
 	.auth-page-card-title {
-		@apply text-3xl font-semibold tracking-tight text-slate-950;
+		@apply text-3xl font-semibold tracking-tight text-heading;
 	}
 
 	.auth-page-card-copy {
-		@apply mt-3 text-sm leading-6 text-slate-500;
+		@apply mt-3 text-sm leading-6 text-text-muted;
 	}
 
 	.auth-page-form {
 		@apply mt-8 space-y-5;
 	}
 
-	.auth-page-form .form-field-label,
-	.login-page-form .form-field-label {
-		@apply text-slate-700;
-	}
-
-	.auth-page-form .form-field-icon,
-	.login-page-form .form-field-icon {
-		@apply text-slate-400;
-	}
-
-	.auth-page-input,
-	.login-page-input {
-		@apply rounded-xl! border-slate-200! bg-slate-50! py-3! text-sm! text-slate-900! caret-slate-900 transition-colors duration-150 placeholder:text-slate-400 focus:border-primary-400! focus:bg-white! focus:ring-2! focus:ring-primary-500/15!;
-	}
-
-	.auth-page-input:-webkit-autofill,
-	.login-page-input:-webkit-autofill {
-		-webkit-text-fill-color: rgb(15 23 42);
-		box-shadow: 0 0 0 1000px rgb(248 250 252) inset;
-	}
-
-	.auth-page-input:focus:-webkit-autofill,
-	.login-page-input:focus:-webkit-autofill {
-		box-shadow: 0 0 0 1000px rgb(255 255 255) inset;
-	}
-
 	.auth-page-submit {
-		@apply w-full rounded-xl! bg-slate-900! py-3.5! text-sm! font-semibold! text-white! shadow-none! hover:bg-slate-800! focus:ring-slate-900/10! focus:ring-offset-0!;
+		@apply w-full rounded-xl py-3.5 text-sm font-semibold shadow-none;
 	}
 
 	.auth-page-status {
-		@apply mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900;
+		@apply mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
 	}
 
 	.auth-page-status-title {
@@ -205,6 +179,12 @@
 	}
 
 	.auth-page-status-link {
-		@apply mt-4 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 transition hover:text-emerald-900;
+		@apply mt-4 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 transition hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-emerald-200;
+	}
+}
+
+@layer components {
+	.auth-page-powered {
+		@apply mt-6 flex justify-center;
 	}
 }

@@ -64,14 +64,6 @@ function ActivityPage() {
 	const [restoreActivityLink, { isLoading: isRestoringLink }] =
 		useRestoreActivityLinkMutation();
 
-	const handleRefresh = async () => {
-		try {
-			await refetch();
-		} catch {
-			// Handled by RTK Query
-		}
-	};
-
 	const handleRestoreActivityLink = async (activity: RecentActivity) => {
 		if (!activity.id) return;
 
@@ -154,7 +146,7 @@ function ActivityPage() {
 			<ActivityHeader
 				summaryCounts={summaryCounts}
 				isRefreshing={isFetching}
-				onRefresh={handleRefresh}
+				onRefresh={refetch}
 			/>
 
 			<ActivityCategoryTabs

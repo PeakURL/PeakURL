@@ -1,0 +1,64 @@
+/* One badge presentation for React auth/status pages and PHP public/installer pages. */
+.powered-by {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	max-width: 100%;
+	padding: 6px 12px;
+	border: 1px solid
+		color-mix(
+			in srgb,
+			var(--color-stroke, var(--status-line, #d9dee7)) 75%,
+			transparent
+		);
+	border-radius: 999px;
+	background: var(--color-surface, var(--status-surface, #fff));
+	color: var(--color-text-muted, var(--status-muted, #596579));
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.3;
+	text-decoration: none;
+	transition:
+		border-color 0.15s ease,
+		background 0.15s ease;
+}
+.powered-by .powered-by-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	color: var(--color-heading, var(--status-ink, #2b3040));
+	font-size: 13px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+.powered-by img {
+	display: block;
+	width: 22px;
+	height: 22px;
+	flex: none;
+}
+.powered-by:hover {
+	border-color: var(
+		--color-field-border-hover,
+		var(--status-accent, #5c719f)
+	);
+}
+.powered-by:focus-visible {
+	outline: 2px solid var(--color-field-focus, var(--status-accent, #5c719f));
+	outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+	.powered-by {
+		transition: none;
+	}
+}
+
+.powered-by-inverse {
+	--color-stroke: #364155;
+	--color-surface: #1c2230;
+	--color-text-muted: #b1bbcc;
+	--color-heading: #f8fafc;
+	--color-field-border-hover: #6d7c94;
+	--color-field-focus: #b5c8fa;
+}

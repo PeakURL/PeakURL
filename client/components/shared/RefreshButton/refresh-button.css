@@ -1,0 +1,16 @@
+@layer components {
+	.refresh-button-icon-spinning {
+		animation: refresh-button-turn 800ms linear infinite;
+	}
+	@keyframes refresh-button-turn {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.refresh-button-icon-spinning {
+			animation-duration: 1ms;
+			animation-iteration-count: 1;
+		}
+	}
+}

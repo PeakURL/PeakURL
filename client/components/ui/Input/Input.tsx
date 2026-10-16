@@ -94,7 +94,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					aria-describedby={describedBy}
 					className={cn(
 						"form-control-base",
-						"form-control-accent-focus",
 						"text-page-start",
 						"form-field-input",
 						hasInlineStartIcon && "field-with-inline-start-icon",
@@ -112,7 +111,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 				{isPasswordField && (
 					<button
 						type="button"
-						className="form-field-icon pointer-events-auto cursor-pointer inline-end-icon-slot text-slate-400 hover:text-slate-600 focus:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-full p-2 absolute transition-colors"
+						className="form-field-icon form-field-password-toggle inline-end-icon-slot"
 						onClick={() => setShowPassword(!showPassword)}
 						aria-label={
 							showPassword ? "Hide password" : "Show password"

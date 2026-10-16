@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 
 import type {
 	CountryMetric,
@@ -15,7 +15,6 @@ import {
 } from "@/state/slices/api";
 import { useAdminAccess } from "@/hooks";
 
-const MIN_REFRESH_DURATION_MS = 700;
 const RECENT_CLICKS_LIMIT = 8;
 const RECENT_ACTIVITIES_LIMIT = 6;
 const DEFAULT_TIME_RANGE_DAYS = 7;
@@ -95,17 +94,6 @@ function normalizeTrafficSeries(
  */
 export function useDashboardAnalytics() {
 	const [timeRange, setTimeRange] = useState<number>(DEFAULT_TIME_RANGE_DAYS);
-	const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-	const refreshTimeoutRef = useRef<number | null>(null);
-
-	useEffect(() => {
-		return () => {
-			if (refreshTimeoutRef.current !== null) {
-				window.clearTimeout(refreshTimeoutRef.current);
-			}
-		};
-	}, []);
-
 	const { canViewAnalytics, canManageUsers } = useAdminAccess();
 
 	const {
@@ -132,37 +120,11 @@ export function useDashboardAnalytics() {
 	});
 
 	const handleRefresh = async () => {
-		if (isRefreshing) {
-			return;
-		}
-
-		if (refreshTimeoutRef.current !== null) {
-			window.clearTimeout(refreshTimeoutRef.current);
-			refreshTimeoutRef.current = null;
-		}
-
-		setIsRefreshing(true);
-		const startedAt = Date.now();
-
-		try {
-			await Promise.allSettled([
-				canViewAnalytics ? refetchAnalytics() : Promise.resolve(),
-				canManageUsers ? refetchActivity() : Promise.resolve(),
-				canViewAnalytics ? refetchRecentClicks() : Promise.resolve(),
-			]);
-		} finally {
-			const remaining =
-				MIN_REFRESH_DURATION_MS - (Date.now() - startedAt);
-
-			if (remaining > 0) {
-				refreshTimeoutRef.current = window.setTimeout(() => {
-					setIsRefreshing(false);
-					refreshTimeoutRef.current = null;
-				}, remaining);
-			} else {
-				setIsRefreshing(false);
-			}
-		}
+		await Promise.allSettled([
+			canViewAnalytics ? refetchAnalytics() : Promise.resolve(),
+			canManageUsers ? refetchActivity() : Promise.resolve(),
+			canViewAnalytics ? refetchRecentClicks() : Promise.resolve(),
+		]);
 	};
 
 	const stats: DashboardStats = analyticsRes?.data ?? EMPTY_STATS;
@@ -190,7 +152,6 @@ export function useDashboardAnalytics() {
 		(canManageUsers && isActivityLoading);
 
 	const isBusy =
-		isRefreshing ||
 		(canViewAnalytics && (isAnalyticsFetching || isRecentClicksFetching)) ||
 		(canManageUsers && isActivityFetching);
 

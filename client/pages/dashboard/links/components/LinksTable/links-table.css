@@ -1,4 +1,8 @@
 @layer components {
+	.links-table-search-input {
+		@apply ps-9 pe-8;
+	}
+
 	.links-table {
 		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-xs;
 	}
@@ -24,7 +28,7 @@
 	}
 
 	.links-table-head {
-		@apply border-b border-stroke bg-surface-alt;
+		@apply border-b border-stroke bg-table-head;
 	}
 
 	.links-table-body {

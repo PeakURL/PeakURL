@@ -402,7 +402,7 @@ const LinksTable = ({
 							value={searchQuery}
 							onChange={(e) => onSearchChange(e.target.value)}
 							placeholder={__("Search links...")}
-							className="w-full rounded-lg border border-stroke bg-surface ps-9 pe-8 py-1.5 text-xs text-heading placeholder:text-text-muted/60 transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent"
+							className="form-control-base links-table-search-input"
 						/>
 						{searchQuery ? (
 							<button

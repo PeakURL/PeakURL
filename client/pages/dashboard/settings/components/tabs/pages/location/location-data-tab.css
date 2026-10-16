@@ -14,7 +14,7 @@
 		@apply inline-flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-300;
 	}
 	.settings-location-credentials-value {
-		@apply min-h-10 rounded-md border border-stroke bg-surface px-3 py-2 font-mono text-sm leading-6 text-heading select-text;
+		@apply min-h-10 rounded-md border border-field-border bg-field-readonly-bg px-3 py-2 font-mono text-sm leading-6 text-heading select-text;
 		overflow-wrap: anywhere;
 	}
 

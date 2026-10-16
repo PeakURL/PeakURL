@@ -72,7 +72,8 @@
 	}
 
 	.form-control-base {
-		@apply h-10 w-full min-w-0 rounded-md border border-stroke bg-surface px-4 py-2 text-sm text-heading placeholder:text-muted outline-none transition-colors;
+		color-scheme: light;
+		@apply h-10 w-full min-w-0 rounded-lg border border-field-border bg-field-bg px-4 py-2 text-sm text-heading placeholder:text-field-placeholder outline-none transition-colors;
 	}
 
 	.form-control-base:is(
@@ -82,28 +83,15 @@
 		[type="time"],
 		[type="week"]
 	) {
-		color-scheme: light;
 		-moz-appearance: none;
 		appearance: none;
 		-webkit-appearance: none;
 		min-height: 2.5rem;
-		background-color: var(--color-surface);
+		background-color: var(--color-field-bg);
 	}
 
-	.dark
-		.form-control-base:is(
-			[type="date"],
-			[type="datetime-local"],
-			[type="month"],
-			[type="time"],
-			[type="week"]
-		) {
+	.dark .form-control-base {
 		color-scheme: dark;
-		-moz-appearance: none;
-		appearance: none;
-		-webkit-appearance: none;
-		min-height: 2.5rem;
-		background-color: var(--color-surface);
 	}
 
 	.dark
@@ -114,27 +102,7 @@
 			[type="time"],
 			[type="week"]
 		)::-webkit-calendar-picker-indicator {
-		-webkit-filter: invert(1);
-		filter: invert(1);
 		opacity: 0.8;
-	}
-
-	.form-control-accent-focus {
-		@apply focus:outline-none;
-	}
-
-	.form-control-accent-focus:focus {
-		border-color: var(--color-accent);
-		box-shadow: 0 0 0 1px
-			color-mix(in srgb, var(--color-accent) 28%, transparent);
-	}
-
-	.form-control-strong-focus:focus {
-		@apply border-accent ring-2 ring-accent;
-	}
-
-	.form-control-surface-alt {
-		@apply rounded-lg bg-surface-alt;
 	}
 
 	.form-control-compact {
@@ -203,5 +171,61 @@
 
 	.text-gradient-pink {
 		@apply bg-linear-to-r from-pink-600 via-rose-600 to-red-600 bg-clip-text text-transparent;
+	}
+}
+
+/* Field states are shared by public forms, dashboard pages, and portals. */
+@layer utilities {
+	.form-control-base:where(
+			:not(
+				:disabled,
+				[readonly],
+				[aria-invalid="true"],
+				.form-field-control-error,
+				.form-field-input-error
+			)
+		):hover:not(:focus),
+	.page-size-control-editor:hover:not(:focus-within) {
+		border-color: var(--color-field-border-hover);
+	}
+
+	:is(.form-control-base, .page-size-control-input)::placeholder {
+		color: var(--color-field-placeholder);
+		opacity: 1;
+	}
+
+	.form-control-base:is(:disabled, [readonly]) {
+		background-color: var(--color-field-readonly-bg);
+	}
+
+	.form-control-base:disabled {
+		color: var(--color-field-disabled-text);
+		cursor: not-allowed;
+		opacity: 1;
+	}
+
+	:is(input, textarea):is(
+		.form-field-control-error,
+		.form-field-input-error,
+		[aria-invalid="true"]
+	) {
+		border-color: var(--color-error);
+	}
+
+	.form-control-base:focus:not(:disabled),
+	.select-trigger-open:not(:disabled),
+	.page-size-control-editor:focus-within {
+		outline: none;
+		border-color: var(--color-field-focus);
+		box-shadow: inset 0 0 0 1px var(--color-field-focus);
+	}
+
+	:is(input, textarea):is(
+			.form-field-control-error,
+			.form-field-input-error,
+			[aria-invalid="true"]
+		):focus:not(:disabled) {
+		border-color: var(--color-error);
+		box-shadow: inset 0 0 0 1px var(--color-error);
 	}
 }

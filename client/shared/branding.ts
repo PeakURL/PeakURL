@@ -1,4 +1,4 @@
-import brand from "../../server/services/brand.json";
+import brand from "../../server/services/brand.json" with { type: "json" };
 
 import { __ } from "@/i18n";
 

@@ -162,9 +162,19 @@ $send_maintenance = static function (
 	}
 
 	header( 'Content-Type: text/html; charset=utf-8' );
-	echo function_exists( 'render_maintenance_page' )
-		? render_maintenance_page( $maintenance_view_data )
-		: '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>PeakURL is briefly unavailable</title><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><p>PeakURL is briefly unavailable right now. Please try again in a moment.</p></body></html>';
+	if ( function_exists( 'render_maintenance_page' ) ) {
+		echo render_maintenance_page( $maintenance_view_data );
+	} else {
+		$runtime = \PeakURL\Core\Config\Environment::get_instance()->get_runtime_root();
+		foreach ( array( 'logo', 'brand', 'status-page' ) as $service ) {
+			require_once $runtime . '/services/' . $service . '.php';
+		}
+		echo \PeakURL\Services\StatusPage::render(
+			'Update in progress',
+			'PeakURL is finishing an update. Please refresh this page in a moment.',
+			'503 · Maintenance',
+		);
+	}
 	exit();
 };
 
@@ -531,8 +541,21 @@ if ( $is_maintenance() ) {
 
 if ( ! file_exists( $autoload ) ) {
 	http_response_code( 500 );
-	header( 'Content-Type: text/plain; charset=utf-8' );
-	echo "PeakURL dependencies are missing. Upload the complete release package before continuing.\n";
+	if ( Str::starts_with( $relative_path, '/api/' ) ) {
+		header( 'Content-Type: text/plain; charset=utf-8' );
+		echo "PeakURL dependencies are missing. Upload the complete release package before continuing.\n";
+		exit();
+	}
+	header( 'Content-Type: text/html; charset=utf-8' );
+	// Recovery must work even when Composer dependencies were not uploaded.
+	require_once $runtime_path . '/services/logo.php';
+	require_once $runtime_path . '/services/status-page.php';
+	require_once $runtime_path . '/services/brand.php';
+	echo \PeakURL\Services\StatusPage::render(
+		'PeakURL couldn’t start',
+		'The server couldn’t complete this request. Please contact your site administrator.',
+		'500 · Server error',
+	);
 	exit();
 }
 
@@ -744,8 +767,12 @@ $dashboard_html_path = $environment->get_app_html_path();
 
 if ( ! file_exists( $dashboard_html_path ) ) {
 	http_response_code( 500 );
-	header( 'Content-Type: text/plain; charset=utf-8' );
-	echo "PeakURL build output is missing. Upload the full release package and try again.\n";
+	header( 'Content-Type: text/html; charset=utf-8' );
+	echo \PeakURL\Services\StatusPage::render_http_error(
+		500,
+		$base_path,
+		$debug_enabled ? 'PeakURL build output is missing. Upload the full release package and try again.' : '',
+	);
 	exit();
 }
 
@@ -758,8 +785,12 @@ $dashboard_html = file_get_contents( $dashboard_html_path );
 
 if ( false === $dashboard_html ) {
 	http_response_code( 500 );
-	header( 'Content-Type: text/plain; charset=utf-8' );
-	echo "PeakURL build output could not be read.\n";
+	header( 'Content-Type: text/html; charset=utf-8' );
+	echo \PeakURL\Services\StatusPage::render_http_error(
+		500,
+		$base_path,
+		$debug_enabled ? 'PeakURL build output could not be read.' : '',
+	);
 	exit();
 }
 

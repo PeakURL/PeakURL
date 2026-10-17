@@ -62,4 +62,5 @@ echo \PeakURL\Services\StatusPage::render(
 	'For your security, database credentials and connection details are never displayed here.',
 	$retry_url,
 	'Retry connection',
+	illustration: 'database',
 );

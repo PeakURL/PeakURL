@@ -173,6 +173,7 @@ $send_maintenance = static function (
 			'Update in progress',
 			'PeakURL is finishing an update. Please refresh this page in a moment.',
 			'503 · Maintenance',
+			illustration: 'maintenance',
 		);
 	}
 	exit();
@@ -555,6 +556,7 @@ if ( ! file_exists( $autoload ) ) {
 		'PeakURL couldn’t start',
 		'The server couldn’t complete this request. Please contact your site administrator.',
 		'500 · Server error',
+		illustration: 'server-error',
 	);
 	exit();
 }

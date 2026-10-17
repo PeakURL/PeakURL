@@ -6,199 +6,25 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-10-16 13:54+0000\n"
-"POT-Creation-Date: 2026-10-16 13:54+0000\n"
+"PO-Revision-Date: 2026-10-17 07:23+0000\n"
+"POT-Creation-Date: 2026-10-17 07:23+0000\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "Project-Id-Version: PeakURL 1.7.2\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
 
-#: install.php:92
+#: install.php:81
 msgid "Administrator Setup - %s"
 msgstr "Administrator-Einrichtung – %s"
 
-#: install.php:533
-#: setup-config.php:674
-msgid "Welcome"
-msgstr "Willkommen"
-
-#: install.php:540
-#: setup-config.php:681
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
-msgid "Database"
-msgstr "Datenbank"
-
-#: install.php:547
-#: setup-config.php:688
-msgid "Admin account"
-msgstr "Admin-Konto"
-
-#: install.php:558
-msgid "Create your account"
-msgstr "Erstellen Sie Ihr Konto"
-
-#: install.php:560
-msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
-msgstr "Benennen Sie Ihre Website und richten Sie den ersten Administrator ein. Sie werden nach Abschluss der Installation automatisch angemeldet."
-
-#: install.php:580
-msgid "Site info"
-msgstr "Website-Informationen"
-
-#: install.php:583
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
-msgid "Site title"
-msgstr "Website-Titel"
-
-#: install.php:584
-msgid "My Link Hub"
-msgstr "Mein Link-Hub"
-
-#: install.php:588
-#: server/core/auth/roles.php:1052
-msgid "Administrator"
-msgstr "Administrator"
-
-#: install.php:591
-#: setup-config.php:818
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
-msgid "Username"
-msgstr "Benutzername"
-
-#: install.php:593
-msgid "Letters, numbers, dots, dashes, underscores, or @."
-msgstr "Buchstaben, Ziffern, Punkte, Bindestriche, Unterstriche oder @."
-
-#: install.php:596
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
-#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
-#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
-msgid "Email"
-msgstr "E-Mail-Adresse"
-
-#: install.php:597
-#: client/pages/auth/login/LoginPage.tsx:248
-msgid "you@company.com"
-msgstr "ihre@firma.de"
-
-#: install.php:600
-#: setup-config.php:822
-#: server/features/links/controller.php:531
-#: client/pages/auth/login/LoginPage.tsx:253
-#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
-msgid "Password"
-msgstr "Passwort"
-
-#: install.php:602
-msgid "At least 8 characters. You will be signed in right after installation."
-msgstr "Mindestens 8 Zeichen. Sie werden nach Abschluss der Installation automatisch angemeldet."
-
-#: install.php:606
-msgid "Database configuration is already saved."
-msgstr "Datenbankkonfiguration ist bereits gespeichert."
-
-#: install.php:609
-msgid "Install %s"
-msgstr "%s installieren"
-
-#: setup-config.php:95
+#: setup-config.php:84
 msgid "Database Setup - %s"
 msgstr "Datenbank-Einrichtung – %s"
 
-#: setup-config.php:97
+#: setup-config.php:86
 msgid "Welcome - %s"
 msgstr "Willkommen – %s"
-
-#: setup-config.php:652
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
-msgid "Site language"
-msgstr "Website-Sprache"
-
-#: setup-config.php:703
-#: server/services/notifications.php:204
-msgid "Welcome to %s"
-msgstr "Willkommen bei %s"
-
-#: setup-config.php:705
-msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
-msgstr "Bevor Sie beginnen, benötigen Sie Ihre Datenbank-Verbindungsdaten. PeakURL verwendet diese, um config.php zu erstellen und die erforderlichen Tabellen einzurichten."
-
-#: setup-config.php:717
-#: setup-config.php:814
-msgid "Database name"
-msgstr "Datenbankname"
-
-#: setup-config.php:723
-msgid "Username and password"
-msgstr "Benutzername und Passwort"
-
-#: setup-config.php:729
-msgid "Host and port"
-msgstr "Host und Port"
-
-#: setup-config.php:735
-#: setup-config.php:838
-msgid "Table prefix"
-msgstr "Tabellenpräfix"
-
-#: setup-config.php:735
-msgid "optional"
-msgstr "optional"
-
-#: setup-config.php:741
-msgid "These details are usually available in your hosting control panel or from your database administrator."
-msgstr "Diese Angaben finden Sie üblicherweise im Kundenbereich Ihres Hosting-Anbieters oder erhalten sie von Ihrem Datenbankadministrator."
-
-#: setup-config.php:761
-msgid "Let's go"
-msgstr "Los geht's"
-
-#: setup-config.php:773
-#: server/services/system-status/diagnostic-checks.php:48
-msgid "Database connection"
-msgstr "Datenbankverbindung"
-
-#: setup-config.php:775
-msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
-msgstr "Geben Sie die Zugangsdaten für Ihre MySQL- oder MariaDB-Datenbank ein. PeakURL speichert diese in der Datei config.php im Stammverzeichnis der Website."
-
-#: setup-config.php:811
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:156
-msgid "Connection details"
-msgstr "Verbindungsdaten"
-
-#: setup-config.php:826
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
-msgid "Host"
-msgstr "Host"
-
-#: setup-config.php:831
-msgid "Advanced"
-msgstr "Erweitert"
-
-#: setup-config.php:834
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
-msgid "Port"
-msgstr "Port"
-
-#: setup-config.php:840
-msgid "Letters, numbers, underscores. Example: peakurl_"
-msgstr "Buchstaben, Ziffern, Unterstriche. Beispiel: peakurl_"
-
-#: setup-config.php:846
-msgid "Back"
-msgstr "Zurück"
-
-#: setup-config.php:849
-msgid "Save and continue"
-msgstr "Speichern und fortfahren"
 
 #: server/database/repair-specs.php:41
 msgid "The clicks table still contains row IDs with prefixes and should be normalized."
@@ -308,6 +134,11 @@ msgstr "Für Administratoren reserviert."
 #: server/core/auth/roles.php:1503
 msgid "Role not found."
 msgstr "Rolle nicht gefunden."
+
+#: server/core/auth/roles.php:1052
+#: server/services/install/templates/administrator.php:43
+msgid "Administrator"
+msgstr "Administrator"
 
 #: server/core/auth/roles.php:1056
 #: client/pages/layout/dashboard/Header/Header.tsx:42
@@ -1064,80 +895,108 @@ msgstr "Link nicht gefunden"
 msgid "Check that the address is complete and correct. This short link may have been removed or is no longer available."
 msgstr "Überprüfen Sie, ob die Adresse vollständig und korrekt ist. Dieser Kurzlink wurde möglicherweise entfernt oder ist nicht mehr verfügbar."
 
-#: server/features/links/controller.php:526
+#: server/features/links/controller.php:518
 msgid "Password required"
 msgstr "Passwort erforderlich"
 
-#: server/features/links/controller.php:527
+#: server/features/links/controller.php:519
 msgid "This link is protected. Enter the password to continue."
 msgstr "Dieser Link ist geschützt. Geben Sie das Passwort ein, um fortzufahren."
 
-#: server/features/links/controller.php:534
+#: server/features/links/controller.php:523
+#: server/services/install/templates/setup.php:132
+#: server/services/install/templates/administrator.php:55
+#: client/pages/auth/login/LoginPage.tsx:198
+#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
+msgid "Password"
+msgstr "Passwort"
+
+#: server/features/links/controller.php:526
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Passwort eingeben"
 
-#: server/features/links/controller.php:538
+#: server/features/links/controller.php:530
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Fortfahren"
 
-#: server/features/links/controller.php:543
+#: server/features/links/controller.php:535
 msgid "Protected Link"
 msgstr "Geschützter Link"
 
-#: server/features/links/controller.php:590
-msgid "Performing security verification"
-msgstr "Sicherheitsüberprüfung wird durchgeführt"
+#: server/features/links/controller.php:568
+msgid "Checking your browser"
+msgstr "Browser wird überprüft"
 
-#: server/features/links/controller.php:591
-msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
-msgstr "Diese Website verwendet einen Sicherheitsdienst zum Schutz vor schädlichen Bots. Diese Seite wird angezeigt, während PeakURL überprüft, ob Sie kein Bot sind."
+#: server/features/links/controller.php:569
+msgid "Complete the security check to open this link. You’ll continue automatically once verification is complete."
+msgstr "Schließen Sie die Sicherheitsüberprüfung ab, um diesen Link zu öffnen. Sie werden automatisch weitergeleitet, sobald die Überprüfung abgeschlossen ist."
 
-#: server/features/links/controller.php:595
+#: server/features/links/controller.php:573
 msgid "JavaScript is required to complete this verification."
 msgstr "JavaScript ist erforderlich, um diese Überprüfung abzuschließen."
 
-#: server/features/links/controller.php:598
+#: server/features/links/controller.php:576
 msgid "Security Verification"
 msgstr "Sicherheitsüberprüfung"
 
-#: server/features/links/controller.php:695
-#: server/features/links/controller.php:856
-msgid "Waiting for verification…"
-msgstr "Warten auf Überprüfung…"
+#: server/features/links/controller.php:670
+msgid "Loading security check…"
+msgstr "Sicherheitsüberprüfung wird geladen…"
 
-#: server/features/links/controller.php:698
-msgid "Checking verification…"
-msgstr "Überprüfung läuft…"
+#: server/features/links/controller.php:671
+msgid "Verifying your browser…"
+msgstr "Browser wird verifiziert…"
 
-#: server/features/links/controller.php:701
-msgid "Starting verification…"
-msgstr "Überprüfung wird gestartet…"
+#: server/features/links/controller.php:672
+msgid "Verification complete. Opening your link…"
+msgstr "Verifizierung abgeschlossen. Ihr Link wird geöffnet…"
 
-#: server/features/links/controller.php:704
+#: server/features/links/controller.php:673
 msgid "Verification expired. Please try again."
 msgstr "Überprüfung abgelaufen. Bitte versuchen Sie es erneut."
 
-#: server/features/links/controller.php:707
+#: server/features/links/controller.php:674
 msgid "Verification could not be completed. Please try again."
 msgstr "Überprüfung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut."
 
-#: server/features/links/controller.php:861
+#: server/features/links/controller.php:675
+msgid "The security check couldn’t load. Check your connection or content blocker, then try again."
+msgstr "Die Sicherheitsüberprüfung konnte nicht geladen werden. Prüfen Sie Ihre Verbindung oder Content-Blocker und versuchen Sie es erneut."
+
+#: server/features/links/controller.php:676
+msgid "Verification is taking longer than expected. Please try again."
+msgstr "Die Verifizierung dauert länger als erwartet. Bitte versuchen Sie es erneut."
+
+#: server/features/links/controller.php:677
+msgid "This browser couldn’t run the security check. Please try another browser."
+msgstr "Dieser Browser konnte die Sicherheitsüberprüfung nicht ausführen. Bitte versuchen Sie es mit einem anderen Browser."
+
+#: server/features/links/controller.php:678
+msgid "Your link couldn’t open. Please verify again to continue."
+msgstr "Ihr Link konnte nicht geöffnet werden. Bitte verifizieren Sie sich erneut, um fortzufahren."
+
+#: server/features/links/controller.php:703
+msgid "Waiting for verification…"
+msgstr "Warten auf Überprüfung…"
+
+#: server/features/links/controller.php:708
 #: client/pages/layout/dashboard/Search/SearchResults.tsx:49
 #: client/pages/dashboard/about/ReleaseNotes.tsx:42
 msgid "Try again"
 msgstr "Erneut versuchen"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "410 · Link expired"
 msgstr "410 · Link abgelaufen"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "404 · Link not found"
 msgstr "404 · Link nicht gefunden"
 
-#: server/features/links/controller.php:1053
+#: server/features/links/controller.php:899
 msgid "Contact the person who shared this link to request a new address. You do not need an account to open a public short link."
 msgstr "Wenden Sie sich an die Person, die diesen Link geteilt hat, um eine neue Adresse anzufordern. Sie benötigen kein Konto, um einen öffentlichen Kurzlink zu öffnen."
 
@@ -1923,7 +1782,7 @@ msgid "Thanks for your patience."
 msgstr "Vielen Dank für Ihre Geduld."
 
 #: server/services/maintenance.php:108
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:132
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:133
 msgid "Loading"
 msgstr "Wird geladen"
 
@@ -2130,6 +1989,206 @@ msgstr "Administrator-Passwort muss mindestens 8 Zeichen lang sein."
 #: server/services/install/manager.php:221
 msgid "The selected timezone is invalid."
 msgstr "Die ausgewählte Zeitzone ist ungültig."
+
+#: server/services/install/templates/setup.php:28
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
+msgid "Site language"
+msgstr "Website-Sprache"
+
+#: server/services/install/templates/setup.php:40
+msgid "Apply language"
+msgstr "Sprache anwenden"
+
+#: server/services/install/templates/setup.php:49
+#: server/services/notifications.php:204
+msgid "Welcome to %s"
+msgstr "Willkommen bei %s"
+
+#: server/services/install/templates/setup.php:51
+msgid "Have the following database details ready. PeakURL will check the connection before saving your configuration."
+msgstr "Halten Sie die folgenden Datenbankdaten bereit. PeakURL prüft die Verbindung, bevor Ihre Konfiguration gespeichert wird."
+
+#: server/services/install/templates/setup.php:62
+#: server/services/install/templates/setup.php:124
+msgid "Database name"
+msgstr "Datenbankname"
+
+#: server/services/install/templates/setup.php:68
+msgid "Username and password"
+msgstr "Benutzername und Passwort"
+
+#: server/services/install/templates/setup.php:74
+msgid "Host and port"
+msgstr "Host und Port"
+
+#: server/services/install/templates/setup.php:80
+#: server/services/install/templates/setup.php:148
+msgid "Table prefix"
+msgstr "Tabellenpräfix"
+
+#: server/services/install/templates/setup.php:80
+msgid "default: peakurl_"
+msgstr "Standard: peakurl_"
+
+#: server/services/install/templates/setup.php:86
+msgid "Your hosting provider or database administrator can provide these details."
+msgstr "Ihr Hosting-Anbieter oder Datenbankadministrator kann Ihnen diese Details mitteilen."
+
+#: server/services/install/templates/setup.php:91
+msgid "Begin setup"
+msgstr "Einrichtung starten"
+
+#: server/services/install/templates/setup.php:99
+#: server/services/system-status/diagnostic-checks.php:48
+msgid "Database connection"
+msgstr "Datenbankverbindung"
+
+#: server/services/install/templates/setup.php:101
+msgid "Enter your MySQL or MariaDB connection details. PeakURL will verify the connection and save the settings in config.php."
+msgstr "Geben Sie Ihre MySQL- oder MariaDB-Verbindungsdaten ein. PeakURL prüft die Verbindung und speichert die Einstellungen in config.php."
+
+#: server/services/install/templates/setup.php:121
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:157
+msgid "Connection details"
+msgstr "Verbindungsdaten"
+
+#: server/services/install/templates/setup.php:128
+#: server/services/install/templates/administrator.php:46
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
+msgid "Username"
+msgstr "Benutzername"
+
+#: server/services/install/templates/setup.php:136
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
+msgid "Host"
+msgstr "Host"
+
+#: server/services/install/templates/setup.php:141
+msgid "Advanced"
+msgstr "Erweitert"
+
+#: server/services/install/templates/setup.php:144
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
+msgid "Port"
+msgstr "Port"
+
+#: server/services/install/templates/setup.php:150
+msgid "Use letters, numbers, and underscores. The default is peakurl_."
+msgstr "Verwenden Sie Buchstaben, Zahlen und Unterstriche. Der Standardwert ist peakurl_."
+
+#: server/services/install/templates/setup.php:156
+msgid "Back"
+msgstr "Zurück"
+
+#: server/services/install/templates/setup.php:159
+msgid "Save and continue"
+msgstr "Speichern und fortfahren"
+
+#: server/services/install/templates/page.php:26
+msgid "Toggle dark mode"
+msgstr "Dunkelmodus umschalten"
+
+#: server/services/install/templates/page.php:33
+msgid "Installation progress"
+msgstr "Installationsfortschritt"
+
+#: server/services/install/templates/page.php:45
+msgid "Installation"
+msgstr "Installation"
+
+#: server/services/install/templates/administrator.php:14
+msgid "Create your account"
+msgstr "Erstellen Sie Ihr Konto"
+
+#: server/services/install/templates/administrator.php:16
+msgid "Enter a site title and administrator credentials. PeakURL will sign you in when installation is complete."
+msgstr "Geben Sie einen Websitetitel und Administrator-Zugangsdaten ein. PeakURL meldet Sie an, sobald die Installation abgeschlossen ist."
+
+#: server/services/install/templates/administrator.php:35
+msgid "Site details"
+msgstr "Website-Details"
+
+#: server/services/install/templates/administrator.php:38
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
+msgid "Site title"
+msgstr "Website-Titel"
+
+#: server/services/install/templates/administrator.php:39
+msgid "My Link Hub"
+msgstr "Mein Link-Hub"
+
+#: server/services/install/templates/administrator.php:48
+msgid "Use letters, numbers, periods, hyphens, underscores, or @."
+msgstr "Verwenden Sie Buchstaben, Zahlen, Punkte, Bindestriche, Unterstriche oder @."
+
+#: server/services/install/templates/administrator.php:51
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
+#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
+msgid "Email"
+msgstr "E-Mail-Adresse"
+
+#: server/services/install/templates/administrator.php:52
+#: client/pages/auth/login/LoginPage.tsx:193
+msgid "you@company.com"
+msgstr "ihre@firma.de"
+
+#: server/services/install/templates/administrator.php:57
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
+msgid "Use at least 8 characters."
+msgstr "Verwenden Sie mindestens 8 Zeichen."
+
+#: server/services/install/templates/administrator.php:61
+msgid "Your database connection is configured."
+msgstr "Ihre Datenbankverbindung ist konfiguriert."
+
+#: server/services/install/templates/administrator.php:64
+msgid "Install %s"
+msgstr "%s installieren"
+
+#: server/services/install/page.php:31
+msgid "Welcome"
+msgstr "Willkommen"
+
+#: server/services/install/page.php:31
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
+msgid "Database"
+msgstr "Datenbank"
+
+#: server/services/install/page.php:31
+msgid "Admin account"
+msgstr "Admin-Konto"
+
+#: server/services/install/page.php:34
+msgid "Install PeakURL"
+msgstr "PeakURL installieren"
+
+#: server/services/install/page.php:35
+msgid "Connect your database"
+msgstr "Datenbank verbinden"
+
+#: server/services/install/page.php:36
+msgid "Set up your site"
+msgstr "Website einrichten"
+
+#: server/services/install/page.php:39
+msgid "Connect your database, then create the administrator account for this installation."
+msgstr "Verbinden Sie Ihre Datenbank und erstellen Sie dann das Administratorkonto für diese Installation."
+
+#: server/services/install/page.php:40
+msgid "PeakURL uses this database to store your links, accounts, and analytics."
+msgstr "PeakURL verwendet diese Datenbank zur Speicherung Ihrer Links, Konten und Analysen."
+
+#: server/services/install/page.php:41
+msgid "Choose a site title and create the account you’ll use to manage PeakURL."
+msgstr "Wählen Sie einen Websitetitel und erstellen Sie das Konto, mit dem Sie PeakURL verwalten."
 
 #: server/services/install/initializer.php:66
 msgid "Unable to connect to the database or create the PeakURL tables. "
@@ -2845,57 +2904,57 @@ msgstr "PeakURL konnte das Favicon-Upload-Verzeichnis nicht erstellen."
 msgid "PeakURL could not write the favicon web manifest."
 msgstr "PeakURL konnte das Favicon-Web-Manifest nicht schreiben."
 
-#: server/services/status-page.php:66
-#: client/pages/NotFoundPage.tsx:17
+#: server/services/status-page.php:69
+#: client/pages/NotFoundPage.tsx:21
 msgid "Page not found"
 msgstr "Seite nicht gefunden"
 
-#: server/services/status-page.php:67
+#: server/services/status-page.php:70
 msgid "We couldn’t find the page you’re looking for. Check the address, or contact the person who shared it with you."
 msgstr "Die von Ihnen gesuchte Seite konnte nicht gefunden werden. Überprüfen Sie die Adresse oder wenden Sie sich an die Person, die sie mit Ihnen geteilt hat."
 
-#: server/services/status-page.php:69
+#: server/services/status-page.php:73
 msgid "Access to this page is restricted"
 msgstr "Der Zugriff auf diese Seite ist eingeschränkt"
 
-#: server/services/status-page.php:70
+#: server/services/status-page.php:74
 msgid "You don’t have permission to open this page. Contact the site administrator if you think you should have access."
 msgstr "Sie haben keine Berechtigung, diese Seite zu öffnen. Wenden Sie sich an den Website-Administrator, wenn Sie der Meinung sind, Zugriff haben zu müssen."
 
-#: server/services/status-page.php:72
+#: server/services/status-page.php:77
 msgid "Please wait a moment"
 msgstr "Bitte warten Sie einen Moment"
 
-#: server/services/status-page.php:73
+#: server/services/status-page.php:78
 msgid "Too many requests have been made. Give it a moment, then try again."
 msgstr "Es wurden zu viele Anfragen gestellt. Warten Sie einen Moment und versuchen Sie es dann erneut."
 
-#: server/services/status-page.php:75
+#: server/services/status-page.php:81
 msgid "Unable to complete your request"
 msgstr "Ihre Anfrage konnte nicht abgeschlossen werden"
 
-#: server/services/status-page.php:76
+#: server/services/status-page.php:82
 msgid "PeakURL encountered a server error. Please try again. If the problem persists, contact the site administrator."
 msgstr "PeakURL hat einen Serverfehler festgestellt. Bitte versuchen Sie es erneut. Wenn das Problem weiterhin besteht, wenden Sie sich an den Website-Administrator."
 
-#: server/services/status-page.php:78
+#: server/services/status-page.php:85
 msgid "Unable to open this page"
 msgstr "Diese Seite kann nicht geöffnet werden"
 
-#: server/services/status-page.php:79
+#: server/services/status-page.php:86
 msgid "This request couldn’t be completed. Check the address, or contact the site administrator for help."
 msgstr "Diese Anfrage konnte nicht abgeschlossen werden. Überprüfen Sie die Adresse oder wenden Sie sich an den Website-Administrator, um Hilfe zu erhalten."
 
-#: server/services/status-page.php:84
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:940
+#: server/services/status-page.php:91
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:946
 msgid "Error details"
 msgstr "Fehlerdetails"
 
-#: server/services/status-page.php:91
+#: server/services/status-page.php:98
 msgid "Error %s"
 msgstr "Fehler %s"
 
-#: server/services/status-page.php:94
+#: server/services/status-page.php:101
 msgid "Go to homepage"
 msgstr "Zur Startseite"
 
@@ -3192,12 +3251,12 @@ msgstr "Bestätigen"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:898
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:115
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:447
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1086
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:586
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:836
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:497
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:842
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
 #: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:515
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
@@ -3403,31 +3462,31 @@ msgstr "Verbindung zum Backend nicht möglich"
 msgid "PeakURL couldn’t complete the connection to your server. Please try again."
 msgstr "PeakURL konnte die Verbindung zu Ihrem Server nicht herstellen. Bitte versuchen Sie es erneut."
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:128
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
 msgid "Backend connection error"
 msgstr "Backend-Verbindungsfehler"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:130
 msgid "If the problem persists, contact your site administrator."
 msgstr "Wenn das Problem weiterhin besteht, wenden Sie sich an Ihren Website-Administrator."
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:141
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
 msgid "Checking connection"
 msgstr "Verbindung wird geprüft"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:143
 msgid "Retry connection"
 msgstr "Verbindung wiederholen"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:166
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:167
 msgid "API endpoint"
 msgstr "API-Endpunkt"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:172
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:173
 msgid "What went wrong"
 msgstr "Was schiefgelaufen ist"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:179
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:180
 msgid "Check these first"
 msgstr "Zuerst prüfen"
 
@@ -3439,66 +3498,64 @@ msgstr "E-Mail-Adresse oder Benutzername ist erforderlich."
 msgid "PeakURL could not process the password reset request."
 msgstr "PeakURL konnte die Anfrage zum Zurücksetzen des Passworts nicht verarbeiten."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:73
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:74
 msgid "Account Recovery"
 msgstr "Kontowiederherstellung"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:75
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:118
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:135
-msgid "Reset your password"
-msgstr "Setzen Sie Ihr Passwort zurück"
-
 #: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:76
-msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
-msgstr "Geben Sie die E-Mail-Adresse oder den Benutzernamen Ihres PeakURL-Kontos ein, und wir senden Ihnen einen sicheren Link zum Zurücksetzen."
-
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:79
 msgid "Secure account recovery"
 msgstr "Sichere Kontowiederherstellung"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
-msgid "For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
-msgstr "Zu Ihrer Sicherheit laufen Links zum Zurücksetzen des Passworts nach 1 Stunde ab. Das Ändern Ihres Passworts widerruft außerdem sofort alle aktiven Sitzungen auf Ihren Geräten."
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:77
+msgid "Get back to your links with a password reset link sent to your account email."
+msgstr "Erhalten Sie wieder Zugriff auf Ihre Links mit einem Link zum Zurücksetzen des Passworts, der an Ihre E-Mail-Adresse gesendet wird."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:83
-#: client/pages/auth/login/LoginPage.tsx:298
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
+msgid "Your account stays protected"
+msgstr "Ihr Konto bleibt geschützt"
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:81
+msgid "Reset links expire after 1 hour. Changing your password signs out your existing sessions."
+msgstr "Links zum Zurücksetzen laufen nach 1 Stunde ab. Das Ändern Ihres Passworts meldet bestehende Sitzungen ab."
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
+#: client/pages/auth/login/LoginPage.tsx:238
 msgid "Forgot your password?"
 msgstr "Passwort vergessen?"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:152
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:85
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:153
 msgid "Enter your account email or username and PeakURL will send a secure password reset link."
 msgstr "Geben Sie die E-Mail-Adresse oder den Benutzernamen Ihres Kontos ein, und PeakURL sendet Ihnen einen sicheren Link zum Zurücksetzen."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:91
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:92
 msgid "Check your inbox"
 msgstr "Überprüfen Sie Ihren Posteingang"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:95
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:96
 msgid "If an account exists for %s, PeakURL has sent a password reset link."
 msgstr "Falls ein Konto für %s existiert, hat PeakURL einen Link zum Zurücksetzen des Passworts gesendet."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:102
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:103
 msgid "Return to login"
 msgstr "Zurück zur Anmeldung"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:109
-#: client/pages/auth/login/LoginPage.tsx:236
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:110
+#: client/pages/auth/login/LoginPage.tsx:183
 msgid "Email or username"
 msgstr "E-Mail-Adresse oder Benutzername"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:116
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:117
 msgid "owner@example.com or admin"
 msgstr "inhaber@example.com oder admin"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:132
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:162
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:133
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:163
 msgid "Send reset link"
 msgstr "Link zum Zurücksetzen senden"
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:66
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:149
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:150
 msgid "The password reset link is invalid."
 msgstr "Der Link zum Zurücksetzen des Passworts ist ungültig."
 
@@ -3511,61 +3568,60 @@ msgstr "Passwörter stimmen nicht überein."
 msgid "PeakURL could not reset the password with that link."
 msgstr "PeakURL konnte das Passwort mit diesem Link nicht zurücksetzen."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:108
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:109
 msgid "Secure Reset"
 msgstr "Sicheres Zurücksetzen"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:110
-msgid "Choose a new password and get back to work."
-msgstr "Wählen Sie ein neues Passwort und setzen Sie Ihre Arbeit fort."
-
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:111
-msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
-msgstr "Sobald das Passwort geändert wird, widerruft PeakURL die alten Sitzungen, sodass nur noch die neue Anmeldung gültig ist."
+msgid "Keep your account secure"
+msgstr "Schützen Sie Ihr Konto"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:114
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
-msgid "Use at least 8 characters."
-msgstr "Verwenden Sie mindestens 8 Zeichen."
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:112
+msgid "Choose a password you don’t use elsewhere. Your previous sessions will be signed out."
+msgstr "Wählen Sie ein Passwort, das Sie nirgendwo sonst verwenden. Ihre vorherigen Sitzungen werden abgemeldet."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:116
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "Kombinieren Sie für beste Ergebnisse Groß- und Kleinbuchstaben, Ziffern und eine eindeutige Phrase, die Sie nirgendwo sonst wiederverwenden."
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:119
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:136
+msgid "Reset your password"
+msgstr "Setzen Sie Ihr Passwort zurück"
+
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:120
 msgid "Set a new account password, then sign in again with the updated credentials."
 msgstr "Legen Sie ein neues Kontopasswort fest und melden Sie sich dann erneut an."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:176
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:177
 msgid "Password updated"
 msgstr "Passwort aktualisiert"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:179
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:180
 msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
 msgstr "PeakURL hat Ihr Passwort aktualisiert und ältere Sitzungen widerrufen. Sie werden nun zur Anmeldeseite weitergeleitet."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:189
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:190
 msgid "New password"
 msgstr "Neues Passwort"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:195
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:196
 msgid "Enter your new password"
 msgstr "Geben Sie Ihr neues Passwort ein"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:202
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:203
 msgid "Confirm new password"
 msgstr "Neues Passwort bestätigen"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:212
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:213
 msgid "Confirm your new password"
 msgstr "Bestätigen Sie Ihr neues Passwort"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:224
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:225
 msgid "Reset password"
 msgstr "Passwort zurücksetzen"
 
-#: client/pages/auth/login/LoginPage.tsx:39
+#: client/pages/auth/login/LoginPage.tsx:37
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:45
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:442
 #: client/pages/layout/dashboard/Search/useSearchResults.ts:118
@@ -3576,110 +3632,106 @@ msgstr "Passwort zurücksetzen"
 msgid "Links"
 msgstr "Links"
 
-#: client/pages/auth/login/LoginPage.tsx:40
+#: client/pages/auth/login/LoginPage.tsx:38
 msgid "Shorten, organize, and share."
 msgstr "Kürzen, organisieren und teilen."
 
-#: client/pages/auth/login/LoginPage.tsx:44
+#: client/pages/auth/login/LoginPage.tsx:42
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:398
 msgid "Analytics"
 msgstr "Analysen"
 
-#: client/pages/auth/login/LoginPage.tsx:45
+#: client/pages/auth/login/LoginPage.tsx:43
 msgid "Clicks, locations, and devices."
 msgstr "Klicks, Standorte und Geräte."
 
-#: client/pages/auth/login/LoginPage.tsx:49
+#: client/pages/auth/login/LoginPage.tsx:47
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:170
 #: client/pages/dashboard/settings/Layout.tsx:27
 msgid "Security"
 msgstr "Sicherheit"
 
-#: client/pages/auth/login/LoginPage.tsx:50
+#: client/pages/auth/login/LoginPage.tsx:48
 msgid "Sessions, 2FA, and roles."
 msgstr "Sitzungen, 2FA und Rollen."
 
-#: client/pages/auth/login/LoginPage.tsx:146
-msgid "Almost there."
-msgstr "Fast geschafft."
+#: client/pages/auth/login/LoginPage.tsx:136
+msgid "Verify to continue"
+msgstr "Zur Fortsetzung verifizieren"
 
-#: client/pages/auth/login/LoginPage.tsx:149
-msgid "Verify to continue."
-msgstr "Bestätigen, um fortzufahren."
-
-#: client/pages/auth/login/LoginPage.tsx:154
+#: client/pages/auth/login/LoginPage.tsx:139
 msgid "Manage every link"
 msgstr "Verwalten Sie jeden Link"
 
-#: client/pages/auth/login/LoginPage.tsx:157
+#: client/pages/auth/login/LoginPage.tsx:142
 msgid "from one place."
 msgstr "von einem zentralen Ort aus."
 
-#: client/pages/auth/login/LoginPage.tsx:164
-msgid "One more verification step and you’ll be in your workspace."
-msgstr "Noch ein Bestätigungsschritt und Sie sind in Ihrem Arbeitsbereich."
+#: client/pages/auth/login/LoginPage.tsx:149
+msgid "Use your authenticator app or a backup code to sign in securely."
+msgstr "Verwenden Sie Ihre Authentifikator-App oder einen Wiederherstellungscode, um sich sicher anzumelden."
 
-#: client/pages/auth/login/LoginPage.tsx:167
-msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
-msgstr "Kürzen Sie URLs, verfolgen Sie Klicks und verwalten Sie Ihre Zielgruppe – alles über Ihr eigenes Dashboard."
+#: client/pages/auth/login/LoginPage.tsx:152
+msgid "Shorten URLs, track clicks, and manage your links from your own dashboard."
+msgstr "Kürzen Sie URLs, verfolgen Sie Klicks und verwalten Sie Ihre Links über Ihr eigenes Dashboard."
 
-#: client/pages/auth/login/LoginPage.tsx:203
+#: client/pages/auth/login/LoginPage.tsx:159
 msgid "Verify your identity"
 msgstr "Bestätigen Sie Ihre Identität"
 
-#: client/pages/auth/login/LoginPage.tsx:204
+#: client/pages/auth/login/LoginPage.tsx:160
 msgid "Sign in to your account"
 msgstr "Melden Sie sich bei Ihrem Konto an"
 
-#: client/pages/auth/login/LoginPage.tsx:209
+#: client/pages/auth/login/LoginPage.tsx:165
 msgid "Enter one of the backup codes you saved when setting up 2FA."
 msgstr "Geben Sie einen der Wiederherstellungscodes ein, die Sie bei der Einrichtung von 2FA gespeichert haben."
 
-#: client/pages/auth/login/LoginPage.tsx:212
+#: client/pages/auth/login/LoginPage.tsx:168
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Geben Sie den 6-stelligen Code aus Ihrer Authentifikator-App ein."
 
-#: client/pages/auth/login/LoginPage.tsx:215
+#: client/pages/auth/login/LoginPage.tsx:171
 msgid "Enter your credentials to continue to the dashboard."
 msgstr "Geben Sie Ihre Anmeldedaten ein, um zum Dashboard zu gelangen."
 
-#: client/pages/auth/login/LoginPage.tsx:282
+#: client/pages/auth/login/LoginPage.tsx:225
 msgid "Remember me"
 msgstr "Angemeldet bleiben"
 
-#: client/pages/auth/login/LoginPage.tsx:308
+#: client/pages/auth/login/LoginPage.tsx:248
 msgid "Backup code"
 msgstr "Wiederherstellungscode"
 
-#: client/pages/auth/login/LoginPage.tsx:323
+#: client/pages/auth/login/LoginPage.tsx:261
 msgid "xxxx-xxxx-xxxx"
 msgstr "xxxx-xxxx-xxxx"
 
-#: client/pages/auth/login/LoginPage.tsx:336
+#: client/pages/auth/login/LoginPage.tsx:272
 msgid "Use authenticator code instead"
 msgstr "Stattdessen Authentifikator-Code verwenden"
 
-#: client/pages/auth/login/LoginPage.tsx:362
+#: client/pages/auth/login/LoginPage.tsx:294
 msgid "Lost your device? Use a backup code"
 msgstr "Gerät verloren? Wiederherstellungscode verwenden"
 
-#: client/pages/auth/login/LoginPage.tsx:403
+#: client/pages/auth/login/LoginPage.tsx:331
 msgid "Verifying…"
 msgstr "Wird überprüft…"
 
-#: client/pages/auth/login/LoginPage.tsx:404
+#: client/pages/auth/login/LoginPage.tsx:332
 msgid "Signing in…"
 msgstr "Wird angemeldet…"
 
-#: client/pages/auth/login/LoginPage.tsx:409
+#: client/pages/auth/login/LoginPage.tsx:337
 msgid "Verify & continue"
 msgstr "Bestätigen & fortfahren"
 
-#: client/pages/auth/login/LoginPage.tsx:410
+#: client/pages/auth/login/LoginPage.tsx:338
 msgid "Sign in"
 msgstr "Anmelden"
 
-#: client/pages/auth/login/LoginPage.tsx:425
+#: client/pages/auth/login/LoginPage.tsx:353
 msgid "Back to sign-in"
 msgstr "Zurück zur Anmeldung"
 
@@ -3950,7 +4002,7 @@ msgstr "Öffnen"
 
 #: client/pages/layout/dashboard/Search/SearchDialog.tsx:150
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1046
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:954
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:960
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:601
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:947
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:463
@@ -3984,7 +4036,6 @@ msgstr "Dashboard"
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
 #: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:387
 #: client/pages/dashboard/links/components/Header/Header.tsx:21
-#: client/pages/NotFoundPage.tsx:41
 msgid "All Links"
 msgstr "Alle Links"
 
@@ -4001,7 +4052,6 @@ msgstr "Über"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:146
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:152
-#: client/pages/NotFoundPage.tsx:43
 #: client/router/pageTitle.ts:22
 msgid "General Settings"
 msgstr "Allgemeine Einstellungen"
@@ -5148,8 +5198,8 @@ msgstr "Standard-Social-Media-Vorschaubild"
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:676
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:597
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:508
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:915
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 #: client/pages/dashboard/users/components/ManageRolesDrawer/components/DrawerFooter.tsx:70
@@ -5174,44 +5224,48 @@ msgstr "Datenbankaktualisierung empfohlen"
 msgid "Your local GeoLite2 City database is over 30 days old. Update the database to maintain accurate location reporting."
 msgstr "Ihre lokale GeoLite2-City-Datenbank ist älter als 30 Tage. Aktualisieren Sie die Datenbank für genaue Standortberichte."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:157
-msgid "Location analytics is enabled"
-msgstr "Standortanalyse ist aktiviert"
-
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
-msgid "PeakURL is using the local GeoLite2 City database for click locations."
-msgstr "PeakURL verwendet die lokale GeoLite2-City-Datenbank, um Besuche nach Land und Stadt zuzuordnen."
+msgid "MaxMind credentials recommended"
+msgstr "MaxMind-Zugangsdaten empfohlen"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:161
+msgid "PeakURL works out of the box using your local database. To keep location stats accurate as IP allocations shift, add your MaxMind credentials below so the weekly background job can automatically fetch updates."
+msgstr "PeakURL funktioniert direkt nach der Installation mit Ihrer lokalen Datenbank. Um Standortstatistiken bei wechselnden IP-Zuweisungen aktuell zu halten, tragen Sie unten Ihre MaxMind-Zugangsdaten ein, damit der wöchentliche Hintergrundjob Aktualisierungen automatisch abrufen kann."
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
+msgid "Setup guide"
+msgstr "Einrichtungsleitfaden"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:186
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:198
 msgid "Database download required"
 msgstr "Datenbank-Download erforderlich"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 msgid "Your MaxMind credentials have been saved. Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "Ihre MaxMind-Zugangsdaten wurden gespeichert. Laden Sie die GeoLite2-City-Datenbank über die Schaltfläche oben herunter, um Länder- und Städteanalysen zu aktivieren."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "Laden Sie die GeoLite2-City-Datenbank über die Schaltfläche oben herunter, um Länder- und Städteanalysen zu aktivieren."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:196
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
 msgid "Location Database"
 msgstr "Standort-Datenbank"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:197
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "Aktivieren Sie Länder- und Städteanalysen mit einer lokalen Kopie der kostenlosen MaxMind GeoLite2-City-Datenbank."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:228
 msgid "Update Database"
 msgstr "Datenbank aktualisieren"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
 msgid "Download Database"
 msgstr "Datenbank herunterladen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:237
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:691
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
@@ -5227,24 +5281,24 @@ msgstr "Datenbank herunterladen"
 msgid "Status"
 msgstr "Status"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:858
 msgid "Ready"
 msgstr "Bereit"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:859
 msgid "Setup Required"
 msgstr "Einrichtung erforderlich"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:225
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
 msgid "Database Updated"
 msgstr "Datenbank aktualisiert"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:233
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:249
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:89
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:128
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -5256,12 +5310,12 @@ msgstr "Datenbank aktualisiert"
 msgid "Never"
 msgstr "Nie"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:254
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:870
 msgid "Database Size"
 msgstr "Datenbankgröße"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:257
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:269
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
@@ -5272,82 +5326,82 @@ msgstr "Datenbankgröße"
 msgid "Not available"
 msgstr "Nicht verfügbar"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:250
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:266
 msgid "Location data unavailable"
 msgstr "Standortdaten nicht verfügbar"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:261
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:277
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:210
 msgid "Dashboard management unavailable"
 msgstr "Dashboard-Verwaltung nicht verfügbar"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:271
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:287
 msgid "MaxMind Credentials"
 msgstr "MaxMind-Zugangsdaten"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:275
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "PeakURL speichert diese Werte verschlüsselt in der Datenbank, damit die GeoLite2-City-Datenbank später ohne erneute Nachfrage aktualisiert werden kann."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "How to get credentials"
 msgstr "So erhalten Sie Anmeldedaten"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
 msgid "Credentials saved"
 msgstr "Zugangsdaten gespeichert"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:312
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:885
 msgid "Account ID"
 msgstr "Konto-ID"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:323
 msgid "License Key"
 msgstr "Lizenzschlüssel"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
 msgid "Update Credentials"
 msgstr "Zugangsdaten aktualisieren"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:446
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:462
 msgid "Clear Credentials"
 msgstr "Zugangsdaten löschen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:363
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:379
 msgid "MaxMind Account ID"
 msgstr "MaxMind-Konto-ID"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:392
 msgid "MaxMind License Key"
 msgstr "MaxMind-Lizenzschlüssel"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:386
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:402
 msgid "Enter a new MaxMind license key"
 msgstr "Neuen MaxMind-Lizenzschlüssel eingeben"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:387
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:403
 msgid "Enter your MaxMind license key"
 msgstr "Geben Sie Ihren MaxMind-Lizenzschlüssel ein"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:410
 msgid "Saved license key:"
 msgstr "Gespeicherter Lizenzschlüssel:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:432
 msgid "Save New Credentials"
 msgstr "Neue Zugangsdaten speichern"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:433
 msgid "Save Credentials"
 msgstr "Zugangsdaten speichern"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:458
 msgid "Clear MaxMind credentials?"
 msgstr "MaxMind-Zugangsdaten löschen?"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:443
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:459
 msgid "The saved account ID and license key will be removed. Your downloaded location database and existing analytics will remain available. Future updates will automatically use PeakURL's verified database archive."
 msgstr "Die gespeicherte Konto-ID und der Lizenzschlüssel werden entfernt. Ihre heruntergeladene Standortdatenbank und vorhandene Analysen bleiben verfügbar. Zukünftige Aktualisierungen verwenden automatisch das verifizierte Datenbankarchiv von PeakURL."
 
@@ -5574,7 +5628,7 @@ msgstr "Webhook-Test-Ping"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:118
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:692
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:929
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:935
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:107
 msgid "Event"
 msgstr "Ereignis"
@@ -5625,7 +5679,7 @@ msgid "Close drawer"
 msgstr "Bereich schließen"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:517
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:457
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:461
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:28
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:85
@@ -5656,8 +5710,8 @@ msgstr "Aktiviert"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:542
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:186
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:337
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:338
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:617
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:844
@@ -5729,7 +5783,7 @@ msgid "HTTP Code"
 msgstr "HTTP-Code"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:697
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:918
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:924
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 #: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:132
 msgid "Duration"
@@ -5892,7 +5946,7 @@ msgid "A descriptive name to identify this webhook endpoint."
 msgstr "Ein aussagekräftiger Name zur Identifizierung dieses Webhook-Endpunkts."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:298
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:764
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:770
 msgid "Endpoint URL"
 msgstr "Endpunkt-URL"
 
@@ -6019,7 +6073,7 @@ msgid "Editing"
 msgstr "Wird bearbeitet"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:195
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:347
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:348
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:829
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:833
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:886
@@ -6047,75 +6101,75 @@ msgstr "CAPTCHA-Schutz"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "Verifizierungsprüfung auf Anmeldeseiten und vor der Weiterleitung öffentlicher Kurzlinks anfordern."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "CAPTCHA-Schutz aktivieren"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
 msgid "Loading CAPTCHA settings…"
 msgstr "CAPTCHA-Einstellungen werden geladen…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:338
 msgid "Failed to load CAPTCHA settings."
 msgstr "CAPTCHA-Einstellungen konnten nicht geladen werden."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:342
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Provider Settings"
 msgstr "Anbieter-Einstellungen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:346
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:348
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "Gespeicherte Zugangsdaten sind maskiert. Ändern oder entfernen Sie sie bei Bedarf."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:349
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:351
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "Wählen Sie einen CAPTCHA-Anbieter und geben Sie Ihre API-Schlüssel ein."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:359
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:392
 msgid "Provider"
 msgstr "Anbieter"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:367
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:369
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
 msgid "Site Key"
 msgstr "Websiteschlüssel"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:375
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:377
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:426
 msgid "Secret Key"
 msgstr "Geheimschlüssel"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:396
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:398
 msgid "CAPTCHA provider"
 msgstr "CAPTCHA-Anbieter"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:407
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Paste site key"
 msgstr "Websiteschlüssel einfügen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:418
 msgid "Leave unchanged to keep the saved site key."
 msgstr "Unverändert lassen, um den gespeicherten Websiteschlüssel beizubehalten."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:434
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:436
 msgid "Keep saved secret"
 msgstr "Gespeicherten Geheimschlüssel behalten"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:435
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:437
 msgid "Paste secret key"
 msgstr "Geheimschlüssel einfügen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:473
 msgid "Change keys"
 msgstr "Schlüssel ändern"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:484
 msgid "Remove keys"
 msgstr "Schlüssel entfernen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 msgid "Save Settings"
 msgstr "Einstellungen speichern"
 
@@ -6190,180 +6244,180 @@ msgid "PeakURL sends HMAC-SHA256 signed POST requests to your endpoint when sele
 msgstr "PeakURL sendet HMAC-SHA256-signierte POST-Anfragen an Ihren Endpunkt, wenn ausgewählte Link-Ereignisse eintreten."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:332
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:704
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:710
 msgid "Add Webhook"
 msgstr "Webhook hinzufügen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:354
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:355
 msgid "Enable webhooks"
 msgstr "Webhooks aktivieren"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:392
 msgid "Loading webhook configuration…"
 msgstr "Webhook-Konfiguration wird geladen…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:398
 msgid "Failed to load webhook configuration."
 msgstr "Webhook-Konfiguration konnte nicht geladen werden."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
 msgid "URL copied"
 msgstr "URL kopiert"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:441
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:445
 msgid "Copy URL"
 msgstr "URL kopieren"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:137
 msgid "SSL"
 msgstr "SSL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:484
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:488
 msgid "Insecure"
 msgstr "Unsicher"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
 msgid "Send a test payload to this endpoint"
 msgstr "Eine Test-Nutzlast an diesen Endpunkt senden"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:517
 msgid "Test"
 msgstr "Testen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:532
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
 msgid "View delivery history & attempts"
 msgstr "Zustellungsverlauf & Versuche anzeigen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:540
 msgid "Deliveries"
 msgstr "Zustellungen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:548
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
 msgid "Edit webhook settings"
 msgstr "Webhook-Einstellungen bearbeiten"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:556
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:407
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:563
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:566
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:567
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:570
 msgid "Delete this webhook"
 msgstr "Diesen Webhook löschen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:579
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:583
 msgid "Events:"
 msgstr "Ereignisse:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:605
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:628
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:609
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:632
 msgid "No events subscribed"
 msgstr "Keine Ereignisse abonniert"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:640
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:645
 msgid "Secret:"
 msgstr "Geheimnis:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:653
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:659
 msgid "Rotate"
 msgstr "Erneuern"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:664
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:670
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:34
 msgid "Created:"
 msgstr "Erstellt:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:688
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:694
 msgid "No webhooks configured"
 msgstr "Keine Webhooks konfiguriert"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:691
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:697
 msgid "Add an HTTPS endpoint to begin receiving signed event deliveries for link activity, user updates, and API key events."
 msgstr "Fügen Sie einen HTTPS-Endpunkt hinzu, um signierte Ereigniszustellungen für Linkaktivitäten, Benutzeraktualisierungen und API-Schlüsselereignisse zu empfangen."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:747
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
 msgid "Your Webhook Signing Secret"
 msgstr "Ihr Webhook-Signaturgeheimnis"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:759
 msgid "This signing secret will not be shown again."
 msgstr "Dieses Signaturgeheimnis wird nicht mehr angezeigt."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:756
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:762
 msgid "Store this secret securely in your receiving application. Outbound requests are signed using HMAC-SHA256 with this secret."
 msgstr "Speichern Sie dieses Geheimnis sicher in Ihrer Empfängeranwendung. Ausgehende Anfragen werden mit diesem Geheimnis per HMAC-SHA256 signiert."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:779
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:803
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:785
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:809
 msgid "Secret copied"
 msgstr "Geheimnis kopiert"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:782
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:788
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "In die Zwischenablage kopieren"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:786
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:792
 msgid "To verify signatures, compute HMAC-SHA256 over '{timestamp}.{raw_payload}' and compare against the X-PeakURL-Signature header."
 msgstr "Berechnen Sie zur Überprüfung von Signaturen HMAC-SHA256 über '{timestamp}.{raw_payload}' und vergleichen Sie das Ergebnis mit dem Header X-PeakURL-Signature."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:807
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:813
 msgid "Copy Secret"
 msgstr "Geheimnis kopieren"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:810
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:816
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "Ich habe es gespeichert"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:824
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:830
 msgid "Rotate Webhook Signing Secret"
 msgstr "Webhook-Signaturgeheimnis erneuern"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:828
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:834
 msgid "Rotate the signing secret for %s? The current secret will be immediately invalidated and outbound event signatures will fail until you update your receiver application."
 msgstr "Signaturgeheimnis für %s erneuern? Das aktuelle Geheimnis wird sofort ungültig und ausgehende Ereignissignaturen schlagen fehl, bis Sie Ihre Empfängeranwendung aktualisieren."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:835
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:841
 msgid "Rotate Secret"
 msgstr "Geheimnis erneuern"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:850
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:861
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:856
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:867
 msgid "Delete Webhook"
 msgstr "Webhook löschen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:854
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:860
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "Webhook für %s löschen? PeakURL stoppt sofort das Senden signierter Ereignisanfragen an diesen Endpunkt."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:862
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:868
 msgid "Keep Webhook"
 msgstr "Webhook behalten"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:872
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:878
 msgid "Webhook Test Ping Result"
 msgstr "Ergebnis des Webhook-Test-Pings"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:893
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:899
 msgid "Delivery Succeeded"
 msgstr "Zustellung erfolgreich"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:903
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:909
 msgid "Delivery Failed"
 msgstr "Zustellung fehlgeschlagen"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:340
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:341
 msgid "%d configured"
 msgid_plural "%d configured"
 msgstr[0] "%d konfiguriert"
 msgstr[1] "%d konfiguriert"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:623
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:627
 msgid "+%d more"
 msgid_plural "+%d more"
 msgstr[0] "+%d mehr"
@@ -8812,7 +8866,7 @@ msgstr "Aktivitätsprotokoll"
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Überprüfen Sie Link-Änderungen und Benutzerverwaltungsereignisse an einem zentralen Ort mit Filtern, Zeitstempeln und Akteur-Details."
 
-#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:75
+#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:76
 msgid "Refresh activity history"
 msgstr "Aktivitätsverlauf aktualisieren"
 
@@ -9047,7 +9101,7 @@ msgid "Review general settings"
 msgstr "Allgemeine Einstellungen überprüfen"
 
 #: client/pages/dashboard/about/CompletionNotice.tsx:71
-#: client/pages/NotFoundPage.tsx:24
+#: client/pages/NotFoundPage.tsx:30
 msgid "Go to Dashboard"
 msgstr "Zum Dashboard"
 
@@ -11171,25 +11225,13 @@ msgstr "Analyseübersicht ausgeblendet"
 msgid "Traffic statistics and click analytics are disabled for your role."
 msgstr "Zugriffsstatistiken und Klickanalysen sind für Ihre Rolle deaktiviert."
 
-#: client/pages/NotFoundPage.tsx:16
-msgid "404 · Missing page"
-msgstr "404 · Fehlende Seite"
+#: client/pages/NotFoundPage.tsx:24
+msgid "This dashboard page doesn’t exist. Check the address, or return to your dashboard."
+msgstr "Diese Dashboard-Seite existiert nicht. Prüfen Sie die Adresse oder kehren Sie zu Ihrem Dashboard zurück."
 
-#: client/pages/NotFoundPage.tsx:18
-msgid "We couldn’t find the dashboard page you’re looking for. Check the address, or return to your dashboard to keep going."
-msgstr "Die von Ihnen gesuchte Dashboard-Seite konnte nicht gefunden werden. Überprüfen Sie die Adresse oder kehren Sie zu Ihrem Dashboard zurück, um fortzufahren."
-
-#: client/pages/NotFoundPage.tsx:31
+#: client/pages/NotFoundPage.tsx:37
 msgid "Go Back"
 msgstr "Zurück"
-
-#: client/pages/NotFoundPage.tsx:36
-msgid "Helpful links"
-msgstr "Hilfreiche Links"
-
-#: client/pages/NotFoundPage.tsx:38
-msgid "Pick up where you left off"
-msgstr "Dort weitermachen, wo Sie aufgehört haben"
 
 #: client/router/pageTitle.ts:30
 msgid "Performance Settings"

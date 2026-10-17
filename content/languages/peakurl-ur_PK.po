@@ -6,199 +6,25 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-10-16 13:54+0000\n"
-"POT-Creation-Date: 2026-10-16 13:54+0000\n"
+"PO-Revision-Date: 2026-10-17 07:23+0000\n"
+"POT-Creation-Date: 2026-10-17 07:23+0000\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "Project-Id-Version: PeakURL 1.7.2\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
 
-#: install.php:92
+#: install.php:81
 msgid "Administrator Setup - %s"
 msgstr "ایڈمنسٹریٹر سیٹ اپ - %s"
 
-#: install.php:533
-#: setup-config.php:674
-msgid "Welcome"
-msgstr "خوش آمدید"
-
-#: install.php:540
-#: setup-config.php:681
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
-msgid "Database"
-msgstr "ڈیٹابیس"
-
-#: install.php:547
-#: setup-config.php:688
-msgid "Admin account"
-msgstr "ایڈمن اکاؤنٹ"
-
-#: install.php:558
-msgid "Create your account"
-msgstr "اپنا اکاؤنٹ بنائیں"
-
-#: install.php:560
-msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
-msgstr "اپنی سائٹ کا نام رکھیں اور پہلے ایڈمنسٹریٹر کا اکاؤنٹ بنائیں۔ انسٹال مکمل ہوتے ہی آپ خود بخود سائن ان ہو جائیں گے۔"
-
-#: install.php:580
-msgid "Site info"
-msgstr "سائٹ کی معلومات"
-
-#: install.php:583
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
-msgid "Site title"
-msgstr "سائٹ کا عنوان"
-
-#: install.php:584
-msgid "My Link Hub"
-msgstr "میرا لنک ہب"
-
-#: install.php:588
-#: server/core/auth/roles.php:1052
-msgid "Administrator"
-msgstr "ایڈمنسٹریٹر"
-
-#: install.php:591
-#: setup-config.php:818
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
-msgid "Username"
-msgstr "صارف نام"
-
-#: install.php:593
-msgid "Letters, numbers, dots, dashes, underscores, or @."
-msgstr "حروف، اعداد، dots، dashes، underscores یا @ استعمال کریں۔"
-
-#: install.php:596
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
-#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
-#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
-msgid "Email"
-msgstr "ای میل"
-
-#: install.php:597
-#: client/pages/auth/login/LoginPage.tsx:248
-msgid "you@company.com"
-msgstr "you@company.com"
-
-#: install.php:600
-#: setup-config.php:822
-#: server/features/links/controller.php:531
-#: client/pages/auth/login/LoginPage.tsx:253
-#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
-msgid "Password"
-msgstr "پاس ورڈ"
-
-#: install.php:602
-msgid "At least 8 characters. You will be signed in right after installation."
-msgstr "کم از کم 8 حروف۔ انسٹالیشن کے فوراً بعد آپ سائن ان ہو جائیں گے۔"
-
-#: install.php:606
-msgid "Database configuration is already saved."
-msgstr "ڈیٹابیس کی کنفیگریشن پہلے ہی محفوظ کی جا چکی ہے۔"
-
-#: install.php:609
-msgid "Install %s"
-msgstr "%s انسٹال کریں"
-
-#: setup-config.php:95
+#: setup-config.php:84
 msgid "Database Setup - %s"
 msgstr "ڈیٹابیس سیٹ اپ - %s"
 
-#: setup-config.php:97
+#: setup-config.php:86
 msgid "Welcome - %s"
 msgstr "خوش آمدید - %s"
-
-#: setup-config.php:652
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
-msgid "Site language"
-msgstr "سائٹ کی زبان"
-
-#: setup-config.php:703
-#: server/services/notifications.php:204
-msgid "Welcome to %s"
-msgstr "%s میں خوش آمدید"
-
-#: setup-config.php:705
-msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
-msgstr "شروع کرنے سے پہلے، آپ کو اپنے ڈیٹا بیس کنکشن کی تفصیلات کی ضرورت ہوگی۔ PeakURL ان کا استعمال config.php بنانے اور مطلوبہ ٹیبلز قائم کرنے کے لیے کرے گا۔"
-
-#: setup-config.php:717
-#: setup-config.php:814
-msgid "Database name"
-msgstr "ڈیٹا بیس کا نام"
-
-#: setup-config.php:723
-msgid "Username and password"
-msgstr "صارف نام اور پاس ورڈ"
-
-#: setup-config.php:729
-msgid "Host and port"
-msgstr "ہوسٹ اور پورٹ"
-
-#: setup-config.php:735
-#: setup-config.php:838
-msgid "Table prefix"
-msgstr "ٹیبل پریفکس"
-
-#: setup-config.php:735
-msgid "optional"
-msgstr "اختیاری"
-
-#: setup-config.php:741
-msgid "These details are usually available in your hosting control panel or from your database administrator."
-msgstr "یہ تفصیلات عموماً آپ کے ہوسٹنگ کنٹرول پینل یا ڈیٹابیس ایڈمنسٹریٹر سے مل جاتی ہیں۔"
-
-#: setup-config.php:761
-msgid "Let's go"
-msgstr "آئیے شروع کریں"
-
-#: setup-config.php:773
-#: server/services/system-status/diagnostic-checks.php:48
-msgid "Database connection"
-msgstr "ڈیٹابیس کنکشن"
-
-#: setup-config.php:775
-msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
-msgstr "اپنے MySQL یا MariaDB ڈیٹا بیس کی اسناد درج کریں۔ PeakURL انہیں سائٹ کی روٹ ڈائریکٹری میں موجود config.php میں درج کرے گا۔"
-
-#: setup-config.php:811
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:156
-msgid "Connection details"
-msgstr "کنکشن کی تفصیلات"
-
-#: setup-config.php:826
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
-msgid "Host"
-msgstr "ہوسٹ"
-
-#: setup-config.php:831
-msgid "Advanced"
-msgstr "ایڈوانسڈ"
-
-#: setup-config.php:834
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
-msgid "Port"
-msgstr "پورٹ"
-
-#: setup-config.php:840
-msgid "Letters, numbers, underscores. Example: peakurl_"
-msgstr "حروف، اعداد اور underscores استعمال کریں۔ مثال: peakurl_"
-
-#: setup-config.php:846
-msgid "Back"
-msgstr "واپس"
-
-#: setup-config.php:849
-msgid "Save and continue"
-msgstr "محفوظ کریں اور جاری رکھیں"
 
 #: server/database/repair-specs.php:41
 msgid "The clicks table still contains row IDs with prefixes and should be normalized."
@@ -308,6 +134,11 @@ msgstr "صرف ایڈمنسٹریٹرز کے لیے مخصوص ہے۔"
 #: server/core/auth/roles.php:1503
 msgid "Role not found."
 msgstr "کردار نہیں ملا۔"
+
+#: server/core/auth/roles.php:1052
+#: server/services/install/templates/administrator.php:43
+msgid "Administrator"
+msgstr "ایڈمنسٹریٹر"
 
 #: server/core/auth/roles.php:1056
 #: client/pages/layout/dashboard/Header/Header.tsx:42
@@ -1064,80 +895,108 @@ msgstr "لنک نہیں ملا"
 msgid "Check that the address is complete and correct. This short link may have been removed or is no longer available."
 msgstr "چیک کریں کہ پتہ مکمل اور درست ہے۔ ہو سکتا ہے یہ شارٹ لنک ہٹا دیا گیا ہو یا اب دستیاب نہ ہو۔"
 
-#: server/features/links/controller.php:526
+#: server/features/links/controller.php:518
 msgid "Password required"
 msgstr "پاس ورڈ درکار ہے"
 
-#: server/features/links/controller.php:527
+#: server/features/links/controller.php:519
 msgid "This link is protected. Enter the password to continue."
 msgstr "یہ لنک محفوظ ہے۔ جاری رکھنے کے لیے پاس ورڈ درج کریں۔"
 
-#: server/features/links/controller.php:534
+#: server/features/links/controller.php:523
+#: server/services/install/templates/setup.php:132
+#: server/services/install/templates/administrator.php:55
+#: client/pages/auth/login/LoginPage.tsx:198
+#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
+msgid "Password"
+msgstr "پاس ورڈ"
+
+#: server/features/links/controller.php:526
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "پاس ورڈ درج کریں"
 
-#: server/features/links/controller.php:538
+#: server/features/links/controller.php:530
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "جاری رکھیں"
 
-#: server/features/links/controller.php:543
+#: server/features/links/controller.php:535
 msgid "Protected Link"
 msgstr "محفوظ لنک"
 
-#: server/features/links/controller.php:590
-msgid "Performing security verification"
-msgstr "سیکیورٹی تصدیق جاری ہے"
+#: server/features/links/controller.php:568
+msgid "Checking your browser"
+msgstr "آپ کے براؤزر کی جانچ کی جا رہی ہے"
 
-#: server/features/links/controller.php:591
-msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
-msgstr "یہ ویب سائٹ بدنیتی پر مبنی بوٹس سے بچاؤ کے لیے سیکیورٹی سروس استعمال کرتی ہے۔ یہ صفحہ اس وقت دکھایا جاتا ہے جب PeakURL تصدیق کرتا ہے کہ آپ بوٹ نہیں ہیں۔"
+#: server/features/links/controller.php:569
+msgid "Complete the security check to open this link. You’ll continue automatically once verification is complete."
+msgstr "اس لنک کو کھولنے کے لیے سیکیورٹی چیک مکمل کریں۔ تصدیق مکمل ہونے کے بعد آپ خودکار طور پر آگے بڑھ جائیں گے۔"
 
-#: server/features/links/controller.php:595
+#: server/features/links/controller.php:573
 msgid "JavaScript is required to complete this verification."
 msgstr "یہ تصدیق مکمل کرنے کے لیے JavaScript درکار ہے۔"
 
-#: server/features/links/controller.php:598
+#: server/features/links/controller.php:576
 msgid "Security Verification"
 msgstr "سیکیورٹی تصدیق"
 
-#: server/features/links/controller.php:695
-#: server/features/links/controller.php:856
-msgid "Waiting for verification…"
-msgstr "تصدیق کا انتظار ہے…"
+#: server/features/links/controller.php:670
+msgid "Loading security check…"
+msgstr "سیکیورٹی چیک لوڈ ہو رہا ہے…"
 
-#: server/features/links/controller.php:698
-msgid "Checking verification…"
-msgstr "تصدیق کی جانچ ہو رہی ہے…"
+#: server/features/links/controller.php:671
+msgid "Verifying your browser…"
+msgstr "آپ کے براؤزر کی تصدیق کی جا رہی ہے…"
 
-#: server/features/links/controller.php:701
-msgid "Starting verification…"
-msgstr "تصدیق شروع ہو رہی ہے…"
+#: server/features/links/controller.php:672
+msgid "Verification complete. Opening your link…"
+msgstr "تصدیق مکمل ہو گئی۔ آپ کا لنک کھولا جا رہا ہے…"
 
-#: server/features/links/controller.php:704
+#: server/features/links/controller.php:673
 msgid "Verification expired. Please try again."
 msgstr "تصدیق کی مدت ختم ہو گئی۔ دوبارہ کوشش کریں۔"
 
-#: server/features/links/controller.php:707
+#: server/features/links/controller.php:674
 msgid "Verification could not be completed. Please try again."
 msgstr "تصدیق مکمل نہیں ہو سکی۔ دوبارہ کوشش کریں۔"
 
-#: server/features/links/controller.php:861
+#: server/features/links/controller.php:675
+msgid "The security check couldn’t load. Check your connection or content blocker, then try again."
+msgstr "سیکیورٹی چیک لوڈ نہیں ہو سکا۔ اپنا انٹرنیٹ کنکشن یا مواد بلاکر چیک کریں اور دوبارہ کوشش کریں۔"
+
+#: server/features/links/controller.php:676
+msgid "Verification is taking longer than expected. Please try again."
+msgstr "تصدیق میں معمول سے زیادہ وقت لگ رہا ہے۔ براہ کرم دوبارہ کوشش کریں۔"
+
+#: server/features/links/controller.php:677
+msgid "This browser couldn’t run the security check. Please try another browser."
+msgstr "یہ براؤزر سیکیورٹی چیک نہیں چلا سکا۔ براہ کرم کوئی دوسرا براؤزر استعمال کریں۔"
+
+#: server/features/links/controller.php:678
+msgid "Your link couldn’t open. Please verify again to continue."
+msgstr "آپ کا لنک نہیں کھل سکا۔ جاری رکھنے کے لیے براہ کرم دوبارہ تصدیق کریں۔"
+
+#: server/features/links/controller.php:703
+msgid "Waiting for verification…"
+msgstr "تصدیق کا انتظار ہے…"
+
+#: server/features/links/controller.php:708
 #: client/pages/layout/dashboard/Search/SearchResults.tsx:49
 #: client/pages/dashboard/about/ReleaseNotes.tsx:42
 msgid "Try again"
 msgstr "دوبارہ کوشش کریں"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "410 · Link expired"
 msgstr "410 · لنک کی میعاد ختم ہو گئی ہے"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "404 · Link not found"
 msgstr "404 · لنک نہیں ملا"
 
-#: server/features/links/controller.php:1053
+#: server/features/links/controller.php:899
 msgid "Contact the person who shared this link to request a new address. You do not need an account to open a public short link."
 msgstr "نیا پتہ مانگنے کے لیے اس شخص سے رابطہ کریں جس نے یہ لنک شیئر کیا تھا۔ عوامی شارٹ لنک کھولنے کے لیے آپ کو اکاؤنٹ کی ضرورت نہیں ہے۔"
 
@@ -1923,7 +1782,7 @@ msgid "Thanks for your patience."
 msgstr "آپ کے صبر کا شکریہ۔"
 
 #: server/services/maintenance.php:108
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:132
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:133
 msgid "Loading"
 msgstr "لوڈ ہو رہا ہے"
 
@@ -2130,6 +1989,206 @@ msgstr "ایڈمن پاس ورڈ کم از کم 8 حروف کا ہونا چاہ�
 #: server/services/install/manager.php:221
 msgid "The selected timezone is invalid."
 msgstr "منتخب کردہ ٹائم زون غلط ہے۔"
+
+#: server/services/install/templates/setup.php:28
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
+msgid "Site language"
+msgstr "سائٹ کی زبان"
+
+#: server/services/install/templates/setup.php:40
+msgid "Apply language"
+msgstr "زبان لاگو کریں"
+
+#: server/services/install/templates/setup.php:49
+#: server/services/notifications.php:204
+msgid "Welcome to %s"
+msgstr "%s میں خوش آمدید"
+
+#: server/services/install/templates/setup.php:51
+msgid "Have the following database details ready. PeakURL will check the connection before saving your configuration."
+msgstr "مندرجہ ذیل ڈیٹا بیس کی تفصیلات تیار رکھیں۔ PeakURL کنفیگریشن محفوظ کرنے سے پہلے کنکشن کی جانچ کرے گا۔"
+
+#: server/services/install/templates/setup.php:62
+#: server/services/install/templates/setup.php:124
+msgid "Database name"
+msgstr "ڈیٹا بیس کا نام"
+
+#: server/services/install/templates/setup.php:68
+msgid "Username and password"
+msgstr "صارف نام اور پاس ورڈ"
+
+#: server/services/install/templates/setup.php:74
+msgid "Host and port"
+msgstr "ہوسٹ اور پورٹ"
+
+#: server/services/install/templates/setup.php:80
+#: server/services/install/templates/setup.php:148
+msgid "Table prefix"
+msgstr "ٹیبل پریفکس"
+
+#: server/services/install/templates/setup.php:80
+msgid "default: peakurl_"
+msgstr "طے شدہ: peakurl_"
+
+#: server/services/install/templates/setup.php:86
+msgid "Your hosting provider or database administrator can provide these details."
+msgstr "آپ کا ہوسٹنگ فراہم کنندہ یا ڈیٹا بیس ایڈمنسٹریٹر یہ تفصیلات فراہم کر سکتا ہے۔"
+
+#: server/services/install/templates/setup.php:91
+msgid "Begin setup"
+msgstr "سیٹ اپ شروع کریں"
+
+#: server/services/install/templates/setup.php:99
+#: server/services/system-status/diagnostic-checks.php:48
+msgid "Database connection"
+msgstr "ڈیٹابیس کنکشن"
+
+#: server/services/install/templates/setup.php:101
+msgid "Enter your MySQL or MariaDB connection details. PeakURL will verify the connection and save the settings in config.php."
+msgstr "اپنے MySQL یا MariaDB کنکشن کی تفصیلات درج کریں۔ PeakURL کنکشن کی تصدیق کرے گا اور ترتیبات کو config.php میں محفوظ کرے گا۔"
+
+#: server/services/install/templates/setup.php:121
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:157
+msgid "Connection details"
+msgstr "کنکشن کی تفصیلات"
+
+#: server/services/install/templates/setup.php:128
+#: server/services/install/templates/administrator.php:46
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
+msgid "Username"
+msgstr "صارف نام"
+
+#: server/services/install/templates/setup.php:136
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
+msgid "Host"
+msgstr "ہوسٹ"
+
+#: server/services/install/templates/setup.php:141
+msgid "Advanced"
+msgstr "ایڈوانسڈ"
+
+#: server/services/install/templates/setup.php:144
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
+msgid "Port"
+msgstr "پورٹ"
+
+#: server/services/install/templates/setup.php:150
+msgid "Use letters, numbers, and underscores. The default is peakurl_."
+msgstr "حروف، اعداد اور انڈر سکور استعمال کریں۔ طے شدہ peakurl_ ہے۔"
+
+#: server/services/install/templates/setup.php:156
+msgid "Back"
+msgstr "واپس"
+
+#: server/services/install/templates/setup.php:159
+msgid "Save and continue"
+msgstr "محفوظ کریں اور جاری رکھیں"
+
+#: server/services/install/templates/page.php:26
+msgid "Toggle dark mode"
+msgstr "ڈارک موڈ تبدیل کریں"
+
+#: server/services/install/templates/page.php:33
+msgid "Installation progress"
+msgstr "تنصیب کی پیشرفت"
+
+#: server/services/install/templates/page.php:45
+msgid "Installation"
+msgstr "تنصیب"
+
+#: server/services/install/templates/administrator.php:14
+msgid "Create your account"
+msgstr "اپنا اکاؤنٹ بنائیں"
+
+#: server/services/install/templates/administrator.php:16
+msgid "Enter a site title and administrator credentials. PeakURL will sign you in when installation is complete."
+msgstr "سائٹ کا عنوان اور ایڈمنسٹریٹر کی اسناد درج کریں۔ تنصیب مکمل ہونے پر PeakURL آپ کو لاگ ان کر دے گا۔"
+
+#: server/services/install/templates/administrator.php:35
+msgid "Site details"
+msgstr "سائٹ کی تفصیلات"
+
+#: server/services/install/templates/administrator.php:38
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
+msgid "Site title"
+msgstr "سائٹ کا عنوان"
+
+#: server/services/install/templates/administrator.php:39
+msgid "My Link Hub"
+msgstr "میرا لنک ہب"
+
+#: server/services/install/templates/administrator.php:48
+msgid "Use letters, numbers, periods, hyphens, underscores, or @."
+msgstr "حروف، اعداد، فل اسٹاپ، ہائفن، انڈر سکور، یا @ استعمال کریں۔"
+
+#: server/services/install/templates/administrator.php:51
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
+#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
+msgid "Email"
+msgstr "ای میل"
+
+#: server/services/install/templates/administrator.php:52
+#: client/pages/auth/login/LoginPage.tsx:193
+msgid "you@company.com"
+msgstr "you@company.com"
+
+#: server/services/install/templates/administrator.php:57
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
+msgid "Use at least 8 characters."
+msgstr "کم از کم 8 حروف استعمال کریں۔"
+
+#: server/services/install/templates/administrator.php:61
+msgid "Your database connection is configured."
+msgstr "آپ کا ڈیٹا بیس کنکشن کنفیگر ہو چکا ہے۔"
+
+#: server/services/install/templates/administrator.php:64
+msgid "Install %s"
+msgstr "%s انسٹال کریں"
+
+#: server/services/install/page.php:31
+msgid "Welcome"
+msgstr "خوش آمدید"
+
+#: server/services/install/page.php:31
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
+msgid "Database"
+msgstr "ڈیٹابیس"
+
+#: server/services/install/page.php:31
+msgid "Admin account"
+msgstr "ایڈمن اکاؤنٹ"
+
+#: server/services/install/page.php:34
+msgid "Install PeakURL"
+msgstr "PeakURL انسٹال کریں"
+
+#: server/services/install/page.php:35
+msgid "Connect your database"
+msgstr "اپنا ڈیٹا بیس مربوط کریں"
+
+#: server/services/install/page.php:36
+msgid "Set up your site"
+msgstr "اپنی سائٹ ترتیب دیں"
+
+#: server/services/install/page.php:39
+msgid "Connect your database, then create the administrator account for this installation."
+msgstr "اپنا ڈیٹا بیس مربوط کریں، پھر اس تنصیب کے لیے ایڈمنسٹریٹر اکاؤنٹ بنائیں۔"
+
+#: server/services/install/page.php:40
+msgid "PeakURL uses this database to store your links, accounts, and analytics."
+msgstr "PeakURL لنکس، اکاؤنٹس اور تجزیات کو محفوظ کرنے کے لیے یہ ڈیٹا بیس استعمال کرتا ہے۔"
+
+#: server/services/install/page.php:41
+msgid "Choose a site title and create the account you’ll use to manage PeakURL."
+msgstr "سائٹ کا عنوان منتخب کریں اور وہ اکاؤنٹ بنائیں جو آپ PeakURL کے انتظام کے لیے استعمال کریں گے۔"
 
 #: server/services/install/initializer.php:66
 msgid "Unable to connect to the database or create the PeakURL tables. "
@@ -2845,57 +2904,57 @@ msgstr "PeakURL favicon uploads directory نہیں بنا سکا۔"
 msgid "PeakURL could not write the favicon web manifest."
 msgstr "PeakURL favicon web manifest نہیں لکھ سکا۔"
 
-#: server/services/status-page.php:66
-#: client/pages/NotFoundPage.tsx:17
+#: server/services/status-page.php:69
+#: client/pages/NotFoundPage.tsx:21
 msgid "Page not found"
 msgstr "صفحہ نہیں ملا"
 
-#: server/services/status-page.php:67
+#: server/services/status-page.php:70
 msgid "We couldn’t find the page you’re looking for. Check the address, or contact the person who shared it with you."
 msgstr "ہمیں آپ کا مطلوبہ صفحہ نہیں ملا۔ پتہ چیک کریں، یا اس شخص سے رابطہ کریں جس نے یہ آپ کے ساتھ شیئر کیا تھا۔"
 
-#: server/services/status-page.php:69
+#: server/services/status-page.php:73
 msgid "Access to this page is restricted"
 msgstr "اس صفحے تک رسائی محدود ہے"
 
-#: server/services/status-page.php:70
+#: server/services/status-page.php:74
 msgid "You don’t have permission to open this page. Contact the site administrator if you think you should have access."
 msgstr "آپ کو یہ صفحہ کھولنے کی اجازت نہیں ہے۔ اگر آپ سمجھتے ہیں کہ آپ کو رسائی ہونی چاہیے تو سائٹ ایڈمنسٹریٹر سے رابطہ کریں۔"
 
-#: server/services/status-page.php:72
+#: server/services/status-page.php:77
 msgid "Please wait a moment"
 msgstr "براہ کرم تھوڑی دیر انتظار کریں"
 
-#: server/services/status-page.php:73
+#: server/services/status-page.php:78
 msgid "Too many requests have been made. Give it a moment, then try again."
 msgstr "بہت زیادہ درخواستیں کی گئی ہیں۔ تھوڑی دیر انتظار کریں، پھر دوبارہ کوشش کریں۔"
 
-#: server/services/status-page.php:75
+#: server/services/status-page.php:81
 msgid "Unable to complete your request"
 msgstr "آپ کی درخواست مکمل نہیں ہو سکی"
 
-#: server/services/status-page.php:76
+#: server/services/status-page.php:82
 msgid "PeakURL encountered a server error. Please try again. If the problem persists, contact the site administrator."
 msgstr "PeakURL کو سرور کی خرابی کا سامنا کرنا پڑا۔ براہ کرم دوبارہ کوشش کریں۔ اگر مسئلہ برقرار رہتا ہے تو سائٹ ایڈمنسٹریٹر سے رابطہ کریں۔"
 
-#: server/services/status-page.php:78
+#: server/services/status-page.php:85
 msgid "Unable to open this page"
 msgstr "یہ صفحہ نہیں کھولا جا سکتا"
 
-#: server/services/status-page.php:79
+#: server/services/status-page.php:86
 msgid "This request couldn’t be completed. Check the address, or contact the site administrator for help."
 msgstr "یہ درخواست مکمل نہیں ہو سکی۔ پتہ چیک کریں، یا مدد کے لیے سائٹ ایڈمنسٹریٹر سے رابطہ کریں۔"
 
-#: server/services/status-page.php:84
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:940
+#: server/services/status-page.php:91
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:946
 msgid "Error details"
 msgstr "خرابی کی تفصیلات"
 
-#: server/services/status-page.php:91
+#: server/services/status-page.php:98
 msgid "Error %s"
 msgstr "خرابی %s"
 
-#: server/services/status-page.php:94
+#: server/services/status-page.php:101
 msgid "Go to homepage"
 msgstr "ہوم پیج پر جائیں"
 
@@ -3192,12 +3251,12 @@ msgstr "تصدیق کریں"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:898
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:115
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:447
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1086
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:586
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:836
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:497
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:842
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
 #: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:515
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
@@ -3403,31 +3462,31 @@ msgstr "بیک اینڈ سے رابطہ قائم نہیں ہو سکا"
 msgid "PeakURL couldn’t complete the connection to your server. Please try again."
 msgstr "PeakURL آپ کے سرور سے رابطہ مکمل نہیں کر سکا۔ براہ کرم دوبارہ کوشش کریں۔"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:128
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
 msgid "Backend connection error"
 msgstr "بیک اینڈ کنکشن کی خرابی"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:130
 msgid "If the problem persists, contact your site administrator."
 msgstr "اگر مسئلہ برقرار رہتا ہے تو اپنے سائٹ ایڈمنسٹریٹر سے رابطہ کریں۔"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:141
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
 msgid "Checking connection"
 msgstr "کنکشن چیک کیا جا رہا ہے"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:143
 msgid "Retry connection"
 msgstr "دوبارہ رابطہ کریں"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:166
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:167
 msgid "API endpoint"
 msgstr "API اینڈ پوائنٹ"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:172
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:173
 msgid "What went wrong"
 msgstr "کیا غلط ہوا"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:179
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:180
 msgid "Check these first"
 msgstr "پہلے ان چیزوں کو چیک کریں"
 
@@ -3439,66 +3498,64 @@ msgstr "ای میل یا صارف نام درکار ہے۔"
 msgid "PeakURL could not process the password reset request."
 msgstr "PeakURL پاس ورڈ ری سیٹ کی درخواست پر عمل نہیں کر سکا۔"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:73
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:74
 msgid "Account Recovery"
 msgstr "اکاؤنٹ بازیافت"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:75
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:118
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:135
-msgid "Reset your password"
-msgstr "اپنا پاس ورڈ ری سیٹ کریں"
-
 #: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:76
-msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
-msgstr "اپنے PeakURL اکاؤنٹ سے منسلک ای میل یا صارف نام درج کریں اور ہم محفوظ ری سیٹ لنک بھیج دیں گے۔"
-
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:79
 msgid "Secure account recovery"
 msgstr "محفوظ اکاؤنٹ کی بحالی"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
-msgid "For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
-msgstr "آپ کی سیکیورٹی کے لیے، پاس ورڈ ری سیٹ لنکس 1 گھنٹے کے بعد ختم ہو جاتے ہیں۔ اپنا پاس ورڈ تبدیل کرنے سے آپ کے تمام آلات پر تمام فعال سیشنز بھی فوری طور پر منسوخ ہو جائیں گے۔"
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:77
+msgid "Get back to your links with a password reset link sent to your account email."
+msgstr "اپنے اکاؤنٹ کے ای میل پر بھیجے گئے پاس ورڈ ری سیٹ لنک کے ذریعے اپنے لنکس تک دوبارہ رسائی حاصل کریں۔"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:83
-#: client/pages/auth/login/LoginPage.tsx:298
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
+msgid "Your account stays protected"
+msgstr "آپ کا اکاؤنٹ محفوظ رہتا ہے"
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:81
+msgid "Reset links expire after 1 hour. Changing your password signs out your existing sessions."
+msgstr "ری سیٹ لنکس کی میعاد 1 گھنٹے بعد ختم ہو جاتی ہے۔ پاس ورڈ تبدیل کرنے سے آپ کے موجودہ سیشن لاگ آؤٹ ہو جائیں گے۔"
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
+#: client/pages/auth/login/LoginPage.tsx:238
 msgid "Forgot your password?"
 msgstr "پاس ورڈ بھول گئے؟"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:152
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:85
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:153
 msgid "Enter your account email or username and PeakURL will send a secure password reset link."
 msgstr "اپنا اکاؤنٹ ای میل یا صارف نام درج کریں اور PeakURL محفوظ پاس ورڈ ری سیٹ لنک بھیج دے گا۔"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:91
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:92
 msgid "Check your inbox"
 msgstr "اپنا ان باکس چیک کریں"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:95
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:96
 msgid "If an account exists for %s, PeakURL has sent a password reset link."
 msgstr "اگر %s کے لیے کوئی اکاؤنٹ موجود ہے تو PeakURL نے پاس ورڈ ری سیٹ لنک بھیج دیا ہے۔"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:102
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:103
 msgid "Return to login"
 msgstr "لاگ اِن پر واپس جائیں"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:109
-#: client/pages/auth/login/LoginPage.tsx:236
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:110
+#: client/pages/auth/login/LoginPage.tsx:183
 msgid "Email or username"
 msgstr "ای میل یا صارف نام"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:116
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:117
 msgid "owner@example.com or admin"
 msgstr "owner@example.com یا admin"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:132
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:162
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:133
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:163
 msgid "Send reset link"
 msgstr "ری سیٹ لنک بھیجیں"
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:66
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:149
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:150
 msgid "The password reset link is invalid."
 msgstr "پاس ورڈ ری سیٹ لنک درست نہیں ہے۔"
 
@@ -3511,61 +3568,60 @@ msgstr "پاس ورڈ ایک جیسے نہیں ہیں۔"
 msgid "PeakURL could not reset the password with that link."
 msgstr "PeakURL اس لنک کے ذریعے پاس ورڈ ری سیٹ نہیں کر سکا۔"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:108
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:109
 msgid "Secure Reset"
 msgstr "محفوظ ری سیٹ"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:110
-msgid "Choose a new password and get back to work."
-msgstr "نیا پاس ورڈ منتخب کریں اور دوبارہ کام شروع کریں۔"
-
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:111
-msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
-msgstr "پاس ورڈ تبدیل ہوتے ہی PeakURL پرانے سیشنز منسوخ کر دے گا تاکہ صرف نیا لاگ اِن درست رہے۔"
+msgid "Keep your account secure"
+msgstr "اپنے اکاؤنٹ کو محفوظ رکھیں"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:114
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
-msgid "Use at least 8 characters."
-msgstr "کم از کم 8 حروف استعمال کریں۔"
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:112
+msgid "Choose a password you don’t use elsewhere. Your previous sessions will be signed out."
+msgstr "ایسا پاس ورڈ منتخب کریں جو آپ کہیں اور استعمال نہیں کرتے۔ آپ کے پچھلے سیشنز سائن آؤٹ ہو جائیں گے۔"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:116
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "بہتر نتائج کے لیے بڑے اور چھوٹے حروف، اعداد، اور ایسا منفرد فقرہ استعمال کریں جو کہیں اور استعمال نہ کرتے ہوں۔"
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:119
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:136
+msgid "Reset your password"
+msgstr "اپنا پاس ورڈ ری سیٹ کریں"
+
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:120
 msgid "Set a new account password, then sign in again with the updated credentials."
 msgstr "نیا اکاؤنٹ پاس ورڈ مقرر کریں، پھر نئی اسناد کے ساتھ دوبارہ سائن اِن کریں۔"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:176
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:177
 msgid "Password updated"
 msgstr "پاس ورڈ اپ ڈیٹ ہو گیا"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:179
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:180
 msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
 msgstr "PeakURL نے آپ کا پاس ورڈ اپ ڈیٹ کر دیا ہے اور پرانے سیشنز منسوخ کر دیے ہیں۔ اب آپ کو لاگ اِن صفحے پر بھیجا جا رہا ہے۔"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:189
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:190
 msgid "New password"
 msgstr "نیا پاس ورڈ"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:195
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:196
 msgid "Enter your new password"
 msgstr "اپنا نیا پاس ورڈ درج کریں"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:202
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:203
 msgid "Confirm new password"
 msgstr "نئے پاس ورڈ کی تصدیق کریں"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:212
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:213
 msgid "Confirm your new password"
 msgstr "اپنے نئے پاس ورڈ کی تصدیق کریں"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:224
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:225
 msgid "Reset password"
 msgstr "پاس ورڈ ری سیٹ کریں"
 
-#: client/pages/auth/login/LoginPage.tsx:39
+#: client/pages/auth/login/LoginPage.tsx:37
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:45
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:442
 #: client/pages/layout/dashboard/Search/useSearchResults.ts:118
@@ -3576,110 +3632,106 @@ msgstr "پاس ورڈ ری سیٹ کریں"
 msgid "Links"
 msgstr "لنکس"
 
-#: client/pages/auth/login/LoginPage.tsx:40
+#: client/pages/auth/login/LoginPage.tsx:38
 msgid "Shorten, organize, and share."
 msgstr "مختصر کریں، منظم کریں، اور شیئر کریں۔"
 
-#: client/pages/auth/login/LoginPage.tsx:44
+#: client/pages/auth/login/LoginPage.tsx:42
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:398
 msgid "Analytics"
 msgstr "تجزیات"
 
-#: client/pages/auth/login/LoginPage.tsx:45
+#: client/pages/auth/login/LoginPage.tsx:43
 msgid "Clicks, locations, and devices."
 msgstr "کلکس، مقامات، اور ڈیوائسز۔"
 
-#: client/pages/auth/login/LoginPage.tsx:49
+#: client/pages/auth/login/LoginPage.tsx:47
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:170
 #: client/pages/dashboard/settings/Layout.tsx:27
 msgid "Security"
 msgstr "سیکیورٹی"
 
-#: client/pages/auth/login/LoginPage.tsx:50
+#: client/pages/auth/login/LoginPage.tsx:48
 msgid "Sessions, 2FA, and roles."
 msgstr "سیشنز، 2FA، اور کردار۔"
 
-#: client/pages/auth/login/LoginPage.tsx:146
-msgid "Almost there."
-msgstr "بس تھوڑا سا باقی ہے۔"
+#: client/pages/auth/login/LoginPage.tsx:136
+msgid "Verify to continue"
+msgstr "جاری رکھنے کے لیے تصدیق کریں"
 
-#: client/pages/auth/login/LoginPage.tsx:149
-msgid "Verify to continue."
-msgstr "جاری رکھنے کے لیے تصدیق کریں۔"
-
-#: client/pages/auth/login/LoginPage.tsx:154
+#: client/pages/auth/login/LoginPage.tsx:139
 msgid "Manage every link"
 msgstr "ہر لنک کو منظم کریں"
 
-#: client/pages/auth/login/LoginPage.tsx:157
+#: client/pages/auth/login/LoginPage.tsx:142
 msgid "from one place."
 msgstr "ایک ہی جگہ سے۔"
 
-#: client/pages/auth/login/LoginPage.tsx:164
-msgid "One more verification step and you’ll be in your workspace."
-msgstr "ایک اور تصدیقی مرحلہ باقی ہے، پھر آپ اپنے ورک اسپیس میں ہوں گے۔"
+#: client/pages/auth/login/LoginPage.tsx:149
+msgid "Use your authenticator app or a backup code to sign in securely."
+msgstr "محفوظ طریقے سے لاگ ان ہونے کے لیے اپنی تصدیقی ایپ یا بیک اپ کوڈ کا استعمال کریں۔"
 
-#: client/pages/auth/login/LoginPage.tsx:167
-msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
-msgstr "اپنے ہی dashboard سے URLs مختصر کریں، clicks track کریں، اور اپنی audience منظم کریں۔"
+#: client/pages/auth/login/LoginPage.tsx:152
+msgid "Shorten URLs, track clicks, and manage your links from your own dashboard."
+msgstr "اپنے ڈیش بورڈ سے یو آر ایل مختصر کریں، کلکس کو ٹریک کریں اور اپنے لنکس کا نظم کریں۔"
 
-#: client/pages/auth/login/LoginPage.tsx:203
+#: client/pages/auth/login/LoginPage.tsx:159
 msgid "Verify your identity"
 msgstr "اپنی شناخت کی تصدیق کریں"
 
-#: client/pages/auth/login/LoginPage.tsx:204
+#: client/pages/auth/login/LoginPage.tsx:160
 msgid "Sign in to your account"
 msgstr "اپنے اکاؤنٹ میں سائن اِن کریں"
 
-#: client/pages/auth/login/LoginPage.tsx:209
+#: client/pages/auth/login/LoginPage.tsx:165
 msgid "Enter one of the backup codes you saved when setting up 2FA."
 msgstr "2FA سیٹ اپ کرتے وقت محفوظ کیے گئے backup codes میں سے ایک درج کریں۔"
 
-#: client/pages/auth/login/LoginPage.tsx:212
+#: client/pages/auth/login/LoginPage.tsx:168
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "اپنی آتھنٹیکیٹر ایپ سے 6 ہندسوں والا کوڈ درج کریں۔"
 
-#: client/pages/auth/login/LoginPage.tsx:215
+#: client/pages/auth/login/LoginPage.tsx:171
 msgid "Enter your credentials to continue to the dashboard."
 msgstr "dashboard میں جاری رکھنے کے لیے اپنی credentials درج کریں۔"
 
-#: client/pages/auth/login/LoginPage.tsx:282
+#: client/pages/auth/login/LoginPage.tsx:225
 msgid "Remember me"
 msgstr "مجھے یاد رکھیں"
 
-#: client/pages/auth/login/LoginPage.tsx:308
+#: client/pages/auth/login/LoginPage.tsx:248
 msgid "Backup code"
 msgstr "بیک اپ کوڈ"
 
-#: client/pages/auth/login/LoginPage.tsx:323
+#: client/pages/auth/login/LoginPage.tsx:261
 msgid "xxxx-xxxx-xxxx"
 msgstr "xxxx-xxxx-xxxx"
 
-#: client/pages/auth/login/LoginPage.tsx:336
+#: client/pages/auth/login/LoginPage.tsx:272
 msgid "Use authenticator code instead"
 msgstr "اس کے بجائے authenticator code استعمال کریں"
 
-#: client/pages/auth/login/LoginPage.tsx:362
+#: client/pages/auth/login/LoginPage.tsx:294
 msgid "Lost your device? Use a backup code"
 msgstr "ڈیوائس گم ہو گئی؟ بیک اپ کوڈ استعمال کریں"
 
-#: client/pages/auth/login/LoginPage.tsx:403
+#: client/pages/auth/login/LoginPage.tsx:331
 msgid "Verifying…"
 msgstr "تصدیق ہو رہی ہے…"
 
-#: client/pages/auth/login/LoginPage.tsx:404
+#: client/pages/auth/login/LoginPage.tsx:332
 msgid "Signing in…"
 msgstr "سائن اِن ہو رہا ہے…"
 
-#: client/pages/auth/login/LoginPage.tsx:409
+#: client/pages/auth/login/LoginPage.tsx:337
 msgid "Verify & continue"
 msgstr "تصدیق کریں اور جاری رکھیں"
 
-#: client/pages/auth/login/LoginPage.tsx:410
+#: client/pages/auth/login/LoginPage.tsx:338
 msgid "Sign in"
 msgstr "سائن اِن"
 
-#: client/pages/auth/login/LoginPage.tsx:425
+#: client/pages/auth/login/LoginPage.tsx:353
 msgid "Back to sign-in"
 msgstr "سائن اِن پر واپس جائیں"
 
@@ -3950,7 +4002,7 @@ msgstr "کھولیں"
 
 #: client/pages/layout/dashboard/Search/SearchDialog.tsx:150
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1046
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:954
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:960
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:601
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:947
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:463
@@ -3984,7 +4036,6 @@ msgstr "ڈیش بورڈ"
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
 #: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:387
 #: client/pages/dashboard/links/components/Header/Header.tsx:21
-#: client/pages/NotFoundPage.tsx:41
 msgid "All Links"
 msgstr "تمام لنکس"
 
@@ -4001,7 +4052,6 @@ msgstr "تعارف"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:146
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:152
-#: client/pages/NotFoundPage.tsx:43
 #: client/router/pageTitle.ts:22
 msgid "General Settings"
 msgstr "عمومی ترتیبات"
@@ -5148,8 +5198,8 @@ msgstr "ڈیفالٹ سوشل پری ویو تصویر"
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:676
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:597
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:508
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:915
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 #: client/pages/dashboard/users/components/ManageRolesDrawer/components/DrawerFooter.tsx:70
@@ -5174,44 +5224,48 @@ msgstr "ڈیٹا بیس اپ ڈیٹ کی سفارش کی جاتی ہے"
 msgid "Your local GeoLite2 City database is over 30 days old. Update the database to maintain accurate location reporting."
 msgstr "آپ کا مقامی GeoLite2 City ڈیٹا بیس 30 دن سے زیادہ پرانا ہے۔ درست مقام کی رپورٹنگ برقرار رکھنے کے لیے ڈیٹا بیس کو اپ ڈیٹ کریں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:157
-msgid "Location analytics is enabled"
-msgstr "مقام کے تجزیات فعال ہیں"
-
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
-msgid "PeakURL is using the local GeoLite2 City database for click locations."
-msgstr "PeakURL کلکس کے مقام کے لیے مقامی GeoLite2 City ڈیٹابیس استعمال کر رہا ہے۔"
+msgid "MaxMind credentials recommended"
+msgstr "MaxMind کی اسناد تجویز کی جاتی ہیں"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:161
+msgid "PeakURL works out of the box using your local database. To keep location stats accurate as IP allocations shift, add your MaxMind credentials below so the weekly background job can automatically fetch updates."
+msgstr "PeakURL آپ کے مقامی ڈیٹا بیس کا استعمال کرتے ہوئے فوری کام کرتا ہے۔ چونکہ IP مختصات وقت کے ساتھ تبدیل ہوتی ہیں، لوکیشن کے اعداد و شمار درست رکھنے کے لیے نیچے اپنے MaxMind کی اسناد شامل کریں تاکہ ہفتہ وار پس پردہ کام خودکار طور پر اپ ڈیٹس حاصل کر سکے۔"
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
+msgid "Setup guide"
+msgstr "سیٹ اپ گائیڈ"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:186
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:198
 msgid "Database download required"
 msgstr "ڈیٹا بیس ڈاؤن لوڈ درکار ہے"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 msgid "Your MaxMind credentials have been saved. Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "آپ کی MaxMind اسناد محفوظ کر لی گئی ہیں۔ آنے والوں کے ملک اور شہر کے تجزیات کو فعال کرنے کے لیے اوپر والے بٹن کا استعمال کرتے ہوئے GeoLite2 City ڈیٹا بیس ڈاؤن لوڈ کریں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "آنے والوں کے ملک اور شہر کے تجزیات کو فعال کرنے کے لیے اوپر والے بٹن کا استعمال کرتے ہوئے GeoLite2 City ڈیٹا بیس ڈاؤن لوڈ کریں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:196
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
 msgid "Location Database"
 msgstr "مقام کی ڈیٹابیس"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:197
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "اپنے مستقل مواد والے فولڈر میں محفوظ مقامی لوکیشن ڈیٹابیس کے ذریعے ملک اور شہر کے تجزیات فعال کریں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:228
 msgid "Update Database"
 msgstr "ڈیٹابیس اپ ڈیٹ کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
 msgid "Download Database"
 msgstr "ڈیٹابیس ڈاؤن لوڈ کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:237
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:691
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
@@ -5227,24 +5281,24 @@ msgstr "ڈیٹابیس ڈاؤن لوڈ کریں"
 msgid "Status"
 msgstr "حالت"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:858
 msgid "Ready"
 msgstr "تیار"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:859
 msgid "Setup Required"
 msgstr "سیٹ اپ درکار ہے"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:225
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
 msgid "Database Updated"
 msgstr "ڈیٹابیس اپ ڈیٹ ہو گیا"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:233
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:249
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:89
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:128
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -5256,12 +5310,12 @@ msgstr "ڈیٹابیس اپ ڈیٹ ہو گیا"
 msgid "Never"
 msgstr "کبھی نہیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:254
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:870
 msgid "Database Size"
 msgstr "ڈیٹابیس کا حجم"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:257
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:269
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
@@ -5272,82 +5326,82 @@ msgstr "ڈیٹابیس کا حجم"
 msgid "Not available"
 msgstr "دستیاب نہیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:250
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:266
 msgid "Location data unavailable"
 msgstr "مقام کا ڈیٹا دستیاب نہیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:261
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:277
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:210
 msgid "Dashboard management unavailable"
 msgstr "ڈیش بورڈ مینجمنٹ دستیاب نہیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:271
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:287
 msgid "MaxMind Credentials"
 msgstr "MaxMind اسناد"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:275
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "PeakURL ان قدروں کو ڈیٹابیس میں خفیہ شدہ حالت میں محفوظ کرتا ہے تاکہ بعد میں دوبارہ پوچھے بغیر GeoLite2 City ڈیٹابیس تازہ کر سکے۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "How to get credentials"
 msgstr "اسناد کیسے حاصل کی جائیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
 msgid "Credentials saved"
 msgstr "اسناد محفوظ ہو گئیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:312
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:885
 msgid "Account ID"
 msgstr "اکاؤنٹ آئی ڈی"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:323
 msgid "License Key"
 msgstr "لائسنس کی"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
 msgid "Update Credentials"
 msgstr "اسناد اپ ڈیٹ کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:446
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:462
 msgid "Clear Credentials"
 msgstr "اسناد صاف کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:363
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:379
 msgid "MaxMind Account ID"
 msgstr "MaxMind اکاؤنٹ آئی ڈی"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:392
 msgid "MaxMind License Key"
 msgstr "MaxMind لائسنس کی"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:386
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:402
 msgid "Enter a new MaxMind license key"
 msgstr "نئی MaxMind لائسنس کی درج کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:387
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:403
 msgid "Enter your MaxMind license key"
 msgstr "اپنی MaxMind لائسنس کی درج کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:410
 msgid "Saved license key:"
 msgstr "محفوظ شدہ لائسنس کی:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:432
 msgid "Save New Credentials"
 msgstr "نئی اسناد محفوظ کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:433
 msgid "Save Credentials"
 msgstr "اسناد محفوظ کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:458
 msgid "Clear MaxMind credentials?"
 msgstr "MaxMind کی اسناد صاف کریں؟"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:443
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:459
 msgid "The saved account ID and license key will be removed. Your downloaded location database and existing analytics will remain available. Future updates will automatically use PeakURL's verified database archive."
 msgstr "محفوظ کردہ اکاؤنٹ ID اور لائسنس کی کو ہٹا دیا جائے گا۔ آپ کا ڈاؤن لوڈ کردہ مقام کا ڈیٹا بیس اور موجودہ اینالیٹکس دستیاب رہیں گے۔ مستقبل کی اپ ڈیٹس خودکار طور پر PeakURL کے تصدیق شدہ ڈیٹا بیس آرکائیو کا استعمال کریں گی۔"
 
@@ -5574,7 +5628,7 @@ msgstr "ویب ہک ٹیسٹ پنگ"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:118
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:692
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:929
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:935
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:107
 msgid "Event"
 msgstr "واقعہ"
@@ -5625,7 +5679,7 @@ msgid "Close drawer"
 msgstr "پینل بند کریں"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:517
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:457
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:461
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:28
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:85
@@ -5656,8 +5710,8 @@ msgstr "فعال"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:542
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:186
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:337
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:338
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:617
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:844
@@ -5729,7 +5783,7 @@ msgid "HTTP Code"
 msgstr "HTTP کوڈ"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:697
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:918
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:924
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 #: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:132
 msgid "Duration"
@@ -5892,7 +5946,7 @@ msgid "A descriptive name to identify this webhook endpoint."
 msgstr "اس ویب ہک اینڈ پوائنٹ کی شناخت کے لیے ایک وضاحتی نام۔"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:298
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:764
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:770
 msgid "Endpoint URL"
 msgstr "اینڈ پوائنٹ URL"
 
@@ -6019,7 +6073,7 @@ msgid "Editing"
 msgstr "ترمیم جاری ہے"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:195
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:347
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:348
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:829
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:833
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:886
@@ -6047,75 +6101,75 @@ msgstr "CAPTCHA تحفظ"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "تصدیقی صفحات پر اور پبلک شارٹ لنکس کے ری ڈائریکٹ ہونے سے پہلے ایک ویریفیکیشن چیلنج درکار کریں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "CAPTCHA تحفظ فعال کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
 msgid "Loading CAPTCHA settings…"
 msgstr "CAPTCHA ترتیبات لوڈ ہو رہی ہیں…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:338
 msgid "Failed to load CAPTCHA settings."
 msgstr "CAPTCHA ترتیبات لوڈ نہیں ہو سکیں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:342
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Provider Settings"
 msgstr "فراہم کنندہ کی ترتیبات"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:346
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:348
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "محفوظ اسناد چھپائی گئی ہیں۔ ضرورت پڑنے پر انہیں تبدیل یا ہٹا دیں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:349
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:351
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "CAPTCHA فراہم کنندہ منتخب کریں اور اپنی API کلیدیں درج کریں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:359
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:392
 msgid "Provider"
 msgstr "فراہم کنندہ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:367
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:369
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
 msgid "Site Key"
 msgstr "سائٹ کلید"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:375
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:377
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:426
 msgid "Secret Key"
 msgstr "خفیہ کلید"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:396
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:398
 msgid "CAPTCHA provider"
 msgstr "CAPTCHA فراہم کنندہ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:407
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Paste site key"
 msgstr "سائٹ کلید پیسٹ کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:418
 msgid "Leave unchanged to keep the saved site key."
 msgstr "محفوظ سائٹ کلید برقرار رکھنے کے لیے اسے تبدیل نہ کریں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:434
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:436
 msgid "Keep saved secret"
 msgstr "محفوظ خفیہ کلید برقرار رکھیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:435
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:437
 msgid "Paste secret key"
 msgstr "خفیہ کلید پیسٹ کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:473
 msgid "Change keys"
 msgstr "کلیدیں تبدیل کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:484
 msgid "Remove keys"
 msgstr "کلیدیں ہٹائیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 msgid "Save Settings"
 msgstr "ترتیبات محفوظ کریں"
 
@@ -6190,180 +6244,180 @@ msgid "PeakURL sends HMAC-SHA256 signed POST requests to your endpoint when sele
 msgstr "منتخب کردہ لنک ایونٹس پیش آنے پر PeakURL آپ کے اینڈ پوائنٹ پر HMAC-SHA256 سے دستخط شدہ POST درخواستیں بھیجتا ہے۔"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:332
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:704
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:710
 msgid "Add Webhook"
 msgstr "ویب ہک شامل کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:354
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:355
 msgid "Enable webhooks"
 msgstr "Webhooks فعال کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:392
 msgid "Loading webhook configuration…"
 msgstr "ویب ہک کنفیگریشن لوڈ ہو رہی ہے…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:398
 msgid "Failed to load webhook configuration."
 msgstr "ویب ہک کنفیگریشن لوڈ کرنے میں ناکامی۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
 msgid "URL copied"
 msgstr "URL کاپی ہو گیا"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:441
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:445
 msgid "Copy URL"
 msgstr "URL کاپی کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:137
 msgid "SSL"
 msgstr "SSL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:484
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:488
 msgid "Insecure"
 msgstr "غیر محفوظ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
 msgid "Send a test payload to this endpoint"
 msgstr "اس اینڈ پوائنٹ پر ٹیسٹ پیلوڈ بھیجیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:517
 msgid "Test"
 msgstr "ٹیسٹ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:532
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
 msgid "View delivery history & attempts"
 msgstr "ترسیل کی تاریخ اور کوششیں دیکھیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:540
 msgid "Deliveries"
 msgstr "ترسیلات"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:548
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
 msgid "Edit webhook settings"
 msgstr "ویب ہک کی ترتیبات میں ترمیم کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:556
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:407
 msgid "Edit"
 msgstr "ترمیم کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:563
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:566
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:567
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:570
 msgid "Delete this webhook"
 msgstr "یہ ویب ہک حذف کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:579
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:583
 msgid "Events:"
 msgstr "ایونٹس:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:605
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:628
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:609
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:632
 msgid "No events subscribed"
 msgstr "کوئی ایونٹ سبسکرائب نہیں ہے"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:640
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:645
 msgid "Secret:"
 msgstr "خفیہ راز (Secret):"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:653
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:659
 msgid "Rotate"
 msgstr "تبدیل کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:664
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:670
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:34
 msgid "Created:"
 msgstr "بنایا گیا:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:688
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:694
 msgid "No webhooks configured"
 msgstr "کوئی ویب ہک کنفیگر نہیں ہے"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:691
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:697
 msgid "Add an HTTPS endpoint to begin receiving signed event deliveries for link activity, user updates, and API key events."
 msgstr "لنک کی سرگرمی، صارف کی اپ ڈیٹس، اور API کی ایونٹس کے لیے دستخط شدہ ایونٹ کی ترسیلات وصول کرنا شروع کرنے کے لیے ایک HTTPS اینڈ پوائنٹ شامل کریں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:747
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
 msgid "Your Webhook Signing Secret"
 msgstr "آپ کا ویب ہک سائننگ سیکریٹ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:759
 msgid "This signing secret will not be shown again."
 msgstr "یہ سائننگ سیکریٹ دوبارہ نہیں دکھایا جائے گا۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:756
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:762
 msgid "Store this secret securely in your receiving application. Outbound requests are signed using HMAC-SHA256 with this secret."
 msgstr "اس خفیہ راز کو اپنی وصول کنندہ ایپلی کیشن میں محفوظ طریقے سے رکھیں۔ جانے والی درخواستوں پر اس راز کے ساتھ HMAC-SHA256 کے ذریعے دستخط کیے جاتے ہیں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:779
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:803
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:785
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:809
 msgid "Secret copied"
 msgstr "سیکریٹ کاپی ہو گیا"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:782
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:788
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "کلپ بورڈ پر کاپی کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:786
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:792
 msgid "To verify signatures, compute HMAC-SHA256 over '{timestamp}.{raw_payload}' and compare against the X-PeakURL-Signature header."
 msgstr "دستخطوں کی تصدیق کے لیے، '{timestamp}.{raw_payload}' پر HMAC-SHA256 کا حساب لگائیں اور X-PeakURL-Signature ہیڈر کے ساتھ موازنہ کریں۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:807
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:813
 msgid "Copy Secret"
 msgstr "سیکریٹ کاپی کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:810
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:816
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "میں نے اسے محفوظ کر لیا ہے"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:824
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:830
 msgid "Rotate Webhook Signing Secret"
 msgstr "ویب ہک سائننگ سیکریٹ تبدیل کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:828
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:834
 msgid "Rotate the signing secret for %s? The current secret will be immediately invalidated and outbound event signatures will fail until you update your receiver application."
 msgstr "%s کے لیے سائننگ سیکریٹ تبدیل کریں؟ موجودہ راز فوری طور پر کالعدم ہو جائے گا اور جب تک آپ اپنی موصول کنندہ ایپلی کیشن کو اپ ڈیٹ نہیں کرتے، آؤٹ باؤنڈ ایونٹ کے دستخط ناکام ہو جائیں گے۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:835
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:841
 msgid "Rotate Secret"
 msgstr "سیکریٹ تبدیل کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:850
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:861
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:856
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:867
 msgid "Delete Webhook"
 msgstr "ویب ہک حذف کریں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:854
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:860
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "%s کے لیے ویب ہک حذف کریں؟ PeakURL فوراً اس اینڈ پوائنٹ پر دستخط شدہ ایونٹ درخواستیں بھیجنا بند کر دے گا۔"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:862
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:868
 msgid "Keep Webhook"
 msgstr "ویب ہک برقرار رکھیں"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:872
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:878
 msgid "Webhook Test Ping Result"
 msgstr "ویب ہک ٹیسٹ پنگ کا نتیجہ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:893
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:899
 msgid "Delivery Succeeded"
 msgstr "ترسیل کامیاب رہی"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:903
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:909
 msgid "Delivery Failed"
 msgstr "ترسیل ناکام ہو گئی"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:340
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:341
 msgid "%d configured"
 msgid_plural "%d configured"
 msgstr[0] "%d کنفیگر شدہ"
 msgstr[1] "%d کنفیگر شدہ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:623
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:627
 msgid "+%d more"
 msgid_plural "+%d more"
 msgstr[0] "+%d مزید"
@@ -8812,7 +8866,7 @@ msgstr "سرگرمی کا لاگ"
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "لنکس میں ہونے والی تبدیلیاں اور صارفین کے نظم و نسق سے متعلق واقعات ایک ہی جگہ دیکھیں، جہاں فلٹرز، وقت اور کارروائی کرنے والے کی تفصیل موجود ہو۔"
 
-#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:75
+#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:76
 msgid "Refresh activity history"
 msgstr "سرگرمی کا ریکارڈ تازہ کریں"
 
@@ -9047,7 +9101,7 @@ msgid "Review general settings"
 msgstr "عمومی ترتیبات دیکھیں"
 
 #: client/pages/dashboard/about/CompletionNotice.tsx:71
-#: client/pages/NotFoundPage.tsx:24
+#: client/pages/NotFoundPage.tsx:30
 msgid "Go to Dashboard"
 msgstr "ڈیش بورڈ پر جائیں"
 
@@ -11171,25 +11225,13 @@ msgstr "اینالیٹکس کا جائزہ پوشیدہ ہے"
 msgid "Traffic statistics and click analytics are disabled for your role."
 msgstr "آپ کے کردار کے لیے ٹریفک کے اعدادوشمار اور کلک اینالیٹکس غیر فعال ہیں۔"
 
-#: client/pages/NotFoundPage.tsx:16
-msgid "404 · Missing page"
-msgstr "404 · غائب صفحہ"
+#: client/pages/NotFoundPage.tsx:24
+msgid "This dashboard page doesn’t exist. Check the address, or return to your dashboard."
+msgstr "یہ ڈیش بورڈ صفحہ موجود نہیں ہے۔ پتہ چیک کریں، یا اپنے ڈیش بورڈ پر واپس جائیں۔"
 
-#: client/pages/NotFoundPage.tsx:18
-msgid "We couldn’t find the dashboard page you’re looking for. Check the address, or return to your dashboard to keep going."
-msgstr "ہمیں آپ کا مطلوبہ ڈیش بورڈ صفحہ نہیں ملا۔ پتہ چیک کریں، یا جاری رکھنے کے لیے اپنے ڈیش بورڈ پر واپس جائیں۔"
-
-#: client/pages/NotFoundPage.tsx:31
+#: client/pages/NotFoundPage.tsx:37
 msgid "Go Back"
 msgstr "واپس جائیں"
-
-#: client/pages/NotFoundPage.tsx:36
-msgid "Helpful links"
-msgstr "مفید لنکس"
-
-#: client/pages/NotFoundPage.tsx:38
-msgid "Pick up where you left off"
-msgstr "وہیں سے جاری رکھیں جہاں چھوڑا تھا"
 
 #: client/router/pageTitle.ts:30
 msgid "Performance Settings"

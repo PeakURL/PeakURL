@@ -6,199 +6,25 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-10-16 13:54+0000\n"
-"POT-Creation-Date: 2026-10-16 13:54+0000\n"
+"PO-Revision-Date: 2026-10-17 07:23+0000\n"
+"POT-Creation-Date: 2026-10-17 07:23+0000\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n == 0 || n != 1 && n % 100 >= 1 && n % 100 <= 19 ? 1 : 2;\n"
 "Project-Id-Version: PeakURL 1.7.2\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
 
-#: install.php:92
+#: install.php:81
 msgid "Administrator Setup - %s"
 msgstr "Configurare administrator – %s"
 
-#: install.php:533
-#: setup-config.php:674
-msgid "Welcome"
-msgstr "Bun venit"
-
-#: install.php:540
-#: setup-config.php:681
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
-msgid "Database"
-msgstr "Bază de date"
-
-#: install.php:547
-#: setup-config.php:688
-msgid "Admin account"
-msgstr "Cont de administrator"
-
-#: install.php:558
-msgid "Create your account"
-msgstr "Creați-vă contul"
-
-#: install.php:560
-msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
-msgstr "Denumiți site-ul și configurați primul administrator. Veți fi autentificat automat după finalizarea instalării."
-
-#: install.php:580
-msgid "Site info"
-msgstr "Informații despre site"
-
-#: install.php:583
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
-msgid "Site title"
-msgstr "Titlu site"
-
-#: install.php:584
-msgid "My Link Hub"
-msgstr "Hub-ul meu de linkuri"
-
-#: install.php:588
-#: server/core/auth/roles.php:1052
-msgid "Administrator"
-msgstr "Administrator"
-
-#: install.php:591
-#: setup-config.php:818
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
-msgid "Username"
-msgstr "Nume de utilizator"
-
-#: install.php:593
-msgid "Letters, numbers, dots, dashes, underscores, or @."
-msgstr "Litere, cifre, puncte, cratime, caractere de subliniere sau @."
-
-#: install.php:596
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
-#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
-#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
-msgid "Email"
-msgstr "E-mail"
-
-#: install.php:597
-#: client/pages/auth/login/LoginPage.tsx:248
-msgid "you@company.com"
-msgstr "you@company.com"
-
-#: install.php:600
-#: setup-config.php:822
-#: server/features/links/controller.php:531
-#: client/pages/auth/login/LoginPage.tsx:253
-#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
-msgid "Password"
-msgstr "Parolă"
-
-#: install.php:602
-msgid "At least 8 characters. You will be signed in right after installation."
-msgstr "Cel puțin 8 caractere. Veți fi autentificat imediat după instalare."
-
-#: install.php:606
-msgid "Database configuration is already saved."
-msgstr "Configurația bazei de date este deja salvată."
-
-#: install.php:609
-msgid "Install %s"
-msgstr "Instalează %s"
-
-#: setup-config.php:95
+#: setup-config.php:84
 msgid "Database Setup - %s"
 msgstr "Configurare bază de date – %s"
 
-#: setup-config.php:97
+#: setup-config.php:86
 msgid "Welcome - %s"
 msgstr "Bun venit – %s"
-
-#: setup-config.php:652
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
-msgid "Site language"
-msgstr "Limba site-ului"
-
-#: setup-config.php:703
-#: server/services/notifications.php:204
-msgid "Welcome to %s"
-msgstr "Bun venit la %s"
-
-#: setup-config.php:705
-msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
-msgstr "Înainte de a începe, veți avea nevoie de detaliile de conectare la baza de date. PeakURL le va utiliza pentru a crea config.php și pentru a configura tabelele necesare."
-
-#: setup-config.php:717
-#: setup-config.php:814
-msgid "Database name"
-msgstr "Nume bază de date"
-
-#: setup-config.php:723
-msgid "Username and password"
-msgstr "Nume de utilizator și parolă"
-
-#: setup-config.php:729
-msgid "Host and port"
-msgstr "Gazdă și port"
-
-#: setup-config.php:735
-#: setup-config.php:838
-msgid "Table prefix"
-msgstr "Prefixul tabelelor"
-
-#: setup-config.php:735
-msgid "optional"
-msgstr "opțional"
-
-#: setup-config.php:741
-msgid "These details are usually available in your hosting control panel or from your database administrator."
-msgstr "Aceste detalii sunt de obicei disponibile în panoul de control al găzduirii sau de la administratorul bazei de date."
-
-#: setup-config.php:761
-msgid "Let's go"
-msgstr "Să începem"
-
-#: setup-config.php:773
-#: server/services/system-status/diagnostic-checks.php:48
-msgid "Database connection"
-msgstr "Conexiunea la baza de date"
-
-#: setup-config.php:775
-msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
-msgstr "Introduceți credențialele pentru baza de date MySQL sau MariaDB. PeakURL le va scrie în config.php în rădăcina site-ului."
-
-#: setup-config.php:811
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:156
-msgid "Connection details"
-msgstr "Detalii de conectare"
-
-#: setup-config.php:826
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
-msgid "Host"
-msgstr "Gazdă"
-
-#: setup-config.php:831
-msgid "Advanced"
-msgstr "Avansat"
-
-#: setup-config.php:834
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
-msgid "Port"
-msgstr "Port"
-
-#: setup-config.php:840
-msgid "Letters, numbers, underscores. Example: peakurl_"
-msgstr "Litere, cifre, caractere de subliniere. Exemplu: peakurl_"
-
-#: setup-config.php:846
-msgid "Back"
-msgstr "Înapoi"
-
-#: setup-config.php:849
-msgid "Save and continue"
-msgstr "Salvează și continuă"
 
 #: server/database/repair-specs.php:41
 msgid "The clicks table still contains row IDs with prefixes and should be normalized."
@@ -308,6 +134,11 @@ msgstr "Rezervat pentru administratori."
 #: server/core/auth/roles.php:1503
 msgid "Role not found."
 msgstr "Rolul nu a fost găsit."
+
+#: server/core/auth/roles.php:1052
+#: server/services/install/templates/administrator.php:43
+msgid "Administrator"
+msgstr "Administrator"
 
 #: server/core/auth/roles.php:1056
 #: client/pages/layout/dashboard/Header/Header.tsx:42
@@ -1064,80 +895,108 @@ msgstr "Linkul nu a fost găsit"
 msgid "Check that the address is complete and correct. This short link may have been removed or is no longer available."
 msgstr "Verifică dacă adresa este completă și corectă. Este posibil ca acest link scurt să fi fost eliminat sau să nu mai fie disponibil."
 
-#: server/features/links/controller.php:526
+#: server/features/links/controller.php:518
 msgid "Password required"
 msgstr "Parolă necesară"
 
-#: server/features/links/controller.php:527
+#: server/features/links/controller.php:519
 msgid "This link is protected. Enter the password to continue."
 msgstr "Acest link este protejat. Introduceți parola pentru a continua."
 
-#: server/features/links/controller.php:534
+#: server/features/links/controller.php:523
+#: server/services/install/templates/setup.php:132
+#: server/services/install/templates/administrator.php:55
+#: client/pages/auth/login/LoginPage.tsx:198
+#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
+msgid "Password"
+msgstr "Parolă"
+
+#: server/features/links/controller.php:526
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Introduceți parola"
 
-#: server/features/links/controller.php:538
+#: server/features/links/controller.php:530
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Continuă"
 
-#: server/features/links/controller.php:543
+#: server/features/links/controller.php:535
 msgid "Protected Link"
 msgstr "Link protejat"
 
-#: server/features/links/controller.php:590
-msgid "Performing security verification"
-msgstr "Se efectuează verificarea de securitate"
+#: server/features/links/controller.php:568
+msgid "Checking your browser"
+msgstr "Se verifică browserul dvs."
 
-#: server/features/links/controller.php:591
-msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
-msgstr "Acest site web utilizează un serviciu de securitate pentru a se proteja împotriva boților rău-intenționați. Această pagină este afișată în timp ce PeakURL verifică dacă nu sunteți un bot."
+#: server/features/links/controller.php:569
+msgid "Complete the security check to open this link. You’ll continue automatically once verification is complete."
+msgstr "Finalizați verificarea de securitate pentru a deschide acest link. Veți continua automat după finalizarea verificării."
 
-#: server/features/links/controller.php:595
+#: server/features/links/controller.php:573
 msgid "JavaScript is required to complete this verification."
 msgstr "Este necesar JavaScript pentru a finaliza această verificare."
 
-#: server/features/links/controller.php:598
+#: server/features/links/controller.php:576
 msgid "Security Verification"
 msgstr "Verificare de securitate"
 
-#: server/features/links/controller.php:695
-#: server/features/links/controller.php:856
-msgid "Waiting for verification…"
-msgstr "Se așteaptă verificarea…"
+#: server/features/links/controller.php:670
+msgid "Loading security check…"
+msgstr "Se încarcă verificarea de securitate…"
 
-#: server/features/links/controller.php:698
-msgid "Checking verification…"
-msgstr "Se verifică…"
+#: server/features/links/controller.php:671
+msgid "Verifying your browser…"
+msgstr "Se verifică browserul dvs.…"
 
-#: server/features/links/controller.php:701
-msgid "Starting verification…"
-msgstr "Se pornește verificarea…"
+#: server/features/links/controller.php:672
+msgid "Verification complete. Opening your link…"
+msgstr "Verificare finalizată. Se deschide linkul…"
 
-#: server/features/links/controller.php:704
+#: server/features/links/controller.php:673
 msgid "Verification expired. Please try again."
 msgstr "Verificarea a expirat. Vă rugăm să încercați din nou."
 
-#: server/features/links/controller.php:707
+#: server/features/links/controller.php:674
 msgid "Verification could not be completed. Please try again."
 msgstr "Verificarea nu a putut fi finalizată. Vă rugăm să încercați din nou."
 
-#: server/features/links/controller.php:861
+#: server/features/links/controller.php:675
+msgid "The security check couldn’t load. Check your connection or content blocker, then try again."
+msgstr "Verificarea de securitate nu s-a putut încărca. Verificați conexiunea sau blocatorul de conținut și încercați din nou."
+
+#: server/features/links/controller.php:676
+msgid "Verification is taking longer than expected. Please try again."
+msgstr "Verificarea durează mai mult decât de obicei. Vă rugăm să încercați din nou."
+
+#: server/features/links/controller.php:677
+msgid "This browser couldn’t run the security check. Please try another browser."
+msgstr "Acest browser nu a putut rula verificarea de securitate. Vă rugăm să încercați alt browser."
+
+#: server/features/links/controller.php:678
+msgid "Your link couldn’t open. Please verify again to continue."
+msgstr "Linkul dvs. nu a putut fi deschis. Vă rugăm să verificați din nou pentru a continua."
+
+#: server/features/links/controller.php:703
+msgid "Waiting for verification…"
+msgstr "Se așteaptă verificarea…"
+
+#: server/features/links/controller.php:708
 #: client/pages/layout/dashboard/Search/SearchResults.tsx:49
 #: client/pages/dashboard/about/ReleaseNotes.tsx:42
 msgid "Try again"
 msgstr "Încearcă din nou"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "410 · Link expired"
 msgstr "410 · Link expirat"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "404 · Link not found"
 msgstr "404 · Linkul nu a fost găsit"
 
-#: server/features/links/controller.php:1053
+#: server/features/links/controller.php:899
 msgid "Contact the person who shared this link to request a new address. You do not need an account to open a public short link."
 msgstr "Contactează persoana care a distribuit acest link pentru a cere o nouă adresă. Nu ai nevoie de cont pentru a deschide un link scurt public."
 
@@ -1930,7 +1789,7 @@ msgid "Thanks for your patience."
 msgstr "Vă mulțumim pentru răbdare."
 
 #: server/services/maintenance.php:108
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:132
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:133
 msgid "Loading"
 msgstr "Se încarcă"
 
@@ -2137,6 +1996,206 @@ msgstr "Parola de administrator trebuie să aibă cel puțin 8 caractere."
 #: server/services/install/manager.php:221
 msgid "The selected timezone is invalid."
 msgstr "Fusul orar selectat este nevalid."
+
+#: server/services/install/templates/setup.php:28
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
+msgid "Site language"
+msgstr "Limba site-ului"
+
+#: server/services/install/templates/setup.php:40
+msgid "Apply language"
+msgstr "Aplică limba"
+
+#: server/services/install/templates/setup.php:49
+#: server/services/notifications.php:204
+msgid "Welcome to %s"
+msgstr "Bun venit la %s"
+
+#: server/services/install/templates/setup.php:51
+msgid "Have the following database details ready. PeakURL will check the connection before saving your configuration."
+msgstr "Pregătiți următoarele detalii despre baza de date. PeakURL va verifica conexiunea înainte de a salva configurația."
+
+#: server/services/install/templates/setup.php:62
+#: server/services/install/templates/setup.php:124
+msgid "Database name"
+msgstr "Nume bază de date"
+
+#: server/services/install/templates/setup.php:68
+msgid "Username and password"
+msgstr "Nume de utilizator și parolă"
+
+#: server/services/install/templates/setup.php:74
+msgid "Host and port"
+msgstr "Gazdă și port"
+
+#: server/services/install/templates/setup.php:80
+#: server/services/install/templates/setup.php:148
+msgid "Table prefix"
+msgstr "Prefixul tabelelor"
+
+#: server/services/install/templates/setup.php:80
+msgid "default: peakurl_"
+msgstr "implicit: peakurl_"
+
+#: server/services/install/templates/setup.php:86
+msgid "Your hosting provider or database administrator can provide these details."
+msgstr "Furnizorul dvs. de găzduire sau administratorul bazei de date vă poate oferi aceste detalii."
+
+#: server/services/install/templates/setup.php:91
+msgid "Begin setup"
+msgstr "Începe instalarea"
+
+#: server/services/install/templates/setup.php:99
+#: server/services/system-status/diagnostic-checks.php:48
+msgid "Database connection"
+msgstr "Conexiunea la baza de date"
+
+#: server/services/install/templates/setup.php:101
+msgid "Enter your MySQL or MariaDB connection details. PeakURL will verify the connection and save the settings in config.php."
+msgstr "Introduceți detaliile conexiunii MySQL sau MariaDB. PeakURL va verifica conexiunea și va salva setările în config.php."
+
+#: server/services/install/templates/setup.php:121
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:157
+msgid "Connection details"
+msgstr "Detalii de conectare"
+
+#: server/services/install/templates/setup.php:128
+#: server/services/install/templates/administrator.php:46
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
+msgid "Username"
+msgstr "Nume de utilizator"
+
+#: server/services/install/templates/setup.php:136
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
+msgid "Host"
+msgstr "Gazdă"
+
+#: server/services/install/templates/setup.php:141
+msgid "Advanced"
+msgstr "Avansat"
+
+#: server/services/install/templates/setup.php:144
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
+msgid "Port"
+msgstr "Port"
+
+#: server/services/install/templates/setup.php:150
+msgid "Use letters, numbers, and underscores. The default is peakurl_."
+msgstr "Utilizați litere, cifre și caractere de subliniere. Valoarea implicită este peakurl_."
+
+#: server/services/install/templates/setup.php:156
+msgid "Back"
+msgstr "Înapoi"
+
+#: server/services/install/templates/setup.php:159
+msgid "Save and continue"
+msgstr "Salvează și continuă"
+
+#: server/services/install/templates/page.php:26
+msgid "Toggle dark mode"
+msgstr "Comutare mod întunecat"
+
+#: server/services/install/templates/page.php:33
+msgid "Installation progress"
+msgstr "Progresul instalării"
+
+#: server/services/install/templates/page.php:45
+msgid "Installation"
+msgstr "Instalare"
+
+#: server/services/install/templates/administrator.php:14
+msgid "Create your account"
+msgstr "Creați-vă contul"
+
+#: server/services/install/templates/administrator.php:16
+msgid "Enter a site title and administrator credentials. PeakURL will sign you in when installation is complete."
+msgstr "Introduceți un titlu pentru site și datele de autentificare ale administratorului. PeakURL vă va conecta automat la finalizarea instalării."
+
+#: server/services/install/templates/administrator.php:35
+msgid "Site details"
+msgstr "Detalii site"
+
+#: server/services/install/templates/administrator.php:38
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
+msgid "Site title"
+msgstr "Titlu site"
+
+#: server/services/install/templates/administrator.php:39
+msgid "My Link Hub"
+msgstr "Hub-ul meu de linkuri"
+
+#: server/services/install/templates/administrator.php:48
+msgid "Use letters, numbers, periods, hyphens, underscores, or @."
+msgstr "Utilizați litere, cifre, puncte, cratime, caractere de subliniere sau @."
+
+#: server/services/install/templates/administrator.php:51
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
+#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
+msgid "Email"
+msgstr "E-mail"
+
+#: server/services/install/templates/administrator.php:52
+#: client/pages/auth/login/LoginPage.tsx:193
+msgid "you@company.com"
+msgstr "you@company.com"
+
+#: server/services/install/templates/administrator.php:57
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
+msgid "Use at least 8 characters."
+msgstr "Folosiți cel puțin 8 caractere."
+
+#: server/services/install/templates/administrator.php:61
+msgid "Your database connection is configured."
+msgstr "Conexiunea la baza de date este configurată."
+
+#: server/services/install/templates/administrator.php:64
+msgid "Install %s"
+msgstr "Instalează %s"
+
+#: server/services/install/page.php:31
+msgid "Welcome"
+msgstr "Bun venit"
+
+#: server/services/install/page.php:31
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
+msgid "Database"
+msgstr "Bază de date"
+
+#: server/services/install/page.php:31
+msgid "Admin account"
+msgstr "Cont de administrator"
+
+#: server/services/install/page.php:34
+msgid "Install PeakURL"
+msgstr "Instalează PeakURL"
+
+#: server/services/install/page.php:35
+msgid "Connect your database"
+msgstr "Conectați baza de date"
+
+#: server/services/install/page.php:36
+msgid "Set up your site"
+msgstr "Configurați site-ul"
+
+#: server/services/install/page.php:39
+msgid "Connect your database, then create the administrator account for this installation."
+msgstr "Conectați baza de date, apoi creați contul de administrator pentru această instalare."
+
+#: server/services/install/page.php:40
+msgid "PeakURL uses this database to store your links, accounts, and analytics."
+msgstr "PeakURL utilizează această bază de date pentru a stoca linkurile, conturile și analiticele dvs."
+
+#: server/services/install/page.php:41
+msgid "Choose a site title and create the account you’ll use to manage PeakURL."
+msgstr "Alegeți un titlu pentru site și creați contul pe care îl veți folosi pentru administrarea PeakURL."
 
 #: server/services/install/initializer.php:66
 msgid "Unable to connect to the database or create the PeakURL tables. "
@@ -2852,57 +2911,57 @@ msgstr "PeakURL nu a putut crea directorul de încărcare pentru favicon."
 msgid "PeakURL could not write the favicon web manifest."
 msgstr "PeakURL nu a putut scrie manifestul web al favicon-ului."
 
-#: server/services/status-page.php:66
-#: client/pages/NotFoundPage.tsx:17
+#: server/services/status-page.php:69
+#: client/pages/NotFoundPage.tsx:21
 msgid "Page not found"
 msgstr "Pagina nu a fost găsită"
 
-#: server/services/status-page.php:67
+#: server/services/status-page.php:70
 msgid "We couldn’t find the page you’re looking for. Check the address, or contact the person who shared it with you."
 msgstr "Nu am putut găsi pagina pe care o cauți. Verifică adresa sau contactează persoana care a distribuit-o."
 
-#: server/services/status-page.php:69
+#: server/services/status-page.php:73
 msgid "Access to this page is restricted"
 msgstr "Accesul la această pagină este restricționat"
 
-#: server/services/status-page.php:70
+#: server/services/status-page.php:74
 msgid "You don’t have permission to open this page. Contact the site administrator if you think you should have access."
 msgstr "Nu ai permisiunea de a deschide această pagină. Contactează administratorul site-ului dacă crezi că ar trebui să ai acces."
 
-#: server/services/status-page.php:72
+#: server/services/status-page.php:77
 msgid "Please wait a moment"
 msgstr "Te rugăm să aștepți un moment"
 
-#: server/services/status-page.php:73
+#: server/services/status-page.php:78
 msgid "Too many requests have been made. Give it a moment, then try again."
 msgstr "Au fost efectuate prea multe cereri. Așteaptă puțin, apoi încearcă din nou."
 
-#: server/services/status-page.php:75
+#: server/services/status-page.php:81
 msgid "Unable to complete your request"
 msgstr "Nu s-a putut finaliza cererea ta"
 
-#: server/services/status-page.php:76
+#: server/services/status-page.php:82
 msgid "PeakURL encountered a server error. Please try again. If the problem persists, contact the site administrator."
 msgstr "PeakURL a întâmpinat o eroare de server. Te rugăm să încerci din nou. Dacă problema persistă, contactează administratorul site-ului."
 
-#: server/services/status-page.php:78
+#: server/services/status-page.php:85
 msgid "Unable to open this page"
 msgstr "Nu se poate deschide această pagină"
 
-#: server/services/status-page.php:79
+#: server/services/status-page.php:86
 msgid "This request couldn’t be completed. Check the address, or contact the site administrator for help."
 msgstr "Această cerere nu a putut fi finalizată. Verifică adresa sau contactează administratorul site-ului pentru ajutor."
 
-#: server/services/status-page.php:84
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:940
+#: server/services/status-page.php:91
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:946
 msgid "Error details"
 msgstr "Detalii despre eroare"
 
-#: server/services/status-page.php:91
+#: server/services/status-page.php:98
 msgid "Error %s"
 msgstr "Eroare %s"
 
-#: server/services/status-page.php:94
+#: server/services/status-page.php:101
 msgid "Go to homepage"
 msgstr "Mergi la pagina de pornire"
 
@@ -3203,12 +3262,12 @@ msgstr "Confirmă"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:898
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:115
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:447
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1086
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:586
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:836
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:497
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:842
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
 #: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:515
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
@@ -3414,31 +3473,31 @@ msgstr "Nu se poate conecta la server"
 msgid "PeakURL couldn’t complete the connection to your server. Please try again."
 msgstr "PeakURL nu a putut finaliza conexiunea la serverul tău. Te rugăm să încerci din nou."
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:128
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
 msgid "Backend connection error"
 msgstr "Eroare de conexiune la server"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:130
 msgid "If the problem persists, contact your site administrator."
 msgstr "Dacă problema persistă, contactează administratorul site-ului."
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:141
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
 msgid "Checking connection"
 msgstr "Se verifică conexiunea"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:143
 msgid "Retry connection"
 msgstr "Reîncearcă conexiunea"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:166
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:167
 msgid "API endpoint"
 msgstr "Punct final API"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:172
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:173
 msgid "What went wrong"
 msgstr "Ce a mers prost"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:179
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:180
 msgid "Check these first"
 msgstr "Verificați mai întâi acestea"
 
@@ -3450,66 +3509,64 @@ msgstr "Este necesară adresa de e-mail sau numele de utilizator."
 msgid "PeakURL could not process the password reset request."
 msgstr "PeakURL nu a putut procesa cererea de resetare a parolei."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:73
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:74
 msgid "Account Recovery"
 msgstr "Recuperarea contului"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:75
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:118
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:135
-msgid "Reset your password"
-msgstr "Resetați parola"
-
 #: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:76
-msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
-msgstr "Introduceți adresa de e-mail sau numele de utilizator asociat contului PeakURL și vă vom trimite un link securizat de resetare."
-
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:79
 msgid "Secure account recovery"
 msgstr "Recuperare securizată a contului"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
-msgid "For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
-msgstr "Pentru securitatea dvs., linkurile de resetare a parolei expiră după 1 oră. Schimbarea parolei va revoca, de asemenea, imediat toate sesiunile active de pe dispozitivele dvs."
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:77
+msgid "Get back to your links with a password reset link sent to your account email."
+msgstr "Reveniți la linkurile dvs. cu un link de resetare a parolei trimis pe adresa de e-mail a contului."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:83
-#: client/pages/auth/login/LoginPage.tsx:298
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
+msgid "Your account stays protected"
+msgstr "Contul dvs. rămâne protejat"
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:81
+msgid "Reset links expire after 1 hour. Changing your password signs out your existing sessions."
+msgstr "Linkurile de resetare expiră după 1 oră. Schimbarea parolei deconectează sesiunile existente."
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
+#: client/pages/auth/login/LoginPage.tsx:238
 msgid "Forgot your password?"
 msgstr "Ați uitat parola?"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:152
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:85
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:153
 msgid "Enter your account email or username and PeakURL will send a secure password reset link."
 msgstr "Introduceți e-mailul contului sau numele de utilizator, iar PeakURL vă va trimite un link securizat de resetare a parolei."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:91
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:92
 msgid "Check your inbox"
 msgstr "Verificați căsuța de e-mail"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:95
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:96
 msgid "If an account exists for %s, PeakURL has sent a password reset link."
 msgstr "Dacă există un cont pentru %s, PeakURL a trimis un link de resetare a parolei."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:102
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:103
 msgid "Return to login"
 msgstr "Înapoi la autentificare"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:109
-#: client/pages/auth/login/LoginPage.tsx:236
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:110
+#: client/pages/auth/login/LoginPage.tsx:183
 msgid "Email or username"
 msgstr "E-mail sau nume de utilizator"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:116
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:117
 msgid "owner@example.com or admin"
 msgstr "owner@example.com sau admin"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:132
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:162
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:133
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:163
 msgid "Send reset link"
 msgstr "Trimite linkul de resetare"
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:66
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:149
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:150
 msgid "The password reset link is invalid."
 msgstr "Linkul de resetare a parolei este nevalid."
 
@@ -3522,61 +3579,60 @@ msgstr "Parolele nu se potrivesc."
 msgid "PeakURL could not reset the password with that link."
 msgstr "PeakURL nu a putut reseta parola cu acel link."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:108
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:109
 msgid "Secure Reset"
 msgstr "Resetare securizată"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:110
-msgid "Choose a new password and get back to work."
-msgstr "Alegeți o parolă nouă și reveniți la lucru."
-
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:111
-msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
-msgstr "După schimbarea parolei, PeakURL va revoca sesiunile vechi, astfel încât doar noua autentificare va rămâne validă."
+msgid "Keep your account secure"
+msgstr "Păstrați-vă contul în siguranță"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:114
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
-msgid "Use at least 8 characters."
-msgstr "Folosiți cel puțin 8 caractere."
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:112
+msgid "Choose a password you don’t use elsewhere. Your previous sessions will be signed out."
+msgstr "Alegeți o parolă pe care nu o folosiți în altă parte. Sesiunile anterioare vor fi deconectate."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:116
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "Pentru cele mai bune rezultate, combinați majuscule, minuscule, numere și o frază unică pe care nu o reutilizați în altă parte."
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:119
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:136
+msgid "Reset your password"
+msgstr "Resetați parola"
+
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:120
 msgid "Set a new account password, then sign in again with the updated credentials."
 msgstr "Setați o nouă parolă pentru cont, apoi autentificați-vă din nou cu credențialele actualizate."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:176
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:177
 msgid "Password updated"
 msgstr "Parolă actualizată"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:179
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:180
 msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
 msgstr "PeakURL v-a actualizat parola și a revocat sesiunile mai vechi. Se redirecționează către pagina de autentificare acum."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:189
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:190
 msgid "New password"
 msgstr "Parolă nouă"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:195
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:196
 msgid "Enter your new password"
 msgstr "Introduceți noua parolă"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:202
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:203
 msgid "Confirm new password"
 msgstr "Confirmați noua parolă"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:212
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:213
 msgid "Confirm your new password"
 msgstr "Confirmați noua dvs. parolă"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:224
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:225
 msgid "Reset password"
 msgstr "Resetează parola"
 
-#: client/pages/auth/login/LoginPage.tsx:39
+#: client/pages/auth/login/LoginPage.tsx:37
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:45
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:442
 #: client/pages/layout/dashboard/Search/useSearchResults.ts:118
@@ -3587,110 +3643,106 @@ msgstr "Resetează parola"
 msgid "Links"
 msgstr "Linkuri"
 
-#: client/pages/auth/login/LoginPage.tsx:40
+#: client/pages/auth/login/LoginPage.tsx:38
 msgid "Shorten, organize, and share."
 msgstr "Scurtați, organizați și partajați."
 
-#: client/pages/auth/login/LoginPage.tsx:44
+#: client/pages/auth/login/LoginPage.tsx:42
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:398
 msgid "Analytics"
 msgstr "Statistici"
 
-#: client/pages/auth/login/LoginPage.tsx:45
+#: client/pages/auth/login/LoginPage.tsx:43
 msgid "Clicks, locations, and devices."
 msgstr "Clicuri, locații și dispozitive."
 
-#: client/pages/auth/login/LoginPage.tsx:49
+#: client/pages/auth/login/LoginPage.tsx:47
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:170
 #: client/pages/dashboard/settings/Layout.tsx:27
 msgid "Security"
 msgstr "Securitate"
 
-#: client/pages/auth/login/LoginPage.tsx:50
+#: client/pages/auth/login/LoginPage.tsx:48
 msgid "Sessions, 2FA, and roles."
 msgstr "Sesiuni, 2FA și roluri."
 
-#: client/pages/auth/login/LoginPage.tsx:146
-msgid "Almost there."
-msgstr "Aproape gata."
+#: client/pages/auth/login/LoginPage.tsx:136
+msgid "Verify to continue"
+msgstr "Verificați pentru a continua"
 
-#: client/pages/auth/login/LoginPage.tsx:149
-msgid "Verify to continue."
-msgstr "Verificați pentru a continua."
-
-#: client/pages/auth/login/LoginPage.tsx:154
+#: client/pages/auth/login/LoginPage.tsx:139
 msgid "Manage every link"
 msgstr "Gestionați fiecare link"
 
-#: client/pages/auth/login/LoginPage.tsx:157
+#: client/pages/auth/login/LoginPage.tsx:142
 msgid "from one place."
 msgstr "dintr-un singur loc."
 
-#: client/pages/auth/login/LoginPage.tsx:164
-msgid "One more verification step and you’ll be in your workspace."
-msgstr "Încă un pas de verificare și veți fi în spațiul dvs. de lucru."
+#: client/pages/auth/login/LoginPage.tsx:149
+msgid "Use your authenticator app or a backup code to sign in securely."
+msgstr "Utilizați aplicația de autentificare sau un cod de rezervă pentru a vă conecta în siguranță."
 
-#: client/pages/auth/login/LoginPage.tsx:167
-msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
-msgstr "Scurtați adresele URL, urmăriți clicurile și gestionați-vă publicul, totul din propriul panou de control."
+#: client/pages/auth/login/LoginPage.tsx:152
+msgid "Shorten URLs, track clicks, and manage your links from your own dashboard."
+msgstr "Scurtați adrese URL, urmăriți clicurile și gestionați linkurile din propriul panou de control."
 
-#: client/pages/auth/login/LoginPage.tsx:203
+#: client/pages/auth/login/LoginPage.tsx:159
 msgid "Verify your identity"
 msgstr "Verificați-vă identitatea"
 
-#: client/pages/auth/login/LoginPage.tsx:204
+#: client/pages/auth/login/LoginPage.tsx:160
 msgid "Sign in to your account"
 msgstr "Autentificați-vă în contul dvs."
 
-#: client/pages/auth/login/LoginPage.tsx:209
+#: client/pages/auth/login/LoginPage.tsx:165
 msgid "Enter one of the backup codes you saved when setting up 2FA."
 msgstr "Introduceți unul dintre codurile de rezervă salvate la configurarea 2FA."
 
-#: client/pages/auth/login/LoginPage.tsx:212
+#: client/pages/auth/login/LoginPage.tsx:168
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Introduceți codul din 6 cifre din aplicația dvs. de autentificare."
 
-#: client/pages/auth/login/LoginPage.tsx:215
+#: client/pages/auth/login/LoginPage.tsx:171
 msgid "Enter your credentials to continue to the dashboard."
 msgstr "Introduceți datele de autentificare pentru a continua în panoul de control."
 
-#: client/pages/auth/login/LoginPage.tsx:282
+#: client/pages/auth/login/LoginPage.tsx:225
 msgid "Remember me"
 msgstr "Ține-mă minte"
 
-#: client/pages/auth/login/LoginPage.tsx:308
+#: client/pages/auth/login/LoginPage.tsx:248
 msgid "Backup code"
 msgstr "Cod de rezervă"
 
-#: client/pages/auth/login/LoginPage.tsx:323
+#: client/pages/auth/login/LoginPage.tsx:261
 msgid "xxxx-xxxx-xxxx"
 msgstr "xxxx-xxxx-xxxx"
 
-#: client/pages/auth/login/LoginPage.tsx:336
+#: client/pages/auth/login/LoginPage.tsx:272
 msgid "Use authenticator code instead"
 msgstr "Utilizați codul din aplicația de autentificare"
 
-#: client/pages/auth/login/LoginPage.tsx:362
+#: client/pages/auth/login/LoginPage.tsx:294
 msgid "Lost your device? Use a backup code"
 msgstr "Ați pierdut dispozitivul? Folosiți un cod de rezervă"
 
-#: client/pages/auth/login/LoginPage.tsx:403
+#: client/pages/auth/login/LoginPage.tsx:331
 msgid "Verifying…"
 msgstr "Se verifică…"
 
-#: client/pages/auth/login/LoginPage.tsx:404
+#: client/pages/auth/login/LoginPage.tsx:332
 msgid "Signing in…"
 msgstr "Se autentifică…"
 
-#: client/pages/auth/login/LoginPage.tsx:409
+#: client/pages/auth/login/LoginPage.tsx:337
 msgid "Verify & continue"
 msgstr "Verifică și continuă"
 
-#: client/pages/auth/login/LoginPage.tsx:410
+#: client/pages/auth/login/LoginPage.tsx:338
 msgid "Sign in"
 msgstr "Autentificare"
 
-#: client/pages/auth/login/LoginPage.tsx:425
+#: client/pages/auth/login/LoginPage.tsx:353
 msgid "Back to sign-in"
 msgstr "Înapoi la autentificare"
 
@@ -3961,7 +4013,7 @@ msgstr "Deschideți"
 
 #: client/pages/layout/dashboard/Search/SearchDialog.tsx:150
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1046
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:954
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:960
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:601
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:947
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:463
@@ -3995,7 +4047,6 @@ msgstr "Panou de control"
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
 #: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:387
 #: client/pages/dashboard/links/components/Header/Header.tsx:21
-#: client/pages/NotFoundPage.tsx:41
 msgid "All Links"
 msgstr "Toate linkurile"
 
@@ -4012,7 +4063,6 @@ msgstr "Despre"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:146
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:152
-#: client/pages/NotFoundPage.tsx:43
 #: client/router/pageTitle.ts:22
 msgid "General Settings"
 msgstr "Setări generale"
@@ -5159,8 +5209,8 @@ msgstr "Imagine implicită de previzualizare socială"
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:676
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:597
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:508
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:915
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 #: client/pages/dashboard/users/components/ManageRolesDrawer/components/DrawerFooter.tsx:70
@@ -5185,44 +5235,48 @@ msgstr "Actualizare a bazei de date recomandată"
 msgid "Your local GeoLite2 City database is over 30 days old. Update the database to maintain accurate location reporting."
 msgstr "Baza de date locală GeoLite2 City este mai veche de 30 de zile. Actualizați baza de date pentru a menține rapoarte de localizare precise."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:157
-msgid "Location analytics is enabled"
-msgstr "Analiza locației este activată"
-
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
-msgid "PeakURL is using the local GeoLite2 City database for click locations."
-msgstr "PeakURL folosește baza de date locală GeoLite2 City pentru locațiile clicurilor."
+msgid "MaxMind credentials recommended"
+msgstr "Sunt recomandate acreditările MaxMind"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:161
+msgid "PeakURL works out of the box using your local database. To keep location stats accurate as IP allocations shift, add your MaxMind credentials below so the weekly background job can automatically fetch updates."
+msgstr "PeakURL funcționează direct folosind baza de date locală. Pentru a menține exacte statisticile de localizare pe măsură ce alocările IP se modifică, adăugați acreditările MaxMind mai jos, astfel încât sarcina de fundal săptămânală să poată prelua automat actualizările."
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
+msgid "Setup guide"
+msgstr "Ghid de configurare"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:186
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:198
 msgid "Database download required"
 msgstr "Descărcarea bazei de date este necesară"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 msgid "Your MaxMind credentials have been saved. Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "Datele de conectare MaxMind au fost salvate. Descărcați baza de date GeoLite2 City folosind butonul de mai sus pentru a activa analiza țărilor și orașelor vizitatorilor."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "Descărcați baza de date GeoLite2 City folosind butonul de mai sus pentru a activa analiza țărilor și orașelor vizitatorilor."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:196
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
 msgid "Location Database"
 msgstr "Bază de date de localizare"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:197
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "Activați analiza țărilor și orașelor cu o bază de date locală MaxMind GeoLite2 City stocată în folderul persistent de conținut."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:228
 msgid "Update Database"
 msgstr "Actualizează baza de date"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
 msgid "Download Database"
 msgstr "Descarcă baza de date"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:237
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:691
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
@@ -5238,24 +5292,24 @@ msgstr "Descarcă baza de date"
 msgid "Status"
 msgstr "Stare"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:858
 msgid "Ready"
 msgstr "Gata"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:859
 msgid "Setup Required"
 msgstr "Configurare necesară"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:225
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
 msgid "Database Updated"
 msgstr "Bază de date actualizată"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:233
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:249
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:89
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:128
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -5267,12 +5321,12 @@ msgstr "Bază de date actualizată"
 msgid "Never"
 msgstr "Niciodată"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:254
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:870
 msgid "Database Size"
 msgstr "Dimensiunea bazei de date"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:257
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:269
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
@@ -5283,82 +5337,82 @@ msgstr "Dimensiunea bazei de date"
 msgid "Not available"
 msgstr "Indisponibil"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:250
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:266
 msgid "Location data unavailable"
 msgstr "Datele de localizare nu sunt disponibile"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:261
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:277
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:210
 msgid "Dashboard management unavailable"
 msgstr "Gestionarea din panoul de control nu este disponibilă"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:271
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:287
 msgid "MaxMind Credentials"
 msgstr "Credențiale MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:275
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "PeakURL stochează aceste valori criptate în baza de date, astfel încât să poată reîmprospăta baza de date GeoLite2 City ulterior fără a cere din nou."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "How to get credentials"
 msgstr "Cum să obțineți acreditările"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
 msgid "Credentials saved"
 msgstr "Date de conectare salvate"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:312
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:885
 msgid "Account ID"
 msgstr "ID cont"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:323
 msgid "License Key"
 msgstr "Cheie de licență"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
 msgid "Update Credentials"
 msgstr "Actualizează credențialele"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:446
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:462
 msgid "Clear Credentials"
 msgstr "Ștergeți datele de conectare"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:363
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:379
 msgid "MaxMind Account ID"
 msgstr "ID cont MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:392
 msgid "MaxMind License Key"
 msgstr "Cheie de licență MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:386
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:402
 msgid "Enter a new MaxMind license key"
 msgstr "Introduceți o nouă cheie de licență MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:387
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:403
 msgid "Enter your MaxMind license key"
 msgstr "Introduceți cheia dvs. de licență MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:410
 msgid "Saved license key:"
 msgstr "Cheie de licență salvată:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:432
 msgid "Save New Credentials"
 msgstr "Salvează noile credențiale"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:433
 msgid "Save Credentials"
 msgstr "Salvează credențialele"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:458
 msgid "Clear MaxMind credentials?"
 msgstr "Ștergeți datele de conectare MaxMind?"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:443
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:459
 msgid "The saved account ID and license key will be removed. Your downloaded location database and existing analytics will remain available. Future updates will automatically use PeakURL's verified database archive."
 msgstr "ID-ul de cont și cheia de licență salvate vor fi eliminate. Baza de date de localizare descărcată și datele analitice existente vor rămâne disponibile. Actualizările viitoare vor utiliza automat arhiva verificată PeakURL."
 
@@ -5585,7 +5639,7 @@ msgstr "Ping de test pentru webhook"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:118
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:692
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:929
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:935
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:107
 msgid "Event"
 msgstr "Eveniment"
@@ -5636,7 +5690,7 @@ msgid "Close drawer"
 msgstr "Închide panoul"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:517
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:457
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:461
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:28
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:85
@@ -5667,8 +5721,8 @@ msgstr "Activat"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:542
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:186
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:337
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:338
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:617
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:844
@@ -5740,7 +5794,7 @@ msgid "HTTP Code"
 msgstr "Cod HTTP"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:697
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:918
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:924
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 #: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:132
 msgid "Duration"
@@ -5904,7 +5958,7 @@ msgid "A descriptive name to identify this webhook endpoint."
 msgstr "Un nume descriptiv pentru identificarea acestui punct final webhook."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:298
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:764
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:770
 msgid "Endpoint URL"
 msgstr "URL punct final"
 
@@ -6031,7 +6085,7 @@ msgid "Editing"
 msgstr "Editare"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:195
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:347
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:348
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:829
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:833
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:886
@@ -6059,75 +6113,75 @@ msgstr "Protecție CAPTCHA"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "Solicitați o provocare de verificare pe paginile de autentificare și înainte de redirecționarea linkurilor scurte publice."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "Activează protecția CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
 msgid "Loading CAPTCHA settings…"
 msgstr "Se încarcă setările CAPTCHA…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:338
 msgid "Failed to load CAPTCHA settings."
 msgstr "Nu s-au putut încărca setările CAPTCHA."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:342
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Provider Settings"
 msgstr "Setări furnizor"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:346
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:348
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "Credențialele salvate sunt mascate. Modificați-le sau eliminați-le când este necesar."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:349
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:351
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "Alegeți un furnizor CAPTCHA și introduceți cheile API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:359
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:392
 msgid "Provider"
 msgstr "Furnizor"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:367
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:369
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
 msgid "Site Key"
 msgstr "Cheie site"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:375
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:377
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:426
 msgid "Secret Key"
 msgstr "Cheie secretă"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:396
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:398
 msgid "CAPTCHA provider"
 msgstr "Furnizor CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:407
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Paste site key"
 msgstr "Inserați cheia de site"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:418
 msgid "Leave unchanged to keep the saved site key."
 msgstr "Lăsați neschimbat pentru a păstra cheia de site salvată."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:434
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:436
 msgid "Keep saved secret"
 msgstr "Păstrează cheia secretă salvată"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:435
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:437
 msgid "Paste secret key"
 msgstr "Inserați cheia secretă"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:473
 msgid "Change keys"
 msgstr "Schimbă cheile"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:484
 msgid "Remove keys"
 msgstr "Elimină cheile"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 msgid "Save Settings"
 msgstr "Salvează setările"
 
@@ -6202,181 +6256,181 @@ msgid "PeakURL sends HMAC-SHA256 signed POST requests to your endpoint when sele
 msgstr "PeakURL trimite cereri POST semnate HMAC-SHA256 către punctul dvs. final când au loc evenimentele de link selectate."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:332
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:704
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:710
 msgid "Add Webhook"
 msgstr "Adaugă webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:354
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:355
 msgid "Enable webhooks"
 msgstr "Activează webhook-urile"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:392
 msgid "Loading webhook configuration…"
 msgstr "Se încarcă configurația webhook-ului…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:398
 msgid "Failed to load webhook configuration."
 msgstr "Nu s-a putut încărca configurația webhook-ului."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
 msgid "URL copied"
 msgstr "URL copiat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:441
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:445
 msgid "Copy URL"
 msgstr "Copiază URL-ul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:137
 msgid "SSL"
 msgstr "SSL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:484
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:488
 msgid "Insecure"
 msgstr "Nesigur"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
 msgid "Send a test payload to this endpoint"
 msgstr "Trimite o sarcină utilă de test către acest punct final"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:517
 msgid "Test"
 msgstr "Test"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:532
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
 msgid "View delivery history & attempts"
 msgstr "Vezi istoricul livrărilor și încercările"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:540
 msgid "Deliveries"
 msgstr "Livrări"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:548
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
 msgid "Edit webhook settings"
 msgstr "Editează setările webhook-ului"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:556
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:407
 msgid "Edit"
 msgstr "Editează"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:563
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:566
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:567
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:570
 msgid "Delete this webhook"
 msgstr "Șterge acest webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:579
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:583
 msgid "Events:"
 msgstr "Evenimente:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:605
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:628
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:609
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:632
 msgid "No events subscribed"
 msgstr "Niciun eveniment abonat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:640
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:645
 msgid "Secret:"
 msgstr "Secret:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:653
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:659
 msgid "Rotate"
 msgstr "Rotește"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:664
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:670
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:34
 msgid "Created:"
 msgstr "Creat la:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:688
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:694
 msgid "No webhooks configured"
 msgstr "Niciun webhook configurat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:691
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:697
 msgid "Add an HTTPS endpoint to begin receiving signed event deliveries for link activity, user updates, and API key events."
 msgstr "Adăugați un punct final HTTPS pentru a începe să primiți livrări de evenimente semnate pentru activitatea linkurilor, actualizările de utilizatori și evenimentele cheilor API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:747
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
 msgid "Your Webhook Signing Secret"
 msgstr "Secretul dvs. de semnare pentru webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:759
 msgid "This signing secret will not be shown again."
 msgstr "Acest secret de semnare nu va mai fi afișat din nou."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:756
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:762
 msgid "Store this secret securely in your receiving application. Outbound requests are signed using HMAC-SHA256 with this secret."
 msgstr "Stocați acest secret în siguranță în aplicația de primire. Cererile de ieșire sunt semnate folosind HMAC-SHA256 cu acest secret."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:779
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:803
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:785
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:809
 msgid "Secret copied"
 msgstr "Secret copiat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:782
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:788
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "Copiază în clipboard"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:786
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:792
 msgid "To verify signatures, compute HMAC-SHA256 over '{timestamp}.{raw_payload}' and compare against the X-PeakURL-Signature header."
 msgstr "Pentru a verifica semnăturile, calculați HMAC-SHA256 peste '{timestamp}.{raw_payload}' și comparați cu antetul X-PeakURL-Signature."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:807
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:813
 msgid "Copy Secret"
 msgstr "Copiază secretul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:810
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:816
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "L-am salvat"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:824
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:830
 msgid "Rotate Webhook Signing Secret"
 msgstr "Rotește secretul de semnare al webhook-ului"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:828
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:834
 msgid "Rotate the signing secret for %s? The current secret will be immediately invalidated and outbound event signatures will fail until you update your receiver application."
 msgstr "Rotiți secretul de semnare pentru %s? Secretul curent va fi invalidat imediat, iar semnăturile evenimentelor de ieșire vor eșua până când actualizați aplicația de primire."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:835
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:841
 msgid "Rotate Secret"
 msgstr "Rotește secretul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:850
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:861
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:856
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:867
 msgid "Delete Webhook"
 msgstr "Șterge webhook-ul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:854
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:860
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "Ștergeți webhook-ul pentru %s? PeakURL va înceta imediat trimiterea cererilor de evenimente semnate către acest punct final."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:862
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:868
 msgid "Keep Webhook"
 msgstr "Păstrează webhook-ul"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:872
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:878
 msgid "Webhook Test Ping Result"
 msgstr "Rezultatul ping-ului de test al webhook-ului"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:893
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:899
 msgid "Delivery Succeeded"
 msgstr "Livrare reușită"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:903
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:909
 msgid "Delivery Failed"
 msgstr "Livrare eșuată"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:340
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:341
 msgid "%d configured"
 msgid_plural "%d configured"
 msgstr[0] "%d configurat"
 msgstr[1] "%d configurate"
 msgstr[2] "%d de configurate"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:623
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:627
 msgid "+%d more"
 msgid_plural "+%d more"
 msgstr[0] "+%d altul"
@@ -8843,7 +8897,7 @@ msgstr "Jurnal de activitate"
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Examinați modificările linkurilor și evenimentele de gestionare a utilizatorilor într-un singur loc, cu filtre, marcaje temporale și detalii despre autori."
 
-#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:75
+#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:76
 msgid "Refresh activity history"
 msgstr "Reîmprospătează istoricul de activitate"
 
@@ -9078,7 +9132,7 @@ msgid "Review general settings"
 msgstr "Verificați setările generale"
 
 #: client/pages/dashboard/about/CompletionNotice.tsx:71
-#: client/pages/NotFoundPage.tsx:24
+#: client/pages/NotFoundPage.tsx:30
 msgid "Go to Dashboard"
 msgstr "Mergi la panoul de control"
 
@@ -11205,25 +11259,13 @@ msgstr "Prezentare generală a analizelor ascunsă"
 msgid "Traffic statistics and click analytics are disabled for your role."
 msgstr "Statisticile de trafic și analiza clicurilor sunt dezactivate pentru rolul dvs."
 
-#: client/pages/NotFoundPage.tsx:16
-msgid "404 · Missing page"
-msgstr "404 · Pagină lipsă"
+#: client/pages/NotFoundPage.tsx:24
+msgid "This dashboard page doesn’t exist. Check the address, or return to your dashboard."
+msgstr "Această pagină din panoul de control nu există. Verificați adresa sau reveniți la panoul de control."
 
-#: client/pages/NotFoundPage.tsx:18
-msgid "We couldn’t find the dashboard page you’re looking for. Check the address, or return to your dashboard to keep going."
-msgstr "Nu am putut găsi pagina din panoul de control pe care o cauți. Verifică adresa sau revino la panoul de control pentru a continua."
-
-#: client/pages/NotFoundPage.tsx:31
+#: client/pages/NotFoundPage.tsx:37
 msgid "Go Back"
 msgstr "Înapoi"
-
-#: client/pages/NotFoundPage.tsx:36
-msgid "Helpful links"
-msgstr "Linkuri utile"
-
-#: client/pages/NotFoundPage.tsx:38
-msgid "Pick up where you left off"
-msgstr "Continuă de unde ai rămas"
 
 #: client/router/pageTitle.ts:30
 msgid "Performance Settings"

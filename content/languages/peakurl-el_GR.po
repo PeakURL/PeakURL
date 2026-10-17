@@ -6,199 +6,25 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-10-16 13:54+0000\n"
-"POT-Creation-Date: 2026-10-16 13:54+0000\n"
+"PO-Revision-Date: 2026-10-17 07:23+0000\n"
+"POT-Creation-Date: 2026-10-17 07:23+0000\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "Project-Id-Version: PeakURL 1.7.2\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
 
-#: install.php:92
+#: install.php:81
 msgid "Administrator Setup - %s"
 msgstr "Ρύθμιση διαχειριστή - %s"
 
-#: install.php:533
-#: setup-config.php:674
-msgid "Welcome"
-msgstr "Καλώς ήρθατε"
-
-#: install.php:540
-#: setup-config.php:681
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
-msgid "Database"
-msgstr "Βάση δεδομένων"
-
-#: install.php:547
-#: setup-config.php:688
-msgid "Admin account"
-msgstr "Λογαριασμός διαχειριστή"
-
-#: install.php:558
-msgid "Create your account"
-msgstr "Δημιουργήστε τον λογαριασμό σας"
-
-#: install.php:560
-msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
-msgstr "Ονομάστε τον ιστότοπό σας και ρυθμίστε τον πρώτο διαχειριστή. Θα συνδεθείτε αυτόματα μόλις ολοκληρωθεί η εγκατάσταση."
-
-#: install.php:580
-msgid "Site info"
-msgstr "Πληροφορίες ιστότοπου"
-
-#: install.php:583
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
-msgid "Site title"
-msgstr "Τίτλος ιστότοπου"
-
-#: install.php:584
-msgid "My Link Hub"
-msgstr "Ο Κόμβος Συνδέσμων Μου"
-
-#: install.php:588
-#: server/core/auth/roles.php:1052
-msgid "Administrator"
-msgstr "Διαχειριστής"
-
-#: install.php:591
-#: setup-config.php:818
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
-msgid "Username"
-msgstr "Όνομα χρήστη"
-
-#: install.php:593
-msgid "Letters, numbers, dots, dashes, underscores, or @."
-msgstr "Γράμματα, αριθμοί, τελείες, παύλες, κάτω παύλες ή @."
-
-#: install.php:596
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
-#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
-#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
-msgid "Email"
-msgstr "Email"
-
-#: install.php:597
-#: client/pages/auth/login/LoginPage.tsx:248
-msgid "you@company.com"
-msgstr "you@company.com"
-
-#: install.php:600
-#: setup-config.php:822
-#: server/features/links/controller.php:531
-#: client/pages/auth/login/LoginPage.tsx:253
-#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
-msgid "Password"
-msgstr "Κωδικός πρόσβασης"
-
-#: install.php:602
-msgid "At least 8 characters. You will be signed in right after installation."
-msgstr "Τουλάχιστον 8 χαρακτήρες. Θα συνδεθείτε αμέσως μετά την εγκατάσταση."
-
-#: install.php:606
-msgid "Database configuration is already saved."
-msgstr "Η διαμόρφωση της βάσης δεδομένων έχει ήδη αποθηκευτεί."
-
-#: install.php:609
-msgid "Install %s"
-msgstr "Εγκατάσταση %s"
-
-#: setup-config.php:95
+#: setup-config.php:84
 msgid "Database Setup - %s"
 msgstr "Ρύθμιση βάσης δεδομένων - %s"
 
-#: setup-config.php:97
+#: setup-config.php:86
 msgid "Welcome - %s"
 msgstr "Καλώς ήρθατε - %s"
-
-#: setup-config.php:652
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
-msgid "Site language"
-msgstr "Γλώσσα ιστότοπου"
-
-#: setup-config.php:703
-#: server/services/notifications.php:204
-msgid "Welcome to %s"
-msgstr "Καλώς ήρθατε στο %s"
-
-#: setup-config.php:705
-msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
-msgstr "Πριν ξεκινήσετε, θα χρειαστείτε τα στοιχεία σύνδεσης της βάσης δεδομένων σας. Το PeakURL θα τα χρησιμοποιήσει για να δημιουργήσει το config.php και να ρυθμίσει τους απαιτούμενους πίνακες."
-
-#: setup-config.php:717
-#: setup-config.php:814
-msgid "Database name"
-msgstr "Όνομα βάσης δεδομένων"
-
-#: setup-config.php:723
-msgid "Username and password"
-msgstr "Όνομα χρήστη και κωδικός πρόσβασης"
-
-#: setup-config.php:729
-msgid "Host and port"
-msgstr "Κεντρικός υπολογιστής (Host) και θύρα"
-
-#: setup-config.php:735
-#: setup-config.php:838
-msgid "Table prefix"
-msgstr "Πρόθεμα πίνακα"
-
-#: setup-config.php:735
-msgid "optional"
-msgstr "προαιρετικό"
-
-#: setup-config.php:741
-msgid "These details are usually available in your hosting control panel or from your database administrator."
-msgstr "Αυτά τα στοιχεία είναι συνήθως διαθέσιμα στον πίνακα ελέγχου της φιλοξενίας σας ή από τον διαχειριστή της βάσης δεδομένων σας."
-
-#: setup-config.php:761
-msgid "Let's go"
-msgstr "Ας ξεκινήσουμε"
-
-#: setup-config.php:773
-#: server/services/system-status/diagnostic-checks.php:48
-msgid "Database connection"
-msgstr "Σύνδεση βάσης δεδομένων"
-
-#: setup-config.php:775
-msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
-msgstr "Εισαγάγετε τα διαπιστευτήρια για τη βάση δεδομένων MySQL ή MariaDB σας. Το PeakURL θα τα εγγράψει στο config.php στον ριζικό κατάλογο του ιστότοπου."
-
-#: setup-config.php:811
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:156
-msgid "Connection details"
-msgstr "Στοιχεία σύνδεσης"
-
-#: setup-config.php:826
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
-msgid "Host"
-msgstr "Κεντρικός υπολογιστής (Host)"
-
-#: setup-config.php:831
-msgid "Advanced"
-msgstr "Για προχωρημένους"
-
-#: setup-config.php:834
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
-msgid "Port"
-msgstr "Θύρα"
-
-#: setup-config.php:840
-msgid "Letters, numbers, underscores. Example: peakurl_"
-msgstr "Γράμματα, αριθμοί, κάτω παύλες. Παράδειγμα: peakurl_"
-
-#: setup-config.php:846
-msgid "Back"
-msgstr "Πίσω"
-
-#: setup-config.php:849
-msgid "Save and continue"
-msgstr "Αποθήκευση και συνέχεια"
 
 #: server/database/repair-specs.php:41
 msgid "The clicks table still contains row IDs with prefixes and should be normalized."
@@ -308,6 +134,11 @@ msgstr "Δεσμευμένο για διαχειριστές."
 #: server/core/auth/roles.php:1503
 msgid "Role not found."
 msgstr "Ο ρόλος δεν βρέθηκε."
+
+#: server/core/auth/roles.php:1052
+#: server/services/install/templates/administrator.php:43
+msgid "Administrator"
+msgstr "Διαχειριστής"
 
 #: server/core/auth/roles.php:1056
 #: client/pages/layout/dashboard/Header/Header.tsx:42
@@ -1064,80 +895,108 @@ msgstr "Ο σύνδεσμος δεν βρέθηκε"
 msgid "Check that the address is complete and correct. This short link may have been removed or is no longer available."
 msgstr "Βεβαιωθείτε ότι η διεύθυνση είναι πλήρης και σωστή. Αυτός ο σύντομος σύνδεσμος ενδέχεται να έχει καταργηθεί ή να μην είναι πλέον διαθέσιμος."
 
-#: server/features/links/controller.php:526
+#: server/features/links/controller.php:518
 msgid "Password required"
 msgstr "Απαιτείται κωδικός πρόσβασης"
 
-#: server/features/links/controller.php:527
+#: server/features/links/controller.php:519
 msgid "This link is protected. Enter the password to continue."
 msgstr "Αυτός ο σύνδεσμος είναι προστατευμένος. Εισαγάγετε τον κωδικό πρόσβασης για να συνεχίσετε."
 
-#: server/features/links/controller.php:534
+#: server/features/links/controller.php:523
+#: server/services/install/templates/setup.php:132
+#: server/services/install/templates/administrator.php:55
+#: client/pages/auth/login/LoginPage.tsx:198
+#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
+msgid "Password"
+msgstr "Κωδικός πρόσβασης"
+
+#: server/features/links/controller.php:526
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Εισαγάγετε κωδικό πρόσβασης"
 
-#: server/features/links/controller.php:538
+#: server/features/links/controller.php:530
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Συνέχεια"
 
-#: server/features/links/controller.php:543
+#: server/features/links/controller.php:535
 msgid "Protected Link"
 msgstr "Προστατευμένος σύνδεσμος"
 
-#: server/features/links/controller.php:590
-msgid "Performing security verification"
-msgstr "Εκτέλεση επαλήθευσης ασφαλείας"
+#: server/features/links/controller.php:568
+msgid "Checking your browser"
+msgstr "Έλεγχος του προγράμματος περιήγησής σας"
 
-#: server/features/links/controller.php:591
-msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
-msgstr "Αυτός ο ιστότοπος χρησιμοποιεί μια υπηρεσία ασφαλείας για προστασία από κακόβουλα bots. Αυτή η σελίδα εμφανίζεται ενώ το PeakURL επαληθεύει ότι δεν είστε bot."
+#: server/features/links/controller.php:569
+msgid "Complete the security check to open this link. You’ll continue automatically once verification is complete."
+msgstr "Ολοκληρώστε τον έλεγχο ασφαλείας για να ανοίξετε αυτόν τον σύνδεσμο. Θα συνεχίσετε αυτόματα μόλις ολοκληρωθεί η επαλήθευση."
 
-#: server/features/links/controller.php:595
+#: server/features/links/controller.php:573
 msgid "JavaScript is required to complete this verification."
 msgstr "Απαιτείται JavaScript για την ολοκλήρωση αυτής της επαλήθευσης."
 
-#: server/features/links/controller.php:598
+#: server/features/links/controller.php:576
 msgid "Security Verification"
 msgstr "Επαλήθευση ασφαλείας"
 
-#: server/features/links/controller.php:695
-#: server/features/links/controller.php:856
-msgid "Waiting for verification…"
-msgstr "Αναμονή για επαλήθευση…"
+#: server/features/links/controller.php:670
+msgid "Loading security check…"
+msgstr "Φόρτωση ελέγχου ασφαλείας…"
 
-#: server/features/links/controller.php:698
-msgid "Checking verification…"
-msgstr "Έλεγχος επαλήθευσης…"
+#: server/features/links/controller.php:671
+msgid "Verifying your browser…"
+msgstr "Επαλήθευση του προγράμματος περιήγησής σας…"
 
-#: server/features/links/controller.php:701
-msgid "Starting verification…"
-msgstr "Έναρξη επαλήθευσης…"
+#: server/features/links/controller.php:672
+msgid "Verification complete. Opening your link…"
+msgstr "Η επαλήθευση ολοκληρώθηκε. Άνοιγμα του συνδέσμου σας…"
 
-#: server/features/links/controller.php:704
+#: server/features/links/controller.php:673
 msgid "Verification expired. Please try again."
 msgstr "Η επαλήθευση έληξε. Παρακαλούμε δοκιμάστε ξανά."
 
-#: server/features/links/controller.php:707
+#: server/features/links/controller.php:674
 msgid "Verification could not be completed. Please try again."
 msgstr "Η επαλήθευση δεν ήταν δυνατό να ολοκληρωθεί. Παρακαλούμε δοκιμάστε ξανά."
 
-#: server/features/links/controller.php:861
+#: server/features/links/controller.php:675
+msgid "The security check couldn’t load. Check your connection or content blocker, then try again."
+msgstr "Δεν ήταν δυνατή η φόρτωση του ελέγχου ασφαλείας. Ελέγξτε τη σύνδεσή σας ή το πρόγραμμα αποκλεισμού περιεχομένου και δοκιμάστε ξανά."
+
+#: server/features/links/controller.php:676
+msgid "Verification is taking longer than expected. Please try again."
+msgstr "Η επαλήθευση διαρκεί περισσότερο από το αναμενόμενο. Παρακαλούμε δοκιμάστε ξανά."
+
+#: server/features/links/controller.php:677
+msgid "This browser couldn’t run the security check. Please try another browser."
+msgstr "Αυτό το πρόγραμμα περιήγησης δεν μπόρεσε να εκτελέσει τον έλεγχο ασφαλείας. Παρακαλούμε δοκιμάστε άλλο πρόγραμμα περιήγησης."
+
+#: server/features/links/controller.php:678
+msgid "Your link couldn’t open. Please verify again to continue."
+msgstr "Δεν ήταν δυνατό το άνοιγμα του συνδέσμου σας. Επαληθεύστε ξανά για να συνεχίσετε."
+
+#: server/features/links/controller.php:703
+msgid "Waiting for verification…"
+msgstr "Αναμονή για επαλήθευση…"
+
+#: server/features/links/controller.php:708
 #: client/pages/layout/dashboard/Search/SearchResults.tsx:49
 #: client/pages/dashboard/about/ReleaseNotes.tsx:42
 msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "410 · Link expired"
 msgstr "410 · Ο σύνδεσμος έληξε"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "404 · Link not found"
 msgstr "404 · Ο σύνδεσμος δεν βρέθηκε"
 
-#: server/features/links/controller.php:1053
+#: server/features/links/controller.php:899
 msgid "Contact the person who shared this link to request a new address. You do not need an account to open a public short link."
 msgstr "Επικοινωνήστε με το άτομο που μοιράστηκε αυτόν τον σύνδεσμο για να ζητήσετε νέα διεύθυνση. Δεν χρειάζεστε λογαριασμό για να ανοίξετε έναν δημόσιο σύντομο σύνδεσμο."
 
@@ -1923,7 +1782,7 @@ msgid "Thanks for your patience."
 msgstr "Ευχαριστούμε για την υπομονή σας."
 
 #: server/services/maintenance.php:108
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:132
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:133
 msgid "Loading"
 msgstr "Φόρτωση"
 
@@ -2130,6 +1989,206 @@ msgstr "Ο κωδικός πρόσβασης διαχειριστή πρέπει
 #: server/services/install/manager.php:221
 msgid "The selected timezone is invalid."
 msgstr "Η επιλεγμένη ζώνη ώρας δεν είναι έγκυρη."
+
+#: server/services/install/templates/setup.php:28
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
+msgid "Site language"
+msgstr "Γλώσσα ιστότοπου"
+
+#: server/services/install/templates/setup.php:40
+msgid "Apply language"
+msgstr "Εφαρμογή γλώσσας"
+
+#: server/services/install/templates/setup.php:49
+#: server/services/notifications.php:204
+msgid "Welcome to %s"
+msgstr "Καλώς ήρθατε στο %s"
+
+#: server/services/install/templates/setup.php:51
+msgid "Have the following database details ready. PeakURL will check the connection before saving your configuration."
+msgstr "Έχετε έτοιμα τα ακόλουθα στοιχεία της βάσης δεδομένων. Το PeakURL θα ελέγξει τη σύνδεση πριν αποθηκεύσει τις ρυθμίσεις σας."
+
+#: server/services/install/templates/setup.php:62
+#: server/services/install/templates/setup.php:124
+msgid "Database name"
+msgstr "Όνομα βάσης δεδομένων"
+
+#: server/services/install/templates/setup.php:68
+msgid "Username and password"
+msgstr "Όνομα χρήστη και κωδικός πρόσβασης"
+
+#: server/services/install/templates/setup.php:74
+msgid "Host and port"
+msgstr "Κεντρικός υπολογιστής (Host) και θύρα"
+
+#: server/services/install/templates/setup.php:80
+#: server/services/install/templates/setup.php:148
+msgid "Table prefix"
+msgstr "Πρόθεμα πίνακα"
+
+#: server/services/install/templates/setup.php:80
+msgid "default: peakurl_"
+msgstr "προεπιλογή: peakurl_"
+
+#: server/services/install/templates/setup.php:86
+msgid "Your hosting provider or database administrator can provide these details."
+msgstr "Ο πάροχος φιλοξενίας ή ο διαχειριστής της βάσης δεδομένων μπορεί να σας παράσχει αυτά τα στοιχεία."
+
+#: server/services/install/templates/setup.php:91
+msgid "Begin setup"
+msgstr "Έναρξη εγκατάστασης"
+
+#: server/services/install/templates/setup.php:99
+#: server/services/system-status/diagnostic-checks.php:48
+msgid "Database connection"
+msgstr "Σύνδεση βάσης δεδομένων"
+
+#: server/services/install/templates/setup.php:101
+msgid "Enter your MySQL or MariaDB connection details. PeakURL will verify the connection and save the settings in config.php."
+msgstr "Εισαγάγετε τα στοιχεία σύνδεσης MySQL ή MariaDB. Το PeakURL θα επαληθεύσει τη σύνδεση και θα αποθηκεύσει τις ρυθμίσεις στο config.php."
+
+#: server/services/install/templates/setup.php:121
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:157
+msgid "Connection details"
+msgstr "Στοιχεία σύνδεσης"
+
+#: server/services/install/templates/setup.php:128
+#: server/services/install/templates/administrator.php:46
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
+msgid "Username"
+msgstr "Όνομα χρήστη"
+
+#: server/services/install/templates/setup.php:136
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
+msgid "Host"
+msgstr "Κεντρικός υπολογιστής (Host)"
+
+#: server/services/install/templates/setup.php:141
+msgid "Advanced"
+msgstr "Για προχωρημένους"
+
+#: server/services/install/templates/setup.php:144
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
+msgid "Port"
+msgstr "Θύρα"
+
+#: server/services/install/templates/setup.php:150
+msgid "Use letters, numbers, and underscores. The default is peakurl_."
+msgstr "Χρησιμοποιήστε γράμματα, αριθμούς και κάτω παύλες. Η προεπιλογή είναι peakurl_."
+
+#: server/services/install/templates/setup.php:156
+msgid "Back"
+msgstr "Πίσω"
+
+#: server/services/install/templates/setup.php:159
+msgid "Save and continue"
+msgstr "Αποθήκευση και συνέχεια"
+
+#: server/services/install/templates/page.php:26
+msgid "Toggle dark mode"
+msgstr "Εναλλαγή σκούρας λειτουργίας"
+
+#: server/services/install/templates/page.php:33
+msgid "Installation progress"
+msgstr "Πρόοδος εγκατάστασης"
+
+#: server/services/install/templates/page.php:45
+msgid "Installation"
+msgstr "Εγκατάσταση"
+
+#: server/services/install/templates/administrator.php:14
+msgid "Create your account"
+msgstr "Δημιουργήστε τον λογαριασμό σας"
+
+#: server/services/install/templates/administrator.php:16
+msgid "Enter a site title and administrator credentials. PeakURL will sign you in when installation is complete."
+msgstr "Εισαγάγετε τίτλο ιστότοπου και διαπιστευτήρια διαχειριστή. Το PeakURL θα σας συνδέσει αυτόματα μόλις ολοκληρωθεί η εγκατάσταση."
+
+#: server/services/install/templates/administrator.php:35
+msgid "Site details"
+msgstr "Στοιχεία ιστότοπου"
+
+#: server/services/install/templates/administrator.php:38
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
+msgid "Site title"
+msgstr "Τίτλος ιστότοπου"
+
+#: server/services/install/templates/administrator.php:39
+msgid "My Link Hub"
+msgstr "Ο Κόμβος Συνδέσμων Μου"
+
+#: server/services/install/templates/administrator.php:48
+msgid "Use letters, numbers, periods, hyphens, underscores, or @."
+msgstr "Χρησιμοποιήστε γράμματα, αριθμούς, τελείες, παύλες, κάτω παύλες ή @."
+
+#: server/services/install/templates/administrator.php:51
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
+#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
+msgid "Email"
+msgstr "Email"
+
+#: server/services/install/templates/administrator.php:52
+#: client/pages/auth/login/LoginPage.tsx:193
+msgid "you@company.com"
+msgstr "you@company.com"
+
+#: server/services/install/templates/administrator.php:57
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
+msgid "Use at least 8 characters."
+msgstr "Χρησιμοποιήστε τουλάχιστον 8 χαρακτήρες."
+
+#: server/services/install/templates/administrator.php:61
+msgid "Your database connection is configured."
+msgstr "Η σύνδεση της βάσης δεδομένων σας έχει ρυθμιστεί."
+
+#: server/services/install/templates/administrator.php:64
+msgid "Install %s"
+msgstr "Εγκατάσταση %s"
+
+#: server/services/install/page.php:31
+msgid "Welcome"
+msgstr "Καλώς ήρθατε"
+
+#: server/services/install/page.php:31
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
+msgid "Database"
+msgstr "Βάση δεδομένων"
+
+#: server/services/install/page.php:31
+msgid "Admin account"
+msgstr "Λογαριασμός διαχειριστή"
+
+#: server/services/install/page.php:34
+msgid "Install PeakURL"
+msgstr "Εγκατάσταση του PeakURL"
+
+#: server/services/install/page.php:35
+msgid "Connect your database"
+msgstr "Σύνδεση της βάσης δεδομένων σας"
+
+#: server/services/install/page.php:36
+msgid "Set up your site"
+msgstr "Ρύθμιση του ιστότοπού σας"
+
+#: server/services/install/page.php:39
+msgid "Connect your database, then create the administrator account for this installation."
+msgstr "Συνδέστε τη βάση δεδομένων σας και, στη συνέχεια, δημιουργήστε τον λογαριασμό διαχειριστή για αυτήν την εγκατάσταση."
+
+#: server/services/install/page.php:40
+msgid "PeakURL uses this database to store your links, accounts, and analytics."
+msgstr "Το PeakURL χρησιμοποιεί αυτήν τη βάση δεδομένων για την αποθήκευση των συνδέσμων, των λογαριασμών και των αναλυτικών σας στοιχείων."
+
+#: server/services/install/page.php:41
+msgid "Choose a site title and create the account you’ll use to manage PeakURL."
+msgstr "Επιλέξτε τίτλο ιστότοπου και δημιουργήστε τον λογαριασμό που θα χρησιμοποιήσετε για τη διαχείριση του PeakURL."
 
 #: server/services/install/initializer.php:66
 msgid "Unable to connect to the database or create the PeakURL tables. "
@@ -2845,57 +2904,57 @@ msgstr "Το PeakURL δεν μπόρεσε να δημιουργήσει τον 
 msgid "PeakURL could not write the favicon web manifest."
 msgstr "Το PeakURL δεν μπόρεσε να εγγράψει τη δήλωση ιστού (web manifest) του favicon."
 
-#: server/services/status-page.php:66
-#: client/pages/NotFoundPage.tsx:17
+#: server/services/status-page.php:69
+#: client/pages/NotFoundPage.tsx:21
 msgid "Page not found"
 msgstr "Η σελίδα δεν βρέθηκε"
 
-#: server/services/status-page.php:67
+#: server/services/status-page.php:70
 msgid "We couldn’t find the page you’re looking for. Check the address, or contact the person who shared it with you."
 msgstr "Δεν μπορέσαμε να βρούμε τη σελίδα που αναζητάτε. Ελέγξτε τη διεύθυνση ή επικοινωνήστε με το άτομο που τη μοιράστηκε μαζί σας."
 
-#: server/services/status-page.php:69
+#: server/services/status-page.php:73
 msgid "Access to this page is restricted"
 msgstr "Η πρόσβαση σε αυτήν τη σελίδα είναι περιορισμένη"
 
-#: server/services/status-page.php:70
+#: server/services/status-page.php:74
 msgid "You don’t have permission to open this page. Contact the site administrator if you think you should have access."
 msgstr "Δεν έχετε άδεια να ανοίξετε αυτήν τη σελίδα. Επικοινωνήστε με τον διαχειριστή του ιστότοπου εάν πιστεύετε ότι θα έπρεπε να έχετε πρόσβαση."
 
-#: server/services/status-page.php:72
+#: server/services/status-page.php:77
 msgid "Please wait a moment"
 msgstr "Παρακαλούμε περιμένετε μια στιγμή"
 
-#: server/services/status-page.php:73
+#: server/services/status-page.php:78
 msgid "Too many requests have been made. Give it a moment, then try again."
 msgstr "Έχουν υποβληθεί πάρα πολλά αιτήματα. Περιμένετε λίγο και δοκιμάστε ξανά."
 
-#: server/services/status-page.php:75
+#: server/services/status-page.php:81
 msgid "Unable to complete your request"
 msgstr "Δεν ήταν δυνατή η ολοκλήρωση του αιτήματός σας"
 
-#: server/services/status-page.php:76
+#: server/services/status-page.php:82
 msgid "PeakURL encountered a server error. Please try again. If the problem persists, contact the site administrator."
 msgstr "Το PeakURL αντιμετώπισε σφάλμα διακομιστή. Δοκιμάστε ξανά. Εάν το πρόβλημα παραμένει, επικοινωνήστε με τον διαχειριστή του ιστότοπου."
 
-#: server/services/status-page.php:78
+#: server/services/status-page.php:85
 msgid "Unable to open this page"
 msgstr "Δεν είναι δυνατό το άνοιγμα αυτής της σελίδας"
 
-#: server/services/status-page.php:79
+#: server/services/status-page.php:86
 msgid "This request couldn’t be completed. Check the address, or contact the site administrator for help."
 msgstr "Δεν ήταν δυνατή η ολοκλήρωση αυτού του αιτήματος. Ελέγξτε τη διεύθυνση ή επικοινωνήστε με τον διαχειριστή του ιστότοπου για βοήθεια."
 
-#: server/services/status-page.php:84
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:940
+#: server/services/status-page.php:91
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:946
 msgid "Error details"
 msgstr "Λεπτομέρειες σφάλματος"
 
-#: server/services/status-page.php:91
+#: server/services/status-page.php:98
 msgid "Error %s"
 msgstr "Σφάλμα %s"
 
-#: server/services/status-page.php:94
+#: server/services/status-page.php:101
 msgid "Go to homepage"
 msgstr "Μετάβαση στην αρχική σελίδα"
 
@@ -3192,12 +3251,12 @@ msgstr "Επιβεβαίωση"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:898
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:115
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:447
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1086
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:586
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:836
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:497
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:842
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
 #: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:515
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
@@ -3403,31 +3462,31 @@ msgstr "Δεν είναι δυνατή η σύνδεση με το backend"
 msgid "PeakURL couldn’t complete the connection to your server. Please try again."
 msgstr "Το PeakURL δεν μπόρεσε να ολοκληρώσει τη σύνδεση με τον διακομιστή σας. Δοκιμάστε ξανά."
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:128
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
 msgid "Backend connection error"
 msgstr "Σφάλμα σύνδεσης backend"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:130
 msgid "If the problem persists, contact your site administrator."
 msgstr "Εάν το πρόβλημα παραμένει, επικοινωνήστε με τον διαχειριστή του ιστότοπου."
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:141
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
 msgid "Checking connection"
 msgstr "Έλεγχος σύνδεσης"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:143
 msgid "Retry connection"
 msgstr "Επανάληψη σύνδεσης"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:166
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:167
 msgid "API endpoint"
 msgstr "Σημείο τελικού προορισμού API"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:172
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:173
 msgid "What went wrong"
 msgstr "Τι πήγε στραβά"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:179
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:180
 msgid "Check these first"
 msgstr "Ελέγξτε πρώτα αυτά"
 
@@ -3439,66 +3498,64 @@ msgstr "Απαιτείται email ή όνομα χρήστη."
 msgid "PeakURL could not process the password reset request."
 msgstr "Το PeakURL δεν μπόρεσε να επεξεργαστεί το αίτημα επαναφοράς κωδικού πρόσβασης."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:73
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:74
 msgid "Account Recovery"
 msgstr "Ανάκτηση λογαριασμού"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:75
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:118
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:135
-msgid "Reset your password"
-msgstr "Επαναφορά του κωδικού πρόσβασής σας"
-
 #: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:76
-msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
-msgstr "Εισαγάγετε τη διεύθυνση email ή το όνομα χρήστη που συνδέεται με τον λογαριασμό σας PeakURL και θα σας στείλουμε έναν ασφαλή σύνδεσμο επαναφοράς."
-
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:79
 msgid "Secure account recovery"
 msgstr "Ασφαλής ανάκτηση λογαριασμού"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
-msgid "For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
-msgstr "Για την ασφάλειά σας, οι σύνδεσμοι επαναφοράς κωδικού πρόσβασης λήγουν μετά από 1 ώρα. Η αλλαγή του κωδικού πρόσβασής σας θα ανακαλέσει επίσης αμέσως όλες τις ενεργές συνεδρίες στις συσκευές σας."
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:77
+msgid "Get back to your links with a password reset link sent to your account email."
+msgstr "Ανακτήστε την πρόσβαση στους συνδέσμους σας με έναν σύνδεσμο επαναφοράς κωδικού πρόσβασης που στάλθηκε στο email σας."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:83
-#: client/pages/auth/login/LoginPage.tsx:298
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
+msgid "Your account stays protected"
+msgstr "Ο λογαριασμός σας παραμένει προστατευμένος"
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:81
+msgid "Reset links expire after 1 hour. Changing your password signs out your existing sessions."
+msgstr "Οι σύνδεσμοι επαναφοράς λήγουν μετά από 1 ώρα. Η αλλαγή του κωδικού πρόσβασης αποσυνδέει τις υπάρχουσες συνεδρίες σας."
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
+#: client/pages/auth/login/LoginPage.tsx:238
 msgid "Forgot your password?"
 msgstr "Ξεχάσατε τον κωδικό πρόσβασής σας;"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:152
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:85
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:153
 msgid "Enter your account email or username and PeakURL will send a secure password reset link."
 msgstr "Εισαγάγετε το email ή το όνομα χρήστη του λογαριασμού σας και το PeakURL θα στείλει έναν ασφαλή σύνδεσμο επαναφοράς κωδικού πρόσβασης."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:91
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:92
 msgid "Check your inbox"
 msgstr "Ελέγξτε τα εισερχόμενά σας"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:95
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:96
 msgid "If an account exists for %s, PeakURL has sent a password reset link."
 msgstr "Εάν υπάρχει λογαριασμός για το %s, το PeakURL έχει στείλει έναν σύνδεσμο επαναφοράς κωδικού πρόσβασης."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:102
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:103
 msgid "Return to login"
 msgstr "Επιστροφή στη σύνδεση"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:109
-#: client/pages/auth/login/LoginPage.tsx:236
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:110
+#: client/pages/auth/login/LoginPage.tsx:183
 msgid "Email or username"
 msgstr "Email ή όνομα χρήστη"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:116
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:117
 msgid "owner@example.com or admin"
 msgstr "owner@example.com ή admin"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:132
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:162
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:133
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:163
 msgid "Send reset link"
 msgstr "Αποστολή συνδέσμου επαναφοράς"
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:66
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:149
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:150
 msgid "The password reset link is invalid."
 msgstr "Ο σύνδεσμος επαναφοράς κωδικού πρόσβασης δεν είναι έγκυρος."
 
@@ -3511,61 +3568,60 @@ msgstr "Οι κωδικοί πρόσβασης δεν ταιριάζουν."
 msgid "PeakURL could not reset the password with that link."
 msgstr "Το PeakURL δεν μπόρεσε να επαναφέρει τον κωδικό πρόσβασης με αυτόν τον σύνδεσμο."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:108
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:109
 msgid "Secure Reset"
 msgstr "Ασφαλής επαναφορά"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:110
-msgid "Choose a new password and get back to work."
-msgstr "Επιλέξτε έναν νέο κωδικό πρόσβασης και επιστρέψτε στην εργασία σας."
-
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:111
-msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
-msgstr "Μόλις αλλάξει ο κωδικός πρόσβασης, το PeakURL ανακαλεί τις παλιές συνεδρίες, ώστε μόνο η νέα σύνδεση να παραμένει έγκυρη."
+msgid "Keep your account secure"
+msgstr "Διατηρήστε τον λογαριασμό σας ασφαλή"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:114
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
-msgid "Use at least 8 characters."
-msgstr "Χρησιμοποιήστε τουλάχιστον 8 χαρακτήρες."
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:112
+msgid "Choose a password you don’t use elsewhere. Your previous sessions will be signed out."
+msgstr "Επιλέξτε έναν κωδικό πρόσβασης που δεν χρησιμοποιείτε αλλού. Οι προηγούμενες συνεδρίες σας θα αποσυνδεθούν."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:116
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "Για καλύτερα αποτελέσματα, συνδυάστε κεφαλαία, πεζά, αριθμούς και μια μοναδική φράση που δεν επαναχρησιμοποιείτε αλλού."
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:119
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:136
+msgid "Reset your password"
+msgstr "Επαναφορά του κωδικού πρόσβασής σας"
+
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:120
 msgid "Set a new account password, then sign in again with the updated credentials."
 msgstr "Ορίστε έναν νέο κωδικό πρόσβασης λογαριασμού και, στη συνέχεια, συνδεθείτε ξανά με τα ενημερωμένα διαπιστευτήρια."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:176
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:177
 msgid "Password updated"
 msgstr "Ο κωδικός πρόσβασης ενημερώθηκε"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:179
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:180
 msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
 msgstr "Το PeakURL ενημέρωσε τον κωδικό πρόσβασής σας και ανακάλεσε τις παλαιότερες συνεδρίες. Ανακατεύθυνση στη σελίδα σύνδεσης τώρα."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:189
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:190
 msgid "New password"
 msgstr "Νέος κωδικός πρόσβασης"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:195
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:196
 msgid "Enter your new password"
 msgstr "Εισαγάγετε τον νέο σας κωδικό πρόσβασης"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:202
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:203
 msgid "Confirm new password"
 msgstr "Επιβεβαίωση νέου κωδικού πρόσβασης"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:212
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:213
 msgid "Confirm your new password"
 msgstr "Επιβεβαιώστε τον νέο σας κωδικό πρόσβασης"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:224
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:225
 msgid "Reset password"
 msgstr "Επαναφορά κωδικού πρόσβασης"
 
-#: client/pages/auth/login/LoginPage.tsx:39
+#: client/pages/auth/login/LoginPage.tsx:37
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:45
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:442
 #: client/pages/layout/dashboard/Search/useSearchResults.ts:118
@@ -3576,110 +3632,106 @@ msgstr "Επαναφορά κωδικού πρόσβασης"
 msgid "Links"
 msgstr "Σύνδεσμοι"
 
-#: client/pages/auth/login/LoginPage.tsx:40
+#: client/pages/auth/login/LoginPage.tsx:38
 msgid "Shorten, organize, and share."
 msgstr "Συντομεύστε, οργανώστε και μοιραστείτε."
 
-#: client/pages/auth/login/LoginPage.tsx:44
+#: client/pages/auth/login/LoginPage.tsx:42
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:398
 msgid "Analytics"
 msgstr "Αναλυτικά στοιχεία"
 
-#: client/pages/auth/login/LoginPage.tsx:45
+#: client/pages/auth/login/LoginPage.tsx:43
 msgid "Clicks, locations, and devices."
 msgstr "Κλικ, τοποθεσίες και συσκευές."
 
-#: client/pages/auth/login/LoginPage.tsx:49
+#: client/pages/auth/login/LoginPage.tsx:47
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:170
 #: client/pages/dashboard/settings/Layout.tsx:27
 msgid "Security"
 msgstr "Ασφάλεια"
 
-#: client/pages/auth/login/LoginPage.tsx:50
+#: client/pages/auth/login/LoginPage.tsx:48
 msgid "Sessions, 2FA, and roles."
 msgstr "Συνεδρίες, 2FA και ρόλοι."
 
-#: client/pages/auth/login/LoginPage.tsx:146
-msgid "Almost there."
-msgstr "Σχεδόν έτοιμοι."
+#: client/pages/auth/login/LoginPage.tsx:136
+msgid "Verify to continue"
+msgstr "Επαληθεύστε για να συνεχίσετε"
 
-#: client/pages/auth/login/LoginPage.tsx:149
-msgid "Verify to continue."
-msgstr "Επαληθεύστε για να συνεχίσετε."
-
-#: client/pages/auth/login/LoginPage.tsx:154
+#: client/pages/auth/login/LoginPage.tsx:139
 msgid "Manage every link"
 msgstr "Διαχειριστείτε κάθε σύνδεσμο"
 
-#: client/pages/auth/login/LoginPage.tsx:157
+#: client/pages/auth/login/LoginPage.tsx:142
 msgid "from one place."
 msgstr "από ένα μέρος."
 
-#: client/pages/auth/login/LoginPage.tsx:164
-msgid "One more verification step and you’ll be in your workspace."
-msgstr "Ένα ακόμα βήμα επαλήθευσης και θα βρίσκεστε στον χώρο εργασίας σας."
+#: client/pages/auth/login/LoginPage.tsx:149
+msgid "Use your authenticator app or a backup code to sign in securely."
+msgstr "Χρησιμοποιήστε την εφαρμογή ελέγχου ταυτότητας ή έναν εφεδρικό κωδικό για ασφαλή είσοδο."
 
-#: client/pages/auth/login/LoginPage.tsx:167
-msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
-msgstr "Συντομεύστε διευθύνσεις URL, παρακολουθήστε κλικ και διαχειριστείτε το κοινό σας, όλα από τον δικό σας πίνακα ελέγχου."
+#: client/pages/auth/login/LoginPage.tsx:152
+msgid "Shorten URLs, track clicks, and manage your links from your own dashboard."
+msgstr "Συντομεύστε URL, παρακολουθήστε κλικ και διαχειριστείτε τους συνδέσμους σας από τον δικό σας πίνακα ελέγχου."
 
-#: client/pages/auth/login/LoginPage.tsx:203
+#: client/pages/auth/login/LoginPage.tsx:159
 msgid "Verify your identity"
 msgstr "Επαληθεύστε την ταυτότητά σας"
 
-#: client/pages/auth/login/LoginPage.tsx:204
+#: client/pages/auth/login/LoginPage.tsx:160
 msgid "Sign in to your account"
 msgstr "Συνδεθείτε στον λογαριασμό σας"
 
-#: client/pages/auth/login/LoginPage.tsx:209
+#: client/pages/auth/login/LoginPage.tsx:165
 msgid "Enter one of the backup codes you saved when setting up 2FA."
 msgstr "Εισαγάγετε έναν από τους εφεδρικούς κωδικούς που αποθηκεύσατε κατά τη ρύθμιση του 2FA."
 
-#: client/pages/auth/login/LoginPage.tsx:212
+#: client/pages/auth/login/LoginPage.tsx:168
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Εισαγάγετε τον 6ψήφιο κωδικό από την εφαρμογή ελέγχου ταυτότητας."
 
-#: client/pages/auth/login/LoginPage.tsx:215
+#: client/pages/auth/login/LoginPage.tsx:171
 msgid "Enter your credentials to continue to the dashboard."
 msgstr "Εισαγάγετε τα διαπιστευτήριά σας για να συνεχίσετε στον πίνακα ελέγχου."
 
-#: client/pages/auth/login/LoginPage.tsx:282
+#: client/pages/auth/login/LoginPage.tsx:225
 msgid "Remember me"
 msgstr "Να με θυμάσαι"
 
-#: client/pages/auth/login/LoginPage.tsx:308
+#: client/pages/auth/login/LoginPage.tsx:248
 msgid "Backup code"
 msgstr "Εφεδρικός κωδικός"
 
-#: client/pages/auth/login/LoginPage.tsx:323
+#: client/pages/auth/login/LoginPage.tsx:261
 msgid "xxxx-xxxx-xxxx"
 msgstr "xxxx-xxxx-xxxx"
 
-#: client/pages/auth/login/LoginPage.tsx:336
+#: client/pages/auth/login/LoginPage.tsx:272
 msgid "Use authenticator code instead"
 msgstr "Χρησιμοποιήστε κωδικό πιστοποιητή αντ' αυτού"
 
-#: client/pages/auth/login/LoginPage.tsx:362
+#: client/pages/auth/login/LoginPage.tsx:294
 msgid "Lost your device? Use a backup code"
 msgstr "Χάσατε τη συσκευή σας; Χρησιμοποιήστε έναν εφεδρικό κωδικό"
 
-#: client/pages/auth/login/LoginPage.tsx:403
+#: client/pages/auth/login/LoginPage.tsx:331
 msgid "Verifying…"
 msgstr "Επαλήθευση…"
 
-#: client/pages/auth/login/LoginPage.tsx:404
+#: client/pages/auth/login/LoginPage.tsx:332
 msgid "Signing in…"
 msgstr "Σύνδεση…"
 
-#: client/pages/auth/login/LoginPage.tsx:409
+#: client/pages/auth/login/LoginPage.tsx:337
 msgid "Verify & continue"
 msgstr "Επαλήθευση & συνέχεια"
 
-#: client/pages/auth/login/LoginPage.tsx:410
+#: client/pages/auth/login/LoginPage.tsx:338
 msgid "Sign in"
 msgstr "Σύνδεση"
 
-#: client/pages/auth/login/LoginPage.tsx:425
+#: client/pages/auth/login/LoginPage.tsx:353
 msgid "Back to sign-in"
 msgstr "Επιστροφή στη σύνδεση"
 
@@ -3950,7 +4002,7 @@ msgstr "Άνοιγμα"
 
 #: client/pages/layout/dashboard/Search/SearchDialog.tsx:150
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1046
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:954
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:960
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:601
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:947
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:463
@@ -3984,7 +4036,6 @@ msgstr "Πίνακας ελέγχου"
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
 #: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:387
 #: client/pages/dashboard/links/components/Header/Header.tsx:21
-#: client/pages/NotFoundPage.tsx:41
 msgid "All Links"
 msgstr "Όλοι οι σύνδεσμοι"
 
@@ -4001,7 +4052,6 @@ msgstr "Σχετικά"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:146
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:152
-#: client/pages/NotFoundPage.tsx:43
 #: client/router/pageTitle.ts:22
 msgid "General Settings"
 msgstr "Γενικές ρυθμίσεις"
@@ -5148,8 +5198,8 @@ msgstr "Προεπιλεγμένη εικόνα κοινωνικής προεπ�
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:676
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:597
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:508
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:915
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 #: client/pages/dashboard/users/components/ManageRolesDrawer/components/DrawerFooter.tsx:70
@@ -5174,44 +5224,48 @@ msgstr "Συνιστάται ενημέρωση της βάσης δεδομέν
 msgid "Your local GeoLite2 City database is over 30 days old. Update the database to maintain accurate location reporting."
 msgstr "Η τοπική βάση δεδομένων GeoLite2 City είναι παλαιότερη των 30 ημερών. Ενημερώστε τη βάση δεδομένων για ακριβείς αναφορές τοποθεσίας."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:157
-msgid "Location analytics is enabled"
-msgstr "Τα αναλυτικά στοιχεία τοποθεσίας είναι ενεργοποιημένα"
-
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
-msgid "PeakURL is using the local GeoLite2 City database for click locations."
-msgstr "Το PeakURL χρησιμοποιεί την τοπική βάση δεδομένων GeoLite2 City για τις τοποθεσίες των κλικ."
+msgid "MaxMind credentials recommended"
+msgstr "Συνιστώνται διαπιστευτήρια MaxMind"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:161
+msgid "PeakURL works out of the box using your local database. To keep location stats accurate as IP allocations shift, add your MaxMind credentials below so the weekly background job can automatically fetch updates."
+msgstr "Το PeakURL λειτουργεί άμεσα χρησιμοποιώντας την τοπική σας βάση δεδομένων. Για να διατηρείτε ακριβή τα στατιστικά τοποθεσίας καθώς αλλάζουν οι εκχωρήσεις IP, προσθέστε τα διαπιστευτήριά σας MaxMind παρακάτω, ώστε η εβδομαδιαία εργασία παρασκηνίου να λαμβάνει αυτόματα ενημερώσεις."
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
+msgid "Setup guide"
+msgstr "Οδηγός ρύθμισης"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:186
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:198
 msgid "Database download required"
 msgstr "Απαιτείται λήψη της βάσης δεδομένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 msgid "Your MaxMind credentials have been saved. Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "Τα διαπιστευτήριά σας MaxMind έχουν αποθηκευτεί. Κάντε λήψη της βάσης δεδομένων GeoLite2 City χρησιμοποιώντας το παραπάνω κουμπί για να ενεργοποιήσετε τα αναλυτικά στοιχεία χωρών και πόλεων επισκεπτών."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "Κάντε λήψη της βάσης δεδομένων GeoLite2 City χρησιμοποιώντας το παραπάνω κουμπί για να ενεργοποιήσετε τα αναλυτικά στοιχεία χωρών και πόλεων επισκεπτών."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:196
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
 msgid "Location Database"
 msgstr "Βάση δεδομένων τοποθεσιών"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:197
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "Ενεργοποιήστε τα αναλυτικά στοιχεία χώρας και πόλης με μια τοπική βάση δεδομένων MaxMind GeoLite2 City που είναι αποθηκευμένη στον φάκελο μόνιμου περιεχομένου σας."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:228
 msgid "Update Database"
 msgstr "Ενημέρωση βάσης δεδομένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
 msgid "Download Database"
 msgstr "Λήψη βάσης δεδομένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:237
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:691
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
@@ -5227,24 +5281,24 @@ msgstr "Λήψη βάσης δεδομένων"
 msgid "Status"
 msgstr "Κατάσταση"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:858
 msgid "Ready"
 msgstr "Έτοιμο"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:859
 msgid "Setup Required"
 msgstr "Απαιτείται ρύθμιση"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:225
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
 msgid "Database Updated"
 msgstr "Η βάση δεδομένων ενημερώθηκε"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:233
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:249
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:89
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:128
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -5256,12 +5310,12 @@ msgstr "Η βάση δεδομένων ενημερώθηκε"
 msgid "Never"
 msgstr "Ποτέ"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:254
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:870
 msgid "Database Size"
 msgstr "Μέγεθος βάσης δεδομένων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:257
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:269
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
@@ -5272,82 +5326,82 @@ msgstr "Μέγεθος βάσης δεδομένων"
 msgid "Not available"
 msgstr "Μη διαθέσιμο"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:250
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:266
 msgid "Location data unavailable"
 msgstr "Τα δεδομένα τοποθεσίας δεν είναι διαθέσιμα"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:261
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:277
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:210
 msgid "Dashboard management unavailable"
 msgstr "Η διαχείριση του πίνακα ελέγχου δεν είναι διαθέσιμη"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:271
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:287
 msgid "MaxMind Credentials"
 msgstr "Διαπιστευτήρια MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:275
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "Το PeakURL αποθηκεύει αυτές τις τιμές κρυπτογραφημένες στη βάση δεδομένων, ώστε να μπορεί να ανανεώσει τη βάση δεδομένων GeoLite2 City αργότερα χωρίς να ρωτήσει ξανά."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "How to get credentials"
 msgstr "Πώς να αποκτήσετε διαπιστευτήρια"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
 msgid "Credentials saved"
 msgstr "Τα διαπιστευτήρια αποθηκεύτηκαν"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:312
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:885
 msgid "Account ID"
 msgstr "ID λογαριασμού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:323
 msgid "License Key"
 msgstr "Κλειδί άδειας χρήσης"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
 msgid "Update Credentials"
 msgstr "Ενημέρωση διαπιστευτηρίων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:446
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:462
 msgid "Clear Credentials"
 msgstr "Εκκαθάριση διαπιστευτηρίων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:363
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:379
 msgid "MaxMind Account ID"
 msgstr "Αναγνωριστικό λογαριασμού MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:392
 msgid "MaxMind License Key"
 msgstr "Κλειδί άδειας χρήσης MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:386
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:402
 msgid "Enter a new MaxMind license key"
 msgstr "Εισαγάγετε ένα νέο κλειδί άδειας χρήσης MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:387
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:403
 msgid "Enter your MaxMind license key"
 msgstr "Εισαγάγετε το κλειδί άδειας χρήσης σας MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:410
 msgid "Saved license key:"
 msgstr "Αποθηκευμένο κλειδί άδειας χρήσης:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:432
 msgid "Save New Credentials"
 msgstr "Αποθήκευση νέων διαπιστευτηρίων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:433
 msgid "Save Credentials"
 msgstr "Αποθήκευση διαπιστευτηρίων"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:458
 msgid "Clear MaxMind credentials?"
 msgstr "Εκκαθάριση διαπιστευτηρίων MaxMind;"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:443
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:459
 msgid "The saved account ID and license key will be removed. Your downloaded location database and existing analytics will remain available. Future updates will automatically use PeakURL's verified database archive."
 msgstr "Το αποθηκευμένο αναγνωριστικό λογαριασμού και το κλειδί άδειας χρήσης θα καταργηθούν. Η ληφθείσα βάση δεδομένων τοποθεσίας και τα υπάρχοντα αναλυτικά στοιχεία θα παραμείνουν διαθέσιμα. Οι μελλοντικές ενημερώσεις θα χρησιμοποιούν αυτόματα το επαληθευμένο αρχείο του PeakURL."
 
@@ -5574,7 +5628,7 @@ msgstr "Δοκιμαστικό ping webhook"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:118
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:692
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:929
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:935
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:107
 msgid "Event"
 msgstr "Συμβάν"
@@ -5625,7 +5679,7 @@ msgid "Close drawer"
 msgstr "Κλείσιμο πλαισίου"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:517
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:457
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:461
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:28
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:85
@@ -5656,8 +5710,8 @@ msgstr "Ενεργοποιημένο"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:542
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:186
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:337
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:338
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:617
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:844
@@ -5729,7 +5783,7 @@ msgid "HTTP Code"
 msgstr "Κωδικός HTTP"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:697
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:918
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:924
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 #: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:132
 msgid "Duration"
@@ -5892,7 +5946,7 @@ msgid "A descriptive name to identify this webhook endpoint."
 msgstr "Ένα περιγραφικό όνομα για την αναγνώριση αυτού του τελικού σημείου webhook."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:298
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:764
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:770
 msgid "Endpoint URL"
 msgstr "URL τελικού σημείου (Endpoint URL)"
 
@@ -6019,7 +6073,7 @@ msgid "Editing"
 msgstr "Επεξεργασία"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:195
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:347
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:348
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:829
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:833
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:886
@@ -6047,75 +6101,75 @@ msgstr "Προστασία CAPTCHA"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "Απαίτηση δοκιμασίας επαλήθευσης στις σελίδες ελέγχου ταυτότητας και πριν από την ανακατεύθυνση δημόσιων σύντομων συνδέσμων."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "Ενεργοποίηση προστασίας CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
 msgid "Loading CAPTCHA settings…"
 msgstr "Φόρτωση ρυθμίσεων CAPTCHA…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:338
 msgid "Failed to load CAPTCHA settings."
 msgstr "Αποτυχία φόρτωσης των ρυθμίσεων CAPTCHA."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:342
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Provider Settings"
 msgstr "Ρυθμίσεις παρόχου"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:346
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:348
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "Τα αποθηκευμένα διαπιστευτήρια είναι καλυμμένα. Αλλάξτε τα ή αφαιρέστε τα όταν χρειάζεται."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:349
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:351
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "Επιλέξτε έναν πάροχο CAPTCHA και εισαγάγετε τα κλειδιά API σας."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:359
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:392
 msgid "Provider"
 msgstr "Πάροχος"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:367
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:369
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
 msgid "Site Key"
 msgstr "Κλειδί ιστότοπου"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:375
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:377
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:426
 msgid "Secret Key"
 msgstr "Μυστικό κλειδί"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:396
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:398
 msgid "CAPTCHA provider"
 msgstr "Πάροχος CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:407
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Paste site key"
 msgstr "Επικόλληση κλειδιού ιστότοπου"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:418
 msgid "Leave unchanged to keep the saved site key."
 msgstr "Αφήστε αμετάβλητο για να διατηρήσετε το αποθηκευμένο κλειδί ιστότοπου."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:434
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:436
 msgid "Keep saved secret"
 msgstr "Διατήρηση αποθηκευμένου μυστικού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:435
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:437
 msgid "Paste secret key"
 msgstr "Επικόλληση μυστικού κλειδιού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:473
 msgid "Change keys"
 msgstr "Αλλαγή κλειδιών"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:484
 msgid "Remove keys"
 msgstr "Διαγραφή les clés"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 msgid "Save Settings"
 msgstr "Αποθήκευση ρυθμίσεων"
 
@@ -6190,180 +6244,180 @@ msgid "PeakURL sends HMAC-SHA256 signed POST requests to your endpoint when sele
 msgstr "Το PeakURL στέλνει αιτήματα POST υπογεγραμμένα με HMAC-SHA256 στο τελικό σας σημείο όταν συμβαίνουν επιλεγμένα συμβάντα συνδέσμων."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:332
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:704
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:710
 msgid "Add Webhook"
 msgstr "Προσθήκη webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:354
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:355
 msgid "Enable webhooks"
 msgstr "Ενεργοποίηση webhooks"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:392
 msgid "Loading webhook configuration…"
 msgstr "Φόρτωση διαμόρφωσης webhook…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:398
 msgid "Failed to load webhook configuration."
 msgstr "Αποτυχία φόρτωσης διαμόρφωσης webhook."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
 msgid "URL copied"
 msgstr "Το URL αντιγράφηκε"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:441
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:445
 msgid "Copy URL"
 msgstr "Αντιγραφή URL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:137
 msgid "SSL"
 msgstr "SSL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:484
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:488
 msgid "Insecure"
 msgstr "Μη ασφαλές"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
 msgid "Send a test payload to this endpoint"
 msgstr "Αποστολή δοκιμαστικού φορτίου σε αυτό το τελικό σημείο"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:517
 msgid "Test"
 msgstr "Δοκιμή"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:532
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
 msgid "View delivery history & attempts"
 msgstr "Προβολή ιστορικού παραδόσεων & αποπειρών"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:540
 msgid "Deliveries"
 msgstr "Παραδόσεις"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:548
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
 msgid "Edit webhook settings"
 msgstr "Επεξεργασία ρυθμίσεων webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:556
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:407
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:563
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:566
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:567
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:570
 msgid "Delete this webhook"
 msgstr "Διαγραφή αυτού του webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:579
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:583
 msgid "Events:"
 msgstr "Συμβάντα:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:605
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:628
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:609
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:632
 msgid "No events subscribed"
 msgstr "Δεν υπάρχουν εγγεγραμμένα συμβάντα"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:640
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:645
 msgid "Secret:"
 msgstr "Μυστικό:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:653
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:659
 msgid "Rotate"
 msgstr "Ανανέωση"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:664
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:670
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:34
 msgid "Created:"
 msgstr "Δημιουργίαd:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:688
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:694
 msgid "No webhooks configured"
 msgstr "Δεν έχουν διαμορφωθεί webhooks"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:691
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:697
 msgid "Add an HTTPS endpoint to begin receiving signed event deliveries for link activity, user updates, and API key events."
 msgstr "Προσθέστε ένα τελικό σημείο HTTPS για να ξεκινήσετε τη λήψη υπογεγραμμένων παραδόσεων συμβάντων για δραστηριότητα συνδέσμων, ενημερώσεις χρηστών και συμβάντα κλειδιών API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:747
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
 msgid "Your Webhook Signing Secret"
 msgstr "Το μυστικό υπογραφής webhook σας"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:759
 msgid "This signing secret will not be shown again."
 msgstr "Αυτό το μυστικό υπογραφής δεν θα εμφανιστεί ξανά."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:756
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:762
 msgid "Store this secret securely in your receiving application. Outbound requests are signed using HMAC-SHA256 with this secret."
 msgstr "Αποθηκεύστε αυτό το μυστικό με ασφάλεια στην εφαρμογή λήψης σας. Τα εξερχόμενα αιτήματα υπογράφονται με χρήση HMAC-SHA256 με αυτό το μυστικό."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:779
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:803
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:785
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:809
 msgid "Secret copied"
 msgstr "Το μυστικό αντιγράφηκε"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:782
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:788
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "Αντιγραφή στο πρόχειρο"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:786
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:792
 msgid "To verify signatures, compute HMAC-SHA256 over '{timestamp}.{raw_payload}' and compare against the X-PeakURL-Signature header."
 msgstr "Για να επαληθεύσετε τις υπογραφές, υπολογίστε το HMAC-SHA256 στο '{timestamp}.{raw_payload}' και συγκρίνετε με την κεφαλίδα X-PeakURL-Signature."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:807
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:813
 msgid "Copy Secret"
 msgstr "Αντιγραφή μυστικού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:810
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:816
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "Το έχω αποθηκεύσει"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:824
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:830
 msgid "Rotate Webhook Signing Secret"
 msgstr "Ανανέωση μυστικού υπογραφής webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:828
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:834
 msgid "Rotate the signing secret for %s? The current secret will be immediately invalidated and outbound event signatures will fail until you update your receiver application."
 msgstr "Ανανέωση του μυστικού υπογραφής για %s; Το τρέχον μυστικό θα ακυρωθεί αμέσως και οι εξερχόμενες υπογραφές συμβάντων θα αποτυγχάνουν μέχρι να ενημερώσετε την εφαρμογή λήψης σας."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:835
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:841
 msgid "Rotate Secret"
 msgstr "Ανανέωση μυστικού"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:850
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:861
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:856
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:867
 msgid "Delete Webhook"
 msgstr "Διαγραφή webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:854
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:860
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "Διαγραφή του webhook για το %s; Το PeakURL θα σταματήσει αμέσως να στέλνει υπογεγραμμένα αιτήματα συμβάντων σε αυτό το τελικό σημείο."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:862
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:868
 msgid "Keep Webhook"
 msgstr "Διατήρηση webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:872
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:878
 msgid "Webhook Test Ping Result"
 msgstr "Αποτέλεσμα δοκιμαστικού ping webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:893
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:899
 msgid "Delivery Succeeded"
 msgstr "Η παράδοση πέτυχε"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:903
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:909
 msgid "Delivery Failed"
 msgstr "Η παράδοση απέτυχε"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:340
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:341
 msgid "%d configured"
 msgid_plural "%d configured"
 msgstr[0] "%d διαμορφώθηκε"
 msgstr[1] "%d διαμορφώθηκαν"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:623
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:627
 msgid "+%d more"
 msgid_plural "+%d more"
 msgstr[0] "+%d ακόμη"
@@ -8812,7 +8866,7 @@ msgstr "Αρχείο καταγραφής δραστηριότητας"
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Ελέγξτε τις αλλαγές συνδέσμων και τα συμβάντα διαχείρισης χρηστών σε ένα μέρος με φίλτρα, χρονικές σημάνσεις και λεπτομέρειες χρήστη."
 
-#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:75
+#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:76
 msgid "Refresh activity history"
 msgstr "Ανανέωση ιστορικού δραστηριότητας"
 
@@ -9047,7 +9101,7 @@ msgid "Review general settings"
 msgstr "Ελέγξτε τις γενικές ρυθμίσεις"
 
 #: client/pages/dashboard/about/CompletionNotice.tsx:71
-#: client/pages/NotFoundPage.tsx:24
+#: client/pages/NotFoundPage.tsx:30
 msgid "Go to Dashboard"
 msgstr "Μετάβαση στον πίνακα ελέγχου"
 
@@ -11171,25 +11225,13 @@ msgstr "Επισκόπηση αναλυτικών στοιχείων σε από
 msgid "Traffic statistics and click analytics are disabled for your role."
 msgstr "Τα στατιστικά επισκεψιμότητας και τα αναλυτικά στοιχεία κλικ είναι απενεργοποιημένα για τον ρόλο σας."
 
-#: client/pages/NotFoundPage.tsx:16
-msgid "404 · Missing page"
-msgstr "404 · Σελίδα που λείπει"
+#: client/pages/NotFoundPage.tsx:24
+msgid "This dashboard page doesn’t exist. Check the address, or return to your dashboard."
+msgstr "Αυτή η σελίδα του πίνακα ελέγχου δεν υπάρχει. Ελέγξτε τη διεύθυνση ή επιστρέψτε στον πίνακα ελέγχου σας."
 
-#: client/pages/NotFoundPage.tsx:18
-msgid "We couldn’t find the dashboard page you’re looking for. Check the address, or return to your dashboard to keep going."
-msgstr "Δεν μπορέσαμε να βρούμε τη σελίδα του πίνακα ελέγχου που αναζητάτε. Ελέγξτε τη διεύθυνση ή επιστρέψτε στον πίνακα ελέγχου για να συνεχίσετε."
-
-#: client/pages/NotFoundPage.tsx:31
+#: client/pages/NotFoundPage.tsx:37
 msgid "Go Back"
 msgstr "Επιστροφή"
-
-#: client/pages/NotFoundPage.tsx:36
-msgid "Helpful links"
-msgstr "Χρήσιμοι σύνδεσμοι"
-
-#: client/pages/NotFoundPage.tsx:38
-msgid "Pick up where you left off"
-msgstr "Συνεχίστε από εκεί που μείνατε"
 
 #: client/router/pageTitle.ts:30
 msgid "Performance Settings"

@@ -6,199 +6,25 @@ msgstr ""
 "Language-Team: PeakURL Localization Team <translate@peakurl.org>\n"
 "Last-Translator: PeakURL Team <translate@peakurl.org>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-10-16 13:54+0000\n"
-"POT-Creation-Date: 2026-10-16 13:54+0000\n"
+"PO-Revision-Date: 2026-10-17 07:23+0000\n"
+"POT-Creation-Date: 2026-10-17 07:23+0000\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Project-Id-Version: PeakURL 1.7.2\n"
 "Report-Msgid-Bugs-To: https://peakurl.org/contact\n"
 "X-Domain: peakurl\n"
 "X-Generator: PeakURL i18n Tools\n"
 
-#: install.php:92
+#: install.php:81
 msgid "Administrator Setup - %s"
 msgstr "Penyiapan Administrator - %s"
 
-#: install.php:533
-#: setup-config.php:674
-msgid "Welcome"
-msgstr "Selamat Datang"
-
-#: install.php:540
-#: setup-config.php:681
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
-msgid "Database"
-msgstr "Database"
-
-#: install.php:547
-#: setup-config.php:688
-msgid "Admin account"
-msgstr "Akun admin"
-
-#: install.php:558
-msgid "Create your account"
-msgstr "Buat akun Anda"
-
-#: install.php:560
-msgid "Name your site and set up the first administrator. You will be signed in automatically once the install completes."
-msgstr "Beri nama situs Anda dan siapkan administrator pertama. Anda akan masuk secara otomatis setelah instalasi selesai."
-
-#: install.php:580
-msgid "Site info"
-msgstr "Info situs"
-
-#: install.php:583
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
-msgid "Site title"
-msgstr "Judul situs"
-
-#: install.php:584
-msgid "My Link Hub"
-msgstr "Hub Tautan Saya"
-
-#: install.php:588
-#: server/core/auth/roles.php:1052
-msgid "Administrator"
-msgstr "Administrator"
-
-#: install.php:591
-#: setup-config.php:818
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
-msgid "Username"
-msgstr "Nama Pengguna"
-
-#: install.php:593
-msgid "Letters, numbers, dots, dashes, underscores, or @."
-msgstr "Huruf, angka, titik, tanda hubung, garis bawah, atau @."
-
-#: install.php:596
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
-#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
-#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
-msgid "Email"
-msgstr "Email"
-
-#: install.php:597
-#: client/pages/auth/login/LoginPage.tsx:248
-msgid "you@company.com"
-msgstr "anda@perusahaan.com"
-
-#: install.php:600
-#: setup-config.php:822
-#: server/features/links/controller.php:531
-#: client/pages/auth/login/LoginPage.tsx:253
-#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
-msgid "Password"
-msgstr "Kata Sandi"
-
-#: install.php:602
-msgid "At least 8 characters. You will be signed in right after installation."
-msgstr "Minimal 8 karakter. Anda akan langsung masuk setelah instalasi."
-
-#: install.php:606
-msgid "Database configuration is already saved."
-msgstr "Konfigurasi database sudah disimpan."
-
-#: install.php:609
-msgid "Install %s"
-msgstr "Instal %s"
-
-#: setup-config.php:95
+#: setup-config.php:84
 msgid "Database Setup - %s"
 msgstr "Penyiapan Database - %s"
 
-#: setup-config.php:97
+#: setup-config.php:86
 msgid "Welcome - %s"
 msgstr "Selamat Datang - %s"
-
-#: setup-config.php:652
-#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
-msgid "Site language"
-msgstr "Bahasa situs"
-
-#: setup-config.php:703
-#: server/services/notifications.php:204
-msgid "Welcome to %s"
-msgstr "Selamat datang di %s"
-
-#: setup-config.php:705
-msgid "Before getting started, you'll need your database connection details. PeakURL will use them to create config.php and set up the required tables."
-msgstr "Sebelum memulai, Anda memerlukan detail koneksi database Anda. PeakURL akan menggunakannya untuk membuat config.php dan menyiapkan tabel yang diperlukan."
-
-#: setup-config.php:717
-#: setup-config.php:814
-msgid "Database name"
-msgstr "Nama database"
-
-#: setup-config.php:723
-msgid "Username and password"
-msgstr "Nama pengguna dan kata sandi"
-
-#: setup-config.php:729
-msgid "Host and port"
-msgstr "Host dan port"
-
-#: setup-config.php:735
-#: setup-config.php:838
-msgid "Table prefix"
-msgstr "Awalan tabel"
-
-#: setup-config.php:735
-msgid "optional"
-msgstr "opsional"
-
-#: setup-config.php:741
-msgid "These details are usually available in your hosting control panel or from your database administrator."
-msgstr "Detail ini biasanya tersedia di panel kontrol hosting Anda atau dari administrator database Anda."
-
-#: setup-config.php:761
-msgid "Let's go"
-msgstr "Ayo mulai"
-
-#: setup-config.php:773
-#: server/services/system-status/diagnostic-checks.php:48
-msgid "Database connection"
-msgstr "Koneksi database"
-
-#: setup-config.php:775
-msgid "Enter the credentials for your MySQL or MariaDB database. PeakURL will write them to config.php in the site root."
-msgstr "Masukkan kredensial untuk database MySQL atau MariaDB Anda. PeakURL akan menulisnya ke config.php di direktori utama situs."
-
-#: setup-config.php:811
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:156
-msgid "Connection details"
-msgstr "Detail koneksi"
-
-#: setup-config.php:826
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
-msgid "Host"
-msgstr "Host"
-
-#: setup-config.php:831
-msgid "Advanced"
-msgstr "Lanjutan"
-
-#: setup-config.php:834
-#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
-msgid "Port"
-msgstr "Port"
-
-#: setup-config.php:840
-msgid "Letters, numbers, underscores. Example: peakurl_"
-msgstr "Huruf, angka, garis bawah. Contoh: peakurl_"
-
-#: setup-config.php:846
-msgid "Back"
-msgstr "Kembali"
-
-#: setup-config.php:849
-msgid "Save and continue"
-msgstr "Simpan dan lanjutkan"
 
 #: server/database/repair-specs.php:41
 msgid "The clicks table still contains row IDs with prefixes and should be normalized."
@@ -308,6 +134,11 @@ msgstr "Disediakan hanya untuk administrator."
 #: server/core/auth/roles.php:1503
 msgid "Role not found."
 msgstr "Peran tidak ditemukan."
+
+#: server/core/auth/roles.php:1052
+#: server/services/install/templates/administrator.php:43
+msgid "Administrator"
+msgstr "Administrator"
 
 #: server/core/auth/roles.php:1056
 #: client/pages/layout/dashboard/Header/Header.tsx:42
@@ -1064,80 +895,108 @@ msgstr "Tautan tidak ditemukan"
 msgid "Check that the address is complete and correct. This short link may have been removed or is no longer available."
 msgstr "Pastikan alamat lengkap dan benar. Tautan singkat ini mungkin telah dihapus atau tidak lagi tersedia."
 
-#: server/features/links/controller.php:526
+#: server/features/links/controller.php:518
 msgid "Password required"
 msgstr "Kata sandi diperlukan"
 
-#: server/features/links/controller.php:527
+#: server/features/links/controller.php:519
 msgid "This link is protected. Enter the password to continue."
 msgstr "Tautan ini dilindungi. Masukkan kata sandi untuk melanjutkan."
 
-#: server/features/links/controller.php:534
+#: server/features/links/controller.php:523
+#: server/services/install/templates/setup.php:132
+#: server/services/install/templates/administrator.php:55
+#: client/pages/auth/login/LoginPage.tsx:198
+#: client/pages/dashboard/settings/components/tabs/pages/security/components/PasswordSettings.tsx:32
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:218
+msgid "Password"
+msgstr "Kata Sandi"
+
+#: server/features/links/controller.php:526
 #: client/pages/dashboard/links/components/UrlShorteningForm/SecurityFields.tsx:52
 msgid "Enter password"
 msgstr "Masukkan kata sandi"
 
-#: server/features/links/controller.php:538
+#: server/features/links/controller.php:530
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:48
 msgid "Continue"
 msgstr "Lanjutkan"
 
-#: server/features/links/controller.php:543
+#: server/features/links/controller.php:535
 msgid "Protected Link"
 msgstr "Tautan Terlindungi"
 
-#: server/features/links/controller.php:590
-msgid "Performing security verification"
-msgstr "Melakukan verifikasi keamanan"
+#: server/features/links/controller.php:568
+msgid "Checking your browser"
+msgstr "Memeriksa browser Anda"
 
-#: server/features/links/controller.php:591
-msgid "This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot."
-msgstr "Situs web ini menggunakan layanan keamanan untuk melindungi dari bot berbahaya. Halaman ini ditampilkan saat PeakURL memverifikasi bahwa Anda bukan bot."
+#: server/features/links/controller.php:569
+msgid "Complete the security check to open this link. You’ll continue automatically once verification is complete."
+msgstr "Selesaikan pemeriksaan keamanan untuk membuka tautan ini. Anda akan melanjutkan secara otomatis setelah verifikasi selesai."
 
-#: server/features/links/controller.php:595
+#: server/features/links/controller.php:573
 msgid "JavaScript is required to complete this verification."
 msgstr "JavaScript diperlukan untuk menyelesaikan verifikasi ini."
 
-#: server/features/links/controller.php:598
+#: server/features/links/controller.php:576
 msgid "Security Verification"
 msgstr "Verifikasi Keamanan"
 
-#: server/features/links/controller.php:695
-#: server/features/links/controller.php:856
-msgid "Waiting for verification…"
-msgstr "Menunggu verifikasi…"
+#: server/features/links/controller.php:670
+msgid "Loading security check…"
+msgstr "Memuat pemeriksaan keamanan…"
 
-#: server/features/links/controller.php:698
-msgid "Checking verification…"
-msgstr "Memeriksa verifikasi…"
+#: server/features/links/controller.php:671
+msgid "Verifying your browser…"
+msgstr "Memverifikasi browser Anda…"
 
-#: server/features/links/controller.php:701
-msgid "Starting verification…"
-msgstr "Memulai verifikasi…"
+#: server/features/links/controller.php:672
+msgid "Verification complete. Opening your link…"
+msgstr "Verifikasi selesai. Membuka tautan Anda…"
 
-#: server/features/links/controller.php:704
+#: server/features/links/controller.php:673
 msgid "Verification expired. Please try again."
 msgstr "Verifikasi kedaluwarsa. Silakan coba lagi."
 
-#: server/features/links/controller.php:707
+#: server/features/links/controller.php:674
 msgid "Verification could not be completed. Please try again."
 msgstr "Verifikasi tidak dapat diselesaikan. Silakan coba lagi."
 
-#: server/features/links/controller.php:861
+#: server/features/links/controller.php:675
+msgid "The security check couldn’t load. Check your connection or content blocker, then try again."
+msgstr "Pemeriksaan keamanan tidak dapat dimuat. Periksa koneksi atau pemblokir konten Anda, lalu coba lagi."
+
+#: server/features/links/controller.php:676
+msgid "Verification is taking longer than expected. Please try again."
+msgstr "Verifikasi memakan waktu lebih lama dari biasanya. Silakan coba lagi."
+
+#: server/features/links/controller.php:677
+msgid "This browser couldn’t run the security check. Please try another browser."
+msgstr "Browser ini tidak dapat menjalankan pemeriksaan keamanan. Silakan coba browser lain."
+
+#: server/features/links/controller.php:678
+msgid "Your link couldn’t open. Please verify again to continue."
+msgstr "Tautan Anda tidak dapat dibuka. Silakan verifikasi lagi untuk melanjutkan."
+
+#: server/features/links/controller.php:703
+msgid "Waiting for verification…"
+msgstr "Menunggu verifikasi…"
+
+#: server/features/links/controller.php:708
 #: client/pages/layout/dashboard/Search/SearchResults.tsx:49
 #: client/pages/dashboard/about/ReleaseNotes.tsx:42
 msgid "Try again"
 msgstr "Coba lagi"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "410 · Link expired"
 msgstr "410 · Tautan kedaluwarsa"
 
-#: server/features/links/controller.php:1052
+#: server/features/links/controller.php:898
 msgid "404 · Link not found"
 msgstr "404 · Tautan tidak ditemukan"
 
-#: server/features/links/controller.php:1053
+#: server/features/links/controller.php:899
 msgid "Contact the person who shared this link to request a new address. You do not need an account to open a public short link."
 msgstr "Hubungi orang yang membagikan tautan ini untuk meminta alamat baru. Anda tidak memerlukan akun untuk membuka tautan singkat publik."
 
@@ -1916,7 +1775,7 @@ msgid "Thanks for your patience."
 msgstr "Terima kasih atas kesabaran Anda."
 
 #: server/services/maintenance.php:108
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:132
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:133
 msgid "Loading"
 msgstr "Memuat"
 
@@ -2123,6 +1982,206 @@ msgstr "Kata sandi admin harus terdiri dari minimal 8 karakter."
 #: server/services/install/manager.php:221
 msgid "The selected timezone is invalid."
 msgstr "Zona waktu yang dipilih tidak valid."
+
+#: server/services/install/templates/setup.php:28
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:470
+msgid "Site language"
+msgstr "Bahasa situs"
+
+#: server/services/install/templates/setup.php:40
+msgid "Apply language"
+msgstr "Terapkan bahasa"
+
+#: server/services/install/templates/setup.php:49
+#: server/services/notifications.php:204
+msgid "Welcome to %s"
+msgstr "Selamat datang di %s"
+
+#: server/services/install/templates/setup.php:51
+msgid "Have the following database details ready. PeakURL will check the connection before saving your configuration."
+msgstr "Siapkan rincian database berikut. PeakURL akan memeriksa koneksi sebelum menyimpan konfigurasi Anda."
+
+#: server/services/install/templates/setup.php:62
+#: server/services/install/templates/setup.php:124
+msgid "Database name"
+msgstr "Nama database"
+
+#: server/services/install/templates/setup.php:68
+msgid "Username and password"
+msgstr "Nama pengguna dan kata sandi"
+
+#: server/services/install/templates/setup.php:74
+msgid "Host and port"
+msgstr "Host dan port"
+
+#: server/services/install/templates/setup.php:80
+#: server/services/install/templates/setup.php:148
+msgid "Table prefix"
+msgstr "Awalan tabel"
+
+#: server/services/install/templates/setup.php:80
+msgid "default: peakurl_"
+msgstr "default: peakurl_"
+
+#: server/services/install/templates/setup.php:86
+msgid "Your hosting provider or database administrator can provide these details."
+msgstr "Penyedia hosting atau administrator database Anda dapat memberikan rincian ini."
+
+#: server/services/install/templates/setup.php:91
+msgid "Begin setup"
+msgstr "Mulai instalasi"
+
+#: server/services/install/templates/setup.php:99
+#: server/services/system-status/diagnostic-checks.php:48
+msgid "Database connection"
+msgstr "Koneksi database"
+
+#: server/services/install/templates/setup.php:101
+msgid "Enter your MySQL or MariaDB connection details. PeakURL will verify the connection and save the settings in config.php."
+msgstr "Masukkan detail koneksi MySQL atau MariaDB Anda. PeakURL akan memverifikasi koneksi dan menyimpan pengaturan di config.php."
+
+#: server/services/install/templates/setup.php:121
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:157
+msgid "Connection details"
+msgstr "Detail koneksi"
+
+#: server/services/install/templates/setup.php:128
+#: server/services/install/templates/administrator.php:46
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:372
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:198
+msgid "Username"
+msgstr "Nama Pengguna"
+
+#: server/services/install/templates/setup.php:136
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:774
+msgid "Host"
+msgstr "Host"
+
+#: server/services/install/templates/setup.php:141
+msgid "Advanced"
+msgstr "Lanjutan"
+
+#: server/services/install/templates/setup.php:144
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:776
+msgid "Port"
+msgstr "Port"
+
+#: server/services/install/templates/setup.php:150
+msgid "Use letters, numbers, and underscores. The default is peakurl_."
+msgstr "Gunakan huruf, angka, dan garis bawah. Defaultnya adalah peakurl_."
+
+#: server/services/install/templates/setup.php:156
+msgid "Back"
+msgstr "Kembali"
+
+#: server/services/install/templates/setup.php:159
+msgid "Save and continue"
+msgstr "Simpan dan lanjutkan"
+
+#: server/services/install/templates/page.php:26
+msgid "Toggle dark mode"
+msgstr "Alihkan mode gelap"
+
+#: server/services/install/templates/page.php:33
+msgid "Installation progress"
+msgstr "Kemajuan instalasi"
+
+#: server/services/install/templates/page.php:45
+msgid "Installation"
+msgstr "Instalasi"
+
+#: server/services/install/templates/administrator.php:14
+msgid "Create your account"
+msgstr "Buat akun Anda"
+
+#: server/services/install/templates/administrator.php:16
+msgid "Enter a site title and administrator credentials. PeakURL will sign you in when installation is complete."
+msgstr "Masukkan judul situs dan kredensial administrator. PeakURL akan memasukkan Anda secara otomatis setelah instalasi selesai."
+
+#: server/services/install/templates/administrator.php:35
+msgid "Site details"
+msgstr "Detail situs"
+
+#: server/services/install/templates/administrator.php:38
+#: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:441
+msgid "Site title"
+msgstr "Judul situs"
+
+#: server/services/install/templates/administrator.php:39
+msgid "My Link Hub"
+msgstr "Hub Tautan Saya"
+
+#: server/services/install/templates/administrator.php:48
+msgid "Use letters, numbers, periods, hyphens, underscores, or @."
+msgstr "Gunakan huruf, angka, titik, tanda hubung, garis bawah, atau @."
+
+#: server/services/install/templates/administrator.php:51
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:145
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1051
+#: client/pages/dashboard/links/components/StatsDrawer/TrafficSourcesTab.tsx:99
+#: client/pages/dashboard/links/components/StatsDrawer/ShareTab.tsx:175
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:207
+msgid "Email"
+msgstr "Email"
+
+#: server/services/install/templates/administrator.php:52
+#: client/pages/auth/login/LoginPage.tsx:193
+msgid "you@company.com"
+msgstr "anda@perusahaan.com"
+
+#: server/services/install/templates/administrator.php:57
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
+#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
+msgid "Use at least 8 characters."
+msgstr "Gunakan minimal 8 karakter."
+
+#: server/services/install/templates/administrator.php:61
+msgid "Your database connection is configured."
+msgstr "Koneksi database Anda telah dikonfigurasi."
+
+#: server/services/install/templates/administrator.php:64
+msgid "Install %s"
+msgstr "Instal %s"
+
+#: server/services/install/page.php:31
+msgid "Welcome"
+msgstr "Selamat Datang"
+
+#: server/services/install/page.php:31
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:66
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:137
+#: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:1049
+msgid "Database"
+msgstr "Database"
+
+#: server/services/install/page.php:31
+msgid "Admin account"
+msgstr "Akun admin"
+
+#: server/services/install/page.php:34
+msgid "Install PeakURL"
+msgstr "Instal PeakURL"
+
+#: server/services/install/page.php:35
+msgid "Connect your database"
+msgstr "Hubungkan database Anda"
+
+#: server/services/install/page.php:36
+msgid "Set up your site"
+msgstr "Siapkan situs Anda"
+
+#: server/services/install/page.php:39
+msgid "Connect your database, then create the administrator account for this installation."
+msgstr "Hubungkan database Anda, lalu buat akun administrator untuk instalasi ini."
+
+#: server/services/install/page.php:40
+msgid "PeakURL uses this database to store your links, accounts, and analytics."
+msgstr "PeakURL menggunakan database ini untuk menyimpan tautan, akun, dan analitik Anda."
+
+#: server/services/install/page.php:41
+msgid "Choose a site title and create the account you’ll use to manage PeakURL."
+msgstr "Pilih judul situs dan buat akun yang akan Anda gunakan untuk mengelola PeakURL."
 
 #: server/services/install/initializer.php:66
 msgid "Unable to connect to the database or create the PeakURL tables. "
@@ -2838,57 +2897,57 @@ msgstr "PeakURL tidak dapat membuat direktori unggahan favicon."
 msgid "PeakURL could not write the favicon web manifest."
 msgstr "PeakURL tidak dapat menulis manifes web favicon."
 
-#: server/services/status-page.php:66
-#: client/pages/NotFoundPage.tsx:17
+#: server/services/status-page.php:69
+#: client/pages/NotFoundPage.tsx:21
 msgid "Page not found"
 msgstr "Halaman tidak ditemukan"
 
-#: server/services/status-page.php:67
+#: server/services/status-page.php:70
 msgid "We couldn’t find the page you’re looking for. Check the address, or contact the person who shared it with you."
 msgstr "Kami tidak dapat menemukan halaman yang Anda cari. Periksa alamatnya, atau hubungi orang yang membagikannya kepada Anda."
 
-#: server/services/status-page.php:69
+#: server/services/status-page.php:73
 msgid "Access to this page is restricted"
 msgstr "Akses ke halaman ini dibatasi"
 
-#: server/services/status-page.php:70
+#: server/services/status-page.php:74
 msgid "You don’t have permission to open this page. Contact the site administrator if you think you should have access."
 msgstr "Anda tidak memiliki izin untuk membuka halaman ini. Hubungi administrator situs jika merasa Anda seharusnya memiliki akses."
 
-#: server/services/status-page.php:72
+#: server/services/status-page.php:77
 msgid "Please wait a moment"
 msgstr "Harap tunggu sebentar"
 
-#: server/services/status-page.php:73
+#: server/services/status-page.php:78
 msgid "Too many requests have been made. Give it a moment, then try again."
 msgstr "Terlalu banyak permintaan yang telah dibuat. Tunggu beberapa saat, lalu coba lagi."
 
-#: server/services/status-page.php:75
+#: server/services/status-page.php:81
 msgid "Unable to complete your request"
 msgstr "Tidak dapat menyelesaikan permintaan Anda"
 
-#: server/services/status-page.php:76
+#: server/services/status-page.php:82
 msgid "PeakURL encountered a server error. Please try again. If the problem persists, contact the site administrator."
 msgstr "PeakURL mengalami kesalahan server. Silakan coba lagi. Jika masalah berlanjut, hubungi administrator situs."
 
-#: server/services/status-page.php:78
+#: server/services/status-page.php:85
 msgid "Unable to open this page"
 msgstr "Tidak dapat membuka halaman ini"
 
-#: server/services/status-page.php:79
+#: server/services/status-page.php:86
 msgid "This request couldn’t be completed. Check the address, or contact the site administrator for help."
 msgstr "Permintaan ini tidak dapat diselesaikan. Periksa alamatnya, atau hubungi administrator situs untuk mendapatkan bantuan."
 
-#: server/services/status-page.php:84
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:940
+#: server/services/status-page.php:91
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:946
 msgid "Error details"
 msgstr "Detail kesalahan"
 
-#: server/services/status-page.php:91
+#: server/services/status-page.php:98
 msgid "Error %s"
 msgstr "Kesalahan %s"
 
-#: server/services/status-page.php:94
+#: server/services/status-page.php:101
 msgid "Go to homepage"
 msgstr "Buka beranda"
 
@@ -3181,12 +3240,12 @@ msgstr "Konfirmasi"
 #: client/pages/dashboard/settings/components/tabs/Content.tsx:898
 #: client/pages/dashboard/settings/components/tabs/pages/security/index.tsx:53
 #: client/pages/dashboard/settings/components/tabs/pages/security/components/TwoFactorSetup.tsx:115
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:431
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:447
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1086
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1105
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:586
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:495
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:836
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:497
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:842
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:63
 #: client/pages/dashboard/settings/components/tabs/pages/performance/PerformanceTab.tsx:515
 #: client/pages/dashboard/tools/scheduled-jobs/components/RunDueJobsModal.tsx:48
@@ -3392,31 +3451,31 @@ msgstr "Tidak dapat terhubung ke backend"
 msgid "PeakURL couldn’t complete the connection to your server. Please try again."
 msgstr "PeakURL tidak dapat menyelesaikan koneksi ke server Anda. Silakan coba lagi."
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:128
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
 msgid "Backend connection error"
 msgstr "Kesalahan koneksi backend"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:129
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:130
 msgid "If the problem persists, contact your site administrator."
 msgstr "Jika masalah berlanjut, hubungi administrator situs Anda."
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:141
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
 msgid "Checking connection"
 msgstr "Memeriksa koneksi"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:142
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:143
 msgid "Retry connection"
 msgstr "Coba lagi koneksi"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:166
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:167
 msgid "API endpoint"
 msgstr "Endpoint API"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:172
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:173
 msgid "What went wrong"
 msgstr "Apa yang salah"
 
-#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:179
+#: client/components/shared/ApiErrorPage/ApiErrorPage.tsx:180
 msgid "Check these first"
 msgstr "Periksa ini terlebih dahulu"
 
@@ -3428,66 +3487,64 @@ msgstr "Email atau nama pengguna wajib diisi."
 msgid "PeakURL could not process the password reset request."
 msgstr "PeakURL tidak dapat memproses permintaan pengaturan ulang kata sandi."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:73
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:74
 msgid "Account Recovery"
 msgstr "Pemulihan Akun"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:75
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:118
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:135
-msgid "Reset your password"
-msgstr "Atur ulang kata sandi Anda"
-
 #: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:76
-msgid "Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
-msgstr "Masukkan alamat email atau nama pengguna yang ditautkan ke akun PeakURL Anda dan kami akan mengirimkan tautan pengaturan ulang yang aman."
-
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:79
 msgid "Secure account recovery"
 msgstr "Pemulihan akun yang aman"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
-msgid "For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
-msgstr "Demi keamanan Anda, tautan pengaturan ulang kata sandi kedaluwarsa setelah 1 jam. Mengubah kata sandi Anda juga akan segera mencabut semua sesi aktif di seluruh perangkat Anda."
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:77
+msgid "Get back to your links with a password reset link sent to your account email."
+msgstr "Dapatkan kembali akses tautan Anda dengan tautan atur ulang kata sandi yang dikirim ke email akun Anda."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:83
-#: client/pages/auth/login/LoginPage.tsx:298
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:80
+msgid "Your account stays protected"
+msgstr "Akun Anda tetap terlindungi"
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:81
+msgid "Reset links expire after 1 hour. Changing your password signs out your existing sessions."
+msgstr "Tautan pengaturan ulang kedaluwarsa setelah 1 jam. Mengubah kata sandi akan mengeluarkan sesi yang ada."
+
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
+#: client/pages/auth/login/LoginPage.tsx:238
 msgid "Forgot your password?"
 msgstr "Lupa kata sandi Anda?"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:84
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:152
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:85
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:153
 msgid "Enter your account email or username and PeakURL will send a secure password reset link."
 msgstr "Masukkan email atau nama pengguna akun Anda dan PeakURL akan mengirimkan tautan pengaturan ulang kata sandi yang aman."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:91
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:92
 msgid "Check your inbox"
 msgstr "Periksa kotak masuk Anda"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:95
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:96
 msgid "If an account exists for %s, PeakURL has sent a password reset link."
 msgstr "Jika akun ditemukan untuk %s, PeakURL telah mengirimkan tautan pengaturan ulang kata sandi."
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:102
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:103
 msgid "Return to login"
 msgstr "Kembali ke login"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:109
-#: client/pages/auth/login/LoginPage.tsx:236
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:110
+#: client/pages/auth/login/LoginPage.tsx:183
 msgid "Email or username"
 msgstr "Email atau nama pengguna"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:116
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:117
 msgid "owner@example.com or admin"
 msgstr "pemilik@example.com atau admin"
 
-#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:132
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:162
+#: client/pages/auth/forgot-password/ForgotPasswordPage.tsx:133
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:163
 msgid "Send reset link"
 msgstr "Kirim tautan reset"
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:66
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:149
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:150
 msgid "The password reset link is invalid."
 msgstr "Tautan pengaturan ulang kata sandi tidak valid."
 
@@ -3500,61 +3557,60 @@ msgstr "Kata sandi tidak cocok."
 msgid "PeakURL could not reset the password with that link."
 msgstr "PeakURL tidak dapat mengatur ulang kata sandi dengan tautan tersebut."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:108
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:109
 msgid "Secure Reset"
 msgstr "Reset Aman"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:110
-msgid "Choose a new password and get back to work."
-msgstr "Pilih kata sandi baru dan kembali bekerja."
-
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:111
-msgid "Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
-msgstr "Setelah kata sandi berubah, PeakURL mencabut sesi lama sehingga hanya login baru yang tetap valid."
+msgid "Keep your account secure"
+msgstr "Jaga keamanan akun Anda"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:114
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:93
-#: client/pages/dashboard/users/components/UserDialog/UserDialog.tsx:228
-msgid "Use at least 8 characters."
-msgstr "Gunakan minimal 8 karakter."
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:112
+msgid "Choose a password you don’t use elsewhere. Your previous sessions will be signed out."
+msgstr "Pilih kata sandi yang tidak Anda gunakan di tempat lain. Sesi Anda sebelumnya akan dikeluarkan."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:115
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:116
 msgid "For best results, combine uppercase, lowercase, numbers, and a unique phrase you do not reuse elsewhere."
 msgstr "Untuk hasil terbaik, gabungkan huruf besar, huruf kecil, angka, dan frasa unik yang tidak Anda gunakan di tempat lain."
 
 #: client/pages/auth/reset-password/ResetPasswordPage.tsx:119
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:136
+msgid "Reset your password"
+msgstr "Atur ulang kata sandi Anda"
+
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:120
 msgid "Set a new account password, then sign in again with the updated credentials."
 msgstr "Tetapkan kata sandi akun baru, lalu masuk lagi dengan kredensial yang diperbarui."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:176
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:177
 msgid "Password updated"
 msgstr "Kata sandi diperbarui"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:179
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:180
 msgid "PeakURL updated your password and revoked the older sessions. Redirecting you to the login page now."
 msgstr "PeakURL telah memperbarui kata sandi Anda dan mencabut sesi lama. Mengalihkan Anda ke halaman login sekarang."
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:189
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:190
 msgid "New password"
 msgstr "Kata sandi baru"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:195
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:196
 msgid "Enter your new password"
 msgstr "Masukkan kata sandi baru Anda"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:202
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:203
 msgid "Confirm new password"
 msgstr "Konfirmasi kata sandi baru"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:212
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:213
 msgid "Confirm your new password"
 msgstr "Konfirmasikan kata sandi baru Anda"
 
-#: client/pages/auth/reset-password/ResetPasswordPage.tsx:224
+#: client/pages/auth/reset-password/ResetPasswordPage.tsx:225
 msgid "Reset password"
 msgstr "Atur ulang kata sandi"
 
-#: client/pages/auth/login/LoginPage.tsx:39
+#: client/pages/auth/login/LoginPage.tsx:37
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:45
 #: client/pages/layout/dashboard/Sidebar/Sidebar.tsx:442
 #: client/pages/layout/dashboard/Search/useSearchResults.ts:118
@@ -3565,110 +3621,106 @@ msgstr "Atur ulang kata sandi"
 msgid "Links"
 msgstr "Tautan"
 
-#: client/pages/auth/login/LoginPage.tsx:40
+#: client/pages/auth/login/LoginPage.tsx:38
 msgid "Shorten, organize, and share."
 msgstr "Perpendek, atur, dan bagikan."
 
-#: client/pages/auth/login/LoginPage.tsx:44
+#: client/pages/auth/login/LoginPage.tsx:42
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:398
 msgid "Analytics"
 msgstr "Analitik"
 
-#: client/pages/auth/login/LoginPage.tsx:45
+#: client/pages/auth/login/LoginPage.tsx:43
 msgid "Clicks, locations, and devices."
 msgstr "Klik, lokasi, dan perangkat."
 
-#: client/pages/auth/login/LoginPage.tsx:49
+#: client/pages/auth/login/LoginPage.tsx:47
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:170
 #: client/pages/dashboard/settings/Layout.tsx:27
 msgid "Security"
 msgstr "Keamanan"
 
-#: client/pages/auth/login/LoginPage.tsx:50
+#: client/pages/auth/login/LoginPage.tsx:48
 msgid "Sessions, 2FA, and roles."
 msgstr "Sesi, 2FA, dan peran."
 
-#: client/pages/auth/login/LoginPage.tsx:146
-msgid "Almost there."
-msgstr "Hampir sampai."
+#: client/pages/auth/login/LoginPage.tsx:136
+msgid "Verify to continue"
+msgstr "Verifikasi untuk melanjutkan"
 
-#: client/pages/auth/login/LoginPage.tsx:149
-msgid "Verify to continue."
-msgstr "Verifikasi untuk melanjutkan."
-
-#: client/pages/auth/login/LoginPage.tsx:154
+#: client/pages/auth/login/LoginPage.tsx:139
 msgid "Manage every link"
 msgstr "Kelola setiap tautan"
 
-#: client/pages/auth/login/LoginPage.tsx:157
+#: client/pages/auth/login/LoginPage.tsx:142
 msgid "from one place."
 msgstr "dari satu tempat."
 
-#: client/pages/auth/login/LoginPage.tsx:164
-msgid "One more verification step and you’ll be in your workspace."
-msgstr "Satu langkah verifikasi lagi dan Anda akan masuk ke ruang kerja Anda."
+#: client/pages/auth/login/LoginPage.tsx:149
+msgid "Use your authenticator app or a backup code to sign in securely."
+msgstr "Gunakan aplikasi autentikator atau kode cadangan untuk masuk secara aman."
 
-#: client/pages/auth/login/LoginPage.tsx:167
-msgid "Shorten URLs, track clicks, and manage your audience, all from your own dashboard."
-msgstr "Perpendek URL, lacak klik, dan kelola audiens Anda, semuanya dari dasbor Anda sendiri."
+#: client/pages/auth/login/LoginPage.tsx:152
+msgid "Shorten URLs, track clicks, and manage your links from your own dashboard."
+msgstr "Perpendek URL, lacak klik, dan kelola tautan Anda dari dasbor Anda sendiri."
 
-#: client/pages/auth/login/LoginPage.tsx:203
+#: client/pages/auth/login/LoginPage.tsx:159
 msgid "Verify your identity"
 msgstr "Verifikasi identitas Anda"
 
-#: client/pages/auth/login/LoginPage.tsx:204
+#: client/pages/auth/login/LoginPage.tsx:160
 msgid "Sign in to your account"
 msgstr "Masuk ke akun Anda"
 
-#: client/pages/auth/login/LoginPage.tsx:209
+#: client/pages/auth/login/LoginPage.tsx:165
 msgid "Enter one of the backup codes you saved when setting up 2FA."
 msgstr "Masukkan salah satu kode cadangan yang Anda simpan saat menyiapkan 2FA."
 
-#: client/pages/auth/login/LoginPage.tsx:212
+#: client/pages/auth/login/LoginPage.tsx:168
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Masukkan kode 6 digit dari aplikasi autentikator Anda."
 
-#: client/pages/auth/login/LoginPage.tsx:215
+#: client/pages/auth/login/LoginPage.tsx:171
 msgid "Enter your credentials to continue to the dashboard."
 msgstr "Masukkan kredensial Anda untuk melanjutkan ke dasbor."
 
-#: client/pages/auth/login/LoginPage.tsx:282
+#: client/pages/auth/login/LoginPage.tsx:225
 msgid "Remember me"
 msgstr "Ingat saya"
 
-#: client/pages/auth/login/LoginPage.tsx:308
+#: client/pages/auth/login/LoginPage.tsx:248
 msgid "Backup code"
 msgstr "Kode cadangan"
 
-#: client/pages/auth/login/LoginPage.tsx:323
+#: client/pages/auth/login/LoginPage.tsx:261
 msgid "xxxx-xxxx-xxxx"
 msgstr "xxxx-xxxx-xxxx"
 
-#: client/pages/auth/login/LoginPage.tsx:336
+#: client/pages/auth/login/LoginPage.tsx:272
 msgid "Use authenticator code instead"
 msgstr "Gunakan kode autentikator sebagai gantinya"
 
-#: client/pages/auth/login/LoginPage.tsx:362
+#: client/pages/auth/login/LoginPage.tsx:294
 msgid "Lost your device? Use a backup code"
 msgstr "Kehilangan perangkat Anda? Gunakan kode cadangan"
 
-#: client/pages/auth/login/LoginPage.tsx:403
+#: client/pages/auth/login/LoginPage.tsx:331
 msgid "Verifying…"
 msgstr "Memverifikasi…"
 
-#: client/pages/auth/login/LoginPage.tsx:404
+#: client/pages/auth/login/LoginPage.tsx:332
 msgid "Signing in…"
 msgstr "Masuk…"
 
-#: client/pages/auth/login/LoginPage.tsx:409
+#: client/pages/auth/login/LoginPage.tsx:337
 msgid "Verify & continue"
 msgstr "Verifikasi & lanjutkan"
 
-#: client/pages/auth/login/LoginPage.tsx:410
+#: client/pages/auth/login/LoginPage.tsx:338
 msgid "Sign in"
 msgstr "Masuk"
 
-#: client/pages/auth/login/LoginPage.tsx:425
+#: client/pages/auth/login/LoginPage.tsx:353
 msgid "Back to sign-in"
 msgstr "Kembali ke halaman masuk"
 
@@ -3939,7 +3991,7 @@ msgstr "Buka"
 
 #: client/pages/layout/dashboard/Search/SearchDialog.tsx:150
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:1046
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:954
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:960
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:601
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:947
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:463
@@ -3973,7 +4025,6 @@ msgstr "Dasbor"
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:101
 #: client/pages/dashboard/links/components/LinksTable/LinksTable.tsx:387
 #: client/pages/dashboard/links/components/Header/Header.tsx:21
-#: client/pages/NotFoundPage.tsx:41
 msgid "All Links"
 msgstr "Semua Tautan"
 
@@ -3990,7 +4041,6 @@ msgstr "Tentang"
 
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:146
 #: client/pages/layout/dashboard/Search/lib/searchMatching.ts:152
-#: client/pages/NotFoundPage.tsx:43
 #: client/router/pageTitle.ts:22
 msgid "General Settings"
 msgstr "Pengaturan Umum"
@@ -5137,8 +5187,8 @@ msgstr "Gambar pratinjau sosial default"
 
 #: client/pages/dashboard/settings/components/tabs/pages/general/GeneralTab.tsx:676
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:597
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:506
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:508
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 #: client/pages/dashboard/tools/scheduled-jobs/components/ManageSchedulesDrawer.tsx:915
 #: client/pages/dashboard/links/components/EditLinkDrawer/components/Footer.tsx:28
 #: client/pages/dashboard/users/components/ManageRolesDrawer/components/DrawerFooter.tsx:70
@@ -5163,44 +5213,48 @@ msgstr "Pembaruan database disarankan"
 msgid "Your local GeoLite2 City database is over 30 days old. Update the database to maintain accurate location reporting."
 msgstr "Database lokal GeoLite2 City Anda sudah berusia lebih dari 30 hari. Perbarui database untuk menjaga keakuratan laporan lokasi."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:157
-msgid "Location analytics is enabled"
-msgstr "Analitik lokasi diaktifkan"
-
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:158
-msgid "PeakURL is using the local GeoLite2 City database for click locations."
-msgstr "PeakURL menggunakan database lokal GeoLite2 City untuk lokasi klik."
+msgid "MaxMind credentials recommended"
+msgstr "Kredensial MaxMind disarankan"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:161
+msgid "PeakURL works out of the box using your local database. To keep location stats accurate as IP allocations shift, add your MaxMind credentials below so the weekly background job can automatically fetch updates."
+msgstr "PeakURL langsung berfungsi menggunakan basis data lokal Anda. Untuk menjaga keakuratan statistik lokasi seiring perubahan alokasi IP, tambahkan kredensial MaxMind Anda di bawah ini agar tugas latar belakang mingguan dapat mengambil pembaruan secara otomatis."
 
 #: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:170
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:182
+msgid "Setup guide"
+msgstr "Panduan pengaturan"
+
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:186
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:198
 msgid "Database download required"
 msgstr "Pengunduhan database diperlukan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:171
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:187
 msgid "Your MaxMind credentials have been saved. Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "Kredensial MaxMind Anda telah disimpan. Unduh database GeoLite2 City menggunakan tombol di atas untuk mengaktifkan analitik negara dan kota pengunjung."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:183
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:199
 msgid "Download the GeoLite2 City database using the button above to enable visitor country and city analytics."
 msgstr "Unduh database GeoLite2 City menggunakan tombol di atas untuk mengaktifkan analitik negara dan kota pengunjung."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:196
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
 msgid "Location Database"
 msgstr "Database Lokasi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:197
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
 msgid "Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
 msgstr "Aktifkan analitik negara dan kota dengan database lokal MaxMind GeoLite2 City yang disimpan di folder konten persisten Anda."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:212
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:228
 msgid "Update Database"
 msgstr "Perbarui Database"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:213
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:229
 msgid "Download Database"
 msgstr "Unduh Database"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:221
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:237
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:505
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:691
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobsTable.tsx:67
@@ -5216,24 +5270,24 @@ msgstr "Unduh Database"
 msgid "Status"
 msgstr "Status"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:194
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:821
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:858
 msgid "Ready"
 msgstr "Siap"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:222
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:859
 msgid "Setup Required"
 msgstr "Penyiapan Diperlukan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:225
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:862
 msgid "Database Updated"
 msgstr "Database Diperbarui"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:233
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:249
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/DatabaseSchema.tsx:89
 #: client/pages/dashboard/settings/components/tabs/pages/updates/components/ApplicationUpdates.tsx:128
 #: client/pages/dashboard/tools/scheduled-jobs/formatters.ts:92
@@ -5245,12 +5299,12 @@ msgstr "Database Diperbarui"
 msgid "Never"
 msgstr "Tidak pernah"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:238
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:254
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:870
 msgid "Database Size"
 msgstr "Ukuran Database"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:241
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:257
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:69
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:269
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:624
@@ -5261,82 +5315,82 @@ msgstr "Ukuran Database"
 msgid "Not available"
 msgstr "Tidak tersedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:250
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:266
 msgid "Location data unavailable"
 msgstr "Data lokasi tidak tersedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:261
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:277
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:210
 msgid "Dashboard management unavailable"
 msgstr "Manajemen dasbor tidak tersedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:271
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:287
 msgid "MaxMind Credentials"
 msgstr "Kredensial MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:275
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
 msgid "PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 msgstr "PeakURL menyimpan nilai-nilai ini dalam keadaan terenkripsi di database sehingga dapat menyegarkan database GeoLite2 City nanti tanpa meminta lagi."
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:282
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:298
 msgid "How to get credentials"
 msgstr "Cara mendapatkan kredensial"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:291
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
 msgid "Credentials saved"
 msgstr "Kredensial disimpan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:312
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:885
 msgid "Account ID"
 msgstr "ID Akun"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:307
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:323
 msgid "License Key"
 msgstr "Kunci Lisensi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
 msgid "Update Credentials"
 msgstr "Perbarui Kredensial"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:352
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:446
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:368
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:462
 msgid "Clear Credentials"
 msgstr "Hapus Kredensial"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:363
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:379
 msgid "MaxMind Account ID"
 msgstr "ID Akun MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:376
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:392
 msgid "MaxMind License Key"
 msgstr "Kunci Lisensi MaxMind"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:386
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:402
 msgid "Enter a new MaxMind license key"
 msgstr "Masukkan kunci lisensi MaxMind baru"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:387
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:403
 msgid "Enter your MaxMind license key"
 msgstr "Masukkan kunci lisensi MaxMind Anda"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:410
 msgid "Saved license key:"
 msgstr "Kunci lisensi tersimpan:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:432
 msgid "Save New Credentials"
 msgstr "Simpan Kredensial Baru"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:417
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:433
 msgid "Save Credentials"
 msgstr "Simpan Kredensial"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:442
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:458
 msgid "Clear MaxMind credentials?"
 msgstr "Hapus kredensial MaxMind?"
 
-#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:443
+#: client/pages/dashboard/settings/components/tabs/pages/location/LocationDataTab.tsx:459
 msgid "The saved account ID and license key will be removed. Your downloaded location database and existing analytics will remain available. Future updates will automatically use PeakURL's verified database archive."
 msgstr "ID akun dan kunci lisensi yang disimpan akan dihapus. Database lokasi yang diunduh dan analitik yang ada akan tetap tersedia. Pembaruan di masa mendatang akan secara otomatis menggunakan arsip database terverifikasi PeakURL."
 
@@ -5563,7 +5617,7 @@ msgstr "Uji Ping Webhook"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:118
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:692
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:929
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:935
 #: client/pages/dashboard/activity/components/ActivityTable/ActivityTable.tsx:107
 msgid "Event"
 msgstr "Peristiwa"
@@ -5614,7 +5668,7 @@ msgid "Close drawer"
 msgstr "Tutup panel"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:517
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:457
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:461
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:28
 #: client/pages/dashboard/plugins/components/InstalledPluginsTable/InstalledPluginsTable.tsx:23
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:85
@@ -5645,8 +5699,8 @@ msgstr "Diaktifkan"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:542
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:186
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:337
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:458
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:338
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:462
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobStatusBadge.tsx:37
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:617
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:844
@@ -5718,7 +5772,7 @@ msgid "HTTP Code"
 msgstr "Kode HTTP"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookDeliveryDrawer.tsx:697
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:918
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:924
 #: client/pages/dashboard/tools/scheduled-jobs/components/JobHistoryDrawer.tsx:338
 #: client/pages/dashboard/links/components/HealthDetailModal/HealthDetailModal.tsx:132
 msgid "Duration"
@@ -5880,7 +5934,7 @@ msgid "A descriptive name to identify this webhook endpoint."
 msgstr "Nama deskriptif untuk mengidentifikasi endpoint webhook ini."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/WebhookFormDrawer.tsx:298
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:764
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:770
 msgid "Endpoint URL"
 msgstr "URL Endpoint"
 
@@ -6007,7 +6061,7 @@ msgid "Editing"
 msgstr "Mengedit"
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:195
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:347
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:348
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:829
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:833
 #: client/pages/dashboard/tools/system-status/SystemStatusPage.tsx:886
@@ -6035,75 +6089,75 @@ msgstr "Perlindungan CAPTCHA"
 msgid "Require a verification challenge on the authentication pages and before public short links redirect."
 msgstr "Wajibkan tantangan verifikasi pada halaman autentikasi dan sebelum tautan singkat publik dialihkan."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:296
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:297
 msgid "Enable CAPTCHA protection"
 msgstr "Aktifkan perlindungan CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:330
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:332
 msgid "Loading CAPTCHA settings…"
 msgstr "Memuat pengaturan CAPTCHA…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:336
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:338
 msgid "Failed to load CAPTCHA settings."
 msgstr "Gagal memuat pengaturan CAPTCHA."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:342
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:344
 msgid "Provider Settings"
 msgstr "Pengaturan Penyedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:346
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:348
 msgid "Saved credentials are masked. Change or remove them when needed."
 msgstr "Kredensial yang disimpan disamarkan. Ubah atau hapus saat diperlukan."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:349
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:351
 msgid "Choose a CAPTCHA provider and enter your API keys."
 msgstr "Pilih penyedia CAPTCHA dan masukkan kunci API Anda."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:359
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:390
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:361
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:392
 msgid "Provider"
 msgstr "Penyedia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:367
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:401
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:369
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:403
 msgid "Site Key"
 msgstr "Kunci Situs"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:375
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:424
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:377
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:426
 msgid "Secret Key"
 msgstr "Kunci Rahasia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:396
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:398
 msgid "CAPTCHA provider"
 msgstr "Penyedia CAPTCHA"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:407
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:409
 msgid "Paste site key"
 msgstr "Tempelkan kunci situs"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:416
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:418
 msgid "Leave unchanged to keep the saved site key."
 msgstr "Biarkan tidak berubah untuk mempertahankan kunci situs yang tersimpan."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:434
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:436
 msgid "Keep saved secret"
 msgstr "Pertahankan rahasia tersimpan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:435
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:437
 msgid "Paste secret key"
 msgstr "Tempelkan kunci rahasia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:471
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:473
 msgid "Change keys"
 msgstr "Ubah kunci"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:482
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:484
 msgid "Remove keys"
 msgstr "Hapus kunci"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:507
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:525
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/CaptchaSettings.tsx:527
 msgid "Save Settings"
 msgstr "Simpan Pengaturan"
 
@@ -6178,179 +6232,179 @@ msgid "PeakURL sends HMAC-SHA256 signed POST requests to your endpoint when sele
 msgstr "PeakURL mengirimkan permintaan POST yang ditandatangani HMAC-SHA256 ke endpoint Anda saat peristiwa tautan yang dipilih terjadi."
 
 #: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:332
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:704
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:710
 msgid "Add Webhook"
 msgstr "Tambah Webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:354
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:355
 msgid "Enable webhooks"
 msgstr "Aktifkan webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:388
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:392
 msgid "Loading webhook configuration…"
 msgstr "Memuat konfigurasi webhook…"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:394
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:398
 msgid "Failed to load webhook configuration."
 msgstr "Gagal memuat konfigurasi webhook."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:436
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
 msgid "URL copied"
 msgstr "URL disalin"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:440
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:441
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:444
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:445
 msgid "Copy URL"
 msgstr "Salin URL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:483
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:487
 #: client/pages/dashboard/settings/components/tabs/pages/email/EmailDeliveryTab.tsx:137
 msgid "SSL"
 msgstr "SSL"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:484
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:488
 msgid "Insecure"
 msgstr "Tidak aman"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:509
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
 msgid "Send a test payload to this endpoint"
 msgstr "Kirim payload pengujian ke endpoint ini"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:513
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:517
 msgid "Test"
 msgstr "Uji"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:532
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
 msgid "View delivery history & attempts"
 msgstr "Lihat riwayat & percobaan pengiriman"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:536
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:540
 msgid "Deliveries"
 msgstr "Pengiriman"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:548
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
 msgid "Edit webhook settings"
 msgstr "Edit pengaturan webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:552
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:556
 #: client/pages/dashboard/links/components/LinksTable/parts/LinkRow.tsx:407
 msgid "Edit"
 msgstr "Edit"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:563
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:566
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:567
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:570
 msgid "Delete this webhook"
 msgstr "Hapus webhook ini"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:579
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:583
 msgid "Events:"
 msgstr "Peristiwa:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:605
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:628
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:609
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:632
 msgid "No events subscribed"
 msgstr "Tidak ada peristiwa yang dilanggan"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:640
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:645
 msgid "Secret:"
 msgstr "Rahasia:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:653
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:659
 msgid "Rotate"
 msgstr "Putar"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:664
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:670
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyItem.tsx:34
 msgid "Created:"
 msgstr "Dibuat:"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:688
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:694
 msgid "No webhooks configured"
 msgstr "Tidak ada webhook yang dikonfigurasi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:691
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:697
 msgid "Add an HTTPS endpoint to begin receiving signed event deliveries for link activity, user updates, and API key events."
 msgstr "Tambahkan endpoint HTTPS untuk mulai menerima pengiriman peristiwa bertanda tangan untuk aktivitas tautan, pembaruan pengguna, dan peristiwa kunci API."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:747
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
 msgid "Your Webhook Signing Secret"
 msgstr "Rahasia Penandatanganan Webhook Anda"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:753
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:759
 msgid "This signing secret will not be shown again."
 msgstr "Rahasia penandatanganan ini tidak akan ditampilkan lagi."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:756
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:762
 msgid "Store this secret securely in your receiving application. Outbound requests are signed using HMAC-SHA256 with this secret."
 msgstr "Simpan rahasia ini dengan aman di aplikasi penerima Anda. Permintaan keluar ditandatangani menggunakan HMAC-SHA256 dengan rahasia ini."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:779
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:803
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:785
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:809
 msgid "Secret copied"
 msgstr "Rahasia disalin"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:782
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:788
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:101
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:117
 msgid "Copy to clipboard"
 msgstr "Salin ke papan klip"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:786
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:792
 msgid "To verify signatures, compute HMAC-SHA256 over '{timestamp}.{raw_payload}' and compare against the X-PeakURL-Signature header."
 msgstr "Untuk memverifikasi tanda tangan, hitung HMAC-SHA256 atas '{timestamp}.{raw_payload}' dan bandingkan dengan header X-PeakURL-Signature."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:807
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:813
 msgid "Copy Secret"
 msgstr "Salin Rahasia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:810
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:816
 #: client/pages/dashboard/settings/components/tabs/pages/api/ApiKeyModals.tsx:147
 msgid "I've Stored It"
 msgstr "Saya Sudah Menyimpannya"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:824
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:830
 msgid "Rotate Webhook Signing Secret"
 msgstr "Putar Rahasia Penandatanganan Webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:828
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:834
 msgid "Rotate the signing secret for %s? The current secret will be immediately invalidated and outbound event signatures will fail until you update your receiver application."
 msgstr "Putar rahasia penandatanganan untuk %s? Rahasia saat ini akan segera dibatalkan dan tanda tangan peristiwa keluar akan gagal sampai Anda memperbarui aplikasi penerima."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:835
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:841
 msgid "Rotate Secret"
 msgstr "Putar Rahasia"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:850
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:861
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:856
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:867
 msgid "Delete Webhook"
 msgstr "Hapus Webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:854
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:860
 msgid "Delete the webhook for %s? PeakURL will stop sending signed event requests to this endpoint immediately."
 msgstr "Hapus webhook untuk %s? PeakURL akan segera berhenti mengirim permintaan peristiwa bertanda tangan ke endpoint ini."
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:862
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:868
 msgid "Keep Webhook"
 msgstr "Pertahankan Webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:872
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:878
 msgid "Webhook Test Ping Result"
 msgstr "Hasil Uji Ping Webhook"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:893
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:899
 msgid "Delivery Succeeded"
 msgstr "Pengiriman Berhasil"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:903
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:909
 msgid "Delivery Failed"
 msgstr "Pengiriman Gagal"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:340
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:341
 msgid "%d configured"
 msgid_plural "%d configured"
 msgstr[0] "%d dikonfigurasi"
 
-#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:623
+#: client/pages/dashboard/settings/components/tabs/pages/integrations/IntegrationsTab.tsx:627
 msgid "+%d more"
 msgid_plural "+%d more"
 msgstr[0] "+%d lagi"
@@ -8781,7 +8835,7 @@ msgstr "Log Aktivitas"
 msgid "Review link changes and user-management events in one place with filters, timestamps, and actor details."
 msgstr "Tinjau perubahan tautan dan peristiwa pengelolaan pengguna di satu tempat dengan filter, stempel waktu, dan detail pelaku."
 
-#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:75
+#: client/pages/dashboard/activity/components/ActivityHeader/ActivityHeader.tsx:76
 msgid "Refresh activity history"
 msgstr "Segarkan riwayat aktivitas"
 
@@ -9016,7 +9070,7 @@ msgid "Review general settings"
 msgstr "Tinjau pengaturan umum"
 
 #: client/pages/dashboard/about/CompletionNotice.tsx:71
-#: client/pages/NotFoundPage.tsx:24
+#: client/pages/NotFoundPage.tsx:30
 msgid "Go to Dashboard"
 msgstr "Buka Dasbor"
 
@@ -11137,25 +11191,13 @@ msgstr "Ikhtisar Analitik Tersembunyi"
 msgid "Traffic statistics and click analytics are disabled for your role."
 msgstr "Statistik lalu lintas dan analitik klik dinonaktifkan untuk peran Anda."
 
-#: client/pages/NotFoundPage.tsx:16
-msgid "404 · Missing page"
-msgstr "404 · Halaman hilang"
+#: client/pages/NotFoundPage.tsx:24
+msgid "This dashboard page doesn’t exist. Check the address, or return to your dashboard."
+msgstr "Halaman dasbor ini tidak ada. Periksa alamatnya, atau kembali ke dasbor Anda."
 
-#: client/pages/NotFoundPage.tsx:18
-msgid "We couldn’t find the dashboard page you’re looking for. Check the address, or return to your dashboard to keep going."
-msgstr "Kami tidak dapat menemukan halaman dasbor yang Anda cari. Periksa alamatnya, atau kembali ke dasbor Anda untuk melanjutkan."
-
-#: client/pages/NotFoundPage.tsx:31
+#: client/pages/NotFoundPage.tsx:37
 msgid "Go Back"
 msgstr "Kembali"
-
-#: client/pages/NotFoundPage.tsx:36
-msgid "Helpful links"
-msgstr "Tautan bermanfaat"
-
-#: client/pages/NotFoundPage.tsx:38
-msgid "Pick up where you left off"
-msgstr "Lanjutkan dari bagian terakhir Anda"
 
 #: client/router/pageTitle.ts:30
 msgid "Performance Settings"

@@ -1,3 +1,4 @@
+import { formatDistanceToNow } from "date-fns";
 import { getDataString, getPeakURLData } from "@/data";
 import type { PeakURLData } from "@/data";
 
@@ -565,5 +566,33 @@ export function formatLocalizedDateTime(
 			/* Final safe fallback if locale/options are invalid for both APIs. */
 			return targetDate.toISOString();
 		}
+	}
+}
+
+/**
+ * Format a release timestamp with relative distance, day name, and calendar date.
+ *
+ * @param releaseDate - ISO date string or date-only string.
+ * @return Formatted release time (e.g. "24 minutes ago • Saturday, Oct 17, 2026").
+ */
+export function formatReleaseDate(releaseDate: string): string {
+	try {
+		const parsedDate = new Date(releaseDate);
+		if (Number.isNaN(parsedDate.getTime())) {
+			return releaseDate;
+		}
+		const dateWithDay = formatDateOnly(releaseDate.slice(0, 10), {
+			weekday: "long",
+			month: "short",
+			day: "numeric",
+			year: "numeric",
+		});
+		const distance = formatDistanceToNow(parsedDate, { addSuffix: true });
+		if (distance && dateWithDay) {
+			return `${distance} • ${dateWithDay}`;
+		}
+		return distance || dateWithDay || releaseDate;
+	} catch {
+		return releaseDate;
 	}
 }

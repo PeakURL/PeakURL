@@ -1,7 +1,7 @@
 import { FileWarning, LoaderCircle, RotateCw } from "lucide-react";
 import { getPeakURLData } from "@/data";
 import { __ } from "@/i18n";
-import { formatDateOnly } from "@/shared/dates";
+import { formatDateOnly, formatReleaseDate } from "@/shared/dates";
 import { useGetReleaseNotesQuery } from "@/state/slices/api/system";
 
 /** Load notes only when opened, and show the installed version rather than another release. */
@@ -65,8 +65,11 @@ export function ReleaseNotes() {
 					{__("Version")} {release.version}
 				</span>
 				{release.releaseDate && (
-					<time dateTime={release.releaseDate}>
-						{formatDateOnly(release.releaseDate.slice(0, 10))}
+					<time
+						dateTime={release.releaseDate}
+						title={formatDateOnly(release.releaseDate.slice(0, 10))}
+					>
+						{formatReleaseDate(release.releaseDate)}
 					</time>
 				)}
 			</div>

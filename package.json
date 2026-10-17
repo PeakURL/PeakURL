@@ -8,7 +8,7 @@
 	},
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc -b && vite build",
+		"build": "tsc -b && vite build && npm run build:public",
 		"i18n:pot": "php scripts/i18n/build-pot.php",
 		"i18n:update-po": "php scripts/i18n/update-po.php",
 		"i18n:compile": "php scripts/i18n/compile-catalogs.php",
@@ -35,7 +35,8 @@
 		"prepare": "husky",
 		"docker:up": "docker compose up --build",
 		"docker:down": "docker compose down",
-		"docker:logs": "docker compose logs -f"
+		"docker:logs": "docker compose logs -f",
+		"build:public": "node scripts/buildPublicAssets.js"
 	},
 	"lint-staged": {
 		"client/**/*.{ts,tsx}": [

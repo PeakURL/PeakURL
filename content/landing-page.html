@@ -10,148 +10,470 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --brand-charcoal: #2b3040;
+            --brand-blue: #b5c8fa;
+            --brand-art-stroke: #8b9fc9;
+            --brand-page: #ffffff;
+            --brand-surface: #f5f7fb;
+            --brand-raised: #ffffff;
+            --brand-ink: #2b3040;
+            --brand-muted: #596579;
+            --brand-line: #e1e6ef;
+            --brand-action: #2b3040;
+            --brand-action-ink: #ffffff;
+            --brand-link: #4365a2;
+            --brand-link-hover: #314e82;
+            --brand-focus: #6078ab;
+            --brand-highlight: #edf1fa;
+            --illustration-surface: #ffffff;
+            --illustration-panel: #edf1fa;
+            --illustration-strong: #2b3040;
+            --illustration-on-strong: #b5c8fa;
+            --illustration-line: #8b9fc9;
+            --illustration-accent: #465d8b;
+            --illustration-highlight: #b5c8fa;
+        }
 
         body {
-            font-family: 'DM Sans', system-ui, sans-serif;
-            background-color: #0b1120;
-            color: #e2e8f0;
+            font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+            background-color: var(--brand-page);
+            color: var(--brand-ink);
             margin: 0;
             min-height: 100vh;
         }
 
         h1, h2, h3, h4, h5, h6, .font-heading {
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
         }
 
-        .hero-gradient {
-            background:
-                radial-gradient(ellipse 80% 60% at 50% -10%, rgba(37, 99, 235, 0.12), transparent 70%),
-                radial-gradient(ellipse 40% 40% at 80% 80%, rgba(124, 58, 237, 0.05), transparent),
-                linear-gradient(170deg, #0c1426 0%, #0b1120 50%, #0f1b30 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        code, pre {
+            font-family: 'JetBrains Mono', monospace;
         }
 
+        .home-hero {
+            background: linear-gradient(155deg, var(--brand-page) 30%, var(--brand-surface) 100%);
+            border-bottom: 1px solid var(--brand-line);
+        }
+
+        .home-hero h1 {
+            font-size: clamp(2.4rem, 4.4vw, 3.85rem);
+            line-height: 1.08;
+            letter-spacing: -0.05em;
+            font-weight: 800;
+            color: var(--brand-ink);
+        }
+
+        .home-lead {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--brand-muted);
+        }
+
+        .brand-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            min-height: 3rem;
+            padding: 0.8rem 1.4rem;
+            border: 1px solid transparent;
+            border-radius: 0.7rem;
+            font-size: 0.92rem;
+            font-weight: 650;
+            line-height: 1.4;
+            text-decoration: none;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .brand-action--primary {
+            background: var(--brand-action);
+            color: var(--brand-action-ink) !important;
+            box-shadow: 0 2px 6px -1px rgba(43, 48, 64, 0.18), 0 8px 20px -4px rgba(43, 48, 64, 0.12);
+        }
+
+        .brand-action--primary:hover {
+            background: #1e222e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px -1px rgba(43, 48, 64, 0.25), 0 12px 28px -4px rgba(43, 48, 64, 0.16);
+        }
+
+        .brand-action--secondary {
+            background: var(--brand-raised);
+            border-color: var(--brand-line);
+            color: var(--brand-ink) !important;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+        }
+
+        .brand-action--secondary:hover {
+            background: var(--brand-surface);
+            border-color: var(--brand-art-stroke);
+            transform: translateY(-1px);
+        }
+
+        .brand-action:focus-visible {
+            outline: 2px solid var(--brand-focus);
+            outline-offset: 4px;
+        }
+
+        .brand-nav-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.45rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 550;
+            color: var(--brand-muted);
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+
+        .brand-nav-link:hover {
+            color: var(--brand-ink);
+            background: var(--brand-highlight);
+        }
+
+        @media (max-width: 640px) {
+            .brand-nav-link {
+                display: none;
+            }
+        }
+
+        /* Solid heading to match homepage hero; no gradient */
         .gradient-text {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--brand-ink) !important;
+            background: none !important;
+            -webkit-text-fill-color: initial !important;
         }
 
-        .button-primary {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #ffffff !important;
-            box-shadow:
-                0 1px 2px rgba(0, 0, 0, 0.06),
-                0 4px 12px rgba(37, 99, 235, 0.18);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .home-hero__tools {
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: 1.25rem;
+            row-gap: 0.5rem;
+            margin-top: 1.75rem;
+            align-items: center;
         }
 
-        .button-primary:hover {
-            background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
-            box-shadow:
-                0 1px 3px rgba(0, 0, 0, 0.08),
-                0 8px 20px rgba(37, 99, 235, 0.28);
-            transform: translateY(-1px);
+        .home-hero__tool {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: var(--brand-muted);
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.15s;
         }
 
-        .button-secondary-inverse {
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            background: rgba(255, 255, 255, 0.06);
-            color: #ffffff !important;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .home-hero__tool:hover {
+            color: var(--brand-link);
+            text-decoration: underline;
+            text-underline-offset: 4px;
         }
 
-        .button-secondary-inverse:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-1px);
+        .home-tool-icon {
+            display: grid;
+            place-items: center;
+            width: 1.85rem;
+            height: 1.85rem;
+            border-radius: 0.5rem;
+            background: var(--brand-highlight);
+            color: var(--brand-link);
+            border: 1px solid #d4def2;
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+
+        .home-hero__tool:hover .home-tool-icon {
+            border-color: var(--brand-art-stroke);
+            background: #e5ebf7;
+        }
+
+        .site-illustration {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            user-select: none;
+        }
+
+        .customize-callout strong {
+            color: var(--brand-ink) !important;
+            font-weight: 700 !important;
         }
     </style>
 </head>
-<body class="antialiased selection:bg-blue-500/30 selection:text-white">
-    <div class="hero-gradient relative overflow-hidden">
+<body class="antialiased selection:bg-[#b5c8fa] selection:text-[#2b3040]">
+    <div class="min-h-screen flex flex-col justify-between">
         <!-- Header -->
-        <header class="px-6 py-5 flex items-center justify-between mx-auto max-w-6xl w-full" role="banner">
-            <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="flex items-center gap-2.5 no-underline hover:opacity-90 transition-opacity" aria-label="PeakURL Homepage" rel="noopener noreferrer">
-                <img src="{{peakurl_logo_url}}" class="h-9 w-9 shrink-0" width="36" height="36" alt="" aria-hidden="true">
-                <span class="font-heading font-semibold tracking-tight text-[15px] text-white">PeakURL</span>
-            </a>
-            <nav class="hidden sm:flex gap-6" aria-label="Main Navigation">
-                <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="text-white/70 hover:text-white font-medium transition-colors text-sm" rel="noopener noreferrer">Website</a>
-                <a href="https://peakurl.org/docs?utm_source=peakurl_app&amp;utm_medium=landing_page" class="text-white/70 hover:text-white font-medium transition-colors text-sm" rel="noopener noreferrer">Documentation</a>
-                <a href="https://go.peakurl.org/repo" class="text-white/70 hover:text-white font-medium transition-colors text-sm" rel="noopener noreferrer" aria-label="GitHub Repository">GitHub</a>
-            </nav>
+        <header class="border-b border-[#e1e6ef] bg-white/95 backdrop-blur-md sticky top-0 z-50" role="banner">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+                <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="flex items-center gap-3 no-underline group" aria-label="PeakURL Homepage" rel="noopener noreferrer">
+                    <div class="p-1.5 rounded-xl bg-[#f5f7fb] border border-[#e1e6ef] group-hover:border-[#8b9fc9] transition-all shadow-sm">
+                        <img src="{{peakurl_logo_url}}" class="h-6 w-6 shrink-0" width="24" height="24" alt="" aria-hidden="true">
+                    </div>
+                    <span class="font-heading font-bold tracking-tight text-lg text-[#2b3040] group-hover:text-[#4365a2] transition-colors">PeakURL</span>
+                </a>
+                <nav class="flex items-center gap-1 sm:gap-2" aria-label="Main Navigation">
+                    <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="brand-nav-link" rel="noopener noreferrer">Website</a>
+                    <a href="https://peakurl.org/docs?utm_source=peakurl_app&amp;utm_medium=landing_page" class="brand-nav-link" rel="noopener noreferrer">Documentation</a>
+                    <a href="https://go.peakurl.org/repo" class="brand-nav-link" rel="noopener noreferrer" aria-label="GitHub Repository">GitHub</a>
+                    <a href="/login" class="brand-action brand-action--primary !min-h-[2.35rem] !py-1 !px-3.5 !text-xs sm:!text-sm ml-1 sm:ml-2">Dashboard Login</a>
+                </nav>
+            </div>
         </header>
 
-        <!-- Main Hero Section -->
-        <main class="grow flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 relative z-10 pb-20" role="main">
-            <div class="mx-auto max-w-3xl">
-                <!-- Status Badge -->
-                <div class="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm mb-10 shadow-sm" role="status" aria-live="polite">
-                    <span class="relative flex h-2 w-2" aria-hidden="true">
-                        <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
-                    </span>
-                    <span class="text-xs font-semibold tracking-[0.15em] text-white/70 uppercase sm:text-sm">
-                        Self-Hosted
-                    </span>
+        <!-- Main Hero Section (Following Homepage's Hero Architecture) -->
+        <main class="grow" role="main">
+            <section class="home-hero pt-10 sm:pt-14 pb-12 sm:pb-16" aria-labelledby="hero-title">
+                <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                        <!-- Left Hero Copy -->
+                        <div class="lg:col-span-7 text-left">
+                            <!-- Eyebrow Badge -->
+                            <div class="inline-flex items-center gap-2 rounded-full border border-[#d4def2] bg-[#edf1fa] px-3.5 py-1.5 shadow-sm mb-6" role="status" aria-live="polite">
+                                <span class="relative flex h-2 w-2" aria-hidden="true">
+                                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75"></span>
+                                    <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-600"></span>
+                                </span>
+                                <span class="text-xs font-bold tracking-[0.14em] text-[#4365a2] uppercase">Self-Hosted</span>
+                            </div>
+
+                            <!-- Hero Heading: Solid Ink, No Gradient (Matching Homepage) -->
+                            <h1 id="hero-title" class="font-extrabold tracking-tight text-[#2b3040] mb-5 font-heading">
+                                Shorten, track, and <span class="gradient-text">own every link.</span>
+                            </h1>
+
+                            <p class="max-w-2xl home-lead mb-8">
+                                Welcome to your self-hosted PeakURL installation. The platform is running securely and is ready to manage your links, analytics, and integrations.
+                            </p>
+
+                            <!-- Actions -->
+                            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-5">
+                                <a href="/login" class="brand-action brand-action--primary">
+                                    Dashboard Login
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </a>
+                                <a href="https://peakurl.org/docs?utm_source=peakurl_app&amp;utm_medium=landing_page" class="brand-action brand-action--secondary" rel="noopener noreferrer">
+                                    Read the docs
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                        <polyline points="15 3 21 3 21 9"/>
+                                        <line x1="10" y1="14" x2="21" y2="3"/>
+                                    </svg>
+                                </a>
+                            </div>
+
+                            <!-- Source Footnote -->
+                            <div class="flex items-center flex-wrap gap-2 text-xs text-[#596579] mb-4">
+                                <a href="https://go.peakurl.org/repo" class="text-[#4365a2] hover:underline underline-offset-4 font-medium" target="_blank" rel="noopener noreferrer">View the source on GitHub</a>
+                                <span aria-hidden="true">·</span>
+                                <span>No subscription required</span>
+                            </div>
+
+                            <!-- Tool Links Strip: WordPress, Chrome, Firefox, Docker, CLI -->
+                            <nav class="home-hero__tools" aria-label="PeakURL ecosystem integrations">
+                                <a href="https://go.peakurl.org/get-wordpress-plugin" class="home-hero__tool" target="_blank" rel="noopener noreferrer" aria-label="PeakURL for WordPress">
+                                    <span class="home-tool-icon">
+                                        <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="currentColor" aria-hidden="true">
+                                            <path d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 6.9c.649-.03 1.234-.1 1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .915-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0" />
+                                        </svg>
+                                    </span>
+                                    <span>WordPress</span>
+                                </a>
+
+                                <a href="https://go.peakurl.org/get-chrome-extension" class="home-hero__tool" target="_blank" rel="noopener noreferrer" aria-label="PeakURL Chrome Extension">
+                                    <span class="home-tool-icon">
+                                        <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="currentColor" aria-hidden="true">
+                                            <path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29zm13.342 2.166a5.446 5.446 0 0 1 1.45 7.09l.002.001h-.002l-5.344 9.257c.206.01.413.016.621.016 6.627 0 12-5.373 12-12 0-1.54-.29-3.011-.818-4.364zM12 16.364a4.364 4.364 0 1 1 0-8.728 4.364 4.364 0 0 1 0 8.728Z" />
+                                        </svg>
+                                    </span>
+                                    <span>Chrome</span>
+                                </a>
+
+                                <a href="https://go.peakurl.org/get-firefox-addon" class="home-hero__tool" target="_blank" rel="noopener noreferrer" aria-label="PeakURL Firefox Add-on">
+                                    <span class="home-tool-icon">
+                                        <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="currentColor" aria-hidden="true">
+                                            <path d="M12.016 24c5.752 0 10.527-4.176 11.463-9.661.02-.149.035-.298.052-.448.232-1.994-.025-4.09-.753-5.844-.505-1.215-1.53-2.528-2.333-2.943.654 1.283 1.033 2.57 1.177 3.53l.002.02c-1.314-3.278-3.544-4.6-5.366-7.477-.091-.147-.184-.292-.273-.446a3.545 3.545 0 01-.13-.24 2.118 2.118 0 01-.172-.46L15.624 0c-2.585 1.515-3.657 4.168-3.932 5.856a6.197 6.197 0 00-2.305.587.297.297 0 00-.147.37c.057.162.24.24.396.17a5.622 5.622 0 012.008-.523l.067-.005a5.847 5.847 0 011.957.222l.095.03a5.816 5.816 0 01.616.228c.08.036.16.073.238.112l.107.055a5.835 5.835 0 01.368.211 5.953 5.953 0 012.034 2.104c-.62-.437-1.733-.868-2.803-.681 4.183 2.09 3.06 9.292-2.737 9.02a5.164 5.164 0 01-1.513-.292 4.42 4.42 0 01-.538-.232c-1.42-.735-2.593-2.121-2.74-3.806 0 0 .537-2 3.845-2 .357 0 1.38-.998 1.398-1.287-.005-.095-2.029-.9-2.817-1.677-.422-.416-.622-.616-.8-.767a3.47 3.47 0 00-.301-.227 5.388 5.388 0 01-.032-2.842c-1.195.544-2.124 1.403-2.8 2.163h-.006c-.46-.584-.428-2.51-.402-2.913-.006-.025-.343.176-.389.206-.406.29-.787.616-1.136.974-.397.403-.76.839-1.085 1.303a9.816 9.816 0 00-1.562 3.52c-.003.013-.11.487-.19 1.073-.013.09-.026.181-.037.272a7.8 7.8 0 00-.069.667l-.002.034-.023.387-.001.06C.386 18.795 5.593 24 12.016 24z" />
+                                        </svg>
+                                    </span>
+                                    <span>Firefox</span>
+                                </a>
+
+                                <a href="https://go.peakurl.org/docker" class="home-hero__tool" target="_blank" rel="noopener noreferrer" aria-label="PeakURL Docker Image">
+                                    <span class="home-tool-icon">
+                                        <svg viewBox="0 0 439 309" class="w-3.5 h-3.5" fill="currentColor" aria-hidden="true">
+                                            <path d="M379.6,111.7c-2.3-16.7-11.5-31.2-28.1-44.3l-9.6-6.5l-6.4,9.7c-8.2,12.5-12.3,29.9-11,46.6c0.6,5.8,2.5,16.4,8.4,25.5c-5.9,3.3-17.6,7.7-33.2,7.4H1.7l-0.6,3.5c-2.8,16.7-2.8,69,30.7,109.1c25.5,30.5,63.6,46,113.4,46c108,0,187.8-50.3,225.3-141.9c14.7,0.3,46.4,0.1,62.7-31.4c0.4-0.7,1.4-2.6,4.2-8.6l1.6-3.3l-9.1-6.2C419.9,110.8,397.2,108.3,379.6,111.7L379.6,111.7z M240,0h-45.3v41.7H240V0z M240,50.1h-45.3v41.7H240V50.1z M186.4,50.1h-45.3v41.7h45.3V50.1z M132.9,50.1H87.6v41.7h45.3V50.1z M79.3,100.2H34v41.7h45.3V100.2z M132.9,100.2H87.6v41.7h45.3V100.2z M186.4,100.2h-45.3v41.7h45.3V100.2z M240,100.2h-45.3v41.7H240V100.2z M293.6,100.2h-45.3v41.7h45.3V100.2z" />
+                                        </svg>
+                                    </span>
+                                    <span>Docker</span>
+                                </a>
+
+                                <a href="https://go.peakurl.org/cli" class="home-hero__tool" target="_blank" rel="noopener noreferrer" aria-label="PeakURL CLI">
+                                    <span class="home-tool-icon">
+                                        <svg viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <polyline points="4 17 10 11 4 5"/>
+                                            <line x1="12" y1="19" x2="20" y2="19"/>
+                                        </svg>
+                                    </span>
+                                    <span>CLI</span>
+                                </a>
+                            </nav>
+                        </div>
+
+                        <!-- Right Hero Illustration (Signature PeakURL Link Workflow Artwork) -->
+                        <div class="lg:col-span-5 flex justify-center">
+                            <div class="w-full max-w-lg lg:max-w-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="640" height="500" viewBox="0 0 640 500" fill="none" class="site-illustration drop-shadow-md" aria-hidden="true" focusable="false">
+                                    <circle cx="320" cy="250" r="214" fill="var(--illustration-line, #8b9fc9)" fill-opacity=".06" />
+                                    <g stroke="var(--illustration-line, #8b9fc9)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <!-- Browser Window Shell -->
+                                        <rect x="52" y="66" width="536" height="368" rx="28" fill="var(--illustration-surface, #ffffff)" />
+                                        <path d="M52 116h536" />
+                                        <!-- Browser Dots -->
+                                        <circle cx="82" cy="91" r="3" fill="var(--illustration-highlight, #b5c8fa)" stroke="none" />
+                                        <circle cx="97" cy="91" r="3" fill="var(--illustration-highlight, #b5c8fa)" stroke="none" />
+                                        <circle cx="112" cy="91" r="3" fill="var(--illustration-highlight, #b5c8fa)" stroke="none" />
+                                        <!-- Address Bar Pill -->
+                                        <rect x="220" y="82" width="200" height="18" rx="9" fill="var(--illustration-highlight, #b5c8fa)" fill-opacity=".18" stroke="none" />
+
+                                        <!-- Top Card: Short Link & QR Tile -->
+                                        <rect x="84" y="144" width="472" height="112" rx="18" fill="var(--illustration-panel, #edf1fa)" />
+                                        <rect x="104" y="164" width="72" height="72" rx="18" fill="var(--illustration-highlight, #b5c8fa)" fill-opacity=".4" stroke="none" />
+                                        <g transform="translate(116 176) scale(2)" stroke="var(--illustration-accent, #465d8b)" stroke-width="1.8">
+                                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                                        </g>
+                                        <path d="M200 180h160M200 202h126M200 224h92" stroke="var(--illustration-accent, #465d8b)" opacity=".75" />
+                                        <rect data-illustration-detail="qr-tile" x="440" y="160" width="80" height="80" rx="16" fill="var(--illustration-surface, #ffffff)" />
+                                        <g stroke="var(--illustration-accent, #526ea8)" stroke-width="3">
+                                            <path d="M455 175h16v16h-16zM489 175h16v16h-16zM455 209h16v16h-16zM489 205v9h8v11h10M482 199h9M480 221v4M505 199v5" />
+                                        </g>
+
+                                        <!-- Bottom Card: Real-time Traffic Curve -->
+                                        <rect x="84" y="280" width="472" height="124" rx="18" fill="var(--illustration-surface, #ffffff)" />
+                                        <path d="M108 380h424M108 345h424M108 310h424" opacity=".22" />
+                                        <path d="m108 367 38-18 37 8 39-40 38 19 38-31 39 22 38-28 39 24 38-17 80-14v88H108Z" fill="var(--illustration-highlight, #b5c8fa)" fill-opacity=".25" stroke="none" />
+                                        <path d="m108 367 38-18 37 8 39-40 38 19 38-31 39 22 38-28 39 24 38-17 80-14" stroke="var(--illustration-accent, #465d8b)" stroke-width="3.5" />
+                                        <circle cx="532" cy="292" r="4" fill="var(--illustration-accent, #465d8b)" stroke="var(--illustration-surface, #ffffff)" stroke-width="2" />
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-                <h1 class="text-[2.75rem] leading-[1.05] font-extrabold text-white sm:text-6xl lg:text-7xl mb-7 font-heading">
-                    Shorten, track, and <span class="gradient-text">own every link.</span>
-                </h1>
+            <!-- PeakURL Highlights Strip (Data of PeakURL) -->
+            <section class="py-12 bg-white border-b border-[#e1e6ef]" aria-label="PeakURL core capabilities">
+                <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 text-left">
+                        <div class="rounded-2xl border border-[#e1e6ef] bg-[#f5f7fb] p-5 shadow-sm hover:border-[#8b9fc9] transition-all">
+                            <div class="flex items-center gap-2.5 mb-2 text-[#4365a2]">
+                                <div class="w-8 h-8 rounded-lg bg-[#edf1fa] border border-[#d4def2] flex items-center justify-center shrink-0">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-[#2b3040] font-heading">Links</span>
+                            </div>
+                            <p class="text-xs text-[#596579] leading-relaxed">Shorten, organize, tag, and protect links with passwords and expiration dates.</p>
+                        </div>
 
-                <p class="mx-auto max-w-2xl text-base leading-[1.85] text-white/50 sm:text-lg mb-10">
-                    Welcome to your self-hosted PeakURL installation. The platform is running securely and is ready to manage your links, analytics, and integrations.
-                </p>
+                        <div class="rounded-2xl border border-[#e1e6ef] bg-[#f5f7fb] p-5 shadow-sm hover:border-[#8b9fc9] transition-all">
+                            <div class="flex items-center gap-2.5 mb-2 text-[#4365a2]">
+                                <div class="w-8 h-8 rounded-lg bg-[#edf1fa] border border-[#d4def2] flex items-center justify-center shrink-0">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M18 20V10M12 20V4M6 20v-6"/>
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-[#2b3040] font-heading">Analytics</span>
+                            </div>
+                            <p class="text-xs text-[#596579] leading-relaxed">Track real-time clicks, MaxMind geo locations, referrers, and visitor devices.</p>
+                        </div>
 
-                <div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4 mb-16">
-                    <a href="/login" class="button-primary inline-flex w-full items-center justify-center gap-2.5 rounded-xl px-8 py-4 text-sm font-bold sm:w-auto transition-transform outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-[#0b1120]">
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                            <polyline points="10 17 15 12 10 7"/>
-                            <line x1="15" x2="3" y1="12" y2="12"/>
-                        </svg>
-                        Dashboard Login
-                    </a>
-                    <a href="https://peakurl.org/docs?utm_source=peakurl_app&amp;utm_medium=landing_page" class="button-secondary-inverse inline-flex w-full items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-sm font-semibold sm:w-auto transition-transform outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-[#0b1120]" rel="noopener noreferrer">
-                        Read the docs
-                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <path d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
-                    </a>
+                        <div class="rounded-2xl border border-[#e1e6ef] bg-[#f5f7fb] p-5 shadow-sm hover:border-[#8b9fc9] transition-all">
+                            <div class="flex items-center gap-2.5 mb-2 text-[#4365a2]">
+                                <div class="w-8 h-8 rounded-lg bg-[#edf1fa] border border-[#d4def2] flex items-center justify-center shrink-0">
+                                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    </svg>
+                                </div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-[#2b3040] font-heading">Security</span>
+                            </div>
+                            <p class="text-xs text-[#596579] leading-relaxed">Complete self-hosted privacy, API keys, webhook notifications, and 2FA protection.</p>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-                <!-- Customize Information Card -->
-                <section class="text-left bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md max-w-2xl mx-auto shadow-xl" aria-labelledby="customize-title">
-                    <h3 id="customize-title" class="text-white font-semibold flex items-center gap-2.5 mb-3 font-heading">
-                        <svg class="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                        Customize This Page
-                    </h3>
-                    <p class="text-white/60 text-sm leading-relaxed mb-4">
-                        This is the default PeakURL landing page template. To completely re-style and customize this page with your own branding, edit the local file:
-                        <code class="bg-black/40 text-white/90 px-2 py-0.5 rounded font-mono text-[13px] border border-white/10 ml-1 select-all">content/landing-page.html</code>
-                    </p>
-                    <p class="text-white/60 text-sm leading-relaxed">
-                        Changes are applied instantly. You can also switch the root domain behavior back to a direct Login screen or a Custom Redirect URL from your dashboard under <strong class="text-white/80 font-medium">Settings &rarr; General</strong>.
-                    </p>
-                </section>
-            </div>
+            <!-- Customize Information Card Section -->
+            <section class="py-14 sm:py-16 px-4 sm:px-6 lg:px-8 bg-[#f5f7fb]" aria-labelledby="customize-title">
+                <div class="max-w-3xl mx-auto text-left">
+                    <div class="bg-white border border-[#e1e6ef] rounded-2xl p-6 sm:p-8 shadow-sm hover:border-[#8b9fc9] transition-all">
+                        <div class="flex items-center justify-between gap-4 mb-5 pb-4 border-b border-[#e1e6ef]">
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 rounded-xl bg-[#edf1fa] border border-[#d4def2] text-[#4365a2] flex items-center justify-center shrink-0">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 id="customize-title" class="text-[#2b3040] font-bold text-lg font-heading">
+                                        Customize This Page
+                                    </h3>
+                                    <span class="text-xs text-[#596579]">Developer &amp; Admin Quickstart</span>
+                                </div>
+                            </div>
+                            <span class="hidden sm:inline-flex items-center gap-1.5 text-xs text-[#596579] bg-[#f5f7fb] border border-[#e1e6ef] px-3 py-1 rounded-md font-mono">HTML Template</span>
+                        </div>
+
+                        <p class="text-[#596579] text-sm leading-relaxed mb-4">
+                            This is the default PeakURL landing page template. To completely re-style and customize this page with your own branding, edit the local file:
+                        </p>
+
+                        <div class="mb-5 flex items-center justify-between gap-3 rounded-xl bg-[#f5f7fb] border border-[#e1e6ef] px-4 py-3 font-mono text-xs text-[#2b3040]">
+                            <div class="flex items-center gap-2.5 truncate">
+                                <svg class="h-4 w-4 text-[#8b9fc9] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                <code class="select-all font-semibold truncate text-[#2b3040]">content/landing-page.html</code>
+                            </div>
+                            <span class="text-[10px] font-bold text-[#4365a2] bg-[#edf1fa] border border-[#d4def2] px-2 py-0.5 rounded uppercase tracking-wider shrink-0">Editable</span>
+                        </div>
+
+                        <div class="customize-callout rounded-xl bg-[#edf1fa] border border-[#d4def2] p-4 flex items-start gap-3">
+                            <svg class="h-5 w-5 text-[#4365a2] shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                            <p class="text-xs text-[#2b3040] leading-relaxed">
+                                Changes are applied instantly. You can also switch the root domain behavior back to a direct Login screen or a Custom Redirect URL from your dashboard under <strong class="text-white/80 font-medium">Settings &rarr; General</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
-        <footer class="text-center py-6 text-white/40 text-sm pb-8 relative z-10" role="contentinfo">
-            <p>
+        <!-- Footer -->
+        <footer class="text-center py-8 bg-white border-t border-[#e1e6ef] text-[#596579] text-sm space-y-3" role="contentinfo">
+            <div class="flex items-center justify-center">
+                <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="inline-flex items-center gap-2 rounded-full border border-[#e1e6ef] bg-[#f5f7fb] px-4 py-1.5 text-xs text-[#596579] hover:text-[#2b3040] hover:border-[#8b9fc9] transition-all" rel="noopener noreferrer">
+                    <span>Powered by</span>
+                    <img src="{{peakurl_logo_url}}" class="h-4 w-4" alt="" aria-hidden="true">
+                    <span class="font-bold text-[#2b3040]">PeakURL</span>
+                </a>
+            </div>
+            <p class="text-xs text-[#596579]">
                 &copy; <span id="current-year"></span> PeakURL.
                 <script>document.getElementById('current-year').textContent = new Date().getFullYear();</script>
-                <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="hover:text-white transition-colors underline decoration-white/20 underline-offset-4" rel="noopener noreferrer">Visit peakurl.org</a> for updates.
+                <a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" class="hover:text-[#2b3040] transition-colors underline decoration-[#8b9fc9] underline-offset-4" rel="noopener noreferrer">Visit peakurl.org</a> for updates.
             </p>
         </footer>
     </div>

@@ -133,6 +133,80 @@ jobs:
 
           bash scripts/geoip/publish-geoip.sh --dist-dir=/tmp/geoip-release
 
+      - name: Notify n8n GeoIP database update
+        if: always()
+        env:
+          N8N_GEOIP_WEBHOOK_URL: ${{ secrets.N8N_GEOIP_WEBHOOK_URL }}
+          N8N_GEOIP_WEBHOOK_SECRET: ${{ secrets.N8N_GEOIP_WEBHOOK_SECRET }}
+          JOB_STATUS: ${{ job.status }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "${N8N_GEOIP_WEBHOOK_URL:-}" ]; then
+            echo "N8N_GEOIP_WEBHOOK_URL secret not configured; skipping n8n notification."
+            exit 0
+          fi
+
+          MANIFEST_PATH="/tmp/geoip-release/manifest.json"
+          DATABASE="GeoLite2-City"
+          BUILD_EPOCH=""
+          CHECKSUM=""
+          COMPRESSED_SIZE=""
+          CF_PURGED="false"
+
+          if [ "$JOB_STATUS" = "success" ]; then
+            CF_PURGED="true"
+          fi
+
+          if [ -f "$MANIFEST_PATH" ]; then
+            DATABASE=$(jq -r '.edition // "GeoLite2-City"' "$MANIFEST_PATH" 2>/dev/null || echo "GeoLite2-City")
+            BUILD_EPOCH=$(jq -r '.buildEpoch // empty' "$MANIFEST_PATH" 2>/dev/null || true)
+            CHECKSUM=$(jq -r '.checksumSha256 // empty' "$MANIFEST_PATH" 2>/dev/null || true)
+            COMPRESSED_SIZE=$(jq -r '.sizeBytes // empty' "$MANIFEST_PATH" 2>/dev/null || true)
+          fi
+
+          PAYLOAD=$(jq -n \
+            --arg status "$JOB_STATUS" \
+            --arg database "$DATABASE" \
+            --arg buildEpoch "$BUILD_EPOCH" \
+            --arg checksumSha256 "$CHECKSUM" \
+            --arg compressedSizeBytes "$COMPRESSED_SIZE" \
+            --arg trigger "${{ github.event_name }}" \
+            --arg actor "${{ github.actor }}" \
+            --arg runId "${{ github.run_id }}" \
+            --arg runNumber "${{ github.run_number }}" \
+            --arg commitSha "${{ github.sha }}" \
+            --arg cloudflarePurged "$CF_PURGED" \
+            '{
+              status: $status,
+              database: $database,
+              buildEpoch: (if $buildEpoch != "" then ($buildEpoch | tonumber) else null end),
+              checksumSha256: $checksumSha256,
+              compressedSizeBytes: (if $compressedSizeBytes != "" then ($compressedSizeBytes | tonumber) else null end),
+              trigger: $trigger,
+              actor: $actor,
+              runId: $runId,
+              runNumber: (if $runNumber != "" then ($runNumber | tonumber) else null end),
+              commitSha: $commitSha,
+              cloudflarePurged: ($cloudflarePurged == "true")
+            }')
+
+          CURL_HEADERS=(
+            -H "Content-Type: application/json"
+          )
+
+          if [ -n "${N8N_GEOIP_WEBHOOK_SECRET:-}" ]; then
+            CURL_HEADERS+=(-H "x-webhook-secret: $N8N_GEOIP_WEBHOOK_SECRET")
+          fi
+
+          echo "Posting GeoIP database update status to n8n webhook..."
+          curl --fail --silent --show-error --max-time 15 \
+            -X POST "$N8N_GEOIP_WEBHOOK_URL" \
+            "${CURL_HEADERS[@]}" \
+            -d "$PAYLOAD" \
+            -o /dev/null || echo "Warning: Failed to deliver notification to n8n webhook."
+
       - name: Clean up temporary runner artifacts
         if: always()
         shell: bash

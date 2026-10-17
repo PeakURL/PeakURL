@@ -9,11 +9,13 @@
 [![Chrome](https://img.shields.io/chrome-web-store/users/bjnaehckdlmehelmlgikjbojbdcanimg?label=Chrome&logo=googlechrome&color=4285F4&labelColor=2f3136&style=flat)](https://chromewebstore.google.com/detail/peakurl/bjnaehckdlmehelmlgikjbojbdcanimg)
 [![Firefox](https://img.shields.io/amo/dw/peakurl?label=Firefox&logo=firefoxbrowser&color=FF7139&labelColor=2f3136&style=flat)](https://addons.mozilla.org/en-US/firefox/addon/peakurl/)
 
-**PeakURL** is an open-source, self-hosted link management platform and URL shortener designed for teams, businesses, and developers who want complete ownership over their branded short links, click analytics, and custom domains without recurring SaaS fees or vendor lock-in.
+**PeakURL** is an open-source, self-hosted link management platform and URL shortener designed for teams, businesses, and developers who want complete ownership over their branded short links and click analytics on their own domain without recurring SaaS fees or vendor lock-in.
 
 Built with a modern React dashboard, a high-throughput in-memory caching engine (Redis & APCu), and a lean PHP 8 runtime, PeakURL serves as a fast, private, self-hosted alternative to Bitly, Dub, and YOURLS.
 
 ![PeakURL dashboard](.github/images/PeakURL_Dashboard.jpg)
+
+_Dashboard preview with illustrative demo data._
 
 ## Why PeakURL
 
@@ -29,7 +31,7 @@ Built with a modern React dashboard, a high-throughput in-memory caching engine 
 - **Global Localization**: Native multi-language dashboard translated into [26 languages](https://go.peakurl.org/p1855) with full bidirectional (LTR & RTL) support.
 - **Site Health & Diagnostics**: Real-time diagnostic dashboard monitoring PHP environment, database status, cache hit-rates, and directory write permissions.
 - **Flexible Root Domain Routing**: Configure your homepage to display a customizable landing page, redirect to a marketing URL, or show the login screen.
-- **Developer-Ready API & Webhooks**: Clean RESTful endpoints, scoped API keys, real-time webhook event dispatching, and terminal CLI automation.
+- **Developer-Ready API & Webhooks**: Clean RESTful endpoints, user-owned API keys, real-time webhook event dispatching, and terminal CLI automation.
 - **Seamless Bulk Import & Portability**: Animated progress tracking for bulk uploads, 1-click YOURLS migration, and full CSV/JSON/XML data export.
 
 ### Why Self-Host PeakURL?
@@ -44,7 +46,7 @@ Built with a modern React dashboard, a high-throughput in-memory caching engine 
 | **Activity & Audit Logging** | **Searchable chronological audit trail with exact user attribution**                | Enterprise tiers only                                               | None                                  |
 | **Bot & Abuse Prevention**   | **Cloudflare Turnstile & Google reCAPTCHA v3 built-in**                             | Included only in higher tiers                                       | Requires third-party plugins          |
 | **Official Ecosystem**       | **CLI, WordPress Plugin, Chrome & Firefox Extensions, Docker**                      | Varies by provider / closed API limits                              | Community plugins only                |
-| **User Roles & Security**    | **Direct `admin` & `editor` roles, 2FA (TOTP), API keys**                           | Included only in expensive enterprise tiers                         | Basic single-user auth                |
+| **User Roles & Security**    | **Admin, Editor, custom roles, 2FA (TOTP), API keys**                               | Included only in expensive enterprise tiers                         | Basic single-user auth                |
 | **Internationalization**     | **[26 Native Languages](https://go.peakurl.org/p1855) with full LTR & RTL layouts** | English-only or limited languages                                   | Limited translation files             |
 
 ## Performance & Caching
@@ -67,7 +69,7 @@ flowchart TD
     Found -- "Yes" --> Warm["Populate In-Memory Cache Store"]
     Warm --> FastPath
 
-    Found -- "No (404)" --> NegCache["Write Negative Cache Entry (180s)<br/>Shields Database from Bot Floods"]
+    Found -- "No (404)" --> NegCache["Write Negative Cache Entry<br/>(Configurable TTL)<br/>Shields Database from Bot Floods"]
     NegCache --> NotFound["Emit HTTP 404 Not Found"]
 ```
 
@@ -179,7 +181,7 @@ If you want the fastest path to a working install:
 2. Extract it on your domain or subdirectory
 3. Visit your site root in the browser
 4. Complete the three-step installer
-5. Sign in and start creating links
+5. Open the dashboard and start creating links
 
 For installation, setup, usage, and product documentation, start here:
 
@@ -202,15 +204,15 @@ Upload the latest release to your site, then visit your site root in the
 browser. PeakURL detects a fresh install automatically, opens the installer,
 and tells you exactly what it needs before it writes your `config.php`.
 
+All three steps share a responsive layout with light/dark
+themes. Use the theme button to change the browser's saved preference.
+
 ![PeakURL installer welcome screen](.github/images/PeakURL_Install_1.jpg)
 
-The first screen keeps things simple:
+The welcome screen reviews the information you’ll need: database credentials and
+administrator details. Choose the site language, then follow the pin:
 
-- database name
-- database username and password
-- database host and port
-- optional table prefix
-- one clear **Let's go** action to start the setup
+1. **Begin setup**: open the database connection form.
 
 ### 2. Connect your database
 
@@ -222,13 +224,14 @@ configuration for you and prepares the install for the final setup step.
 This step is designed for real-world hosting environments, so it works well
 whether your database is local, remote, or managed through a hosting panel.
 
-The numbered markers in the screenshot map to:
+The pins highlight the main parts of this step:
 
-1. **Database name**: the MySQL or MariaDB database PeakURL will use.
-2. **Username**: the database user with access to that database.
-3. **Password**: the password for that database user.
-4. **Host**: usually `localhost`, unless your host gives you a remote DB host.
-5. **Save & continue**: writes the runtime config and moves you into the final setup step.
+1. **Connection details**: enter the database name, username, password, and host supplied by your hosting provider.
+2. **Advanced**: confirm the port (default `3306`) and table prefix (default `peakurl_`). Prefixes support letters, numbers, and underscores.
+3. **Save and continue**: verify the connection, write the runtime configuration, and proceed.
+
+The screenshot uses example database credentials; enter the values supplied by
+your hosting provider.
 
 ### 3. Create the first administrator
 
@@ -238,35 +241,26 @@ you can move straight into the dashboard.
 
 ![PeakURL installer admin account setup](.github/images/PeakURL_Install_3.jpg)
 
-You only need to set:
+Enter a site title, such as `PeakURL Demo`, then follow the two pins:
 
-- site title
-- admin username
-- admin email
-- admin password
-
-The numbered markers in the screenshot map to:
-
-1. **Site title**: the name shown across the dashboard and product screens.
-2. **Username**: the first administrator login name.
-3. **Email**: the recovery and notification address for that first admin account.
-4. **Password**: the administrator password for the new install.
-5. **Install PeakURL**: creates the tables, saves the site settings, and signs you in.
+1. **Administrator**: choose a username, recovery email, and password with at least 8 characters.
+2. **Install PeakURL**: create the application tables, save the site settings, and sign in.
 
 ### 4. Start using PeakURL
 
-After installation, you land in a focused dashboard built for publishing
-links, reviewing traffic, and managing settings without SaaS clutter.
+After installation, PeakURL signs you in and opens **About PeakURL**. Select
+**Overview** in the sidebar to view the dashboard homepage shown below, where you
+can review traffic, devices, locations, and recent activity.
 
-![PeakURL dashboard after install](.github/images/PeakURL_Dashboard.jpg)
+![PeakURL dashboard overview with demo data](.github/images/PeakURL_Dashboard.jpg)
 
-Dashboard highlights include:
+_Illustrative demo data; a new installation starts without link or click history._
 
-- short-link publishing and bulk import tools
-- analytics for traffic, devices, referrers, and locations
-- multi-language dashboard localized in [26 languages](https://go.peakurl.org/p1855) with full RTL/LTR support
-- user, session, API-key, and integration management
-- self-hosted operations for settings, mail delivery, updates, and location data
+The dashboard shows summary metrics, click and visitor trends, recent clicks,
+devices, browsers, operating systems, country totals, and recent activity.
+The sidebar also provides link publishing and bulk import tools, user management,
+and settings for sessions, API keys, integrations, mail, updates, and location
+data. The dashboard supports [26 languages](https://go.peakurl.org/p1855) with full RTL/LTR layouts.
 
 For the full product guide and current feature details, visit
 [peakurl.org/docs](https://go.peakurl.org/docs).
@@ -313,7 +307,7 @@ flowchart TD
 
     subgraph Storage["Storage &amp; Acceleration Layer"]
         Cache["In-Memory Cache<br/>(Redis / APCu / Filesystem)"]
-        Database[("MariaDB / MySQL<br/>(Versioned Schema v8)")]
+        Database[("MariaDB / MySQL<br/>(Versioned Schema)")]
         GeoIP["Local MaxMind GeoIP<br/>(Zero Third-Party Tracking)"]
     end
 
@@ -327,10 +321,26 @@ flowchart TD
 ```
 
 - **[Browser Extensions for Chrome & Firefox](https://go.peakurl.org/p1923)**: Create custom branded short links, customize aliases, and generate QR codes in one click directly from your browser toolbar. Available on the [Chrome Web Store](https://go.peakurl.org/get-chrome-extension) and [Firefox Add-ons](https://go.peakurl.org/get-firefox-addon).
-- **[PeakURL Command-Line Interface (CLI)](https://go.peakurl.org/p1894)**: Create and manage short links, inspect analytics, and automate shortening workflows directly from your terminal or CI/CD pipelines (`npx peakurl` or `npm i -g peakurl`).
+- **[PeakURL Command-Line Interface (CLI)](https://go.peakurl.org/p1894)**: Create and manage short links, inspect site status, download and update core packages, and manage activity, scheduled jobs, and webhook deliveries from your terminal or CI/CD pipelines (`npx peakurl` or `npm i -g peakurl`).
 - **[PeakURL for WordPress Plugin](https://go.peakurl.org/p1800)**: Automatically generate branded short links for posts, pages, and custom post types directly within your WordPress publishing workflow. Available on [WordPress.org](https://go.peakurl.org/get-wordpress-plugin).
 - **[Official Docker Containers](https://go.peakurl.org/p1920)**: Launch containerized PeakURL instances with Redis and MariaDB in seconds using pre-built Docker and Docker Compose images.
 - **[Global Multi-Language Support](https://go.peakurl.org/p1855)**: Fully localized across 26 languages with native bidirectional (LTR & RTL) layout rendering for global teams.
+
+### CLI quick start
+
+View the available commands without connecting to a site:
+
+```sh
+npx peakurl -h
+npx --yes peakurl@latest -h
+```
+
+The second command explicitly checks the current published release. Use
+`npx peakurl <command> -h` for command-specific options and examples.
+
+Preview the PeakURL CLI help and supported commands below:
+
+![PeakURL CLI help and supported commands](.github/images/peakurl-cli.jpg)
 
 ## Technical Guides & Architecture Deep Dives
 

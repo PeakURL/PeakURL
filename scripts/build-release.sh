@@ -96,8 +96,18 @@ verify_release_package() {
 		database/schema.sql \
 		core \
 		features \
+		features/links/publicCaptcha.js \
 		http \
 		services \
+		services/illustration.php \
+		services/status-illustrations/manifest.json \
+		services/install/page.php \
+		services/install/installer.css \
+		services/install/installer.js \
+		services/install/languagePicker.js \
+		services/install/templates/page.php \
+		services/install/templates/setup.php \
+		services/install/templates/administrator.php \
 		utils \
 		vendor/autoload.php; do
 		if [ ! -e "$RELEASE_DIR/$req" ]; then
@@ -105,6 +115,18 @@ verify_release_package() {
 			exit 1
 		fi
 	done
+
+	# Both PHP recovery pages and the client resolve artwork from this manifest.
+	php -r '
+		$directory = $argv[1];
+		$illustrations = json_decode(file_get_contents($directory . "/manifest.json"), true, 512, JSON_THROW_ON_ERROR);
+		foreach ($illustrations as $filename) {
+			if (!is_readable($directory . "/" . $filename)) {
+				fwrite(STDERR, "Missing status illustration: " . $filename . "\n");
+				exit(1);
+			}
+		}
+	' "$RELEASE_DIR/services/status-illustrations"
 
 	for forbidden in \
 		server \
@@ -211,6 +233,8 @@ require_file "$ROOT_DIR/client/assets/logo/peakurl.svg"
 require_file "$ROOT_DIR/client/assets/logo/LICENSE-Lucide.txt"
 require_file "$ROOT_DIR/server/public/default-favicon.png"
 require_file "$ROOT_DIR/server/public/default-site.webmanifest"
+require_file "$ROOT_DIR/server/features/links/publicCaptcha.js"
+require_file "$ROOT_DIR/server/services/status-illustrations/manifest.json"
 
 printf 'Building React dashboard UI...\n'
 npm run build
@@ -263,6 +287,12 @@ for server_dir in api bin core database features http services templates utils v
 			--exclude='Tests' \
 			--exclude='*.cache'
 	fi
+done
+
+# Standalone PHP pages inline these dependency-free production bundles.
+for public_asset in features/links/publicCaptcha.js services/install/installer.js services/install/languagePicker.js; do
+	require_file "$UI_BUILD_DIR/server/$public_asset"
+	cp "$UI_BUILD_DIR/server/$public_asset" "$RELEASE_DIR/$public_asset"
 done
 
 # Copy API router entrypoint to api/index.php

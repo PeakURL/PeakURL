@@ -136,10 +136,24 @@ Stop the stack:
 docker compose down
 ```
 
-Build the dashboard:
+Build the dashboard and public-page scripts:
 
 ```bash
 npm run build
+```
+
+The build also bundles and minifies the standalone CAPTCHA and installer scripts
+into `build/server/`. Release assembly copies these over the corresponding PHP
+runtime assets. Their readable source files stay in `server/features/links/` and
+`server/services/install/`; PHP embeds the compiled scripts inline, so public
+access checks and setup do not load the dashboard bundle. Run `npm run build:public`
+to rebuild only these scripts.
+
+To check the production scripts against mocked CAPTCHA providers and installer
+forms without accessing a database:
+
+```bash
+PEAKURL_TEST_BUILT_ASSETS=1 npx playwright test tests/e2e/public --project=chromium
 ```
 
 Build the release package:

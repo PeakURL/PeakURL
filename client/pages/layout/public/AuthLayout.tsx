@@ -2,7 +2,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 
 import { DEFAULT_AUTH_LOGO_URL } from "@constants";
-import { Logo, PoweredBy } from "@/components";
+import { Logo, PageIllustration, PoweredBy } from "@/components";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 
@@ -17,26 +17,29 @@ function AuthLayout({
 	cardCopy,
 	cardTitle,
 	children,
-	containerClassName = "auth-page-container auth-page-container-compact",
+	illustration,
 	noteCopy,
 	noteTitle,
-	pageClassName = "auth-page auth-page-recovery",
+	poweredByHref,
 	showcaseCopy,
+	showcaseFooter,
 	showcaseTitle,
 }: AuthLayoutProps) {
 	const isRtl = isDocumentRtl();
 	const BackArrow = isRtl ? ArrowRight : ArrowLeft;
 
 	return (
-		<main id="page-container" className={pageClassName}>
-			<div className={containerClassName}>
+		<main id="page-container" className="auth-page">
+			<div className="auth-page-container">
 				<div className="auth-page-layout">
 					<aside className="auth-page-showcase" aria-hidden="true">
 						<div className="auth-page-showcase-header">
-							<div className="auth-page-badge">
-								<BadgeIcon size={14} />
-								{badgeLabel}
-							</div>
+							{badgeLabel && (
+								<div className="auth-page-badge">
+									{BadgeIcon && <BadgeIcon size={14} />}
+									{badgeLabel}
+								</div>
+							)}
 							<h1 className="auth-page-showcase-title">
 								{showcaseTitle}
 							</h1>
@@ -45,9 +48,22 @@ function AuthLayout({
 							</p>
 						</div>
 
-						<div className="auth-page-note">
-							<p className="auth-page-note-title">{noteTitle}</p>
-							<p className="auth-page-note-copy">{noteCopy}</p>
+						<PageIllustration
+							name={illustration}
+							className="auth-page-illustration"
+						/>
+
+						<div className="auth-page-showcase-footer">
+							{showcaseFooter ?? (
+								<div className="auth-page-note">
+									<p className="auth-page-note-title">
+										{noteTitle}
+									</p>
+									<p className="auth-page-note-copy">
+										{noteCopy}
+									</p>
+								</div>
+							)}
 						</div>
 					</aside>
 
@@ -61,10 +77,15 @@ function AuthLayout({
 								href={brandHref}
 								className="auth-page-logo"
 							/>
-							<Link to={backTo} className="auth-page-back-link">
-								<BackArrow size={16} />
-								{backLabel}
-							</Link>
+							{backTo && (
+								<Link
+									to={backTo}
+									className="auth-page-back-link"
+								>
+									<BackArrow size={16} />
+									{backLabel}
+								</Link>
+							)}
 						</header>
 
 						<h2 id="page-heading" className="auth-page-card-title">
@@ -76,7 +97,7 @@ function AuthLayout({
 					</section>
 				</div>
 				<footer className="auth-page-powered">
-					<PoweredBy />
+					<PoweredBy href={poweredByHref} />
 				</footer>
 			</div>
 		</main>

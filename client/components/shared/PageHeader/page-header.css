@@ -20,7 +20,7 @@
 		@apply mt-1 max-w-3xl text-sm leading-6 text-text-muted;
 	}
 	.page-header-actions {
-		@apply flex min-w-0 max-w-full shrink-0 flex-wrap items-center gap-2 md:self-center;
+		@apply flex w-full justify-end md:w-auto min-w-0 max-w-full shrink-0 flex-wrap items-center gap-2 md:self-center;
 	}
 	.page-header-icon-button {
 		@apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted transition-colors hover:border-accent/30 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-wait disabled:opacity-60;

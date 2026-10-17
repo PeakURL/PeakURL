@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#8b9fc9">
+  <defs>
+    <mask id="foreground-clearance" maskUnits="userSpaceOnUse" x="0" y="0" width="360" height="280">
+      <rect width="360" height="280" fill="white"/>
+      <circle cx="235" cy="177" r="47" fill="black"/>
+    </mask>
+  </defs>
+  <style>.wash{fill:currentColor;fill-opacity:.08}.solid{fill:#8b9fc9;fill-opacity:.2}.emphasis{stroke-width:4}</style>
+  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <g mask="url(#foreground-clearance)">
+      <path class="wash" d="M93 59h110l37 37v104a18 18 0 0 1-18 18H93a18 18 0 0 1-18-18V77a18 18 0 0 1 18-18z"/>
+      <path d="M203 59v25a12 12 0 0 0 12 12h25m-132 23h57m-57 23h37m-37 23h22"/>
+    </g>
+    <circle class="wash" cx="235" cy="177" r="43"/>
+    <path class="emphasis" d="m266 208 32 32m-75-75 24 24m0-24-24 24"/>
+    <path d="M53 92h-14m7-7v14m241 24h15m-7-7v14" opacity=".5"/>
+  </g>
+</svg>

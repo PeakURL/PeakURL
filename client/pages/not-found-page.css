@@ -1,0 +1,30 @@
+@layer components {
+	.dashboard-not-found {
+		@apply flex items-center justify-center px-4 py-12;
+		min-height: min(65dvh, 640px);
+	}
+
+	.dashboard-not-found-content {
+		@apply w-full max-w-lg text-center;
+	}
+
+	.dashboard-not-found-artwork {
+		@apply mx-auto mb-5 block h-auto w-52 max-w-full;
+	}
+
+	.dashboard-not-found-label {
+		@apply mb-3 text-xs font-semibold tracking-wider text-accent;
+	}
+
+	.dashboard-not-found-title {
+		@apply text-3xl font-semibold tracking-tight text-heading;
+	}
+
+	.dashboard-not-found-description {
+		@apply mx-auto mt-4 max-w-md text-sm leading-7 text-text-muted;
+	}
+
+	.dashboard-not-found-actions {
+		@apply mt-6 flex flex-wrap justify-center gap-3;
+	}
+}

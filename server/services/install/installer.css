@@ -1,0 +1,496 @@
+.installer-page :where(h1, h2, p, ol, ul) {
+	margin: 0;
+}
+.installer-container {
+	width: min(100% - 64px, 1080px);
+	min-height: 100dvh;
+	margin-inline: auto;
+	display: flex;
+	flex-direction: column;
+}
+.installer-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-block: 24px;
+}
+.installer-theme-toggle {
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	border: 1px solid var(--status-line);
+	border-radius: 12px;
+	background: var(--status-surface);
+	color: var(--status-muted);
+	cursor: pointer;
+}
+.installer-theme-toggle[aria-pressed="true"] {
+	background: var(--status-soft);
+	color: var(--status-accent);
+}
+.installer-theme-icon-moon,
+[data-status-theme="dark"] .installer-theme-icon-sun {
+	display: none;
+}
+[data-status-theme="dark"] .installer-theme-icon-moon {
+	display: block;
+}
+@media (prefers-color-scheme: dark) {
+	[data-status-theme="auto"] .installer-theme-icon-sun {
+		display: none;
+	}
+	[data-status-theme="auto"] .installer-theme-icon-moon {
+		display: block;
+	}
+}
+.installer-main {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	justify-content: center;
+	padding-block: 12px 32px;
+}
+.installer-progress {
+	margin-block-end: 24px;
+}
+.installer-progress ol {
+	display: flex;
+	justify-content: center;
+	gap: 40px;
+	padding: 0;
+	list-style: none;
+}
+.installer-step {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--status-muted);
+	font-size: 13px;
+}
+.installer-step-number {
+	display: grid;
+	place-items: center;
+	width: 28px;
+	height: 28px;
+	flex-shrink: 0;
+	border: 1px solid var(--status-line);
+	border-radius: 50%;
+	font-size: 12px;
+	font-weight: 600;
+}
+.installer-step.is-active {
+	color: var(--status-ink);
+	font-weight: 600;
+}
+.installer-step.is-active .installer-step-number {
+	background: var(--status-action);
+	border-color: var(--status-action);
+	color: #fff;
+}
+.installer-step.is-done .installer-step-number {
+	background: var(--status-soft);
+	border-color: transparent;
+	color: var(--status-accent);
+}
+.installer-panel {
+	display: grid;
+	grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+	border: 1px solid var(--status-line);
+	border-radius: 24px;
+	background: var(--status-surface);
+	overflow: hidden;
+	box-shadow: 0 12px 40px rgb(20 28 48 / 4%);
+}
+.installer-introduction {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 40px;
+	background: var(--status-soft);
+}
+.installer-eyebrow {
+	color: var(--status-accent);
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+.installer-introduction h2 {
+	margin-block-start: 16px;
+	font-size: clamp(28px, 3vw, 36px);
+	font-weight: 650;
+	letter-spacing: -0.035em;
+	line-height: 1.2;
+	text-wrap: balance;
+}
+.installer-introduction-description {
+	margin-block-start: 16px;
+	color: var(--status-muted);
+	font-size: 14px;
+	line-height: 1.8;
+}
+.installer-artwork {
+	display: block;
+	width: min(100%, 320px);
+	height: auto;
+	margin: 24px auto;
+}
+.installer-tagline {
+	color: var(--status-muted);
+	font-size: 12px;
+}
+.installer-content {
+	min-width: 0;
+	padding: 40px;
+}
+.installer-content h1 {
+	color: var(--status-ink);
+	font-size: 26px;
+	font-weight: 650;
+	letter-spacing: -0.03em;
+	line-height: 1.3;
+}
+.installer-content .desc {
+	margin-block-start: 10px;
+	color: var(--status-muted);
+	font-size: 14px;
+	line-height: 1.7;
+}
+.installer-content .divider {
+	height: 1px;
+	margin-block: 24px;
+	background: var(--status-line);
+}
+.installer-content .form-body {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin-block-start: 24px;
+}
+.installer-content .form-body .divider {
+	margin: 0;
+}
+.installer-content .form-section-label {
+	color: var(--status-muted);
+	font-size: 12px;
+	font-weight: 600;
+}
+.installer-content .grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 18px;
+}
+.installer-content .field {
+	display: flex;
+	min-width: 0;
+	flex-direction: column;
+	gap: 7px;
+}
+.installer-content .field.full {
+	grid-column: 1 / -1;
+}
+.installer-content label {
+	color: var(--status-ink);
+	font-size: 13px;
+	font-weight: 600;
+}
+.installer-content input:not([type="hidden"]),
+.installer-content select {
+	width: 100%;
+	min-height: 44px;
+	padding: 10px 12px;
+	border: 1px solid var(--status-line);
+	border-radius: 8px;
+	background: var(--status-bg);
+	color: var(--status-ink);
+	font: inherit;
+	font-size: 14px;
+	transition: border-color 150ms ease;
+}
+.installer-content input::placeholder {
+	color: var(--status-muted);
+}
+.installer-content input:focus,
+.installer-content select:focus,
+.installer-page button:focus-visible,
+.installer-page a:focus-visible {
+	outline: 2px solid var(--status-accent);
+	outline-offset: 2px;
+}
+.installer-content .hint,
+.installer-content .actions-note {
+	color: var(--status-muted);
+	font-size: 12px;
+	line-height: 1.6;
+}
+.installer-content .actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-block-start: 4px;
+}
+.installer-content .checklist + .info-note + .actions {
+	margin-block-start: 24px;
+}
+.installer-content .actions-note {
+	flex-basis: 100%;
+}
+.installer-content .btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-height: 44px;
+	padding: 10px 18px;
+	border: 1px solid transparent;
+	border-radius: 8px;
+	font: inherit;
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+}
+.installer-content .btn-primary {
+	background: var(--status-action);
+	color: #fff;
+}
+.installer-content .btn-primary:hover {
+	background: #333d54;
+}
+.installer-content .btn-ghost {
+	margin-inline-end: auto;
+	border-color: var(--status-line);
+	background: var(--status-surface);
+	color: var(--status-muted);
+}
+.installer-content .btn-ghost:hover {
+	background: var(--status-bg);
+	color: var(--status-ink);
+}
+.installer-content .checklist {
+	display: grid;
+	gap: 16px;
+	padding: 0;
+	list-style: none;
+}
+.installer-content .checklist li {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 14px;
+}
+.installer-content .check-icon {
+	display: grid;
+	place-items: center;
+	flex-shrink: 0;
+	width: 32px;
+	height: 32px;
+	border-radius: 8px;
+	background: var(--status-soft);
+	color: var(--status-accent);
+}
+.installer-content .check-icon svg {
+	width: 16px;
+	height: 16px;
+}
+.installer-content .muted {
+	color: var(--status-muted);
+	font-size: 12px;
+}
+.installer-content .info-note {
+	margin-block-start: 24px;
+	color: var(--status-muted);
+	font-size: 12px;
+	line-height: 1.7;
+}
+.installer-content .info-note svg {
+	vertical-align: -2px;
+	margin-inline-end: 4px;
+}
+.installer-content .error-box {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin-block-start: 20px;
+	padding: 12px 14px;
+	border: 1px solid light-dark(#fecaca, #7f333b);
+	border-radius: 8px;
+	background: light-dark(#fff0ee, #321e26);
+	color: light-dark(#b42318, #fecaca);
+	font-size: 13px;
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+}
+.installer-content .bang {
+	font-weight: 700;
+}
+.installer-content .language-picker {
+	margin-block-end: 24px;
+}
+.installer-content .language-picker-form {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+.installer-content .language-picker-label {
+	flex-shrink: 0;
+}
+.installer-content .language-picker-select {
+	min-width: 0;
+}
+.installer-footer {
+	display: flex;
+	justify-content: center;
+	padding-block: 0 24px;
+}
+[dir="rtl"] .installer-content .actions svg {
+	transform: scaleX(-1);
+}
+@media (max-width: 760px) {
+	.installer-container {
+		width: min(100% - 32px, 560px);
+	}
+	.installer-header {
+		padding-block: 20px;
+	}
+	.installer-progress ol {
+		gap: 16px;
+	}
+	.installer-step {
+		flex-direction: column;
+		gap: 6px;
+		font-size: 11px;
+		text-align: center;
+	}
+	.installer-panel {
+		grid-template-columns: minmax(0, 1fr);
+		border-radius: 16px;
+	}
+	.installer-introduction {
+		padding: 16px;
+	}
+	.installer-introduction :where(h2, p) {
+		display: none;
+	}
+	.installer-artwork {
+		width: 128px;
+		margin: 0 auto;
+	}
+	.installer-content {
+		padding: 24px;
+	}
+	.installer-content h1 {
+		font-size: 24px;
+	}
+}
+@media (max-width: 480px) {
+	.installer-content .grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+	.installer-content input:not([type="hidden"]),
+	.installer-content select {
+		font-size: 16px;
+	}
+	.installer-content .actions .btn-primary {
+		width: 100%;
+	}
+	.installer-content .language-picker-form {
+		align-items: stretch;
+		flex-direction: column;
+		gap: 8px;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.installer-content input:not([type="hidden"]),
+	.installer-content select {
+		transition: none;
+	}
+}
+
+/* The installer uses the dashboard select's spacing, states, and theme tokens. */
+.installer-language-trigger {
+	display: flex;
+	flex: 1;
+	min-width: 0;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	min-height: 44px;
+	padding: 10px 12px;
+	border: 1px solid var(--status-line);
+	border-radius: 8px;
+	background: var(--status-surface);
+	color: var(--status-ink);
+	font: inherit;
+	font-size: 14px;
+	text-align: start;
+	cursor: pointer;
+}
+.installer-language-trigger span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.installer-language-trigger svg {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+	color: var(--status-muted);
+}
+.installer-language-trigger[aria-expanded="true"] {
+	border-color: var(--status-accent);
+	outline: 2px solid var(--status-accent);
+	outline-offset: 1px;
+}
+.installer-language-options {
+	position: fixed;
+	z-index: 50;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	padding: 4px;
+	border: 1px solid var(--status-line);
+	border-radius: 8px;
+	background: var(--status-surface);
+	color: var(--status-ink);
+	box-shadow: 0 12px 28px rgb(15 23 42 / 15%);
+	font-size: 14px;
+}
+.installer-language-options[hidden] {
+	display: none;
+}
+.installer-language-option {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	min-height: 40px;
+	padding: 8px 12px;
+	border-radius: 6px;
+	cursor: pointer;
+}
+.installer-language-option[aria-selected="true"] {
+	background: var(--status-bg);
+	color: var(--status-accent);
+}
+.installer-language-option[data-active] {
+	background: var(--status-soft);
+}
+.installer-language-option svg {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+	visibility: hidden;
+}
+.installer-language-option[aria-selected="true"] svg {
+	visibility: visible;
+}
+@media (max-width: 480px) {
+	.installer-language-trigger {
+		flex: auto;
+		width: 100%;
+		font-size: 16px;
+	}
+}

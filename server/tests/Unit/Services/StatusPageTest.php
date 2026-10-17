@@ -20,15 +20,15 @@ class StatusPageTest extends TestCase {
 
 	public function test_public_access_states_keep_status_codes_and_post_forms(): void {
 		$states = array(
-			'not_found'         => 404,
-			'unavailable'       => 404,
-			'expired'           => 410,
-			'password_required' => 200,
-			'password_invalid'  => 401,
-			'captcha_invalid'   => 403,
+			'not_found'         => array( 404, 'missing-link' ),
+			'unavailable'       => array( 404, 'missing-link' ),
+			'expired'           => array( 410, 'expired' ),
+			'password_required' => array( 200, 'password' ),
+			'password_invalid'  => array( 401, 'password' ),
+			'captcha_invalid'   => array( 403, 'verification' ),
 		);
 
-		foreach ( $states as $state => $status ) {
+		foreach ( $states as $state => list( $status, $illustration ) ) {
 			$service = $this->createMock( Service::class );
 			$service->method( 'get_link_access' )->willReturn(
 				array(
@@ -50,6 +50,7 @@ class StatusPageTest extends TestCase {
 			$this->assertStringContainsString( 'class="powered-by"', $html );
 			$this->assertStringContainsString( Brand::get_tagline(), $html );
 			$this->assertStringNotContainsString( '<img src=x', $html );
+			$this->assertStringContainsString( 'data-status-illustration="' . $illustration . '"', $html );
 
 			if ( str_starts_with( $state, 'password_' ) || 'captcha_invalid' === $state ) {
 				$this->assertStringContainsString( 'method="post" action="/folder/protected"', $html );
@@ -58,6 +59,24 @@ class StatusPageTest extends TestCase {
 				$this->assertStringContainsString( 'name="link_password" type="password"', $html );
 			}
 		}
+	}
+
+	public function test_http_error_pages_choose_their_own_illustrations(): void {
+		$states = array(
+			404 => 'missing-page',
+			403 => 'forbidden',
+			429 => 'rate-limit',
+			500 => 'server-error',
+			400 => 'request-error',
+		);
+		foreach ( $states as $status => $illustration ) {
+			$this->assertStringContainsString( 'data-status-illustration="' . $illustration . '"', StatusPage::render_http_error( $status ) );
+		}
+	}
+
+	public function test_illustration_names_reject_unregistered_paths(): void {
+		$this->expectException( \InvalidArgumentException::class );
+		StatusPage::render( 'Error', 'Check the address.', illustration: '../../config' );
 	}
 
 	public function test_status_text_and_development_details_are_escaped(): void {

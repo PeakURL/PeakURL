@@ -500,7 +500,7 @@ class Controller extends BaseController {
 		string $error = ''
 	): string {
 		$form_action  = htmlspecialchars(
-			$request->get_path(),
+			$this->format_app_path( $request, $request->get_path() ),
 			ENT_QUOTES,
 			'UTF-8',
 		);
@@ -508,25 +508,17 @@ class Controller extends BaseController {
 
 		if ( '' !== trim( $error ) ) {
 			$error_markup =
-				'<div class="alert">' .
+				'<div class="alert" role="alert">' .
 				'<svg class="alert-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg>' .
 				'<span>' . htmlspecialchars( $error, ENT_QUOTES, 'UTF-8' ) . '</span>' .
 				'</div>';
 		}
 
-		$lock_icon =
-			'<svg class="hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' .
-			'<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>' .
-			'<path d="M7 11V7a5 5 0 0 1 10 0v4"/>' .
-			'<circle cx="12" cy="16" r="1"/>' .
-			'</svg>';
-
 		$content_html =
-			'<div class="hero-icon-wrap">' . $lock_icon . '</div>' .
-			'<h1 class="title">' . __( 'Password required', 'peakurl' ) . '</h1>' .
-			'<p class="subtitle">' . __( 'This link is protected. Enter the password to continue.', 'peakurl' ) . '</p>' .
-			$error_markup .
+			'<h1 id="page-heading" class="status-title">' . __( 'Password required', 'peakurl' ) . '</h1>' .
+			'<p class="status-description">' . __( 'This link is protected. Enter the password to continue.', 'peakurl' ) . '</p>' .
 			'<form method="post" action="' . $form_action . '" autocomplete="off">' .
+			$error_markup .
 			'<div class="field">' .
 			'<label class="label" for="link_password">' . __( 'Password', 'peakurl' ) . '</label>' .
 			'<div class="input-wrap">' .
@@ -540,7 +532,7 @@ class Controller extends BaseController {
 			'</button>' .
 			'</form>';
 
-		return $this->format_public_page( __( 'Protected Link', 'peakurl' ), $content_html );
+		return $this->format_public_page( __( 'Protected Link', 'peakurl' ), $content_html, 'password' );
 	}
 
 	/**
@@ -558,13 +550,12 @@ class Controller extends BaseController {
 		string $error = ''
 	): string {
 		$form_action = htmlspecialchars(
-			$request->get_path(),
+			$this->format_app_path( $request, $request->get_path() ),
 			ENT_QUOTES,
 			'UTF-8',
 		);
 		$provider    = (string) ( $challenge['provider'] ?? '' );
 		$has_error   = '' !== trim( $error );
-		$script_url  = $this->format_captcha_script_url( $challenge, $provider );
 		$status_html = $this->format_captcha_status_panel(
 			$provider,
 			$has_error,
@@ -572,30 +563,17 @@ class Controller extends BaseController {
 		);
 		$widget_html = $this->format_captcha_widget( $challenge, $provider );
 
-		$script_tag = '';
-		if ( $this->is_allowed_captcha_script_url( $script_url ) ) {
-			$script_tag = '<script src="' . $script_url . '" async defer></script>';
-		}
-
-		$shield_icon =
-			'<svg class="hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' .
-			'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>' .
-			'<path d="m9 12 2 2 4-4"/>' .
-			'</svg>';
-
 		$content_html =
 			$this->format_captcha_script( $challenge, $provider, $has_error, $error ) .
-			$script_tag .
-			'<div class="hero-icon-wrap">' . $shield_icon . '</div>' .
-			'<h1 class="title">' . __( 'Performing security verification', 'peakurl' ) . '</h1>' .
-			'<p class="subtitle">' . __( 'This website uses a security service to protect against malicious bots. This page is displayed while PeakURL verifies you are not a bot.', 'peakurl' ) . '</p>' .
-			'<form id="captcha-form" class="captcha-form" method="post" action="' . $form_action . '" autocomplete="off">' .
+			'<h1 id="page-heading" class="status-title">' . __( 'Checking your browser', 'peakurl' ) . '</h1>' .
+			'<p class="status-description">' . __( 'Complete the security check to open this link. You’ll continue automatically once verification is complete.', 'peakurl' ) . '</p>' .
+			'<form id="captcha-form" class="captcha-form" aria-busy="true" method="post" action="' . $form_action . '" autocomplete="off">' .
 			$status_html .
 			$widget_html .
 			'<noscript><p class="captcha-noscript">' . __( 'JavaScript is required to complete this verification.', 'peakurl' ) . '</p></noscript>' .
 			'</form>';
 
-		return $this->format_public_page( __( 'Security Verification', 'peakurl' ), $content_html );
+		return $this->format_public_page( __( 'Security Verification', 'peakurl' ), $content_html, 'verification' );
 	}
 
 	/**
@@ -632,7 +610,7 @@ class Controller extends BaseController {
 	 *
 	 * @param array<string, mixed> $challenge Public CAPTCHA challenge settings.
 	 * @param string               $provider  CAPTCHA provider key.
-	 * @return string Escaped script URL.
+	 * @return string Provider script URL.
 	 * @since 1.2.2
 	 */
 	private function format_captcha_script_url(
@@ -661,7 +639,7 @@ class Controller extends BaseController {
 				: '&' . $script_query;
 		}
 
-		return htmlspecialchars( $script_url, ENT_QUOTES, 'UTF-8' );
+		return $script_url;
 	}
 
 	/**
@@ -680,161 +658,30 @@ class Controller extends BaseController {
 		bool $has_error,
 		string $error
 	): string {
-		$site_key_json   = $this->encode_captcha_json(
-			(string) ( $challenge['siteKey'] ?? '' ),
+		$script_url = $this->format_captcha_script_url( $challenge, $provider );
+		$config     = array(
+			'provider'   => $provider,
+			'siteKey'    => (string) ( $challenge['siteKey'] ?? '' ),
+			'action'     => (string) ( $challenge['action'] ?? 'peakurl_redirect' ),
+			'autoVerify' => ! $has_error,
+			'scriptUrl'  => $this->is_allowed_captcha_script_url( $script_url ) ? $script_url : '',
+			'messages'   => array(
+				'initial'       => $error,
+				'loading'       => __( 'Loading security check…', 'peakurl' ),
+				'running'       => __( 'Verifying your browser…', 'peakurl' ),
+				'verified'      => __( 'Verification complete. Opening your link…', 'peakurl' ),
+				'expired'       => __( 'Verification expired. Please try again.', 'peakurl' ),
+				'error'         => __( 'Verification could not be completed. Please try again.', 'peakurl' ),
+				'loadError'     => __( 'The security check couldn’t load. Check your connection or content blocker, then try again.', 'peakurl' ),
+				'slow'          => __( 'Verification is taking longer than expected. Please try again.', 'peakurl' ),
+				'unsupported'   => __( 'This browser couldn’t run the security check. Please try another browser.', 'peakurl' ),
+				'continueError' => __( 'Your link couldn’t open. Please verify again to continue.', 'peakurl' ),
+			),
 		);
-		$action_json     = $this->encode_captcha_json(
-			(string) ( $challenge['action'] ?? 'peakurl_redirect' ),
-		);
-		$provider_json   = $this->encode_captcha_json( $provider );
-		$auto_json       = $this->encode_captcha_json( ! $has_error );
-		$initial_state   = $has_error ? 'error' : 'pending';
-		$initial_status  = $this->encode_captcha_json(
-			$has_error
-				? $error
-				: __( 'Waiting for verification…', 'peakurl' ),
-		);
-		$checking_status = $this->encode_captcha_json(
-			__( 'Checking verification…', 'peakurl' ),
-		);
-		$running_status  = $this->encode_captcha_json(
-			__( 'Starting verification…', 'peakurl' ),
-		);
-		$expired_status  = $this->encode_captcha_json(
-			__( 'Verification expired. Please try again.', 'peakurl' ),
-		);
-		$error_status    = $this->encode_captcha_json(
-			__( 'Verification could not be completed. Please try again.', 'peakurl' ),
-		);
+		$script     = (string) file_get_contents( __DIR__ . '/publicCaptcha.js' );
 
-		return <<<HTML
-<script>
-(function(){
-var submitted=false;
-var active=false;
-var provider={$provider_json};
-var autoVerify={$auto_json};
-var turnstileSelector="#captcha-turnstile";
-var turnstileWidgetId=null;
-function whenReady(callback){
-	if("loading"===document.readyState){
-		document.addEventListener("DOMContentLoaded",callback);
-		return;
+		return '<script>' . str_replace( '__PEAKURL_CAPTCHA_CONFIG__', $this->encode_captcha_json( $config ), $script ) . '</script>';
 	}
-	callback();
-}
-function setRetryVisible(visible){
-	var button=document.getElementById("captcha-retry-button");
-	if(button){button.hidden=!visible;}
-}
-function setWidgetVisible(visible){
-	var widget=document.getElementById("captcha-widget");
-	if(widget){widget.hidden=!visible;}
-}
-function setStatus(message,state,visible){
-	var status=document.getElementById("captcha-status-text");
-	var panel=document.getElementById("captcha-status-panel");
-	var needsRetry="error"===state||"warning"===state;
-	var showPanel=false!==visible||needsRetry;
-	if(status){status.textContent=message;}
-	if(panel){
-		panel.className="captcha-status-panel captcha-status-panel-"+state;
-		panel.hidden=!showPanel;
-	}
-	setRetryVisible(needsRetry);
-	if(needsRetry){setWidgetVisible(false);}
-}
-function setToken(token){
-	var input=document.getElementById("captcha-token");
-	if(input){input.value=token||"";}
-}
-function renderTurnstile(){
-	if("turnstile"!==provider||!window.turnstile||turnstileWidgetId!==null){return;}
-	/* Explicit execution prevents automatic retry loops after a failed token. */
-	try{
-		turnstileWidgetId=window.turnstile.render(turnstileSelector,{
-			sitekey:{$site_key_json},
-			theme:window.PeakURLCaptchaTheme(),
-			language:"auto",
-			execution:"execute",
-			callback:window.PeakURLCaptchaVerified,
-			"expired-callback":window.PeakURLCaptchaExpired,
-			"error-callback":window.PeakURLCaptchaError
-		});
-	}catch(error){
-		window.PeakURLCaptchaError();
-	}
-}
-function startVerification(){
-	submitted=false;
-	active=true;
-	setToken("");
-	setRetryVisible(false);
-	setWidgetVisible("turnstile"===provider);
-	/* Turnstile shows its own challenge state, so keep our panel for fallback and retry states. */
-	setStatus({$running_status},"pending","turnstile"!==provider);
-	if("recaptcha"===provider){
-		if(!window.grecaptcha){window.PeakURLCaptchaError();return;}
-		window.grecaptcha.ready(function(){
-			window.grecaptcha.execute({$site_key_json},{action:{$action_json}}).then(
-				window.PeakURLCaptchaVerified,
-				window.PeakURLCaptchaError
-			);
-		});
-		return;
-	}
-	if("turnstile"===provider){
-		if(!window.turnstile){window.PeakURLCaptchaError();return;}
-		if(turnstileWidgetId===null){renderTurnstile();}
-		if(turnstileWidgetId===null){window.PeakURLCaptchaError();return;}
-		try{
-			window.turnstile.reset(turnstileWidgetId);
-			window.turnstile.execute(turnstileSelector);
-		}catch(error){
-			window.PeakURLCaptchaError();
-		}
-	}
-}
-function submitVerification(token){
-	if(submitted||!active){return;}
-	if(!token){window.PeakURLCaptchaError();return;}
-	submitted=true;
-	active=false;
-	setToken(token);
-	/* Keep Turnstile visible so Cloudflare can show the verified state before submit. */
-	if("turnstile"!==provider){setWidgetVisible(false);}
-	setStatus({$checking_status},"pending","turnstile"!==provider);
-	window.setTimeout(function(){
-		whenReady(function(){
-			var form=document.getElementById("captcha-form");
-			if(form){form.submit();}
-		});
-	},"turnstile"===provider?650:160);
-}
-window.PeakURLCaptchaVerified=submitVerification;
-window.PeakURLCaptchaExpired=function(){submitted=false;active=false;setStatus({$expired_status},"warning");};
-window.PeakURLCaptchaError=function(){submitted=false;active=false;setStatus({$error_status},"warning");};
-window.PeakURLStartCaptcha=startVerification;
-window.PeakURLCaptchaTheme=function(){
-	return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
-};
-window.PeakURLRenderCaptcha=function(){
-	whenReady(function(){
-		if(autoVerify){
-			startVerification();
-			return;
-		}
-		setStatus({$initial_status},"{$initial_state}");
-	});
-};
-document.addEventListener("click",function(event){
-	if(event.target&&"captcha-retry-button"===event.target.id){startVerification();}
-});
-}());
-</script>
-HTML;
-	}
-
 	/**
 	 * Format the verification status panel.
 	 *
@@ -852,8 +699,8 @@ HTML;
 		$state       = $has_error ? 'error' : 'pending';
 		$status_text = htmlspecialchars(
 			$has_error
-				? $error
-				: __( 'Waiting for verification…', 'peakurl' ),
+			? $error
+			: __( 'Waiting for verification…', 'peakurl' ),
 			ENT_QUOTES,
 			'UTF-8',
 		);
@@ -868,16 +715,16 @@ HTML;
 			true,
 		);
 		$retry_html  = $has_retry
-			? '<button id="captcha-retry-button" class="captcha-retry-button" type="button"' . ( $has_error ? '' : ' hidden' ) . '>' . $retry_label . '</button>'
-			: '';
+		? '<button id="captcha-retry-button" class="captcha-retry-button" type="button"' . ( $has_error ? '' : ' hidden' ) . '>' . $retry_label . '</button>'
+		: '';
 
 		return '<div id="captcha-status-panel" class="captcha-status-panel captcha-status-panel-' . $state . '">' .
-				'<span class="captcha-spinner" aria-hidden="true"></span>' .
-				'<span class="captcha-status-content">' .
-					'<span id="captcha-status-text" class="captcha-status-text">' . $status_text . '</span>' .
-					$retry_html .
-				'</span>' .
-			'</div>';
+			'<span class="captcha-spinner" aria-hidden="true"></span>' .
+			'<span class="captcha-status-content">' .
+				'<span id="captcha-status-text" class="captcha-status-text" role="status" aria-live="polite">' . $status_text . '</span>' .
+				$retry_html .
+			'</span>' .
+		'</div>';
 	}
 
 	/**
@@ -892,17 +739,16 @@ HTML;
 		array $challenge,
 		string $provider
 	): string {
-		if ( 'turnstile' === $provider ) {
-			return '<div id="captcha-widget" class="captcha-widget" hidden><div id="captcha-turnstile" class="captcha-turnstile"></div></div>';
-		}
 
 		$response_field = htmlspecialchars(
-			(string) ( $challenge['responseField'] ?? 'g-recaptcha-response' ),
+			(string) ( $challenge['responseField'] ?? ( 'turnstile' === $provider ? 'cf-turnstile-response' : 'g-recaptcha-response' ) ),
 			ENT_QUOTES,
 			'UTF-8',
 		);
 
-		return '<input id="captcha-token" type="hidden" name="' . $response_field . '" value="">';
+		$widget = 'turnstile' === $provider ? '<div id="captcha-widget" class="captcha-widget" hidden><div id="captcha-turnstile" class="captcha-turnstile"></div></div>' : '';
+
+		return '<input id="captcha-token" type="hidden" name="' . $response_field . '" value="">' . $widget;
 	}
 
 	/**
@@ -936,19 +782,19 @@ HTML;
 		}
 
 		foreach (
-			array(
-				'facebookexternalhit',
-				'facebot',
-				'twitterbot',
-				'linkedinbot',
-				'slackbot',
-				'discordbot',
-				'whatsapp',
-				'telegrambot',
-				'pinterest',
-				'skypeuripreview',
-				'applebot',
-			) as $crawler
+		array(
+			'facebookexternalhit',
+			'facebot',
+			'twitterbot',
+			'linkedinbot',
+			'slackbot',
+			'discordbot',
+			'whatsapp',
+			'telegrambot',
+			'pinterest',
+			'skypeuripreview',
+			'applebot',
+		) as $crawler
 		) {
 			if ( false !== strpos( $user_agent, $crawler ) ) {
 				return true;
@@ -984,9 +830,9 @@ HTML;
 
 		if ( '' !== $image_url ) {
 			$image_tags =
-				'<meta property="og:image" content="' . $image_url . '">' . "\n" .
-				'<meta property="og:image:secure_url" content="' . $image_url . '">' . "\n" .
-				'<meta name="twitter:image" content="' . $image_url . '">' . "\n";
+			'<meta property="og:image" content="' . $image_url . '">' . "\n" .
+			'<meta property="og:image:secure_url" content="' . $image_url . '">' . "\n" .
+			'<meta name="twitter:image" content="' . $image_url . '">' . "\n";
 		}
 
 		return <<<HTML
@@ -1051,6 +897,7 @@ HTML;
 			$description,
 			$is_expired ? __( '410 · Link expired', 'peakurl' ) : __( '404 · Link not found', 'peakurl' ),
 			__( 'Contact the person who shared this link to request a new address. You do not need an account to open a public short link.', 'peakurl' ),
+			illustration: $is_expired ? 'expired' : 'missing-link',
 		);
 	}
 
@@ -1059,13 +906,15 @@ HTML;
 	 *
 	 * @param string $page_title   Browser page title.
 	 * @param string $content_html Safe inner HTML for the public page.
+	 * @param string $illustration  Semantic access-check illustration.
 	 * @return string HTML page markup.
 	 * @since 1.0.0
 	 */
 	private function format_public_page(
 		string $page_title,
-		string $content_html
+		string $content_html,
+		string $illustration
 	): string {
-		return \PeakURL\Services\StatusPage::render_document( $page_title, $content_html );
+		return \PeakURL\Services\StatusPage::render_document( $page_title, $content_html, array(), '', $illustration, true );
 	}
 }

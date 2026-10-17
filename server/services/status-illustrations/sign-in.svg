@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#8b9fc9">
+  <style>.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
+  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect class="wash" x="44" y="58" width="272" height="164" rx="20"/>
+    <path d="M44 94h272m-244-18h1m12 0h1m12 0h1"/>
+    <circle class="solid" cx="118" cy="134" r="16"/>
+    <path d="M88 187v-8a30 30 0 0 1 60 0v8"/>
+    <path class="wash" d="M220 145v-17a10 10 0 0 1 10-10h34a10 10 0 0 1 10 10v60a10 10 0 0 1-10 10h-34a10 10 0 0 1-10-10v-17"/>
+    <path class="emphasis" d="M174 158h70m-11-11 11 11-11 11"/>
+  </g>
+</svg>

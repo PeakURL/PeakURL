@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#8b9fc9">
+  <style>.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}</style>
+  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect class="wash" x="48" y="54" width="264" height="174" rx="18"/>
+    <path d="M48 86h264"/><path d="M66 70h1m10 0h1m10 0h1"/>
+    <rect class="solid" x="72" y="112" width="62" height="62" rx="14"/>
+    <path d="m94 146 13-13m-16 6-3 3a9 9 0 0 0 13 13l4-4m-6-17 4-4a9 9 0 0 1 13 13l-3 3"/>
+    <path d="M152 130h66m-66 16h42m-42 16h54" opacity=".65"/>
+    <circle class="solid" cx="264" cy="142" r="20"/>
+    <path d="m254 142 7 7 13-14" stroke-width="3.4"/>
+    <path d="M72 202h216" opacity=".4"/>
+    <path d="m300 32 0 10m-5-5h10m-272 160v10m-5-5h10" opacity=".5"/>
+  </g>
+</svg>

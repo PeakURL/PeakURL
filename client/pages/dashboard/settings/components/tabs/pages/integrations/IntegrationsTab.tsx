@@ -332,52 +332,56 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 									{__("Add Webhook")}
 								</Button>
 							)}
-							<span className="integrations-tab-status-pill">
-								{!isWebhooksEnabled
-									? __("Disabled")
-									: webhooks.length > 0
-										? sprintf(
-												_n(
-													"%d configured",
-													"%d configured",
+							<div className="integrations-tab-toggle-group">
+								<span className="integrations-tab-status-pill">
+									{!isWebhooksEnabled
+										? __("Disabled")
+										: webhooks.length > 0
+											? sprintf(
+													_n(
+														"%d configured",
+														"%d configured",
+														webhooks.length
+													),
 													webhooks.length
-												),
-												webhooks.length
-											)
-										: __("Not configured")}
-							</span>
-							<div className="integrations-tab-switch">
-								<span
-									id="webhooks-toggle-label"
-									className="sr-only"
-								>
-									{__("Enable webhooks")}
+												)
+											: __("Not configured")}
 								</span>
-								<button
-									type="button"
-									role="switch"
-									aria-checked={isWebhooksEnabled}
-									aria-labelledby="webhooks-toggle-label"
-									disabled={isLoading}
-									onClick={() =>
-										setIsWebhooksToggled(!isWebhooksEnabled)
-									}
-									className={cn(
-										"integrations-tab-switch-track",
-										isWebhooksEnabled
-											? "integrations-tab-switch-track-active"
-											: "integrations-tab-switch-track-inactive"
-									)}
-								>
+								<div className="integrations-tab-switch">
 									<span
+										id="webhooks-toggle-label"
+										className="sr-only"
+									>
+										{__("Enable webhooks")}
+									</span>
+									<button
+										type="button"
+										role="switch"
+										aria-checked={isWebhooksEnabled}
+										aria-labelledby="webhooks-toggle-label"
+										disabled={isLoading}
+										onClick={() =>
+											setIsWebhooksToggled(
+												!isWebhooksEnabled
+											)
+										}
 										className={cn(
-											"integrations-tab-switch-thumb",
+											"integrations-tab-switch-track",
 											isWebhooksEnabled
-												? "integrations-tab-switch-thumb-active"
-												: "integrations-tab-switch-thumb-inactive"
+												? "integrations-tab-switch-track-active"
+												: "integrations-tab-switch-track-inactive"
 										)}
-									/>
-								</button>
+									>
+										<span
+											className={cn(
+												"integrations-tab-switch-thumb",
+												isWebhooksEnabled
+													? "integrations-tab-switch-thumb-active"
+													: "integrations-tab-switch-thumb-inactive"
+											)}
+										/>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -580,7 +584,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 											</span>
 											{webhook.events &&
 											webhook.events.length > 0 ? (
-												<span className="text-[11px] text-text-secondary">
+												<span className="text-[11px] text-text font-medium">
 													{(() => {
 														const labels =
 															webhook.events
@@ -632,13 +636,15 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 										<div className="integrations-tab-webhook-meta">
 											{webhook.secretHint && (
-												<div className="flex items-center gap-1.5">
+												<div className="flex items-center gap-1.5 min-w-0 max-w-full">
 													<KeyRound
 														size={12}
 														className="shrink-0 text-text-muted"
 													/>
-													<span>{__("Secret:")}</span>
-													<code className="integrations-tab-secret-code text-[10px] py-0 px-1.5">
+													<span className="shrink-0">
+														{__("Secret:")}
+													</span>
+													<code className="integrations-tab-secret-code text-[10px] py-0.5 px-1.5 truncate max-w-36 sm:max-w-xs shrink">
 														{webhook.secretHint}
 													</code>
 													<button
@@ -648,7 +654,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 																webhook
 															)
 														}
-														className="font-medium text-accent hover:underline text-xs ml-0.5"
+														className="font-medium text-accent hover:underline text-xs ml-0.5 shrink-0"
 													>
 														{__("Rotate")}
 													</button>
@@ -657,10 +663,10 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 											{webhook.createdAt && (
 												<>
-													<span className="text-stroke-strong">
+													<span className="hidden sm:inline text-stroke-strong">
 														•
 													</span>
-													<div className="text-text-muted text-[11px]">
+													<div className="text-text-muted text-[11px] shrink-0">
 														{__("Created:")}{" "}
 														<span className="preserve-ltr-value font-medium text-heading">
 															{formatLocalizedDateTime(

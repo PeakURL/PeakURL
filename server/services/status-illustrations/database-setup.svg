@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#8b9fc9">
+  <style>.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}</style>
+  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path class="wash" d="M56 91v100c0 15 23 27 52 27s52-12 52-27V91"/>
+    <ellipse class="solid" cx="108" cy="91" rx="52" ry="27"/>
+    <path d="M56 125c0 15 23 27 52 27s52-12 52-27m-104 33c0 15 23 27 52 27s52-12 52-27"/>
+    <path d="M174 141h27" stroke-dasharray="4 6" opacity=".65"/>
+    <rect class="wash" x="216" y="78" width="112" height="126" rx="16"/>
+    <path d="M216 108h112m-94-15h1m9 0h1"/>
+    <circle class="solid" cx="272" cy="153" r="24"/>
+    <path d="m260 153 8 8 16-17" stroke-width="3.4"/>
+    <path d="M190 48v12m-6-6h12M32 175v10m-5-5h10" opacity=".5"/>
+  </g>
+</svg>

@@ -123,6 +123,7 @@ export function ApiErrorPage({
 
 	return (
 		<StatusLayout
+			illustration="backend"
 			title={title}
 			description={description}
 			label={__("Backend connection error")}

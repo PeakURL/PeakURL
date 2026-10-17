@@ -208,19 +208,19 @@
 
 	/* Segmented Tabs & Copy Button */
 	.system-status-page-tabs {
-		@apply flex-1 sm:flex-initial grid grid-cols-2 sm:inline-flex items-center gap-1 rounded-lg bg-surface-alt p-1 border border-stroke/70 shadow-2xs;
+		@apply flex-1 sm:flex-initial grid grid-cols-2 sm:inline-flex items-center gap-1 rounded-lg bg-surface p-1 border border-stroke;
 	}
 
 	.system-status-page-tab {
-		@apply flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-text-muted transition-all duration-200 ease-in-out focus:outline-none whitespace-nowrap;
+		@apply flex-1 sm:flex-initial inline-flex h-8 items-center justify-center gap-1.5 rounded px-3 text-xs font-medium transition-all focus:outline-none whitespace-nowrap;
 	}
 
 	.system-status-page-tab-active {
-		@apply bg-action text-white font-medium shadow-sm hover:text-white;
+		@apply bg-action text-white shadow-sm;
 	}
 
 	.system-status-page-tab-inactive {
-		@apply text-text-muted hover:text-heading hover:bg-surface/50;
+		@apply text-text-muted hover:bg-surface-alt hover:text-heading;
 	}
 
 	.system-status-page-copy-button {

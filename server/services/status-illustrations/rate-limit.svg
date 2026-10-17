@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#8b9fc9">
+  <style>.wash{fill:currentColor;fill-opacity:.08}.solid{fill:#8b9fc9;fill-opacity:.2}.emphasis{stroke-width:4}</style>
+  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path class="wash" d="M122 57h116v29c0 27-13 42-37 55 24 14 37 29 37 56v26H122v-26c0-27 13-42 37-56-24-13-37-28-37-55z"/>
+    <path class="emphasis" d="M112 57h136M112 223h136"/>
+    <path d="M139 89h82l-41 38zm0 110 41-38 41 38z" fill="currentColor" fill-opacity=".17"/>
+    <path d="M180 135v16" stroke-dasharray="2 6"/>
+    <path d="M61 104h27m-38 30h38m-27 30h27m183-30h28m-28 30h39" opacity=".6"/>
+  </g>
+</svg>

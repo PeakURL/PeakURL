@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#8b9fc9">
+  <defs>
+    <mask id="foreground-clearance" maskUnits="userSpaceOnUse" x="0" y="0" width="360" height="280">
+      <rect width="360" height="280" fill="white"/>
+      <circle cx="242" cy="184" r="55" fill="black"/>
+    </mask>
+  </defs>
+  <style>.wash{fill:currentColor;fill-opacity:.08}.solid{fill:#8b9fc9;fill-opacity:.2}.emphasis{stroke-width:4}</style>
+  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <g mask="url(#foreground-clearance)">
+      <rect class="wash" x="65" y="64" width="179" height="150" rx="19"/>
+      <path d="M65 107h179m-143-57v28m108-28v28"/>
+      <path d="M95 132h20m-20 27h20m-20 27h20m19-54h20m-20 27h20" opacity=".65"/>
+    </g>
+    <circle class="wash" cx="242" cy="184" r="51"/>
+    <path class="emphasis" d="M242 153v31l21 12"/>
+    <path d="M242 139v5m0 80v5m-45-45h5m80 0h5"/>
+    <path d="m154 177 8-8a10 10 0 0 1 14 14l-8 8m-6-6-8 8a10 10 0 0 1-14-14l8-8"/>
+  </g>
+</svg>

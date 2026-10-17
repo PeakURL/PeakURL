@@ -151,16 +151,32 @@ function LocationDataTab({
 				);
 			}
 
-			return (
-				<StateCard
-					icon={CheckCircle2}
-					title={__("Location analytics is enabled")}
-					description={__(
-						"PeakURL is using the local GeoLite2 City database for click locations."
-					)}
-					variant="success"
-				/>
-			);
+			if (!hasCredentials) {
+				return (
+					<StateCard
+						icon={AlertCircle}
+						title={__("MaxMind credentials recommended")}
+						description={
+							<span>
+								{__(
+									"PeakURL works out of the box using your local database. To keep location stats accurate as IP allocations shift, add your MaxMind credentials below so the weekly background job can automatically fetch updates."
+								)}{" "}
+								<a
+									href="https://go.peakurl.org/028e82"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="underline font-medium hover:opacity-100"
+								>
+									{__("Setup guide")}
+								</a>
+							</span>
+						}
+						variant="warning"
+					/>
+				);
+			}
+
+			return null;
 		}
 
 		if (hasCredentials) {

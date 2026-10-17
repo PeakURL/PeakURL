@@ -149,6 +149,7 @@ if ( ! function_exists( 'render_maintenance_page' ) ) {
 			(string) ( $maintenance_view_data['title'] ?? $heading ),
 			$content,
 			$maintenance_view_data,
+			illustration: 'maintenance',
 		);
 	}
 }

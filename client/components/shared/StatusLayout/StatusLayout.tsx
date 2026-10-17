@@ -1,15 +1,12 @@
 import type { ReactNode } from "react";
 
+import type { StatusIllustrationName } from "@/assets/status-illustrations";
 import { __ } from "@/i18n";
 import { getBrandTagline } from "@/shared/branding";
 
 import { Logo } from "../Logo";
+import { PageIllustration } from "../PageIllustration";
 import { PoweredBy } from "../PoweredBy";
-
-const statusArtworkUrl = new URL(
-	"../../../../server/services/status-artwork.svg",
-	import.meta.url
-).href;
 
 interface StatusLayoutProps {
 	title: string;
@@ -18,10 +15,10 @@ interface StatusLayoutProps {
 	actions: ReactNode;
 	note?: string;
 	children?: ReactNode;
-	embedded?: boolean;
+	illustration?: StatusIllustrationName;
 }
 
-/** Flat branded layout shared by dashboard recovery and missing-page states. */
+/** Standalone branded recovery layout, independent of the dashboard layout. */
 export function StatusLayout({
 	title,
 	description,
@@ -29,19 +26,16 @@ export function StatusLayout({
 	actions,
 	note,
 	children,
-	embedded = false,
+	illustration = "missing-page",
 }: StatusLayoutProps) {
-	const Content = embedded ? "div" : "main";
 	return (
-		<div
-			className={`status-page${embedded ? " status-page-embedded" : ""}`}
-		>
+		<div className="status-page">
 			<div className="status-container">
 				<header className="status-header">
 					<Logo size="lg" />
 					<span className="status-tagline">{getBrandTagline()}</span>
 				</header>
-				<Content className="status-main">
+				<main className="status-main">
 					<section
 						className="status-hero"
 						aria-labelledby="page-heading"
@@ -55,17 +49,13 @@ export function StatusLayout({
 							<div className="status-actions">{actions}</div>
 							{note && <p className="status-note">{note}</p>}
 						</div>
-						<img
+						<PageIllustration
 							className="status-artwork"
-							src={statusArtworkUrl}
-							alt=""
-							aria-hidden="true"
-							width="360"
-							height="280"
+							name={illustration}
 						/>
 					</section>
 					{children}
-				</Content>
+				</main>
 				<footer className="status-footer">
 					<PoweredBy />
 				</footer>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#8b9fc9">
+  <defs>
+    <path id="warning" d="m253 147 48 81a8 8 0 0 1-7 12h-96a8 8 0 0 1-7-12l48-81a8 8 0 0 1 14 0z"/>
+    <mask id="foreground-clearance" maskUnits="userSpaceOnUse" x="0" y="0" width="360" height="280">
+      <rect width="360" height="280" fill="white"/>
+      <use href="#warning" fill="black" stroke="black" stroke-width="8" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+  <style>.wash{fill:currentColor;fill-opacity:.08}.solid{fill:#8b9fc9;fill-opacity:.2}.emphasis{stroke-width:4}</style>
+  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <g mask="url(#foreground-clearance)">
+      <rect class="wash" x="70" y="61" width="214" height="65" rx="17"/>
+      <rect class="wash" x="70" y="146" width="214" height="65" rx="17"/>
+      <circle cx="96" cy="93" r="4"/>
+      <circle cx="96" cy="179" r="4"/>
+      <path d="M116 93h104m-104 86h72m46-86h23m-23 86h23"/>
+    </g>
+    <use href="#warning" class="solid"/>
+    <path class="emphasis" d="M246 176v29m0 15v1"/>
+  </g>
+</svg>

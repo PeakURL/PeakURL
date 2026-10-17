@@ -26,6 +26,7 @@ class StatusPage {
 	 * @param string $action_url   Local, root-relative recovery URL.
 	 * @param string $action_label Recovery action label.
 	 * @param string $support_html Trusted, escaped supporting markup.
+	 * @param string|null $illustration Semantic illustration from the shared manifest.
 	 * @return string Complete HTML document.
 	 */
 	public static function render(
@@ -35,7 +36,8 @@ class StatusPage {
 		string $note = '',
 		string $action_url = '',
 		string $action_label = '',
-		string $support_html = ''
+		string $support_html = '',
+		?string $illustration = null
 	): string {
 		$content = '<p class="status-eyebrow">' . self::escape( $label ) . '</p>' .
 			'<h1 id="page-heading" class="status-title">' . self::escape( $title ) . '</h1>' .
@@ -50,7 +52,7 @@ class StatusPage {
 			$content .= '<p class="status-note">' . self::escape( $note ) . '</p>';
 		}
 
-		return self::render_document( $title, $content, array(), $support_html );
+		return self::render_document( $title, $content, array(), $support_html, $illustration );
 	}
 
 	/**
@@ -63,20 +65,25 @@ class StatusPage {
 	 */
 	public static function render_http_error( int $status, string $base_path = '', string $debug_message = '' ): string {
 		if ( 404 === $status ) {
-			$title       = __( 'Page not found', 'peakurl' );
-			$description = __( 'We couldn’t find the page you’re looking for. Check the address, or contact the person who shared it with you.', 'peakurl' );
+			$illustration = 'missing-page';
+			$title        = __( 'Page not found', 'peakurl' );
+			$description  = __( 'We couldn’t find the page you’re looking for. Check the address, or contact the person who shared it with you.', 'peakurl' );
 		} elseif ( 403 === $status ) {
-			$title       = __( 'Access to this page is restricted', 'peakurl' );
-			$description = __( 'You don’t have permission to open this page. Contact the site administrator if you think you should have access.', 'peakurl' );
+			$illustration = 'forbidden';
+			$title        = __( 'Access to this page is restricted', 'peakurl' );
+			$description  = __( 'You don’t have permission to open this page. Contact the site administrator if you think you should have access.', 'peakurl' );
 		} elseif ( 429 === $status ) {
-			$title       = __( 'Please wait a moment', 'peakurl' );
-			$description = __( 'Too many requests have been made. Give it a moment, then try again.', 'peakurl' );
+			$illustration = 'rate-limit';
+			$title        = __( 'Please wait a moment', 'peakurl' );
+			$description  = __( 'Too many requests have been made. Give it a moment, then try again.', 'peakurl' );
 		} elseif ( $status >= 500 ) {
-			$title       = __( 'Unable to complete your request', 'peakurl' );
-			$description = __( 'PeakURL encountered a server error. Please try again. If the problem persists, contact the site administrator.', 'peakurl' );
+			$illustration = 'server-error';
+			$title        = __( 'Unable to complete your request', 'peakurl' );
+			$description  = __( 'PeakURL encountered a server error. Please try again. If the problem persists, contact the site administrator.', 'peakurl' );
 		} else {
-			$title       = __( 'Unable to open this page', 'peakurl' );
-			$description = __( 'This request couldn’t be completed. Check the address, or contact the site administrator for help.', 'peakurl' );
+			$illustration = 'request-error';
+			$title        = __( 'Unable to open this page', 'peakurl' );
+			$description  = __( 'This request couldn’t be completed. Check the address, or contact the site administrator for help.', 'peakurl' );
 		}
 
 		$details = '';
@@ -93,6 +100,7 @@ class StatusPage {
 			rtrim( $base_path, '/' ) . '/',
 			__( 'Go to homepage', 'peakurl' ),
 			$details,
+			$illustration,
 		);
 	}
 
@@ -103,18 +111,24 @@ class StatusPage {
 	 * @param string                $content_html Trusted HTML, including any access-check forms.
 	 * @param array<string, string> $metadata     Optional language, direction, and generator version.
 	 * @param string                $support_html Trusted, escaped supporting markup.
+	 * @param string|null           $illustration Semantic illustration from the shared manifest.
+	 * @param bool                  $compact      Keep access checks compact and near the header.
 	 * @return string Complete HTML document with inline assets for offline/error recovery.
 	 */
-	public static function render_document( string $title, string $content_html, array $metadata = array(), string $support_html = '' ): string {
-		$title     = self::escape( $title );
-		$language  = self::escape( $metadata['htmlLang'] ?? ( function_exists( 'get_html_lang_attribute' ) ? get_html_lang_attribute() : 'en' ) );
-		$direction = 'rtl' === ( $metadata['textDirection'] ?? ( function_exists( 'get_text_direction' ) ? get_text_direction() : 'ltr' ) ) ? 'rtl' : 'ltr';
-		$generator = function_exists( 'get_generator_tag' ) ? get_generator_tag( $metadata['version'] ?? null ) : '';
-		$logo      = self::escape( Logo::get_data_url() );
-		$artwork   = 'data:image/svg+xml;base64,' . base64_encode( (string) file_get_contents( __DIR__ . '/status-artwork.svg' ) );
-		$styles    = file_get_contents( __DIR__ . '/status-page.css' ) . file_get_contents( __DIR__ . '/public-link-forms.css' ) . Brand::get_badge_styles();
-		$powered   = Brand::get_powered_by_badge();
-		$tagline   = self::escape( Brand::get_tagline() );
+	public static function render_document( string $title, string $content_html, array $metadata = array(), string $support_html = '', ?string $illustration = null, bool $compact = false ): string {
+		$title          = self::escape( $title );
+		$language       = self::escape( $metadata['htmlLang'] ?? ( function_exists( 'get_html_lang_attribute' ) ? get_html_lang_attribute() : 'en' ) );
+		$direction      = 'rtl' === ( $metadata['textDirection'] ?? ( function_exists( 'get_text_direction' ) ? get_text_direction() : 'ltr' ) ) ? 'rtl' : 'ltr';
+		$generator      = function_exists( 'get_generator_tag' ) ? get_generator_tag( $metadata['version'] ?? null ) : '';
+		$logo           = self::escape( Logo::get_data_url() );
+		$is_compact     = $compact || null === $illustration;
+		$page_class     = $is_compact ? 'status-page status-page-compact' : 'status-page';
+		$artwork_html   = self::format_illustration( $illustration, $is_compact );
+		$access_artwork = $is_compact ? $artwork_html : '';
+		$hero_artwork   = $is_compact ? '' : $artwork_html;
+		$styles         = file_get_contents( __DIR__ . '/status-page.css' ) . file_get_contents( __DIR__ . '/public-link-forms.css' ) . Brand::get_badge_styles();
+		$powered        = Brand::get_powered_by_badge();
+		$tagline        = self::escape( Brand::get_tagline() );
 
 		return <<<HTML
 <!doctype html>
@@ -128,15 +142,31 @@ class StatusPage {
 <style>{$styles}</style>
 <script>try{const theme=localStorage.getItem('theme');if(theme==='light'||theme==='dark')document.documentElement.dataset.statusTheme=theme;}catch{}</script>
 </head>
-<body class="status-page">
+<body class="{$page_class}">
 <div class="status-container">
 <header class="status-header"><div class="status-brand"><img src="{$logo}" alt="" width="40" height="40"><span>PeakURL</span></div><span class="status-tagline">{$tagline}</span></header>
-<main class="status-main"><section class="status-hero"><div class="status-copy">{$content_html}</div><img class="status-artwork" src="{$artwork}" alt="" width="360" height="280"></section>{$support_html}</main>
+<main class="status-main"><section class="status-hero"><div class="status-copy">{$access_artwork}{$content_html}</div>{$hero_artwork}</section>{$support_html}</main>
 <footer class="status-footer">{$powered}</footer>
 </div>
 </body>
 </html>
 HTML;
+	}
+
+	/**
+	 * Embed semantic artwork without an external request or database dependency.
+	 *
+	 * @param string|null $name    Canonical illustration name.
+	 * @param bool        $compact Whether this is a compact access-check layout.
+	 * @return string Decorative, escaped image markup.
+	 */
+	private static function format_illustration( ?string $name, bool $compact ): string {
+		if ( null === $name ) {
+			return '';
+		}
+		$source     = self::escape( Illustration::get_data_url( $name ) );
+		$class_name = $compact ? 'status-access-artwork' : 'status-artwork';
+		return '<img class="' . $class_name . '" data-status-illustration="' . self::escape( $name ) . '" src="' . $source . '" alt="" aria-hidden="true" draggable="false" oncontextmenu="return false" width="360" height="280">';
 	}
 
 	/**

@@ -1,10 +1,10 @@
 @layer components {
 	.dashboard-sidebar-overlay {
-		@apply fixed inset-0 z-40 bg-overlay transition-opacity duration-300 ease-out motion-reduce:transition-none lg:hidden;
+		@apply fixed inset-0 z-40 bg-overlay transition-opacity duration-200 ease-out motion-reduce:transition-none lg:hidden;
 	}
 
 	.dashboard-sidebar-overlay-open {
-		@apply opacity-100 pointer-events-auto ease-in;
+		@apply opacity-100 pointer-events-auto;
 	}
 
 	.dashboard-sidebar-overlay-closed {
@@ -12,7 +12,7 @@
 	}
 
 	.dashboard-sidebar {
-		@apply fixed inset-y-0 left-0 z-50 flex w-60 -translate-x-full flex-col border-r border-navigation-stroke bg-surface overflow-x-hidden transition-all duration-400 ease-out motion-reduce:transition-none lg:z-30 lg:translate-x-0;
+		@apply fixed inset-y-0 left-0 z-50 flex w-60 -translate-x-full flex-col border-r border-navigation-stroke bg-surface overflow-x-hidden transition-all duration-200 ease-out motion-reduce:transition-none lg:z-30 lg:translate-x-0;
 	}
 
 	.dashboard-sidebar-rtl {
@@ -20,7 +20,7 @@
 	}
 
 	.dashboard-sidebar-open {
-		@apply translate-x-0 shadow-2xl duration-500 ease-in;
+		@apply translate-x-0 shadow-2xl;
 	}
 
 	@media (min-width: 1024px) {

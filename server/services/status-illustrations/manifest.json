@@ -1,0 +1,20 @@
+{
+	"backend": "backend.svg",
+	"database": "database.svg",
+	"missing-link": "missing-link.svg",
+	"missing-page": "missing-page.svg",
+	"expired": "expired.svg",
+	"forbidden": "forbidden.svg",
+	"rate-limit": "rate-limit.svg",
+	"maintenance": "maintenance.svg",
+	"server-error": "server-error.svg",
+	"password": "password.svg",
+	"verification": "verification.svg",
+	"request-error": "request-error.svg",
+	"sign-in": "sign-in.svg",
+	"account-recovery": "account-recovery.svg",
+	"password-reset": "password-reset.svg",
+	"installation": "installation.svg",
+	"database-setup": "database-setup.svg",
+	"administrator": "administrator.svg"
+}

@@ -16,7 +16,9 @@ const Tabs = ({ tabs, activeTab }: TabsProps) => {
 						to={`/dashboard/tools/import/${tab.id}`}
 						className={cn(
 							"import-layout-tab",
-							activeTab === tab.id && "import-layout-tab-active"
+							activeTab === tab.id
+								? "import-layout-tab-active"
+								: "import-layout-tab-inactive"
 						)}
 					>
 						<TabIcon className="import-layout-tab-icon" />

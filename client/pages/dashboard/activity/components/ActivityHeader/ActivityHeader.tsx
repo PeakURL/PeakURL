@@ -69,11 +69,13 @@ export function ActivityHeader({
 					"Review link changes and user-management events in one place with filters, timestamps, and actor details."
 				)}
 				actions={
-					<RefreshButton
-						onRefresh={onRefresh}
-						isRefreshing={isRefreshing}
-						label={__("Refresh activity history")}
-					/>
+					<div className="activity-page-header-actions">
+						<RefreshButton
+							onRefresh={onRefresh}
+							isRefreshing={isRefreshing}
+							label={__("Refresh activity history")}
+						/>
+					</div>
 				}
 			/>
 

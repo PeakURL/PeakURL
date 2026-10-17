@@ -9,3 +9,4 @@ export { PageHeader, type PageHeaderProps } from "./PageHeader";
 export { RefreshButton } from "./RefreshButton";
 
 export { PoweredBy } from "./PoweredBy";
+export { PageIllustration } from "./PageIllustration";

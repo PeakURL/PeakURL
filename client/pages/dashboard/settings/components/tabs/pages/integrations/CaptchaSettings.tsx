@@ -285,41 +285,43 @@ function CaptchaSettingsContent({
 				<div className="settings-section-tools">
 					<DocumentationLink href="https://go.peakurl.org/7dcc41" />
 					<div className="integrations-tab-controls">
-						<span className="integrations-tab-status-pill">
-							{statusLabel}
-						</span>
-						<div className="integrations-tab-switch">
-							<span
-								id="captcha-protection-toggle-label"
-								className="sr-only"
-							>
-								{__("Enable CAPTCHA protection")}
+						<div className="integrations-tab-toggle-group">
+							<span className="integrations-tab-status-pill">
+								{statusLabel}
 							</span>
-							<button
-								type="button"
-								role="switch"
-								aria-checked={form.enabled}
-								aria-labelledby="captcha-protection-toggle-label"
-								disabled={!canManage || isLoading}
-								onClick={() =>
-									setProtectionEnabled(!form.enabled)
-								}
-								className={cn(
-									"integrations-tab-switch-track",
-									form.enabled
-										? "integrations-tab-switch-track-active"
-										: "integrations-tab-switch-track-inactive"
-								)}
-							>
+							<div className="integrations-tab-switch">
 								<span
+									id="captcha-protection-toggle-label"
+									className="sr-only"
+								>
+									{__("Enable CAPTCHA protection")}
+								</span>
+								<button
+									type="button"
+									role="switch"
+									aria-checked={form.enabled}
+									aria-labelledby="captcha-protection-toggle-label"
+									disabled={!canManage || isLoading}
+									onClick={() =>
+										setProtectionEnabled(!form.enabled)
+									}
 									className={cn(
-										"integrations-tab-switch-thumb",
+										"integrations-tab-switch-track",
 										form.enabled
-											? "integrations-tab-switch-thumb-active"
-											: "integrations-tab-switch-thumb-inactive"
+											? "integrations-tab-switch-track-active"
+											: "integrations-tab-switch-track-inactive"
 									)}
-								/>
-							</button>
+								>
+									<span
+										className={cn(
+											"integrations-tab-switch-thumb",
+											form.enabled
+												? "integrations-tab-switch-thumb-active"
+												: "integrations-tab-switch-thumb-inactive"
+										)}
+									/>
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>

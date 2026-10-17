@@ -104,12 +104,13 @@ function ResetPasswordPage() {
 
 	return (
 		<AuthLayout
+			illustration="password-reset"
 			badgeIcon={LockKeyhole}
 			badgeLabel={__("Secure Reset")}
 			brandHref={RESET_PASSWORD_LOGO_URL}
-			showcaseTitle={__("Choose a new password and get back to work.")}
+			showcaseTitle={__("Keep your account secure")}
 			showcaseCopy={__(
-				"Once the password changes, PeakURL revokes the old sessions so only the new login remains valid."
+				"Choose a password you don’t use elsewhere. Your previous sessions will be signed out."
 			)}
 			noteTitle={__("Use at least 8 characters.")}
 			noteCopy={__(

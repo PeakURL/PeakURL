@@ -69,16 +69,17 @@ function ForgotPasswordPage() {
 
 	return (
 		<AuthLayout
+			illustration="account-recovery"
 			badgeIcon={KeyRound}
 			badgeLabel={__("Account Recovery")}
 			brandHref={FORGOT_PASSWORD_LOGO_URL}
-			showcaseTitle={__("Reset your password")}
+			showcaseTitle={__("Secure account recovery")}
 			showcaseCopy={__(
-				"Enter the email address or username linked to your PeakURL account and we'll send a secure reset link."
+				"Get back to your links with a password reset link sent to your account email."
 			)}
-			noteTitle={__("Secure account recovery")}
+			noteTitle={__("Your account stays protected")}
 			noteCopy={__(
-				"For your security, password reset links expire after 1 hour. Changing your password will also immediately revoke all active sessions across your devices."
+				"Reset links expire after 1 hour. Changing your password signs out your existing sessions."
 			)}
 			cardTitle={__("Forgot your password?")}
 			cardCopy={__(

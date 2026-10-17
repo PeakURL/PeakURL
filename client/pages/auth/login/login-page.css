@@ -1,46 +1,16 @@
 @layer components {
-	.login-page-layout {
-		@apply flex min-h-screen;
-	}
-
-	.login-page-aside {
-		@apply hidden flex-col justify-between px-10 py-10 text-white lg:flex lg:w-[54%] xl:px-16;
-	}
-
-	.login-page-brand {
-		-webkit-animation: auth-page-fade-up 0.5s ease-out both;
-		animation: auth-page-fade-up 0.5s ease-out both;
-	}
-
-	.login-page-content {
-		@apply space-y-8;
-	}
-
-	.login-page-heading {
-		@apply text-[2.5rem] font-bold leading-[1.1] tracking-tight xl:text-5xl;
-		-webkit-animation: auth-page-fade-up 0.5s ease-out 0.06s both;
-		animation: auth-page-fade-up 0.5s ease-out 0.06s both;
-	}
-
 	.login-page-heading-accent {
 		@apply text-primary-300;
 	}
 
-	.login-page-summary {
-		@apply max-w-sm text-[15px] leading-relaxed text-slate-400;
-		-webkit-animation: auth-page-fade-up 0.5s ease-out 0.12s both;
-		animation: auth-page-fade-up 0.5s ease-out 0.12s both;
-	}
-
 	.login-page-highlight-list {
-		@apply flex flex-wrap gap-3;
+		@apply grid grid-cols-3 gap-4;
 		-webkit-animation: auth-page-fade-up 0.5s ease-out 0.18s both;
 		animation: auth-page-fade-up 0.5s ease-out 0.18s both;
 	}
 
 	.login-page-highlight {
-		@apply flex items-center gap-3 rounded-xl border border-white/8 px-4 py-3;
-		background: rgb(255 255 255 / 0.06);
+		@apply flex min-w-0 flex-col items-start gap-2;
 	}
 
 	.login-page-highlight-icon {
@@ -52,45 +22,7 @@
 	}
 
 	.login-page-highlight-copy {
-		@apply text-[12px] text-slate-400;
-	}
-
-	.login-page-aside-footer {
-		@apply pt-6;
-	}
-
-	.login-page-mobile-footer {
-		@apply flex justify-center px-6 pb-6 pt-2 lg:hidden;
-	}
-
-	.login-page-panel {
-		@apply flex flex-1 flex-col bg-surface text-heading;
-	}
-
-	.login-page-mobile-header {
-		@apply flex items-center justify-between px-6 py-5 lg:hidden;
-	}
-
-	.login-page-panel-content {
-		@apply flex flex-1 items-center justify-center px-6 py-8 sm:px-10;
-	}
-
-	.login-page-card {
-		@apply w-full max-w-xs sm:max-w-sm;
-		-webkit-animation: auth-page-scale-in 0.45s ease-out 0.08s both;
-		animation: auth-page-scale-in 0.45s ease-out 0.08s both;
-	}
-
-	.login-page-card-icon {
-		@apply inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-selected text-accent;
-	}
-
-	.login-page-card-title {
-		@apply mt-5 text-2xl font-bold tracking-tight text-heading;
-	}
-
-	.login-page-card-copy {
-		@apply mt-2 text-sm leading-relaxed text-text-muted;
+		@apply mt-1 text-xs leading-5 text-slate-400;
 	}
 
 	.login-page-alert {

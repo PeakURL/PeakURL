@@ -12,35 +12,9 @@
 	--error-border: light-dark(#fecaca, #7f1d1d);
 	--radius: 8px;
 }
-.hero-icon-wrap {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 44px;
-	height: 44px;
-	border-radius: 12px;
-	background: var(--status-soft);
-	color: var(--status-accent);
-	margin-bottom: 20px;
-}
-.hero-icon {
-	width: 24px;
-	height: 24px;
-}
-.title {
-	margin: 0;
-	font-size: clamp(28px, 3vw, 38px);
-	line-height: 1.2;
-	letter-spacing: -0.03em;
-}
-.subtitle {
-	margin: 16px 0 0;
-	color: var(--status-muted);
-	font-size: 15px;
-	line-height: 1.8;
-}
 .status-copy form {
-	max-width: 460px;
+	max-width: 440px;
+	margin-inline: auto;
 }
 form {
 	margin-top: 28px;
@@ -148,7 +122,7 @@ form {
 	flex-shrink: 0;
 	margin-top: 1px;
 }
-/* Keep CAPTCHA status text and retry actions clear without widening the card. */
+/* Keep CAPTCHA status text and retry actions clear without obscuring the provider challenge. */
 .captcha-form {
 	margin-top: 24px;
 }
@@ -248,13 +222,15 @@ form {
 	justify-content: center;
 	align-items: center;
 	min-height: 78px;
-	overflow: hidden;
+	overflow: visible;
 }
 .captcha-widget[hidden] {
 	display: none;
 }
-.captcha-widget iframe {
-	max-width: 100%;
+.captcha-turnstile {
+	display: flex;
+	justify-content: center;
+	width: min(100%, 300px);
 }
 .captcha-noscript {
 	margin-top: 14px;
@@ -287,4 +263,14 @@ form {
 .captcha-retry-button:focus-visible {
 	outline: 2px solid var(--status-accent);
 	outline-offset: 3px;
+}
+
+.captcha-status-panel-success {
+	background: var(--status-soft);
+	border-color: var(--status-line);
+	color: var(--status-accent);
+}
+.captcha-status-panel-success .captcha-spinner {
+	animation: none;
+	border-color: currentColor;
 }

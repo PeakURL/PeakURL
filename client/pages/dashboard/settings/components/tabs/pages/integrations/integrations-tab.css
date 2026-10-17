@@ -1,6 +1,10 @@
 @layer components {
 	.integrations-tab-controls {
-		@apply flex min-w-0 max-w-full flex-wrap items-center gap-3;
+		@apply flex min-w-0 max-w-full flex-wrap items-center gap-2.5 sm:gap-3;
+	}
+
+	.integrations-tab-toggle-group {
+		@apply inline-flex items-center gap-2 shrink-0;
 	}
 
 	.integrations-tab-badge {
@@ -21,15 +25,15 @@
 	}
 
 	.integrations-tab-webhook-card {
-		@apply rounded-xl border border-stroke bg-surface-alt/30 p-4;
+		@apply rounded-xl border border-stroke bg-surface p-4 sm:p-5 shadow-2xs hover:border-stroke-strong transition-colors;
 	}
 
 	.integrations-tab-webhook-header {
-		@apply flex flex-col gap-4 xl:flex-row xl:flex-wrap xl:items-start xl:justify-between;
+		@apply flex flex-col gap-3.5 sm:gap-4 lg:flex-row lg:items-start lg:justify-between;
 	}
 
 	.integrations-tab-webhook-main {
-		@apply flex flex-col gap-1.5 min-w-0 flex-1;
+		@apply flex flex-col gap-2 min-w-0 flex-1;
 	}
 
 	.integrations-tab-webhook-title-row {
@@ -41,50 +45,50 @@
 	}
 
 	.integrations-tab-webhook-url-row {
-		@apply flex items-center gap-1.5 min-w-0 max-w-full;
+		@apply flex items-center justify-between gap-2 min-w-0 max-w-full rounded-lg border border-stroke/60 bg-surface-alt/60 px-2.5 py-1.5;
 	}
 
 	.integrations-tab-webhook-dot {
-		@apply h-2 w-2 rounded-full shrink-0;
+		@apply h-2.5 w-2.5 rounded-full shrink-0;
 	}
 
 	.integrations-tab-webhook-url {
-		@apply font-mono text-xs text-text-muted truncate select-all;
+		@apply font-mono text-xs text-text-muted truncate select-all flex-1 min-w-0;
 		direction: ltr;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
 	}
 
 	.integrations-tab-icon-button {
-		@apply rounded p-1 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading shrink-0;
+		@apply rounded p-1 text-text-muted transition-colors hover:bg-surface hover:text-heading shrink-0;
 	}
 
 	.integrations-tab-webhook-badges {
-		@apply flex flex-wrap items-center gap-1.5 mt-0.5;
+		@apply flex flex-wrap items-center gap-1.5 pt-0.5;
 	}
 
 	.integrations-tab-webhook-actions {
-		@apply flex flex-wrap items-center gap-1.5 shrink-0 self-start sm:self-center;
+		@apply flex flex-wrap items-center gap-1.5 shrink-0 self-start lg:self-start;
 	}
 
 	.integrations-tab-action-btn {
-		@apply h-7! text-xs! px-2! py-0! gap-1!;
+		@apply h-8! text-xs! font-medium! px-2.5! py-0! gap-1.5! rounded-lg!;
 	}
 
 	.integrations-tab-delete-btn {
-		@apply h-7 w-7 inline-flex items-center justify-center rounded-lg border border-stroke text-text-muted hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:hover:border-red-900/40 dark:hover:bg-red-950/20 dark:hover:text-red-400 transition-colors;
+		@apply h-8 w-8 inline-flex items-center justify-center rounded-lg border border-stroke text-text-muted hover:border-red-300 hover:bg-red-50 hover:text-red-600 dark:hover:border-red-900/40 dark:hover:bg-red-950/20 dark:hover:text-red-400 transition-colors shrink-0;
 	}
 
 	.integrations-tab-webhook-footer {
-		@apply mt-4 pt-3 border-t border-stroke/70 flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between text-xs text-text-muted;
+		@apply mt-3.5 pt-3 border-t border-stroke/70 flex flex-col gap-2 md:flex-row md:items-center md:justify-between text-xs text-text-muted;
 	}
 
 	.integrations-tab-webhook-events {
-		@apply flex flex-wrap items-center gap-1.5;
+		@apply flex flex-wrap items-center gap-1.5 min-w-0;
 	}
 
 	.integrations-tab-webhook-meta {
-		@apply flex flex-wrap items-center gap-2 text-xs text-text-muted;
+		@apply flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs text-text-muted min-w-0;
 	}
 
 	/* Empty State */
@@ -201,7 +205,7 @@
 
 	/* Signing Secret Display Card in Settings */
 	.integrations-tab-secret-code {
-		@apply font-mono bg-surface-alt px-2 py-0.5 rounded border border-stroke/50 text-text-muted text-xs inline-block;
+		@apply font-mono bg-surface-alt px-2 py-0.5 rounded border border-stroke/50 text-text-muted text-xs inline-block truncate;
 		direction: ltr;
 		unicode-bidi: -moz-plaintext;
 		unicode-bidi: plaintext;
@@ -210,27 +214,27 @@
 	/* Form Footer Actions */
 	/* Health Badges */
 	.integrations-tab-item-health-pill {
-		@apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+		@apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium border border-transparent;
 	}
 
 	.integrations-tab-item-health-pill-success {
-		@apply bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400;
+		@apply bg-emerald-50 text-emerald-700 border-emerald-500/20 dark:bg-emerald-950/30 dark:text-emerald-300;
 	}
 
 	.integrations-tab-item-health-pill-warning {
-		@apply bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400;
+		@apply bg-amber-50 text-amber-700 border-amber-500/20 dark:bg-amber-950/30 dark:text-amber-300;
 	}
 
 	.integrations-tab-item-health-pill-danger {
-		@apply bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400;
+		@apply bg-red-50 text-red-700 border-red-500/20 dark:bg-red-950/30 dark:text-red-300;
 	}
 
 	.integrations-tab-item-health-pill-neutral {
-		@apply bg-surface-alt text-text-muted;
+		@apply bg-surface-alt text-text-muted border-stroke;
 	}
 
 	.integrations-tab-item-health-pill-info {
-		@apply bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400;
+		@apply bg-blue-50 text-blue-700 border-blue-500/20 dark:bg-blue-950/30 dark:text-blue-300;
 	}
 
 	/* ─── Webhook Delivery Slide-Over Drawer (Matching Links Drawer & Scheduled Jobs) ─── */

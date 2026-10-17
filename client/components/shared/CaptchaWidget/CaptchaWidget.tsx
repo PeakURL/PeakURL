@@ -8,6 +8,9 @@ import {
 import { getPeakURLData } from "@/data";
 import { useTheme } from "@/providers/ThemeProvider";
 
+// Flexible Turnstile widgets have a 300px minimum; narrower forms use compact mode.
+const TURNSTILE_MIN_FLEXIBLE_WIDTH = 300;
+
 export interface CaptchaWidgetRef {
 	/**
 	 * Returns the CAPTCHA token, or undefined if CAPTCHA is disabled.
@@ -50,17 +53,28 @@ export const CaptchaWidget = forwardRef<CaptchaWidgetRef>((_, ref) => {
 			scriptUrl += `?render=${encodeURIComponent(captcha.siteKey)}`;
 		}
 
-		if (document.querySelector(`script[src="${scriptUrl}"]`)) {
+		if (
+			(captcha.provider === "turnstile" && window.turnstile) ||
+			(captcha.provider === "recaptcha" && window.grecaptcha)
+		) {
 			setScriptLoaded(true);
 			return;
 		}
 
-		const script = document.createElement("script");
-		script.src = scriptUrl;
-		script.async = true;
-		script.defer = true;
-		script.onload = () => setScriptLoaded(true);
-		document.head.appendChild(script);
+		const existingScript = document.querySelector<HTMLScriptElement>(
+			`script[src="${scriptUrl}"]`
+		);
+		const script = existingScript ?? document.createElement("script");
+		const handleLoad = () => setScriptLoaded(true);
+		// An existing script can still be downloading when another widget mounts.
+		script.addEventListener("load", handleLoad, { once: true });
+		if (!existingScript) {
+			script.src = scriptUrl;
+			script.async = true;
+			script.defer = true;
+			document.head.appendChild(script);
+		}
+		return () => script.removeEventListener("load", handleLoad);
 	}, [captcha]);
 
 	useEffect(() => {
@@ -77,18 +91,41 @@ export const CaptchaWidget = forwardRef<CaptchaWidgetRef>((_, ref) => {
 			return;
 		}
 
-		const widgetId = window.turnstile.render(containerRef.current, {
-			sitekey: captcha.siteKey,
-			theme,
-			callback: (token: string) => setTurnstileToken(token),
-			"error-callback": () => setTurnstileToken(""),
-			"expired-callback": () => setTurnstileToken(""),
-		});
+		const container = containerRef.current;
+		const turnstile = window.turnstile;
+		let widgetId: string | number | undefined;
+		let currentSize: "compact" | "flexible" | undefined;
+		let widgetRevision = 0;
+		const renderWidget = () => {
+			const size =
+				container.clientWidth < TURNSTILE_MIN_FLEXIBLE_WIDTH
+					? "compact"
+					: "flexible";
+			if (size === currentSize) return;
+			const revision = ++widgetRevision;
+			if (widgetId !== undefined) turnstile.remove(widgetId);
+			currentSize = size;
+			setTurnstileToken("");
+			const updateToken = (token: string) => {
+				if (revision === widgetRevision) setTurnstileToken(token);
+			};
+			widgetId = turnstile.render(container, {
+				sitekey: captcha.siteKey,
+				theme,
+				size,
+				callback: updateToken,
+				"error-callback": () => updateToken(""),
+				"expired-callback": () => updateToken(""),
+			});
+		};
+		const observer = new ResizeObserver(renderWidget);
+		observer.observe(container);
+		renderWidget();
 
 		return () => {
-			if (window.turnstile) {
-				window.turnstile.remove(widgetId);
-			}
+			widgetRevision++;
+			observer.disconnect();
+			if (widgetId !== undefined) turnstile.remove(widgetId);
 		};
 	}, [scriptLoaded, captcha, theme]);
 
@@ -130,16 +167,8 @@ export const CaptchaWidget = forwardRef<CaptchaWidgetRef>((_, ref) => {
 	}
 
 	return (
-		<div
-			className="captcha-widget"
-			style={{
-				marginBottom: "1.5rem",
-				minHeight: "65px",
-				display: "flex",
-				justifyContent: "center",
-			}}
-		>
-			<div ref={containerRef} />
+		<div className="captcha-widget">
+			<div className="captcha-widget-control" ref={containerRef} />
 		</div>
 	);
 });

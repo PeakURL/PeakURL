@@ -121,11 +121,11 @@
 
 	/* Segmented Tabs Skeleton */
 	.system-status-skeleton-tabs {
-		@apply flex-1 sm:flex-initial grid grid-cols-2 sm:inline-flex items-center gap-1 rounded-lg bg-surface-alt p-1 border border-stroke/70;
+		@apply flex-1 sm:flex-initial grid grid-cols-2 sm:inline-flex items-center gap-1 rounded-lg bg-surface p-1 border border-stroke;
 	}
 
 	.system-status-skeleton-tab {
-		@apply h-7 w-full sm:w-20 rounded-md;
+		@apply h-8 w-full sm:w-20 rounded bg-surface-alt;
 	}
 
 	/* Panel Skeleton */

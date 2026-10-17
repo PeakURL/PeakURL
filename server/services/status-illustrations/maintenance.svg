@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#8b9fc9">
+  <style>.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
+  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <rect class="wash" x="57" y="61" width="246" height="158" rx="20"/>
+    <path d="M57 95h246m-217-17h1m12 0h1m12 0h1m-22 47h52m-52 23h34m-34 23h44"/>
+    <g transform="translate(46 22) scale(.82)">
+      <path class="solid" d="M237 112a29 29 0 0 0-34 36l-47 47a12 12 0 0 0 17 17l47-47a29 29 0 0 0 36-34l-19 19-20-20z" vector-effect="non-scaling-stroke"/>
+      <path d="m165 202 1-1" vector-effect="non-scaling-stroke"/>
+    </g>
+    <path d="M292 234h20m-10-10v20" opacity=".5"/>
+  </g>
+</svg>

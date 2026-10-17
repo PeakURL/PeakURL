@@ -1,9 +1,9 @@
 @layer components {
 	.dashboard-overview-header-actions {
-		@apply flex shrink-0 items-center gap-2;
+		@apply flex items-center gap-2 w-full sm:w-auto shrink-0;
 	}
 
 	.dashboard-overview-header-select {
-		@apply min-w-40;
+		@apply flex-1 sm:flex-initial min-w-0 sm:min-w-40;
 	}
 }

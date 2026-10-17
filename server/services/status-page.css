@@ -61,7 +61,7 @@ html[data-status-theme="dark"] .status-page {
 	display: flex;
 	flex-direction: column;
 	min-height: 100dvh;
-	width: min(100% - 64px, 1080px);
+	width: min(100% - 64px, 1200px);
 	margin-inline: auto;
 }
 .status-header {
@@ -69,7 +69,8 @@ html[data-status-theme="dark"] .status-page {
 	align-items: center;
 	justify-content: space-between;
 	gap: 24px;
-	min-height: 104px;
+	min-height: 96px;
+	padding-block: 20px;
 	border-bottom: 1px solid var(--status-line);
 }
 .status-brand {
@@ -88,7 +89,7 @@ html[data-status-theme="dark"] .status-page {
 }
 .status-tagline {
 	color: var(--status-muted);
-	font-size: 14px;
+	font-size: 13px;
 	text-decoration: none;
 }
 
@@ -97,19 +98,20 @@ html[data-status-theme="dark"] .status-page {
 	flex: 1;
 	flex-direction: column;
 	justify-content: center;
-	padding-block: clamp(48px, 9vh, 96px) 48px;
+	padding-block: clamp(40px, 7vh, 80px) 48px;
 }
 .status-hero {
 	display: grid;
-	grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+	grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
 	align-items: center;
-	gap: 48px;
+	gap: clamp(32px, 6vw, 88px);
+	text-align: start;
 }
 .status-copy {
 	min-width: 0;
 }
 .status-eyebrow {
-	margin: 0 0 16px;
+	margin: 0 0 12px;
 	color: var(--status-accent);
 	font-size: 12px;
 	font-weight: 650;
@@ -119,34 +121,38 @@ html[data-status-theme="dark"] .status-page {
 .status-title {
 	margin: 0;
 	color: var(--status-ink);
-	font-size: clamp(28px, 3.3vw, 42px);
+	font-size: clamp(32px, 3.5vw, 48px);
 	font-weight: 650;
 	letter-spacing: -0.035em;
 	line-height: 1.18;
 	text-wrap: balance;
 }
 .status-description {
+	max-width: 520px;
 	margin: 20px 0 0;
 	color: var(--status-muted);
-	font-size: 16px;
+	font-size: 17px;
 	line-height: 1.8;
 	text-wrap: pretty;
 }
 .status-note {
-	margin: 20px 0 0;
+	max-width: 480px;
+	margin: 24px 0 0;
+	padding-block-start: 20px;
+	border-top: 1px solid var(--status-line);
 	color: var(--status-muted);
-	font-size: 14px;
+	font-size: 13px;
 }
 .status-actions {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 12px;
-	margin-top: 28px;
+	margin-top: 24px;
 }
 .status-artwork {
 	display: block;
 	width: 100%;
-	max-width: 360px;
+	max-width: 500px;
 	height: auto;
 	margin-inline: auto;
 }
@@ -190,16 +196,6 @@ html[data-status-theme="dark"] .status-page {
 	color: var(--status-muted);
 	font-size: 14px;
 }
-.status-support-links {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 12px 24px;
-}
-.status-support-links a {
-	color: var(--status-accent);
-	font-size: 14px;
-	text-underline-offset: 4px;
-}
 .status-footer {
 	display: flex;
 	align-items: center;
@@ -211,47 +207,46 @@ html[data-status-theme="dark"] .status-page {
 	color: var(--status-muted);
 	font-size: 12px;
 }
-.status-page-embedded {
-	min-height: auto;
-	background: transparent;
-}
-.status-page-embedded .status-container {
-	min-height: auto;
-	width: 100%;
-	max-width: 1080px;
-}
-.status-page-embedded .status-header {
-	min-height: 72px;
-}
 @media (max-width: 700px) {
 	.status-container {
 		width: calc(100% - 40px);
 	}
 	.status-header {
-		min-height: 80px;
-		align-items: flex-start;
-		flex-direction: column;
+		min-height: 88px;
 		padding-block: 16px;
-		gap: 10px;
+		flex-wrap: wrap;
+		gap: 8px 20px;
 	}
 	.status-main {
-		padding-block: 40px 32px;
+		padding-block: 20px 28px;
 	}
 	.status-hero {
 		grid-template-columns: minmax(0, 1fr);
 		gap: 24px;
+		text-align: center;
 	}
 	.status-artwork {
 		grid-row: 1;
-		width: 180px;
+		width: min(100%, 280px);
 	}
 	.status-description {
 		font-size: 15px;
+		margin-inline: auto;
+	}
+	.status-title {
+		font-size: 30px;
+	}
+	.status-note {
+		margin-inline: auto;
+	}
+	.status-actions {
+		justify-content: center;
 	}
 	.status-support {
 		margin-top: 32px;
 	}
 	.status-footer {
+		justify-content: center;
 		padding-block: 20px;
 	}
 	.status-tagline {
@@ -266,4 +261,45 @@ html[data-status-theme="dark"] .status-page {
 .status-header .logo-name {
 	font-size: 20px;
 	font-weight: 700;
+}
+
+/* Password and security checks share a centered column with a small illustration. */
+.status-page-compact .status-main {
+	justify-content: center;
+	padding-block: 32px;
+}
+.status-page-compact .status-hero {
+	grid-template-columns: minmax(0, 1fr);
+	width: 100%;
+	max-width: 440px;
+	margin-inline: auto;
+	gap: 0;
+	text-align: start;
+}
+.status-page-compact .status-title {
+	font-size: clamp(28px, 3vw, 34px);
+}
+.status-page-compact .status-title,
+.status-page-compact .status-description {
+	text-align: center;
+	margin-inline: auto;
+}
+.status-page-compact .status-description {
+	margin-block-start: 12px;
+	font-size: 15px;
+	line-height: 1.7;
+}
+
+.status-access-artwork {
+	display: block;
+	width: 144px;
+	height: auto;
+	margin-inline: auto;
+	margin-block-end: 20px;
+}
+@media (max-width: 700px) {
+	.status-access-artwork {
+		width: 112px;
+		margin-block-end: 16px;
+	}
 }

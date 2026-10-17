@@ -22,90 +22,49 @@
 	}
 }
 
-@-webkit-keyframes auth-page-scale-in {
-	from {
-		opacity: 0;
-		transform: scale(0.97);
-	}
-
-	to {
-		opacity: 1;
-		transform: scale(1);
-	}
-}
-
-@keyframes auth-page-scale-in {
-	from {
-		opacity: 0;
-		transform: scale(0.97);
-	}
-
-	to {
-		opacity: 1;
-		transform: scale(1);
-	}
-}
-
 @layer components {
-	.auth-page,
-	.login-page-layout {
-		@apply min-h-screen text-white;
-		background:
-			radial-gradient(
-				circle at top left,
-				color-mix(in srgb, var(--color-primary-300) 16%, transparent),
-				transparent 32%
-			),
-			linear-gradient(
-				180deg,
-				var(--color-primary-950),
-				var(--color-primary-900)
-			);
-	}
-
-	.auth-page-recovery {
-		@apply px-6 py-10 sm:px-8;
+	.auth-page {
+		@apply min-h-screen bg-bg px-4 py-6 text-heading sm:px-8 sm:py-10;
 	}
 
 	.auth-page-container {
-		@apply mx-auto flex min-h-[calc(100vh-5rem)] w-full items-center justify-center;
-	}
-
-	.auth-page-container-compact {
-		@apply max-w-5xl;
+		@apply mx-auto flex w-full max-w-6xl flex-col items-center justify-center;
+		min-height: calc(100dvh - 3rem);
 	}
 
 	.auth-page-layout {
-		@apply grid w-full gap-8 lg:grid-cols-[1.15fr_0.85fr];
+		@apply grid w-full max-w-lg overflow-hidden rounded-3xl border border-stroke bg-surface shadow-xl shadow-primary-950/5 lg:max-w-none lg:grid-cols-2;
+		animation: auth-page-fade-up 0.4s ease-out both;
 	}
 
 	.auth-page-showcase {
-		@apply hidden rounded-[28px] border border-white/10 p-10 shadow-2xl shadow-slate-950/30 lg:flex lg:flex-col lg:justify-between;
-		background: rgb(255 255 255 / 0.04);
-		backdrop-filter: blur(18px);
-	}
-
-	.auth-page-showcase-header {
-		-webkit-animation: auth-page-fade-up 0.5s ease-out both;
-		animation: auth-page-fade-up 0.5s ease-out both;
+		@apply hidden min-w-0 flex-col justify-center gap-6 p-10 text-white lg:flex;
+		background: linear-gradient(
+			145deg,
+			var(--color-primary-900),
+			var(--color-primary-950)
+		);
 	}
 
 	.auth-page-badge {
-		@apply inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-300;
+		@apply mb-5 inline-flex items-center gap-2 text-xs font-medium text-primary-300;
 	}
 
 	.auth-page-showcase-title {
-		@apply mt-6 text-4xl font-semibold tracking-tight text-white;
+		@apply text-4xl font-semibold leading-tight tracking-tight text-white;
+		text-wrap: balance;
 	}
 
 	.auth-page-showcase-copy {
-		@apply mt-4 max-w-lg text-base leading-7 text-slate-400;
+		@apply mt-4 max-w-md text-sm leading-6 text-slate-400;
 	}
 
-	.auth-page-note {
-		@apply rounded-2xl border border-white/10 bg-slate-900/60 p-5;
-		-webkit-animation: auth-page-fade-up 0.5s ease-out 0.14s both;
-		animation: auth-page-fade-up 0.5s ease-out 0.14s both;
+	.auth-page-illustration {
+		@apply mx-auto block h-auto w-full max-w-[360px] shrink-0;
+	}
+
+	.auth-page-showcase-footer {
+		@apply border-t border-white/10 pt-5;
 	}
 
 	.auth-page-note-title {
@@ -117,13 +76,17 @@
 	}
 
 	.auth-page-card {
-		@apply min-w-0 rounded-[28px] border border-stroke bg-surface p-6 text-heading shadow-2xl shadow-slate-950/10 sm:p-8;
-		-webkit-animation: auth-page-scale-in 0.45s ease-out 0.08s both;
-		animation: auth-page-scale-in 0.45s ease-out 0.08s both;
+		@apply flex min-w-0 flex-col justify-center p-6 text-heading sm:p-8 lg:p-10;
+	}
+
+	.auth-page-card > * {
+		width: 100%;
+		max-width: 28rem;
+		margin-inline: auto;
 	}
 
 	.auth-page-card-header {
-		@apply mb-7 flex flex-wrap items-center justify-between gap-x-4 gap-y-3;
+		@apply mb-8 flex flex-wrap items-center justify-between gap-x-4 gap-y-3;
 	}
 
 	.auth-page-logo {
@@ -136,10 +99,6 @@
 
 	.auth-page-logo .logo-name {
 		@apply text-xl leading-7 text-heading;
-	}
-
-	.auth-page-logo.logo-dark .logo-name {
-		@apply text-white;
 	}
 
 	.auth-page-logo:focus-visible {
@@ -159,7 +118,7 @@
 	}
 
 	.auth-page-form {
-		@apply mt-8 space-y-5;
+		@apply mt-7 space-y-5;
 	}
 
 	.auth-page-submit {
@@ -181,10 +140,14 @@
 	.auth-page-status-link {
 		@apply mt-4 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 transition hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-emerald-200;
 	}
-}
 
-@layer components {
 	.auth-page-powered {
 		@apply mt-6 flex justify-center;
+	}
+}
+
+@media (min-width: 640px) {
+	.auth-page-container {
+		min-height: calc(100dvh - 5rem);
 	}
 }

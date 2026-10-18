@@ -269,7 +269,12 @@ class Client {
 		}
 
 		// MaxMind AWS S3 distribution buckets: geoip.maxmind.com.s3.amazonaws.com or geoip.maxmind.com.s3.<region>.amazonaws.com
-		if ( preg_match( '/^geoip\.maxmind\.com\.s3(\.[a-z0-9-]+)?\.amazonaws\.com$/', $host ) ) {
+		if ( preg_match( '/^(geoip\.maxmind\.com|mm-prod-geoip-databases)\.s3(\.[a-z0-9-]+)?\.amazonaws\.com$/', $host ) ) {
+			return true;
+		}
+
+		// MaxMind Cloudflare R2 distribution endpoints: mm-prod-geoip-databases.<account-id>.r2.cloudflarestorage.com
+		if ( preg_match( '/^mm-prod-geoip-databases(\.[a-z0-9_-]+)?\.r2\.cloudflarestorage\.com$/', $host ) ) {
 			return true;
 		}
 

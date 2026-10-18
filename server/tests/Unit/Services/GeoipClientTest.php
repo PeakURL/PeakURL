@@ -105,6 +105,32 @@ class GeoipClientTest extends TestCase {
 		$this->addToAssertionCount( 1 );
 	}
 
+	public function test_is_allowlisted_redirect_host(): void {
+		$client = new Client( $this->create_context() );
+
+		// 1. Direct MaxMind endpoints.
+		$this->assertTrue( $client->is_allowlisted_redirect_host( 'download.maxmind.com' ) );
+		$this->assertTrue( $client->is_allowlisted_redirect_host( 'updates.maxmind.com' ) );
+		$this->assertTrue( $client->is_allowlisted_redirect_host( 'cdn.maxmind.com' ) );
+
+		// 2. MaxMind AWS S3 distribution endpoints.
+		$this->assertTrue( $client->is_allowlisted_redirect_host( 'geoip.maxmind.com.s3.amazonaws.com' ) );
+		$this->assertTrue( $client->is_allowlisted_redirect_host( 'geoip.maxmind.com.s3.us-east-1.amazonaws.com' ) );
+		$this->assertTrue( $client->is_allowlisted_redirect_host( 'mm-prod-geoip-databases.s3.amazonaws.com' ) );
+		$this->assertTrue( $client->is_allowlisted_redirect_host( 'mm-prod-geoip-databases.s3.us-west-2.amazonaws.com' ) );
+
+		// 3. MaxMind Cloudflare R2 distribution endpoints.
+		$this->assertTrue( $client->is_allowlisted_redirect_host( 'mm-prod-geoip-databases.a2649acb697e2c09b632799562c076f2.r2.cloudflarestorage.com' ) );
+		$this->assertTrue( $client->is_allowlisted_redirect_host( 'mm-prod-geoip-databases.r2.cloudflarestorage.com' ) );
+
+		// 4. Untrusted origins must be rejected.
+		$this->assertFalse( $client->is_allowlisted_redirect_host( 'untrusted-bucket.r2.cloudflarestorage.com' ) );
+		$this->assertFalse( $client->is_allowlisted_redirect_host( 'untrusted-s3-bucket.s3.amazonaws.com' ) );
+		$this->assertFalse( $client->is_allowlisted_redirect_host( 'mm-prod-geoip-databases.attacker.com' ) );
+		$this->assertFalse( $client->is_allowlisted_redirect_host( 'notmaxmind.com' ) );
+		$this->assertFalse( $client->is_allowlisted_redirect_host( 'maxmind.com.attacker.com' ) );
+	}
+
 	public function test_redirect_handling_credential_isolation_and_transports(): void {
 		$port        = 58200 + random_int( 1, 900 );
 		$server_file = $this->temp_dir . '/server.php';

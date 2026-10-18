@@ -3,6 +3,7 @@ import {
 	formatDateOnly,
 	formatLocalizedDateTime,
 	formatRelativeTime,
+	formatReleaseDate,
 	getActiveLocale,
 	getSiteTimeZone,
 } from "../../client/shared/dates";
@@ -295,6 +296,29 @@ test.describe("Date Utilities", () => {
 			} finally {
 				Date.prototype.getTimezoneOffset = originalGetTimezoneOffset;
 			}
+		});
+	});
+
+	test.describe("formatReleaseDate", () => {
+		test("formats release date with relative distance, day name, and calendar date", () => {
+			const pastDate = new Date(Date.now() - 86400 * 2 * 1000)
+				.toISOString()
+				.slice(0, 10);
+			const formatted = formatReleaseDate(pastDate);
+			expect(formatted).toContain("2 days ago");
+			expect(formatted).toMatch(
+				/2 days ago • [A-Za-z]+,\s+[A-Z][a-z]{2}\s+\d{1,2},\s+\d{4}/
+			);
+		});
+
+		test("handles ISO timestamps with day name", () => {
+			const formatted = formatReleaseDate("2026-10-01T00:00:00Z");
+			expect(formatted).toMatch(/ago • Thursday, Oct 1, 2026/);
+		});
+
+		test("falls back safely on malformed dates", () => {
+			const formatted = formatReleaseDate("invalid-date");
+			expect(formatted).toBe("invalid-date");
 		});
 	});
 });

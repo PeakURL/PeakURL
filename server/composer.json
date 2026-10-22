@@ -3,7 +3,7 @@
 	"description": "PHP application runtime for the PeakURL dashboard.",
 	"type": "project",
 	"require": {
-		"php": "^8.0",
+		"php": "^8.3",
 		"ext-pdo": "*",
 		"ext-pdo_mysql": "*",
 		"maxmind-db/reader": "^1.13.1",

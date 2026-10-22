@@ -24,7 +24,7 @@
 		"lint:web": "eslint client --cache",
 		"lint:web:fix": "eslint client --cache --fix",
 		"lint:php": "composer --working-dir=server run phpcs",
-		"lint:php:syntax": "find server -path 'server/vendor' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l && php -l index.php install.php setup-config.php database-error.php",
+		"lint:php:syntax": "find server -path 'server/vendor' -prune -o -name '*.php' -print0 | xargs -0 -n1 php -l && php -l index.php install.php setup-config.php database-error.php load.php",
 		"format": "npm run format:web && npm run format:php",
 		"format:check": "npm run format:web:check && npm run format:php:check",
 		"format:web": "prettier . --write --ignore-unknown",
@@ -61,17 +61,17 @@
 		"@tailwindcss/vite": "^4.3.3",
 		"@visx/geo": "^4.0.0",
 		"@visx/zoom": "^4.0.0",
-		"@wordpress/i18n": "^6.30.0",
+		"@wordpress/i18n": "^7.0.0",
 		"chart.js": "^4.5.1",
 		"d3-scale": "^4.0.2",
 		"date-fns": "^4.4.0",
 		"iso-3166": "4.4.0",
-		"lucide-react": "^1.59.0",
+		"lucide-react": "^1.61.0",
 		"qrcode": "^1.5.4",
 		"react": "^19.3.1",
 		"react-dom": "^19.3.1",
 		"react-redux": "^9.3.0",
-		"react-router": "^8.4.0",
+		"react-router": "^8.5.0",
 		"tailwindcss": "^4.3.3",
 		"topojson-client": "^3.1.0"
 	},
@@ -93,7 +93,7 @@
 		"lint-staged": "^17.6.0",
 		"prettier": "^3.9.10",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.71.2",
-		"vite": "^8.3.4"
+		"typescript-eslint": "^8.72.0",
+		"vite": "^8.3.5"
 	}
 }

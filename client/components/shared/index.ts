@@ -6,7 +6,7 @@ export { ThemeToggle } from "./ThemeToggle";
 export { CaptchaWidget, type CaptchaWidgetRef } from "./CaptchaWidget";
 export type * from "./types";
 export { PageHeader, type PageHeaderProps } from "./PageHeader";
-export { RefreshButton } from "./RefreshButton";
+export { RefreshButton, type RefreshButtonProps } from "./RefreshButton";
 
 export { PoweredBy } from "./PoweredBy";
 export { PageIllustration } from "./PageIllustration";

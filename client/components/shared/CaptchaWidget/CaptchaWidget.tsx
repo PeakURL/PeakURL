@@ -94,13 +94,13 @@ export const CaptchaWidget = forwardRef<CaptchaWidgetRef>((_, ref) => {
 		const container = containerRef.current;
 		const turnstile = window.turnstile;
 		let widgetId: string | number | undefined;
-		let currentSize: "compact" | "flexible" | undefined;
+		let currentSize: "compact" | "normal" | undefined;
 		let widgetRevision = 0;
 		const renderWidget = () => {
 			const size =
 				container.clientWidth < TURNSTILE_MIN_FLEXIBLE_WIDTH
 					? "compact"
-					: "flexible";
+					: "normal";
 			if (size === currentSize) return;
 			const revision = ++widgetRevision;
 			if (widgetId !== undefined) turnstile.remove(widgetId);

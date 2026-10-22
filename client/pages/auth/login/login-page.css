@@ -38,7 +38,7 @@
 	}
 
 	.login-page-form {
-		@apply mt-7 space-y-5;
+		@apply mt-7 w-full max-w-[20.5rem] space-y-5 mx-auto lg:ms-0 lg:me-auto;
 	}
 
 	.login-page-link-row {
@@ -51,7 +51,7 @@
 
 	.login-page-link,
 	.login-page-secondary-link {
-		@apply text-sm font-medium text-accent transition-colors duration-150 hover:text-heading;
+		@apply text-sm font-medium text-blue-600 underline-offset-4 transition-colors duration-150 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300;
 	}
 
 	.login-page-secondary-link {
@@ -71,7 +71,7 @@
 	}
 
 	.login-page-muted-link {
-		@apply text-xs font-medium text-text-muted transition-colors duration-150 hover:text-heading;
+		@apply text-xs font-medium text-blue-600 underline-offset-4 transition-colors duration-150 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300;
 	}
 
 	.login-page-submit {
@@ -91,7 +91,10 @@
 	}
 
 	.login-page-back-action {
-		@apply inline-flex items-center gap-1.5 text-xs font-medium text-text-muted transition-colors duration-150 hover:text-heading;
+		@apply inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 underline-offset-4 transition-colors duration-150 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300;
+	}
+	.login-page-back-action > svg {
+		@apply text-accent shrink-0;
 	}
 	.login-page-remember-me {
 		@apply mb-4;

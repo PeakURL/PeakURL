@@ -22,64 +22,51 @@
 	.settings-api-endpoint-section > .settings-api-endpoint {
 		@apply bg-surface-alt/30 p-4;
 	}
+	.settings-api-list-wrap {
+		@apply w-full overflow-hidden rounded-xl border border-stroke bg-surface shadow-2xs;
+	}
 	.settings-api-keys-list {
-		@apply m-0 list-none overflow-hidden rounded-xl border border-stroke bg-surface-alt/30 p-0;
+		@apply m-0 w-full list-none divide-y divide-stroke/60 bg-surface p-0;
 	}
 	.settings-api-key-row {
-		@apply grid min-w-0 grid-cols-[minmax(0,1fr)_2.5rem] items-start gap-4 p-4;
+		@apply flex min-w-0 items-center justify-between gap-3 p-3.5 text-start transition-colors hover:bg-surface-alt/40 sm:gap-4 sm:p-4;
 	}
-	.settings-api-key-row + .settings-api-key-row {
-		@apply border-t border-stroke/70;
-	}
-	.settings-api-key-identity {
-		@apply flex min-w-0 items-start gap-3;
+	.settings-api-key-main {
+		@apply flex min-w-0 flex-1 items-center gap-3;
 	}
 	.settings-api-key-icon {
-		@apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-selected-border bg-selected text-accent;
+		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-accent/20 bg-accent/10 text-accent;
 	}
-	.settings-api-key-details {
-		@apply min-w-0 flex-1 text-start;
+	.settings-api-key-content {
+		@apply flex min-w-0 flex-1 flex-col gap-1;
 	}
-	.settings-api-key-title-row {
-		@apply flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1;
+	.settings-api-key-heading {
+		@apply min-w-0;
 	}
 	.settings-api-key-title {
-		@apply text-sm font-semibold leading-6 text-heading;
-		overflow-wrap: anywhere;
-	}
-	.settings-api-key-status {
-		@apply inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:text-emerald-300;
+		@apply block truncate text-sm font-semibold text-heading;
 	}
 	.settings-api-key-meta {
-		@apply mt-1 flex items-start gap-1.5 text-xs leading-5 text-text-muted;
-	}
-	.settings-api-key-meta > svg {
-		@apply mt-1 shrink-0;
-	}
-	.settings-api-key-token {
-		@apply col-span-2 min-w-0 space-y-1.5;
-	}
-	.settings-api-key-token-label {
-		@apply text-xs font-medium text-text-muted;
+		@apply flex min-w-0 flex-wrap items-center gap-2 text-xs text-text-muted;
 	}
 	.settings-api-key-value {
-		@apply block min-w-0 rounded-lg border border-stroke bg-surface px-3 py-2.5 text-start font-mono text-xs leading-5 text-heading;
+		@apply inline-flex min-w-0 items-center rounded-md border border-stroke bg-surface-alt px-2 py-0.5 font-mono text-[11px] font-medium text-heading select-all;
 		overflow-wrap: anywhere;
 	}
-	.settings-api-key-delete-button {
-		@apply col-start-2 row-start-1 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-stroke bg-surface text-text-muted transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50 dark:hover:border-red-500/40 dark:hover:bg-red-500/10 dark:hover:text-red-400;
+	.settings-api-key-meta-dot {
+		@apply text-text-muted/60;
 	}
-	@container settings-content (min-width: 42rem) {
-		.settings-api-key-row {
-			grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.85fr) 2.5rem;
-			@apply items-center gap-5 p-5;
-		}
-		.settings-api-key-token {
-			@apply col-span-1;
-		}
-		.settings-api-key-delete-button {
-			@apply col-start-3;
-		}
+	.settings-api-key-date {
+		@apply shrink-0 text-xs text-text-muted;
+	}
+	.settings-api-key-actions {
+		@apply flex shrink-0 items-center;
+	}
+	.settings-api-key-delete-button {
+		@apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-stroke/70 bg-surface text-text-muted transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:gap-1.5 sm:px-2.5 dark:border-stroke/60 dark:bg-surface-alt/40 dark:hover:border-red-900/40 dark:hover:bg-red-500/15 dark:hover:text-red-400;
+	}
+	.settings-api-key-delete-text {
+		@apply hidden sm:inline text-xs font-medium;
 	}
 
 	.settings-api-empty {

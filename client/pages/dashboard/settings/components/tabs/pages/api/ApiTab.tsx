@@ -85,20 +85,22 @@ function ApiTab({
 				</div>
 
 				{user?.apiKeys && user.apiKeys.length > 0 ? (
-					<ul
-						className="settings-api-keys-list"
-						aria-label={__("Saved API keys")}
-						dir={direction}
-					>
-						{user.apiKeys.map((apiKey) => (
-							<ApiKeyItem
-								key={apiKey.id}
-								apiKey={apiKey}
-								isDeleting={isDeletingKey}
-								onDelete={onDeleteKey}
-							/>
-						))}
-					</ul>
+					<div className="settings-api-list-wrap">
+						<ul
+							className="settings-api-keys-list"
+							aria-label={__("Saved API keys")}
+							dir={direction}
+						>
+							{user.apiKeys.map((apiKey) => (
+								<ApiKeyItem
+									key={apiKey.id}
+									apiKey={apiKey}
+									isDeleting={isDeletingKey}
+									onDelete={onDeleteKey}
+								/>
+							))}
+						</ul>
+					</div>
 				) : (
 					<div className="settings-api-empty">
 						<div className="settings-api-empty-icon">

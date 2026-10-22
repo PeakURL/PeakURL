@@ -1,6 +1,7 @@
 @import "./Avatar/avatar.css";
 @import "./Button/button.css";
 @import "./Input/input.css";
+@import "./SearchInput/search-input.css";
 @import "./TextArea/textarea.css";
 @import "./Select/select.css";
 @import "./ReadOnlyValueBlock/read-only-value-block.css";

@@ -12,7 +12,7 @@ export default function Header() {
 			description={__(
 				"Bulk import short links into PeakURL from CSV, JSON, or XML files, pasted URL lists, or automated API payloads."
 			)}
-			actions={
+			docsLink={
 				<a
 					href="https://go.peakurl.org/979434"
 					target="_blank"

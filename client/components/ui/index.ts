@@ -11,6 +11,7 @@ export * from "./Button";
 export * from "./ConfirmDialog";
 export * from "./DrawerDialog";
 export * from "./Input";
+export * from "./SearchInput";
 export * from "./TextArea";
 export * from "./ReadOnlyValueBlock";
 export * from "./Loading";

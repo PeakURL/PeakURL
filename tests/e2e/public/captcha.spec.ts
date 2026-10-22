@@ -183,8 +183,8 @@ test("a provider that never loads times out instead of waiting forever", async (
 	page,
 }) => {
 	await page.clock.install();
-	await mockPublicPage(page);
-	await page.route(turnstileScript, (route) =>
+	await mockPublicPage(page, "recaptcha");
+	await page.route(recaptchaScript, (route) =>
 		route.fulfill({
 			contentType: "application/javascript",
 			body: "/* SDK never initializes */",

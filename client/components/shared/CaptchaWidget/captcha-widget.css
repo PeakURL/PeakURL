@@ -1,9 +1,9 @@
 @layer components {
 	.captcha-widget {
-		@apply flex min-h-[65px] w-full justify-center;
+		@apply flex min-h-16.25 w-full justify-center;
 	}
 
 	.captcha-widget-control {
-		@apply flex min-w-0 w-full justify-center;
+		@apply flex min-w-0 max-w-75 w-full justify-center;
 	}
 }

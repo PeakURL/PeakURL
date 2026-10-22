@@ -1,6 +1,6 @@
 @layer components {
 	.dashboard-overview-header-actions {
-		@apply flex items-center gap-2 w-64 sm:w-auto shrink-0;
+		@apply flex items-center gap-2 w-full sm:w-auto shrink-0;
 	}
 
 	.dashboard-overview-header-select {

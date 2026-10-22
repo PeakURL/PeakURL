@@ -489,7 +489,7 @@ function LinksPage() {
 					)}
 
 					<LinksTable
-						key={filterContextKey}
+						filterContextKey={filterContextKey}
 						links={paginatedLinks}
 						totalCount={totalItems}
 						searchQuery={searchQuery}

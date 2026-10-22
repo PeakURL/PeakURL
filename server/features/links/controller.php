@@ -696,30 +696,41 @@ class Controller extends BaseController {
 		bool $has_error,
 		string $error
 	): string {
-		$state       = $has_error ? 'error' : 'pending';
-		$status_text = htmlspecialchars(
+		$state        = $has_error ? 'error' : 'pending';
+		$is_turnstile = 'turnstile' === $provider;
+		$is_hidden    = $is_turnstile && ! $has_error;
+		$status_text  = htmlspecialchars(
 			$has_error
 			? $error
 			: __( 'Waiting for verification…', 'peakurl' ),
 			ENT_QUOTES,
 			'UTF-8',
 		);
-		$retry_label = htmlspecialchars(
+		$retry_label  = htmlspecialchars(
 			__( 'Try again', 'peakurl' ),
 			ENT_QUOTES,
 			'UTF-8',
 		);
-		$has_retry   = in_array(
+		$has_retry    = in_array(
 			$provider,
 			array( 'recaptcha', 'turnstile' ),
 			true,
 		);
-		$retry_html  = $has_retry
+		$retry_html   = $has_retry
 		? '<button id="captcha-retry-button" class="captcha-retry-button" type="button"' . ( $has_error ? '' : ' hidden' ) . '>' . $retry_label . '</button>'
 		: '';
 
-		return '<div id="captcha-status-panel" class="captcha-status-panel captcha-status-panel-' . $state . '">' .
-			'<span class="captcha-spinner" aria-hidden="true"></span>' .
+		$check_svg   = '<svg class="captcha-status-icon captcha-status-icon-success" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="m6.5 10 2.5 2.5 4.5-5"/></svg>';
+		$warning_svg = '<svg class="captcha-status-icon captcha-status-icon-warning" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="M10 6.5v4.5"/><path d="M10 13.75h.01"/></svg>';
+		$error_svg   = '<svg class="captcha-status-icon captcha-status-icon-error" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="m7.25 7.25 5.5 5.5"/><path d="m12.75 7.25-5.5 5.5"/></svg>';
+
+		return '<div id="captcha-status-panel" class="captcha-status-panel captcha-status-panel-' . $state . '"' . ( $is_hidden ? ' hidden' : '' ) . '>' .
+			'<span class="captcha-status-indicator" aria-hidden="true">' .
+				'<span class="captcha-spinner"></span>' .
+				$check_svg .
+				$warning_svg .
+				$error_svg .
+			'</span>' .
 			'<span class="captcha-status-content">' .
 				'<span id="captcha-status-text" class="captcha-status-text" role="status" aria-live="polite">' . $status_text . '</span>' .
 				$retry_html .

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useNotification } from "@/components";
 import { useAdminAccess } from "@/hooks";
@@ -20,6 +20,7 @@ import {
 	ActivityTable,
 } from "./components";
 import { useActivityFilter, useActivitySelection } from "./hooks";
+import { getActivityMessage, getActivityPersonName } from "./lib";
 import type { RecentActivity } from "./types";
 
 function ActivityPage() {
@@ -40,6 +41,45 @@ function ActivityPage() {
 		refetch,
 	} = useActivityFilter();
 
+	const [searchQuery, setSearchQuery] = useState("");
+
+	const filteredItems = useMemo(() => {
+		const q = searchQuery.trim().toLowerCase();
+		if (!q) return items;
+		return items.filter((item) => {
+			if (getActivityMessage(item).toLowerCase().includes(q)) {
+				return true;
+			}
+			const actor = getActivityPersonName(item.actor);
+			if (actor && actor.toLowerCase().includes(q)) {
+				return true;
+			}
+			const targetUser = getActivityPersonName(item.user);
+			if (targetUser && targetUser.toLowerCase().includes(q)) {
+				return true;
+			}
+			if (item.link?.shortCode?.toLowerCase().includes(q)) {
+				return true;
+			}
+			if (item.link?.alias?.toLowerCase().includes(q)) {
+				return true;
+			}
+			if (item.link?.title?.toLowerCase().includes(q)) {
+				return true;
+			}
+			if (item.link?.destinationUrl?.toLowerCase().includes(q)) {
+				return true;
+			}
+			if (item.location?.city?.toLowerCase().includes(q)) {
+				return true;
+			}
+			if (item.location?.country?.toLowerCase().includes(q)) {
+				return true;
+			}
+			return false;
+		});
+	}, [items, searchQuery]);
+
 	const {
 		selectedActivityIds,
 		isAllSelected,
@@ -48,7 +88,7 @@ function ActivityPage() {
 		toggleSelectOne,
 		clearSelection,
 		selectedCount,
-	} = useActivitySelection(items);
+	} = useActivitySelection(filteredItems);
 
 	const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
 	const [clearAllOpen, setClearAllOpen] = useState(false);
@@ -160,7 +200,10 @@ function ActivityPage() {
 				<ActivitySkeleton isAdmin={isAdmin} />
 			) : (
 				<ActivityTable
-					items={items}
+					items={filteredItems}
+					totalItemsCount={items.length}
+					searchQuery={searchQuery}
+					onSearchChange={setSearchQuery}
 					category={category}
 					isAdmin={isAdmin}
 					selectedActivityIds={selectedActivityIds}

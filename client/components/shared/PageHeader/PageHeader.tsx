@@ -8,6 +8,7 @@ export interface PageHeaderProps {
 	title: string;
 	description: ReactNode;
 	actions?: ReactNode;
+	docsLink?: ReactNode;
 	/** Allows a page to retain positioning, such as the sticky Settings heading. */
 	className?: string;
 	/** Accessible title when the visible page name is intentionally shorter. */
@@ -20,6 +21,7 @@ export function PageHeader({
 	title,
 	description,
 	actions,
+	docsLink,
 	className,
 	titleLabel,
 }: PageHeaderProps) {
@@ -34,6 +36,9 @@ export function PageHeader({
 						{title}
 					</h1>
 					<p className="page-header-description">{description}</p>
+					{docsLink && (
+						<div className="page-header-docs-row">{docsLink}</div>
+					)}
 				</div>
 			</div>
 			{actions && <div className="page-header-actions">{actions}</div>}

@@ -32,7 +32,7 @@
 	}
 
 	.export-page-intro-text {
-		@apply text-xs leading-relaxed text-text-muted;
+		@apply text-sm leading-relaxed text-text-muted;
 	}
 
 	.export-page-intro-count {
@@ -87,11 +87,11 @@
 	}
 
 	.export-card-title {
-		@apply text-sm font-semibold text-heading;
+		@apply text-base font-semibold text-heading;
 	}
 
 	.export-card-summary {
-		@apply text-xs leading-relaxed text-text-muted;
+		@apply text-sm leading-relaxed text-text-muted;
 	}
 
 	.export-card-footer {
@@ -99,7 +99,7 @@
 	}
 
 	.export-card-format {
-		@apply text-[11px] font-medium text-text-muted truncate;
+		@apply text-xs font-medium text-text-muted truncate;
 	}
 
 	/* API Export Section */
@@ -125,7 +125,7 @@
 	}
 
 	.export-page-api-copy {
-		@apply mt-0.5 text-xs text-text-muted leading-relaxed;
+		@apply mt-1 text-sm text-text-muted leading-relaxed;
 	}
 
 	.export-page-api-grid {

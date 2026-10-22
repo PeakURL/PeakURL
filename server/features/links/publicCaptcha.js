@@ -19,7 +19,13 @@
 			? typeof window.turnstile?.render === "function"
 			: typeof window.grecaptcha?.execute === "function";
 
-	function setStatus(message, state, visible = true) {
+	function setStatus(
+		message,
+		state,
+		visible = config.provider !== "turnstile" ||
+			state === "warning" ||
+			state === "error"
+	) {
 		const panel = element("captcha-status-panel");
 		const needsRetry = state === "warning" || state === "error";
 		element("captcha-status-text").textContent = message;

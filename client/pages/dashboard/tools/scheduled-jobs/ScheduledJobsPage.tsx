@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import {
 	AlertCircle,
 	AlertTriangle,
@@ -7,7 +7,6 @@ import {
 	ExternalLink,
 	Play,
 	RefreshCw,
-	Search,
 	ShieldCheck,
 	SlidersHorizontal,
 	Trash2,
@@ -18,6 +17,8 @@ import {
 	Button,
 	ConfirmDialog,
 	PageHeader,
+	RefreshButton,
+	SearchInput,
 	useNotification,
 } from "@/components";
 import { useAdminAccess } from "@/hooks";
@@ -44,8 +45,6 @@ import {
 	calculateCronStatusSummary,
 } from "./summary";
 
-const MIN_REFRESH_DURATION_MS = 700;
-
 export function ScheduledJobsPage() {
 	const { canManageUpdates, isLoading: isAccessLoading } = useAdminAccess();
 	const notification = useNotification();
@@ -53,6 +52,7 @@ export function ScheduledJobsPage() {
 	const {
 		data,
 		isLoading: isCronLoading,
+		isFetching,
 		isError,
 		refetch,
 	} = useGetCronStatusQuery();
@@ -61,17 +61,6 @@ export function ScheduledJobsPage() {
 	const [runCronJob] = useRunCronJobMutation();
 	const [clearCronHistory, { isLoading: isClearingHistory }] =
 		useClearCronHistoryMutation();
-
-	const [isRefreshing, setIsRefreshing] = useState(false);
-	const refreshTimeoutRef = useRef<number | null>(null);
-
-	useEffect(() => {
-		return () => {
-			if (refreshTimeoutRef.current !== null) {
-				window.clearTimeout(refreshTimeoutRef.current);
-			}
-		};
-	}, []);
 
 	const [runningJobId, setRunningJobId] = useState<string | null>(null);
 	const [selectedJobForHistory, setSelectedJobForHistory] =
@@ -196,36 +185,6 @@ export function ScheduledJobsPage() {
 		}
 	};
 
-	const handleRefresh = async () => {
-		if (isRefreshing) {
-			return;
-		}
-
-		if (refreshTimeoutRef.current !== null) {
-			window.clearTimeout(refreshTimeoutRef.current);
-			refreshTimeoutRef.current = null;
-		}
-
-		setIsRefreshing(true);
-		const startedAt = Date.now();
-
-		try {
-			await refetch();
-		} finally {
-			const remaining =
-				MIN_REFRESH_DURATION_MS - (Date.now() - startedAt);
-
-			if (remaining > 0) {
-				refreshTimeoutRef.current = window.setTimeout(() => {
-					setIsRefreshing(false);
-					refreshTimeoutRef.current = null;
-				}, remaining);
-			} else {
-				setIsRefreshing(false);
-			}
-		}
-	};
-
 	/* ─── Non-admin gate ─── */
 	if (!isAccessLoading && !canManageUpdates) {
 		return (
@@ -256,32 +215,25 @@ export function ScheduledJobsPage() {
 				description={__(
 					"Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
 				)}
+				docsLink={
+					<a
+						href="https://go.peakurl.org/7a0e0b"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="page-header-docs-link"
+					>
+						{__("Read documentation")}{" "}
+						<ExternalLink size={14} aria-hidden="true" />
+					</a>
+				}
 				actions={
 					<div className="scheduled-jobs-page-hero-actions">
-						<a
-							href="https://go.peakurl.org/7a0e0b"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="page-header-docs-link"
-						>
-							{__("Read documentation")}{" "}
-							<ExternalLink size={14} aria-hidden="true" />
-						</a>
 						<div className="scheduled-jobs-hero-actions-primary">
-							<button
-								type="button"
-								onClick={handleRefresh}
-								disabled={isRefreshing}
-								className="page-header-icon-button"
-								aria-label={__("Refresh")}
-								title={__("Refresh scheduled jobs status")}
-							>
-								<RefreshCw
-									className={cn(
-										isRefreshing && "animate-spin"
-									)}
-								/>
-							</button>
+							<RefreshButton
+								label={__("Refresh scheduled jobs status")}
+								onRefresh={() => refetch()}
+								isRefreshing={isFetching}
+							/>
 							{canManageUpdates ? (
 								<Button
 									variant="outline"
@@ -481,19 +433,14 @@ export function ScheduledJobsPage() {
 					</div>
 
 					<div className="w-full sm:w-64">
-						<div className="relative">
-							<Search
-								size={14}
-								className="pointer-events-none absolute inset-s-3 top-1/2 -translate-y-1/2 text-text-muted"
-							/>
-							<input
-								type="text"
-								value={searchQuery}
-								onChange={(e) => setSearchQuery(e.target.value)}
-								placeholder={__("Search jobs...")}
-								className="form-control-base scheduled-jobs-search-input"
-							/>
-						</div>
+						<SearchInput
+							value={searchQuery}
+							onChange={setSearchQuery}
+							placeholder={__("Search jobs...")}
+							aria-label={__(
+								"Search registered background tasks"
+							)}
+						/>
 					</div>
 				</div>
 

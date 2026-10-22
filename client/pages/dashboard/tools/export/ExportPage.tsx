@@ -152,7 +152,7 @@ function ExportPage() {
 				description={__(
 					"Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."
 				)}
-				actions={
+				docsLink={
 					<a
 						href="https://go.peakurl.org/979434"
 						target="_blank"

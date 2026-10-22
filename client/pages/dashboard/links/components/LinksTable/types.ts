@@ -12,6 +12,7 @@ import type {
  * Props for the links table container component.
  */
 export interface LinksTableProps {
+	filterContextKey?: string;
 	links: LinkRecord[];
 	totalCount: number;
 	searchQuery: string;

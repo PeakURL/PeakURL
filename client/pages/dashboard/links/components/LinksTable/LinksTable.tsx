@@ -1,9 +1,7 @@
 import type { ChangeEvent } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
-import { Search, X } from "lucide-react";
-
-import { ConfirmDialog, useNotification } from "@/components";
+import { ConfirmDialog, SearchInput, useNotification } from "@/components";
 import { __ } from "@/i18n";
 import { useAdminAccess } from "@/hooks";
 import { copyToClipboard } from "@/shared/browser";
@@ -36,6 +34,7 @@ import type { LinkRecord } from "../types";
 import type { LinksTableProps } from "./types";
 
 const LinksTable = ({
+	filterContextKey,
 	links,
 	totalCount,
 	searchQuery,
@@ -96,6 +95,15 @@ const LinksTable = ({
 				(linkItem: LinkRecord) => linkItem.id === healthModalLinkId
 			) ?? null)
 		: null;
+
+	const previousFilterContextKeyRef = useRef(filterContextKey);
+
+	useEffect(() => {
+		if (previousFilterContextKeyRef.current !== filterContextKey) {
+			previousFilterContextKeyRef.current = filterContextKey;
+			setSelectedIds([]);
+		}
+	}, [filterContextKey]);
 
 	useEffect(() => {
 		if (!statsShortId) return;
@@ -392,29 +400,12 @@ const LinksTable = ({
 				</div>
 
 				<div className="w-full sm:w-64">
-					<div className="relative">
-						<Search
-							size={14}
-							className="pointer-events-none absolute inset-s-3 top-1/2 -translate-y-1/2 text-text-muted"
-						/>
-						<input
-							type="text"
-							value={searchQuery}
-							onChange={(e) => onSearchChange(e.target.value)}
-							placeholder={__("Search links...")}
-							className="form-control-base links-table-search-input"
-						/>
-						{searchQuery ? (
-							<button
-								type="button"
-								onClick={() => onSearchChange("")}
-								className="absolute inset-e-2.5 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-heading"
-								aria-label={__("Clear search")}
-							>
-								<X size={13} />
-							</button>
-						) : null}
-					</div>
+					<SearchInput
+						value={searchQuery}
+						onChange={onSearchChange}
+						placeholder={__("Search links...")}
+						aria-label={__("Search links")}
+					/>
 				</div>
 			</div>
 

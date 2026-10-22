@@ -17,7 +17,6 @@ import {
 	Globe,
 	HardDrive,
 	Mail,
-	RefreshCw,
 	Server,
 	ShieldCheck,
 	Trash2,
@@ -28,6 +27,7 @@ import {
 	Button,
 	ConfirmDialog,
 	PageHeader,
+	RefreshButton,
 	useNotification,
 } from "@/components";
 import { useTemporaryState } from "@/hooks";
@@ -1117,18 +1117,11 @@ function SystemStatusPage() {
 							onChange={setActiveView}
 						/>
 
-						<button
-							type="button"
-							onClick={() => refetch()}
-							disabled={isFetching}
-							className="page-header-icon-button"
-							aria-label={__("Refresh site health status")}
-							title={__("Refresh site health status")}
-						>
-							<RefreshCw
-								className={cn(isFetching && "animate-spin")}
-							/>
-						</button>
+						<RefreshButton
+							label={__("Refresh site health status")}
+							onRefresh={() => refetch()}
+							isRefreshing={isFetching}
+						/>
 					</div>
 				}
 			/>

@@ -6,6 +6,9 @@ import {
 	Trash2,
 	X,
 	ShieldCheck,
+	KeyRound,
+	Lock,
+	CheckCircle2,
 } from "lucide-react";
 
 import { Button, Input, SelectField, type SelectOption } from "@/components";
@@ -154,7 +157,6 @@ function CaptchaSettingsContent({
 	const savedConfigured = Boolean(savedActiveProvider && status?.configured);
 	const showingSavedKeys =
 		form.enabled && savedConfigured && !editingKeys && !providerChanged;
-	const showingKeyFields = form.enabled && !showingSavedKeys;
 	const providerDocs = getProviderDocs(form.provider);
 	const providerNote =
 		form.provider === "recaptcha"
@@ -354,165 +356,225 @@ function CaptchaSettingsContent({
 					</p>
 
 					{showingSavedKeys ? (
-						<div className="integrations-tab-captcha-summary">
-							<div className="integrations-tab-captcha-summary-grid">
-								<div className="integrations-tab-captcha-summary-item">
-									<span className="integrations-tab-captcha-summary-label">
-										{__("Provider")}
-									</span>
-									<span className="integrations-tab-captcha-summary-value">
-										{savedProviderLabel}
-									</span>
-								</div>
-								<div className="integrations-tab-captcha-summary-item">
-									<span className="integrations-tab-captcha-summary-label">
-										{__("Site Key")}
-									</span>
-									<code className="integrations-tab-captcha-summary-value integrations-tab-captcha-summary-code">
-										{savedSiteKeyHint}
-									</code>
-								</div>
-								<div className="integrations-tab-captcha-summary-item">
-									<span className="integrations-tab-captcha-summary-label">
-										{__("Secret Key")}
-									</span>
-									<code className="integrations-tab-captcha-summary-value integrations-tab-captcha-summary-code">
-										{savedSecretKeyHint}
-									</code>
+						<div className="integrations-tab-captcha-card">
+							<div className="integrations-tab-captcha-card-header">
+								<div className="integrations-tab-captcha-provider-info">
+									<div
+										className="integrations-tab-captcha-provider-icon"
+										aria-hidden="true"
+									>
+										<ShieldCheck size={18} />
+									</div>
+									<div className="integrations-tab-captcha-provider-details">
+										<div className="integrations-tab-captcha-provider-title-row">
+											<h5 className="integrations-tab-captcha-provider-name">
+												{savedProviderLabel}
+											</h5>
+											<span className="integrations-tab-captcha-status-badge">
+												<CheckCircle2
+													size={12}
+													aria-hidden="true"
+												/>
+												<span>{__("Configured")}</span>
+											</span>
+										</div>
+										<p className="integrations-tab-captcha-provider-desc">
+											{providerNote}
+										</p>
+									</div>
 								</div>
 							</div>
-							<p className="integrations-tab-captcha-summary-note">
-								{providerNote}
-							</p>
-						</div>
-					) : (
-						<div className="integrations-tab-form-grid integrations-tab-captcha-fields">
-							<SelectField
-								className="integrations-tab-captcha-provider"
-								label={__("Provider")}
-								id="captcha-provider"
-								value={form.provider}
-								onChange={handleProviderChange}
-								disabled={!canManage}
-								options={providerOptions}
-								ariaLabel={__("CAPTCHA provider")}
-								helperText={providerNote}
-							/>
 
-							<Input
-								label={__("Site Key")}
-								value={form.siteKey}
-								valueDirection="ltr"
-								disabled={!canManage}
-								autoCapitalize="off"
-								spellCheck={false}
-								placeholder={__("Paste site key")}
-								onChange={(event) =>
-									setForm((current) => ({
-										...current,
-										siteKey: event.target.value,
-									}))
-								}
-								helperText={
-									savedConfigured && !providerChanged
-										? __(
-												"Leave unchanged to keep the saved site key."
-											)
-										: undefined
-								}
-							/>
+							<div className="integrations-tab-captcha-card-body">
+								<div className="integrations-tab-captcha-creds-grid">
+									<div className="integrations-tab-captcha-cred-item">
+										<span className="integrations-tab-captcha-cred-label">
+											{__("Site Key")}
+										</span>
+										<div className="integrations-tab-captcha-cred-box">
+											<KeyRound
+												size={14}
+												className="integrations-tab-captcha-cred-icon"
+												aria-hidden="true"
+											/>
+											<code
+												className="integrations-tab-captcha-cred-value"
+												dir="ltr"
+											>
+												{savedSiteKeyHint}
+											</code>
+										</div>
+									</div>
 
-							<Input
-								label={__("Secret Key")}
-								type="password"
-								value={form.secretKey}
-								helperText={secretHelp}
-								valueDirection="ltr"
-								disabled={!canManage}
-								autoCapitalize="off"
-								spellCheck={false}
-								placeholder={
-									canKeepSavedSecret
-										? __("Keep saved secret")
-										: __("Paste secret key")
-								}
-								onChange={(event) =>
-									setForm((current) => ({
-										...current,
-										secretKey: event.target.value,
-									}))
-								}
-							/>
-						</div>
-					)}
-
-					<div className="integrations-tab-captcha-footer">
-						{providerDocs ? (
-							<a
-								href={providerDocs.href}
-								target="_blank"
-								rel="noreferrer"
-								className="integrations-tab-docs-link"
-							>
-								{providerDocs.label}
-								<ExternalLink size={14} />
-							</a>
-						) : (
-							<div />
-						)}
-
-						{showingSavedKeys ? (
-							<div className="integrations-tab-captcha-footer-actions">
-								<Button
-									size="sm"
-									variant="secondary"
-									icon={Pencil}
-									onClick={handleEditKeys}
-									disabled={!canManage || isSaving}
-								>
-									{__("Change keys")}
-								</Button>
-								<Button
-									size="sm"
-									variant="outline"
-									className="integrations-tab-captcha-remove-button"
-									icon={Trash2}
-									loading={isSaving}
-									onClick={handleRemoveKeys}
-									disabled={!canManage || isSaving}
-								>
-									{__("Remove keys")}
-								</Button>
+									<div className="integrations-tab-captcha-cred-item">
+										<span className="integrations-tab-captcha-cred-label">
+											{__("Secret Key")}
+										</span>
+										<div className="integrations-tab-captcha-cred-box">
+											<Lock
+												size={14}
+												className="integrations-tab-captcha-cred-icon"
+												aria-hidden="true"
+											/>
+											<code
+												className="integrations-tab-captcha-cred-value"
+												dir="ltr"
+											>
+												{savedSecretKeyHint}
+											</code>
+										</div>
+									</div>
+								</div>
 							</div>
-						) : showingKeyFields ? (
-							<div className="integrations-tab-captcha-footer-actions">
-								{savedConfigured ? (
+
+							<div className="integrations-tab-captcha-card-footer">
+								{providerDocs ? (
+									<a
+										href={providerDocs.href}
+										target="_blank"
+										rel="noreferrer"
+										className="integrations-tab-docs-link"
+									>
+										<span>{providerDocs.label}</span>
+										<ExternalLink
+											size={13}
+											aria-hidden="true"
+										/>
+									</a>
+								) : (
+									<div />
+								)}
+
+								<div className="integrations-tab-captcha-footer-actions">
 									<Button
 										size="sm"
 										variant="secondary"
-										icon={X}
-										onClick={handleCancelEdit}
+										icon={Pencil}
+										onClick={handleEditKeys}
 										disabled={!canManage || isSaving}
 									>
-										{__("Cancel")}
+										{__("Change keys")}
 									</Button>
-								) : null}
-								<Button
-									size="sm"
-									icon={Save}
-									loading={isSaving}
-									onClick={handleSave}
-									disabled={!canManage || isSaving}
-								>
-									{isSaving
-										? __("Saving...")
-										: __("Save Settings")}
-								</Button>
+									<Button
+										size="sm"
+										variant="outline"
+										className="integrations-tab-captcha-remove-button"
+										icon={Trash2}
+										loading={isSaving}
+										onClick={handleRemoveKeys}
+										disabled={!canManage || isSaving}
+									>
+										{__("Remove keys")}
+									</Button>
+								</div>
 							</div>
-						) : (
-							<div />
-						)}
-					</div>
+						</div>
+					) : (
+						<>
+							<div className="integrations-tab-form-grid integrations-tab-captcha-fields">
+								<SelectField
+									className="integrations-tab-captcha-provider"
+									label={__("Provider")}
+									id="captcha-provider"
+									value={form.provider}
+									onChange={handleProviderChange}
+									disabled={!canManage}
+									options={providerOptions}
+									ariaLabel={__("CAPTCHA provider")}
+									helperText={providerNote}
+								/>
+
+								<Input
+									label={__("Site Key")}
+									value={form.siteKey}
+									valueDirection="ltr"
+									disabled={!canManage}
+									autoCapitalize="off"
+									spellCheck={false}
+									placeholder={__("Paste site key")}
+									onChange={(event) =>
+										setForm((current) => ({
+											...current,
+											siteKey: event.target.value,
+										}))
+									}
+									helperText={
+										savedConfigured && !providerChanged
+											? __(
+													"Leave unchanged to keep the saved site key."
+												)
+											: undefined
+									}
+								/>
+
+								<Input
+									label={__("Secret Key")}
+									type="password"
+									value={form.secretKey}
+									helperText={secretHelp}
+									valueDirection="ltr"
+									disabled={!canManage}
+									autoCapitalize="off"
+									spellCheck={false}
+									placeholder={
+										canKeepSavedSecret
+											? __("Keep saved secret")
+											: __("Paste secret key")
+									}
+									onChange={(event) =>
+										setForm((current) => ({
+											...current,
+											secretKey: event.target.value,
+										}))
+									}
+								/>
+							</div>
+
+							<div className="integrations-tab-captcha-footer">
+								{providerDocs ? (
+									<a
+										href={providerDocs.href}
+										target="_blank"
+										rel="noreferrer"
+										className="integrations-tab-docs-link"
+									>
+										<span>{providerDocs.label}</span>
+										<ExternalLink
+											size={13}
+											aria-hidden="true"
+										/>
+									</a>
+								) : (
+									<div />
+								)}
+
+								<div className="integrations-tab-captcha-footer-actions">
+									{savedConfigured ? (
+										<Button
+											size="sm"
+											variant="secondary"
+											icon={X}
+											onClick={handleCancelEdit}
+											disabled={!canManage || isSaving}
+										>
+											{__("Cancel")}
+										</Button>
+									) : null}
+									<Button
+										size="sm"
+										icon={Save}
+										loading={isSaving}
+										onClick={handleSave}
+										disabled={!canManage || isSaving}
+									>
+										{isSaving
+											? __("Saving...")
+											: __("Save Settings")}
+									</Button>
+								</div>
+							</div>
+						</>
+					)}
 				</div>
 			) : (
 				showSaveButton && (

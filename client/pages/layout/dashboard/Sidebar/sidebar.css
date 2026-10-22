@@ -73,7 +73,7 @@
 	}
 
 	.dashboard-sidebar-section-toggle {
-		@apply flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-accent;
+		@apply flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent;
 	}
 
 	.dashboard-sidebar-section-toggle-active {
@@ -109,7 +109,7 @@
 	}
 
 	.dashboard-sidebar-submenu-open {
-		@apply max-h-96 opacity-100;
+		@apply max-h-96 opacity-100 overflow-visible;
 	}
 
 	.dashboard-sidebar-submenu-list {
@@ -118,12 +118,14 @@
 		margin-inline-start: 1.75rem;
 		-webkit-padding-start: 0.875rem;
 		padding-inline-start: 0.875rem;
+		-webkit-padding-end: 0.25rem;
+		padding-inline-end: 0.25rem;
 		-webkit-border-start: 1px solid var(--color-stroke);
 		border-inline-start: 1px solid var(--color-stroke);
 	}
 
 	.dashboard-sidebar-submenu-link {
-		@apply block rounded-md px-3 py-2 text-sm font-medium leading-snug text-text-muted transition-colors hover:bg-surface-alt hover:text-accent;
+		@apply block rounded-md px-3 py-2 text-sm font-medium leading-snug text-text-muted transition-colors hover:bg-surface-alt hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent;
 		text-align: start;
 	}
 
@@ -136,7 +138,7 @@
 	}
 
 	.dashboard-sidebar-link {
-		@apply relative flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-accent;
+		@apply relative flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent;
 	}
 
 	.dashboard-sidebar-link-active {
@@ -188,7 +190,7 @@
 	}
 
 	.dashboard-sidebar-about-link {
-		@apply flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-accent;
+		@apply flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent;
 	}
 
 	.dashboard-sidebar-about-link-active {

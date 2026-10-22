@@ -1,8 +1,49 @@
-import { Users } from "lucide-react";
+import { Search, Users } from "lucide-react";
 
-import { __ } from "@/i18n";
+import { Button } from "@/components";
+import { __, sprintf } from "@/i18n";
 
-export function UsersEmptyState() {
+interface UsersEmptyStateProps {
+	searchQuery?: string;
+	onClearSearch?: () => void;
+}
+
+export function UsersEmptyState({
+	searchQuery,
+	onClearSearch,
+}: UsersEmptyStateProps = {}) {
+	if (searchQuery) {
+		return (
+			<div className="users-page-panel-state">
+				<div className="users-page-empty-icon">
+					<Search size={24} />
+				</div>
+				<h3 className="users-page-empty-title">
+					{__("No matching users")}
+				</h3>
+				<p className="users-page-empty-summary">
+					{sprintf(
+						__(
+							'No accounts match "%s". Try a different search term.'
+						),
+						searchQuery
+					)}
+				</p>
+				{onClearSearch ? (
+					<div className="mt-4 flex justify-center">
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={onClearSearch}
+						>
+							{__("Clear search")}
+						</Button>
+					</div>
+				) : null}
+			</div>
+		);
+	}
+
 	return (
 		<div className="users-page-panel-state">
 			<div className="users-page-empty-icon">

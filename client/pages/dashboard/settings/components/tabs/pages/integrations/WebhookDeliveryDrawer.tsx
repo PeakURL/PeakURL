@@ -21,6 +21,7 @@ import {
 	DrawerDialog,
 	Button,
 	ConfirmDialog,
+	RefreshButton,
 	Select,
 	type SelectOption,
 } from "@/components";
@@ -469,21 +470,13 @@ export function WebhookDeliveryDrawer({
 									</div>
 								</div>
 								<div className="flex items-center gap-1.5 shrink-0">
-									<button
-										type="button"
-										onClick={() => refetch()}
-										disabled={isFetching}
-										className="drawer-icon-button webhook-drawer-header-btn"
-										title={__("Refresh deliveries")}
-										aria-label={__("Refresh deliveries")}
-									>
-										<RefreshCw
-											size={16}
-											className={cn(
-												isFetching && "animate-spin"
-											)}
-										/>
-									</button>
+									<RefreshButton
+										size="sm"
+										className="webhook-drawer-header-btn"
+										label={__("Refresh deliveries")}
+										onRefresh={() => refetch()}
+										isRefreshing={isFetching}
+									/>
 									<button
 										type="button"
 										onClick={handleClose}

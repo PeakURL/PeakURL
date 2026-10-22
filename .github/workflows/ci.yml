@@ -95,11 +95,15 @@ jobs:
               - '.github/workflows/**'
 
   backend:
-    name: Backend Lint, Syntax & PHPUnit
+    name: Backend Lint, Syntax & PHPUnit (PHP ${{ matrix.php-version }})
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: detect-changes
     if: needs.detect-changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ["8.3", "8.4", "8.5"]
 
     services:
       mysql:
@@ -118,7 +122,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: ${{ matrix.php-version }}
           extensions: pdo, pdo_mysql, zip
           tools: composer
 
@@ -126,8 +130,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.composer/cache/files
-          key: ${{ runner.os }}-composer-${{ hashFiles('server/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('server/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ matrix.php-version }}-
+            ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
         run: composer --working-dir=server install --no-interaction --prefer-dist --optimize-autoloader
@@ -192,7 +198,7 @@ jobs:
         run: npm run build
 
   release-check:
-    name: Release Packaging Check
+    name: Release Packaging Check (PHP 8.3)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: detect-changes
@@ -211,7 +217,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: "8.3"
           extensions: pdo, pdo_mysql, zip
           tools: composer
 

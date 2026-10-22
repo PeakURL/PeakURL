@@ -22,6 +22,7 @@
 	<file>install.php</file>
 	<file>setup-config.php</file>
 	<file>database-error.php</file>
+	<file>load.php</file>
 
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>*/storage/*</exclude-pattern>

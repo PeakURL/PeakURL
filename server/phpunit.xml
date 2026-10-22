@@ -13,6 +13,7 @@
         </testsuite>
     </testsuites>
     <php>
+        <ini name="memory_limit" value="512M"/>
         <env name="PEAKURL_ENV" value="testing"/>
         <env name="PEAKURL_DEV" value="true"/>
         <env name="PEAKURL_AUTH_KEY" value="01392ccd4d2f29b4b8c4c64ac0bda3da0fbf2229ec4e0d037ec9fcbb49afffd8"/>

@@ -1,315 +1,589 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta name="viewport" content="width=device-width" />
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="robots" content="noindex,nofollow" />
-		<title>PeakURL &#8250; ReadMe</title>
+		<title>PeakURL — Self-Hosted Link Management &amp; MCP Server</title>
 		<style>
-			body {
-				margin: 0;
-				padding: 32px 16px 48px;
-				background: #f0f0f1;
-				color: #1d2327;
-				font-family:
-					-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-				font-size: 14px;
-				line-height: 1.65;
+			:root {
+				--bg: #f7f8fa;
+				--surface: #ffffff;
+				--surface-alt: #f0f3f8;
+				--ink: #2b3040;
+				--heading: #2b3040;
+				--muted: #596579;
+				--line: #d9dee7;
+				--line-subtle: #edf0f5;
+				--accent: #3d4c6a;
+				--accent-hover: #2b3040;
+				--soft: #e9eef9;
+				--code-bg: #edf1f7;
+				--code-border: #d0d8e4;
+				--badge-bg: #e9eef9;
+				--badge-text: #2b3040;
 			}
 
-			.page {
-				max-width: 920px;
+			@media (prefers-color-scheme: dark) {
+				:root {
+					--bg: #151923;
+					--surface: #1c2230;
+					--surface-alt: #252d3e;
+					--ink: #f8fafc;
+					--heading: #ffffff;
+					--muted: #b1bbcc;
+					--line: #364155;
+					--line-subtle: #2b3446;
+					--accent: #b5c8fa;
+					--accent-hover: #ffffff;
+					--soft: #333d54;
+					--code-bg: #151b27;
+					--code-border: #364155;
+					--badge-bg: #333d54;
+					--badge-text: #f8fafc;
+				}
+			}
+
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				padding: 40px 20px 64px;
+				background: var(--bg);
+				color: var(--ink);
+				font-family:
+					Inter,
+					-apple-system,
+					BlinkMacSystemFont,
+					"Segoe UI",
+					Roboto,
+					Helvetica,
+					Arial,
+					sans-serif;
+				font-size: 14px;
+				line-height: 1.65;
+				-webkit-font-smoothing: antialiased;
+			}
+
+			.container {
+				max-width: 820px;
 				margin: 0 auto;
 			}
 
-			.hero,
-			.section {
-				background: #fff;
-				border: 1px solid #dcdcde;
-				border-radius: 10px;
-				padding: 28px 32px;
+			/* Header Card */
+			.header-card {
+				background: var(--surface);
+				border: 1px solid var(--line);
+				border-radius: 12px;
+				padding: 32px;
+				margin-bottom: 24px;
 			}
 
-			.section {
-				margin-top: 16px;
+			.header-brand {
+				display: flex;
+				align-items: center;
+				gap: 14px;
+				margin-bottom: 12px;
 			}
 
-			.eyebrow {
-				display: inline-block;
-				margin-bottom: 14px;
-				padding: 6px 10px;
-				border-radius: 999px;
-				background: #edf7f2;
-				color: #0a7b5f;
-				font-size: 12px;
-				font-weight: 700;
-				letter-spacing: 0.08em;
-				text-transform: uppercase;
+			.header-logo {
+				width: 36px;
+				height: 36px;
+				border-radius: 8px;
+				flex-shrink: 0;
 			}
 
-			h1,
-			h2,
-			h3 {
-				margin: 0 0 12px;
-				color: #1d2327;
-				line-height: 1.25;
+			.header-title-group {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				flex-wrap: wrap;
 			}
 
 			h1 {
-				font-size: 34px;
-				letter-spacing: -0.03em;
+				margin: 0;
+				color: var(--heading);
+				font-size: 24px;
+				font-weight: 700;
+				letter-spacing: -0.025em;
+			}
+
+			.version-badge {
+				display: inline-block;
+				padding: 2px 8px;
+				background: var(--badge-bg);
+				color: var(--badge-text);
+				font-size: 11px;
+				font-weight: 600;
+				border-radius: 999px;
+			}
+
+			.lead {
+				margin: 0 0 16px;
+				color: var(--muted);
+				font-size: 15px;
+				line-height: 1.6;
+			}
+
+			.meta-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 16px 24px;
+				padding-top: 16px;
+				border-top: 1px solid var(--line-subtle);
+				font-size: 13px;
+				color: var(--muted);
+			}
+
+			.meta-item strong {
+				color: var(--ink);
+			}
+
+			/* Section Card */
+			.card {
+				background: var(--surface);
+				border: 1px solid var(--line);
+				border-radius: 12px;
+				padding: 28px 32px;
+				margin-bottom: 20px;
 			}
 
 			h2 {
-				font-size: 22px;
+				margin: 0 0 16px;
+				color: var(--heading);
+				font-size: 18px;
+				font-weight: 700;
+				letter-spacing: -0.015em;
 			}
 
 			h3 {
-				font-size: 16px;
+				margin: 0 0 8px;
+				color: var(--heading);
+				font-size: 14px;
+				font-weight: 600;
 			}
 
-			p,
-			li,
-			dt,
-			dd {
-				color: #3c434a;
+			p {
+				margin: 0 0 12px;
+				color: var(--ink);
 			}
 
-			p:last-child,
-			dd:last-child {
+			p:last-child {
 				margin-bottom: 0;
 			}
 
 			a {
-				color: #2271b1;
+				color: var(--accent);
+				text-decoration: none;
+				font-weight: 500;
 			}
 
-			code,
-			.file {
-				background: #f6f7f7;
-				border: 1px solid #dcdcde;
-				border-radius: 3px;
-				font-family: SFMono-Regular, Consolas, monospace;
+			a:hover {
+				text-decoration: underline;
+				color: var(--accent-hover);
+			}
+
+			code {
+				font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 				font-size: 13px;
-				padding: 1px 5px;
+				background: var(--code-bg);
+				border: 1px solid var(--code-border);
+				padding: 2px 6px;
+				border-radius: 4px;
+				color: var(--ink);
 			}
 
-			.meta {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 12px 20px;
-				margin-top: 18px;
-				padding-top: 18px;
-				border-top: 1px solid #dcdcde;
-			}
-
-			.meta span {
-				color: #50575e;
-			}
-
-			.grid {
+			/* Grid Layouts */
+			.grid-2 {
 				display: grid;
 				grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 				gap: 16px;
+				margin-top: 12px;
 			}
 
-			.card {
-				padding: 18px;
-				border: 1px solid #dcdcde;
+			.subcard {
+				background: var(--surface-alt);
+				border: 1px solid var(--line-subtle);
 				border-radius: 8px;
-				background: #f6f7f7;
+				padding: 16px;
 			}
 
-			dl {
+			ul,
+			ol {
 				margin: 0;
+				padding-left: 20px;
 			}
 
-			dt {
+			li {
+				margin-bottom: 6px;
+				color: var(--ink);
+			}
+
+			li:last-child {
+				margin-bottom: 0;
+			}
+
+			/* Numbered Steps */
+			.step-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 14px;
+			}
+
+			.step-item {
+				display: flex;
+				gap: 14px;
+				align-items: flex-start;
+			}
+
+			.step-num {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 26px;
+				height: 26px;
+				border-radius: 999px;
+				background: var(--soft);
+				color: var(--accent);
+				font-weight: 700;
+				font-size: 12px;
+				flex-shrink: 0;
+				margin-top: 1px;
+			}
+
+			.step-body {
+				flex: 1;
+				min-width: 0;
+			}
+
+			.step-title {
 				font-weight: 600;
-				margin-bottom: 4px;
+				color: var(--heading);
+				margin-bottom: 2px;
 			}
 
-			ol,
-			ul {
+			.step-desc {
+				color: var(--muted);
+				font-size: 13px;
+				line-height: 1.5;
 				margin: 0;
-				padding-left: 22px;
+			}
+
+			/* Notice box */
+			.notice {
+				background: var(--soft);
+				border: 1px solid var(--line);
+				border-radius: 8px;
+				padding: 14px 16px;
+				margin-top: 16px;
+				font-size: 13px;
+				color: var(--ink);
+			}
+
+			.notice strong {
+				color: var(--heading);
+			}
+
+			/* Footer */
+			.footer {
+				text-align: center;
+				padding-top: 12px;
+				font-size: 12px;
+				color: var(--muted);
 			}
 		</style>
 	</head>
 	<body>
-		<div class="page">
-			<div class="hero">
-				<div class="eyebrow">PeakURL</div>
-				<h1>The modern self-hosted link management platform.</h1>
-				<p>
-					PeakURL gives you branded short links, analytics, user
-					access, and API tools from one clean dashboard. This package
-					can live in the site root or in a subfolder.
-				</p>
-				<div class="meta">
-					<span><strong>Author:</strong> Abd Ur Rehman</span>
-					<span
-						><strong>Stack:</strong> React admin, PHP app runtime,
-						MySQL or MariaDB</span
-					>
-					<span
-						><strong>Install flow:</strong>
-						<code>setup-config.php</code> then
-						<code>install.php</code></span
-					>
+		<div class="container">
+			<header class="header-card">
+				<div class="header-brand">
+					<img
+						src="assets/peakurl.svg"
+						alt="PeakURL"
+						class="header-logo"
+						width="36"
+						height="36"
+					/>
+					<div class="header-title-group">
+						<h1>PeakURL</h1>
+						<span class="version-badge">v1.8.0</span>
+					</div>
 				</div>
-			</div>
+				<p class="lead">
+					PeakURL is a self-hosted short link management and analytics
+					platform with native Model Context Protocol (MCP) server
+					integration.
+				</p>
+				<div class="meta-row">
+					<div class="meta-item">
+						<strong>License:</strong> MIT License
+					</div>
+					<div class="meta-item">
+						<strong>Runtime:</strong> PHP 8.3 or later
+					</div>
+					<div class="meta-item">
+						<strong>Database:</strong> MySQL 5.7+ or MariaDB 10.4+
+					</div>
+				</div>
+			</header>
 
-			<div class="section">
-				<h2>Getting Started</h2>
-				<ol>
-					<li>
-						Upload the package and extract it into an empty folder
-						on your hosting account.
-					</li>
-					<li>
-						Create a database and database user from your hosting
-						panel.
-					</li>
-					<li>
-						Open
-						<span class="file"
-							><a href="setup-config.php"
-								>setup-config.php</a
-							></span
-						>
-						to enter the database details and write
-						<code>config.php</code>.
-					</li>
-					<li>
-						Continue to
-						<span class="file"
-							><a href="install.php">install.php</a></span
-						>
-						to set the site title, admin username, email, password,
-						and table prefix.
-					</li>
-					<li>
-						After installation, sign in and manage your links from
-						<span class="file"
-							><a href="dashboard">/dashboard</a></span
-						>.
-					</li>
-				</ol>
-			</div>
-
-			<div class="section">
-				<h2>Before You Install</h2>
-				<div class="grid">
-					<div class="card">
-						<h3>Server Requirements</h3>
+			<section class="card">
+				<h2>Server Requirements</h2>
+				<p>
+					Verify that your web server meets these requirements before
+					running the installation:
+				</p>
+				<div class="grid-2">
+					<div class="subcard">
+						<h3>PHP Runtime</h3>
 						<ul>
-							<li>PHP <strong>8.0</strong> or newer</li>
+							<li>PHP <strong>8.3</strong> or later</li>
 							<li>
-								PHP <strong>8.4</strong> is recommended for
-								current deployments
+								Required extensions: <code>pdo</code>,
+								<code>pdo_mysql</code>, <code>mbstring</code>,
+								<code>openssl</code>, <code>json</code>,
+								<code>curl</code>
 							</li>
 							<li>
-								<code>pdo</code> and
-								<code>pdo_mysql</code> enabled
+								<code>memory_limit</code> of 128MB or higher
 							</li>
-							<li>
-								MySQL <strong>8.0</strong> or MariaDB equivalent
-							</li>
-							<li>Apache with <code>mod_rewrite</code></li>
 						</ul>
 					</div>
-					<div class="card">
-						<h3>Write Access</h3>
+					<div class="subcard">
+						<h3>Database</h3>
 						<ul>
 							<li>
-								Site root must be able to write
+								MySQL <strong>5.7</strong> or later, or MariaDB
+								<strong>10.4</strong> or later
+							</li>
+							<li>Default character set: <code>utf8mb4</code></li>
+							<li>Full schema and table creation privileges</li>
+						</ul>
+					</div>
+					<div class="subcard">
+						<h3>Web Server</h3>
+						<ul>
+							<li>
+								Apache with <code>mod_rewrite</code>, Nginx, or
+								equivalent
+							</li>
+							<li>
+								Allow directory index files (e.g.,
+								<code>index.php</code>)
+							</li>
+							<li>
+								Write permissions on the root directory to save
 								<code>config.php</code>
 							</li>
+						</ul>
+					</div>
+					<div class="subcard">
+						<h3>Security &amp; Transport</h3>
+						<ul>
 							<li>
-								HTTPS is recommended for secure session cookies
+								<strong>HTTPS enabled</strong> for production
+								deployments
 							</li>
+							<li>
+								Required for secure cookies and OAuth 2.0 PKCE
+								flows
+							</li>
+							<li>Restrictive file permissions (e.g., 0640)</li>
 						</ul>
 					</div>
 				</div>
-			</div>
+			</section>
 
-			<div class="section">
-				<h2>What Is Included</h2>
-				<div class="grid">
-					<div class="card">
-						<h3>Site Files</h3>
-						<ul>
-							<li>
-								<code>index.php</code> boots the app and routes
-								requests
-							</li>
-							<li>
-								<code>setup-config.php</code> handles database
-								configuration
-							</li>
-							<li>
-								<code>install.php</code> handles site and admin
-								setup
-							</li>
-							<li>
-								<code>config-sample.php</code> provides the
-								config template
-							</li>
-						</ul>
+			<section class="card">
+				<h2>Installation</h2>
+				<p>
+					PeakURL automatically routes new deployments into its
+					interactive configuration wizard:
+				</p>
+				<ol class="step-list">
+					<li class="step-item">
+						<span class="step-num">1</span>
+						<div class="step-body">
+							<div class="step-title">Upload and Extract</div>
+							<p class="step-desc">
+								Extract the release package into your web server
+								document root or a supported subdirectory.
+							</p>
+						</div>
+					</li>
+					<li class="step-item">
+						<span class="step-num">2</span>
+						<div class="step-body">
+							<div class="step-title">Create Database</div>
+							<p class="step-desc">
+								Create a MySQL or MariaDB database and
+								associated database user with all privileges.
+							</p>
+						</div>
+					</li>
+					<li class="step-item">
+						<span class="step-num">3</span>
+						<div class="step-body">
+							<div class="step-title">Open in Browser</div>
+							<p class="step-desc">
+								Navigate to your site URL in a web browser.
+								PeakURL detects new installs and opens the
+								configuration wizard.
+							</p>
+						</div>
+					</li>
+					<li class="step-item">
+						<span class="step-num">4</span>
+						<div class="step-body">
+							<div class="step-title">Database Configuration</div>
+							<p class="step-desc">
+								Enter your database host, name, username,
+								password, and table prefix. PeakURL verifies the
+								connection and writes <code>config.php</code>.
+							</p>
+						</div>
+					</li>
+					<li class="step-item">
+						<span class="step-num">5</span>
+						<div class="step-body">
+							<div class="step-title">Administrator Setup</div>
+							<p class="step-desc">
+								Provide your site title, administrator name,
+								email address, and a secure password to complete
+								installation.
+							</p>
+						</div>
+					</li>
+					<li class="step-item">
+						<span class="step-num">6</span>
+						<div class="step-body">
+							<div class="step-title">Access Dashboard</div>
+							<p class="step-desc">
+								Sign in with your administrator credentials to
+								start creating links, managing roles, and
+								connecting AI clients.
+							</p>
+						</div>
+					</li>
+				</ol>
+				<div class="notice">
+					<strong>Deployment Tip:</strong> PeakURL automatically
+					derives base paths and supports both site-root deployments
+					(e.g., <code>https://example.com/</code>) and subdirectory
+					installations (e.g.,
+					<code>https://example.com/links/</code>).
+				</div>
+			</section>
+
+			<section class="card">
+				<h2>After Installation</h2>
+				<div class="grid-2">
+					<div class="subcard">
+						<h3>Location Data (GeoIP)</h3>
+						<p class="step-desc">
+							Navigate to
+							<strong>Settings &rarr; Location Data</strong>
+							to download the local MaxMind GeoLite2 City database
+							for geographic visitor analytics.
+						</p>
 					</div>
-					<div class="card">
-						<h3>Application Files</h3>
-						<ul>
-							<li>
-								<code>assets/</code> contains the built admin
-								app
-							</li>
-							<li>
-								<code>app/</code> contains the runtime, API, and
-								services
-							</li>
-						</ul>
+					<div class="subcard">
+						<h3>PeakURL MCP Server</h3>
+						<p class="step-desc">
+							Connect AI clients (Claude Desktop, ChatGPT, Cursor,
+							Windsurf) via
+							<strong>Settings &rarr; MCP Server</strong>
+							using standard Streamable HTTP and OAuth 2.0 PKCE.
+						</p>
+					</div>
+					<div class="subcard">
+						<h3>Background Automation</h3>
+						<p class="step-desc">
+							Configure a system cron job to run maintenance, link
+							health checks, and webhook retries:
+							<code
+								>* * * * * php /path/to/peakurl/index.php</code
+							>
+						</p>
+					</div>
+					<div class="subcard">
+						<h3>Role Delegation</h3>
+						<p class="step-desc">
+							Use <strong>Users &rarr; Manage Roles</strong> to
+							delegate specific administrative capabilities
+							(including MCP server management) to Editors or
+							custom roles.
+						</p>
 					</div>
 				</div>
-			</div>
+			</section>
 
-			<div class="section">
-				<h2>Deployment Notes</h2>
+			<section class="card">
+				<h2>Documentation and Support</h2>
+				<p>
+					For complete guides, configuration options, API reference,
+					and developer documentation:
+				</p>
 				<ul>
 					<li>
-						PeakURL runs from the installed site URL and supports
-						site-root or subfolder deployments.
+						<strong>Official Documentation:</strong>
+						<a
+							href="https://peakurl.org/docs"
+							target="_blank"
+							rel="noopener noreferrer"
+							>https://peakurl.org/docs</a
+						>
 					</li>
 					<li>
-						If you want it under a sub-path, extract it into that
-						folder and run setup there.
+						<strong>MCP Server Guide:</strong>
+						<a
+							href="https://peakurl.org/docs/mcp"
+							target="_blank"
+							rel="noopener noreferrer"
+							>https://peakurl.org/docs/mcp</a
+						>
 					</li>
 					<li>
-						Keep backups of your database and generated
-						<code>config.php</code> before upgrades.
+						<strong>REST API Reference:</strong>
+						<a
+							href="https://peakurl.org/docs/api"
+							target="_blank"
+							rel="noopener noreferrer"
+							>https://peakurl.org/docs/api</a
+						>
 					</li>
 					<li>
-						Store installation credentials and API keys securely.
+						<strong>Source Repository:</strong>
+						<a
+							href="https://github.com/PeakURL/PeakURL"
+							target="_blank"
+							rel="noopener noreferrer"
+							>https://github.com/PeakURL/PeakURL</a
+						>
 					</li>
 				</ul>
-			</div>
+			</section>
 
-			<div class="section">
-				<h2>Resources</h2>
-				<dl>
-					<dt><a href="https://peakurl.org/">PeakURL Website</a></dt>
-					<dd>Product information and release updates.</dd>
-				</dl>
-			</div>
-
-			<div class="section">
-				<h2>License</h2>
+			<section class="card">
+				<h2>License and Credits</h2>
 				<p>
-					PeakURL is open-source software released under the
-					<a href="LICENSE">MIT License</a>.
+					PeakURL is open-source software licensed under the
+					<a href="LICENSE">MIT License</a>. Third-party components
+					and bundled libraries are acknowledged in
+					<a href="CREDITS.txt">CREDITS.txt</a>.
 				</p>
-			</div>
+			</section>
+
+			<footer class="footer">
+				&copy; PeakURL Contributors. Open source link management.
+			</footer>
 		</div>
 	</body>
 </html>

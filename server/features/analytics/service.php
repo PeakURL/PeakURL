@@ -182,7 +182,7 @@ class Service {
 		);
 
 		$days              = max( 1, $days );
-		$period            = $this->data->get_analytics_period( $days );
+		$period            = $this->get_analytics_period( $days );
 		$last_month_period = $this->data->get_last_month_period( $period, $days );
 		$stats             = $this->data->get_dashboard_click_totals(
 			$user,
@@ -199,7 +199,7 @@ class Service {
 			$last_month_period['end_at'],
 		);
 
-		return array(
+		$metrics = array(
 			'totalClicks'              => $stats['totalClicks'],
 			'lastMonthTotalClicks'     => $last_month_stats['totalClicks'],
 			'totalLinks'               => $total_links,
@@ -251,12 +251,157 @@ class Service {
 				$user,
 				null,
 			),
-			'traffic'                  => $this->data->query_traffic_series(
+			'traffic'                  => $this->data->query_traffic_series_range(
 				null,
+				$period['start_date'],
 				$days,
+				$period['start_at'],
+				null,
+				$period['timezone'],
 				$user,
+				'day',
 			),
 		);
+
+		/**
+		 * Filter the aggregated analytics summary metrics after permission and scope checks.
+		 *
+		 * @since 1.8.0
+		 *
+		 * @param array<string, mixed>      $metrics Aggregated summary metrics.
+		 * @param int                       $days    Number of rolling days queried.
+		 * @param array<string, mixed>|null $user    Authenticated user context.
+		 */
+		$filtered_metrics = \apply_filters( 'analytics_metrics', $metrics, $days, $user );
+
+		if ( ! is_array( $filtered_metrics ) ) {
+			return $metrics;
+		}
+
+		// Ensure required top-level numeric and structure fields are preserved with valid types.
+		$numeric_fields = array(
+			'totalClicks',
+			'lastMonthTotalClicks',
+			'totalLinks',
+			'lastMonthTotalLinks',
+			'uniqueClicks',
+			'lastMonthUniqueClicks',
+		);
+		foreach ( $numeric_fields as $field ) {
+			if ( ! isset( $filtered_metrics[ $field ] ) || ! is_numeric( $filtered_metrics[ $field ] ) || $filtered_metrics[ $field ] < 0 ) {
+				$filtered_metrics[ $field ] = $metrics[ $field ];
+			} else {
+				$filtered_metrics[ $field ] = (int) $filtered_metrics[ $field ];
+			}
+		}
+
+		$rate_fields = array( 'uniqueClickRate', 'lastMonthUniqueClickRate' );
+		foreach ( $rate_fields as $field ) {
+			if ( ! isset( $filtered_metrics[ $field ] ) || ! is_numeric( $filtered_metrics[ $field ] ) || ! is_finite( (float) $filtered_metrics[ $field ] ) || $filtered_metrics[ $field ] < 0 ) {
+				$filtered_metrics[ $field ] = $metrics[ $field ];
+			} else {
+				$filtered_metrics[ $field ] = (float) $filtered_metrics[ $field ];
+			}
+		}
+
+		$array_fields = array( 'devices', 'browsers', 'operatingSystems', 'countries', 'traffic', 'lastMonth' );
+		foreach ( $array_fields as $field ) {
+			if ( ! isset( $filtered_metrics[ $field ] ) || ! is_array( $filtered_metrics[ $field ] ) ) {
+				$filtered_metrics[ $field ] = $metrics[ $field ];
+			}
+		}
+
+		// Validate nested lastMonth comparison period structure.
+		if (
+			! isset( $filtered_metrics['lastMonth']['type'], $filtered_metrics['lastMonth']['days'], $filtered_metrics['lastMonth']['startDate'], $filtered_metrics['lastMonth']['endDate'] ) ||
+			! is_string( $filtered_metrics['lastMonth']['type'] ) ||
+			! is_numeric( $filtered_metrics['lastMonth']['days'] ) ||
+			$filtered_metrics['lastMonth']['days'] < 0 ||
+			! is_string( $filtered_metrics['lastMonth']['startDate'] ) ||
+			! is_string( $filtered_metrics['lastMonth']['endDate'] )
+		) {
+			$filtered_metrics['lastMonth'] = $metrics['lastMonth'];
+		} else {
+			$filtered_metrics['lastMonth'] = array(
+				'type'      => $filtered_metrics['lastMonth']['type'],
+				'days'      => (int) $filtered_metrics['lastMonth']['days'],
+				'startDate' => $filtered_metrics['lastMonth']['startDate'],
+				'endDate'   => $filtered_metrics['lastMonth']['endDate'],
+			);
+		}
+
+		// Validate nested traffic series structure and compatible array lengths.
+		if (
+			! isset( $filtered_metrics['traffic']['granularity'], $filtered_metrics['traffic']['labels'], $filtered_metrics['traffic']['clicks'], $filtered_metrics['traffic']['unique'] ) ||
+			! is_string( $filtered_metrics['traffic']['granularity'] ) ||
+			! is_array( $filtered_metrics['traffic']['labels'] ) ||
+			! is_array( $filtered_metrics['traffic']['clicks'] ) ||
+			! is_array( $filtered_metrics['traffic']['unique'] )
+		) {
+			$filtered_metrics['traffic'] = $metrics['traffic'];
+		} else {
+			$labels = $filtered_metrics['traffic']['labels'];
+			$clicks = $filtered_metrics['traffic']['clicks'];
+			$unique = $filtered_metrics['traffic']['unique'];
+
+			if ( count( $labels ) !== count( $clicks ) || count( $labels ) !== count( $unique ) ) {
+				$filtered_metrics['traffic'] = $metrics['traffic'];
+			} else {
+				$clean_labels = array();
+				$clean_clicks = array();
+				$clean_unique = array();
+				$valid_series = true;
+
+				foreach ( $labels as $idx => $label ) {
+					if ( ! is_string( $label ) || ! is_numeric( $clicks[ $idx ] ) || $clicks[ $idx ] < 0 || ! is_numeric( $unique[ $idx ] ) || $unique[ $idx ] < 0 ) {
+						$valid_series = false;
+						break;
+					}
+					$clean_labels[] = $label;
+					$clean_clicks[] = (int) $clicks[ $idx ];
+					$clean_unique[] = (int) $unique[ $idx ];
+				}
+
+				if ( $valid_series ) {
+					$filtered_metrics['traffic'] = array(
+						'granularity' => $filtered_metrics['traffic']['granularity'],
+						'labels'      => $clean_labels,
+						'clicks'      => $clean_clicks,
+						'unique'      => $clean_unique,
+					);
+				} else {
+					$filtered_metrics['traffic'] = $metrics['traffic'];
+				}
+			}
+		}
+
+		// Validate breakdown items (name, count, optional code).
+		$breakdown_fields = array( 'devices', 'browsers', 'operatingSystems', 'countries' );
+		foreach ( $breakdown_fields as $bf ) {
+			if ( ! isset( $filtered_metrics[ $bf ] ) || ! is_array( $filtered_metrics[ $bf ] ) ) {
+				$filtered_metrics[ $bf ] = $metrics[ $bf ];
+				continue;
+			}
+			$filtered_items = array();
+			$valid          = true;
+			foreach ( $filtered_metrics[ $bf ] as $item ) {
+				if ( ! is_array( $item ) || ! isset( $item['name'], $item['count'] ) || ! is_string( $item['name'] ) || ! is_numeric( $item['count'] ) || $item['count'] < 0 ) {
+					$valid = false;
+					break;
+				}
+				$clean_item = array(
+					'name'  => $item['name'],
+					'count' => (int) $item['count'],
+				);
+				if ( isset( $item['code'] ) && is_string( $item['code'] ) ) {
+					$clean_item['code'] = $item['code'];
+				}
+				$filtered_items[] = $clean_item;
+			}
+			$filtered_metrics[ $bf ] = $valid ? $filtered_items : $metrics[ $bf ];
+		}
+
+		return $filtered_metrics;
 	}
 
 	/**
@@ -904,7 +1049,7 @@ class Service {
 			$is_restorable = false;
 		}
 
-		return array(
+		$item = array(
 			'id'           => (string) $row['id'],
 			'type'         => $type,
 			'message'      => html_entity_decode( (string) ( $row['message'] ?? '' ), ENT_QUOTES | ENT_HTML5, 'UTF-8' ),
@@ -923,6 +1068,73 @@ class Service {
 			'linkStatus'   => $link_status,
 			'count'        => isset( $metadata['count'] ) ? (int) $metadata['count'] : null,
 		);
+
+		$safe_metadata = array();
+		if ( isset( $metadata['count'] ) ) {
+			$safe_metadata['count'] = (int) $metadata['count'];
+		}
+		if ( isset( $metadata['location'] ) && is_array( $metadata['location'] ) ) {
+			$safe_metadata['location'] = array(
+				'country'     => isset( $metadata['location']['country'] ) ? (string) $metadata['location']['country'] : null,
+				'countryCode' => isset( $metadata['location']['countryCode'] ) ? (string) $metadata['location']['countryCode'] : null,
+				'city'        => isset( $metadata['location']['city'] ) ? (string) $metadata['location']['city'] : null,
+			);
+		}
+		if ( isset( $metadata['link'] ) && is_array( $metadata['link'] ) ) {
+			$safe_link = array(
+				'id'        => (string) ( $metadata['link']['id'] ?? '' ),
+				'shortCode' => (string) ( $metadata['link']['shortCode'] ?? $metadata['link']['short_code'] ?? '' ),
+				'title'     => (string) ( $metadata['link']['title'] ?? '' ),
+			);
+
+			$raw_dest = (string) ( $metadata['link']['destinationUrl'] ?? $metadata['link']['destination_url'] ?? '' );
+			if ( '' !== $raw_dest ) {
+				$parsed = parse_url( $raw_dest );
+				if ( is_array( $parsed ) && ! empty( $parsed['host'] ) ) {
+					$scheme = strtolower( (string) ( $parsed['scheme'] ?? 'https' ) );
+					if ( in_array( $scheme, array( 'http', 'https' ), true ) ) {
+						$port                        = isset( $parsed['port'] ) ? ':' . (int) $parsed['port'] : '';
+						$safe_link['destinationUrl'] = $scheme . '://' . $parsed['host'] . $port;
+					}
+				}
+			}
+
+			$safe_metadata['link'] = $safe_link;
+		}
+		if ( isset( $metadata['user'] ) && is_array( $metadata['user'] ) ) {
+			$safe_metadata['user'] = array(
+				'id'          => (string) ( $metadata['user']['id'] ?? '' ),
+				'username'    => (string) ( $metadata['user']['username'] ?? '' ),
+				'displayName' => (string) ( $metadata['user']['displayName'] ?? $metadata['user']['display_name'] ?? '' ),
+			);
+		}
+
+		$safe_row = array(
+			'id'        => (string) ( $row['id'] ?? '' ),
+			'type'      => $type,
+			'userId'    => (string) ( $row['user_id'] ?? '' ),
+			'linkId'    => (string) ( $row['link_id'] ?? '' ),
+			'createdAt' => (string) ( $row['created_at'] ?? '' ),
+			'metadata'  => $safe_metadata,
+		);
+
+		/**
+		 * Filter a formatted presentation activity row before output.
+		 *
+		 * Fired after user-scope and capability checks verify caller access.
+		 * The contextual audit row exposes bounded operational metadata: user display info,
+		 * link IDs/titles, validated HTTP/HTTPS origin, geographic names, and counts.
+		 * Operational metadata is strictly confidential, even after minimization.
+		 * Observers must treat even sanitized operational metadata as confidential and avoid logging or leaking it.
+		 *
+		 * @since 1.8.0
+		 *
+		 * @param array<string, mixed> $item Formatted activity item.
+		 * @param array<string, mixed> $row  Sanitized database audit log row with safe metadata.
+		 */
+		$filtered_item = \apply_filters( 'activity_item', $item, $safe_row );
+
+		return is_array( $filtered_item ) ? $filtered_item : $item;
 	}
 
 	/**
@@ -993,7 +1205,7 @@ class Service {
 	 * @param string|null          $user_id  Associated user ID.
 	 * @param string|null          $link_id  Associated link ID.
 	 * @param array<string, mixed> $metadata Arbitrary metadata to store as JSON.
-	 * @return void
+	 * @return bool True if persisted, false otherwise.
 	 * @since 1.0.0
 	 */
 	public function record_activity(
@@ -1002,19 +1214,90 @@ class Service {
 		?string $user_id = null,
 		?string $link_id = null,
 		array $metadata = array()
-	): void {
-		$this->data->record_activity( $type, $message, $user_id, $link_id, $metadata );
+	) {
+		$persisted = (bool) $this->data->record_activity( $type, $message, $user_id, $link_id, $metadata );
+		if ( ! $persisted ) {
+			return false;
+		}
+
+		/**
+		 * Fires after an activity or audit event has been successfully persisted.
+		 *
+		 * @since 1.8.0
+		 *
+		 * @param string               $type     Activity event type.
+		 * @param string|null          $message  Activity message description.
+		 * @param string|null          $user_id  Acting user ID if available.
+		 * @param string|null          $link_id  Target link ID if applicable.
+		 * @param array<string, mixed> $metadata Additional event metadata.
+		 */
+		try {
+			\do_action( 'activity_recorded', $type, $message, $user_id, $link_id, $metadata );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL activity_recorded observer error: %s', $e->getMessage() ) );
+		}
+
+		return true;
 	}
 
 	/**
 	 * Get analytics period metadata for a rolling day count.
+	 *
+	 * Allows customizing the reporting timezone via the 'analytics_period' filter.
+	 * Enforces the rolling-period contract where $days represents the window ending on the current
+	 * local date in the validated timezone. The expected start_date and UTC start_at are consistently
+	 * derived to reject or normalize window shifts that would produce future dates or reporting drift.
 	 *
 	 * @param int $days Number of days to look back.
 	 * @return array<string, string> Period metadata using UTC start time.
 	 * @since 1.0.0
 	 */
 	public function get_analytics_period( int $days ): array {
-		return $this->data->get_analytics_period( $days );
+		$days     = max( 1, $days );
+		$period   = $this->data->get_analytics_period( $days );
+		$filtered = \apply_filters( 'analytics_period', $period, $days );
+
+		if ( ! is_array( $filtered ) ) {
+			return $period;
+		}
+
+		$tz_name = trim( (string) ( $filtered['timezone'] ?? '' ) );
+		if ( '' === $tz_name || ! in_array( $tz_name, \DateTimeZone::listIdentifiers(), true ) ) {
+			return $period;
+		}
+
+		if ( ( $period['timezone'] ?? '' ) === $tz_name ) {
+			$expected_start_date = (string) ( $period['start_date'] ?? '' );
+			$expected_start_at   = (string) ( $period['start_at'] ?? '' );
+		} else {
+			try {
+				$tz                  = new \DateTimeZone( $tz_name );
+				$canonical_start     = ( new \DateTimeImmutable( 'now', $tz ) )
+					->setTime( 0, 0, 0 )
+					->modify( '-' . max( 0, $days - 1 ) . ' days' );
+				$expected_start_date = $canonical_start->format( 'Y-m-d' );
+				$expected_start_at   = $canonical_start->setTimezone( new \DateTimeZone( 'UTC' ) )->format( 'Y-m-d H:i:s' );
+			} catch ( \Throwable $e ) {
+				return $period;
+			}
+		}
+
+		$start_date = (string) ( $filtered['start_date'] ?? '' );
+		$start_at   = (string) ( $filtered['start_at'] ?? '' );
+
+		// Reject or normalize callback results attempting to shift the reporting window away
+		// from the canonical rolling window ending on the current local date.
+		if ( $start_date !== $expected_start_date || $start_at !== $expected_start_at ) {
+			$start_date = $expected_start_date;
+			$start_at   = $expected_start_at;
+		}
+
+		$filtered['timezone']   = $tz_name;
+		$filtered['start_date'] = $start_date;
+		$filtered['start_at']   = $start_at;
+
+		return $filtered;
 	}
 
 	/**

@@ -173,8 +173,8 @@ class Repository {
 		?string $user_id = null,
 		?string $link_id = null,
 		array $metadata = array()
-	): void {
-		$this->db->insert(
+	): bool {
+		$inserted = $this->db->insert(
 			'audit_logs',
 			array(
 				'id'         => Str::random_id(),
@@ -186,6 +186,8 @@ class Repository {
 				'created_at' => Date::now(),
 			),
 		);
+
+		return $inserted > 0;
 	}
 
 	/**

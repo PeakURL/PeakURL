@@ -88,7 +88,7 @@ class Hooks {
 	 * @return mixed
 	 * @since 1.0.2
 	 */
-	public static function apply_filters( string $hook_name, $value, ...$args ) {
+	public static function apply_filters( string $hook_name, mixed $value, mixed ...$args ): mixed {
 		if ( empty( self::$hooks[ $hook_name ] ) ) {
 			return $value;
 		}

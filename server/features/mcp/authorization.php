@@ -162,6 +162,129 @@ class Authorization {
 	}
 
 	/**
+	 * Check whether a hostname is a local loopback address.
+	 *
+	 * Supports localhost, 127.0.0.1, and [::1] loopback targets.
+	 *
+	 * @param string $host Hostname or IP.
+	 * @return bool True if loopback.
+	 * @since 1.8.0
+	 */
+	public static function is_loopback_host( string $host ): bool {
+		$normalized = strtolower( trim( $host, '[]' ) );
+		return 'localhost' === $normalized
+			|| '127.0.0.1' === $normalized
+			|| '::1' === $normalized;
+	}
+
+	/**
+	 * Validate the structure, protocol, and components of a redirect URI.
+	 *
+	 * Enforces RFC 6749 Section 3.1.2 and RFC 8252 security rules:
+	 * - Absolute URI with scheme and host
+	 * - No fragment identifiers (#)
+	 * - No userinfo credentials (@)
+	 * - HTTPS required for remote callback endpoints
+	 * - HTTP permitted exclusively for local loopback callbacks
+	 * - Valid port range (1–65535) if specified
+	 *
+	 * @param string      $uri           Candidate redirect URI.
+	 * @param string|null $error_message Optional output variable receiving reason on failure.
+	 * @return bool True if structurally valid and compliant with policy.
+	 * @since 1.8.0
+	 */
+	public function validate_redirect_uri_structure( string $uri, ?string &$error_message = null ): bool {
+		$clean = trim( $uri );
+		if ( '' === $clean ) {
+			$error_message = __( 'Redirect URI cannot be empty.', 'peakurl' );
+			return false;
+		}
+
+		if ( str_contains( $clean, '#' ) ) {
+			$error_message = sprintf(
+				/* translators: %s is the redirect URI */
+				__( 'Redirect URI cannot contain a fragment identifier: "%s".', 'peakurl' ),
+				$clean
+			);
+			return false;
+		}
+
+		$parsed = parse_url( $clean );
+		if ( false === $parsed || ! is_array( $parsed ) ) {
+			$error_message = sprintf(
+				/* translators: %s is the redirect URI */
+				__( 'Invalid redirect URI: "%s".', 'peakurl' ),
+				$clean
+			);
+			return false;
+		}
+
+		if ( isset( $parsed['fragment'] ) ) {
+			$error_message = sprintf(
+				/* translators: %s is the redirect URI */
+				__( 'Redirect URI cannot contain a fragment identifier: "%s".', 'peakurl' ),
+				$clean
+			);
+			return false;
+		}
+
+		if ( isset( $parsed['user'] ) || isset( $parsed['pass'] ) || str_contains( $parsed['host'] ?? '', '@' ) ) {
+			$error_message = sprintf(
+				/* translators: %s is the redirect URI */
+				__( 'Redirect URI cannot contain user information: "%s".', 'peakurl' ),
+				$clean
+			);
+			return false;
+		}
+
+		$scheme = strtolower( (string) ( $parsed['scheme'] ?? '' ) );
+		$host   = (string) ( $parsed['host'] ?? '' );
+
+		if ( '' === $scheme || '' === $host ) {
+			$error_message = sprintf(
+				/* translators: %s is the redirect URI */
+				__( 'Redirect URI must be an absolute URL with scheme and host: "%s".', 'peakurl' ),
+				$clean
+			);
+			return false;
+		}
+
+		if ( ! in_array( $scheme, array( 'http', 'https' ), true ) ) {
+			$error_message = sprintf(
+				/* translators: %s is the redirect URI */
+				__( 'Unsupported protocol for redirect URI: "%s". Only HTTP and HTTPS are permitted.', 'peakurl' ),
+				$clean
+			);
+			return false;
+		}
+
+		if ( isset( $parsed['port'] ) ) {
+			$port = (int) $parsed['port'];
+			if ( $port < 1 || $port > 65535 ) {
+				$error_message = sprintf(
+					/* translators: %s is the redirect URI */
+					__( 'Invalid port for redirect URI: "%s".', 'peakurl' ),
+					$clean
+				);
+				return false;
+			}
+		}
+
+		$is_loopback = self::is_loopback_host( $host );
+
+		if ( 'http' === $scheme && ! $is_loopback ) {
+			$error_message = sprintf(
+				/* translators: %s is the redirect URI */
+				__( 'Remote redirect URIs must use HTTPS: "%s".', 'peakurl' ),
+				$clean
+			);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Update the list of allowed OAuth redirect URIs.
 	 *
 	 * @param array<int, string> $uris Array of allowed URIs.
@@ -169,7 +292,14 @@ class Authorization {
 	 * @since 1.8.0
 	 */
 	public function set_allowed_redirect_uris( array $uris ): void {
-		$clean = array_values( array_unique( array_filter( array_map( 'trim', $uris ) ) ) );
+		$clean = array();
+		foreach ( $uris as $uri ) {
+			$trimmed = trim( (string) $uri );
+			if ( $this->validate_redirect_uri_structure( $trimmed ) ) {
+				$clean[] = $trimmed;
+			}
+		}
+		$clean = array_values( array_unique( $clean ) );
 		$this->settings->update_option( Constants::SETTING_MCP_ALLOWED_REDIRECT_URIS, (string) json_encode( $clean ), Date::now() );
 	}
 
@@ -185,23 +315,21 @@ class Authorization {
 	 */
 	public function validate_redirect_uri( string $uri ): bool {
 		$clean = trim( $uri );
-		if ( '' === $clean ) {
+		if ( ! $this->validate_redirect_uri_structure( $clean ) ) {
 			return false;
 		}
 
 		$allowed = $this->get_allowed_redirect_uris();
 
+		// Exact match against configured allowlist.
 		if ( in_array( $clean, $allowed, true ) ) {
 			return true;
 		}
 
-		// Allow localhost and 127.0.0.1 loopback callbacks for local developer clients.
+		// Loopback callbacks for local developer clients (RFC 8252 Section 7.3).
 		$parsed = parse_url( $clean );
-		if ( is_array( $parsed ) && isset( $parsed['scheme'], $parsed['host'] ) ) {
-			$host = strtolower( (string) $parsed['host'] );
-			if ( 'localhost' === $host || '127.0.0.1' === $host ) {
-				return 'http' === $parsed['scheme'] || 'https' === $parsed['scheme'];
-			}
+		if ( is_array( $parsed ) && isset( $parsed['host'] ) ) {
+			return self::is_loopback_host( (string) $parsed['host'] );
 		}
 
 		return false;

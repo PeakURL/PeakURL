@@ -180,17 +180,66 @@ class Service {
 			);
 		}
 
-		// Reject JSON-RPC batching (unsupported by Streamable HTTP MCP transport).
+		// Handle JSON-RPC batching per JSON-RPC 2.0 and Streamable HTTP spec.
 		if ( array_is_list( $payload ) ) {
-			return $this->error_response(
-				null,
-				Constants::JSONRPC_INVALID_REQUEST,
-				'Invalid Request: JSON-RPC batching is not supported by PeakURL MCP transport.',
-				400
+			if ( empty( $payload ) ) {
+				return $this->error_response(
+					null,
+					Constants::JSONRPC_INVALID_REQUEST,
+					'Invalid Request: batch array must not be empty.',
+					400
+				);
+			}
+
+			$batch_responses = array();
+			foreach ( $payload as $item ) {
+				if ( ! is_array( $item ) || array_is_list( $item ) ) {
+					$batch_responses[] = array(
+						'jsonrpc' => '2.0',
+						'id'      => null,
+						'error'   => array(
+							'code'    => Constants::JSONRPC_INVALID_REQUEST,
+							'message' => 'Invalid Request: batch item must be a JSON-RPC object.',
+						),
+					);
+					continue;
+				}
+
+				$item_res = $this->handle_single_payload( $item, $request );
+				// Notifications in a batch produce no response object.
+				if ( 202 !== $item_res['status'] && ! empty( $item_res['body'] ) ) {
+					$batch_responses[] = $item_res['body'];
+				}
+			}
+
+			// If the batch contained only notifications, return 202 with empty body.
+			if ( empty( $batch_responses ) ) {
+				return $this->notification_response();
+			}
+
+			return JsonResponse::raw(
+				$batch_responses,
+				200,
+				array(
+					'MCP-Protocol-Version' => Constants::PROTOCOL_VERSION,
+				)
 			);
 		}
 
-		$id      = $payload['id'] ?? null;
+		return $this->handle_single_payload( $payload, $request );
+	}
+
+	/**
+	 * Process a single JSON-RPC 2.0 request or notification object.
+	 *
+	 * @param array<string, mixed> $payload Parsed JSON-RPC request object.
+	 * @param Request              $request Incoming HTTP request.
+	 * @return array<string, mixed> Structured response array.
+	 * @since 1.8.0
+	 */
+	private function handle_single_payload( array $payload, Request $request ): array {
+		$has_id  = array_key_exists( 'id', $payload );
+		$id      = $has_id ? $payload['id'] : null;
 		$jsonrpc = $payload['jsonrpc'] ?? '';
 		$method  = $payload['method'] ?? '';
 
@@ -203,35 +252,60 @@ class Service {
 			);
 		}
 
-		// Handle methods that do not require OAuth authentication.
+		// 1. Methods not requiring authentication.
 		if ( 'initialize' === $method ) {
+			if ( ! $has_id ) {
+				return $this->notification_response();
+			}
 			return $this->initialize( $id, (array) ( $payload['params'] ?? array() ) );
 		}
 
-		if ( 'notifications/initialized' === $method ) {
-			return JsonResponse::raw( (object) array(), 202, array( 'MCP-Protocol-Version' => Constants::PROTOCOL_VERSION ) );
+		// 2. Notification methods (notifications/*).
+		if ( str_starts_with( $method, 'notifications/' ) ) {
+			return $this->notification_response();
 		}
 
 		if ( 'ping' === $method ) {
+			if ( ! $has_id ) {
+				return $this->notification_response();
+			}
 			return $this->success_response( $id, (object) array() );
 		}
 
-		// All subsequent methods require Bearer token authentication.
+		// 3. Authorization boundary: protected methods require Bearer token authentication.
 		$auth_context = $this->authorization->authenticate_request( $request );
 		if ( ! $auth_context ) {
 			return $this->unauthorized_response( $id );
 		}
 
-		return match ( $method ) {
-			'tools/list' => $this->list_tools( $id, $auth_context ),
-			'tools/call' => $this->call_tool( $id, (array) ( $payload['params'] ?? array() ), $auth_context, $request ),
-			default      => $this->error_response(
-				$id,
-				Constants::JSONRPC_METHOD_NOT_FOUND,
-				sprintf( 'Method not found: %s', $method ),
-				404
-			),
-		};
+		// 4. Authenticated methods.
+		if ( 'tools/list' === $method ) {
+			if ( ! $has_id ) {
+				return $this->notification_response();
+			}
+			return $this->list_tools( $id, $auth_context );
+		}
+
+		if ( 'tools/call' === $method ) {
+			if ( ! $has_id ) {
+				$this->call_tool( null, (array) ( $payload['params'] ?? array() ), $auth_context, $request );
+				return $this->notification_response();
+			}
+			return $this->call_tool( $id, (array) ( $payload['params'] ?? array() ), $auth_context, $request );
+		}
+
+		// 5. Unsupported method.
+		if ( ! $has_id ) {
+			// Per JSON-RPC 2.0: Server MUST NOT reply to a Notification for an unrecognized method.
+			return $this->notification_response();
+		}
+
+		return $this->error_response(
+			$id,
+			Constants::JSONRPC_METHOD_NOT_FOUND,
+			sprintf( 'Method not found: %s', $method ),
+			404
+		);
 	}
 
 	/**
@@ -650,6 +724,7 @@ class Service {
 
 		$payload = array(
 			'destinationUrl' => $url,
+			'alias'          => ! empty( $arguments['alias'] ) ? trim( (string) $arguments['alias'] ) : null,
 			'customSlug'     => ! empty( $arguments['alias'] ) ? trim( (string) $arguments['alias'] ) : null,
 			'title'          => ! empty( $arguments['title'] ) ? trim( (string) $arguments['title'] ) : null,
 			'utmSource'      => ! empty( $arguments['utm_source'] ) ? trim( (string) $arguments['utm_source'] ) : null,
@@ -844,13 +919,32 @@ class Service {
 		// 2. Origin header validation (if provided).
 		$origin_header = $request->get_header( 'Origin' );
 		if ( null !== $origin_header && '' !== trim( (string) $origin_header ) ) {
-			$origin_host = strtolower( (string) parse_url( trim( (string) $origin_header ), PHP_URL_HOST ) );
-			if ( '' !== $origin_host && ! in_array( $origin_host, $allowed_hosts, true ) ) {
+			$origin_clean  = trim( (string) $origin_header );
+			$parsed_origin = parse_url( $origin_clean );
+			$origin_host   = is_array( $parsed_origin ) ? strtolower( (string) ( $parsed_origin['host'] ?? '' ) ) : '';
+
+			if ( '' === $origin_host || ! in_array( $origin_host, $allowed_hosts, true ) ) {
 				return sprintf( 'Forbidden: Cross-origin request not allowed from origin "%s".', $origin_header );
 			}
 		}
 
 		return null;
+	}
+
+	/**
+	 * Create an empty HTTP 202 Accepted response for notifications per MCP Streamable HTTP spec.
+	 *
+	 * @return array<string, mixed>
+	 * @since 1.8.0
+	 */
+	private function notification_response(): array {
+		return array(
+			'status'  => 202,
+			'headers' => array(
+				'MCP-Protocol-Version' => Constants::PROTOCOL_VERSION,
+			),
+			'body'    => '',
+		);
 	}
 
 	/**

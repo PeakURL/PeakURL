@@ -197,6 +197,22 @@ class McpProtocolTest extends TestCase {
 		$this->assertArrayHasKey( 'tools', $response['body']['result']['capabilities'] );
 	}
 
+	public function test_unsupported_protocol_version_header_returns_400(): void {
+		$this->auth->set_enabled( true );
+
+		$request  = $this->make_request(
+			'{"jsonrpc": "2.0", "id": 1, "method": "ping"}',
+			array(
+				'Mcp-Protocol-Version' => '2024-11-05',
+			)
+		);
+		$response = $this->service->handle_request( $request );
+
+		$this->assertSame( 400, $response['status'] );
+		$this->assertSame( Constants::JSONRPC_INVALID_REQUEST, $response['body']['error']['code'] );
+		$this->assertStringContainsString( 'Unsupported MCP-Protocol-Version', $response['body']['error']['message'] );
+	}
+
 	public function test_ping_returns_success_result(): void {
 		$this->auth->set_enabled( true );
 
@@ -346,6 +362,24 @@ class McpProtocolTest extends TestCase {
 		$this->assertSame( 403, $bad_origin_res['status'] );
 		$this->assertStringContainsString( 'Forbidden: Cross-origin request not allowed', $bad_origin_res['body']['error']['message'] );
 
+		// Opaque / null origin.
+		$null_origin_req = $this->make_request(
+			'{"jsonrpc": "2.0", "id": 21, "method": "ping"}',
+			array( 'Origin' => 'null' )
+		);
+		$null_origin_res = $this->service->handle_request( $null_origin_req );
+		$this->assertSame( 403, $null_origin_res['status'] );
+		$this->assertStringContainsString( 'Forbidden: Cross-origin request not allowed', $null_origin_res['body']['error']['message'] );
+
+		// Malformed unparseable origin.
+		$malformed_origin_req = $this->make_request(
+			'{"jsonrpc": "2.0", "id": 22, "method": "ping"}',
+			array( 'Origin' => 'invalid-not-a-url' )
+		);
+		$malformed_origin_res = $this->service->handle_request( $malformed_origin_req );
+		$this->assertSame( 403, $malformed_origin_res['status'] );
+		$this->assertStringContainsString( 'Forbidden: Cross-origin request not allowed', $malformed_origin_res['body']['error']['message'] );
+
 		// Valid host.
 		$good_req = $this->make_request(
 			'{"jsonrpc": "2.0", "id": 3, "method": "ping"}',
@@ -414,19 +448,66 @@ class McpProtocolTest extends TestCase {
 		$this->assertSame( 200, $good_accept_res['status'] );
 	}
 
-	public function test_batch_rejection(): void {
+	public function test_batch_requests_execution(): void {
 		$this->auth->set_enabled( true );
 
 		$batch_body = '[{"jsonrpc": "2.0", "id": 1, "method": "ping"}, {"jsonrpc": "2.0", "id": 2, "method": "ping"}]';
 		$req        = $this->make_request( $batch_body );
 		$res        = $this->service->handle_request( $req );
 
-		$this->assertSame( 400, $res['status'] );
-		$this->assertSame( Constants::JSONRPC_INVALID_REQUEST, $res['body']['error']['code'] );
-		$this->assertStringContainsString( 'JSON-RPC batching is not supported', $res['body']['error']['message'] );
+		$this->assertSame( 200, $res['status'] );
+		$this->assertIsArray( $res['body'] );
+		$this->assertCount( 2, $res['body'] );
+		$this->assertSame( 1, $res['body'][0]['id'] );
+		$this->assertSame( 2, $res['body'][1]['id'] );
 	}
 
-	public function test_notification_initialized_returns_202(): void {
+	public function test_empty_batch_returns_400(): void {
+		$this->auth->set_enabled( true );
+
+		$req = $this->make_request( '[]' );
+		$res = $this->service->handle_request( $req );
+
+		$this->assertSame( 400, $res['status'] );
+		$this->assertSame( Constants::JSONRPC_INVALID_REQUEST, $res['body']['error']['code'] );
+	}
+
+	public function test_batch_with_notifications_omits_notification_responses(): void {
+		$this->auth->set_enabled( true );
+
+		$batch_body = '[{"jsonrpc": "2.0", "method": "notifications/initialized"}, {"jsonrpc": "2.0", "id": 10, "method": "ping"}]';
+		$req        = $this->make_request( $batch_body );
+		$res        = $this->service->handle_request( $req );
+
+		$this->assertSame( 200, $res['status'] );
+		$this->assertIsArray( $res['body'] );
+		$this->assertCount( 1, $res['body'] );
+		$this->assertSame( 10, $res['body'][0]['id'] );
+	}
+
+	public function test_batch_all_notifications_returns_202(): void {
+		$this->auth->set_enabled( true );
+
+		$batch_body = '[{"jsonrpc": "2.0", "method": "notifications/initialized"}, {"jsonrpc": "2.0", "method": "notifications/cancelled", "params": {"requestId": "1"}}]';
+		$req        = $this->make_request( $batch_body );
+		$res        = $this->service->handle_request( $req );
+
+		$this->assertSame( 202, $res['status'] );
+		$this->assertSame( '', $res['body'] );
+	}
+
+	public function test_unauthenticated_notification_for_tools_enforces_authorization_boundary(): void {
+		$this->auth->set_enabled( true );
+
+		// tool call without id (notification attempt) must enforce auth and return 401
+		$req = $this->make_request( '{"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "whoami"}}' );
+		$res = $this->service->handle_request( $req );
+
+		$this->assertSame( 401, $res['status'] );
+		$this->assertSame( Constants::MCP_UNAUTHORIZED, $res['body']['error']['code'] );
+	}
+
+	public function test_notification_initialized_returns_202_with_empty_body(): void {
 		$this->auth->set_enabled( true );
 
 		$req = $this->make_request( '{"jsonrpc": "2.0", "method": "notifications/initialized"}' );
@@ -434,6 +515,14 @@ class McpProtocolTest extends TestCase {
 
 		$this->assertSame( 202, $res['status'] );
 		$this->assertSame( Constants::PROTOCOL_VERSION, $res['headers']['MCP-Protocol-Version'] );
+		$this->assertSame( '', $res['body'], 'Notification response must have no body' );
+
+		// Custom notification also returns 202 without body.
+		$cancel_req = $this->make_request( '{"jsonrpc": "2.0", "method": "notifications/cancelled", "params": {"requestId": "123"}}' );
+		$cancel_res = $this->service->handle_request( $cancel_req );
+
+		$this->assertSame( 202, $cancel_res['status'] );
+		$this->assertSame( '', $cancel_res['body'], 'Notification response must have no body' );
 	}
 
 	public function test_additional_properties_and_schema_validation(): void {

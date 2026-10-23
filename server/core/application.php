@@ -1038,11 +1038,11 @@ class Application {
 		$headers = isset( $response['headers'] ) ? $response['headers'] : array();
 		$body    = $response['body'] ?? null;
 
-		http_response_code( $status );
-
 		foreach ( $headers as $name => $value ) {
-			header( $name . ': ' . $value );
+			header( $name . ': ' . $value, true, $status );
 		}
+
+		http_response_code( $status );
 
 		foreach ( $request->get_response_cookies() as $cookie_header ) {
 			header( 'Set-Cookie: ' . $cookie_header, false );
@@ -1052,7 +1052,7 @@ class Application {
 			return;
 		}
 
-		if ( is_array( $body ) ) {
+		if ( is_array( $body ) || is_object( $body ) ) {
 			if ( ! isset( $headers['Content-Type'] ) ) {
 				header( 'Content-Type: application/json; charset=utf-8' );
 			}

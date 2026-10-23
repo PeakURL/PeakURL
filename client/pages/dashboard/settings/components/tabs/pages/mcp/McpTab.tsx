@@ -138,6 +138,23 @@ export function McpTab({ notification }: McpTabProps) {
 
 		try {
 			const parsed = new URL(uri);
+
+			if (parsed.hash) {
+				setUriError(
+					__(
+						"Redirect URIs cannot contain a fragment identifier (#)."
+					)
+				);
+				return;
+			}
+
+			if (parsed.username || parsed.password) {
+				setUriError(
+					__("Redirect URIs cannot contain user information (@).")
+				);
+				return;
+			}
+
 			const isHttpLocal =
 				parsed.protocol === "http:" &&
 				(parsed.hostname === "localhost" ||

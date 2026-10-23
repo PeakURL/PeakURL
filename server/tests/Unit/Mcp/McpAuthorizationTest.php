@@ -121,17 +121,49 @@ class McpAuthorizationTest extends TestCase {
 	}
 
 	public function test_redirect_uri_validation(): void {
+		// Valid default remote HTTPS endpoints.
 		$this->assertTrue( $this->auth->validate_redirect_uri( 'https://chatgpt.com/connector_platform_oauth_redirect' ) );
 		$this->assertTrue( $this->auth->validate_redirect_uri( 'https://claude.ai/api/mcp/oauth/callback' ) );
+
+		// Valid local loopback callbacks (HTTP and HTTPS, localhost, 127.0.0.1, and [::1]).
 		$this->assertTrue( $this->auth->validate_redirect_uri( 'http://localhost:3000/callback' ) );
 		$this->assertTrue( $this->auth->validate_redirect_uri( 'http://127.0.0.1:8080/callback' ) );
+		$this->assertTrue( $this->auth->validate_redirect_uri( 'http://[::1]:8080/callback' ) );
+		$this->assertTrue( $this->auth->validate_redirect_uri( 'https://localhost:3000/callback' ) );
+		$this->assertTrue( $this->auth->validate_redirect_uri( 'https://127.0.0.1:8080/callback' ) );
 
+		// Custom configured allowed URI.
+		$this->auth->set_allowed_redirect_uris( array( 'https://my-custom-client.com/oauth' ) );
+		$this->assertTrue( $this->auth->validate_redirect_uri( 'https://my-custom-client.com/oauth' ) );
+
+		// Negative: Exact matching against allowlist (subpaths or different domains fail).
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'https://my-custom-client.com/other' ) );
 		$this->assertFalse( $this->auth->validate_redirect_uri( 'https://evil.com/callback' ) );
 		$this->assertFalse( $this->auth->validate_redirect_uri( '' ) );
 
-		// Custom allowed URI.
-		$this->auth->set_allowed_redirect_uris( array( 'https://my-custom-client.com/oauth' ) );
-		$this->assertTrue( $this->auth->validate_redirect_uri( 'https://my-custom-client.com/oauth' ) );
+		// Negative: Fragments rejected.
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'https://chatgpt.com/connector_platform_oauth_redirect#token=123' ) );
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'http://localhost:3000/callback#state=abc' ) );
+
+		// Negative: Userinfo rejected.
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'https://user:pass@chatgpt.com/connector_platform_oauth_redirect' ) );
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'https://user@chatgpt.com/connector_platform_oauth_redirect' ) );
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'http://user:pass@localhost:3000/callback' ) );
+
+		// Negative: Remote callback over plain HTTP rejected.
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'http://chatgpt.com/connector_platform_oauth_redirect' ) );
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'http://claude.ai/api/mcp/oauth/callback' ) );
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'http://my-custom-client.com/oauth' ) );
+
+		// Negative: Non-HTTP/HTTPS schemes rejected.
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'javascript:alert(1)' ) );
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'data:text/html,test' ) );
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'ftp://chatgpt.com/callback' ) );
+
+		// Negative: Relative URLs and missing components.
+		$this->assertFalse( $this->auth->validate_redirect_uri( '/api/callback' ) );
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'relative/path' ) );
+		$this->assertFalse( $this->auth->validate_redirect_uri( 'https://' ) );
 	}
 
 	public function test_pkce_s256_authorization_code_and_token_exchange(): void {

@@ -434,7 +434,7 @@ class Controller extends BaseController {
 			$this->authorization->revoke_token( $token );
 		}
 
-		return JsonResponse::raw( (object) array(), 200 );
+		return JsonResponse::raw( array( 'revoked' => true ), 200 );
 	}
 
 	/**
@@ -472,20 +472,92 @@ class Controller extends BaseController {
 	public function update_settings( Request $request ): array {
 		$this->require_mcp_management( $request );
 
-		$enabled               = $request->get_body_param( 'enabled' );
-		$write_enabled         = $request->get_body_param( 'writeEnabled' );
-		$allowed_redirect_uris = $request->get_body_param( 'allowedRedirectUris' );
+		$body = $request->get_body_params();
 
-		if ( null !== $enabled ) {
-			$this->authorization->set_enabled( (bool) $enabled );
+		$new_enabled               = null;
+		$new_write_enabled         = null;
+		$new_allowed_redirect_uris = null;
+
+		// 1. Validate enabled if supplied.
+		if ( array_key_exists( 'enabled', $body ) ) {
+			if ( ! is_bool( $body['enabled'] ) ) {
+				return JsonResponse::error(
+					__( 'The "enabled" setting must be a boolean.', 'peakurl' ),
+					400
+				);
+			}
+			$new_enabled = $body['enabled'];
 		}
 
-		if ( null !== $write_enabled ) {
-			$this->authorization->set_write_enabled( (bool) $write_enabled );
+		// 2. Validate writeEnabled if supplied.
+		if ( array_key_exists( 'writeEnabled', $body ) ) {
+			if ( ! is_bool( $body['writeEnabled'] ) ) {
+				return JsonResponse::error(
+					__( 'The "writeEnabled" setting must be a boolean.', 'peakurl' ),
+					400
+				);
+			}
+			$new_write_enabled = $body['writeEnabled'];
 		}
 
-		if ( is_array( $allowed_redirect_uris ) ) {
-			$this->authorization->set_allowed_redirect_uris( $allowed_redirect_uris );
+		// 3. Validate allowedRedirectUris if supplied.
+		if ( array_key_exists( 'allowedRedirectUris', $body ) ) {
+			$uris = $body['allowedRedirectUris'];
+			if ( ! is_array( $uris ) ) {
+				return JsonResponse::error(
+					__( 'The "allowedRedirectUris" setting must be an array of URL strings.', 'peakurl' ),
+					400
+				);
+			}
+
+			if ( ! empty( $uris ) && array_keys( $uris ) !== range( 0, count( $uris ) - 1 ) ) {
+				return JsonResponse::error(
+					__( 'The "allowedRedirectUris" setting must be a sequential list of URL strings.', 'peakurl' ),
+					400
+				);
+			}
+
+			$clean_uris = array();
+			foreach ( $uris as $uri ) {
+				if ( ! is_string( $uri ) ) {
+					return JsonResponse::error(
+						__( 'Each redirect URI must be a URL string.', 'peakurl' ),
+						400
+					);
+				}
+
+				$err = null;
+				if ( ! $this->authorization->validate_redirect_uri_structure( $uri, $err ) ) {
+					return JsonResponse::error(
+						$err ?? __( 'Invalid redirect URI.', 'peakurl' ),
+						400
+					);
+				}
+
+				$clean_uris[] = trim( $uri );
+			}
+
+			$new_allowed_redirect_uris = array_values( array_unique( $clean_uris ) );
+		}
+
+		// 4. All validations passed; persist updates atomically.
+		try {
+			if ( null !== $new_enabled ) {
+				$this->authorization->set_enabled( $new_enabled );
+			}
+
+			if ( null !== $new_write_enabled ) {
+				$this->authorization->set_write_enabled( $new_write_enabled );
+			}
+
+			if ( null !== $new_allowed_redirect_uris ) {
+				$this->authorization->set_allowed_redirect_uris( $new_allowed_redirect_uris );
+			}
+		} catch ( \Throwable $e ) {
+			return JsonResponse::error(
+				__( 'Failed to persist MCP settings.', 'peakurl' ),
+				500
+			);
 		}
 
 		return $this->get_settings( $request );

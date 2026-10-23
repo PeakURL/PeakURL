@@ -6,6 +6,12 @@ export interface McpIconProps extends SVGProps<SVGSVGElement> {
 	className?: string;
 }
 
+/**
+ * Model Context Protocol (MCP) icon component.
+ *
+ * Source: Devicon (MIT License - Copyright (c) 2015 konpa).
+ * Packaged license: client/assets/mcp/LICENSE-Devicons.txt
+ */
 export const McpIcon = forwardRef<SVGSVGElement, McpIconProps>(function McpIcon(
 	{ size = 16, className, ...props },
 	ref

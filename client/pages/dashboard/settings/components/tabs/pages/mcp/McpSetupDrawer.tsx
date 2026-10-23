@@ -367,7 +367,7 @@ export function McpSetupDrawer({
 												</code>
 												<p className="text-xs text-text-muted mt-1">
 													{__(
-														"In ChatGPT, navigate to Settings > Connected Apps > Add MCP Server and enter this endpoint URL."
+														"In ChatGPT, navigate to Settings > Connected Apps > Add MCP Server and enter this endpoint URL. ChatGPT will use RFC 8414 metadata discovery automatically."
 													)}
 												</p>
 											</div>
@@ -470,7 +470,7 @@ export function McpSetupDrawer({
 																onClick={() =>
 																	handleCopy(
 																		"scope",
-																		"peakurl:read peakurl:write"
+																		"links:read analytics:read links:write"
 																	)
 																}
 																className="mcp-guide-copy-btn"
@@ -492,8 +492,9 @@ export function McpSetupDrawer({
 															</button>
 														</div>
 														<code className="mcp-guide-field-code font-mono">
-															peakurl:read
-															peakurl:write
+															links:read
+															analytics:read
+															links:write
 														</code>
 													</div>
 
@@ -531,7 +532,7 @@ export function McpSetupDrawer({
 															)}
 														</strong>{" "}
 														{__(
-															"Copy the redirect URI provided by ChatGPT (e.g. https://chatgpt.com/api/actions/cb/...) and register it in the Allowed OAuth Redirect URIs list in PeakURL Settings."
+															"ChatGPT's standard MCP connector callback is https://chatgpt.com/connector_platform_oauth_redirect (pre-registered by default). If prompted with an alternate redirect URI, ensure it is added to the Allowed OAuth Redirect URIs list in PeakURL Settings."
 														)}
 													</div>
 												</div>

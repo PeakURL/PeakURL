@@ -2179,26 +2179,27 @@ class RolesApiTest extends TestCase {
 	}
 
 	/**
-	 * Verify all six Site & Integrations capabilities are delegable to Editor.
+	 * Verify all seven Site & Integrations capabilities (including manage_mcp) are delegable to Editor.
 	 */
-	public function test_all_six_site_and_integrations_capabilities_delegable_to_editor(): void {
-		$six_caps = array(
+	public function test_all_seven_site_and_integrations_capabilities_delegable_to_editor(): void {
+		$delegable_caps = array(
 			'manage_site_settings' => true,
 			'manage_mail_delivery' => true,
 			'manage_location_data' => true,
 			'manage_performance'   => true,
 			'manage_updates'       => true,
 			'manage_integrations'  => true,
+			'manage_mcp'           => true,
 		);
 
 		$updated = $this->roles->update_role_definition(
 			'editor',
-			array( 'capabilities' => $six_caps )
+			array( 'capabilities' => $delegable_caps )
 		);
 
 		$this->assertTrue( $updated['is_customized'] );
 
-		foreach ( $six_caps as $cap => $val ) {
+		foreach ( $delegable_caps as $cap => $val ) {
 			$this->assertTrue(
 				$this->roles->has_capability( $this->editor_user, $cap ),
 				"Editor must have capability {$cap}"

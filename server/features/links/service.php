@@ -598,10 +598,6 @@ class Service {
 			$user,
 		);
 
-		$raw_destination           = (string) ( $payload['destinationUrl'] ?? '' );
-		$destination_url           = $this->validator->clean_destination( $raw_destination );
-		$payload['destinationUrl'] = $destination_url;
-
 		$social_image_file = $request->get_file( 'socialImage' );
 		$social_image_url  = $this->validator->normalize_link_social_image_url(
 			$payload['socialImageUrl'] ?? null,
@@ -636,7 +632,7 @@ class Service {
 		}
 
 		try {
-			$row = $this->creator->create_link_record( $payload, $user['id'] );
+			$row = $this->creator->create( $payload, (string) $user['id'], $user );
 		} catch ( \Throwable $exception ) {
 			if ( null !== $social_image_path ) {
 				$this->social_preview->delete_link_image( $social_image_path );

@@ -26,19 +26,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Validator {
 
 	/**
-	 * Clean and validate a destination URL.
+	 * Validate a destination URL.
+	 *
+	 * Requires a valid HTTP or HTTPS URL.
 	 *
 	 * @param mixed $value Raw destination URL value.
 	 * @return string Valid destination URL.
 	 *
-	 * @throws ApiException When the URL is missing or invalid.
+	 * @throws ApiException When the URL is missing, invalid, or uses an unsupported protocol.
 	 * @since 1.0.0
 	 */
-	public function clean_destination( $value ): string {
+	public function validate_destination( $value ): string {
 		$value = trim( (string) $value );
 
 		if ( '' !== $value && filter_var( $value, FILTER_VALIDATE_URL ) ) {
-			return $value;
+			$scheme = strtolower( (string) parse_url( $value, PHP_URL_SCHEME ) );
+			if ( in_array( $scheme, array( 'http', 'https' ), true ) ) {
+				return $value;
+			}
 		}
 
 		throw new ApiException(
@@ -94,6 +99,13 @@ class Validator {
 		if ( '' === $alias ) {
 			throw new ApiException(
 				__( 'A short code or alias cannot be empty.', 'peakurl' ),
+				422,
+			);
+		}
+
+		if ( strlen( $alias ) > 64 ) {
+			throw new ApiException(
+				__( 'Aliases cannot exceed 64 characters.', 'peakurl' ),
 				422,
 			);
 		}
@@ -375,5 +387,37 @@ class Validator {
 		return is_array( $file ) &&
 			array_key_exists( 'error', $file ) &&
 			UPLOAD_ERR_NO_FILE !== (int) $file['error'];
+	}
+
+	/**
+	 * Normalize a link title for persistence.
+	 *
+	 * Decodes HTML entities, validates UTF-8 encoding, and enforces
+	 * the 191-character database length limit.
+	 *
+	 * @param mixed $value Raw title value.
+	 * @return string Normalized title.
+	 * @since 1.8.0
+	 */
+	public function normalize_title( $value ): string {
+		if ( ! is_string( $value ) ) {
+			return '';
+		}
+
+		$decoded = trim( html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
+
+		if ( '' === $decoded ) {
+			return '';
+		}
+
+		if ( ! mb_check_encoding( $decoded, 'UTF-8' ) ) {
+			$decoded = mb_convert_encoding( $decoded, 'UTF-8', 'UTF-8' );
+		}
+
+		if ( mb_strlen( $decoded, 'UTF-8' ) > 191 ) {
+			return mb_substr( $decoded, 0, 191, 'UTF-8' );
+		}
+
+		return $decoded;
 	}
 }

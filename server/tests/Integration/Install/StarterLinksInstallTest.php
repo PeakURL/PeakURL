@@ -327,7 +327,7 @@ class StarterLinksInstallTest extends TestCase {
 			);
 
 			// First link succeeds
-			$creator->create_link_record(
+			$creator->create(
 				array(
 					'title'          => 'Welcome to PeakURL',
 					'destinationUrl' => 'https://peakurl.org/?utm_source=peakurl&utm_medium=installation&utm_campaign=welcome',
@@ -336,7 +336,7 @@ class StarterLinksInstallTest extends TestCase {
 			);
 
 			// Second link fails validation
-			$creator->create_link_record(
+			$creator->create(
 				array(
 					'title'          => 'Invalid Link',
 					'destinationUrl' => 'invalid-protocol://not-a-valid-url',

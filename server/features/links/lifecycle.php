@@ -229,11 +229,31 @@ class Lifecycle {
 			$user,
 		);
 
+		$formatted_existing = ( $this->link_formatter )( $existing );
+		$user_context       = array(
+			'id'       => (string) ( $user['id'] ?? '' ),
+			'username' => (string) ( $user['username'] ?? '' ),
+			'role'     => (string) ( $user['role'] ?? '' ),
+		);
+		$link_context       = array(
+			'id'             => (string) ( $existing['id'] ?? '' ),
+			'destinationUrl' => (string) ( $existing['destination_url'] ?? '' ),
+			'title'          => trim( (string) ( $existing['title'] ?? '' ) ),
+			'alias'          => (string) ( $existing['alias'] ?? '' ),
+			'status'         => (string) ( $existing['status'] ?? 'active' ),
+			'expiresAt'      => isset( $existing['expires_at'] ) && '' !== trim( (string) $existing['expires_at'] )
+				? (string) $existing['expires_at']
+				: null,
+		);
+
 		$destination_changed = false;
 
 		if ( array_key_exists( 'destinationUrl', $payload ) ) {
-			$cleaned_dest = $this->validator->clean_destination( $payload['destinationUrl'] );
-			$current_dest = (string) ( $existing['destination_url'] ?? '' );
+			$raw_dest       = (string) $payload['destinationUrl'];
+			$filtered_dest  = \apply_filters( 'link_destination_url', $raw_dest, $link_context, $user_context );
+			$candidate_dest = is_string( $filtered_dest ) ? $filtered_dest : $raw_dest;
+			$cleaned_dest   = $this->validator->validate_destination( $candidate_dest );
+			$current_dest   = (string) ( $existing['destination_url'] ?? '' );
 			if ( $cleaned_dest !== $current_dest ) {
 				$destination_changed = true;
 			}
@@ -257,13 +277,14 @@ class Lifecycle {
 			$value = $payload[ $input_key ];
 
 			if ( 'title' === $input_key ) {
-				$value = is_string( $value )
-					? trim( html_entity_decode( $value, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) )
-					: $value;
+				$raw_title       = is_string( $value ) ? trim( $value ) : '';
+				$filtered_title  = \apply_filters( 'link_title', $raw_title, $link_context, $user_context );
+				$candidate_title = is_string( $filtered_title ) ? $filtered_title : $raw_title;
+				$value           = $this->validator->normalize_title( $candidate_title );
 			}
 
 			if ( 'destinationUrl' === $input_key ) {
-				$value = $this->validator->clean_destination( $value );
+				$value = $this->validator->validate_destination( $value );
 			}
 
 			if ( 'status' === $input_key ) {
@@ -271,7 +292,9 @@ class Lifecycle {
 			}
 
 			$updates[]         = $column . ' = :' . $column;
-			$params[ $column ] = is_string( $value ) ? trim( $value ) : $value;
+			$params[ $column ] = ( 'title' === $input_key && '' === $value )
+				? null
+				: ( is_string( $value ) ? trim( $value ) : $value );
 		}
 
 		$social_preview = $this->validator->normalize_link_social_preview(
@@ -393,7 +416,10 @@ class Lifecycle {
 			array_key_exists( 'alias', $payload ) &&
 			'' !== trim( (string) $payload['alias'] )
 		) {
-			$alias = $this->validator->sanitize_code( (string) $payload['alias'] );
+			$raw_alias       = (string) $payload['alias'];
+			$filtered_alias  = \apply_filters( 'link_alias', $raw_alias, $link_context, $user_context );
+			$candidate_alias = is_string( $filtered_alias ) ? $filtered_alias : $raw_alias;
+			$alias           = $this->validator->sanitize_code( $candidate_alias );
 
 			$this->validator->validate_alias(
 				$alias,
@@ -482,8 +508,7 @@ class Lifecycle {
 		 */
 		\do_action( 'link_updated', $url, $existing, $request, $user );
 
-		$formatted_existing = ( $this->link_formatter )( $existing );
-		$formatted_url      = ( $this->link_formatter )( $url );
+		$formatted_url = ( $this->link_formatter )( $url );
 		$this->webhooks_service->dispatch_link_event( 'link.updated', $formatted_url, $user, $formatted_existing );
 
 		$persisted_row = $updated_row ? $updated_row : $existing;

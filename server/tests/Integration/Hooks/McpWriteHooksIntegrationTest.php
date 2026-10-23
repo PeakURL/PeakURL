@@ -316,6 +316,51 @@ class McpWriteHooksIntegrationTest extends TestCase {
 			3
 		);
 
+		$destination_url_events = array();
+		add_filter(
+			'link_destination_url',
+			function ( string $url, array $link, array $user ) use ( &$destination_url_events ): string {
+				$destination_url_events[] = array(
+					'url'  => $url,
+					'link' => $link,
+					'user' => $user,
+				);
+				return $url;
+			},
+			10,
+			3
+		);
+
+		$alias_events = array();
+		add_filter(
+			'link_alias',
+			function ( string $alias, array $link, array $user ) use ( &$alias_events ): string {
+				$alias_events[] = array(
+					'alias' => $alias,
+					'link'  => $link,
+					'user'  => $user,
+				);
+				return $alias;
+			},
+			10,
+			3
+		);
+
+		$title_events = array();
+		add_filter(
+			'link_title',
+			function ( string $title, array $link, array $user ) use ( &$title_events ): string {
+				$title_events[] = array(
+					'title' => $title,
+					'link'  => $link,
+					'user'  => $user,
+				);
+				return $title;
+			},
+			10,
+			3
+		);
+
 		// 3. Execute MCP tools/call for create_link.
 		$create_request = $this->create_request(
 			'POST',
@@ -354,6 +399,12 @@ class McpWriteHooksIntegrationTest extends TestCase {
 		$this->assertCount( 1, $link_created_events, 'link_created must be invoked exactly once during MCP create_link' );
 		$this->assertSame( $link_id, $link_created_events[0]['url']['id'] );
 		$this->assertSame( 'https://example.com/hook-mcp-integration-test', $link_created_events[0]['url']['destinationUrl'] );
+
+		$this->assertCount( 1, $destination_url_events, 'link_destination_url must be invoked during MCP create_link' );
+		$this->assertSame( 'https://example.com/hook-mcp-integration-test', $destination_url_events[0]['url'] );
+		$this->assertCount( 1, $alias_events, 'link_alias must be invoked during MCP create_link' );
+		$this->assertCount( 1, $title_events, 'link_title must be invoked during MCP create_link' );
+		$this->assertSame( 'Hook MCP Test Link', $title_events[0]['title'] );
 
 		// 5. Attach listeners for update_link lifecycle hooks: pre_update_link and link_updated.
 		$pre_update_events = array();
@@ -417,6 +468,11 @@ class McpWriteHooksIntegrationTest extends TestCase {
 
 		$this->assertCount( 1, $link_updated_events, 'link_updated must be invoked exactly once during MCP update_link' );
 		$this->assertSame( $link_id, $link_updated_events[0]['url']['id'] );
+
+		$this->assertCount( 2, $title_events, 'link_title must be invoked during MCP update_link' );
+		$this->assertSame( 'Updated Hook MCP Test Link', $title_events[1]['title'] );
+		$this->assertCount( 1, $destination_url_events, 'link_destination_url must not fire during update when destination is omitted' );
+		$this->assertCount( 1, $alias_events, 'link_alias must not fire during update when alias is omitted' );
 
 		// 8. Attach listener for link_status_changed and verify status transition via MCP update_link.
 		$status_changed_events = array();

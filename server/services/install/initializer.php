@@ -346,7 +346,7 @@ class Initializer {
 		);
 
 		foreach ( $starter_links as $link ) {
-			$creator->create_link_record( $link, $owner_id );
+			$creator->create( $link, $owner_id );
 		}
 
 		$now = Date::now();

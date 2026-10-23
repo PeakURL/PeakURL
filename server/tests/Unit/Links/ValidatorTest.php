@@ -160,4 +160,88 @@ class ValidatorTest extends TestCase {
 
 		$this->assertTrue( true );
 	}
+
+	public function test_validate_alias_accepts_exactly_64_characters(): void {
+		$alias = str_repeat( 'a', 64 );
+		$this->validator->validate_alias( $alias );
+		$this->assertTrue( true );
+	}
+
+	public function test_validate_alias_rejects_more_than_64_characters(): void {
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 422 );
+		$this->expectExceptionMessage( 'Aliases cannot exceed 64 characters.' );
+
+		$this->validator->validate_alias( str_repeat( 'a', 65 ) );
+	}
+
+	public function test_validate_destination_accepts_valid_http_and_https_urls(): void {
+		$this->assertSame(
+			'https://example.com/target?query=val#section',
+			$this->validator->validate_destination( 'https://example.com/target?query=val#section' )
+		);
+		$this->assertSame(
+			'http://example.org/path',
+			$this->validator->validate_destination( '  http://example.org/path  ' )
+		);
+	}
+
+	public function test_validate_destination_rejects_unsupported_schemes_and_invalid_urls(): void {
+		$invalid_destinations = array(
+			'ftp://example.com/file.txt',
+			'file:///etc/passwd',
+			'javascript:alert(1)',
+			'mailto:user@example.com',
+			'data:text/plain;base64,SGVsbG8=',
+			'//protocol-relative.com',
+			'not-a-valid-url',
+			'',
+		);
+
+		foreach ( $invalid_destinations as $destination ) {
+			try {
+				$this->validator->validate_destination( $destination );
+				$this->fail( 'Expected ApiException for invalid destination: ' . $destination );
+			} catch ( ApiException $exception ) {
+				$this->assertSame( 422, $exception->getCode() );
+				$this->assertSame( 'A valid destination URL is required.', $exception->getMessage() );
+			}
+		}
+	}
+
+	public function test_normalize_title_decodes_html_entities_and_trims(): void {
+		$this->assertSame(
+			'Summer & Winter "Sale"',
+			$this->validator->normalize_title( '  Summer &amp; Winter &quot;Sale&quot;  ' )
+		);
+	}
+
+	public function test_normalize_title_decodes_double_encoded_entities_exactly_once(): void {
+		$this->assertSame(
+			'&lt;script&gt;',
+			$this->validator->normalize_title( '&amp;lt;script&amp;gt;' )
+		);
+	}
+
+	public function test_normalize_title_enforces_191_char_limit(): void {
+		$long_title = str_repeat( 'x', 250 );
+		$normalized = $this->validator->normalize_title( $long_title );
+
+		$this->assertSame( 191, mb_strlen( $normalized, 'UTF-8' ) );
+		$this->assertSame( str_repeat( 'x', 191 ), $normalized );
+	}
+
+	public function test_normalize_title_multibyte_utf8_truncation(): void {
+		$multibyte_title = str_repeat( '🚀PeakURL測試', 30 ); // 10 chars * 30 = 300 chars
+		$normalized      = $this->validator->normalize_title( $multibyte_title );
+
+		$this->assertSame( 191, mb_strlen( $normalized, 'UTF-8' ) );
+		$this->assertTrue( mb_check_encoding( $normalized, 'UTF-8' ) );
+	}
+
+	public function test_normalize_title_handles_non_string_and_empty(): void {
+		$this->assertSame( '', $this->validator->normalize_title( null ) );
+		$this->assertSame( '', $this->validator->normalize_title( 12345 ) );
+		$this->assertSame( '', $this->validator->normalize_title( '   ' ) );
+	}
 }

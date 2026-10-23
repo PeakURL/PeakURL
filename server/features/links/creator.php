@@ -92,14 +92,14 @@ class Creator {
 	 * @param string $title             Raw title from payload.
 	 * @param string $alias             Final alias or short code.
 	 * @param bool   $uses_custom_alias Whether a custom alias was specified.
-	 * @return string Decoded and normalized title.
+	 * @return string Raw trimmed title or default formatted alias title.
 	 * @since 1.7.0
 	 */
 	public function get_url_title( string $title, string $alias, bool $uses_custom_alias ): string {
 		$normalized_title = trim( $title );
 
 		if ( '' !== $normalized_title ) {
-			return trim( html_entity_decode( $normalized_title, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
+			return $normalized_title;
 		}
 
 		if ( $uses_custom_alias ) {
@@ -137,18 +137,20 @@ class Creator {
 	/**
 	 * Create and persist a canonical link record in the database.
 	 *
-	 * @param array<string, mixed> $payload Canonical link payload.
-	 * @param int|string           $user_id Owner user identifier.
+	 * @param array<string, mixed>      $payload  Canonical link payload.
+	 * @param int|string                $owner_id Owner user identifier.
+	 * @param array<string, mixed>|null $user     Authorized actor context or null for internal creation.
 	 * @return array<string, mixed> Persisted database row.
 	 *
 	 * @throws ApiException On validation failure.
 	 * @since 1.7.0
 	 */
-	public function create_link_record( array $payload, $user_id ): array {
-		$raw_destination = (string) ( $payload['destinationUrl'] ?? '' );
-		$destination_url = $this->validator->clean_destination( $raw_destination );
+	public function create( array $payload, int|string $owner_id, ?array $user = null ): array {
+		$owner_id = (string) $owner_id;
 
+		$raw_destination   = (string) ( $payload['destinationUrl'] ?? '' );
 		$raw_alias         = (string) ( $payload['alias'] ?? '' );
+		$raw_title         = (string) ( $payload['title'] ?? '' );
 		$alias             = $this->validator->sanitize_code( $raw_alias );
 		$uses_custom_alias = '' !== $alias;
 
@@ -156,17 +158,59 @@ class Creator {
 			$alias = $this->generate_short_code();
 		}
 
-		$this->validator->validate_alias(
-			$alias,
-			'',
-			fn( string $code ): bool => $this->repository->short_code_exists( $code ),
-		);
+		if ( null !== $user ) {
+			$user_context = array(
+				'id'       => (string) ( $user['id'] ?? '' ),
+				'username' => (string) ( $user['username'] ?? '' ),
+				'role'     => (string) ( $user['role'] ?? '' ),
+			);
 
-		$title = $this->get_url_title(
-			(string) ( $payload['title'] ?? '' ),
-			$alias,
-			$uses_custom_alias,
-		);
+			$link_context = array(
+				'destinationUrl' => $raw_destination,
+				'title'          => $raw_title,
+				'alias'          => $raw_alias,
+				'status'         => (string) ( $payload['status'] ?? 'active' ),
+				'expiresAt'      => isset( $payload['expiresAt'] ) ? (string) $payload['expiresAt'] : null,
+			);
+
+			$filtered_dest   = \apply_filters( 'link_destination_url', $raw_destination, $link_context, $user_context );
+			$candidate_dest  = is_string( $filtered_dest ) ? $filtered_dest : $raw_destination;
+			$destination_url = $this->validator->validate_destination( $candidate_dest );
+
+			$filtered_alias  = \apply_filters( 'link_alias', $alias, $link_context, $user_context );
+			$candidate_alias = is_string( $filtered_alias ) ? $filtered_alias : $alias;
+			$alias           = $this->validator->sanitize_code( $candidate_alias );
+
+			$this->validator->validate_alias(
+				$alias,
+				'',
+				fn( string $code ): bool => $this->repository->short_code_exists( $code ),
+			);
+
+			$default_title   = $this->get_url_title(
+				$raw_title,
+				$alias,
+				$uses_custom_alias,
+			);
+			$filtered_title  = \apply_filters( 'link_title', $default_title, $link_context, $user_context );
+			$candidate_title = is_string( $filtered_title ) ? $filtered_title : $default_title;
+			$title           = $this->validator->normalize_title( $candidate_title );
+		} else {
+			$destination_url = $this->validator->validate_destination( $raw_destination );
+
+			$this->validator->validate_alias(
+				$alias,
+				'',
+				fn( string $code ): bool => $this->repository->short_code_exists( $code ),
+			);
+
+			$default_title = $this->get_url_title(
+				$raw_title,
+				$alias,
+				$uses_custom_alias,
+			);
+			$title         = $this->validator->normalize_title( $default_title );
+		}
 
 		$id                = Str::random_id();
 		$now               = Date::now();
@@ -193,7 +237,7 @@ class Creator {
 		$this->repository->insert_url(
 			array(
 				'id'                 => $id,
-				'user_id'            => $user_id,
+				'user_id'            => $owner_id,
 				'short_code'         => $alias,
 				'alias'              => $alias,
 				'title'              => '' !== $title ? $title : null,

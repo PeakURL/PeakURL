@@ -301,9 +301,9 @@ test.describe("Date Utilities", () => {
 
 	test.describe("formatReleaseDate", () => {
 		test("formats release date with relative distance, day name, and calendar date", () => {
-			const pastDate = new Date(Date.now() - 86400 * 2 * 1000)
-				.toISOString()
-				.slice(0, 10);
+			const pastDate = new Date(
+				Date.now() - 48 * 3600 * 1000
+			).toISOString();
 			const formatted = formatReleaseDate(pastDate);
 			expect(formatted).toContain("2 days ago");
 			expect(formatted).toMatch(

@@ -2487,7 +2487,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 				'error'   => $error_message,
 			);
 		};
-		\add_action( 'peakurl_link_health_scheduling_failed', $hook_callback, 10, 2 );
+		\add_action( 'link_health_scheduling_failed', $hook_callback, 10, 2 );
 
 		try {
 			// 1. Create link: must succeed despite scheduler failure.
@@ -2532,7 +2532,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 			$this->assertSame( $link_id, $captured_events[1]['link_id'] );
 		} finally {
 			$ref_service->setValue( $links_service, $original_scheduler );
-			\PeakURL\Core\Hooks\Hooks::remove_all( 'peakurl_link_health_scheduling_failed' );
+			\PeakURL\Core\Hooks\Hooks::remove_all( 'link_health_scheduling_failed' );
 		}
 	}
 }

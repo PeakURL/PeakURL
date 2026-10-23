@@ -336,7 +336,11 @@ class Service {
 			} catch ( \Throwable $e ) {
 				// Background scheduling must never fail the link create/update request, but failure is observable.
 				error_log( sprintf( 'PeakURL link health scheduling failed for link [%s]: %s', $link_id, $e->getMessage() ) );
-				\do_action( 'peakurl_link_health_scheduling_failed', $link_id, $e->getMessage() );
+				try {
+					\do_action( 'link_health_scheduling_failed', $link_id, $e->getMessage() );
+				} catch ( \Throwable $obs_err ) {
+					error_log( sprintf( 'PeakURL link_health_scheduling_failed observer error for link [%s]: %s', $link_id, $obs_err->getMessage() ) );
+				}
 			}
 		}
 	}

@@ -424,16 +424,84 @@ class Controller extends BaseController {
 			$request,
 		);
 
-		if ( 'redirect' === ( $result['status'] ?? '' ) ) {
+		$status   = (string) ( $result['status'] ?? '' );
+		$url_data = is_array( $result['url'] ?? null ) ? $result['url'] : array();
+
+		if ( 'redirect' === $status ) {
+			$location = (string) ( $result['location'] ?? '' );
+
+			if ( \has_action( 'link_redirect_prepared' ) ) {
+				$safe_link       = $this->links_service->format_url( $url_data );
+				$request_context = array(
+					'ip'        => (string) $request->get_ip_address(),
+					'userAgent' => (string) $request->get_header( 'User-Agent' ),
+					'method'    => (string) $request->get_method(),
+				);
+
+				/**
+				 * Fires after PeakURL has prepared a redirect response for a short link.
+				 *
+				 * Informational post-preparation action that fires only after access, password,
+				 * and security checks have completed successfully. Observers have no control
+				 * over the HTTP response and cannot alter or block the redirect. The client IP
+				 * address is personal data provided for security auditing and abuse detection.
+				 * Referrers, query strings, cookies, and credentials are intentionally excluded.
+				 *
+				 * @since 1.8.0
+				 *
+				 * @param string               $location Target redirect destination URL.
+				 * @param array<string, mixed> $link     Formatted link payload (secrets omitted).
+				 * @param array<string, mixed> $context  Minimal safe request context (ip, userAgent, method).
+				 */
+				try {
+					\do_action( 'link_redirect_prepared', $location, $safe_link, $request_context );
+				} catch ( \Throwable $e ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					\error_log( sprintf( 'PeakURL link_redirect_prepared observer error: %s', $e->getMessage() ) );
+				}
+			}
+
 			return JsonResponse::redirect(
-				(string) $result['location'],
+				$location,
 				self::REDIRECT_TEMPORARY,
 			);
 		}
 
+		if ( 'password_invalid' === $status || 'captcha_invalid' === $status ) {
+			if ( \has_action( 'link_access_denied' ) ) {
+				$safe_link       = $this->links_service->format_url( $url_data );
+				$request_context = array(
+					'ip'        => (string) $request->get_ip_address(),
+					'userAgent' => (string) $request->get_header( 'User-Agent' ),
+					'method'    => (string) $request->get_method(),
+				);
+
+				/**
+				 * Fires when public access to a link is denied specifically due to failed password or CAPTCHA verification.
+				 *
+				 * This action is designed for security monitoring and brute-force rate-limiting (e.g. fail2ban).
+				 * It does NOT fire for general missing, expired, inactive, or unprompted links. Observers cannot
+				 * modify the rejection response. The client IP address is personal data provided for security
+				 * purposes; request bodies, passwords, cookies, and tokens are strictly excluded.
+				 *
+				 * @since 1.8.0
+				 *
+				 * @param string               $reason  Denial reason ('password_invalid' or 'captcha_invalid').
+				 * @param array<string, mixed> $link    Formatted link payload (secrets omitted).
+				 * @param array<string, mixed> $context Minimal safe request context (ip, userAgent, method).
+				 */
+				try {
+					\do_action( 'link_access_denied', $status, $safe_link, $request_context );
+				} catch ( \Throwable $e ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					\error_log( sprintf( 'PeakURL link_access_denied observer error: %s', $e->getMessage() ) );
+				}
+			}
+		}
+
 		if (
-			'password_required' === ( $result['status'] ?? '' ) ||
-			'password_invalid' === ( $result['status'] ?? '' )
+			'password_required' === $status ||
+			'password_invalid' === $status
 		) {
 			return JsonResponse::text(
 				$this->format_password_page(

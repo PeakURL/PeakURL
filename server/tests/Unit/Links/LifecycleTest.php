@@ -14,6 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Hooks\Hooks;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Links\Lifecycle;
@@ -39,6 +40,9 @@ class LifecycleTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
+		Hooks::remove_all();
+		Hooks::reset_actions();
+
 		$this->repository              = $this->createMock( LinksRepository::class );
 		$this->validator               = new LinksValidator();
 		$this->auth_service            = $this->createMock( AuthService::class );
@@ -51,6 +55,8 @@ class LifecycleTest extends TestCase {
 
 		$links_api = $this->createMock( \PeakURL\Api\LinksApi::class );
 		$this->repository->method( 'get_links_api' )->willReturn( $links_api );
+		$this->repository->method( 'trash_url' )->willReturn( true );
+		$this->repository->method( 'restore_url' )->willReturn( true );
 
 		$this->lifecycle = new Lifecycle(
 			$this->repository,
@@ -83,6 +89,12 @@ class LifecycleTest extends TestCase {
 			},
 			fn( ?array $row ): ?array => null !== $row ? array( 'status' => (string) ( $row['status'] ?? 'healthy' ) ) : null
 		);
+	}
+
+	protected function tearDown(): void {
+		Hooks::remove_all();
+		Hooks::reset_actions();
+		parent::tearDown();
 	}
 
 	public function test_update_returns_null_when_link_not_found(): void {
@@ -741,5 +753,164 @@ class LifecycleTest extends TestCase {
 		$result  = $this->lifecycle->update_url( $request, 'link_act_4', array( 'title' => 'Title Y' ) );
 
 		$this->assertNotNull( $result );
+	}
+
+	public function test_failed_trash_persist_returns_false(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$row        = array(
+			'id'              => 'link_fail_trash',
+			'user_id'         => 'user_admin',
+			'short_code'      => 'failtrash',
+			'destination_url' => 'https://example.com/trash',
+			'title'           => 'Fail Trash',
+			'status'          => 'active',
+			'alias'           => 'failtrash',
+		);
+
+		$repo = $this->createMock( LinksRepository::class );
+		$repo->method( 'get_link_by_id' )->with( 'link_fail_trash' )->willReturn( $row );
+		$repo->method( 'trash_url' )->willReturn( false );
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$lifecycle = $this->create_lifecycle_with_repository( $repo );
+
+		$request = new Request( 'DELETE', '/link_fail_trash', array(), array() );
+		$result  = $lifecycle->delete_url( $request, 'link_fail_trash', false );
+
+		$this->assertFalse( $result, 'delete_url must return false when trash persistence fails' );
+	}
+
+	public function test_failed_bulk_trash_persist_counts_only_successful_rows(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$rows       = array(
+			array(
+				'id'     => 'b_ok',
+				'title'  => 'OK Link',
+				'status' => 'active',
+			),
+			array(
+				'id'     => 'b_fail',
+				'title'  => 'Fail Link',
+				'status' => 'active',
+			),
+		);
+
+		$repo = $this->createMock( LinksRepository::class );
+		$repo->method( 'get_links_by_ids' )->willReturn( $rows );
+		$repo->method( 'trash_url' )->willReturnCallback(
+			fn( string $id ): bool => 'b_ok' === $id
+		);
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$lifecycle = $this->create_lifecycle_with_repository( $repo );
+
+		$request = new Request( 'POST', '/api/v1/links/bulk-delete', array(), array( 'ids' => array( 'b_ok', 'b_fail' ) ) );
+		$count   = $lifecycle->bulk_delete_urls( $request, array( 'b_ok', 'b_fail' ) );
+
+		$this->assertSame( 1, $count, 'bulk_delete_urls must count only rows successfully persisted to trash' );
+	}
+
+	public function test_failed_restore_persist_throws_api_exception(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$row        = array(
+			'id'              => 'link_fail_res',
+			'user_id'         => 'user_admin',
+			'short_code'      => 'failres',
+			'destination_url' => 'https://example.com/res',
+			'title'           => 'Fail Restore',
+			'status'          => 'trashed',
+		);
+
+		$repo = $this->createMock( LinksRepository::class );
+		$repo->method( 'get_link_by_id' )->with( 'link_fail_res' )->willReturn( $row );
+		$repo->method( 'restore_url' )->willReturn( false );
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$lifecycle = $this->create_lifecycle_with_repository( $repo );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 500 );
+
+		$request = new Request( 'POST', '/link_fail_res/restore', array(), array() );
+		$lifecycle->restore_url( $request, 'link_fail_res' );
+	}
+
+	public function test_failed_bulk_restore_persist_counts_only_successful_rows(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$rows       = array(
+			array(
+				'id'     => 'r_ok',
+				'title'  => 'OK Link',
+				'status' => 'trashed',
+			),
+			array(
+				'id'     => 'r_fail',
+				'title'  => 'Fail Link',
+				'status' => 'trashed',
+			),
+		);
+
+		$repo = $this->createMock( LinksRepository::class );
+		$repo->method( 'get_links_by_ids' )->willReturn( $rows );
+		$repo->method( 'restore_url' )->willReturnCallback(
+			fn( string $id ): bool => 'r_ok' === $id
+		);
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$lifecycle = $this->create_lifecycle_with_repository( $repo );
+
+		$request = new Request( 'POST', '/api/v1/links/bulk-restore', array(), array( 'ids' => array( 'r_ok', 'r_fail' ) ) );
+		$count   = $lifecycle->bulk_restore_urls( $request, array( 'r_ok', 'r_fail' ) );
+
+		$this->assertSame( 1, $count, 'bulk_restore_urls must count only rows successfully persisted as restored' );
+	}
+
+	private function create_lifecycle_with_repository( LinksRepository $repo ): Lifecycle {
+		$links_api = $this->createMock( \PeakURL\Api\LinksApi::class );
+		$repo->method( 'get_links_api' )->willReturn( $links_api );
+
+		return new Lifecycle(
+			$repo,
+			$this->validator,
+			$this->auth_service,
+			$this->analytics_service,
+			$this->webhooks_service,
+			$this->social_preview,
+			$this->roles,
+			$this->authorization,
+			fn( ?array $row ): array => array(
+				'id'             => (string) ( $row['id'] ?? '' ),
+				'shortCode'      => (string) ( $row['short_code'] ?? '' ),
+				'alias'          => (string) ( $row['alias'] ?? '' ),
+				'title'          => (string) ( $row['title'] ?? '' ),
+				'destinationUrl' => (string) ( $row['destination_url'] ?? '' ),
+				'status'         => (string) ( $row['status'] ?? 'active' ),
+			),
+			fn( array $url, array $user, ?string $owner_id ): array => ( new Roles() )->can_view_link_analytics( $user, $owner_id )
+				? $url
+				: array_merge(
+					$url,
+					array(
+						'clicks'       => null,
+						'uniqueClicks' => null,
+					)
+				),
+			function ( string $link_id ): void {
+				$this->scheduled_health_checks[] = $link_id;
+			},
+			fn( ?array $row ): ?array => null !== $row ? array( 'status' => (string) ( $row['status'] ?? 'healthy' ) ) : null
+		);
 	}
 }

@@ -256,6 +256,45 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$this->assertSame( 'active', $stmt->fetchColumn(), 'Database status must be restored to active.' );
 	}
 
+	public function test_repository_trash_url_direct_execution(): void {
+		$alias      = $this->test_prefix . 'repo_trash';
+		$create_res = $this->dispatch(
+			$this->admin_request(
+				'POST',
+				'/api/v1/urls',
+				array(),
+				array(
+					'destinationUrl' => 'https://example.com/direct-repo-trash',
+					'alias'          => $alias,
+				)
+			)
+		);
+
+		$link_id = $create_res['body']['data']['id'];
+
+		$config     = Configuration::get_current();
+		$connection = Connection::get_instance( $config );
+		$db         = new \PeakURL\Services\Database\PeakURL_DB( $connection );
+		$roles      = new \PeakURL\Core\Auth\Roles();
+		$auth       = new \PeakURL\Core\Auth\Authorization( $roles );
+		$links_api  = new \PeakURL\Api\LinksApi( $db );
+		$repository = new \PeakURL\Features\Links\Repository( $db, $links_api, $auth );
+
+		$now = \PeakURL\Utils\Date::now();
+
+		// First call: transitions active -> trashed, returns true.
+		$trashed = $repository->trash_url( $link_id, $now );
+		$this->assertTrue( $trashed, 'Repository::trash_url() must return true when active row is updated.' );
+
+		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id' );
+		$stmt->execute( array( 'id' => $link_id ) );
+		$this->assertSame( 'trashed', $stmt->fetchColumn() );
+
+		// Second call: row is already trashed, returns false.
+		$re_trashed = $repository->trash_url( $link_id, $now );
+		$this->assertFalse( $re_trashed, 'Repository::trash_url() must return false when row is already trashed.' );
+	}
+
 	public function test_link_permanent_deletion_removes_database_row(): void {
 		$alias      = $this->test_prefix . 'perm';
 		$create_res = $this->dispatch(

@@ -15,6 +15,7 @@ use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Errors\ApiException;
 use PeakURL\Services\Database\PeakURL_DB;
 use PeakURL\Services\Database\Query;
+use PeakURL\Services\Database\Sql;
 use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
@@ -538,13 +539,16 @@ class Repository {
 	 * @since 1.0.0
 	 */
 	public function trash_url( string $id, string $updated_at ): bool {
-		return $this->db->update(
-			'urls',
+		return $this->db->query(
+			'UPDATE ' . Sql::quote_identifier( $this->db->table_name( 'urls' ) ) .
+			' SET `status` = :status, `updated_at` = :updated_at
+			WHERE `id` = :id AND `status` != :trashed_status',
 			array(
-				'status'     => 'trashed',
-				'updated_at' => $updated_at,
-			),
-			array( 'id' => $id ),
+				'status'         => 'trashed',
+				'updated_at'     => $updated_at,
+				'id'             => $id,
+				'trashed_status' => 'trashed',
+			)
 		) > 0;
 	}
 
@@ -563,7 +567,10 @@ class Repository {
 				'status'     => 'active',
 				'updated_at' => $updated_at,
 			),
-			array( 'id' => $id ),
+			array(
+				'id'     => $id,
+				'status' => 'trashed',
+			),
 		) > 0;
 	}
 

@@ -561,9 +561,7 @@ class Lifecycle {
 		if ( ! $permanent ) {
 			\do_action( 'pre_trash_link', $row, $request, $user );
 
-			$this->trash_link( $row, Date::now(), $user, $request );
-
-			return true;
+			return $this->trash_link( $row, Date::now(), $user, $request );
 		}
 
 		\do_action( 'pre_delete_link', $row, $request, $user );
@@ -640,6 +638,12 @@ class Lifecycle {
 		}
 
 		$restored = $this->restore_link( $row, Date::now(), $user, $request );
+		if ( null === $restored ) {
+			throw new ApiException(
+				__( 'Failed to restore link.', 'peakurl' ),
+				500,
+			);
+		}
 
 		return ( $this->analytics_filter )( $restored, $user, $owner_id );
 	}
@@ -780,8 +784,9 @@ class Lifecycle {
 					continue;
 				}
 
-				$this->trash_link( $row, $now, $user, $request );
-				$trashed_ids[] = $row_id;
+				if ( $this->trash_link( $row, $now, $user, $request ) ) {
+					$trashed_ids[] = $row_id;
+				}
 			}
 
 			return count( $trashed_ids );
@@ -852,8 +857,10 @@ class Lifecycle {
 				continue;
 			}
 
-			$this->restore_link( $row, $now, $user, $request );
-			$restored_ids[] = $row_id;
+			$restored = $this->restore_link( $row, $now, $user, $request );
+			if ( null !== $restored ) {
+				$restored_ids[] = $row_id;
+			}
 		}
 
 		return count( $restored_ids );
@@ -976,8 +983,9 @@ class Lifecycle {
 				continue;
 			}
 
-			$this->trash_link( $row, $now, $user, $request );
-			$trashed_ids[] = $row_id;
+			if ( $this->trash_link( $row, $now, $user, $request ) ) {
+				$trashed_ids[] = $row_id;
+			}
 		}
 
 		return count( $trashed_ids );
@@ -990,14 +998,17 @@ class Lifecycle {
 	 * @param string               $now     Timestamp string.
 	 * @param array<string, mixed> $user    Acting user.
 	 * @param Request              $request Incoming HTTP request.
-	 * @return void
+	 * @return bool True if successfully moved to trash.
 	 * @since 1.7.2
 	 */
-	private function trash_link( array $row, string $now, array $user, Request $request ): void {
+	private function trash_link( array $row, string $now, array $user, Request $request ): bool {
 		$row_id     = (string) ( $row['id'] ?? '' );
 		$link_title = $this->get_link_title( $row, $row_id );
 
-		$this->repository->trash_url( $row_id, $now );
+		$persisted = $this->repository->trash_url( $row_id, $now );
+		if ( ! $persisted ) {
+			return false;
+		}
 
 		$this->record_link_activity(
 			'link_trashed',
@@ -1012,6 +1023,8 @@ class Lifecycle {
 		\do_action( 'link_trashed', $row, $request, $user );
 
 		$this->webhooks_service->dispatch_link_event( 'link.deleted', ( $this->link_formatter )( $row ), $user );
+
+		return true;
 	}
 
 	/**
@@ -1021,16 +1034,21 @@ class Lifecycle {
 	 * @param string               $now     Timestamp string.
 	 * @param array<string, mixed> $user    Acting user.
 	 * @param Request              $request Incoming HTTP request.
-	 * @return array<string, mixed> Formatted restored link payload.
+	 * @return array<string, mixed>|null Formatted restored link payload, or null on persistence failure.
 	 * @since 1.7.2
 	 */
-	private function restore_link( array &$row, string $now, array $user, Request $request ): array {
-		$row_id            = (string) ( $row['id'] ?? '' );
+	private function restore_link( array &$row, string $now, array $user, Request $request ): ?array {
+		$row_id     = (string) ( $row['id'] ?? '' );
+		$old_status = (string) ( $row['status'] ?? 'trashed' );
+		$link_title = $this->get_link_title( $row, $row_id );
+
+		$persisted = $this->repository->restore_url( $row_id, $now );
+		if ( ! $persisted ) {
+			return null;
+		}
+
 		$row['status']     = 'active';
 		$row['updated_at'] = $now;
-		$link_title        = $this->get_link_title( $row, $row_id );
-
-		$this->repository->restore_url( $row_id, $now );
 
 		$this->record_link_activity(
 			'link_restored',
@@ -1047,6 +1065,7 @@ class Lifecycle {
 		$restored_row  = $this->repository->find_url_row( $row_id );
 		$restored_row  = $restored_row ? $restored_row : $row;
 		$formatted_url = ( $this->link_formatter )( $restored_row );
+
 		$this->webhooks_service->dispatch_link_event( 'link.restored', $formatted_url, $user );
 
 		return $formatted_url;

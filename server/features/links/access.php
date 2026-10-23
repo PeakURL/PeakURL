@@ -170,17 +170,26 @@ class Access {
 
 		if ( $this->validator->is_public_link_expired( $url ) || 'expired' === (string) ( $url['status'] ?? '' ) ) {
 			if ( 'expired' !== (string) ( $url['status'] ?? '' ) && ! empty( $url['id'] ) ) {
-				$this->repository->expire_link( (string) $url['id'] );
-				$this->repository->get_links_api()->invalidate_link_cache( $url );
-				\do_action( 'link_expired', $url );
-				$expired_payload = array_merge( $url, array( 'status' => 'expired' ) );
-				$webhook_payload = null !== $this->link_formatter
-					? ( $this->link_formatter )( $expired_payload )
-					: $expired_payload;
-				$this->webhooks_service->dispatch_link_event(
-					'link.expired',
-					$webhook_payload
-				);
+				$persisted = $this->repository->expire_link( (string) $url['id'] );
+				if ( $persisted ) {
+					$this->repository->get_links_api()->invalidate_link_cache( $url );
+					\do_action( 'link_expired', $url );
+					$expired_payload = array_merge( $url, array( 'status' => 'expired' ) );
+					$formatted_link  = null !== $this->link_formatter
+						? ( $this->link_formatter )( $expired_payload )
+						: $expired_payload;
+					$old_status      = (string) ( $url['status'] ?? 'active' );
+					try {
+						\do_action( 'link_status_changed', $formatted_link, $old_status, 'expired', null, $request );
+					} catch ( \Throwable $e ) {
+						// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+						\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+					}
+					$this->webhooks_service->dispatch_link_event(
+						'link.expired',
+						$formatted_link
+					);
+				}
 			}
 
 			return array(

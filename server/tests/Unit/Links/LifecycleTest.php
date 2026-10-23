@@ -755,7 +755,244 @@ class LifecycleTest extends TestCase {
 		$this->assertNotNull( $result );
 	}
 
-	public function test_failed_trash_persist_returns_false(): void {
+	public function test_update_fires_link_status_changed_hook_when_status_transitions(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$existing   = array(
+			'id'              => 'link_sc_1',
+			'user_id'         => 'user_admin',
+			'short_code'      => 'sc1',
+			'destination_url' => 'https://example.com/dest',
+			'title'           => 'Title 1',
+			'status'          => 'active',
+			'alias'           => 'sc1',
+		);
+		$updated    = array_merge( $existing, array( 'status' => 'inactive' ) );
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_sc_1' )->willReturn( $existing );
+		$this->repository->method( 'find_url_row' )->with( 'link_sc_1' )->willReturn( $updated );
+
+		$captured = null;
+		\add_action(
+			'link_status_changed',
+			function ( array $link, string $old_status, string $new_status, ?array $user, ?Request $request ) use ( &$captured ): void {
+				$captured = array(
+					'link'       => $link,
+					'old_status' => $old_status,
+					'new_status' => $new_status,
+					'user'       => $user,
+					'request'    => $request,
+				);
+			},
+			10,
+			5
+		);
+
+		$request = new Request( 'PUT', '/link_sc_1', array(), array() );
+		$this->lifecycle->update_url( $request, 'link_sc_1', array( 'status' => 'inactive' ) );
+
+		$this->assertNotNull( $captured );
+		$this->assertSame( 'active', $captured['old_status'] );
+		$this->assertSame( 'inactive', $captured['new_status'] );
+		$this->assertSame( 'link_sc_1', $captured['link']['id'] );
+		$this->assertSame( 'user_admin', $captured['user']['id'] );
+		$this->assertSame( $request, $captured['request'] );
+
+		\remove_all_actions( 'link_status_changed' );
+	}
+
+	public function test_trash_link_fires_link_status_changed_hook(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$row        = array(
+			'id'              => 'link_trash_sc',
+			'user_id'         => 'user_admin',
+			'short_code'      => 'trashme',
+			'destination_url' => 'https://example.com/trash',
+			'title'           => 'Trash Me',
+			'status'          => 'active',
+			'alias'           => 'trashme',
+		);
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_trash_sc' )->willReturn( $row );
+		$this->repository->method( 'trash_url' )->willReturn( true );
+
+		$captured = null;
+		\add_action(
+			'link_status_changed',
+			function ( array $link, string $old_status, string $new_status, ?array $user, ?Request $request ) use ( &$captured ): void {
+				$captured = array(
+					'link'       => $link,
+					'old_status' => $old_status,
+					'new_status' => $new_status,
+					'user'       => $user,
+				);
+			},
+			10,
+			5
+		);
+
+		$request = new Request( 'DELETE', '/link_trash_sc', array(), array() );
+		$this->lifecycle->delete_url( $request, 'link_trash_sc', false );
+
+		$this->assertNotNull( $captured );
+		$this->assertSame( 'active', $captured['old_status'] );
+		$this->assertSame( 'trashed', $captured['new_status'] );
+		$this->assertSame( 'trashed', $captured['link']['status'] );
+
+		\remove_all_actions( 'link_status_changed' );
+	}
+
+	public function test_restore_link_fires_link_status_changed_hook(): void {
+		$admin_user   = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$row          = array(
+			'id'              => 'link_res_sc',
+			'user_id'         => 'user_admin',
+			'short_code'      => 'restoreme',
+			'destination_url' => 'https://example.com/restore',
+			'title'           => 'Restore Me',
+			'status'          => 'trashed',
+			'alias'           => 'restoreme',
+		);
+		$restored_row = array_merge( $row, array( 'status' => 'active' ) );
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_res_sc' )->willReturn( $row );
+		$this->repository->method( 'find_url_row' )->with( 'link_res_sc' )->willReturn( $restored_row );
+		$this->repository->method( 'restore_url' )->willReturn( true );
+
+		$captured = null;
+		\add_action(
+			'link_status_changed',
+			function ( array $link, string $old_status, string $new_status, ?array $user, ?Request $request ) use ( &$captured ): void {
+				$captured = array(
+					'link'       => $link,
+					'old_status' => $old_status,
+					'new_status' => $new_status,
+					'user'       => $user,
+				);
+			},
+			10,
+			5
+		);
+
+		$request = new Request( 'POST', '/link_res_sc/restore', array(), array() );
+		$this->lifecycle->restore_url( $request, 'link_res_sc' );
+
+		$this->assertNotNull( $captured );
+		$this->assertSame( 'trashed', $captured['old_status'] );
+		$this->assertSame( 'active', $captured['new_status'] );
+		$this->assertSame( 'active', $captured['link']['status'] );
+
+		\remove_all_actions( 'link_status_changed' );
+	}
+
+	public function test_unchanged_status_does_not_fire_link_status_changed_hook(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$existing   = array(
+			'id'              => 'link_unchanged',
+			'user_id'         => 'user_admin',
+			'short_code'      => 'same1',
+			'destination_url' => 'https://example.com/dest',
+			'title'           => 'Title Same',
+			'status'          => 'active',
+			'alias'           => 'same1',
+		);
+		$updated    = array_merge( $existing, array( 'title' => 'Title Renamed' ) );
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_unchanged' )->willReturn( $existing );
+		$this->repository->method( 'find_url_row' )->with( 'link_unchanged' )->willReturn( $updated );
+
+		$fired = false;
+		\add_action(
+			'link_status_changed',
+			function () use ( &$fired ): void {
+				$fired = true;
+			}
+		);
+
+		$request = new Request( 'PUT', '/link_unchanged', array(), array() );
+		$this->lifecycle->update_url( $request, 'link_unchanged', array( 'title' => 'Title Renamed' ) );
+
+		$this->assertFalse( $fired, 'link_status_changed must not fire when status is unchanged' );
+		\remove_all_actions( 'link_status_changed' );
+	}
+
+	public function test_computed_expiration_does_not_fire_link_status_changed_hook_when_persisted_status_unchanged(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$existing   = array(
+			'id'              => 'link_past_exp',
+			'user_id'         => 'user_admin',
+			'short_code'      => 'pastexp',
+			'destination_url' => 'https://example.com/target',
+			'title'           => 'Past Expire Link',
+			'status'          => 'active',
+			'expires_at'      => '2020-01-01 00:00:00',
+			'alias'           => 'pastexp',
+		);
+		$updated    = array_merge( $existing, array( 'title' => 'Renamed Past Expire Link' ) );
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_past_exp' )->willReturn( $existing );
+		$this->repository->method( 'find_url_row' )->with( 'link_past_exp' )->willReturn( $updated );
+
+		$lifecycle = new Lifecycle(
+			$this->repository,
+			$this->validator,
+			$this->auth_service,
+			$this->analytics_service,
+			$this->webhooks_service,
+			$this->social_preview,
+			$this->roles,
+			$this->authorization,
+			function ( ?array $r ): array {
+				if ( ! $r ) {
+					return array();
+				}
+				$out = $r;
+				if ( ! empty( $r['expires_at'] ) && strtotime( $r['expires_at'] ) < time() ) {
+					$out['status'] = 'expired';
+				}
+				return $out;
+			},
+			fn( array $url ): array => $url
+		);
+
+		$fired = false;
+		\add_action(
+			'link_status_changed',
+			function () use ( &$fired ): void {
+				$fired = true;
+			}
+		);
+
+		$request = new Request( 'PUT', '/link_past_exp', array(), array() );
+		$result  = $lifecycle->update_url( $request, 'link_past_exp', array( 'title' => 'Renamed Past Expire Link' ) );
+
+		$this->assertNotNull( $result );
+		$this->assertSame( 'expired', $result['status'], 'Presentation status can still be computed as expired' );
+		$this->assertFalse( $fired, 'link_status_changed must NOT fire when stored status is unchanged active despite computed expiration' );
+
+		\remove_all_actions( 'link_status_changed' );
+	}
+
+	public function test_failed_trash_persist_does_not_fire_link_status_changed_hook(): void {
 		$admin_user = array(
 			'id'   => 'user_admin',
 			'role' => 'admin',
@@ -774,13 +1011,38 @@ class LifecycleTest extends TestCase {
 		$repo->method( 'get_link_by_id' )->with( 'link_fail_trash' )->willReturn( $row );
 		$repo->method( 'trash_url' )->willReturn( false );
 
+		$lifecycle = new Lifecycle(
+			$repo,
+			$this->validator,
+			$this->auth_service,
+			$this->analytics_service,
+			$this->webhooks_service,
+			$this->social_preview,
+			$this->roles,
+			$this->authorization,
+			fn( ?array $r ): array => array(
+				'id'     => (string) ( $r['id'] ?? '' ),
+				'status' => (string) ( $r['status'] ?? 'active' ),
+			),
+			fn( array $url ): array => $url
+		);
+
 		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
-		$lifecycle = $this->create_lifecycle_with_repository( $repo );
+
+		$fired = false;
+		\add_action(
+			'link_status_changed',
+			function () use ( &$fired ): void {
+				$fired = true;
+			}
+		);
 
 		$request = new Request( 'DELETE', '/link_fail_trash', array(), array() );
 		$result  = $lifecycle->delete_url( $request, 'link_fail_trash', false );
 
 		$this->assertFalse( $result, 'delete_url must return false when trash persistence fails' );
+		$this->assertFalse( $fired, 'link_status_changed must not fire when trash persistence affects zero rows' );
+		\remove_all_actions( 'link_status_changed' );
 	}
 
 	public function test_failed_bulk_trash_persist_counts_only_successful_rows(): void {
@@ -875,6 +1137,39 @@ class LifecycleTest extends TestCase {
 		$count   = $lifecycle->bulk_restore_urls( $request, array( 'r_ok', 'r_fail' ) );
 
 		$this->assertSame( 1, $count, 'bulk_restore_urls must count only rows successfully persisted as restored' );
+	}
+
+	public function test_link_status_changed_observer_exception_does_not_break_trash_operation(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$row        = array(
+			'id'              => 'link_obs_trash',
+			'user_id'         => 'user_admin',
+			'short_code'      => 'obstrash',
+			'destination_url' => 'https://example.com/obs',
+			'title'           => 'Obs Trash',
+			'status'          => 'active',
+			'alias'           => 'obstrash',
+		);
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_obs_trash' )->willReturn( $row );
+		$this->repository->method( 'trash_url' )->willReturn( true );
+
+		\add_action(
+			'link_status_changed',
+			function (): void {
+				throw new \RuntimeException( 'Crashing plugin observer' );
+			}
+		);
+
+		$request = new Request( 'DELETE', '/link_obs_trash', array(), array() );
+		$result  = $this->lifecycle->delete_url( $request, 'link_obs_trash', false );
+
+		$this->assertTrue( $result, 'delete_url must succeed despite observer exception' );
+		\remove_all_actions( 'link_status_changed' );
 	}
 
 	private function create_lifecycle_with_repository( LinksRepository $repo ): Lifecycle {

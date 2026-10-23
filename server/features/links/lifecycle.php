@@ -486,10 +486,29 @@ class Lifecycle {
 		$formatted_url      = ( $this->link_formatter )( $url );
 		$this->webhooks_service->dispatch_link_event( 'link.updated', $formatted_url, $user, $formatted_existing );
 
-		$prev_status = (string) ( $existing['status'] ?? 'active' );
-		$new_status  = (string) ( $formatted_url['status'] ?? 'active' );
+		$persisted_row = $updated_row ? $updated_row : $existing;
+		$prev_status   = (string) ( $existing['status'] ?? 'active' );
+		$new_status    = (string) ( $persisted_row['status'] ?? 'active' );
 
 		if ( $prev_status !== $new_status ) {
+			/**
+			 * Fires after a link's status transitions to a new state.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, mixed>      $link       Formatted link payload.
+			 * @param string                    $old_status Previous status.
+			 * @param string                    $new_status New status.
+			 * @param array<string, mixed>|null $user       Current user row if authenticated.
+			 * @param Request|null              $request    Incoming request if available.
+			 */
+			try {
+				\do_action( 'link_status_changed', $formatted_url, $prev_status, $new_status, $user, $request );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+			}
+
 			if ( 'active' === $new_status && in_array( $prev_status, array( 'inactive', 'paused' ), true ) ) {
 				$this->webhooks_service->dispatch_link_event( 'link.activated', $formatted_url, $user, $formatted_existing );
 			} elseif ( in_array( $new_status, array( 'inactive', 'paused' ), true ) && 'active' === $prev_status ) {
@@ -1022,6 +1041,19 @@ class Lifecycle {
 
 		\do_action( 'link_trashed', $row, $request, $user );
 
+		$old_status = (string) ( $row['status'] ?? 'active' );
+		if ( 'trashed' !== $old_status ) {
+			$trashed_row           = $row;
+			$trashed_row['status'] = 'trashed';
+			$formatted_trashed     = ( $this->link_formatter )( $trashed_row );
+			try {
+				\do_action( 'link_status_changed', $formatted_trashed, $old_status, 'trashed', $user, $request );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+			}
+		}
+
 		$this->webhooks_service->dispatch_link_event( 'link.deleted', ( $this->link_formatter )( $row ), $user );
 
 		return true;
@@ -1065,6 +1097,15 @@ class Lifecycle {
 		$restored_row  = $this->repository->find_url_row( $row_id );
 		$restored_row  = $restored_row ? $restored_row : $row;
 		$formatted_url = ( $this->link_formatter )( $restored_row );
+
+		if ( 'active' !== $old_status ) {
+			try {
+				\do_action( 'link_status_changed', $formatted_url, $old_status, 'active', $user, $request );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+			}
+		}
 
 		$this->webhooks_service->dispatch_link_event( 'link.restored', $formatted_url, $user );
 

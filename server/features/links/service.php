@@ -736,6 +736,29 @@ class Service {
 			}
 		}
 
+		$summary = array(
+			'created' => count( $results ),
+			'failed'  => count( $errors ),
+			'results' => $results,
+			'errors'  => $errors,
+		);
+
+		/**
+		 * Fires after bulk link creation has completed.
+		 *
+		 * @since 1.8.0
+		 *
+		 * @param array<string, mixed>      $summary Summary of created/failed counts and items.
+		 * @param array<string, mixed>|null $user    Acting user.
+		 * @param Request|null              $request Incoming HTTP request.
+		 */
+		try {
+			\do_action( 'bulk_link_create_finished', $summary, $user, $request );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL bulk_link_create_finished observer error: %s', $e->getMessage() ) );
+		}
+
 		return array(
 			'results' => $results,
 			'errors'  => $errors,
@@ -1176,6 +1199,12 @@ class Service {
 			$link['status'] = 'expired';
 			$this->invalidate_link_cache( $link );
 			\do_action( 'link_expired', $link );
+			try {
+				\do_action( 'link_status_changed', $this->format_url( $link ), 'active', 'expired', null, null );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+			}
 			$this->webhooks_service->dispatch_link_event( 'link.expired', $this->format_url( $link ) );
 		}
 

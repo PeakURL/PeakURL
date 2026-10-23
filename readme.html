@@ -346,10 +346,12 @@
 						<ul>
 							<li>PHP <strong>8.3</strong> or later</li>
 							<li>
-								Required extensions: <code>pdo</code>,
-								<code>pdo_mysql</code>, <code>mbstring</code>,
-								<code>openssl</code>, <code>json</code>,
-								<code>curl</code>
+								Required extensions: <code>curl</code>,
+								<code>json</code>, <code>mbstring</code>,
+								<code>openssl</code>, <code>pdo</code>,
+								<code>pdo_mysql</code> (with
+								<code>intl</code> and
+								<code>zip</code> recommended)
 							</li>
 							<li>
 								<code>memory_limit</code> of 128MB or higher
@@ -364,7 +366,10 @@
 								<strong>10.4</strong> or later
 							</li>
 							<li>Default character set: <code>utf8mb4</code></li>
-							<li>Full schema and table creation privileges</li>
+							<li>
+								Dedicated database user with table and schema
+								privileges
+							</li>
 						</ul>
 					</div>
 					<div class="subcard">
@@ -423,8 +428,9 @@
 						<div class="step-body">
 							<div class="step-title">Create Database</div>
 							<p class="step-desc">
-								Create a MySQL or MariaDB database and
-								associated database user with all privileges.
+								Create a MySQL or MariaDB database and a
+								dedicated database user with standard privileges
+								on that database.
 							</p>
 						</div>
 					</li>
@@ -506,11 +512,20 @@
 					<div class="subcard">
 						<h3>Background Automation</h3>
 						<p class="step-desc">
-							Configure a system cron job to run maintenance, link
-							health checks, and webhook retries:
+							Schedule the background runner every minute to
+							execute maintenance, link health checks, and webhook
+							retries:
 							<code
-								>* * * * * php /path/to/peakurl/index.php</code
+								>* * * * * php /path/to/peakurl/bin/cron.php
+								&gt; /dev/null 2&gt;&amp;1</code
 							>
+							For configuration details, see the
+							<a
+								href="https://peakurl.org/docs/scheduled-jobs"
+								target="_blank"
+								rel="noopener noreferrer"
+								>Scheduled Jobs Guide</a
+							>.
 						</p>
 					</div>
 					<div class="subcard">
@@ -542,12 +557,12 @@
 						>
 					</li>
 					<li>
-						<strong>MCP Server Guide:</strong>
+						<strong>Scheduled Jobs Guide:</strong>
 						<a
-							href="https://peakurl.org/docs/mcp"
+							href="https://peakurl.org/docs/scheduled-jobs"
 							target="_blank"
 							rel="noopener noreferrer"
-							>https://peakurl.org/docs/mcp</a
+							>https://peakurl.org/docs/scheduled-jobs</a
 						>
 					</li>
 					<li>

@@ -118,7 +118,7 @@ if ( PHP_VERSION_ID < 80300 ) {
 				<a class="status-button" href="https://peakurl.org/docs/getting-started#installation" target="_blank" rel="noopener noreferrer">PHP upgrade guide</a>
 			</div>
 			<p class="status-note">
-				Please update your server’s PHP version in cPanel, Plesk, Docker, or your hosting control panel to PHP 8.3, 8.4, or 8.5 before running PeakURL.
+				Please update your server’s PHP version in cPanel, Plesk, Docker, or your hosting control panel to PHP 8.3 or later before running PeakURL.
 			</p>
 		</div>
 		<?php if ( '' !== $artwork_data ) : ?>
@@ -127,7 +127,7 @@ if ( PHP_VERSION_ID < 80300 ) {
 	</section>
 	<section class="status-support">
 		<h2 class="status-support-title">Runtime environment</h2>
-		<p>Current runtime: PHP <?php echo $escaped_php; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> · Minimum required: PHP 8.3.0 (tested with PHP 8.3, 8.4, and 8.5).</p>
+		<p>Current runtime: PHP <?php echo $escaped_php; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> · Minimum required: PHP 8.3.0 or later.</p>
 	</section>
 </main>
 <footer class="status-footer">

@@ -308,7 +308,7 @@ class McpIntegrationTest extends TestCase {
 
 		$token_request = $this->create_request(
 			'POST',
-			'/api/mcp/oauth/token',
+			'/oauth/token',
 			array(
 				'grant_type'    => 'authorization_code',
 				'code'          => $code,
@@ -330,7 +330,7 @@ class McpIntegrationTest extends TestCase {
 		// Call tools/list via protocol.
 		$list_request = $this->create_request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(
 				'jsonrpc' => '2.0',
 				'id'      => 1,
@@ -351,7 +351,7 @@ class McpIntegrationTest extends TestCase {
 		// Call whoami tool.
 		$whoami_request = $this->create_request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(
 				'jsonrpc' => '2.0',
 				'id'      => 2,
@@ -389,7 +389,7 @@ class McpIntegrationTest extends TestCase {
 
 		$token_request = $this->create_request(
 			'POST',
-			'/api/mcp/oauth/token',
+			'/oauth/token',
 			array(
 				'grant_type'    => 'authorization_code',
 				'code'          => $code,
@@ -405,7 +405,7 @@ class McpIntegrationTest extends TestCase {
 		// Create a link via MCP tool call.
 		$create_request = $this->create_request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(
 				'jsonrpc' => '2.0',
 				'id'      => 10,
@@ -440,7 +440,7 @@ class McpIntegrationTest extends TestCase {
 		// Retrieve via get_link tool.
 		$get_request = $this->create_request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(
 				'jsonrpc' => '2.0',
 				'id'      => 11,
@@ -463,7 +463,7 @@ class McpIntegrationTest extends TestCase {
 		// Retrieve via list_links tool.
 		$list_links_request = $this->create_request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(
 				'jsonrpc' => '2.0',
 				'id'      => 12,
@@ -500,7 +500,7 @@ class McpIntegrationTest extends TestCase {
 
 		$token_request = $this->create_request(
 			'POST',
-			'/api/mcp/oauth/token',
+			'/oauth/token',
 			array(
 				'grant_type'    => 'authorization_code',
 				'code'          => $code,
@@ -517,7 +517,7 @@ class McpIntegrationTest extends TestCase {
 		// Rotate via refresh token.
 		$refresh_request = $this->create_request(
 			'POST',
-			'/api/mcp/oauth/token',
+			'/oauth/token',
 			array(
 				'grant_type'    => 'refresh_token',
 				'refresh_token' => $refresh_token,
@@ -536,7 +536,7 @@ class McpIntegrationTest extends TestCase {
 		// Tools list with new access token works.
 		$tools_request = $this->create_request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(
 				'jsonrpc' => '2.0',
 				'id'      => 30,
@@ -553,7 +553,7 @@ class McpIntegrationTest extends TestCase {
 		// Revoke the new access token.
 		$revoke_request = $this->create_request(
 			'POST',
-			'/api/mcp/oauth/revoke',
+			'/oauth/revoke',
 			array(
 				'token'     => $new_access,
 				'client_id' => 'rotating-client',
@@ -623,7 +623,7 @@ class McpIntegrationTest extends TestCase {
 
 		$token_request = $this->create_request(
 			'POST',
-			'/api/mcp/oauth/token',
+			'/oauth/token',
 			array(
 				'grant_type'    => 'authorization_code',
 				'code'          => $code,
@@ -666,10 +666,10 @@ class McpIntegrationTest extends TestCase {
 		);
 		$this->assertNull( $this->auth_service->current_user( $create_req ) );
 
-		// 4. Same token calling POST /api/mcp -> MUST succeed.
+		// 4. Same token calling POST /mcp -> MUST succeed.
 		$mcp_req = $this->create_request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(
 				'jsonrpc' => '2.0',
 				'id'      => 'iso-1',

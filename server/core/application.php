@@ -900,15 +900,15 @@ class Application {
 		// Public protocol and OAuth discovery / token endpoints (no API prefix).
 		$this->add_routes(
 			array(
-				array( 'post', '/api/mcp', array( $mcp, 'handle_mcp' ) ),
-				array( 'get', '/api/mcp', array( $mcp, 'handle_mcp_get' ) ),
-				array( 'get', '/.well-known/oauth-protected-resource/api/mcp', array( $mcp, 'oauth_protected_resource_metadata' ) ),
+				array( 'post', '/mcp', array( $mcp, 'handle_mcp' ) ),
+				array( 'get', '/mcp', array( $mcp, 'handle_mcp_get' ) ),
+				array( 'get', '/.well-known/oauth-protected-resource/mcp', array( $mcp, 'oauth_protected_resource_metadata' ) ),
 				array( 'get', '/.well-known/oauth-protected-resource', array( $mcp, 'oauth_protected_resource_metadata' ) ),
 				array( 'get', '/.well-known/oauth-authorization-server', array( $mcp, 'oauth_authorization_server_metadata' ) ),
 				array( 'get', '/oauth/authorize', array( $mcp, 'oauth_authorize' ) ),
 				array( 'post', '/oauth/authorize', array( $mcp, 'oauth_authorize_submit' ) ),
-				array( 'post', '/api/mcp/oauth/token', array( $mcp, 'oauth_token' ) ),
-				array( 'post', '/api/mcp/oauth/revoke', array( $mcp, 'oauth_revoke' ) ),
+				array( 'post', '/oauth/token', array( $mcp, 'oauth_token' ) ),
+				array( 'post', '/oauth/revoke', array( $mcp, 'oauth_revoke' ) ),
 			),
 			''
 		);

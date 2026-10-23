@@ -28,9 +28,9 @@ export function McpSetupDrawer({
 	const [activeTab, setActiveTab] = useState<GuideTab>("claude");
 	const [copiedKey, setCopiedKey] = useTemporaryState<string | null>(null);
 
-	const siteUrl = endpoint.replace(/\/api\/mcp$/, "");
+	const siteUrl = endpoint.replace(/\/mcp$/, "");
 	const authUrl = `${siteUrl}/oauth/authorize`;
-	const tokenUrl = `${siteUrl}/api/mcp/oauth/token`;
+	const tokenUrl = `${siteUrl}/oauth/token`;
 
 	const handleCopy = async (key: string, text: string) => {
 		try {

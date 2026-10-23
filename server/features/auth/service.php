@@ -1229,11 +1229,11 @@ class Service {
 			return $api_user;
 		}
 
-		// MCP OAuth bearer tokens only authenticate within the dedicated /api/mcp endpoint.
+		// MCP OAuth bearer tokens only authenticate within the dedicated /mcp endpoint.
 		// They are isolated and strictly forbidden from authorizing ordinary REST routes.
 		if (
 			null !== $this->mcp_authorization &&
-			\PeakURL\Core\Config\Constants::API_MCP_PATH === $request->get_path()
+			\PeakURL\Core\Config\Constants::MCP_PATH === $request->get_path()
 		) {
 			$mcp_context = $this->mcp_authorization->authenticate_request( $request );
 			if ( $mcp_context && ! empty( $mcp_context['user'] ) ) {

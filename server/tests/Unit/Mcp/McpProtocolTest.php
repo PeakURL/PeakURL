@@ -129,7 +129,7 @@ class McpProtocolTest extends TestCase {
 
 		return new Request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(),
 			is_array( $parsed_body ) ? $parsed_body : array(),
 			array(),
@@ -399,7 +399,7 @@ class McpProtocolTest extends TestCase {
 		);
 		$req    = new Request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(),
 			array(),
 			array(),
@@ -415,7 +415,7 @@ class McpProtocolTest extends TestCase {
 		$server['CONTENT_TYPE'] = 'application/json; charset=utf-8';
 		$valid_req              = new Request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(),
 			array(),
 			array(),

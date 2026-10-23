@@ -574,17 +574,17 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'public',
 			'coverage'   => array( 'contract' ),
 		),
-		'POST /api/mcp'                                    => array(
+		'POST /mcp'                                        => array(
 			'area'       => 'MCP',
 			'capability' => 'public',
 			'coverage'   => array( 'contract' ),
 		),
-		'GET /api/mcp'                                     => array(
+		'GET /mcp'                                         => array(
 			'area'       => 'MCP',
 			'capability' => 'public',
 			'coverage'   => array( 'contract' ),
 		),
-		'GET /.well-known/oauth-protected-resource/api/mcp' => array(
+		'GET /.well-known/oauth-protected-resource/mcp'    => array(
 			'area'       => 'MCP',
 			'capability' => 'public',
 			'coverage'   => array( 'contract' ),
@@ -609,12 +609,12 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'public',
 			'coverage'   => array( 'contract' ),
 		),
-		'POST /api/mcp/oauth/token'                        => array(
+		'POST /oauth/token'                                => array(
 			'area'       => 'MCP',
 			'capability' => 'public',
 			'coverage'   => array( 'contract' ),
 		),
-		'POST /api/mcp/oauth/revoke'                       => array(
+		'POST /oauth/revoke'                               => array(
 			'area'       => 'MCP',
 			'capability' => 'public',
 			'coverage'   => array( 'contract' ),

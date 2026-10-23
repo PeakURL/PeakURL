@@ -187,7 +187,7 @@ class Constants {
 	/** Public REST API base path. */
 	public const string API_BASE_PATH = '/api/v1';
 	/** Model Context Protocol (MCP) server endpoint path. */
-	public const string API_MCP_PATH = '/api/mcp';
+	public const string MCP_PATH = '/mcp';
 	/** Default update manifest URL. */
 	public const string DEFAULT_UPDATE_MANIFEST_URL = 'https://api.peakurl.org/v1/update';
 	/** Current managed database schema version. */

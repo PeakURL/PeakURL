@@ -115,6 +115,29 @@ class ValidatorTest extends TestCase {
 		$this->validator->validate_alias( 'dashboard' );
 	}
 
+	public function test_validate_alias_rejects_mcp_and_oauth_as_reserved_routes(): void {
+		$this->assertTrue( $this->validator->is_reserved_code( 'mcp' ) );
+		$this->assertTrue( $this->validator->is_reserved_code( 'MCP' ) );
+		$this->assertTrue( $this->validator->is_reserved_code( 'oauth' ) );
+		$this->assertTrue( $this->validator->is_reserved_code( 'OAuth' ) );
+
+		try {
+			$this->validator->validate_alias( 'mcp' );
+			$this->fail( 'Expected ApiException for reserved alias mcp' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'That short code is reserved by the application.', $e->getMessage() );
+		}
+
+		try {
+			$this->validator->validate_alias( 'oauth' );
+			$this->fail( 'Expected ApiException for reserved alias oauth' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 422, $e->getCode() );
+			$this->assertSame( 'That short code is reserved by the application.', $e->getMessage() );
+		}
+	}
+
 	public function test_validate_alias_rejects_existing_duplicate(): void {
 		$this->expectException( ApiException::class );
 		$this->expectExceptionCode( 422 );

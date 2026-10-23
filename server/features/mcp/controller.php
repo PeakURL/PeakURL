@@ -98,7 +98,7 @@ class Controller extends BaseController {
 	}
 
 	/**
-	 * Handle incoming POST requests to /api/mcp (JSON-RPC protocol endpoint).
+	 * Handle incoming POST requests to /mcp (JSON-RPC protocol endpoint).
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @return array<string, mixed> Structured response.
@@ -109,7 +109,7 @@ class Controller extends BaseController {
 	}
 
 	/**
-	 * Handle GET requests to /api/mcp.
+	 * Handle GET requests to /mcp.
 	 *
 	 * In conformance with the MCP Streamable HTTP specification (2025-03-26),
 	 * a GET request to the protocol endpoint must return HTTP 405 Method Not Allowed
@@ -142,7 +142,7 @@ class Controller extends BaseController {
 	/**
 	 * RFC 9728 Protected Resource Metadata endpoint.
 	 *
-	 * Served at /.well-known/oauth-protected-resource/api/mcp and /.well-known/oauth-protected-resource.
+	 * Served at /.well-known/oauth-protected-resource/mcp and /.well-known/oauth-protected-resource.
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @return array<string, mixed> Structured response.
@@ -152,7 +152,7 @@ class Controller extends BaseController {
 		$site_url = rtrim( (string) ( $this->config[ CoreConstants::SITE_URL ] ?? '' ), '/' );
 
 		$metadata = array(
-			'resource'                 => $site_url . CoreConstants::API_MCP_PATH,
+			'resource'                 => $site_url . CoreConstants::MCP_PATH,
 			'authorization_servers'    => array( $site_url ),
 			'scopes_supported'         => Constants::ALL_SCOPES,
 			'bearer_methods_supported' => array( 'header' ),
@@ -177,8 +177,8 @@ class Controller extends BaseController {
 		$metadata = array(
 			'issuer'                                => $site_url,
 			'authorization_endpoint'                => $site_url . '/oauth/authorize',
-			'token_endpoint'                        => $site_url . CoreConstants::API_MCP_PATH . '/oauth/token',
-			'revocation_endpoint'                   => $site_url . CoreConstants::API_MCP_PATH . '/oauth/revoke',
+			'token_endpoint'                        => $site_url . '/oauth/token',
+			'revocation_endpoint'                   => $site_url . '/oauth/revoke',
 			'response_types_supported'              => array( 'code' ),
 			'grant_types_supported'                 => array( 'authorization_code', 'refresh_token' ),
 			'code_challenge_methods_supported'      => array( 'S256' ),
@@ -334,7 +334,7 @@ class Controller extends BaseController {
 	}
 
 	/**
-	 * OAuth 2.1 token endpoint (POST /api/mcp/oauth/token).
+	 * OAuth 2.1 token endpoint (POST /oauth/token).
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @return array<string, mixed> Structured response.
@@ -411,7 +411,7 @@ class Controller extends BaseController {
 	}
 
 	/**
-	 * OAuth token revocation endpoint (POST /api/mcp/oauth/revoke).
+	 * OAuth token revocation endpoint (POST /oauth/revoke).
 	 *
 	 * @param Request $request Incoming HTTP request.
 	 * @return array<string, mixed> Structured response.
@@ -452,7 +452,7 @@ class Controller extends BaseController {
 		$data = array(
 			'enabled'             => $this->authorization->is_enabled(),
 			'writeEnabled'        => $this->authorization->is_write_enabled(),
-			'endpoint'            => $site_url . CoreConstants::API_MCP_PATH,
+			'endpoint'            => $site_url . CoreConstants::MCP_PATH,
 			'protocolVersion'     => Constants::PROTOCOL_VERSION,
 			'allowedRedirectUris' => $this->authorization->get_allowed_redirect_uris(),
 			'supportedScopes'     => Constants::ALL_SCOPES,

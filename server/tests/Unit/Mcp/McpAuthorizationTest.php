@@ -222,7 +222,7 @@ class McpAuthorizationTest extends TestCase {
 		// Authenticate request using the bearer token.
 		$request = new Request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(),
 			array(),
 			array(),
@@ -285,7 +285,7 @@ class McpAuthorizationTest extends TestCase {
 
 		$request = new Request(
 			'POST',
-			'/api/mcp',
+			'/mcp',
 			array(),
 			array(),
 			array(),

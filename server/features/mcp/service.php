@@ -1017,7 +1017,7 @@ class Service {
 	 */
 	private function unauthorized_response( $id ): array {
 		$site_url     = rtrim( (string) ( $this->config[ CoreConstants::SITE_URL ] ?? '' ), '/' );
-		$resource_url = $site_url . '/.well-known/oauth-protected-resource/api/mcp';
+		$resource_url = $site_url . '/.well-known/oauth-protected-resource/mcp';
 
 		$headers = array(
 			'WWW-Authenticate'     => 'Bearer error="invalid_token", error_description="The access token is invalid or expired."',

@@ -141,11 +141,11 @@ class McpDiscoveryTest extends TestCase {
 	}
 
 	public function test_protected_resource_metadata_rfc9728(): void {
-		$request  = new Request( 'GET', '/.well-known/oauth-protected-resource/api/mcp', array(), array() );
+		$request  = new Request( 'GET', '/.well-known/oauth-protected-resource/mcp', array(), array() );
 		$response = $this->controller->oauth_protected_resource_metadata( $request );
 
 		$this->assertSame( 200, $response['status'] );
-		$this->assertSame( 'https://peakurl.dev/api/mcp', $response['body']['resource'] );
+		$this->assertSame( 'https://peakurl.dev/mcp', $response['body']['resource'] );
 		$this->assertSame( array( 'https://peakurl.dev' ), $response['body']['authorization_servers'] );
 		$this->assertSame( Constants::ALL_SCOPES, $response['body']['scopes_supported'] );
 	}
@@ -157,8 +157,8 @@ class McpDiscoveryTest extends TestCase {
 		$this->assertSame( 200, $response['status'] );
 		$this->assertSame( 'https://peakurl.dev', $response['body']['issuer'] );
 		$this->assertSame( 'https://peakurl.dev/oauth/authorize', $response['body']['authorization_endpoint'] );
-		$this->assertSame( 'https://peakurl.dev/api/mcp/oauth/token', $response['body']['token_endpoint'] );
-		$this->assertSame( 'https://peakurl.dev/api/mcp/oauth/revoke', $response['body']['revocation_endpoint'] );
+		$this->assertSame( 'https://peakurl.dev/oauth/token', $response['body']['token_endpoint'] );
+		$this->assertSame( 'https://peakurl.dev/oauth/revoke', $response['body']['revocation_endpoint'] );
 		$this->assertSame( array( 'none' ), $response['body']['token_endpoint_auth_methods_supported'] );
 		$this->assertContains( 'S256', $response['body']['code_challenge_methods_supported'] );
 	}
@@ -242,11 +242,11 @@ class McpDiscoveryTest extends TestCase {
 		$res_get = $this->controller->oauth_authorize( $req_get );
 		$this->assertSame( 503, $res_get['status'] );
 
-		$req_mcp_get = new Request( 'GET', '/api/mcp', array(), array() );
+		$req_mcp_get = new Request( 'GET', '/mcp', array(), array() );
 		$res_mcp_get = $this->controller->handle_mcp_get( $req_mcp_get );
 		$this->assertSame( 503, $res_mcp_get['status'] );
 
-		$req_tok = new Request( 'POST', '/api/mcp/oauth/token', array(), array( 'grant_type' => 'authorization_code' ) );
+		$req_tok = new Request( 'POST', '/oauth/token', array(), array( 'grant_type' => 'authorization_code' ) );
 		$res_tok = $this->controller->oauth_token( $req_tok );
 		$this->assertSame( 503, $res_tok['status'] );
 	}
@@ -254,7 +254,7 @@ class McpDiscoveryTest extends TestCase {
 	public function test_handle_mcp_get_returns_405_method_not_allowed(): void {
 		$this->auth->set_enabled( true );
 
-		$req      = new Request( 'GET', '/api/mcp', array(), array() );
+		$req      = new Request( 'GET', '/mcp', array(), array() );
 		$response = $this->controller->handle_mcp_get( $req );
 
 		$this->assertSame( 405, $response['status'] );
@@ -271,7 +271,7 @@ class McpDiscoveryTest extends TestCase {
 		$this->assertFalse( $response['body']['data']['enabled'] );
 		$this->assertFalse( $response['body']['data']['writeEnabled'] );
 		$this->assertSame( '2025-03-26', $response['body']['data']['protocolVersion'] );
-		$this->assertSame( 'https://peakurl.dev/api/mcp', $response['body']['data']['endpoint'] );
+		$this->assertSame( 'https://peakurl.dev/mcp', $response['body']['data']['endpoint'] );
 
 		// Update settings.
 		$put_req = new Request(

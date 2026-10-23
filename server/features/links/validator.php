@@ -70,7 +70,7 @@ class Validator {
 	public function is_reserved_code( string $code ): bool {
 		return in_array(
 			strtolower( trim( $code ) ),
-			array( 'api', 'dashboard', 'login', 'forgot-password', 'reset-password' ),
+			array( 'api', 'dashboard', 'login', 'forgot-password', 'reset-password', 'mcp', 'oauth' ),
 			true,
 		);
 	}

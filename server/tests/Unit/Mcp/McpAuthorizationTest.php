@@ -349,6 +349,7 @@ class McpAuthorizationTest extends TestCase {
 		$this->auth->revoke_connection( $conn_id );
 		$conns_revoked = $this->auth->list_connections();
 		$this->assertFalse( $conns_revoked[0]['isActive'] );
+		$this->assertSame( 'revoked', $conns_revoked[0]['status'] );
 		$this->assertNotNull( $conns_revoked[0]['revokedAt'] );
 
 		// Touch on revoked connection does not alter its lastUsedAt.
@@ -357,5 +358,178 @@ class McpAuthorizationTest extends TestCase {
 
 		$conns_after_ghost = $this->auth->list_connections();
 		$this->assertSame( \PeakURL\Utils\Date::to_iso( $time2 ), $conns_after_ghost[0]['lastUsedAt'] );
+	}
+
+	/**
+	 * Test connection authorization status derivation for active, expired, and revoked grants.
+	 */
+	public function test_connection_status_derivation(): void {
+		$now = time();
+
+		$stored = array(
+			array(
+				'id'                 => 'conn-active',
+				'client_id'          => 'client-1',
+				'client_name'        => 'Active Client',
+				'user_id'            => '1',
+				'token_hash'         => hash( 'sha256', 'tok1' ),
+				'refresh_token_hash' => hash( 'sha256', 'ref1' ),
+				'scopes'             => array( Constants::SCOPE_LINKS_READ ),
+				'expires_at'         => gmdate( 'Y-m-d H:i:s', $now + 3600 ),
+				'refresh_expires_at' => gmdate( 'Y-m-d H:i:s', $now + 86400 ),
+				'created_at'         => gmdate( 'Y-m-d H:i:s', $now - 100 ),
+				'last_used_at'       => gmdate( 'Y-m-d H:i:s', $now - 50 ),
+				'revoked_at'         => null,
+			),
+			array(
+				'id'                 => 'conn-expired',
+				'client_id'          => 'client-2',
+				'client_name'        => 'Expired Client',
+				'user_id'            => '1',
+				'token_hash'         => hash( 'sha256', 'tok2' ),
+				'refresh_token_hash' => hash( 'sha256', 'ref2' ),
+				'scopes'             => array( Constants::SCOPE_LINKS_READ ),
+				'expires_at'         => gmdate( 'Y-m-d H:i:s', $now - 7200 ),
+				'refresh_expires_at' => gmdate( 'Y-m-d H:i:s', $now - 3600 ),
+				'created_at'         => gmdate( 'Y-m-d H:i:s', $now - 86400 ),
+				'last_used_at'       => gmdate( 'Y-m-d H:i:s', $now - 7200 ),
+				'revoked_at'         => null,
+			),
+			array(
+				'id'                 => 'conn-revoked',
+				'client_id'          => 'client-3',
+				'client_name'        => 'Revoked Client',
+				'user_id'            => '1',
+				'token_hash'         => hash( 'sha256', 'tok3' ),
+				'refresh_token_hash' => hash( 'sha256', 'ref3' ),
+				'scopes'             => array( Constants::SCOPE_LINKS_READ ),
+				'expires_at'         => gmdate( 'Y-m-d H:i:s', $now + 3600 ),
+				'refresh_expires_at' => gmdate( 'Y-m-d H:i:s', $now + 86400 ),
+				'created_at'         => gmdate( 'Y-m-d H:i:s', $now - 500 ),
+				'last_used_at'       => gmdate( 'Y-m-d H:i:s', $now - 200 ),
+				'revoked_at'         => gmdate( 'Y-m-d H:i:s', $now - 100 ),
+			),
+		);
+
+		$this->settings_store[ Constants::SETTING_MCP_CONNECTIONS ] = (string) json_encode( $stored );
+
+		$connections = $this->auth->list_connections();
+		$this->assertCount( 3, $connections );
+
+		$by_id = array();
+		foreach ( $connections as $c ) {
+			$by_id[ $c['id'] ] = $c;
+		}
+
+		// Active
+		$this->assertSame( 'active', $by_id['conn-active']['status'] );
+		$this->assertTrue( $by_id['conn-active']['isActive'] );
+		$this->assertNull( $by_id['conn-active']['revokedAt'] );
+
+		// Expired
+		$this->assertSame( 'expired', $by_id['conn-expired']['status'] );
+		$this->assertFalse( $by_id['conn-expired']['isActive'] );
+		$this->assertNull( $by_id['conn-expired']['revokedAt'] );
+
+		// Revoked
+		$this->assertSame( 'revoked', $by_id['conn-revoked']['status'] );
+		$this->assertFalse( $by_id['conn-revoked']['isActive'] );
+		$this->assertNotNull( $by_id['conn-revoked']['revokedAt'] );
+	}
+
+	/**
+	 * Test revoke_all_connections revokes only active authorizations and preserves history.
+	 */
+	public function test_revoke_all_connections_only_revokes_active_grants(): void {
+		$now               = time();
+		$past_revoked_time = gmdate( 'Y-m-d H:i:s', $now - 3600 );
+
+		$stored = array(
+			array(
+				'id'                 => 'act-1',
+				'client_id'          => 'c1',
+				'client_name'        => 'Active 1',
+				'user_id'            => '1',
+				'token_hash'         => hash( 'sha256', 't1' ),
+				'refresh_token_hash' => hash( 'sha256', 'r1' ),
+				'scopes'             => array( Constants::SCOPE_LINKS_READ ),
+				'expires_at'         => gmdate( 'Y-m-d H:i:s', $now + 3600 ),
+				'refresh_expires_at' => gmdate( 'Y-m-d H:i:s', $now + 86400 ),
+				'created_at'         => gmdate( 'Y-m-d H:i:s', $now - 100 ),
+				'last_used_at'       => null,
+				'revoked_at'         => null,
+			),
+			array(
+				'id'                 => 'act-2',
+				'client_id'          => 'c2',
+				'client_name'        => 'Active 2',
+				'user_id'            => '1',
+				'token_hash'         => hash( 'sha256', 't2' ),
+				'refresh_token_hash' => hash( 'sha256', 'r2' ),
+				'scopes'             => array( Constants::SCOPE_LINKS_READ ),
+				'expires_at'         => gmdate( 'Y-m-d H:i:s', $now + 3600 ),
+				'refresh_expires_at' => gmdate( 'Y-m-d H:i:s', $now + 86400 ),
+				'created_at'         => gmdate( 'Y-m-d H:i:s', $now - 200 ),
+				'last_used_at'       => null,
+				'revoked_at'         => null,
+			),
+			array(
+				'id'                 => 'exp-1',
+				'client_id'          => 'c3',
+				'client_name'        => 'Expired 1',
+				'user_id'            => '1',
+				'token_hash'         => hash( 'sha256', 't3' ),
+				'refresh_token_hash' => hash( 'sha256', 'r3' ),
+				'scopes'             => array( Constants::SCOPE_LINKS_READ ),
+				'expires_at'         => gmdate( 'Y-m-d H:i:s', $now - 7200 ),
+				'refresh_expires_at' => gmdate( 'Y-m-d H:i:s', $now - 3600 ),
+				'created_at'         => gmdate( 'Y-m-d H:i:s', $now - 86400 ),
+				'last_used_at'       => null,
+				'revoked_at'         => null,
+			),
+			array(
+				'id'                 => 'rev-1',
+				'client_id'          => 'c4',
+				'client_name'        => 'Already Revoked',
+				'user_id'            => '1',
+				'token_hash'         => hash( 'sha256', 't4' ),
+				'refresh_token_hash' => hash( 'sha256', 'r4' ),
+				'scopes'             => array( Constants::SCOPE_LINKS_READ ),
+				'expires_at'         => gmdate( 'Y-m-d H:i:s', $now + 3600 ),
+				'refresh_expires_at' => gmdate( 'Y-m-d H:i:s', $now + 86400 ),
+				'created_at'         => gmdate( 'Y-m-d H:i:s', $now - 5000 ),
+				'last_used_at'       => null,
+				'revoked_at'         => $past_revoked_time,
+			),
+		);
+
+		$this->settings_store[ Constants::SETTING_MCP_CONNECTIONS ] = (string) json_encode( $stored );
+
+		$revoked_count = $this->auth->revoke_all_connections();
+		$this->assertSame( 2, $revoked_count );
+
+		$connections = $this->auth->list_connections();
+		$by_id       = array();
+		foreach ( $connections as $c ) {
+			$by_id[ $c['id'] ] = $c;
+		}
+
+		// The 2 active connections are now revoked.
+		$this->assertSame( 'revoked', $by_id['act-1']['status'] );
+		$this->assertFalse( $by_id['act-1']['isActive'] );
+		$this->assertNotNull( $by_id['act-1']['revokedAt'] );
+
+		$this->assertSame( 'revoked', $by_id['act-2']['status'] );
+		$this->assertFalse( $by_id['act-2']['isActive'] );
+		$this->assertNotNull( $by_id['act-2']['revokedAt'] );
+
+		// The expired connection remains expired, not marked revoked.
+		$this->assertSame( 'expired', $by_id['exp-1']['status'] );
+		$this->assertFalse( $by_id['exp-1']['isActive'] );
+		$this->assertNull( $by_id['exp-1']['revokedAt'] );
+
+		// The already-revoked connection kept its original revoked timestamp.
+		$this->assertSame( 'revoked', $by_id['rev-1']['status'] );
+		$this->assertSame( \PeakURL\Utils\Date::to_iso( $past_revoked_time ), $by_id['rev-1']['revokedAt'] );
 	}
 }

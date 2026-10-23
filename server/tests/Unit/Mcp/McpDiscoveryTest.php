@@ -295,7 +295,20 @@ class McpDiscoveryTest extends TestCase {
 		$response = $this->controller->list_tools( $req );
 
 		$this->assertSame( 200, $response['status'] );
-		$this->assertNotEmpty( $response['body']['data']['tools'] );
+		$tools = $response['body']['data']['tools'];
+		$this->assertCount( 9, $tools );
+
+		$write_tools = array( 'create_link', 'update_link' );
+		foreach ( $tools as $tool ) {
+			$this->assertArrayHasKey( 'isWrite', $tool );
+			$this->assertArrayNotHasKey( 'is_write', $tool );
+
+			if ( in_array( $tool['name'], $write_tools, true ) ) {
+				$this->assertTrue( $tool['isWrite'], sprintf( 'Tool %s should be marked as write tool', $tool['name'] ) );
+			} else {
+				$this->assertFalse( $tool['isWrite'], sprintf( 'Tool %s should be marked as read-only', $tool['name'] ) );
+			}
+		}
 	}
 
 	public function test_user_with_manage_integrations_alone_receives_403_forbidden_on_all_mcp_management_endpoints(): void {

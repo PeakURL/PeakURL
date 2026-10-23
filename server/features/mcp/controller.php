@@ -639,7 +639,14 @@ class Controller extends BaseController {
 	public function list_tools( Request $request ): array {
 		$this->require_mcp_management( $request );
 
-		$tools = array_values( Registry::get_tools( true ) );
+		$raw_tools = array_values( Registry::get_tools( true ) );
+		$tools     = array();
+
+		foreach ( $raw_tools as $tool ) {
+			$tool['isWrite'] = ! empty( $tool['is_write'] );
+			unset( $tool['is_write'] );
+			$tools[] = $tool;
+		}
 
 		return JsonResponse::success(
 			array(

@@ -218,53 +218,21 @@
 		@apply inline-flex items-center rounded bg-surface border border-stroke px-1.5 py-0.5 text-[11px] text-text-muted;
 	}
 
-	/* Modal & Catalog */
-	.mcp-modal-content {
-		@apply space-y-4 max-h-[70vh] overflow-y-auto px-1;
-	}
-
-	.mcp-modal-header-desc {
-		@apply space-y-3 pb-3 border-b border-stroke;
-	}
-
-	.mcp-modal-summary {
-		@apply text-xs text-text-muted m-0 leading-relaxed;
-	}
-
-	.mcp-modal-search-wrapper {
-		@apply relative flex items-center;
-	}
-
-	.mcp-modal-search-icon {
-		@apply absolute text-text-muted shrink-0 pointer-events-none;
-		inset-inline-start: 0.75rem;
-	}
-
-	.mcp-modal-search-input {
-		@apply w-full rounded-lg border border-stroke bg-surface py-2 text-xs text-heading transition-colors focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent;
-		padding-inline-start: 2.25rem;
-		padding-inline-end: 0.75rem;
-	}
-
-	.mcp-modal-loading,
-	.mcp-modal-empty {
-		@apply flex flex-col items-center justify-center p-8 text-center text-xs text-text-muted;
-	}
-
+	/* ─── MCP Tool Catalog Drawer ─── */
 	.mcp-tool-list {
-		@apply space-y-3;
+		@apply space-y-4;
 	}
 
 	.mcp-tool-card {
-		@apply rounded-lg border border-stroke bg-surface p-3.5 space-y-2.5;
+		@apply rounded-xl border border-stroke bg-surface p-4 space-y-3.5 shadow-2xs transition-colors hover:border-stroke-strong;
 	}
 
 	.mcp-tool-card-header {
-		@apply space-y-1;
+		@apply space-y-1.5 pb-3 border-b border-stroke/60;
 	}
 
 	.mcp-tool-title-row {
-		@apply flex items-center gap-2 flex-wrap;
+		@apply flex items-center justify-between gap-2 flex-wrap;
 	}
 
 	.mcp-tool-name {
@@ -275,44 +243,81 @@
 		@apply text-xs text-text-muted m-0 leading-relaxed;
 	}
 
-	.mcp-tool-parameters-section {
-		@apply pt-2 border-t border-stroke/60 space-y-1.5;
+	.mcp-tool-card-body {
+		@apply space-y-3 pt-0.5;
 	}
 
-	.mcp-tool-param-heading {
-		@apply text-[11px] font-semibold text-heading uppercase tracking-wider flex items-center gap-1;
+	.mcp-tool-meta-row {
+		@apply flex items-center gap-2 text-xs flex-wrap;
 	}
 
-	.mcp-tool-param-table {
-		@apply space-y-1.5 rounded-md border border-stroke/70 bg-surface-alt/40 p-2;
+	.mcp-tool-meta-label {
+		@apply inline-flex items-center gap-1.5 text-xs font-medium text-text-muted;
 	}
 
-	.mcp-tool-param-row {
-		@apply text-xs space-y-0.5;
+	.mcp-tool-meta-code {
+		@apply inline-flex items-center rounded-md border border-stroke bg-surface-alt px-2 py-0.5 text-xs font-mono text-heading;
 	}
 
-	.mcp-tool-param-meta {
-		@apply flex items-center gap-2;
+	.mcp-tool-schema-section {
+		@apply space-y-2 pt-1;
 	}
 
-	.mcp-tool-param-name {
-		@apply font-semibold text-heading;
+	.mcp-tool-schema-header {
+		@apply flex items-center gap-1.5 text-xs font-semibold text-heading uppercase tracking-wider;
 	}
 
-	.mcp-tool-param-type {
-		@apply text-[11px] text-text-muted bg-surface px-1 py-0.5 rounded border border-stroke;
+	.mcp-tool-no-params {
+		@apply text-xs text-text-muted m-0 italic rounded-md border border-stroke/50 bg-surface-alt/30 px-3 py-2;
+	}
+
+	.mcp-tool-params-table-wrapper {
+		@apply overflow-x-auto rounded-lg border border-stroke bg-surface;
+	}
+
+	.mcp-tool-params-table {
+		@apply min-w-full text-start text-xs border-collapse;
+	}
+
+	[dir="rtl"] .mcp-tool-params-table {
+		@apply text-right;
+	}
+
+	.mcp-tool-params-table th {
+		@apply bg-table-head px-3.5 py-2.5 text-[11px] font-semibold text-table-head-text uppercase tracking-wider border-b border-stroke/60 text-start;
+	}
+
+	[dir="rtl"] .mcp-tool-params-table th {
+		@apply text-right;
+	}
+
+	.mcp-tool-params-table td {
+		@apply border-b border-stroke/30 px-3.5 py-2.5 text-xs text-heading align-top text-start last:border-b-0;
+	}
+
+	[dir="rtl"] .mcp-tool-params-table td {
+		@apply text-right;
+	}
+
+	.mcp-param-name {
+		@apply font-mono text-xs font-medium text-heading;
 	}
 
 	.mcp-param-required {
-		@apply text-[11px] text-red-500 font-medium;
+		@apply text-red-500 font-bold ms-0.5;
 	}
 
-	.mcp-param-optional {
-		@apply text-[11px] text-text-muted;
+	.mcp-param-type {
+		@apply inline-block rounded border border-stroke bg-surface-alt px-1.5 py-0.5 text-[11px] font-mono text-text-muted whitespace-nowrap;
 	}
 
-	.mcp-tool-param-desc {
-		@apply text-[11px] text-text-muted m-0;
+	.mcp-param-desc {
+		@apply text-xs text-text-muted leading-relaxed;
+	}
+
+	.mcp-modal-loading,
+	.mcp-modal-empty {
+		@apply flex flex-col items-center justify-center rounded-xl border border-dashed border-stroke bg-surface-alt/40 p-8 text-center text-xs text-text-muted;
 	}
 
 	/* Guide Modal */

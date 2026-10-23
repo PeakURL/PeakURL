@@ -9,8 +9,9 @@ import {
 	useRevokeMcpConnectionMutation,
 } from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
-import { formatLocalizedDateTime } from "@/shared/dates";
+import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
 import { getErrorMessage } from "@/shared/errors";
+import { cn } from "@/shared/formatting";
 
 interface McpConnectedClientsProps {
 	notification?: Pick<NotificationContextValue, "error" | "success"> | null;
@@ -35,7 +36,9 @@ export function McpConnectedClients({
 	const [isRevokeAllOpen, setIsRevokeAllOpen] = useState(false);
 
 	const connections = data?.data?.connections || [];
-	const total = data?.data?.total || connections.length;
+	const activeCount = connections.filter((conn) =>
+		conn.status ? conn.status === "active" : conn.isActive !== false
+	).length;
 
 	const handleConfirmRevokeOne = async () => {
 		if (!connectionToRevoke) {
@@ -70,7 +73,7 @@ export function McpConnectedClients({
 	const handleConfirmRevokeAll = async () => {
 		try {
 			const res = await revokeAllConnections().unwrap();
-			const count = res.data?.revokedCount ?? total;
+			const count = res.data?.revokedCount ?? activeCount;
 			notification?.success(
 				__("All Connections Revoked"),
 				sprintf(
@@ -108,12 +111,12 @@ export function McpConnectedClients({
 						{sprintf(
 							/* translators: %d: count */
 							__("%d active"),
-							total
+							activeCount
 						)}
 					</span>
 				</div>
 
-				{connections.length > 0 && (
+				{activeCount > 0 && (
 					<Button
 						variant="outline"
 						size="sm"
@@ -154,14 +157,27 @@ export function McpConnectedClients({
 				<div className="mcp-clients-list">
 					{connections.map((conn) => {
 						const lastUsed = conn.lastUsedAt
-							? formatLocalizedDateTime(conn.lastUsedAt)
+							? `${formatRelativeTime(conn.lastUsedAt)} • ${formatLocalizedDateTime(conn.lastUsedAt)}`
 							: __("Never");
 						const authorizedAt = conn.createdAt
-							? formatLocalizedDateTime(conn.createdAt)
+							? `${formatRelativeTime(conn.createdAt)} • ${formatLocalizedDateTime(conn.createdAt)}`
 							: __("Unknown");
 
+						const status =
+							conn.status ??
+							(conn.isActive !== false ? "active" : "revoked");
+						const isActive = status === "active";
+						const isExpired = status === "expired";
+						const isRevoked = status === "revoked";
+
 						return (
-							<div key={conn.id} className="mcp-client-card">
+							<div
+								key={conn.id}
+								className={cn(
+									"mcp-client-card",
+									!isActive && "opacity-75 bg-surface-alt/10"
+								)}
+							>
 								<div className="mcp-client-header">
 									<div className="mcp-client-main-info">
 										<div className="mcp-client-name-row">
@@ -169,58 +185,109 @@ export function McpConnectedClients({
 												{conn.clientName ||
 													__("Unnamed Client")}
 											</span>
-											<span className="mcp-badge mcp-badge-success">
-												{__("Active")}
-											</span>
+											{isActive && (
+												<span className="mcp-badge mcp-badge-success">
+													{__("Active")}
+												</span>
+											)}
+											{isExpired && (
+												<span className="mcp-badge mcp-badge-warning">
+													{__("Expired")}
+												</span>
+											)}
+											{isRevoked && (
+												<span className="mcp-badge mcp-badge-neutral">
+													{__("Revoked")}
+												</span>
+											)}
 										</div>
 
 										<div className="mcp-client-meta-row">
 											<span className="mcp-client-meta-item">
-												<User size={12} />
+												<User
+													size={12}
+													className="shrink-0"
+												/>
 												{conn.displayName ||
 													conn.username}
 											</span>
 											<span className="mcp-client-meta-item">
-												<Clock size={12} />
+												<Clock
+													size={12}
+													className="shrink-0"
+												/>
 												{sprintf(
+													/* translators: %s: relative and full issue timestamp */
 													__("Issued: %s"),
 													authorizedAt
 												)}
 											</span>
 											<span className="mcp-client-meta-item">
-												<Key size={12} />
+												<Key
+													size={12}
+													className="shrink-0"
+												/>
 												{sprintf(
+													/* translators: %s: relative and full last used timestamp */
 													__("Last used: %s"),
 													lastUsed
 												)}
 											</span>
+											{isExpired && conn.expiresAt && (
+												<span className="mcp-client-meta-item text-amber-600/80 dark:text-amber-400/80">
+													<Clock
+														size={12}
+														className="shrink-0"
+													/>
+													{sprintf(
+														/* translators: %s: relative and full expired timestamp */
+														__("Expired: %s"),
+														`${formatRelativeTime(conn.expiresAt)} • ${formatLocalizedDateTime(conn.expiresAt)}`
+													)}
+												</span>
+											)}
+											{isRevoked && conn.revokedAt && (
+												<span className="mcp-client-meta-item text-red-500/80">
+													<Clock
+														size={12}
+														className="shrink-0"
+													/>
+													{sprintf(
+														/* translators: %s: relative and full revoked timestamp */
+														__("Revoked: %s"),
+														`${formatRelativeTime(conn.revokedAt)} • ${formatLocalizedDateTime(conn.revokedAt)}`
+													)}
+												</span>
+											)}
 										</div>
 									</div>
 
-									<Button
-										variant="outline"
-										size="sm"
-										onClick={() =>
-											setConnectionToRevoke({
-												id: conn.id,
-												clientName:
-													conn.clientName ||
-													__("Client"),
-											})
-										}
-										className="mcp-client-revoke-btn"
-										aria-label={sprintf(
-											/* translators: %s: client name */
-											__("Revoke %s authorization"),
-											conn.clientName
-										)}
-									>
-										<Trash2
-											size={13}
-											className="text-red-500"
-										/>
-										{__("Revoke")}
-									</Button>
+									{isActive && (
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() =>
+												setConnectionToRevoke({
+													id: conn.id,
+													clientName:
+														conn.clientName ||
+														__("Client"),
+												})
+											}
+											className="mcp-client-revoke-btn"
+											aria-label={sprintf(
+												/* translators: %s: client name */
+												__("Revoke %s authorization"),
+												conn.clientName
+											)}
+										>
+											<Trash2
+												size={13}
+												className="text-red-500"
+											/>
+											{__("Revoke")}
+										</Button>
+									)}
 								</div>
 
 								{conn.scopes && conn.scopes.length > 0 && (

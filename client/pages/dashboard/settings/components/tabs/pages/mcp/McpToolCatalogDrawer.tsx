@@ -1,16 +1,8 @@
 import { useState } from "react";
 import { DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
-import {
-	Code,
-	FileText,
-	PenTool,
-	Search,
-	Shield,
-	Wrench,
-	X,
-} from "lucide-react";
+import { Code, FileText, PenTool, Shield, Wrench, X } from "lucide-react";
 
-import { DrawerDialog, Button } from "@/components";
+import { DrawerDialog, Button, SearchInput } from "@/components";
 import type { McpTool } from "@/state/slices/api";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -45,7 +37,7 @@ export function McpToolCatalogDrawer({
 	});
 
 	const readCount = tools.filter((tool) => !tool.isWrite).length;
-	const writeCount = tools.filter((tool) => Boolean(tool.isWrite)).length;
+	const writeCount = tools.filter((tool) => tool.isWrite).length;
 
 	return (
 		<DrawerDialog open={isOpen} onClose={onClose}>
@@ -87,7 +79,7 @@ export function McpToolCatalogDrawer({
 											{sprintf(
 												/* translators: 1: total tool count, 2: read tool count, 3: write tool count */
 												__(
-													"%1$d tools available over JSON-RPC 2.0 (%2$d read-only queries, %3$d write actions)."
+													"%1$d registered tools (%2$d read-only queries, %3$d write actions)."
 												),
 												tools.length,
 												readCount,
@@ -109,24 +101,14 @@ export function McpToolCatalogDrawer({
 							{/* Drawer Content */}
 							<div className="drawer-content p-4 sm:p-6 space-y-5">
 								{/* Search Filter */}
-								<div className="mcp-modal-search-wrapper">
-									<Search
-										size={15}
-										className="mcp-modal-search-icon"
-									/>
-									<input
-										type="text"
-										value={searchQuery}
-										onChange={(e) =>
-											setSearchQuery(e.target.value)
-										}
-										placeholder={__(
-											"Filter tools by name, description, or scope..."
-										)}
-										className="mcp-modal-search-input"
-										aria-label={__("Filter tools")}
-									/>
-								</div>
+								<SearchInput
+									value={searchQuery}
+									onChange={setSearchQuery}
+									placeholder={__(
+										"Filter tools by name, description, or scope..."
+									)}
+									aria-label={__("Filter tools")}
+								/>
 
 								{isLoading ? (
 									<div className="mcp-modal-loading">
@@ -156,6 +138,9 @@ export function McpToolCatalogDrawer({
 											);
 											const propertyKeys =
 												Object.keys(properties);
+											const isWrite = Boolean(
+												tool.isWrite
+											);
 
 											return (
 												<div
@@ -170,12 +155,12 @@ export function McpToolCatalogDrawer({
 															<span
 																className={cn(
 																	"mcp-badge",
-																	tool.isWrite
+																	isWrite
 																		? "mcp-badge-warning"
 																		: "mcp-badge-neutral"
 																)}
 															>
-																{tool.isWrite ? (
+																{isWrite ? (
 																	<>
 																		<PenTool
 																			size={
@@ -231,7 +216,7 @@ export function McpToolCatalogDrawer({
 														<div className="mcp-tool-schema-section">
 															<div className="mcp-tool-schema-header">
 																<Code
-																	size={12}
+																	size={13}
 																	className="shrink-0"
 																/>
 																<span>
@@ -253,12 +238,12 @@ export function McpToolCatalogDrawer({
 																	<table className="mcp-tool-params-table">
 																		<thead>
 																			<tr>
-																				<th>
+																				<th className="w-1/4">
 																					{__(
 																						"Parameter"
 																					)}
 																				</th>
-																				<th>
+																				<th className="w-1/5">
 																					{__(
 																						"Type"
 																					)}
@@ -293,9 +278,9 @@ export function McpToolCatalogDrawer({
 																								propName
 																							}
 																						>
-																							<td className="font-mono text-xs">
-																								<div className="flex items-center gap-1.5">
-																									<span>
+																							<td>
+																								<div className="flex items-center gap-1 font-mono text-xs">
+																									<span className="mcp-param-name">
 																										{
 																											propName
 																										}
@@ -318,7 +303,7 @@ export function McpToolCatalogDrawer({
 																										"any"}
 																								</span>
 																							</td>
-																							<td className="text-xs text-text-muted">
+																							<td className="mcp-param-desc">
 																								{prop.description ||
 																									"—"}
 																							</td>

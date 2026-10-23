@@ -812,6 +812,9 @@ class Authorization {
 	/**
 	 * Revoke all active MCP client connections under atomic lock.
 	 *
+	 * Only active authorizations are revoked; expired and already-revoked
+	 * records remain preserved in history.
+	 *
 	 * @return int Number of active connections revoked.
 	 * @since 1.8.0
 	 */
@@ -831,7 +834,13 @@ class Authorization {
 				}
 
 				foreach ( $connections as $idx => $conn ) {
-					if ( empty( $conn['revoked_at'] ) ) {
+					$refresh_expiry = ! empty( $conn['refresh_expires_at'] )
+						? (string) $conn['refresh_expires_at']
+						: ( ! empty( $conn['expires_at'] ) ? (string) $conn['expires_at'] : null );
+
+					$is_active = empty( $conn['revoked_at'] ) && ( empty( $refresh_expiry ) || $refresh_expiry > $now );
+
+					if ( $is_active ) {
 						$connections[ $idx ]['revoked_at'] = $now;
 						++$revoked;
 					}
@@ -855,9 +864,22 @@ class Authorization {
 	public function list_connections(): array {
 		$connections = $this->get_stored_connections();
 		$list        = array();
+		$now         = gmdate( 'Y-m-d H:i:s' );
 
 		foreach ( $connections as $conn ) {
 			$user = $this->users->get_user( (string) $conn['user_id'] );
+
+			$refresh_expiry = ! empty( $conn['refresh_expires_at'] )
+				? (string) $conn['refresh_expires_at']
+				: ( ! empty( $conn['expires_at'] ) ? (string) $conn['expires_at'] : null );
+
+			if ( ! empty( $conn['revoked_at'] ) ) {
+				$status = 'revoked';
+			} elseif ( ! empty( $refresh_expiry ) && $refresh_expiry <= $now ) {
+				$status = 'expired';
+			} else {
+				$status = 'active';
+			}
 
 			$list[] = array(
 				'id'          => $conn['id'],
@@ -869,9 +891,10 @@ class Authorization {
 				'scopes'      => $conn['scopes'],
 				'createdAt'   => Date::to_iso( $conn['created_at'] ),
 				'lastUsedAt'  => ! empty( $conn['last_used_at'] ) ? Date::to_iso( $conn['last_used_at'] ) : null,
-				'expiresAt'   => ! empty( $conn['expires_at'] ) ? Date::to_iso( $conn['expires_at'] ) : null,
+				'expiresAt'   => ! empty( $refresh_expiry ) ? Date::to_iso( $refresh_expiry ) : null,
 				'revokedAt'   => ! empty( $conn['revoked_at'] ) ? Date::to_iso( $conn['revoked_at'] ) : null,
-				'isActive'    => empty( $conn['revoked_at'] ),
+				'status'      => $status,
+				'isActive'    => ( 'active' === $status ),
 			);
 		}
 

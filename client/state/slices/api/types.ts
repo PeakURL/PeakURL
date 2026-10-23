@@ -656,6 +656,7 @@ export interface McpConnection {
 	lastUsedAt: string | null;
 	expiresAt: string | null;
 	revokedAt: string | null;
+	status: "active" | "expired" | "revoked";
 	isActive: boolean;
 }
 
@@ -676,7 +677,7 @@ export interface McpTool {
 	inputSchema: McpToolSchema;
 	scope?: string;
 	capability?: string | null;
-	isWrite?: boolean;
+	isWrite: boolean;
 }
 
 export interface McpConnectionsResponse {

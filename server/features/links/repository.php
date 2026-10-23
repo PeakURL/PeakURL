@@ -776,29 +776,33 @@ class Repository {
 			return array();
 		}
 
-		$ids = array();
+		$expired_links = array();
 		foreach ( $due_links as $link ) {
 			$id = (string) ( $link['id'] ?? '' );
-			if ( '' !== $id ) {
-				$ids[] = $id;
+			if ( '' === $id ) {
+				continue;
+			}
+
+			$transitioned = $this->db->update(
+				'urls',
+				array(
+					'status'     => 'expired',
+					'updated_at' => $now,
+				),
+				array(
+					'id'     => $id,
+					'status' => 'active',
+				),
+			) > 0;
+
+			if ( $transitioned ) {
+				$link['status']     = 'expired';
+				$link['updated_at'] = $now;
+				$expired_links[]    = $link;
 			}
 		}
 
-		if ( empty( $ids ) ) {
-			return array();
-		}
-
-		$this->db->update_where_in(
-			'urls',
-			array(
-				'status'     => 'expired',
-				'updated_at' => $now,
-			),
-			'id',
-			$ids
-		);
-
-		return $due_links;
+		return $expired_links;
 	}
 
 	/**

@@ -295,6 +295,177 @@ class LinksDatabasePersistenceTest extends TestCase {
 		$this->assertFalse( $re_trashed, 'Repository::trash_url() must return false when row is already trashed.' );
 	}
 
+	public function test_expire_due_links_full_and_zero_updates(): void {
+		$config     = Configuration::get_current();
+		$connection = Connection::get_instance( $config );
+		$db         = new \PeakURL\Services\Database\PeakURL_DB( $connection );
+		$roles      = new \PeakURL\Core\Auth\Roles();
+		$auth       = new \PeakURL\Core\Auth\Authorization( $roles );
+		$links_api  = new \PeakURL\Api\LinksApi( $db );
+		$repository = new \PeakURL\Features\Links\Repository( $db, $links_api, $auth );
+
+		$past_time = '2020-01-01 00:00:00';
+		$now       = \PeakURL\Utils\Date::now();
+
+		$id1 = bin2hex( random_bytes( 10 ) );
+		$id2 = bin2hex( random_bytes( 10 ) );
+
+		$insert_stmt = $this->pdo->prepare(
+			'INSERT INTO peakurl_urls (id, user_id, short_code, alias, destination_url, title, status, expires_at, created_at, updated_at)
+			VALUES (:id, 1, :code, :alias, :dest, :title, :status, :expires_at, :created_at, :updated_at)'
+		);
+
+		$insert_stmt->execute(
+			array(
+				'id'         => $id1,
+				'code'       => $this->test_prefix . 'exp1',
+				'alias'      => $this->test_prefix . 'exp1',
+				'dest'       => 'https://example.com/exp1',
+				'title'      => 'Exp 1',
+				'status'     => 'active',
+				'expires_at' => $past_time,
+				'created_at' => $now,
+				'updated_at' => $now,
+			)
+		);
+
+		$insert_stmt->execute(
+			array(
+				'id'         => $id2,
+				'code'       => $this->test_prefix . 'exp2',
+				'alias'      => $this->test_prefix . 'exp2',
+				'dest'       => 'https://example.com/exp2',
+				'title'      => 'Exp 2',
+				'status'     => 'active',
+				'expires_at' => $past_time,
+				'created_at' => $now,
+				'updated_at' => $now,
+			)
+		);
+
+		// Full update: both id1 and id2 are active and due.
+		$expired     = $repository->expire_due_links( 100 );
+		$expired_ids = array_column( $expired, 'id' );
+		$this->assertContains( $id1, $expired_ids, 'Full update must include id1' );
+		$this->assertContains( $id2, $expired_ids, 'Full update must include id2' );
+
+		$stmt = $this->pdo->prepare( 'SELECT status FROM peakurl_urls WHERE id = :id1 OR id = :id2 ORDER BY id ASC' );
+		$stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$statuses = $stmt->fetchAll( \PDO::FETCH_COLUMN );
+		$this->assertSame( array( 'expired', 'expired' ), $statuses );
+
+		// Zero update on immediate re-run: both are now expired, neither should be re-expired.
+		$re_run     = $repository->expire_due_links( 100 );
+		$re_run_ids = array_column( $re_run, 'id' );
+		$this->assertNotContains( $id1, $re_run_ids );
+		$this->assertNotContains( $id2, $re_run_ids );
+	}
+
+	public function test_expire_due_links_skips_link_modified_between_selection_and_update(): void {
+		$config     = Configuration::get_current();
+		$connection = Connection::get_instance( $config );
+		$roles      = new \PeakURL\Core\Auth\Roles();
+		$auth       = new \PeakURL\Core\Auth\Authorization( $roles );
+
+		$past_time = '2020-01-01 00:00:00';
+		$now       = \PeakURL\Utils\Date::now();
+
+		$id1 = bin2hex( random_bytes( 10 ) );
+		$id2 = bin2hex( random_bytes( 10 ) );
+
+		$insert_stmt = $this->pdo->prepare(
+			'INSERT INTO peakurl_urls (id, user_id, short_code, alias, destination_url, title, status, expires_at, created_at, updated_at)
+			VALUES (:id, 1, :code, :alias, :dest, :title, :status, :expires_at, :created_at, :updated_at)'
+		);
+
+		$insert_stmt->execute(
+			array(
+				'id'         => $id1,
+				'code'       => $this->test_prefix . 'conc1',
+				'alias'      => $this->test_prefix . 'conc1',
+				'dest'       => 'https://example.com/conc1',
+				'title'      => 'Conc 1',
+				'status'     => 'active',
+				'expires_at' => $past_time,
+				'created_at' => $now,
+				'updated_at' => $now,
+			)
+		);
+
+		$insert_stmt->execute(
+			array(
+				'id'         => $id2,
+				'code'       => $this->test_prefix . 'conc2',
+				'alias'      => $this->test_prefix . 'conc2',
+				'dest'       => 'https://example.com/conc2',
+				'title'      => 'Conc 2',
+				'status'     => 'active',
+				'expires_at' => $past_time,
+				'created_at' => $now,
+				'updated_at' => $now,
+			)
+		);
+
+		// Intercepting DB wrapper: after candidate links are selected, before updating id2,
+		// an out-of-band query changes id2's status in the database to 'trashed'.
+		$raw_pdo        = $this->pdo;
+		$interceptor_db = new class( $connection, $raw_pdo, $id2 ) extends \PeakURL\Services\Database\PeakURL_DB {
+			private \PDO $pdo;
+			private string $target_id;
+			private bool $intercepted = false;
+
+			public function __construct( $connection, \PDO $pdo, string $target_id ) {
+				parent::__construct( $connection );
+				$this->pdo       = $pdo;
+				$this->target_id = $target_id;
+			}
+
+			public function update( string $table, array $data, array $where = array() ): int {
+				if ( ! $this->intercepted && 'urls' === $table ) {
+					$this->intercepted = true;
+					$stmt              = $this->pdo->prepare( 'UPDATE peakurl_urls SET status = :status WHERE id = :id' );
+					$stmt->execute(
+						array(
+							'status' => 'trashed',
+							'id'     => $this->target_id,
+						)
+					);
+				}
+				return parent::update( $table, $data, $where );
+			}
+		};
+
+		$links_api  = new \PeakURL\Api\LinksApi( $interceptor_db );
+		$repository = new \PeakURL\Features\Links\Repository( $interceptor_db, $links_api, $auth );
+
+		$expired_links = $repository->expire_due_links( 100 );
+		$expired_ids   = array_column( $expired_links, 'id' );
+
+		// id1 was still 'active' when update executed, so it must be transitioned and returned.
+		$this->assertContains( $id1, $expired_ids, 'id1 must be transitioned to expired' );
+
+		// id2 had its status changed to 'trashed' between selection and update,
+		// so its conditional UPDATE (WHERE status = 'active') affected 0 rows and was skipped.
+		$this->assertNotContains( $id2, $expired_ids, 'id2 must be skipped because status was modified after selection' );
+
+		// Verify database state: id1 is 'expired', id2 remains 'trashed'.
+		$check_stmt = $this->pdo->prepare( 'SELECT id, status FROM peakurl_urls WHERE id IN (:id1, :id2)' );
+		$check_stmt->execute(
+			array(
+				'id1' => $id1,
+				'id2' => $id2,
+			)
+		);
+		$rows = $check_stmt->fetchAll( \PDO::FETCH_KEY_PAIR );
+		$this->assertSame( 'expired', $rows[ $id1 ] );
+		$this->assertSame( 'trashed', $rows[ $id2 ] );
+	}
+
 	public function test_link_permanent_deletion_removes_database_row(): void {
 		$alias      = $this->test_prefix . 'perm';
 		$create_res = $this->dispatch(

@@ -201,7 +201,7 @@ complex deploy process to get started.
 ### System Requirements
 
 - **PHP**: PHP 8.3 or later
-- **Required Extensions**: `pdo` and `pdo_mysql` enabled
+- **Required Extensions**: `pdo`, `pdo_mysql`, `mbstring`, `openssl`, `json`, and `curl` enabled (with `intl` and `zip` recommended)
 - **Database**: MySQL 5.7 or later, or MariaDB 10.4 or later
 - **Web Server**: Apache with `mod_rewrite`, or an equivalent supported web-server configuration
 

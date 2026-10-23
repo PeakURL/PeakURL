@@ -33,7 +33,7 @@ class Installer {
 	 * @var Context
 	 * @since 1.0.14
 	 */
-	private Context $context;
+	private readonly Context $context;
 
 	/**
 	 * Shared updater filesystem helper.
@@ -41,7 +41,7 @@ class Installer {
 	 * @var Filesystem
 	 * @since 1.0.14
 	 */
-	private Filesystem $filesystem;
+	private readonly Filesystem $filesystem;
 
 	/**
 	 * Shared updater HTTP client.
@@ -49,7 +49,7 @@ class Installer {
 	 * @var Client
 	 * @since 1.0.14
 	 */
-	private Client $client;
+	private readonly Client $client;
 
 	/**
 	 * Shared updater workspace helper.
@@ -57,7 +57,7 @@ class Installer {
 	 * @var Workspace
 	 * @since 1.0.14
 	 */
-	private Workspace $workspace;
+	private readonly Workspace $workspace;
 
 	/**
 	 * Shared updater release-file helper.
@@ -65,7 +65,7 @@ class Installer {
 	 * @var ReleaseFiles
 	 * @since 1.0.14
 	 */
-	private ReleaseFiles $files;
+	private readonly ReleaseFiles $files;
 
 	/**
 	 * Create a new update package helper.
@@ -118,6 +118,25 @@ class Installer {
 		if ( '' === $package_url || '' === $version ) {
 			throw new \RuntimeException(
 				__( 'The update manifest is missing a package URL or version.', 'peakurl' ),
+			);
+		}
+
+		if ( PHP_VERSION_ID < 80300 ) {
+			throw new \RuntimeException(
+				__( 'PeakURL requires PHP 8.3.0 or higher. Please upgrade your PHP runtime before applying updates.', 'peakurl' ),
+			);
+		}
+
+		$minimum_php = trim( (string) ( $manifest['minimumPhp'] ?? '' ) );
+		if ( '' !== $minimum_php && ! version_compare( PHP_VERSION, $minimum_php, '>=' ) ) {
+			throw new \RuntimeException(
+				sprintf(
+					/* translators: 1: target release version, 2: required PHP version, 3: current PHP version */
+					__( 'PeakURL %1$s requires PHP %2$s or higher. Your server is currently running PHP %3$s.', 'peakurl' ),
+					$version,
+					$minimum_php,
+					PHP_VERSION,
+				),
 			);
 		}
 

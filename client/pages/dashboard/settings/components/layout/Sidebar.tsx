@@ -1,3 +1,4 @@
+import type { ComponentType } from "react";
 import {
 	Activity,
 	Settings,
@@ -11,12 +12,16 @@ import {
 	Download,
 } from "lucide-react";
 import { Link } from "react-router";
+import { McpIcon } from "@/components";
 import { getDocumentDirection } from "@/i18n/direction";
 import { cn } from "@/shared/formatting";
 import type { SettingsTabIcon, SettingsTabItem, SidebarProps } from "./types";
 
 // Icon mapping
-const iconMap: Record<SettingsTabIcon, typeof Settings> = {
+const iconMap: Record<
+	SettingsTabIcon,
+	ComponentType<{ size?: number | string; className?: string }>
+> = {
 	settings: Settings,
 	activity: Activity,
 	shield: Shield,
@@ -25,6 +30,7 @@ const iconMap: Record<SettingsTabIcon, typeof Settings> = {
 	mapPin: MapPin,
 	globe: Globe,
 	plug: Plug,
+	mcp: McpIcon,
 	zap: Zap,
 	download: Download,
 };

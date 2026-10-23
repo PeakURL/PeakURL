@@ -31,6 +31,7 @@ class AuthorizationTest extends TestCase {
 			'role' => 'admin',
 		);
 		$this->assertTrue( $this->roles->has_capability( $admin_user, 'manage_users' ) );
+		$this->assertTrue( $this->roles->has_capability( $admin_user, 'manage_mcp' ) );
 		$this->assertTrue( $this->roles->is_admin( $admin_user ) );
 	}
 
@@ -73,6 +74,7 @@ class AuthorizationTest extends TestCase {
 		$this->assertFalse( $this->roles->has_capability( $editor_user, 'delete_links' ) );
 		$this->assertFalse( $this->roles->has_capability( $editor_user, 'empty_trash' ) );
 		$this->assertFalse( $this->roles->has_capability( $editor_user, 'manage_integrations' ) );
+		$this->assertFalse( $this->roles->has_capability( $editor_user, 'manage_mcp' ) );
 		$this->assertFalse( $this->roles->has_capability( $editor_user, 'manage_api_keys' ) );
 	}
 }

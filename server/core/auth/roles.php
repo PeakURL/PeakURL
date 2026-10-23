@@ -40,7 +40,7 @@ class Roles {
 	 * @var string
 	 * @since 1.7.2
 	 */
-	public const ROLE_ID_PATTERN = '/\A[a-z][a-z0-9]*(?:_[a-z0-9]+)*\z/';
+	public const string ROLE_ID_PATTERN = '/\A[a-z][a-z0-9]*(?:_[a-z0-9]+)*\z/';
 
 	/**
 	 * Maximum allowed length for role identifiers (matching users.role VARCHAR(32)).
@@ -48,7 +48,7 @@ class Roles {
 	 * @var int
 	 * @since 1.7.2
 	 */
-	public const MAX_ROLE_ID_LENGTH = 32;
+	public const int MAX_ROLE_ID_LENGTH = 32;
 
 	/**
 	 * Default shipped role capability maps for PeakURL users.
@@ -62,7 +62,7 @@ class Roles {
 	 * @var array<string, array<string, bool>>
 	 * @since 1.0.0
 	 */
-	public const ROLE_CAPABILITIES = array(
+	public const array ROLE_CAPABILITIES = array(
 		'editor' => array(
 			'create_links'   => true,
 			'view_links'     => true,
@@ -78,7 +78,7 @@ class Roles {
 	 * @var array<string, array<string, string>>
 	 * @since 1.7.2
 	 */
-	public const ROLES_METADATA = array(
+	public const array ROLES_METADATA = array(
 		'admin'  => array(
 			'name'        => 'Administrator',
 			'description' => 'Complete control over site settings, users, roles, and all short links.',
@@ -95,7 +95,7 @@ class Roles {
 	 * @var array<string, array<string, mixed>>
 	 * @since 1.7.2
 	 */
-	public const CAPABILITIES_CATALOG = array(
+	public const array CAPABILITIES_CATALOG = array(
 		'manage_users'         => array(
 			'label'            => 'Manage Users',
 			'description'      => 'Create, edit, and delete user accounts and assign roles.',
@@ -155,6 +155,14 @@ class Roles {
 		'manage_integrations'  => array(
 			'label'            => 'Manage Integrations',
 			'description'      => 'Manage site-wide webhook subscriptions and deliveries, and configure CAPTCHA protection.',
+			'group'            => 'site_integrations',
+			'group_label'      => 'Site & Integrations',
+			'applicable_roles' => array( 'admin', 'editor' ),
+			'protected_roles'  => array(),
+		),
+		'manage_mcp'           => array(
+			'label'            => 'Manage MCP Server',
+			'description'      => 'Configure Model Context Protocol (MCP) server integration, client connections, and permissions.',
 			'group'            => 'site_integrations',
 			'group_label'      => 'Site & Integrations',
 			'applicable_roles' => array( 'admin', 'editor' ),
@@ -1142,7 +1150,8 @@ class Roles {
 					);
 				}
 
-				$snapshot = $this->resolve_editor_capabilities( $stored_settings['editor'] ?? array() );
+				$snapshot               = $this->resolve_editor_capabilities( $stored_settings['editor'] ?? array() );
+				$snapshot['manage_mcp'] = false;
 
 				$custom_roles[ $id ] = array(
 					'name'                 => $name,

@@ -97,6 +97,33 @@ class JsonResponse {
 	}
 
 	/**
+	 * Build a raw JSON response (without the standard PeakURL envelope).
+	 *
+	 * Used for protocol-level endpoints such as MCP JSON-RPC and OAuth discovery.
+	 *
+	 * @param mixed                $data    Data payload (JSON-serialisable).
+	 * @param int                  $status  HTTP status code (default 200).
+	 * @param array<string, string> $headers Additional HTTP response headers.
+	 * @return array<string, mixed> Structured response array.
+	 * @since 1.8.0
+	 */
+	public static function raw(
+		$data,
+		int $status = 200,
+		array $headers = array()
+	): array {
+		$default_headers = array(
+			'Content-Type' => 'application/json; charset=utf-8',
+		);
+
+		return array(
+			'status'  => $status,
+			'headers' => array_merge( $default_headers, $headers ),
+			'body'    => $data,
+		);
+	}
+
+	/**
 	 * Build a plain-text response.
 	 *
 	 * @param string $body         Response body string.

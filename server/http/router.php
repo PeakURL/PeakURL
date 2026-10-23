@@ -33,7 +33,7 @@ class Router {
 	 * @var array<string, bool>
 	 * @since 1.2.2
 	 */
-	private const METHODS = array(
+	private const array METHODS = array(
 		'GET'    => true,
 		'HEAD'   => true,
 		'POST'   => true,

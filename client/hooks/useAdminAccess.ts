@@ -17,6 +17,7 @@ export const useAdminAccess = () => {
 	const canDeleteAnyLink =
 		canDeleteLinks && Boolean(capabilities.deleteAnyLink);
 	const canManageIntegrations = Boolean(capabilities.manageIntegrations);
+	const canManageMcp = Boolean(capabilities.manageMcp);
 
 	return {
 		user,
@@ -26,6 +27,7 @@ export const useAdminAccess = () => {
 		canManageSiteSettings: Boolean(capabilities.manageSiteSettings),
 		canManageApiKeys: Boolean(capabilities.manageApiKeys),
 		canManageIntegrations,
+		canManageMcp,
 		canManageMailDelivery: Boolean(capabilities.manageMailDelivery),
 		canManageLocationData: Boolean(capabilities.manageLocationData),
 		canManagePerformance: Boolean(capabilities.managePerformance),

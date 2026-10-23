@@ -574,6 +574,81 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'public',
 			'coverage'   => array( 'contract' ),
 		),
+		'POST /api/mcp'                                    => array(
+			'area'       => 'MCP',
+			'capability' => 'public',
+			'coverage'   => array( 'contract' ),
+		),
+		'GET /api/mcp'                                     => array(
+			'area'       => 'MCP',
+			'capability' => 'public',
+			'coverage'   => array( 'contract' ),
+		),
+		'GET /.well-known/oauth-protected-resource/api/mcp' => array(
+			'area'       => 'MCP',
+			'capability' => 'public',
+			'coverage'   => array( 'contract' ),
+		),
+		'GET /.well-known/oauth-protected-resource'        => array(
+			'area'       => 'MCP',
+			'capability' => 'public',
+			'coverage'   => array( 'contract' ),
+		),
+		'GET /.well-known/oauth-authorization-server'      => array(
+			'area'       => 'MCP',
+			'capability' => 'public',
+			'coverage'   => array( 'contract' ),
+		),
+		'GET /oauth/authorize'                             => array(
+			'area'       => 'MCP',
+			'capability' => 'public',
+			'coverage'   => array( 'contract' ),
+		),
+		'POST /oauth/authorize'                            => array(
+			'area'       => 'MCP',
+			'capability' => 'public',
+			'coverage'   => array( 'contract' ),
+		),
+		'POST /api/mcp/oauth/token'                        => array(
+			'area'       => 'MCP',
+			'capability' => 'public',
+			'coverage'   => array( 'contract' ),
+		),
+		'POST /api/mcp/oauth/revoke'                       => array(
+			'area'       => 'MCP',
+			'capability' => 'public',
+			'coverage'   => array( 'contract' ),
+		),
+		'GET /api/v1/system/mcp/settings'                  => array(
+			'area'       => 'System',
+			'capability' => 'manage_mcp',
+			'coverage'   => array( 'contract' ),
+		),
+		'PUT /api/v1/system/mcp/settings'                  => array(
+			'area'       => 'System',
+			'capability' => 'manage_mcp',
+			'coverage'   => array( 'contract' ),
+		),
+		'GET /api/v1/system/mcp/connections'               => array(
+			'area'       => 'System',
+			'capability' => 'manage_mcp',
+			'coverage'   => array( 'contract' ),
+		),
+		'DELETE /api/v1/system/mcp/connections/{id}'       => array(
+			'area'       => 'System',
+			'capability' => 'manage_mcp',
+			'coverage'   => array( 'contract' ),
+		),
+		'POST /api/v1/system/mcp/connections/revoke-all'   => array(
+			'area'       => 'System',
+			'capability' => 'manage_mcp',
+			'coverage'   => array( 'contract' ),
+		),
+		'GET /api/v1/system/mcp/tools'                     => array(
+			'area'       => 'System',
+			'capability' => 'manage_mcp',
+			'coverage'   => array( 'contract' ),
+		),
 	);
 
 	private Application $application;

@@ -1,5 +1,6 @@
 export { ApiErrorPage } from "./ApiErrorPage";
 export { Logo } from "./Logo";
+export { McpIcon, type McpIconProps } from "./McpIcon";
 export { PlatformIcon } from "./PlatformIcon";
 export { PreviewImage } from "./PreviewImage";
 export { ThemeToggle } from "./ThemeToggle";

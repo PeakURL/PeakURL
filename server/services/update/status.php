@@ -30,7 +30,7 @@ class Status {
 	 * @var Context
 	 * @since 1.0.14
 	 */
-	private Context $context;
+	private readonly Context $context;
 
 	/**
 	 * Shared updater manifest helper.
@@ -38,7 +38,7 @@ class Status {
 	 * @var Manifest
 	 * @since 1.0.14
 	 */
-	private Manifest $manifest;
+	private readonly Manifest $manifest;
 
 	/**
 	 * Shared updater workspace helper.
@@ -46,7 +46,7 @@ class Status {
 	 * @var Workspace
 	 * @since 1.0.14
 	 */
-	private Workspace $workspace;
+	private readonly Workspace $workspace;
 
 	/**
 	 * Create a new updater status helper.
@@ -87,6 +87,17 @@ class Status {
 		$php_compatible   = '' === $minimum_php || version_compare( PHP_VERSION, $minimum_php, '>=' );
 		$update_available = '' !== $latest_version && version_compare( $latest_version, $current_version, '>' );
 		$availability     = $this->context->get_availability();
+		$can_apply        = $availability['allowed'] && $php_compatible;
+		$disabled_reason  = $availability['reason'];
+
+		if ( $availability['allowed'] && ! $php_compatible ) {
+			$disabled_reason = sprintf(
+				/* translators: 1: Required PHP version, 2: Current PHP version */
+				__( 'This update requires PHP %1$s or higher. Your server is running PHP %2$s.', 'peakurl' ),
+				$minimum_php,
+				PHP_VERSION
+			);
+		}
 
 		return array(
 			'manifestUrl'         => $this->manifest->get_manifest_url(),
@@ -108,8 +119,8 @@ class Status {
 			'lastError'           => '' !== trim( (string) $last_error ) ? trim( (string) $last_error ) : null,
 			'phpVersion'          => PHP_VERSION,
 			'phpCompatible'       => $php_compatible,
-			'canApply'            => $availability['allowed'],
-			'applyDisabledReason' => $availability['reason'],
+			'canApply'            => $can_apply,
+			'applyDisabledReason' => $disabled_reason,
 			'isLocked'            => $this->workspace->is_locked(),
 			'manifest'            => $manifest_data,
 		);

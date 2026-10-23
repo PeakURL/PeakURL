@@ -137,7 +137,10 @@ export type ApiTagType =
 	| "AdminNotices"
 	| "CronStatus"
 	| "CronHistory"
-	| "Roles";
+	| "Roles"
+	| "McpSettings"
+	| "McpConnections"
+	| "McpTools";
 
 /**
  * Ordered list of RTK Query cache tags registered on the base API instance.
@@ -166,6 +169,9 @@ export const API_TAG_TYPES: ApiTagType[] = [
 	"CronStatus",
 	"CronHistory",
 	"Roles",
+	"McpSettings",
+	"McpConnections",
+	"McpTools",
 ];
 
 /**
@@ -625,6 +631,83 @@ export interface UpgradeDatabaseResponse {
 	data?: {
 		/** Number of remaining database issues detected after repair. */
 		issuesCount?: number | null;
+	};
+}
+
+export interface McpSettings {
+	enabled: boolean;
+	writeEnabled: boolean;
+	endpoint: string;
+	protocolVersion: string;
+	allowedRedirectUris: string[];
+	supportedScopes: string[];
+	isHttps: boolean;
+}
+
+export interface McpConnection {
+	id: string;
+	clientId: string;
+	clientName: string;
+	userId: string;
+	username: string;
+	displayName: string;
+	scopes: string[];
+	createdAt: string;
+	lastUsedAt: string | null;
+	expiresAt: string | null;
+	revokedAt: string | null;
+	isActive: boolean;
+}
+
+export interface McpToolProperty {
+	type: string;
+	description?: string;
+}
+
+export interface McpToolSchema {
+	type: string;
+	properties: Record<string, McpToolProperty>;
+	required?: string[];
+}
+
+export interface McpTool {
+	name: string;
+	description: string;
+	inputSchema: McpToolSchema;
+	scope?: string;
+	capability?: string | null;
+	isWrite?: boolean;
+}
+
+export interface McpConnectionsResponse {
+	data?: {
+		connections: McpConnection[];
+		total: number;
+	};
+}
+
+export interface McpToolsResponse {
+	data?: {
+		tools: McpTool[];
+		writeEnabled: boolean;
+	};
+}
+
+export interface UpdateMcpSettingsPayload {
+	enabled?: boolean;
+	writeEnabled?: boolean;
+	allowedRedirectUris?: string[];
+}
+
+export interface RevokeMcpConnectionResponse {
+	data?: {
+		revoked: boolean;
+	};
+}
+
+export interface RevokeAllMcpConnectionsResponse {
+	data?: {
+		revokedCount: number;
 	};
 }
 

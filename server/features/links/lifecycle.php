@@ -439,9 +439,18 @@ class Lifecycle {
 			}
 		}
 
+		$alias = (string) ( $params['alias'] ?? $existing['alias'] ?? '' );
+		if ( '' === trim( $alias ) ) {
+			$alias = (string) ( $existing['short_code'] ?? '' );
+		}
+		if ( '' === trim( $alias ) ) {
+			$alias = (string) $id;
+		}
+		$alias = trim( $alias );
+
 		$this->record_link_activity(
 			'link_updated',
-			'Updated link ' . ( $params['alias'] ?? $existing['alias'] ) . '.',
+			'Updated link ' . $alias . '.',
 			$user,
 			$updated_row ? $updated_row : $existing,
 			$id

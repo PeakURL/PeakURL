@@ -143,6 +143,14 @@ class Service {
 	private ?WebhooksService $webhooks_service = null;
 
 	/**
+	 * Optional MCP authorization manager for MCP requests.
+	 *
+	 * @var \PeakURL\Features\Mcp\Authorization|null
+	 * @since 1.8.0
+	 */
+	private ?\PeakURL\Features\Mcp\Authorization $mcp_authorization = null;
+
+	/**
 	 * Create an AuthService instance from runtime configuration and database connection.
 	 *
 	 * @param array<string, mixed> $config     Runtime configuration.
@@ -227,6 +235,17 @@ class Service {
 	 */
 	public function set_webhooks_service( ?WebhooksService $webhooks_service ): void {
 		$this->webhooks_service = $webhooks_service;
+	}
+
+	/**
+	 * Set optional MCP authorization manager for MCP requests.
+	 *
+	 * @param \PeakURL\Features\Mcp\Authorization|null $mcp_authorization MCP authorization manager.
+	 * @return void
+	 * @since 1.8.0
+	 */
+	public function set_mcp_authorization( ?\PeakURL\Features\Mcp\Authorization $mcp_authorization ): void {
+		$this->mcp_authorization = $mcp_authorization;
 	}
 
 	/**
@@ -1208,6 +1227,18 @@ class Service {
 
 		if ( $api_user ) {
 			return $api_user;
+		}
+
+		// MCP OAuth bearer tokens only authenticate within the dedicated /api/mcp endpoint.
+		// They are isolated and strictly forbidden from authorizing ordinary REST routes.
+		if (
+			null !== $this->mcp_authorization &&
+			\PeakURL\Core\Config\Constants::API_MCP_PATH === $request->get_path()
+		) {
+			$mcp_context = $this->mcp_authorization->authenticate_request( $request );
+			if ( $mcp_context && ! empty( $mcp_context['user'] ) ) {
+				return $this->format_user( $mcp_context['user'], $request );
+			}
 		}
 
 		$session = $this->find_session_by_request( $request );

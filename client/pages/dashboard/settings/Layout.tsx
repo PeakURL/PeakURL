@@ -16,6 +16,7 @@ function Layout({ children }: SettingsLayoutProps) {
 	const {
 		canManageApiKeys,
 		canManageIntegrations,
+		canManageMcp,
 		canManageMailDelivery,
 		canManageLocationData,
 		canManagePerformance,
@@ -36,6 +37,14 @@ function Layout({ children }: SettingsLayoutProps) {
 			id: "integrations",
 			name: __("Integrations"),
 			icon: "plug",
+		});
+	}
+
+	if (canManageMcp) {
+		tabs.push({
+			id: "mcp",
+			name: __("MCP Server"),
+			icon: "mcp",
 		});
 	}
 

@@ -28,6 +28,9 @@ export interface DashboardSearchCapabilities {
 	/** Whether the current user can manage integrations. */
 	canManageIntegrations?: boolean;
 
+	/** Whether the current user can manage MCP server settings. */
+	canManageMcp?: boolean;
+
 	/** Whether the current user can manage mail delivery settings. */
 	canManageMailDelivery?: boolean;
 

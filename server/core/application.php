@@ -40,6 +40,9 @@ use PeakURL\Features\Links\Health\Resolver as HealthResolver;
 use PeakURL\Features\Links\Repository as LinksRepository;
 use PeakURL\Features\Links\Service as LinksService;
 use PeakURL\Features\Links\Validator as LinksValidator;
+use PeakURL\Features\Mcp\Authorization as McpAuthorization;
+use PeakURL\Features\Mcp\Controller as McpController;
+use PeakURL\Features\Mcp\Service as McpService;
 use PeakURL\Features\Roles\Controller as RolesController;
 use PeakURL\Features\Roles\Service as RolesService;
 use PeakURL\Features\Settings\Controller as SettingsController;
@@ -300,6 +303,26 @@ class Application {
 			$auth_service,
 			$users_api
 		);
+		$mcp_authorization       = new McpAuthorization(
+			$settings_api,
+			$users_api,
+			$roles,
+			$config
+		);
+		$auth_service->set_mcp_authorization( $mcp_authorization );
+		$mcp_service    = new McpService(
+			$mcp_authorization,
+			$links_service,
+			$analytics_service,
+			$config
+		);
+		$mcp_controller = new McpController(
+			$mcp_service,
+			$mcp_authorization,
+			$auth_service,
+			$authorization,
+			$config
+		);
 
 		$this->register_routes(
 			$auth_service,
@@ -310,7 +333,8 @@ class Application {
 			$webhooks_service,
 			$settings_service,
 			$system_service,
-			$captcha_service
+			$captcha_service,
+			$mcp_controller
 		);
 	}
 
@@ -590,6 +614,7 @@ class Application {
 	 * @param SettingsService  $settings_service  Settings service.
 	 * @param SystemService    $system_service    System service.
 	 * @param Captcha          $captcha_service   Captcha service.
+	 * @param McpController    $mcp_controller    MCP controller.
 	 * @return void
 	 * @since 1.0.0
 	 */
@@ -602,7 +627,8 @@ class Application {
 		WebhooksService $webhooks_service,
 		SettingsService $settings_service,
 		SystemService $system_service,
-		Captcha $captcha_service
+		Captcha $captcha_service,
+		McpController $mcp_controller
 	): void {
 		$auth      = new AuthController( $auth_service, $captcha_service );
 		$users     = new UsersController( $users_service );
@@ -622,6 +648,7 @@ class Application {
 		$this->register_webhook_routes( $webhooks );
 		$this->register_settings_routes( $settings );
 		$this->register_system_routes( $system );
+		$this->register_mcp_routes( $mcp_controller );
 
 		/**
 		 * Fires after built-in API routes have been registered.
@@ -858,6 +885,43 @@ class Application {
 				array( 'patch', '/system/cron/jobs/{id}', array( $system, 'cron_job_update' ) ),
 				array( 'post', '/system/cron/jobs/{id}', array( $system, 'cron_job_update' ) ),
 				array( 'post', '/system/cron/jobs/{id}/reset', array( $system, 'cron_job_reset' ) ),
+			)
+		);
+	}
+
+	/**
+	 * Register Model Context Protocol (MCP) and OAuth integration routes.
+	 *
+	 * @param McpController $mcp MCP controller.
+	 * @return void
+	 * @since 1.8.0
+	 */
+	private function register_mcp_routes( McpController $mcp ): void {
+		// Public protocol and OAuth discovery / token endpoints (no API prefix).
+		$this->add_routes(
+			array(
+				array( 'post', '/api/mcp', array( $mcp, 'handle_mcp' ) ),
+				array( 'get', '/api/mcp', array( $mcp, 'handle_mcp_get' ) ),
+				array( 'get', '/.well-known/oauth-protected-resource/api/mcp', array( $mcp, 'oauth_protected_resource_metadata' ) ),
+				array( 'get', '/.well-known/oauth-protected-resource', array( $mcp, 'oauth_protected_resource_metadata' ) ),
+				array( 'get', '/.well-known/oauth-authorization-server', array( $mcp, 'oauth_authorization_server_metadata' ) ),
+				array( 'get', '/oauth/authorize', array( $mcp, 'oauth_authorize' ) ),
+				array( 'post', '/oauth/authorize', array( $mcp, 'oauth_authorize_submit' ) ),
+				array( 'post', '/api/mcp/oauth/token', array( $mcp, 'oauth_token' ) ),
+				array( 'post', '/api/mcp/oauth/revoke', array( $mcp, 'oauth_revoke' ) ),
+			),
+			''
+		);
+
+		// Authenticated dashboard management endpoints (/api/v1 prefix).
+		$this->add_routes(
+			array(
+				array( 'get', '/system/mcp/settings', array( $mcp, 'get_settings' ) ),
+				array( 'put', '/system/mcp/settings', array( $mcp, 'update_settings' ) ),
+				array( 'get', '/system/mcp/connections', array( $mcp, 'list_connections' ) ),
+				array( 'delete', '/system/mcp/connections/{id}', array( $mcp, 'revoke_connection' ) ),
+				array( 'post', '/system/mcp/connections/revoke-all', array( $mcp, 'revoke_all_connections' ) ),
+				array( 'get', '/system/mcp/tools', array( $mcp, 'list_tools' ) ),
 			)
 		);
 	}

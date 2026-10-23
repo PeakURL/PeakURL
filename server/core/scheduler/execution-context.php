@@ -28,7 +28,7 @@ class ExecutionContext {
 	 * @var string
 	 * @since 1.7.0
 	 */
-	private string $job_id;
+	private readonly string $job_id;
 
 	/**
 	 * Unique run/attempt execution identifier.
@@ -36,7 +36,7 @@ class ExecutionContext {
 	 * @var string
 	 * @since 1.7.0
 	 */
-	private string $run_id;
+	private readonly string $run_id;
 
 	/**
 	 * Current attempt number (1-indexed).
@@ -44,7 +44,7 @@ class ExecutionContext {
 	 * @var int
 	 * @since 1.7.0
 	 */
-	private int $attempt;
+	private readonly int $attempt;
 
 	/**
 	 * Whether this execution was triggered manually (run-now).
@@ -52,7 +52,7 @@ class ExecutionContext {
 	 * @var bool
 	 * @since 1.7.0
 	 */
-	private bool $is_manual;
+	private readonly bool $is_manual;
 
 	/**
 	 * Execution start time in MySQL datetime format (UTC).
@@ -60,7 +60,7 @@ class ExecutionContext {
 	 * @var string
 	 * @since 1.7.0
 	 */
-	private string $started_at;
+	private readonly string $started_at;
 
 	/**
 	 * Context execution payload dictionary.
@@ -68,7 +68,7 @@ class ExecutionContext {
 	 * @var array<string, mixed>
 	 * @since 1.7.1
 	 */
-	private array $payload;
+	private readonly array $payload;
 
 	/**
 	 * Create a new execution context.

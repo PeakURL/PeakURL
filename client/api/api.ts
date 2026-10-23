@@ -481,6 +481,47 @@ export const API_ROUTES = {
 		mailTest: apiPath("system", "mail", "test"),
 
 		/**
+		 * Relative API path: `system/mcp/settings`.
+		 *
+		 * Loads or saves native Model Context Protocol (MCP) server settings.
+		 */
+		mcpSettings: apiPath("system", "mcp", "settings"),
+
+		/**
+		 * Relative API path: `system/mcp/connections`.
+		 *
+		 * Lists active MCP client authorizations.
+		 */
+		mcpConnections: apiPath("system", "mcp", "connections"),
+
+		/**
+		 * Relative API path: `system/mcp/connections/{id}`.
+		 *
+		 * Revokes an MCP client authorization by ID.
+		 */
+		mcpConnectionById: (id: ApiPathPart) =>
+			apiPath("system", "mcp", "connections", encodeApiParam(id)),
+
+		/**
+		 * Relative API path: `system/mcp/connections/revoke-all`.
+		 *
+		 * Revokes all active MCP client authorizations.
+		 */
+		mcpRevokeAllConnections: apiPath(
+			"system",
+			"mcp",
+			"connections",
+			"revoke-all"
+		),
+
+		/**
+		 * Relative API path: `system/mcp/tools`.
+		 *
+		 * Lists registered MCP tools and JSON schemas.
+		 */
+		mcpTools: apiPath("system", "mcp", "tools"),
+
+		/**
 		 * Relative API path: `system/notices`.
 		 *
 		 * Loads dashboard admin notices.

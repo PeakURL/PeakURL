@@ -62,6 +62,22 @@ class Checks {
 				: __( 'The PeakURL database schema matches the current release.', 'peakurl' ),
 		);
 		$checks[] = array(
+			'id'          => 'php-version',
+			'label'       => __( 'PHP runtime version', 'peakurl' ),
+			'status'      => version_compare( PHP_VERSION, '8.3.0', '>=' ) ? 'ok' : 'error',
+			'description' => version_compare( PHP_VERSION, '8.3.0', '>=' )
+				? sprintf(
+					/* translators: %s: Current PHP version */
+					__( 'PeakURL is running on PHP %s (minimum supported version is 8.3.0).', 'peakurl' ),
+					PHP_VERSION
+				)
+				: sprintf(
+					/* translators: %s: Current PHP version */
+					__( 'PeakURL requires PHP 8.3.0 or higher. Your server is running PHP %s.', 'peakurl' ),
+					PHP_VERSION
+				),
+		);
+		$checks[] = array(
 			'id'          => 'cache',
 			'label'       => __( 'Object cache', 'peakurl' ),
 			'status'      => ( ! empty( $cache['enabled'] ) && 'active' === ( $cache['status'] ?? '' ) )

@@ -28,7 +28,7 @@ class RetryPolicy {
 	 * @var int
 	 * @since 1.7.0
 	 */
-	private int $max_attempts;
+	private readonly int $max_attempts;
 
 	/**
 	 * Initial retry delay in seconds.
@@ -36,7 +36,7 @@ class RetryPolicy {
 	 * @var int
 	 * @since 1.7.0
 	 */
-	private int $initial_delay_seconds;
+	private readonly int $initial_delay_seconds;
 
 	/**
 	 * Exponential backoff multiplier.
@@ -44,7 +44,7 @@ class RetryPolicy {
 	 * @var int
 	 * @since 1.7.0
 	 */
-	private int $backoff_multiplier;
+	private readonly int $backoff_multiplier;
 
 	/**
 	 * Maximum retry delay ceiling in seconds (default 3600 = 1 hour).
@@ -52,7 +52,7 @@ class RetryPolicy {
 	 * @var int
 	 * @since 1.7.0
 	 */
-	private int $max_delay_seconds;
+	private readonly int $max_delay_seconds;
 
 	/**
 	 * Create a new retry policy.

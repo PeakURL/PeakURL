@@ -13,6 +13,7 @@ function TabPage() {
 	const {
 		canManageApiKeys,
 		canManageIntegrations,
+		canManageMcp,
 		canManagePerformance,
 		canManageMailDelivery,
 		canManageLocationData,
@@ -27,6 +28,7 @@ function TabPage() {
 	const restrictedTabs: Partial<Record<SettingsTabId, boolean>> = {
 		api: canManageApiKeys,
 		integrations: canManageIntegrations,
+		mcp: canManageMcp,
 		performance: canManagePerformance,
 		email: canManageMailDelivery,
 		location: canManageLocationData,

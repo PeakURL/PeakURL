@@ -3,6 +3,7 @@ export const VALID_SETTINGS_TABS = [
 	"security",
 	"api",
 	"integrations",
+	"mcp",
 	"performance",
 	"email",
 	"location",

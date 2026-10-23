@@ -52,6 +52,7 @@ import {
 	GeneralTab,
 	IntegrationsTab,
 	LocationDataTab,
+	McpTab,
 	PerformanceTab,
 	ReleaseInstallProgress,
 	SecurityTab,
@@ -774,6 +775,8 @@ const Content = ({ activeTab }: ContentProps) => {
 			{activeTab === "integrations" && (
 				<IntegrationsTab notification={notification} />
 			)}
+
+			{activeTab === "mcp" && <McpTab notification={notification} />}
 
 			{activeTab === "performance" && (
 				<PerformanceTab

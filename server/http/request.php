@@ -29,25 +29,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Request {
 
 	/** @var string HTTP method (GET, POST, PUT, DELETE, …). */
-	private string $method;
+	private readonly string $method;
 
 	/** @var string Request path without the query string. */
-	private string $path;
+	private readonly string $path;
 
 	/** @var array<string, mixed> Parsed query-string parameters. */
-	private array $query_params;
+	private readonly array $query_params;
 
 	/** @var array<string, mixed> Parsed request body (JSON or form data). */
-	private array $body_params;
+	private readonly array $body_params;
 
 	/** @var array<string, string> Cookie values from the request. */
 	private array $cookie_params;
 
 	/** @var array<string, mixed> Uploaded file payloads from the request. */
-	private array $file_params;
+	private readonly array $file_params;
 
 	/** @var array<string, string> $_SERVER super-global snapshot. */
-	private array $server_params;
+	private readonly array $server_params;
+
+	/** @var string Raw request body string. */
+	private readonly string $raw_body;
 
 	/** @var array<string, string> Route parameters extracted by the Router. */
 	private array $route_params = array();
@@ -58,13 +61,14 @@ class Request {
 	/**
 	 * Create a new Request instance.
 	 *
-	 * @param string               $method        HTTP method.
-	 * @param string               $path          Request path.
-	 * @param array<string, mixed> $query_params  Query-string parameters.
-	 * @param array<string, mixed> $body_params   Parsed body parameters.
+	 * @param string                $method        HTTP method.
+	 * @param string                $path          Request path.
+	 * @param array<string, mixed>  $query_params  Query-string parameters.
+	 * @param array<string, mixed>  $body_params   Parsed body parameters.
 	 * @param array<string, string> $cookie_params Cookie values.
 	 * @param array<string, mixed>  $file_params   Uploaded file payloads.
 	 * @param array<string, string> $server_params Server super-global.
+	 * @param string                $raw_body      Raw request body.
 	 * @since 1.0.0
 	 */
 	public function __construct(
@@ -74,7 +78,8 @@ class Request {
 		array $body_params,
 		array $cookie_params = array(),
 		array $file_params = array(),
-		array $server_params = array()
+		array $server_params = array(),
+		string $raw_body = ''
 	) {
 		$this->method        = strtoupper( $method );
 		$this->path          = $path;
@@ -83,6 +88,7 @@ class Request {
 		$this->cookie_params = $cookie_params;
 		$this->file_params   = $file_params;
 		$this->server_params = $server_params;
+		$this->raw_body      = $raw_body;
 	}
 
 	/**
@@ -123,6 +129,7 @@ class Request {
 			$_COOKIE,
 			$file_params,
 			$_SERVER,
+			$body,
 		);
 	}
 
@@ -228,6 +235,16 @@ class Request {
 	 */
 	private static function is_multipart( string $content_type ): bool {
 		return false !== stripos( $content_type, 'multipart/form-data' );
+	}
+
+	/**
+	 * Get the raw request body.
+	 *
+	 * @return string Raw request body string.
+	 * @since 1.8.0
+	 */
+	public function get_raw_body(): string {
+		return $this->raw_body;
 	}
 
 	/**

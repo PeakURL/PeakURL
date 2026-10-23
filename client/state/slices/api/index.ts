@@ -56,6 +56,12 @@ export {
 	useUpdateCronJobScheduleMutation,
 	useResetCronJobScheduleMutation,
 	useUpdateCronSettingsMutation,
+	useGetMcpSettingsQuery,
+	useUpdateMcpSettingsMutation,
+	useGetMcpConnectionsQuery,
+	useRevokeMcpConnectionMutation,
+	useRevokeAllMcpConnectionsMutation,
+	useGetMcpToolsQuery,
 } from "./system";
 export * from "./types";
 export { urlsApi } from "./urls";

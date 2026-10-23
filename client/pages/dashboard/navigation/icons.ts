@@ -17,6 +17,7 @@ import {
 	Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { McpIcon } from "@/components/shared/McpIcon";
 
 /** Page identities shared by headings, navigation, and global search. */
 export const dashboardPageIcons = {
@@ -29,6 +30,7 @@ export const dashboardPageIcons = {
 	"settings-security": Shield,
 	"settings-api": Key,
 	"settings-integrations": Plug,
+	"settings-mcp": McpIcon as unknown as LucideIcon,
 	"settings-email": Mail,
 	"settings-location": MapPin,
 	"settings-updates": Download,

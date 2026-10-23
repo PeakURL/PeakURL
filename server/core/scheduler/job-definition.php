@@ -22,8 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class JobDefinition {
 
-	public const OVERLAP_PREVENT = 'prevent';
-	public const OVERLAP_ALLOW   = 'allow';
+	public const string OVERLAP_PREVENT = 'prevent';
+	public const string OVERLAP_ALLOW   = 'allow';
 
 	/**
 	 * Unique alphanumeric job identifier.
@@ -31,7 +31,7 @@ class JobDefinition {
 	 * @var string
 	 * @since 1.7.0
 	 */
-	private string $id;
+	private readonly string $id;
 
 	/**
 	 * Human-readable job title.
@@ -39,7 +39,7 @@ class JobDefinition {
 	 * @var string
 	 * @since 1.7.0
 	 */
-	private string $title;
+	private readonly string $title;
 
 	/**
 	 * Recurring execution interval in seconds (e.g. 3600 for hourly).
@@ -47,7 +47,7 @@ class JobDefinition {
 	 * @var int
 	 * @since 1.7.0
 	 */
-	private int $interval_seconds;
+	private readonly int $interval_seconds;
 
 	/**
 	 * Job execution handler: instance of JobHandlerInterface or callable.
@@ -63,7 +63,7 @@ class JobDefinition {
 	 * @var RetryPolicy
 	 * @since 1.7.0
 	 */
-	private RetryPolicy $retry_policy;
+	private readonly RetryPolicy $retry_policy;
 
 	/**
 	 * Overlap policy (prevent or allow).
@@ -71,7 +71,7 @@ class JobDefinition {
 	 * @var string
 	 * @since 1.7.0
 	 */
-	private string $overlap_policy;
+	private readonly string $overlap_policy;
 
 	/**
 	 * Maximum lock lease duration in seconds before considered stale (default 300s).
@@ -79,7 +79,7 @@ class JobDefinition {
 	 * @var int
 	 * @since 1.7.0
 	 */
-	private int $lease_seconds;
+	private readonly int $lease_seconds;
 
 	/**
 	 * Whether the job is enabled.
@@ -87,7 +87,7 @@ class JobDefinition {
 	 * @var bool
 	 * @since 1.7.0
 	 */
-	private bool $is_enabled;
+	private readonly bool $is_enabled;
 
 	/**
 	 * Create a new job definition.

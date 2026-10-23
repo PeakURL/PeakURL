@@ -37,7 +37,7 @@ class Context {
 	 * @var array<string, mixed>
 	 * @since 1.0.14
 	 */
-	private array $config;
+	private readonly array $config;
 
 	/**
 	 * Shared database wrapper.
@@ -45,7 +45,7 @@ class Context {
 	 * @var PeakURL_DB
 	 * @since 1.0.14
 	 */
-	private PeakURL_DB $db;
+	private readonly PeakURL_DB $db;
 
 	/**
 	 * Settings API dependency.
@@ -53,7 +53,7 @@ class Context {
 	 * @var SettingsApi
 	 * @since 1.0.14
 	 */
-	private SettingsApi $settings_api;
+	private readonly SettingsApi $settings_api;
 
 	/**
 	 * GeoIP service dependency.
@@ -61,7 +61,7 @@ class Context {
 	 * @var Geoip
 	 * @since 1.0.14
 	 */
-	private Geoip $geoip_service;
+	private readonly Geoip $geoip_service;
 
 	/**
 	 * Mail transport dependency.
@@ -69,7 +69,7 @@ class Context {
 	 * @var Mailer
 	 * @since 1.0.14
 	 */
-	private Mailer $mailer_service;
+	private readonly Mailer $mailer_service;
 
 	/**
 	 * Database schema dependency.
@@ -77,7 +77,7 @@ class Context {
 	 * @var DatabaseSchema
 	 * @since 1.0.14
 	 */
-	private DatabaseSchema $database_schema;
+	private readonly DatabaseSchema $database_schema;
 
 	/**
 	 * I18n service dependency.
@@ -85,7 +85,7 @@ class Context {
 	 * @var I18n
 	 * @since 1.0.14
 	 */
-	private I18n $i18n_service;
+	private readonly I18n $i18n_service;
 
 	/**
 	 * Create a new system-status context.

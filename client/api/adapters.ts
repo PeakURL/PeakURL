@@ -51,6 +51,7 @@ export const DEFAULT_USER_CAPABILITIES: Readonly<UserCapabilities> =
 		manageUpdates: false,
 		manageApiKeys: false,
 		manageIntegrations: false,
+		manageMcp: false,
 		viewLinks: false,
 		createLinks: false,
 		editLinks: false,
@@ -84,6 +85,7 @@ export function mapApiCapabilities(
 		manageUpdates: Boolean(apiCapabilities.manage_updates),
 		manageApiKeys: Boolean(apiCapabilities.manage_api_keys),
 		manageIntegrations: Boolean(apiCapabilities.manage_integrations),
+		manageMcp: Boolean(apiCapabilities.manage_mcp),
 		viewLinks: Boolean(apiCapabilities.view_links),
 		createLinks: Boolean(apiCapabilities.create_links),
 		editLinks: Boolean(apiCapabilities.edit_links),
@@ -144,6 +146,9 @@ export function mapUserCapabilitiesToApi(
 		apiCapabilitiesPayload.manage_integrations = Boolean(
 			capabilities.manageIntegrations
 		);
+	}
+	if (undefined !== capabilities.manageMcp) {
+		apiCapabilitiesPayload.manage_mcp = Boolean(capabilities.manageMcp);
 	}
 	if (undefined !== capabilities.viewLinks) {
 		apiCapabilitiesPayload.view_links = Boolean(capabilities.viewLinks);

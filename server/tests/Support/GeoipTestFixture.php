@@ -78,23 +78,56 @@ class GeoipTestFixture {
 	 * @param string                $archive_path Target tar.gz file path.
 	 * @param array<string, string> $entries      Map of relative path => file contents.
 	 * @return void
+	 *
+	 * @throws RuntimeException On any filesystem failure.
 	 */
 	public static function create_tar_gz( string $archive_path, array $entries ): void {
-		$tar_path = preg_replace( '/\.gz$/', '', $archive_path );
-		if ( file_exists( $tar_path ) ) {
-			Phar::unlinkArchive( $tar_path );
-			@unlink( $tar_path );
-		}
+		$tar_path = sys_get_temp_dir() . '/peakurl_test_tar_' . bin2hex( random_bytes( 8 ) ) . '.tar';
 
-		$phar = new PharData( $tar_path );
-		foreach ( $entries as $path => $content ) {
-			$phar->addFromString( $path, $content );
-		}
+		try {
+			if ( file_exists( $tar_path ) ) {
+				Phar::unlinkArchive( $tar_path );
+				if ( file_exists( $tar_path ) ) {
+					unlink( $tar_path );
+				}
+			}
 
-		$gz = $phar->compress( Phar::GZ );
-		unset( $phar, $gz );
-		Phar::unlinkArchive( $tar_path );
-		@unlink( $tar_path );
+			$phar = new PharData( $tar_path );
+			foreach ( $entries as $path => $content ) {
+				$phar->addFromString( $path, $content );
+			}
+			unset( $phar );
+
+			$tar_contents = file_get_contents( $tar_path );
+			if ( false === $tar_contents ) {
+				throw new RuntimeException( "Failed to read intermediate tar file: {$tar_path}" );
+			}
+
+			$compressed = gzencode( $tar_contents, 9 );
+			if ( false === $compressed ) {
+				throw new RuntimeException( "Failed to gzip-compress tar contents for: {$archive_path}" );
+			}
+
+			$dir = dirname( $archive_path );
+			if ( ! is_dir( $dir ) && ! mkdir( $dir, 0755, true ) && ! is_dir( $dir ) ) {
+				throw new RuntimeException( "Failed to create directory for archive: {$dir}" );
+			}
+
+			if ( false === file_put_contents( $archive_path, $compressed ) ) {
+				throw new RuntimeException( "Failed to write tar.gz archive: {$archive_path}" );
+			}
+		} finally {
+			if ( file_exists( $tar_path ) ) {
+				try {
+					Phar::unlinkArchive( $tar_path );
+				} catch ( \Throwable $ignored ) {
+					unset( $ignored );
+				}
+				if ( file_exists( $tar_path ) ) {
+					unlink( $tar_path );
+				}
+			}
+		}
 	}
 
 	/**
@@ -103,22 +136,33 @@ class GeoipTestFixture {
 	 * @param string $archive_path Target archive path.
 	 * @param int    $build_epoch  MMDB build epoch.
 	 * @return void
+	 *
+	 * @throws RuntimeException On any failure.
 	 */
 	public static function create_valid_upstream_archive(
 		string $archive_path,
 		int $build_epoch = self::DEFAULT_BUILD_EPOCH
 	): void {
-		$temp_mmdb = sys_get_temp_dir() . '/temp_city_' . bin2hex( random_bytes( 4 ) ) . '.mmdb';
-		self::generate_city_mmdb( $temp_mmdb, $build_epoch );
-		$mmdb_data = (string) file_get_contents( $temp_mmdb );
-		@unlink( $temp_mmdb );
+		$temp_mmdb = sys_get_temp_dir() . '/temp_city_' . bin2hex( random_bytes( 8 ) ) . '.mmdb';
 
-		$entries = array(
-			'GeoLite2-City_20261015/GeoLite2-City.mmdb' => $mmdb_data,
-			'GeoLite2-City_20261015/LICENSE.txt'        => "MaxMind GeoLite2 End User License Agreement\nAll rights reserved.\n",
-			'GeoLite2-City_20261015/COPYRIGHT.txt'      => "Copyright 2026 MaxMind, Inc. All rights reserved.\n",
-		);
+		try {
+			self::generate_city_mmdb( $temp_mmdb, $build_epoch );
+			$mmdb_data = file_get_contents( $temp_mmdb );
+			if ( false === $mmdb_data ) {
+				throw new RuntimeException( "Failed to read temporary MMDB file: {$temp_mmdb}" );
+			}
 
-		self::create_tar_gz( $archive_path, $entries );
+			$entries = array(
+				'GeoLite2-City_20261015/GeoLite2-City.mmdb' => $mmdb_data,
+				'GeoLite2-City_20261015/LICENSE.txt'   => "MaxMind GeoLite2 End User License Agreement\nAll rights reserved.\n",
+				'GeoLite2-City_20261015/COPYRIGHT.txt' => "Copyright 2026 MaxMind, Inc. All rights reserved.\n",
+			);
+
+			self::create_tar_gz( $archive_path, $entries );
+		} finally {
+			if ( file_exists( $temp_mmdb ) ) {
+				unlink( $temp_mmdb );
+			}
+		}
 	}
 }

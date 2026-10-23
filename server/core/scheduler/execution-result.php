@@ -22,9 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ExecutionResult {
 
-	public const STATUS_SUCCESS = 'success';
-	public const STATUS_FAILURE = 'failed';
-	public const STATUS_SKIPPED = 'skipped';
+	public const string STATUS_SUCCESS = 'success';
+	public const string STATUS_FAILURE = 'failed';
+	public const string STATUS_SKIPPED = 'skipped';
 
 	/**
 	 * Execution status.
@@ -32,7 +32,7 @@ class ExecutionResult {
 	 * @var string
 	 * @since 1.7.0
 	 */
-	private string $status;
+	private readonly string $status;
 
 	/**
 	 * Brief human-readable summary of work performed.
@@ -40,7 +40,7 @@ class ExecutionResult {
 	 * @var string|null
 	 * @since 1.7.0
 	 */
-	private ?string $summary;
+	private readonly ?string $summary;
 
 	/**
 	 * Sanitized error message if execution failed.
@@ -48,7 +48,7 @@ class ExecutionResult {
 	 * @var string|null
 	 * @since 1.7.0
 	 */
-	private ?string $error;
+	private readonly ?string $error;
 
 	/**
 	 * Whether the failure is permanent/fatal and should not be retried.
@@ -56,7 +56,7 @@ class ExecutionResult {
 	 * @var bool
 	 * @since 1.7.0
 	 */
-	private bool $is_fatal;
+	private readonly bool $is_fatal;
 
 	/**
 	 * Additional structured metadata from the execution.
@@ -64,7 +64,7 @@ class ExecutionResult {
 	 * @var array<string, mixed>
 	 * @since 1.7.0
 	 */
-	private array $metadata;
+	private readonly array $metadata;
 
 	/**
 	 * Private constructor; use static factory methods.

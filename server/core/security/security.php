@@ -218,15 +218,11 @@ class Security {
 			),
 		);
 
-		if ( in_array( $mode, array( 'true', '1', 'yes', 'on' ), true ) ) {
-			return true;
-		}
-
-		if ( in_array( $mode, array( 'false', '0', 'no', 'off' ), true ) ) {
-			return false;
-		}
-
-		return $request->is_secure();
+		return match ( $mode ) {
+			'true', '1', 'yes', 'on' => true,
+			'false', '0', 'no', 'off' => false,
+			default => $request->is_secure(),
+		};
 	}
 
 	/**

@@ -35,7 +35,7 @@ class JsonResponse {
 	 * @since 1.0.0
 	 */
 	public static function success(
-		$data = null,
+		mixed $data = null,
 		string $message = 'OK',
 		int $status = 200
 	): array {
@@ -79,7 +79,7 @@ class JsonResponse {
 	private static function json(
 		bool $success,
 		string $message,
-		$data,
+		mixed $data,
 		int $status
 	): array {
 		return array(
@@ -93,6 +93,33 @@ class JsonResponse {
 				'data'      => $data,
 				'timestamp' => gmdate( DATE_ATOM ),
 			),
+		);
+	}
+
+	/**
+	 * Build a raw JSON response (without the standard PeakURL envelope).
+	 *
+	 * Used for protocol-level endpoints such as MCP JSON-RPC and OAuth discovery.
+	 *
+	 * @param mixed                 $data    Data payload (JSON-serialisable).
+	 * @param int                   $status  HTTP status code (default 200).
+	 * @param array<string, string> $headers Additional HTTP response headers.
+	 * @return array<string, mixed> Structured response array.
+	 * @since 1.8.0
+	 */
+	public static function raw(
+		mixed $data,
+		int $status = 200,
+		array $headers = array()
+	): array {
+		$default_headers = array(
+			'Content-Type' => 'application/json; charset=utf-8',
+		);
+
+		return array(
+			'status'  => $status,
+			'headers' => array_merge( $default_headers, $headers ),
+			'body'    => $data,
 		);
 	}
 

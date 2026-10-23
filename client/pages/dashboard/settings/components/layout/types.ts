@@ -16,6 +16,7 @@ export type SettingsTabIcon =
 	| "mapPin"
 	| "globe"
 	| "plug"
+	| "mcp"
 	| "zap"
 	| "download";
 

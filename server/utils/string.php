@@ -37,11 +37,7 @@ class Str {
 	 * @since 1.0.0
 	 */
 	public static function starts_with( string $haystack, string $needle ): bool {
-		if ( '' === $needle ) {
-			return true;
-		}
-
-		return 0 === strpos( $haystack, $needle );
+		return str_starts_with( $haystack, $needle );
 	}
 
 	/**
@@ -53,15 +49,7 @@ class Str {
 	 * @since 1.0.0
 	 */
 	public static function ends_with( string $haystack, string $needle ): bool {
-		if ( '' === $needle ) {
-			return true;
-		}
-
-		if ( strlen( $needle ) > strlen( $haystack ) ) {
-			return false;
-		}
-
-		return 0 === substr_compare( $haystack, $needle, -strlen( $needle ) );
+		return str_ends_with( $haystack, $needle );
 	}
 
 	/**
@@ -73,11 +61,7 @@ class Str {
 	 * @since 1.0.0
 	 */
 	public static function contains( string $haystack, string $needle ): bool {
-		if ( '' === $needle ) {
-			return true;
-		}
-
-		return false !== strpos( $haystack, $needle );
+		return str_contains( $haystack, $needle );
 	}
 
 	/**

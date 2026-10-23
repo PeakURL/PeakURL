@@ -11,7 +11,7 @@
 
 **PeakURL** is an open-source, self-hosted link management platform and URL shortener designed for teams, businesses, and developers who want complete ownership over their branded short links and click analytics on their own domain without recurring SaaS fees or vendor lock-in.
 
-Built with a modern React dashboard, a high-throughput in-memory caching engine (Redis & APCu), and a lean PHP 8 runtime, PeakURL serves as a fast, private, self-hosted alternative to Bitly, Dub, and YOURLS.
+Built with a React dashboard, high-throughput in-memory caching (Redis and APCu), and a PHP 8.3 runtime, PeakURL serves as a fast, private, self-hosted alternative to Bitly, Dub, and YOURLS.
 
 ![PeakURL dashboard](.github/images/PeakURL_Dashboard.jpg)
 
@@ -197,6 +197,13 @@ and then import them from the PeakURL dashboard through `Bulk Import`. Read the 
 PeakURL is built to feel familiar on shared hosting, VPS setups, and standard
 PHP environments. You do not need a separate control panel application or a
 complex deploy process to get started.
+
+### System Requirements
+
+- **PHP**: PHP 8.3 or later
+- **Required Extensions**: `pdo`, `pdo_mysql`, `mbstring`, `openssl`, `json`, and `curl` enabled (with `intl` and `zip` recommended)
+- **Database**: MySQL 5.7 or later, or MariaDB 10.4 or later
+- **Web Server**: Apache with `mod_rewrite`, or an equivalent supported web-server configuration
 
 ### 1. Start the installer
 

@@ -1,2 +1,2 @@
 /** Shared heading presentation within Settings. */
-export { SectionTitle } from "./SectionTitle";
+export { SectionTitle, type SettingsIconComponent } from "./SectionTitle";

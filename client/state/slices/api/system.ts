@@ -41,6 +41,12 @@ import type {
 	UpdateStatusPayload,
 	UpgradeDatabaseResponse,
 	ReleaseNotesResponse,
+	McpConnectionsResponse,
+	McpSettings,
+	McpToolsResponse,
+	RevokeAllMcpConnectionsResponse,
+	RevokeMcpConnectionResponse,
+	UpdateMcpSettingsPayload,
 } from "./types";
 
 const ADMIN_NOTICE_TAGS = ["AdminNotices"] as const;
@@ -60,6 +66,10 @@ const DATABASE_UPDATE_TAGS = [
 	"AdminNotices",
 	"SystemStatus",
 ] as const;
+const MCP_SETTINGS_TAGS = ["McpSettings"] as const;
+const MCP_CONNECTIONS_TAGS = ["McpConnections"] as const;
+const MCP_TOOLS_TAGS = ["McpTools"] as const;
+const MCP_SETTINGS_CHANGE_TAGS = ["McpSettings", "McpTools"] as const;
 
 /**
  * Check whether general settings must be saved as multipart form data.
@@ -466,6 +476,49 @@ export const systemApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: CRON_TAGS,
 		}),
+		getMcpSettings: build.query<ApiDataResponse<McpSettings>, void>({
+			query: () => API_ROUTES.system.mcpSettings,
+			providesTags: MCP_SETTINGS_TAGS,
+		}),
+		updateMcpSettings: build.mutation<
+			ApiDataResponse<McpSettings>,
+			UpdateMcpSettingsPayload
+		>({
+			query: (body) => ({
+				url: API_ROUTES.system.mcpSettings,
+				method: "PUT",
+				body,
+			}),
+			invalidatesTags: MCP_SETTINGS_CHANGE_TAGS,
+		}),
+		getMcpConnections: build.query<McpConnectionsResponse, void>({
+			query: () => API_ROUTES.system.mcpConnections,
+			providesTags: MCP_CONNECTIONS_TAGS,
+		}),
+		revokeMcpConnection: build.mutation<
+			RevokeMcpConnectionResponse,
+			string
+		>({
+			query: (id) => ({
+				url: API_ROUTES.system.mcpConnectionById(id),
+				method: "DELETE",
+			}),
+			invalidatesTags: MCP_CONNECTIONS_TAGS,
+		}),
+		revokeAllMcpConnections: build.mutation<
+			RevokeAllMcpConnectionsResponse,
+			void
+		>({
+			query: () => ({
+				url: API_ROUTES.system.mcpRevokeAllConnections,
+				method: "POST",
+			}),
+			invalidatesTags: MCP_CONNECTIONS_TAGS,
+		}),
+		getMcpTools: build.query<McpToolsResponse, void>({
+			query: () => API_ROUTES.system.mcpTools,
+			providesTags: MCP_TOOLS_TAGS,
+		}),
 	}),
 });
 
@@ -498,4 +551,10 @@ export const {
 	useUpdateCronJobScheduleMutation,
 	useResetCronJobScheduleMutation,
 	useUpdateCronSettingsMutation,
+	useGetMcpSettingsQuery,
+	useUpdateMcpSettingsMutation,
+	useGetMcpConnectionsQuery,
+	useRevokeMcpConnectionMutation,
+	useRevokeAllMcpConnectionsMutation,
+	useGetMcpToolsQuery,
 } = systemApi;

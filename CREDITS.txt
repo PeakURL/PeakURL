@@ -29,6 +29,10 @@ Bundled dashboard and frontend components
 - PeakURL logo link artwork — Lucide/Feather, ISC/MIT
   Full license notices: assets/LICENSE-Lucide.txt in releases;
   client/assets/logo/LICENSE-Lucide.txt in the source repository.
+- Model Context Protocol (MCP) icon — Devicon, MIT
+  Full license notices: assets/LICENSE-Devicons.txt in releases;
+  client/assets/mcp/LICENSE-Devicons.txt in the source repository.
+  https://devicons.io
 - @headlessui/react 2.2.9 — MIT
   https://github.com/tailwindlabs/headlessui
 - @reduxjs/toolkit 2.11.2 — MIT

@@ -3,13 +3,23 @@
 	"description": "PHP application runtime for the PeakURL dashboard.",
 	"type": "project",
 	"require": {
-		"php": "^8.0",
+		"php": "^8.3",
+		"ext-curl": "*",
+		"ext-json": "*",
+		"ext-mbstring": "*",
+		"ext-openssl": "*",
 		"ext-pdo": "*",
 		"ext-pdo_mysql": "*",
 		"maxmind-db/reader": "^1.13.1",
 		"phpmailer/phpmailer": "^6.9",
 		"gettext/gettext": "^5.7",
 		"matomo/device-detector": "^6.5.2"
+	},
+	"suggest": {
+		"ext-intl": "Enhanced internationalization and locale formatting.",
+		"ext-zip": "In-app system updates archive extraction.",
+		"ext-redis": "High-throughput in-memory caching with Redis.",
+		"ext-apcu": "Fast single-server shared-memory caching with APCu."
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.1",

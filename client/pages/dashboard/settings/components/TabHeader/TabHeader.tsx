@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
 
+import type { SettingsIconComponent } from "@/pages/dashboard/settings/components/SectionTitle";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { DocumentationLink } from "./DocumentationLink";
 
 interface TabHeaderProps {
-	icon: LucideIcon;
+	icon: SettingsIconComponent;
 	title: string;
 	description: string;
 	documentationHref?: string;

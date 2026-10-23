@@ -20,6 +20,7 @@ export interface ApiUserCapabilities {
 	manage_updates?: boolean | null;
 	manage_api_keys?: boolean | null;
 	manage_integrations?: boolean | null;
+	manage_mcp?: boolean | null;
 	view_links?: boolean | null;
 	create_links?: boolean | null;
 	edit_links?: boolean | null;
@@ -43,6 +44,7 @@ export interface UserCapabilities {
 	manageUpdates: boolean;
 	manageApiKeys: boolean;
 	manageIntegrations: boolean;
+	manageMcp: boolean;
 	viewLinks: boolean;
 	createLinks: boolean;
 	editLinks: boolean;

@@ -611,4 +611,135 @@ class LifecycleTest extends TestCase {
 		$this->assertNull( $result['clicks'] );
 		$this->assertNull( $result['uniqueClicks'] );
 	}
+
+	public function test_update_records_activity_with_explicit_alias(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$existing   = array(
+			'id'              => 'link_act_1',
+			'user_id'         => 'user_admin',
+			'alias'           => 'old-alias',
+			'short_code'      => 'old-alias',
+			'title'           => 'Existing Link',
+			'destination_url' => 'https://example.com/original',
+			'status'          => 'active',
+		);
+		$updated    = array_merge(
+			$existing,
+			array(
+				'alias'      => 'new-alias',
+				'short_code' => 'new-alias',
+			)
+		);
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_act_1' )->willReturn( $existing );
+		$this->repository->method( 'find_url_row' )->with( 'link_act_1' )->willReturn( $updated );
+		$this->repository->method( 'short_code_exists' )->willReturn( false );
+		$this->repository->method( 'update_url_fields' );
+
+		$this->analytics_service->expects( $this->once() )
+			->method( 'record_activity' )
+			->with( 'link_updated', 'Updated link new-alias.', 'user_admin', 'link_act_1' );
+
+		$request = new Request( 'PUT', '/link_act_1', array(), array() );
+		$result  = $this->lifecycle->update_url( $request, 'link_act_1', array( 'alias' => 'new-alias' ) );
+
+		$this->assertNotNull( $result );
+	}
+
+	public function test_update_records_activity_falling_back_to_existing_alias(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$existing   = array(
+			'id'              => 'link_act_2',
+			'user_id'         => 'user_admin',
+			'alias'           => 'existing-slug',
+			'short_code'      => 'existing-slug',
+			'title'           => 'Title 1',
+			'destination_url' => 'https://example.com/dest',
+			'status'          => 'active',
+		);
+		$updated    = array_merge( $existing, array( 'title' => 'Title 2' ) );
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_act_2' )->willReturn( $existing );
+		$this->repository->method( 'find_url_row' )->with( 'link_act_2' )->willReturn( $updated );
+		$this->repository->method( 'update_url_fields' );
+
+		$this->analytics_service->expects( $this->once() )
+			->method( 'record_activity' )
+			->with( 'link_updated', 'Updated link existing-slug.', 'user_admin', 'link_act_2' );
+
+		$request = new Request( 'PUT', '/link_act_2', array(), array() );
+		$result  = $this->lifecycle->update_url( $request, 'link_act_2', array( 'title' => 'Title 2' ) );
+
+		$this->assertNotNull( $result );
+	}
+
+	public function test_update_records_activity_falling_back_to_existing_short_code(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$existing   = array(
+			'id'              => 'link_act_3',
+			'user_id'         => 'user_admin',
+			'alias'           => '',
+			'short_code'      => 'sc789',
+			'title'           => 'Title A',
+			'destination_url' => 'https://example.com/dest',
+			'status'          => 'active',
+		);
+		$updated    = array_merge( $existing, array( 'title' => 'Title B' ) );
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_act_3' )->willReturn( $existing );
+		$this->repository->method( 'find_url_row' )->with( 'link_act_3' )->willReturn( $updated );
+		$this->repository->method( 'update_url_fields' );
+
+		$this->analytics_service->expects( $this->once() )
+			->method( 'record_activity' )
+			->with( 'link_updated', 'Updated link sc789.', 'user_admin', 'link_act_3' );
+
+		$request = new Request( 'PUT', '/link_act_3', array(), array() );
+		$result  = $this->lifecycle->update_url( $request, 'link_act_3', array( 'title' => 'Title B' ) );
+
+		$this->assertNotNull( $result );
+	}
+
+	public function test_update_records_activity_falling_back_to_id_never_dangling_period(): void {
+		$admin_user = array(
+			'id'   => 'user_admin',
+			'role' => 'admin',
+		);
+		$existing   = array(
+			'id'              => 'link_act_4',
+			'user_id'         => 'user_admin',
+			'alias'           => '',
+			'short_code'      => '',
+			'title'           => 'Title X',
+			'destination_url' => 'https://example.com/dest',
+			'status'          => 'active',
+		);
+		$updated    = array_merge( $existing, array( 'title' => 'Title Y' ) );
+
+		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
+		$this->repository->method( 'get_link_by_id' )->with( 'link_act_4' )->willReturn( $existing );
+		$this->repository->method( 'find_url_row' )->with( 'link_act_4' )->willReturn( $updated );
+		$this->repository->method( 'update_url_fields' );
+
+		$this->analytics_service->expects( $this->once() )
+			->method( 'record_activity' )
+			->with( 'link_updated', 'Updated link link_act_4.', 'user_admin', 'link_act_4' );
+
+		$request = new Request( 'PUT', '/link_act_4', array(), array() );
+		$result  = $this->lifecycle->update_url( $request, 'link_act_4', array( 'title' => 'Title Y' ) );
+
+		$this->assertNotNull( $result );
+	}
 }

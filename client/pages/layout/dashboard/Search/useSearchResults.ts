@@ -68,6 +68,7 @@ export function useSearchResults(query: string) {
 			canManagePlugins: access.canManageUsers,
 			canManageApiKeys: access.canManageApiKeys,
 			canManageIntegrations: access.canManageIntegrations,
+			canManageMcp: access.canManageMcp,
 			canManageMailDelivery: access.canManageMailDelivery,
 			canManageLocationData: access.canManageLocationData,
 			canManageUpdates: access.canManageUpdates,

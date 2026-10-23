@@ -74,7 +74,7 @@ if ( ! function_exists( 'apply_filters' ) ) {
 	 * @since 1.0.2
 	 */
 	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
-	function apply_filters( string $hook_name, $value, ...$args ) {
+	function apply_filters( string $hook_name, mixed $value, mixed ...$args ): mixed {
 		return Hooks::apply_filters( $hook_name, $value, ...$args );
 	}
 }

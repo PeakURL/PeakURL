@@ -19,7 +19,6 @@ namespace {
 		 */
 		function remove_filter( string $hook_name, callable $callback, int $priority = 10 ): bool {
 			$reflector = new \ReflectionProperty( \PeakURL\Core\Hooks\Hooks::class, 'hooks' );
-			$reflector->setAccessible( true );
 			/** @var array<string, array<int, array<int, array{callback: callable, accepted_args: int}>>> $hooks */
 			$hooks = $reflector->getValue();
 

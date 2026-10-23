@@ -210,6 +210,23 @@ function getRouteTargets(
 			isAllowed: Boolean(capabilities.canManageIntegrations),
 		}),
 		createRouteTarget({
+			id: "settings-mcp",
+			href: "/dashboard/settings/mcp",
+			label: __("MCP Server"),
+			description: __("Settings"),
+			section: "pages",
+			terms: [
+				__("MCP Server"),
+				"mcp",
+				"model context protocol",
+				"ai",
+				"claude",
+				"chatgpt",
+				"cursor",
+			],
+			isAllowed: Boolean(capabilities.canManageMcp),
+		}),
+		createRouteTarget({
 			id: "settings-email",
 			href: "/dashboard/settings/email",
 			label: __("Email SMTP"),

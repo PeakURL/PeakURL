@@ -545,7 +545,7 @@ class InstallStateTest extends TestCase {
 		$raw_response = curl_exec( $ch );
 		$http_code    = (int) curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 		$header_size  = (int) curl_getinfo( $ch, CURLINFO_HEADER_SIZE );
-		curl_close( $ch );
+		unset( $ch );
 
 		if ( isset( $pipes[0] ) && is_resource( $pipes[0] ) ) {
 			fclose( $pipes[0] );

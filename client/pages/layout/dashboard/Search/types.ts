@@ -1,5 +1,7 @@
-import type { LucideIcon } from "lucide-react";
-import type { DashboardPageId } from "@/pages/dashboard/navigation";
+import type {
+	DashboardNavIcon,
+	DashboardPageId,
+} from "@/pages/dashboard/navigation";
 
 /**
  * Search result groups rendered in the dashboard command palette.
@@ -27,6 +29,9 @@ export interface DashboardSearchCapabilities {
 
 	/** Whether the current user can manage integrations. */
 	canManageIntegrations?: boolean;
+
+	/** Whether the current user can manage MCP server settings. */
+	canManageMcp?: boolean;
 
 	/** Whether the current user can manage mail delivery settings. */
 	canManageMailDelivery?: boolean;
@@ -146,7 +151,7 @@ export interface SearchResult {
 	description?: string;
 	meta?: string;
 	href: string;
-	icon: LucideIcon;
+	icon: DashboardNavIcon;
 	external?: boolean;
 }
 

@@ -346,9 +346,6 @@ class Transport {
 				if ( $handle ) {
 					$status_code = (int) curl_getinfo( $handle, CURLINFO_RESPONSE_CODE );
 				}
-				if ( PHP_VERSION_ID < 80500 ) {
-					curl_close( $handle );
-				}
 				unset( $handle );
 
 				if ( is_resource( $dest_fp ) ) {
@@ -747,9 +744,6 @@ class Transport {
 		$error       = curl_error( $handle );
 		$status_code = (int) curl_getinfo( $handle, CURLINFO_RESPONSE_CODE );
 
-		if ( PHP_VERSION_ID < 80500 ) {
-			curl_close( $handle );
-		}
 		unset( $handle );
 
 		if ( $size_exceeded ) {

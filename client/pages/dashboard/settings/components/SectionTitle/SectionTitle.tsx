@@ -1,8 +1,11 @@
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 
+export type SettingsIconComponent =
+	LucideIcon | ComponentType<{ size?: number | string; className?: string }>;
+
 interface SectionTitleProps {
-	icon: LucideIcon;
+	icon: SettingsIconComponent;
 	children: ReactNode;
 }
 

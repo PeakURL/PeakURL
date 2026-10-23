@@ -404,15 +404,60 @@ class Controller extends BaseController {
 			in_array( $request->get_method(), array( 'GET', 'HEAD' ), true ) &&
 			$this->is_social_preview_request( $request )
 		) {
-			$preview = $this->links_service->get_link_social_preview( $route_id );
+			$preview_data = $this->links_service->get_link_social_preview( $route_id );
 
-			if ( is_array( $preview ) ) {
+			if ( is_array( $preview_data ) ) {
+				$preview = is_array( $preview_data['preview'] ?? null )
+					? $preview_data['preview']
+					: array();
+				$link    = is_array( $preview_data['link'] ?? null )
+					? $preview_data['link']
+					: array();
+
+				if ( \has_filter( 'link_social_metadata' ) ) {
+					$link_context = array(
+						'id'          => (string) ( $link['id'] ?? '' ),
+						'shortCode'   => (string) ( $link['shortCode'] ?? '' ),
+						'alias'       => (string) ( $link['alias'] ?? '' ),
+						'shortUrl'    => (string) ( $link['shortUrl'] ?? '' ),
+						'title'       => trim( (string) ( $link['title'] ?? '' ) ),
+						'hasPassword' => ! empty( $link['hasPassword'] ),
+						'status'      => (string) ( $link['status'] ?? 'active' ),
+					);
+
+					$preview_context = array(
+						'title'       => (string) ( $preview['title'] ?? '' ),
+						'description' => (string) ( $preview['description'] ?? '' ),
+						'imageUrl'    => (string) ( $preview['imageUrl'] ?? '' ),
+						'siteName'    => (string) ( $preview['siteName'] ?? '' ),
+						'url'         => (string) ( $preview['url'] ?? '' ),
+					);
+
+					try {
+						/**
+						 * Filters the Open Graph and Twitter card social preview metadata for a short link.
+						 *
+						 * Allows extensions to customize presentation metadata (title, description,
+						 * site name, and preview image) before the public HTML preview page is rendered.
+						 * Canonical routing and link identity ('url' and 'destination') are immutable
+						 * to preserve link integrity and prevent spoofing.
+						 *
+						 * @since 1.8.0
+						 *
+						 * @param array<string, string> $preview Presentation social preview metadata (destination excluded).
+						 * @param array<string, mixed>  $link    Minimal bounded link payload (credentials, destination, and metrics omitted).
+						 * @return array<string, string> Filtered social preview metadata.
+						 */
+						$filtered = \apply_filters( 'link_social_metadata', $preview_context, $link_context );
+						$preview  = $this->validate_social_preview( $filtered, $preview );
+					} catch ( \Throwable $e ) {
+						// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+						\error_log( sprintf( 'PeakURL link_social_metadata filter failed (%s).', get_class( $e ) ) );
+					}
+				}
+
 				return JsonResponse::text(
-					$this->format_social_preview_page(
-						is_array( $preview['preview'] ?? null )
-							? $preview['preview']
-							: array(),
-					),
+					$this->format_social_preview_page( $preview ),
 					200,
 					'text/html; charset=utf-8',
 				);
@@ -953,6 +998,68 @@ HTML;
 	 */
 	private function escape_meta_text( string $value ): string {
 		return htmlspecialchars( trim( $value ), ENT_QUOTES, 'UTF-8' );
+	}
+
+	/**
+	 * Validate filtered social preview metadata structure against fallback values.
+	 *
+	 * Ensures presentation fields are strings and valid protocols, while preserving
+	 * canonical routing and link identity.
+	 *
+	 * @param mixed                 $filtered Filtered metadata from callbacks.
+	 * @param array<string, string> $fallback Original trusted metadata.
+	 * @return array<string, string> Validated social preview metadata.
+	 * @since 1.8.0
+	 */
+	private function validate_social_preview( mixed $filtered, array $fallback ): array {
+		if ( ! is_array( $filtered ) ) {
+			return $fallback;
+		}
+
+		$title       = $filtered['title'] ?? $fallback['title'] ?? '';
+		$description = $filtered['description'] ?? $fallback['description'] ?? '';
+		$site_name   = $filtered['siteName'] ?? $fallback['siteName'] ?? '';
+		$image_url   = $filtered['imageUrl'] ?? $fallback['imageUrl'] ?? '';
+
+		if ( ! is_string( $title ) || ! is_string( $description ) || ! is_string( $site_name ) || ! is_string( $image_url ) ) {
+			return $fallback;
+		}
+
+		$title     = trim( $title );
+		$site_name = trim( $site_name );
+		$image_url = trim( $image_url );
+
+		if ( '' === $title ) {
+			$title = (string) ( $fallback['title'] ?? 'PeakURL' );
+		}
+
+		if ( '' === $site_name ) {
+			$site_name = (string) ( $fallback['siteName'] ?? 'PeakURL' );
+		}
+
+		if ( '' !== $image_url ) {
+			$parts = parse_url( $image_url );
+
+			if (
+				! is_array( $parts ) ||
+				! in_array( strtolower( (string) ( $parts['scheme'] ?? '' ) ), array( 'http', 'https' ), true ) ||
+				'' === trim( (string) ( $parts['host'] ?? '' ) ) ||
+				isset( $parts['user'] ) ||
+				isset( $parts['pass'] ) ||
+				false === filter_var( $image_url, FILTER_VALIDATE_URL )
+			) {
+				$image_url = (string) ( $fallback['imageUrl'] ?? '' );
+			}
+		}
+
+		return array(
+			'title'       => $title,
+			'description' => trim( $description ),
+			'imageUrl'    => $image_url,
+			'url'         => (string) ( $fallback['url'] ?? '' ),
+			'destination' => (string) ( $fallback['destination'] ?? '' ),
+			'siteName'    => $site_name,
+		);
 	}
 
 	/**

@@ -178,7 +178,7 @@ Configuration lives in [`package.json`](../../package.json) under the `"lint-sta
 
 Continuous Integration is configured via [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). Every pull request and push to the `main` branch undergoes automated quality verification:
 
-1. **Environment Setup**: Node.js 24 and PHP 8.4 with required PDO/Zip extensions.
+1. **Environment Setup**: Node.js 24 and PHP 8.3+ (matrix validating PHP 8.3, 8.4, and 8.5) with required PDO/Zip extensions.
 2. **Dependency Installation**: `npm ci` & `composer install` (in `server/`).
 3. **Format Check**: `npm run format:check` (Prettier & PHPCS).
 4. **Linters**: `npm run lint` (ESLint with Flat Config & PHPCS with WordPressCS).

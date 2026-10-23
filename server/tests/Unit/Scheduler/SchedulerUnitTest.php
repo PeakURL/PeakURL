@@ -796,4 +796,57 @@ class SchedulerUnitTest extends TestCase {
 		$this->assertSame( 0, $status_indef['effective_retention_days'] );
 		$this->assertTrue( $status_indef['is_customized'] );
 	}
+
+	/**
+	 * Test that SchedulerFactory::create() invokes register_jobs with the JobRegistry.
+	 */
+	public function test_scheduler_factory_invokes_register_jobs_with_registry(): void {
+		$mock_db       = $this->createMock( \PeakURL\Services\Database\PeakURL_DB::class );
+		$mock_settings = $this->createMock( SettingsApi::class );
+		$mock_cache    = $this->createMock( \PeakURL\Services\Cache\CacheInterface::class );
+		$mock_geoip    = $this->createMock( \PeakURL\Services\Geoip::class );
+		$mock_webhooks = $this->createMock( \PeakURL\Features\Webhooks\Service::class );
+		$mock_update   = $this->createMock( \PeakURL\Services\Update\Manager::class );
+		$mock_checker  = $this->createMock( \PeakURL\Features\Links\Health\Checker::class );
+
+		$captured_registry = null;
+
+		add_action(
+			'register_jobs',
+			function ( JobRegistry $registry ) use ( &$captured_registry ): void {
+				$captured_registry = $registry;
+				$registry->register(
+					new JobDefinition(
+						'custom_test_cron_job',
+						'Custom Test Job',
+						3600,
+						new class() implements JobHandlerInterface {
+							public function execute( ExecutionContext $context ): ExecutionResult {
+								return ExecutionResult::success();
+							}
+						}
+					)
+				);
+			}
+		);
+
+		try {
+			$scheduler = \PeakURL\Core\Scheduler\SchedulerFactory::create(
+				$mock_db,
+				array(),
+				$mock_settings,
+				$mock_cache,
+				$mock_geoip,
+				$mock_webhooks,
+				$mock_update,
+				$mock_checker
+			);
+
+			$this->assertInstanceOf( JobRegistry::class, $captured_registry );
+			$this->assertTrue( $captured_registry->has( 'custom_test_cron_job' ) );
+			$this->assertTrue( $scheduler->get_registry()->has( 'custom_test_cron_job' ) );
+		} finally {
+			\PeakURL\Core\Hooks\Hooks::remove_all( 'register_jobs' );
+		}
+	}
 }

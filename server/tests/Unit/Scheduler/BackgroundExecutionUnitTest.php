@@ -426,4 +426,45 @@ class BackgroundExecutionUnitTest extends TestCase {
 
 		$this->assertFalse( $no_failure );
 	}
+
+	/**
+	 * Test that background_tasks_started and background_tasks_finished hooks are fired in order with runner instance.
+	 */
+	public function test_background_tasks_lifecycle_hooks_fired_in_order(): void {
+		$runner = new BackgroundRunner();
+		$events = array();
+
+		add_action(
+			'background_tasks_started',
+			function ( BackgroundRunner $instance ) use ( &$events ): void {
+				$events[] = array(
+					'event'    => 'started',
+					'instance' => $instance,
+				);
+			}
+		);
+
+		add_action(
+			'background_tasks_finished',
+			function ( BackgroundRunner $instance ) use ( &$events ): void {
+				$events[] = array(
+					'event'    => 'finished',
+					'instance' => $instance,
+				);
+			}
+		);
+
+		try {
+			$runner->dispatch_post_response( false );
+
+			$this->assertCount( 2, $events );
+			$this->assertSame( 'started', $events[0]['event'] );
+			$this->assertSame( $runner, $events[0]['instance'] );
+			$this->assertSame( 'finished', $events[1]['event'] );
+			$this->assertSame( $runner, $events[1]['instance'] );
+		} finally {
+			\PeakURL\Core\Hooks\Hooks::remove_all( 'background_tasks_started' );
+			\PeakURL\Core\Hooks\Hooks::remove_all( 'background_tasks_finished' );
+		}
+	}
 }

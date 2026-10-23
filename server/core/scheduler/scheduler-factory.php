@@ -181,7 +181,7 @@ class SchedulerFactory {
 
 		// Extensibility hook: allow plugins to register custom jobs.
 		if ( function_exists( 'do_action' ) ) {
-			\do_action( 'peakurl_register_cron_jobs', $registry );
+			\do_action( 'register_jobs', $registry );
 		}
 
 		return new Scheduler( $registry, $repository, $logger, $settings_api );

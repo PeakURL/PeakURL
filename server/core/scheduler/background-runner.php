@@ -208,7 +208,7 @@ class BackgroundRunner {
 		}
 
 		if ( function_exists( 'do_action' ) ) {
-			\do_action( 'peakurl_background_tasks_start', $this );
+			\do_action( 'background_tasks_started', $this );
 		}
 
 		// 3. Execute any targeted one-off jobs (e.g. immediate post-create link health check).
@@ -251,7 +251,7 @@ class BackgroundRunner {
 		}
 
 		if ( function_exists( 'do_action' ) ) {
-			\do_action( 'peakurl_background_tasks_finished', $this );
+			\do_action( 'background_tasks_finished', $this );
 		}
 	}
 

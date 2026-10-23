@@ -11,6 +11,7 @@ namespace PeakURL\Tests\Unit\Links;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PeakURL\Core\Hooks\Hooks;
 use PeakURL\Features\Analytics\Service as AnalyticsService;
 use PeakURL\Features\Links\Access;
 use PeakURL\Features\Links\Repository as LinksRepository;
@@ -31,6 +32,9 @@ class AccessTest extends TestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
+
+		Hooks::remove_all();
+		Hooks::reset_actions();
 
 		$this->repository        = $this->createMock( LinksRepository::class );
 		$this->validator         = new LinksValidator();
@@ -56,6 +60,12 @@ class AccessTest extends TestCase {
 				'status'         => (string) ( $row['status'] ?? '' ),
 			)
 		);
+	}
+
+	protected function tearDown(): void {
+		Hooks::remove_all();
+		Hooks::reset_actions();
+		parent::tearDown();
 	}
 
 	public function test_returns_not_found_when_short_code_is_empty(): void {
@@ -108,16 +118,77 @@ class AccessTest extends TestCase {
 
 		$this->repository->expects( $this->once() )
 			->method( 'expire_link' )
-			->with( 'link_due_1' );
+			->with( 'link_due_1' )
+			->willReturn( true );
 
 		$this->webhooks_service->expects( $this->once() )
 			->method( 'dispatch_link_event' )
 			->with( 'link.expired', $this->isType( 'array' ) );
 
+		$actions_fired = array();
+		add_action(
+			'link_expired',
+			function () use ( &$actions_fired ): void {
+				$actions_fired[] = 'link_expired';
+			}
+		);
+		add_action(
+			'link_status_changed',
+			function () use ( &$actions_fired ): void {
+				$actions_fired[] = 'link_status_changed';
+			}
+		);
+
 		$request = new Request( 'GET', '/due', array(), array() );
 		$result  = $this->access->get_link_access( 'due', $request );
 
 		$this->assertSame( 'expired', $result['status'] );
+		$this->assertContains( 'link_expired', $actions_fired );
+		$this->assertContains( 'link_status_changed', $actions_fired );
+	}
+
+	public function test_does_not_dispatch_expiration_events_when_expire_link_persistence_fails(): void {
+		$row = array(
+			'id'              => 'link_due_failed',
+			'short_code'      => 'duefail',
+			'destination_url' => 'https://example.com',
+			'status'          => 'active',
+			'expires_at'      => '2020-01-01 00:00:00',
+		);
+		$this->repository->method( 'find_link_access_row' )->with( 'duefail' )->willReturn( $row );
+
+		$links_api = $this->createMock( \PeakURL\Api\LinksApi::class );
+		$links_api->expects( $this->never() )->method( 'invalidate_link_cache' );
+		$this->repository->method( 'get_links_api' )->willReturn( $links_api );
+
+		$this->repository->expects( $this->once() )
+			->method( 'expire_link' )
+			->with( 'link_due_failed' )
+			->willReturn( false );
+
+		$this->webhooks_service->expects( $this->never() )
+			->method( 'dispatch_link_event' );
+
+		$actions_fired = array();
+		add_action(
+			'link_expired',
+			function () use ( &$actions_fired ): void {
+				$actions_fired[] = 'link_expired';
+			}
+		);
+		add_action(
+			'link_status_changed',
+			function () use ( &$actions_fired ): void {
+				$actions_fired[] = 'link_status_changed';
+			}
+		);
+
+		$request = new Request( 'GET', '/duefail', array(), array() );
+		$result  = $this->access->get_link_access( 'duefail', $request );
+
+		$this->assertSame( 'expired', $result['status'] );
+		$this->assertSame( $row, $result['url'] );
+		$this->assertEmpty( $actions_fired );
 	}
 
 	public function test_returns_unavailable_when_status_is_not_active(): void {

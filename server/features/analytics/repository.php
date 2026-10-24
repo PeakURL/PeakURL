@@ -1429,45 +1429,83 @@ class Repository {
 		$ip_address = Str::nullable( $request->get_ip_address() );
 		$now        = Date::now();
 
+		if ( Visitor::skip_click_tracking( $request, $allow_non_get_hit ) ) {
+			return;
+		}
+
+		$options = array(
+			'deduplicate'          => true,
+			'deduplication_window' => 2,
+		);
+
+		if ( \has_filter( 'click_tracking_options' ) ) {
+			$safe_link = array(
+				'id'        => (string) ( $url['id'] ?? '' ),
+				'shortCode' => (string) ( $url['short_code'] ?? '' ),
+				'alias'     => (string) ( $url['alias'] ?? '' ),
+				'title'     => (string) ( $url['title'] ?? '' ),
+				'status'    => (string) ( $url['status'] ?? 'active' ),
+			);
+
+			$tracking_context = array(
+				'ip'        => (string) $request->get_ip_address(),
+				'userAgent' => (string) $request->get_header( 'User-Agent' ),
+				'method'    => (string) $request->get_method(),
+			);
+
+			try {
+				/**
+				 * Filters click tracking options before duplicate detection and persistence.
+				 *
+				 * @since 1.8.0
+				 *
+				 * @param array<string, mixed> $options          Bounded tracking options (deduplicate, deduplication_window).
+				 * @param array<string, mixed> $safe_link        Minimal bounded link data.
+				 * @param array<string, mixed> $tracking_context Bounded request context.
+				 */
+				$filtered = \apply_filters( 'click_tracking_options', $options, $safe_link, $tracking_context );
+
+				if ( is_array( $filtered ) ) {
+					if ( isset( $filtered['deduplicate'] ) && is_bool( $filtered['deduplicate'] ) ) {
+						$options['deduplicate'] = $filtered['deduplicate'];
+					}
+
+					if ( isset( $filtered['deduplication_window'] ) && is_int( $filtered['deduplication_window'] ) ) {
+						$options['deduplication_window'] = max( 1, min( 86400, $filtered['deduplication_window'] ) );
+					}
+				}
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL click_tracking_options filter error: %s', get_class( $e ) ) );
+			}
+		}
+
 		if (
-			Visitor::skip_click_tracking(
-				$request,
-				$allow_non_get_hit,
-			) ||
+			$options['deduplicate'] &&
 			$this->is_duplicate_click(
 				(string) $url['id'],
 				Visitor::hash_request( $request ),
 				$ip_address,
 				$user_agent,
 				$now,
+				(int) $options['deduplication_window']
 			)
 		) {
 			return;
 		}
 
-		$referrer      = Visitor::parse_referrer(
+		$referrer     = Visitor::parse_referrer(
 			$request->get_header( 'Referer', '' ),
 		);
-		$metadata      = Visitor::parse_user_agent(
+		$metadata     = Visitor::parse_user_agent(
 			(string) ( $user_agent ?? '' ),
 		);
-		$location      = $this->geoip->lookup_location(
+		$location     = $this->geoip->lookup_location(
 			(string) ( $ip_address ?? '' ),
 		);
-		$visitor_hash  = Visitor::hash_request( $request );
-		$click_id      = Str::random_id();
-		$click_payload = array(
-			'id'                => $click_id,
-			'url_id'            => (string) $url['id'],
-			'clicked_at'        => $now,
-			'visitor_hash'      => $visitor_hash,
-			'ip_address'        => $ip_address,
-			'country_code'      => $location['country_code'],
-			'country_name'      => $location['country_name'],
-			'city_name'         => $location['city_name'],
-			'device'            => $metadata['device'],
-			'browser'           => $metadata['browser'],
-			'operating_system'  => $metadata['os'],
+		$visitor_hash = Visitor::hash_request( $request );
+		$click_id     = Str::random_id();
+		$attribution  = array(
 			'referrer_name'     => $referrer['name'],
 			'referrer_domain'   => $referrer['domain'],
 			'referrer_category' => $referrer['category'],
@@ -1486,6 +1524,97 @@ class Repository {
 			'utm_content'       => Str::nullable(
 				$url['utm_content'] ?? null,
 			),
+		);
+
+		if ( \has_filter( 'click_attribution' ) ) {
+			$safe_link = array(
+				'id'        => (string) ( $url['id'] ?? '' ),
+				'shortCode' => (string) ( $url['short_code'] ?? '' ),
+				'alias'     => (string) ( $url['alias'] ?? '' ),
+				'title'     => (string) ( $url['title'] ?? '' ),
+				'status'    => (string) ( $url['status'] ?? 'active' ),
+			);
+
+			$attribution_context = array(
+				'ip'        => (string) $request->get_ip_address(),
+				'userAgent' => (string) $request->get_header( 'User-Agent' ),
+				'method'    => (string) $request->get_method(),
+			);
+
+			try {
+				/**
+				 * Filters click attribution fields before insertion.
+				 *
+				 * @since 1.8.0
+				 *
+				 * @param array<string, string|null> $attribution         Bounded attribution fields.
+				 * @param array<string, mixed>       $safe_link           Minimal bounded link data.
+				 * @param array<string, mixed>       $attribution_context Bounded request context.
+				 */
+				$filtered_attribution = \apply_filters(
+					'click_attribution',
+					$attribution,
+					$safe_link,
+					$attribution_context
+				);
+
+				if ( is_array( $filtered_attribution ) ) {
+					$allowed_fields = array(
+						'referrer_name'     => 191,
+						'referrer_domain'   => 191,
+						'referrer_category' => 64,
+						'utm_source'        => 120,
+						'utm_medium'        => 120,
+						'utm_campaign'      => 120,
+						'utm_term'          => 120,
+						'utm_content'       => 120,
+					);
+
+					foreach ( $allowed_fields as $field => $max_length ) {
+						if ( ! array_key_exists( $field, $filtered_attribution ) ) {
+							continue;
+						}
+
+						$val = $filtered_attribution[ $field ];
+
+						if ( null === $val ) {
+							$attribution[ $field ] = null;
+						} elseif ( is_string( $val ) ) {
+							$trimmed = trim( $val );
+							if ( '' === $trimmed ) {
+								$attribution[ $field ] = null;
+							} elseif ( mb_strlen( $trimmed ) <= $max_length ) {
+								$attribution[ $field ] = $trimmed;
+							}
+						}
+					}
+				}
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL click_attribution filter error: %s', get_class( $e ) ) );
+			}
+		}
+
+		$click_payload = array(
+			'id'                => $click_id,
+			'url_id'            => (string) $url['id'],
+			'clicked_at'        => $now,
+			'visitor_hash'      => $visitor_hash,
+			'ip_address'        => $ip_address,
+			'country_code'      => $location['country_code'],
+			'country_name'      => $location['country_name'],
+			'city_name'         => $location['city_name'],
+			'device'            => $metadata['device'],
+			'browser'           => $metadata['browser'],
+			'operating_system'  => $metadata['os'],
+			'referrer_name'     => $attribution['referrer_name'],
+			'referrer_domain'   => $attribution['referrer_domain'],
+			'referrer_category' => $attribution['referrer_category'],
+			'utm_source'        => $attribution['utm_source'],
+			'utm_medium'        => $attribution['utm_medium'],
+			'utm_campaign'      => $attribution['utm_campaign'],
+			'utm_term'          => $attribution['utm_term'],
+			'utm_content'       => $attribution['utm_content'],
 			'user_agent'        => $user_agent,
 		);
 
@@ -1522,11 +1651,12 @@ class Repository {
 	/**
 	 * Detect a near-immediate duplicate click from the same visitor.
 	 *
-	 * @param string      $url_id       Short-link row ID.
-	 * @param string|null $visitor_hash Visitor fingerprint hash.
-	 * @param string|null $ip_address   Client IP address.
-	 * @param string|null $user_agent   Raw user-agent string.
-	 * @param string      $clicked_at   Current click timestamp in UTC.
+	 * @param string      $url_id         Short-link row ID.
+	 * @param string|null $visitor_hash   Visitor fingerprint hash.
+	 * @param string|null $ip_address     Client IP address.
+	 * @param string|null $user_agent     Raw user-agent string.
+	 * @param string      $clicked_at     Current click timestamp in UTC.
+	 * @param int         $window_seconds Bounded deduplication time window in seconds.
 	 * @return bool True when a recent matching click already exists.
 	 * @since 1.0.0
 	 */
@@ -1535,13 +1665,15 @@ class Repository {
 		?string $visitor_hash,
 		?string $ip_address,
 		?string $user_agent,
-		string $clicked_at
+		string $clicked_at,
+		int $window_seconds = 2
 	): bool {
-		$threshold = ( new \DateTimeImmutable(
+		$window_seconds = max( 1, min( 86400, $window_seconds ) );
+		$threshold      = ( new \DateTimeImmutable(
 			$clicked_at,
 			new \DateTimeZone( 'UTC' ),
 		) )
-			->modify( '-2 seconds' )
+			->modify( sprintf( '-%d seconds', $window_seconds ) )
 			->format( 'Y-m-d H:i:s' );
 
 		if ( null !== $visitor_hash && '' !== $visitor_hash ) {

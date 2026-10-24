@@ -139,7 +139,7 @@ class AnalyticsRetentionJob implements JobHandlerInterface {
 			if ( null !== $this->analytics_service ) {
 				$purged_clicks = $this->analytics_service->purge_old_clicks( $analytics_cutoff, 1000 );
 			} else {
-				$purged_clicks = $this->db->query(
+				$purged_clicks = (int) $this->db->query(
 					'DELETE FROM clicks
 					WHERE clicked_at < :cutoff
 					LIMIT 1000',
@@ -147,6 +147,29 @@ class AnalyticsRetentionJob implements JobHandlerInterface {
 						'cutoff' => $analytics_cutoff,
 					)
 				);
+
+				if ( \has_action( 'analytics_retention_completed' ) ) {
+					try {
+						/**
+						 * Fires after click analytics retention purge completes.
+						 *
+						 * @since 1.8.0
+						 *
+						 * @param array{purgedClicks: int, cutoff: string, limit: int} $summary Retention summary.
+						 */
+						\do_action(
+							'analytics_retention_completed',
+							array(
+								'purgedClicks' => $purged_clicks,
+								'cutoff'       => $analytics_cutoff,
+								'limit'        => 1000,
+							)
+						);
+					} catch ( \Throwable $e ) {
+						// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+						\error_log( sprintf( 'PeakURL analytics_retention_completed observer error: %s', get_class( $e ) ) );
+					}
+				}
 			}
 		}
 		$message = sprintf(

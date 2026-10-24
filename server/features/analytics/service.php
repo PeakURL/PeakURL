@@ -1338,6 +1338,32 @@ class Service {
 	 * @since 1.7.0
 	 */
 	public function purge_old_clicks( string $cutoff, int $limit = 1000 ): int {
-		return $this->data->purge_old_clicks( $cutoff, $limit );
+		$deleted      = $this->data->purge_old_clicks( $cutoff, $limit );
+		$actual_limit = max( 1, min( 5000, $limit ) );
+
+		if ( \has_action( 'analytics_retention_completed' ) ) {
+			try {
+				/**
+				 * Fires after click analytics retention purge completes.
+				 *
+				 * @since 1.8.0
+				 *
+				 * @param array{purgedClicks: int, cutoff: string, limit: int} $summary Retention summary.
+				 */
+				\do_action(
+					'analytics_retention_completed',
+					array(
+						'purgedClicks' => $deleted,
+						'cutoff'       => $cutoff,
+						'limit'        => $actual_limit,
+					)
+				);
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL analytics_retention_completed observer error: %s', get_class( $e ) ) );
+			}
+		}
+
+		return $deleted;
 	}
 }

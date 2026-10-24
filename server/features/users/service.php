@@ -286,19 +286,42 @@ class Service {
 
 		$data['updated_at'] = Date::now();
 
-		$this->db->update( 'users', $data, array( 'id' => $user_id ) );
-
-		if ( $password_changed && $user_row ) {
-			$this->auth_service->send_password_changed( $user_row );
-		}
+		$affected = $this->db->update( 'users', $data, array( 'id' => $user_id ) );
 
 		$updated_user = $this->users_api->get_user( $user_id );
 
-		if ( $updated_user ) {
-			$this->webhooks_service->dispatch_user_event(
-				'user.updated',
+		if ( ! $updated_user ) {
+			throw new ApiException(
+				__( 'User not found.', 'peakurl' ),
+				404,
+			);
+		}
+
+		if ( $affected > 0 ) {
+			if ( $password_changed && $user_row ) {
+				try {
+					$this->auth_service->send_password_changed( $user_row );
+				} catch ( \Throwable $mail_error ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					\error_log( sprintf( 'Failed to send password changed notification: %s', get_class( $mail_error ) ) );
+				}
+			}
+
+			try {
+				$this->webhooks_service->dispatch_user_event(
+					'user.updated',
+					$updated_user,
+					$user_row
+				);
+			} catch ( \Throwable $webhook_error ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'Failed to dispatch user.updated webhook: %s', get_class( $webhook_error ) ) );
+			}
+
+			$this->notify_updated(
 				$updated_user,
-				$user_row
+				$user_row ?? array(),
+				$user
 			);
 		}
 
@@ -565,12 +588,15 @@ class Service {
 			throw new \LogicException( 'Cannot execute role modification within an active external transaction.' );
 		}
 
-		$max_attempts = $role_supplied ? 3 : 1;
-		$attempt      = 0;
+		$max_attempts  = $role_supplied ? 3 : 1;
+		$attempt       = 0;
+		$affected      = 0;
+		$previous_user = $user;
 
 		while ( $attempt < $max_attempts ) {
 			++$attempt;
-			$did_begin = false;
+			$did_begin   = false;
+			$locked_user = null;
 
 			if ( $role_supplied ) {
 				$this->db->begin_transaction();
@@ -622,10 +648,15 @@ class Service {
 
 				$data['updated_at'] = Date::now();
 
-				$this->db->update( 'users', $data, array( 'id' => $user_id ) );
+				$affected_rows = $this->db->update( 'users', $data, array( 'id' => $user_id ) );
 
 				if ( $did_begin ) {
 					$this->db->commit();
+				}
+
+				$affected = $affected_rows;
+				if ( $role_supplied && $locked_user ) {
+					$previous_user = $locked_user;
 				}
 				break;
 			} catch ( \Throwable $exception ) {
@@ -650,14 +681,26 @@ class Service {
 			}
 		}
 
-		if ( ! empty( $password_changed ) ) {
-			$this->auth_service->send_password_changed( $user );
-		}
-
 		$updated_user = $this->users_api->get_user( $user_id );
 
-		try {
-			if ( $updated_user ) {
+		if ( ! $updated_user ) {
+			throw new ApiException(
+				__( 'User not found.', 'peakurl' ),
+				404,
+			);
+		}
+
+		if ( $affected > 0 ) {
+			if ( ! empty( $password_changed ) ) {
+				try {
+					$this->auth_service->send_password_changed( $previous_user );
+				} catch ( \Throwable $mail_error ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					\error_log( sprintf( 'Failed to send password changed notification: %s', get_class( $mail_error ) ) );
+				}
+			}
+
+			try {
 				$this->analytics_service->record_activity(
 					'user_updated',
 					'Updated user ' . (string) ( $updated_user['username'] ?? $username ) . '.',
@@ -667,15 +710,27 @@ class Service {
 						'user' => $this->get_user_activity_meta( $updated_user ),
 					),
 				);
+			} catch ( \Throwable $activity_error ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'Failed to record user_updated activity: %s', get_class( $activity_error ) ) );
+			}
 
+			try {
 				$this->webhooks_service->dispatch_user_event(
 					'user.updated',
 					$updated_user,
-					$user
+					$previous_user
 				);
+			} catch ( \Throwable $webhook_error ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'Failed to dispatch user.updated webhook: %s', get_class( $webhook_error ) ) );
 			}
-		} catch ( \Throwable $side_effect_error ) {
-			\error_log( 'Failed to process user_updated side effects: ' . $side_effect_error->getMessage() );
+
+			$this->notify_updated(
+				$updated_user,
+				$previous_user,
+				$current_user
+			);
 		}
 
 		return $this->format_user( $updated_user );
@@ -824,6 +879,14 @@ class Service {
 			\error_log( 'Failed to dispatch user.deleted webhook: ' . $webhook_error->getMessage() );
 		}
 
+		if ( $target_user ) {
+			$this->notify_deleted(
+				$target_user,
+				$current_user,
+				count( $transferred_links )
+			);
+		}
+
 		return true;
 	}
 
@@ -962,5 +1025,121 @@ class Service {
 			'email'       => '' !== $email ? $email : null,
 			'role'        => '' !== $role ? $role : null,
 		);
+	}
+
+	/**
+	 * Format a user row for lifecycle hooks.
+	 *
+	 * @param array<string, mixed> $user Raw user database row.
+	 * @return array<string, string> Bounded user details.
+	 * @since 1.8.0
+	 */
+	private function user_details( array $user ): array {
+		return array(
+			'id'          => (string) ( $user['id'] ?? '' ),
+			'username'    => (string) ( $user['username'] ?? '' ),
+			'email'       => (string) ( $user['email'] ?? '' ),
+			'role'        => (string) ( $user['role'] ?? '' ),
+			'displayName' => (string) ( $user['display_name'] ?? '' ),
+			'updatedAt'   => (string) ( $user['updated_at'] ?? '' ),
+		);
+	}
+
+	/**
+	 * Format an actor dictionary for lifecycle hooks.
+	 *
+	 * @param array<string, mixed> $actor Raw or formatted actor array.
+	 * @return array<string, string> Bounded actor details.
+	 * @since 1.8.0
+	 */
+	private function actor_details( array $actor ): array {
+		return array(
+			'id'       => (string) ( $actor['id'] ?? '' ),
+			'username' => (string) ( $actor['username'] ?? '' ),
+			'role'     => (string) ( $actor['role'] ?? '' ),
+		);
+	}
+
+	/**
+	 * Dispatch user_updated lifecycle action.
+	 *
+	 * @param array<string, mixed> $user          Updated user row.
+	 * @param array<string, mixed> $previous_user User row before update.
+	 * @param array<string, mixed> $actor         Acting user.
+	 * @since 1.8.0
+	 */
+	private function notify_updated(
+		array $user,
+		array $previous_user,
+		array $actor
+	): void {
+		if ( ! \has_action( 'user_updated' ) ) {
+			return;
+		}
+
+		$payload  = $this->user_details( $user );
+		$previous = $this->user_details( $previous_user );
+		$actor    = $this->actor_details( $actor );
+
+		try {
+			/**
+			 * Fires after a user record has been successfully updated.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $payload  Bounded updated user payload.
+			 * @param array<string, string> $previous Bounded previous user payload.
+			 * @param array<string, string> $actor    Bounded acting user.
+			 */
+			\do_action( 'user_updated', $payload, $previous, $actor );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL user_updated observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch user_deleted lifecycle action.
+	 *
+	 * @param array<string, mixed> $user              Target deleted user row.
+	 * @param array<string, mixed> $actor             Acting administrator.
+	 * @param int                  $transferred_links Confirmed number of transferred links.
+	 * @since 1.8.0
+	 */
+	private function notify_deleted(
+		array $user,
+		array $actor,
+		int $transferred_links
+	): void {
+		if ( ! \has_action( 'user_deleted' ) ) {
+			return;
+		}
+
+		$payload = array(
+			'id'       => (string) ( $user['id'] ?? '' ),
+			'username' => (string) ( $user['username'] ?? '' ),
+			'email'    => (string) ( $user['email'] ?? '' ),
+			'role'     => (string) ( $user['role'] ?? '' ),
+		);
+
+		$context = array(
+			'actor'                 => $this->actor_details( $actor ),
+			'transferredLinksCount' => $transferred_links,
+		);
+
+		try {
+			/**
+			 * Fires after a user has been permanently deleted.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $payload Bounded deleted user payload.
+			 * @param array<string, mixed>  $context Bounded deletion context (actor, transferredLinksCount).
+			 */
+			\do_action( 'user_deleted', $payload, $context );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL user_deleted observer error: %s', get_class( $e ) ) );
+		}
 	}
 }

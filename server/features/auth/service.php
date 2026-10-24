@@ -389,14 +389,9 @@ class Service {
 	public function send_password_changed( array $user ): void {
 		try {
 			$this->notifications->send_password_changed( $user );
-		} catch ( \RuntimeException $exception ) {
-			error_log(
-				sprintf(
-					'PeakURL mail error for password changed (%s): %s',
-					(string) ( $user['email'] ?? 'unknown-email' ),
-					$exception->getMessage(),
-				),
-			);
+		} catch ( \Throwable $exception ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL password_changed notification error: %s', get_class( $exception ) ) );
 		}
 	}
 
@@ -872,34 +867,73 @@ class Service {
 		}
 
 		$validated_password = $this->validator->validate_password( $password );
+		$token_hash         = Credentials::hash_lookup_token( $clean_token );
 
-		$this->db->query(
-			'UPDATE users
-            SET password_hash = :hash,
-                password_reset_token = NULL,
-                password_reset_expires_at = NULL,
-                updated_at = :updated_at
-            WHERE id = :id',
-			array(
-				'hash'       => password_hash( $validated_password, PASSWORD_DEFAULT ),
-				'updated_at' => Date::now(),
-				'id'         => $user['id'],
-			),
-		);
+		$this->db->begin_transaction();
 
-		$this->db->query(
-			'UPDATE sessions
-            SET revoked_at = :revoked_at
-            WHERE user_id = :user_id',
-			array(
-				'revoked_at' => Date::now(),
-				'user_id'    => $user['id'],
-			),
-		);
+		try {
+			$now      = Date::now();
+			$affected = $this->db->query(
+				'UPDATE users
+				SET password_hash = :hash,
+					password_reset_token = NULL,
+					password_reset_expires_at = NULL,
+					updated_at = :updated_at
+				WHERE id = :id
+				  AND password_reset_token = :token_hash
+				  AND password_reset_expires_at > :now',
+				array(
+					'hash'       => password_hash( $validated_password, PASSWORD_DEFAULT ),
+					'updated_at' => $now,
+					'id'         => (string) $user['id'],
+					'token_hash' => $token_hash,
+					'now'        => $now,
+				),
+			);
+
+			if ( 1 !== $affected ) {
+				throw new ApiException(
+					__( 'Password reset token is invalid or has expired.', 'peakurl' ),
+					422,
+				);
+			}
+
+			$this->db->query(
+				'UPDATE sessions
+				SET revoked_at = :revoked_at
+				WHERE user_id = :user_id',
+				array(
+					'revoked_at' => $now,
+					'user_id'    => (string) $user['id'],
+				),
+			);
+
+			$this->db->commit();
+		} catch ( \Throwable $exception ) {
+			if ( $this->db->in_transaction() ) {
+				$this->db->roll_back();
+			}
+
+			throw $exception;
+		}
 
 		$this->send_password_changed( $user );
 
-		\do_action( 'password_reset', $this->format_user( $user ) );
+		try {
+			/**
+			 * Fires after a user password has been reset.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param array<string, mixed> $user Formatted user data.
+			 */
+			\do_action( 'password_reset', $this->format_user( $user ) );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL password_reset observer error: %s', get_class( $e ) ) );
+		}
+
+		$this->notify_password_changed( $user, 'reset', $now );
 
 		return true;
 	}
@@ -2133,6 +2167,52 @@ class Service {
 		} catch ( \Throwable $e ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			\error_log( sprintf( 'PeakURL two_factor_backup_codes_regenerated observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch password_changed lifecycle action.
+	 *
+	 * @param array<string, mixed> $user        Persisted user record or details.
+	 * @param string               $source      Change origin: 'reset', 'profile', or 'admin'.
+	 * @param string|null          $occurred_at Timestamp of confirmed change.
+	 * @since 1.8.0
+	 */
+	public function notify_password_changed(
+		array $user,
+		string $source,
+		?string $occurred_at = null
+	): void {
+		if ( ! \has_action( 'password_changed' ) ) {
+			return;
+		}
+
+		$timestamp = $occurred_at ?? Date::now();
+
+		$payload = array(
+			'id'         => (string) ( $user['id'] ?? '' ),
+			'username'   => (string) ( $user['username'] ?? '' ),
+			'role'       => (string) ( $user['role'] ?? '' ),
+			'occurredAt' => Date::to_iso( $timestamp ),
+		);
+
+		$context = array(
+			'source' => $source,
+		);
+
+		try {
+			/**
+			 * Fires after a user password has been successfully changed and persisted.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $payload Bounded user details without credentials.
+			 * @param array<string, string> $context Origin context ('reset', 'profile', or 'admin').
+			 */
+			\do_action( 'password_changed', $payload, $context );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL password_changed observer error: %s', get_class( $e ) ) );
 		}
 	}
 

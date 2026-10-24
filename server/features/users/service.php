@@ -305,6 +305,12 @@ class Service {
 					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 					\error_log( sprintf( 'Failed to send password changed notification: %s', get_class( $mail_error ) ) );
 				}
+
+				$this->auth_service->notify_password_changed(
+					$updated_user,
+					'profile',
+					(string) $data['updated_at']
+				);
 			}
 
 			try {
@@ -681,7 +687,6 @@ class Service {
 					throw new ApiException(
 						__( 'Database lock conflict occurred. Please retry the operation.', 'peakurl' ),
 						409,
-						$exception
 					);
 				}
 
@@ -706,6 +711,12 @@ class Service {
 					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 					\error_log( sprintf( 'Failed to send password changed notification: %s', get_class( $mail_error ) ) );
 				}
+
+				$this->auth_service->notify_password_changed(
+					$updated_user,
+					'admin',
+					(string) $data['updated_at']
+				);
 			}
 
 			try {
@@ -870,7 +881,6 @@ class Service {
 					throw new ApiException(
 						__( 'Database lock conflict occurred. Please retry the operation.', 'peakurl' ),
 						409,
-						$exception
 					);
 				}
 

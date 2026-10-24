@@ -50,7 +50,8 @@ class SessionCreationTest extends TestCase {
 						return true;
 					}
 				)
-			);
+			)
+			->willReturn( 1 );
 
 		$service = new AuthService(
 			$db,

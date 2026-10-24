@@ -747,13 +747,14 @@ class Service {
 			? $this->users_api->get_user( (string) $session['user_id'] )
 			: null;
 
+		$deleted = false;
 		if ( $session ) {
-			$this->db->delete(
+			$deleted = ( $this->db->delete(
 				'sessions',
 				array(
 					'id' => $session['id'],
 				),
-			);
+			) > 0 );
 		}
 
 		$request->expire_cookie(
@@ -761,7 +762,24 @@ class Service {
 			Security::session_cookie_options( $this->config, $request ),
 		);
 
-		\do_action( 'logout', $this->format_user( $user ), $request );
+		if ( $session && $deleted ) {
+			$this->notify_session_revoked(
+				array(
+					'id'     => (string) $session['id'],
+					'userId' => (string) $session['user_id'],
+				),
+				array(
+					'reason' => 'logout',
+				)
+			);
+		}
+
+		try {
+			\do_action( 'logout', $this->format_user( $user ), $request );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL logout observer error: %s', get_class( $e ) ) );
+		}
 	}
 
 	/**
@@ -1336,6 +1354,18 @@ class Service {
 			),
 		);
 
+		if ( $deleted > 0 ) {
+			$this->notify_session_revoked(
+				array(
+					'id'     => $id,
+					'userId' => (string) $user['id'],
+				),
+				array(
+					'reason' => 'explicit_revocation',
+				)
+			);
+		}
+
 		return $deleted > 0;
 	}
 
@@ -1360,7 +1390,7 @@ class Service {
 			);
 		}
 
-		return $this->db->query(
+		$deleted = $this->db->query(
 			'DELETE FROM sessions
 			WHERE user_id = :user_id
 			AND id <> :current_session_id
@@ -1372,6 +1402,18 @@ class Service {
 				'active_since'       => $this->session_active_since(),
 			),
 		);
+
+		if ( $deleted > 0 ) {
+			$this->notify_sessions_revoked(
+				array(
+					'userId'  => (string) $user['id'],
+					'revoked' => $deleted,
+					'reason'  => 'other_sessions',
+				)
+			);
+		}
+
+		return $deleted;
 	}
 
 	/**
@@ -1557,7 +1599,10 @@ class Service {
 			'last_active_at'   => $now,
 		);
 
-		$this->db->insert( 'sessions', $row );
+		$affected = $this->db->insert( 'sessions', $row );
+		if ( $affected <= 0 ) {
+			throw new \RuntimeException( 'Failed to persist user session.' );
+		}
 
 		$cookie_options = array();
 
@@ -1579,6 +1624,8 @@ class Service {
 				$cookie_options
 			),
 		);
+
+		$this->notify_session_created( $row, $remember );
 	}
 
 	/**
@@ -1791,6 +1838,8 @@ class Service {
 			return 0;
 		}
 
+		$cutoff = $this->session_active_since();
+
 		$sql = 'DELETE FROM sessions
 			WHERE revoked_at IS NOT NULL
 			OR last_active_at < :active_since';
@@ -1802,12 +1851,25 @@ class Service {
 		$deleted_count = $this->db->query(
 			$sql,
 			array(
-				'active_since' => $this->session_active_since(),
+				'active_since' => $cutoff,
 			),
 		);
 
 		if ( null === $limit ) {
 			$pruned = true;
+		}
+
+		if ( $deleted_count > 0 ) {
+			$summary = array(
+				'deletedSessions' => $deleted_count,
+				'cutoff'          => Date::to_iso( $cutoff ),
+			);
+
+			if ( null !== $limit && $limit > 0 ) {
+				$summary['limit'] = (int) $limit;
+			}
+
+			$this->notify_sessions_pruned( $summary );
 		}
 
 		return $deleted_count;
@@ -1827,6 +1889,120 @@ class Service {
 				(int) ( $this->config[ Constants::SESSION_LIFETIME ] ?? Constants::DEFAULT_SESSION_LIFETIME ),
 			),
 		);
+	}
+
+	/**
+	 * Dispatch session_created lifecycle action.
+	 *
+	 * @param array<string, mixed> $row      Persisted session database row.
+	 * @param bool                 $remember Whether the session cookie is persistent.
+	 * @since 1.8.0
+	 */
+	private function notify_session_created( array $row, bool $remember ): void {
+		if ( ! \has_action( 'session_created' ) ) {
+			return;
+		}
+
+		$payload = array(
+			'id'        => (string) ( $row['id'] ?? '' ),
+			'userId'    => (string) ( $row['user_id'] ?? '' ),
+			'createdAt' => Date::to_iso( (string) ( $row['created_at'] ?? '' ) ),
+			'remember'  => $remember,
+		);
+
+		try {
+			/**
+			 * Fires after a new user session has been persisted and queued.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, mixed> $payload Bounded session metadata without secret tokens or network identifiers.
+			 */
+			\do_action( 'session_created', $payload );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL session_created observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch session_revoked lifecycle action.
+	 *
+	 * @param array<string, string> $session Confirmed session identity details.
+	 * @param array<string, string> $context Revocation context with reason.
+	 * @since 1.8.0
+	 */
+	private function notify_session_revoked( array $session, array $context ): void {
+		if ( ! \has_action( 'session_revoked' ) ) {
+			return;
+		}
+
+		try {
+			/**
+			 * Fires after a specific user session has been revoked.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $session Bounded session identification.
+			 * @param array<string, string> $context Revocation context with reason.
+			 */
+			\do_action( 'session_revoked', $session, $context );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL session_revoked observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch sessions_revoked lifecycle action.
+	 *
+	 * @param array<string, mixed> $summary Bulk revocation summary.
+	 * @since 1.8.0
+	 */
+	private function notify_sessions_revoked( array $summary ): void {
+		if ( ! \has_action( 'sessions_revoked' ) ) {
+			return;
+		}
+
+		try {
+			/**
+			 * Fires after other active sessions have been revoked for a user.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, mixed> $summary Bulk revocation summary.
+			 */
+			\do_action( 'sessions_revoked', $summary );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL sessions_revoked observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch sessions_pruned lifecycle action.
+	 *
+	 * @param array<string, mixed> $summary Cleanup execution summary.
+	 * @since 1.8.0
+	 */
+	private function notify_sessions_pruned( array $summary ): void {
+		if ( ! \has_action( 'sessions_pruned' ) ) {
+			return;
+		}
+
+		try {
+			/**
+			 * Fires after expired or revoked sessions have been pruned from storage.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, mixed> $summary Cleanup execution summary.
+			 */
+			\do_action( 'sessions_pruned', $summary );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL sessions_pruned observer error: %s', get_class( $e ) ) );
+		}
 	}
 
 	/**

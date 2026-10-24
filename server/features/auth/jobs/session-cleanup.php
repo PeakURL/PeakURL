@@ -16,6 +16,7 @@ use PeakURL\Core\Scheduler\ExecutionResult;
 use PeakURL\Core\Scheduler\JobHandlerInterface;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Services\Database\PeakURL_DB;
+use PeakURL\Utils\Date;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -88,6 +89,29 @@ class SessionCleanupJob implements JobHandlerInterface {
 					'active_since' => $cutoff,
 				)
 			);
+
+			if ( $deleted_count > 0 && \has_action( 'sessions_pruned' ) ) {
+				try {
+					/**
+					 * Fires after expired or revoked sessions have been pruned from storage.
+					 *
+					 * @since 1.8.0
+					 *
+					 * @param array<string, mixed> $summary Cleanup execution summary.
+					 */
+					\do_action(
+						'sessions_pruned',
+						array(
+							'deletedSessions' => $deleted_count,
+							'cutoff'          => Date::to_iso( $cutoff ),
+							'limit'           => 1000,
+						)
+					);
+				} catch ( \Throwable $e ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					\error_log( sprintf( 'PeakURL sessions_pruned observer error: %s', get_class( $e ) ) );
+				}
+			}
 		}
 
 		$message = 1 === $deleted_count

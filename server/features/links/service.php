@@ -1163,18 +1163,34 @@ class Service {
 			return 0;
 		}
 
-		$deleted_count = $this->repository->delete_links_permanently( $ids );
+		$deleted_ids = $this->repository->delete_links_permanently( $ids );
 
-		$this->social_preview->delete_link_images(
-			array_column( $rows, 'social_image_path' ),
-		);
-
-		foreach ( $rows as $deleted_row ) {
-			$this->invalidate_link_cache( $deleted_row );
-			\do_action( 'link_deleted', $deleted_row, null, null );
+		if ( empty( $deleted_ids ) ) {
+			return 0;
 		}
 
-		return $deleted_count;
+		$confirmed_rows = array_values(
+			array_filter(
+				$rows,
+				static fn( array $r ): bool => in_array( (string) ( $r['id'] ?? '' ), $deleted_ids, true )
+			)
+		);
+
+		$this->social_preview->delete_link_images(
+			array_column( $confirmed_rows, 'social_image_path' ),
+		);
+
+		foreach ( $confirmed_rows as $deleted_row ) {
+			$this->invalidate_link_cache( $deleted_row );
+			try {
+				\do_action( 'link_deleted', $deleted_row, null, null );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL link_deleted observer error: %s', get_class( $e ) ) );
+			}
+		}
+
+		return count( $deleted_ids );
 	}
 
 	/**

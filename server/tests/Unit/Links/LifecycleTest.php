@@ -441,7 +441,7 @@ class LifecycleTest extends TestCase {
 
 		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
 		$this->repository->method( 'get_trashed_links' )->with( $admin_user )->willReturn( $rows );
-		$this->repository->expects( $this->once() )->method( 'delete_links_permanently' )->with( array( 't1', 't2' ) )->willReturn( 2 );
+		$this->repository->expects( $this->once() )->method( 'delete_links_permanently' )->with( array( 't1', 't2' ) )->willReturn( array( 't1', 't2' ) );
 		$this->social_preview->expects( $this->once() )->method( 'delete_link_images' )->with( array( null, 'img2.png' ) );
 
 		$request = new Request( 'POST', '/trash/empty', array(), array() );
@@ -465,7 +465,7 @@ class LifecycleTest extends TestCase {
 
 		$this->auth_service->method( 'get_current_user' )->willReturn( $admin_user );
 		$this->repository->method( 'get_accessible_links' )->willReturn( $rows );
-		$this->repository->expects( $this->once() )->method( 'delete_links_permanently' )->with( array( 'c1' ) )->willReturn( 1 );
+		$this->repository->expects( $this->once() )->method( 'delete_links_permanently' )->with( array( 'c1' ) )->willReturn( array( 'c1' ) );
 
 		$request = new Request( 'POST', '/clear', array(), array( 'mode' => 'permanent' ) );
 		$count   = $this->lifecycle->clear_urls( $request, 'permanent' );

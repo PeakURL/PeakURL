@@ -112,7 +112,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->repository->expects( $this->once() )
 			->method( 'delete_links_permanently' )
 			->with( array( 'link_1' ) )
-			->willReturn( 1 );
+			->willReturn( array( 'link_1' ) );
 
 		$response = $this->links_controller->empty_trash( $request );
 
@@ -153,7 +153,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->repository->expects( $this->once() )
 			->method( 'delete_links_permanently' )
 			->with( array( 'link_1', 'link_2' ) )
-			->willReturn( 2 );
+			->willReturn( array( 'link_1', 'link_2' ) );
 
 		$response = $this->links_controller->clear( $request );
 
@@ -463,7 +463,7 @@ class LinksDestructiveAuthorizationTest extends TestCase {
 		$this->repository->expects( $this->once() )
 			->method( 'delete_links_permanently' )
 			->with( array( 'link_1' ) )
-			->willReturn( 1 );
+			->willReturn( array( 'link_1' ) );
 
 		$this->repository->expects( $this->never() )
 			->method( 'trash_url' );

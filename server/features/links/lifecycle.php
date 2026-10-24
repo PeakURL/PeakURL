@@ -628,7 +628,12 @@ class Lifecycle {
 				(string) ( $row['social_image_path'] ?? '' ),
 			);
 
-			\do_action( 'link_deleted', $row, $request, $user );
+			try {
+				\do_action( 'link_deleted', $row, $request, $user );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL link_deleted observer error: %s', get_class( $e ) ) );
+			}
 
 			$this->webhooks_service->dispatch_link_event( 'link.deleted', ( $this->link_formatter )( $row ), $user );
 		}
@@ -833,10 +838,40 @@ class Lifecycle {
 				}
 			}
 
-			return count( $trashed_ids );
+			$affected = count( $trashed_ids );
+		} else {
+			$affected = $this->delete_links_permanently( $target_rows, $ids, $user, $request );
 		}
 
-		return $this->delete_links_permanently( $target_rows, $ids, $user, $request );
+		if ( \has_action( 'bulk_link_delete_finished' ) ) {
+			$summary = array(
+				'mode'      => $permanent ? 'permanent' : 'trash',
+				'requested' => count( $ids ),
+				'affected'  => $affected,
+			);
+			$actor   = array(
+				'id'       => (string) ( $user['id'] ?? '' ),
+				'username' => (string) ( $user['username'] ?? '' ),
+				'role'     => (string) ( $user['role'] ?? '' ),
+			);
+
+			try {
+				/**
+				 * Fires after a bulk short-link deletion operation finishes.
+				 *
+				 * @since 1.8.0
+				 *
+				 * @param array<string, mixed> $summary Operation summary with 'mode' ('trash'|'permanent'), 'requested' count, and 'affected' count.
+				 * @param array<string, mixed> $actor   Minimal authenticated actor context ('id', 'username', 'role').
+				 */
+				\do_action( 'bulk_link_delete_finished', $summary, $actor );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL bulk_link_delete_finished observer error: %s', get_class( $e ) ) );
+			}
+		}
+
+		return $affected;
 	}
 
 	/**
@@ -907,7 +942,36 @@ class Lifecycle {
 			}
 		}
 
-		return count( $restored_ids );
+		$affected = count( $restored_ids );
+
+		if ( \has_action( 'bulk_link_restore_finished' ) ) {
+			$summary = array(
+				'requested' => count( $ids ),
+				'affected'  => $affected,
+			);
+			$actor   = array(
+				'id'       => (string) ( $user['id'] ?? '' ),
+				'username' => (string) ( $user['username'] ?? '' ),
+				'role'     => (string) ( $user['role'] ?? '' ),
+			);
+
+			try {
+				/**
+				 * Fires after a bulk short-link restoration operation finishes.
+				 *
+				 * @since 1.8.0
+				 *
+				 * @param array<string, mixed> $summary Operation summary with 'requested' count and 'affected' count.
+				 * @param array<string, mixed> $actor   Minimal authenticated actor context ('id', 'username', 'role').
+				 */
+				\do_action( 'bulk_link_restore_finished', $summary, $actor );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL bulk_link_restore_finished observer error: %s', get_class( $e ) ) );
+			}
+		}
+
+		return $affected;
 	}
 
 
@@ -1064,7 +1128,12 @@ class Lifecycle {
 
 		$this->invalidate_link_cache( $row );
 
-		\do_action( 'link_trashed', $row, $request, $user );
+		try {
+			\do_action( 'link_trashed', $row, $request, $user );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL link_trashed observer error: %s', get_class( $e ) ) );
+		}
 
 		$old_status = (string) ( $row['status'] ?? 'active' );
 		if ( 'trashed' !== $old_status ) {
@@ -1117,7 +1186,12 @@ class Lifecycle {
 
 		$this->invalidate_link_cache( $row );
 
-		\do_action( 'link_restored', $row, $request, $user );
+		try {
+			\do_action( 'link_restored', $row, $request, $user );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL link_restored observer error: %s', get_class( $e ) ) );
+		}
 
 		$restored_row  = $this->repository->find_url_row( $row_id );
 		$restored_row  = $restored_row ? $restored_row : $row;
@@ -1153,7 +1227,24 @@ class Lifecycle {
 		array $user,
 		Request $request
 	): int {
-		foreach ( $rows as $deleted_row ) {
+		$deleted_ids = $this->repository->delete_links_permanently( $ids );
+
+		if ( empty( $deleted_ids ) ) {
+			return 0;
+		}
+
+		$confirmed_rows = array_values(
+			array_filter(
+				$rows,
+				static fn( array $r ): bool => in_array( (string) ( $r['id'] ?? '' ), $deleted_ids, true )
+			)
+		);
+
+		$this->social_preview->delete_link_images(
+			array_column( $confirmed_rows, 'social_image_path' ),
+		);
+
+		foreach ( $confirmed_rows as $deleted_row ) {
 			$link_title = $this->get_link_title( $deleted_row, (string) ( $deleted_row['id'] ?? '' ) );
 
 			$this->record_link_activity(
@@ -1163,23 +1254,20 @@ class Lifecycle {
 				$deleted_row,
 				null
 			);
-		}
 
-		$deleted_count = $this->repository->delete_links_permanently( $ids );
-
-		$this->social_preview->delete_link_images(
-			array_column( $rows, 'social_image_path' ),
-		);
-
-		foreach ( $rows as $deleted_row ) {
 			$this->invalidate_link_cache( $deleted_row );
 
-			\do_action( 'link_deleted', $deleted_row, $request, $user );
+			try {
+				\do_action( 'link_deleted', $deleted_row, $request, $user );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL link_deleted observer error: %s', get_class( $e ) ) );
+			}
 
 			$this->webhooks_service->dispatch_link_event( 'link.deleted', ( $this->link_formatter )( $deleted_row ), $user );
 		}
 
-		return $deleted_count;
+		return count( $deleted_ids );
 	}
 
 

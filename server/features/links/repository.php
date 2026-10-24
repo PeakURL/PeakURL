@@ -652,36 +652,66 @@ class Repository {
 	/**
 	 * Permanently delete multiple URL rows and cascade audit/clicks.
 	 *
+	 * Selects and locks candidate rows with FOR UPDATE in the transaction
+	 * before updating audit logs, deleting clicks, and removing the URLs.
+	 * Verifies that the affected row count matches the selected ID count
+	 * before committing.
+	 *
 	 * @param array<int, string> $ids List of URL IDs to delete.
-	 * @return int Number of rows deleted.
+	 * @return array<int, string> Confirmed deleted URL IDs.
+	 * @throws \RuntimeException When deleted row count does not match locked ID count.
 	 * @since 1.0.0
 	 */
-	public function delete_links_permanently( array $ids ): int {
+	public function delete_links_permanently( array $ids ): array {
+		if ( empty( $ids ) ) {
+			return array();
+		}
+
 		$this->db->begin_transaction();
 
 		try {
+			$placeholders = $this->db->in_placeholders( $ids, 'del_id' );
+
+			$deleted_ids = array_map(
+				'strval',
+				$this->db->get_col(
+					'SELECT id FROM urls WHERE id IN (' . $placeholders['sql'] . ') FOR UPDATE',
+					$placeholders['params'],
+				),
+			);
+
+			if ( empty( $deleted_ids ) ) {
+				$this->db->commit();
+
+				return array();
+			}
+
 			$this->db->update_where_in(
 				'audit_logs',
 				array( 'link_id' => null ),
 				'link_id',
-				$ids,
+				$deleted_ids,
 			);
 
 			$this->db->delete_where_in(
 				'clicks',
 				'url_id',
-				$ids,
+				$deleted_ids,
 			);
 
-			$deleted_count = $this->db->delete_where_in(
+			$affected_count = $this->db->delete_where_in(
 				'urls',
 				'id',
-				$ids,
+				$deleted_ids,
 			);
+
+			if ( count( $deleted_ids ) !== $affected_count ) {
+				throw new \RuntimeException( 'Permanent deletion row count mismatch.' );
+			}
 
 			$this->db->commit();
 
-			return $deleted_count;
+			return $deleted_ids;
 		} catch ( \Throwable $exception ) {
 			if ( $this->db->in_transaction() ) {
 				$this->db->roll_back();

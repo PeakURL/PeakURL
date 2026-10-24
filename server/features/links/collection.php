@@ -260,12 +260,37 @@ class LinkCollection {
 			$rows,
 		);
 
-		return array(
+		$export = array(
 			'items' => $items,
 			'meta'  => array(
 				'totalItems' => count( $items ),
 			),
 		);
+
+		if ( \has_action( 'link_export_prepared' ) ) {
+			$actor = array(
+				'id'       => (string) ( $user['id'] ?? '' ),
+				'username' => (string) ( $user['username'] ?? '' ),
+				'role'     => (string) ( $user['role'] ?? '' ),
+			);
+
+			try {
+				/**
+				 * Fires after an authorized link export payload has been prepared.
+				 *
+				 * @since 1.8.0
+				 *
+				 * @param array<string, mixed> $export Prepared export payload with 'items' and 'meta' ('totalItems').
+				 * @param array<string, mixed> $actor  Minimal authenticated actor context ('id', 'username', 'role').
+				 */
+				\do_action( 'link_export_prepared', $export, $actor );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL link_export_prepared observer error: %s', get_class( $e ) ) );
+			}
+		}
+
+		return $export;
 	}
 
 	/**

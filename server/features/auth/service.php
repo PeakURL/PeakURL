@@ -936,18 +936,25 @@ class Service {
 		);
 
 		if ( null !== $this->webhooks_service ) {
-			$this->webhooks_service->dispatch_api_key_event(
-				'api_key.created',
-				array(
-					'id'         => (string) $key['id'],
-					'label'      => (string) $key['label'],
-					'prefix'     => (string) $key['prefix'],
-					'last_four'  => (string) $key['lastFour'],
-					'created_at' => (string) $key['createdAt'],
-				),
-				$user['id']
-			);
+			try {
+				$this->webhooks_service->dispatch_api_key_event(
+					'api_key.created',
+					array(
+						'id'         => (string) $key['id'],
+						'label'      => (string) $key['label'],
+						'prefix'     => (string) $key['prefix'],
+						'last_four'  => (string) $key['lastFour'],
+						'created_at' => (string) $key['createdAt'],
+					),
+					$user['id']
+				);
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'Failed to dispatch api_key.created webhook: %s', get_class( $e ) ) );
+			}
 		}
+
+		$this->notify_key_created( $key, $user );
 
 		return $key;
 	}
@@ -972,22 +979,119 @@ class Service {
 
 		$revoked = $this->credentials->revoke_api_key( (string) $user['id'], $id );
 
-		if ( $revoked && $key_data && null !== $this->webhooks_service ) {
-			$this->webhooks_service->dispatch_api_key_event(
-				'api_key.revoked',
-				array(
-					'id'         => (string) $key_data['id'],
-					'label'      => (string) $key_data['label'],
-					'prefix'     => (string) $key_data['key_prefix'],
-					'last_four'  => (string) $key_data['key_last_four'],
-					'created_at' => (string) $key_data['created_at'],
-					'revoked_at' => Date::now(),
-				),
-				$user['id']
-			);
+		if ( $revoked && $key_data ) {
+			$now = Date::now();
+
+			if ( null !== $this->webhooks_service ) {
+				try {
+					$this->webhooks_service->dispatch_api_key_event(
+						'api_key.revoked',
+						array(
+							'id'         => (string) $key_data['id'],
+							'label'      => (string) $key_data['label'],
+							'prefix'     => (string) $key_data['key_prefix'],
+							'last_four'  => (string) $key_data['key_last_four'],
+							'created_at' => (string) $key_data['created_at'],
+							'revoked_at' => $now,
+						),
+						$user['id']
+					);
+				} catch ( \Throwable $e ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					\error_log( sprintf( 'Failed to dispatch api_key.revoked webhook: %s', get_class( $e ) ) );
+				}
+			}
+
+			$this->notify_key_revoked( $key_data, $user, $now );
 		}
 
 		return $revoked;
+	}
+
+	/**
+	 * Dispatch api_key_created lifecycle action.
+	 *
+	 * @param array<string, mixed> $key  Created key details.
+	 * @param array<string, mixed> $user Authenticated creator user.
+	 * @since 1.8.0
+	 */
+	private function notify_key_created( array $key, array $user ): void {
+		if ( ! \has_action( 'api_key_created' ) ) {
+			return;
+		}
+
+		$payload = array(
+			'id'        => (string) ( $key['id'] ?? '' ),
+			'label'     => (string) ( $key['label'] ?? '' ),
+			'prefix'    => (string) ( $key['prefix'] ?? '' ),
+			'lastFour'  => (string) ( $key['lastFour'] ?? '' ),
+			'createdAt' => (string) ( $key['createdAt'] ?? '' ),
+		);
+
+		$context = array(
+			'id'       => (string) ( $user['id'] ?? '' ),
+			'username' => (string) ( $user['username'] ?? '' ),
+			'role'     => (string) ( $user['role'] ?? '' ),
+		);
+
+		try {
+			/**
+			 * Fires after an API key has been created.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $payload Bounded key metadata without secret key.
+			 * @param array<string, string> $context Bounded user identity context.
+			 */
+			\do_action( 'api_key_created', $payload, $context );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL api_key_created observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch api_key_revoked lifecycle action.
+	 *
+	 * @param array<string, mixed> $key_data   Deleted API key row metadata.
+	 * @param array<string, mixed> $user       Authenticated revoking user.
+	 * @param string               $revoked_at Completed revocation timestamp.
+	 * @since 1.8.0
+	 */
+	private function notify_key_revoked( array $key_data, array $user, string $revoked_at ): void {
+		if ( ! \has_action( 'api_key_revoked' ) ) {
+			return;
+		}
+
+		$payload = array(
+			'id'        => (string) ( $key_data['id'] ?? '' ),
+			'label'     => (string) ( $key_data['label'] ?? '' ),
+			'prefix'    => (string) ( $key_data['key_prefix'] ?? '' ),
+			'lastFour'  => (string) ( $key_data['key_last_four'] ?? '' ),
+			'createdAt' => Date::to_iso( (string) ( $key_data['created_at'] ?? '' ) ),
+			'revokedAt' => Date::to_iso( $revoked_at ),
+		);
+
+		$context = array(
+			'id'       => (string) ( $user['id'] ?? '' ),
+			'username' => (string) ( $user['username'] ?? '' ),
+			'role'     => (string) ( $user['role'] ?? '' ),
+		);
+
+		try {
+			/**
+			 * Fires after an API key has been revoked.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $payload Bounded key metadata.
+			 * @param array<string, string> $context Bounded user identity context.
+			 */
+			\do_action( 'api_key_revoked', $payload, $context );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL api_key_revoked observer error: %s', get_class( $e ) ) );
+		}
 	}
 
 	/**

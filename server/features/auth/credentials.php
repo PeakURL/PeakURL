@@ -64,7 +64,10 @@ class Credentials {
 			'created_at'    => Date::now(),
 		);
 
-		$this->db->insert( 'api_keys', $row );
+		$affected = $this->db->insert( 'api_keys', $row );
+		if ( $affected <= 0 ) {
+			throw new \RuntimeException( 'Failed to persist API key.' );
+		}
 
 		return array(
 			'id'        => $row['id'],

@@ -482,6 +482,7 @@ class Service {
 		}
 
 		$token_hash = Credentials::hash_lookup_token( $clean_token );
+		$now        = Date::now();
 		$user       = $this->db->get_row(
 			'SELECT * FROM users
             WHERE email_verification_token = :token_hash
@@ -489,7 +490,7 @@ class Service {
             LIMIT 1',
 			array(
 				'token_hash' => $token_hash,
-				'now'        => Date::now(),
+				'now'        => $now,
 			),
 		);
 
@@ -500,20 +501,74 @@ class Service {
 			);
 		}
 
-		$now = Date::now();
-		$this->db->update(
-			'users',
+		$affected = $this->db->query(
+			'UPDATE users
+			SET is_email_verified = 1,
+				email_verified_at = :email_verified_at,
+				email_verification_token = NULL,
+				email_verification_expires_at = NULL,
+				updated_at = :updated_at
+			WHERE id = :id
+			  AND email_verification_token = :token_hash
+			  AND email_verification_expires_at > :now
+			  AND is_email_verified = 0',
 			array(
-				'is_email_verified'             => 1,
-				'email_verified_at'             => $now,
-				'email_verification_token'      => null,
-				'email_verification_expires_at' => null,
-				'updated_at'                    => $now,
+				'id'                => (string) $user['id'],
+				'token_hash'        => $token_hash,
+				'now'               => $now,
+				'email_verified_at' => $now,
+				'updated_at'        => $now,
 			),
-			array( 'id' => (string) $user['id'] ),
 		);
 
+		if ( 1 !== $affected ) {
+			throw new ApiException(
+				__( 'Verification token is invalid or has expired.', 'peakurl' ),
+				422,
+			);
+		}
+
+		$this->notify_email_verified( $user, $now );
+
 		return true;
+	}
+
+	/**
+	 * Dispatch user_email_verified lifecycle action.
+	 *
+	 * Identity fields originate from the matched pre-update token lookup,
+	 * while the verification timestamp reflects the confirmed atomic write.
+	 *
+	 * @param array<string, mixed> $user        Matched user database row.
+	 * @param string               $verified_at Confirmed verification timestamp.
+	 * @since 1.8.0
+	 */
+	private function notify_email_verified( array $user, string $verified_at ): void {
+		if ( ! \has_action( 'user_email_verified' ) ) {
+			return;
+		}
+
+		$payload = array(
+			'id'              => (string) ( $user['id'] ?? '' ),
+			'username'        => (string) ( $user['username'] ?? '' ),
+			'email'           => (string) ( $user['email'] ?? '' ),
+			'role'            => (string) ( $user['role'] ?? '' ),
+			'emailVerifiedAt' => $verified_at,
+		);
+
+		try {
+			/**
+			 * Fires after a user's email address has been successfully verified.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $payload Bounded verified user details.
+			 */
+			\do_action( 'user_email_verified', $payload );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL user_email_verified observer error: %s', get_class( $e ) ) );
+		}
 	}
 
 	/**

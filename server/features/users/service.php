@@ -592,6 +592,9 @@ class Service {
 		$attempt       = 0;
 		$affected      = 0;
 		$previous_user = $user;
+		$role_changed  = false;
+		$old_role      = '';
+		$new_role      = '';
 
 		while ( $attempt < $max_attempts ) {
 			++$attempt;
@@ -657,6 +660,11 @@ class Service {
 				$affected = $affected_rows;
 				if ( $role_supplied && $locked_user ) {
 					$previous_user = $locked_user;
+					if ( $is_actual_role_change ) {
+						$role_changed = true;
+						$old_role     = $actual_current_role;
+						$new_role     = $proposed_role;
+					}
 				}
 				break;
 			} catch ( \Throwable $exception ) {
@@ -731,6 +739,15 @@ class Service {
 				$previous_user,
 				$current_user
 			);
+
+			if ( $role_changed ) {
+				$this->notify_role_changed(
+					$updated_user,
+					$new_role,
+					$old_role,
+					$current_user
+				);
+			}
 		}
 
 		return $this->format_user( $updated_user );
@@ -1095,6 +1112,46 @@ class Service {
 		} catch ( \Throwable $e ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			\error_log( sprintf( 'PeakURL user_updated observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch user_role_changed lifecycle action.
+	 *
+	 * @param array<string, mixed> $user     Updated user row.
+	 * @param string               $new_role Confirmed new role.
+	 * @param string               $old_role Previous role from locked record.
+	 * @param array<string, mixed> $actor    Acting administrator.
+	 * @since 1.8.0
+	 */
+	private function notify_role_changed(
+		array $user,
+		string $new_role,
+		string $old_role,
+		array $actor
+	): void {
+		if ( ! \has_action( 'user_role_changed' ) ) {
+			return;
+		}
+
+		$payload = $this->user_details( $user );
+		$actor   = $this->actor_details( $actor );
+
+		try {
+			/**
+			 * Fires after a user's role has been successfully changed.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $payload  Bounded updated user payload.
+			 * @param string               $new_role Confirmed new role.
+			 * @param string               $old_role Previous role from locked record.
+			 * @param array<string, string> $actor    Bounded acting administrator.
+			 */
+			\do_action( 'user_role_changed', $payload, $new_role, $old_role, $actor );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL user_role_changed observer error: %s', get_class( $e ) ) );
 		}
 	}
 

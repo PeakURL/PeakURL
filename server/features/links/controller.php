@@ -502,7 +502,7 @@ class Controller extends BaseController {
 					\do_action( 'link_redirect_prepared', $location, $safe_link, $request_context );
 				} catch ( \Throwable $e ) {
 					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-					\error_log( sprintf( 'PeakURL link_redirect_prepared observer error: %s', $e->getMessage() ) );
+					\error_log( sprintf( 'PeakURL link_redirect_prepared observer error: %s', get_class( $e ) ) );
 				}
 			}
 
@@ -539,7 +539,7 @@ class Controller extends BaseController {
 					\do_action( 'link_access_denied', $status, $safe_link, $request_context );
 				} catch ( \Throwable $e ) {
 					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-					\error_log( sprintf( 'PeakURL link_access_denied observer error: %s', $e->getMessage() ) );
+					\error_log( sprintf( 'PeakURL link_access_denied observer error: %s', get_class( $e ) ) );
 				}
 			}
 		}

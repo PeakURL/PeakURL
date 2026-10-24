@@ -183,7 +183,7 @@ class Access {
 						\do_action( 'link_status_changed', $formatted_link, $old_status, 'expired', null, $request );
 					} catch ( \Throwable $e ) {
 						// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-						\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+						\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', get_class( $e ) ) );
 					}
 					$this->webhooks_service->dispatch_link_event(
 						'link.expired',

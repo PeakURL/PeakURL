@@ -531,7 +531,7 @@ class Lifecycle {
 				\do_action( 'link_status_changed', $formatted_url, $prev_status, $new_status, $user, $request );
 			} catch ( \Throwable $e ) {
 				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', get_class( $e ) ) );
 			}
 
 			if ( 'active' === $new_status && in_array( $prev_status, array( 'inactive', 'paused' ), true ) ) {
@@ -1144,7 +1144,7 @@ class Lifecycle {
 				\do_action( 'link_status_changed', $formatted_trashed, $old_status, 'trashed', $user, $request );
 			} catch ( \Throwable $e ) {
 				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', get_class( $e ) ) );
 			}
 		}
 
@@ -1202,7 +1202,7 @@ class Lifecycle {
 				\do_action( 'link_status_changed', $formatted_url, $old_status, 'active', $user, $request );
 			} catch ( \Throwable $e ) {
 				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', get_class( $e ) ) );
 			}
 		}
 

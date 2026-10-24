@@ -335,11 +335,13 @@ class Service {
 				}
 			} catch ( \Throwable $e ) {
 				// Background scheduling must never fail the link create/update request, but failure is observable.
-				error_log( sprintf( 'PeakURL link health scheduling failed for link [%s]: %s', $link_id, $e->getMessage() ) );
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				error_log( sprintf( 'PeakURL link health scheduling failed for link [%s]: %s', $link_id, get_class( $e ) ) );
 				try {
 					\do_action( 'link_health_scheduling_failed', $link_id, $e->getMessage() );
 				} catch ( \Throwable $obs_err ) {
-					error_log( sprintf( 'PeakURL link_health_scheduling_failed observer error for link [%s]: %s', $link_id, $obs_err->getMessage() ) );
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					error_log( sprintf( 'PeakURL link_health_scheduling_failed observer error for link [%s]: %s', $link_id, get_class( $obs_err ) ) );
 				}
 			}
 		}
@@ -752,7 +754,7 @@ class Service {
 			\do_action( 'bulk_link_create_finished', $summary, $user, $request );
 		} catch ( \Throwable $e ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			\error_log( sprintf( 'PeakURL bulk_link_create_finished observer error: %s', $e->getMessage() ) );
+			\error_log( sprintf( 'PeakURL bulk_link_create_finished observer error: %s', get_class( $e ) ) );
 		}
 
 		return array(
@@ -1215,7 +1217,7 @@ class Service {
 				\do_action( 'link_status_changed', $this->format_url( $link ), 'active', 'expired', null, null );
 			} catch ( \Throwable $e ) {
 				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', $e->getMessage() ) );
+				\error_log( sprintf( 'PeakURL link_status_changed observer error: %s', get_class( $e ) ) );
 			}
 			$this->webhooks_service->dispatch_link_event( 'link.expired', $this->format_url( $link ) );
 		}

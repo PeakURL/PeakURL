@@ -451,10 +451,28 @@ class Service {
 		$this->create_session_for_user( $request, $user_id );
 		$user = $this->users_api->get_user( $user_id );
 
-		\do_action( 'user_register', $this->format_user( $user ), $request );
+		try {
+			/**
+			 * Fires after a new user account has been registered.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param array<string, mixed> $user    Formatted user record.
+			 * @param Request              $request Incoming HTTP request.
+			 */
+			\do_action( 'user_register', $this->format_user( $user ), $request );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL user_register observer error: %s', get_class( $e ) ) );
+		}
 
 		if ( null !== $this->webhooks_service && $user ) {
-			$this->webhooks_service->dispatch_user_event( 'user.created', $user );
+			try {
+				$this->webhooks_service->dispatch_user_event( 'user.created', $user );
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'Failed to dispatch user.created webhook: %s', get_class( $e ) ) );
+			}
 		}
 
 		return $this->format_user( $user, $request );

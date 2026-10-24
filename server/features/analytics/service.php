@@ -1235,7 +1235,7 @@ class Service {
 			\do_action( 'activity_recorded', $type, $message, $user_id, $link_id, $metadata );
 		} catch ( \Throwable $e ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			\error_log( sprintf( 'PeakURL activity_recorded observer error: %s', $e->getMessage() ) );
+			\error_log( sprintf( 'PeakURL activity_recorded observer error: %s', get_class( $e ) ) );
 		}
 
 		return true;

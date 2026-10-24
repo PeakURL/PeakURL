@@ -236,28 +236,54 @@ class LinkLifecycleHooksTest extends TestCase {
 			)
 		);
 
-		add_action(
-			'bulk_link_create_finished',
-			function (): void {
-				throw new \RuntimeException( 'Simulated observer crash on bulk create finished' );
-			}
-		);
+		$log_file = tempnam( sys_get_temp_dir(), 'peakurl_bulk_test_' );
+		$this->assertIsString( $log_file, 'Failed to create temporary log file for observer test.' );
+		$this->assertFileExists( $log_file, 'Temporary log file was not created on disk.' );
 
-		$request  = new Request( 'POST', '/api/v1/urls/bulk', array(), array() );
-		$response = $this->links_service->bulk_create_urls(
-			$request,
-			array(
-				'urls' => array(
-					array(
-						'destinationUrl' => 'https://example.com/res',
-						'title'          => 'Resilient',
+		$prev_log        = ini_get( 'error_log' );
+		$observer_called = false;
+
+		try {
+			$ini_result = ini_set( 'error_log', $log_file );
+			$this->assertNotFalse( $ini_result, 'Failed to redirect error_log to temporary file.' );
+
+			add_action(
+				'bulk_link_create_finished',
+				function () use ( &$observer_called ): void {
+					$observer_called = true;
+					throw new \RuntimeException( 'SUPER_SENSITIVE_BEARER_TOKEN_999' );
+				}
+			);
+
+			$request  = new Request( 'POST', '/api/v1/urls/bulk', array(), array() );
+			$response = $this->links_service->bulk_create_urls(
+				$request,
+				array(
+					'urls' => array(
+						array(
+							'destinationUrl' => 'https://example.com/res',
+							'title'          => 'Resilient',
+						),
 					),
-				),
-			)
-		);
+				)
+			);
 
-		$this->assertCount( 1, $response['results'] );
-		$this->assertCount( 0, $response['errors'] );
+			$this->assertTrue( $observer_called, 'Observer callback was not executed.' );
+			$this->assertCount( 1, $response['results'] );
+			$this->assertCount( 0, $response['errors'] );
+
+			$log_content = file_get_contents( $log_file );
+			$this->assertIsString( $log_content );
+			$this->assertStringContainsString( 'PeakURL bulk_link_create_finished observer error: RuntimeException', $log_content );
+			$this->assertStringNotContainsString( 'SUPER_SENSITIVE_BEARER_TOKEN_999', $log_content );
+		} finally {
+			if ( is_string( $prev_log ) ) {
+				ini_set( 'error_log', $prev_log );
+			}
+			if ( file_exists( $log_file ) ) {
+				unlink( $log_file );
+			}
+		}
 	}
 
 	public function test_on_access_expiration_fires_link_status_changed_hook(): void {

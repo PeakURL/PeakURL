@@ -173,23 +173,35 @@ class Credentials {
 	/**
 	 * Replace a user's backup codes with a freshly generated set.
 	 *
-	 * @param string $user_id User row ID.
+	 * @param string $user_id         User row ID.
+	 * @param bool   $require_enabled Whether to require two-factor authentication to be enabled.
 	 * @return array<int, string> Plain-text backup codes shown once to the user.
+	 *
+	 * @throws \RuntimeException When persisting backup codes fails.
 	 * @since 1.0.0
 	 */
-	public function replace_backup_codes( string $user_id ): array {
+	public function replace_backup_codes( string $user_id, bool $require_enabled = false ): array {
 		$codes = $this->generate_backup_codes();
 		$now   = Date::now();
 
-		$this->db->update(
+		$where = array( 'id' => $user_id );
+		if ( $require_enabled ) {
+			$where['two_factor_enabled'] = 1;
+		}
+
+		$affected = $this->db->update(
 			'users',
 			array(
 				'backup_codes_json'         => peakurl_json_encode( $codes ),
 				'backup_codes_generated_at' => $now,
 				'updated_at'                => $now,
 			),
-			array( 'id' => $user_id ),
+			$where,
 		);
+
+		if ( $affected <= 0 ) {
+			throw new \RuntimeException( 'Failed to persist backup codes.' );
+		}
 
 		return $codes;
 	}

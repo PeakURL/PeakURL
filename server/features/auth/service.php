@@ -1218,24 +1218,34 @@ class Service {
 		$this->db->begin_transaction();
 
 		try {
-			$backup_codes = $this->credentials->replace_backup_codes( (string) $user['id'] );
-
-			$this->db->query(
+			$now      = Date::now();
+			$affected = $this->db->query(
 				'UPDATE users
 				SET two_factor_enabled = 1,
 					two_factor_secret = :secret,
 					two_factor_pending_secret = NULL,
 					updated_at = :updated_at
-				WHERE id = :id',
+				WHERE id = :id
+				  AND two_factor_pending_secret = :pending_secret
+				  AND two_factor_enabled = 0',
 				array(
-					'secret'     => $pending_secret,
-					'updated_at' => Date::now(),
-					'id'         => $user['id'],
+					'id'             => (string) $user['id'],
+					'secret'         => $pending_secret,
+					'pending_secret' => $pending_secret,
+					'updated_at'     => $now,
 				),
 			);
 
+			if ( 1 !== $affected ) {
+				throw new ApiException(
+					__( 'Two-factor setup is no longer pending or has already been enabled.', 'peakurl' ),
+					422,
+				);
+			}
+
+			$backup_codes = $this->credentials->replace_backup_codes( (string) $user['id'] );
+
 			$this->db->commit();
-			return $backup_codes;
 		} catch ( \Throwable $exception ) {
 			if ( $this->db->in_transaction() ) {
 				$this->db->roll_back();
@@ -1243,6 +1253,10 @@ class Service {
 
 			throw $exception;
 		}
+
+		$this->notify_two_factor_enabled( $user, $now );
+
+		return $backup_codes;
 	}
 
 	/**
@@ -1266,7 +1280,8 @@ class Service {
 		);
 		$this->validate_two_factor( $user_row );
 
-		$this->db->query(
+		$now      = Date::now();
+		$affected = $this->db->query(
 			'UPDATE users
             SET two_factor_enabled = 0,
                 two_factor_secret = NULL,
@@ -1274,12 +1289,17 @@ class Service {
                 backup_codes_json = NULL,
                 backup_codes_generated_at = NULL,
                 updated_at = :updated_at
-            WHERE id = :id',
+            WHERE id = :id
+              AND two_factor_enabled = 1',
 			array(
-				'updated_at' => Date::now(),
-				'id'         => $user_row['id'],
+				'updated_at' => $now,
+				'id'         => (string) $user_row['id'],
 			),
 		);
+
+		if ( 1 === $affected ) {
+			$this->notify_two_factor_disabled( $user_row, $now );
+		}
 	}
 
 	/**
@@ -1303,7 +1323,12 @@ class Service {
 		);
 		$this->validate_two_factor( $user_row );
 
-		return $this->credentials->replace_backup_codes( (string) $user_row['id'] );
+		$now   = Date::now();
+		$codes = $this->credentials->replace_backup_codes( (string) $user_row['id'], true );
+
+		$this->notify_backup_codes_regenerated( (string) $user_row['id'], count( $codes ), $now );
+
+		return $codes;
 	}
 
 	/**
@@ -2002,6 +2027,112 @@ class Service {
 		} catch ( \Throwable $e ) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			\error_log( sprintf( 'PeakURL sessions_pruned observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch two_factor_enabled lifecycle action.
+	 *
+	 * @param array<string, mixed> $user        Authenticated user details.
+	 * @param string               $occurred_at Confirmed enablement timestamp.
+	 * @since 1.8.0
+	 */
+	private function notify_two_factor_enabled( array $user, string $occurred_at ): void {
+		if ( ! \has_action( 'two_factor_enabled' ) ) {
+			return;
+		}
+
+		$payload = array(
+			'id'         => (string) ( $user['id'] ?? '' ),
+			'username'   => (string) ( $user['username'] ?? '' ),
+			'role'       => (string) ( $user['role'] ?? '' ),
+			'occurredAt' => Date::to_iso( $occurred_at ),
+		);
+
+		try {
+			/**
+			 * Fires after two-factor authentication has been confirmed and enabled.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $payload Bounded user details without credentials.
+			 */
+			\do_action( 'two_factor_enabled', $payload );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL two_factor_enabled observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch two_factor_disabled lifecycle action.
+	 *
+	 * @param array<string, mixed> $user        Authenticated user details.
+	 * @param string               $occurred_at Confirmed disablement timestamp.
+	 * @since 1.8.0
+	 */
+	private function notify_two_factor_disabled( array $user, string $occurred_at ): void {
+		if ( ! \has_action( 'two_factor_disabled' ) ) {
+			return;
+		}
+
+		$payload = array(
+			'id'         => (string) ( $user['id'] ?? '' ),
+			'username'   => (string) ( $user['username'] ?? '' ),
+			'role'       => (string) ( $user['role'] ?? '' ),
+			'occurredAt' => Date::to_iso( $occurred_at ),
+		);
+
+		try {
+			/**
+			 * Fires after two-factor authentication has been disabled for a user.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string> $payload Bounded user details without credentials.
+			 */
+			\do_action( 'two_factor_disabled', $payload );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL two_factor_disabled observer error: %s', get_class( $e ) ) );
+		}
+	}
+
+	/**
+	 * Dispatch two_factor_backup_codes_regenerated lifecycle action.
+	 *
+	 * @param string $user_id     User row ID.
+	 * @param int    $count       Number of backup codes generated and persisted.
+	 * @param string $occurred_at Confirmed regeneration timestamp.
+	 * @since 1.8.0
+	 */
+	private function notify_backup_codes_regenerated(
+		string $user_id,
+		int $count,
+		string $occurred_at
+	): void {
+		if ( ! \has_action( 'two_factor_backup_codes_regenerated' ) ) {
+			return;
+		}
+
+		$summary = array(
+			'userId'     => $user_id,
+			'generated'  => $count,
+			'occurredAt' => Date::to_iso( $occurred_at ),
+		);
+
+		try {
+			/**
+			 * Fires after two-factor backup codes have been regenerated and persisted.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, mixed> $summary Bounded summary of regenerated codes.
+			 */
+			\do_action( 'two_factor_backup_codes_regenerated', $summary );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL two_factor_backup_codes_regenerated observer error: %s', get_class( $e ) ) );
 		}
 	}
 

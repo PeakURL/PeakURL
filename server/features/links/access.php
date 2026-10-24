@@ -328,6 +328,43 @@ class Access {
 			);
 		}
 
+		if ( \has_filter( 'link_captcha_required' ) ) {
+			$safe_link = array(
+				'id'        => (string) ( $url['id'] ?? '' ),
+				'shortCode' => (string) ( $url['short_code'] ?? '' ),
+				'alias'     => (string) ( $url['alias'] ?? '' ),
+				'title'     => (string) ( $url['title'] ?? '' ),
+				'status'    => (string) ( $url['status'] ?? 'active' ),
+			);
+
+			try {
+				/**
+				 * Filters whether a CAPTCHA challenge is required for link access.
+				 *
+				 * Note for extensions: Headers such as Referer and User-Agent, as well
+				 * as arbitrary query parameters, can be forged and do not constitute
+				 * trusted proof of client identity.
+				 *
+				 * @since 1.8.0
+				 *
+				 * @param bool                 $required  Whether CAPTCHA is required. Default true.
+				 * @param array<string, mixed> $safe_link Minimal allowlisted link metadata.
+				 * @param Request              $request   Current incoming HTTP request.
+				 */
+				$filtered = \apply_filters( 'link_captcha_required', true, $safe_link, $request );
+
+				if ( false === $filtered ) {
+					return array(
+						'status'    => 'open',
+						'protected' => false,
+					);
+				}
+			} catch ( \Throwable $e ) {
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL link_captcha_required filter error: %s', get_class( $e ) ) );
+			}
+		}
+
 		if ( 'POST' !== $request->get_method() ) {
 			return array(
 				'status'    => 'captcha_required',

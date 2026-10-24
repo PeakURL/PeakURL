@@ -248,6 +248,8 @@ class Access {
 				}
 
 				if ( $this->validator->link_password_matches( $url, $password_attempt ) ) {
+					$this->notify_verification( 'link_password_verified', $url, $request );
+
 					$request->queue_cookie(
 						$cookie_name,
 						$expected_cookie,
@@ -265,6 +267,8 @@ class Access {
 						'captchaProtected' => $captcha_protected,
 					);
 				}
+
+				$this->notify_verification( 'link_password_failed', $url, $request );
 
 				return array(
 					'status'  => 'password_invalid',
@@ -350,12 +354,18 @@ class Access {
 			);
 		}
 
+		$captcha_context = array(
+			'provider' => (string) ( $challenge['provider'] ?? '' ),
+		);
+
 		if (
 			! $this->captcha->verify_token(
 				$token,
 				$request->get_ip_address(),
 			)
 		) {
+			$this->notify_verification( 'link_captcha_failed', $url, $request, $captcha_context );
+
 			return array(
 				'status'    => 'captcha_invalid',
 				'url'       => $url,
@@ -364,6 +374,8 @@ class Access {
 				'message'   => __( 'Verification failed. Please try again.', 'peakurl' ),
 			);
 		}
+
+		$this->notify_verification( 'link_captcha_verified', $url, $request, $captcha_context );
 
 		$request->queue_cookie(
 			$cookie_name,
@@ -525,5 +537,58 @@ class Access {
 		$options['expires'] = gmdate( 'D, d M Y H:i:s T', time() + $max_age );
 
 		return $options;
+	}
+
+	/**
+	 * Dispatch a public verification security action.
+	 *
+	 * @param string               $action        Action hook name.
+	 * @param array<string, mixed> $url           Raw URL database row.
+	 * @param Request              $request       Incoming HTTP request.
+	 * @param array<string, mixed> $extra_context Optional extra context fields (e.g. captcha provider).
+	 * @since 1.8.0
+	 */
+	private function notify_verification(
+		string $action,
+		array $url,
+		Request $request,
+		array $extra_context = array()
+	): void {
+		if ( ! \has_action( $action ) ) {
+			return;
+		}
+
+		$safe_link = array(
+			'id'        => (string) ( $url['id'] ?? '' ),
+			'shortCode' => (string) ( $url['short_code'] ?? '' ),
+			'alias'     => (string) ( $url['alias'] ?? '' ),
+			'title'     => (string) ( $url['title'] ?? '' ),
+			'status'    => (string) ( $url['status'] ?? 'active' ),
+		);
+
+		$context = array(
+			'ip'        => (string) $request->get_ip_address(),
+			'userAgent' => (string) $request->get_header( 'User-Agent' ),
+			'method'    => (string) $request->get_method(),
+		);
+
+		if ( ! empty( $extra_context ) ) {
+			$context = array_merge( $context, $extra_context );
+		}
+
+		try {
+			/**
+			 * Fires upon public link password or CAPTCHA verification outcome.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, mixed> $safe_link Bounded public link data (destinationUrl and secrets excluded).
+			 * @param array<string, mixed> $context   Minimal request context (ip, userAgent, method, optional provider).
+			 */
+			\do_action( $action, $safe_link, $context );
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL %s observer error: %s', $action, get_class( $e ) ) );
+		}
 	}
 }

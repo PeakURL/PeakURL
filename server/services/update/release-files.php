@@ -37,6 +37,7 @@ class ReleaseFiles {
 		'config.php',
 		'content',
 		'.maintenance',
+		'.user.ini',
 	);
 
 	/**

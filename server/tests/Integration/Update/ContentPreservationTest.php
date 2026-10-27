@@ -70,6 +70,7 @@ class ContentPreservationTest extends TestCase {
 		$config_content = "<?php\ndefine('DB_DATABASE', 'prod_db');\n";
 		file_put_contents( $this->source_root . '/config.php', $config_content );
 		file_put_contents( $this->source_root . '/.maintenance', 'maintenance-active' );
+		file_put_contents( $this->source_root . '/.user.ini', 'auto_prepend_file = "test.php"' );
 		file_put_contents( $this->source_root . '/index.php', '<?php // v1 index' );
 		file_put_contents( $this->source_root . '/app.html', '<!-- v1 app -->' );
 		file_put_contents( $this->source_root . '/retired-release-file.txt', 'old release data' );
@@ -111,6 +112,7 @@ class ContentPreservationTest extends TestCase {
 		$this->assertNotContains( 'config.php', $installed_paths );
 		$this->assertNotContains( 'content', $installed_paths );
 		$this->assertNotContains( '.maintenance', $installed_paths );
+		$this->assertNotContains( '.user.ini', $installed_paths );
 
 		// Backup phase.
 		$this->release_files->backup_release_paths( $installed_paths, $this->backup_root );
@@ -126,6 +128,8 @@ class ContentPreservationTest extends TestCase {
 		$this->assertSame( $config_content, file_get_contents( $this->source_root . '/config.php' ) );
 		$this->assertFileExists( $this->source_root . '/.maintenance' );
 		$this->assertSame( 'maintenance-active', file_get_contents( $this->source_root . '/.maintenance' ) );
+		$this->assertFileExists( $this->source_root . '/.user.ini' );
+		$this->assertSame( 'auto_prepend_file = "test.php"', file_get_contents( $this->source_root . '/.user.ini' ) );
 
 		// User content survives.
 		$this->assertFileExists( $this->source_root . '/content/uploads/avatar.png' );

@@ -46,15 +46,67 @@ class Lookup {
 	/**
 	 * Resolve country and city values for a visitor IP address.
 	 *
+	 * Preserves local MaxMind GeoLite2 lookup as the default and fallback,
+	 * while allowing third-party plugins to provide location data via the
+	 * geoip_location filter.
+	 *
 	 * @param string $ip_address Visitor IP address.
-	 * @return array<string, string|null>
+	 * @return array<string, string|null> Resolved and filtered location data.
 	 * @since 1.0.14
 	 */
 	public function lookup_location( string $ip_address = '' ): array {
-		if ( ! Security::is_public_ip_address( $ip_address ) ) {
+		$clean_ip = trim( $ip_address );
+
+		if ( ! Security::is_public_ip_address( $clean_ip ) ) {
 			return $this->get_empty_location();
 		}
 
+		$location = $this->lookup_maxmind( $clean_ip );
+
+		if ( ! \function_exists( 'has_filter' ) || ! \has_filter( 'geoip_location' ) ) {
+			return $location;
+		}
+
+		try {
+			/**
+			 * Filters the resolved geographic location for an IP address.
+			 *
+			 * @since 1.8.0
+			 *
+			 * @param array<string, string|null> $location
+			 *     Default GeoIP location data.
+			 * @param string $ip_address
+			 *     Validated public visitor IP address.
+			 *
+			 * @return array<string, string|null>
+			 */
+			$filtered = \apply_filters(
+				'geoip_location',
+				$location,
+				$clean_ip
+			);
+
+			$validated = $this->validate_location( $filtered );
+
+			if ( null !== $validated ) {
+				return $validated;
+			}
+		} catch ( \Throwable $e ) {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			\error_log( sprintf( 'PeakURL geoip_location filter error: %s', get_class( $e ) ) );
+		}
+
+		return $location;
+	}
+
+	/**
+	 * Perform MaxMind database lookup for an IP address.
+	 *
+	 * @param string $ip_address Validated public IP address.
+	 * @return array<string, string|null> Resolved MaxMind location data.
+	 * @since 1.8.0
+	 */
+	private function lookup_maxmind( string $ip_address ): array {
 		$reader = $this->get_reader();
 
 		if ( null === $reader ) {
@@ -86,6 +138,84 @@ class Lookup {
 			),
 			'country_name' => $this->get_display_name( $country ),
 			'city_name'    => $this->get_display_name( $city ),
+		);
+	}
+
+	/**
+	 * Validate and sanitize a filtered location payload.
+	 *
+	 * Enforces recognized location fields, strict value types, bounded string
+	 * lengths, and ISO 3166-1 alpha-2 country codes. Rejects partial replacement
+	 * payloads and unrecognized keys to prevent mixing incompatible geographic data.
+	 *
+	 * @param mixed $payload Filtered return value.
+	 * @return array<string, string|null>|null Validated location array, or null on validation failure.
+	 * @since 1.8.0
+	 */
+	private function validate_location( mixed $payload ): ?array {
+		if ( ! is_array( $payload ) ) {
+			return null;
+		}
+
+		if (
+			! array_key_exists( 'country_code', $payload ) ||
+			! array_key_exists( 'country_name', $payload ) ||
+			! array_key_exists( 'city_name', $payload ) ||
+			3 !== count( $payload )
+		) {
+			return null;
+		}
+
+		$raw_country_code = $payload['country_code'];
+		$raw_country_name = $payload['country_name'];
+		$raw_city_name    = $payload['city_name'];
+
+		if (
+			( null !== $raw_country_code && ! is_string( $raw_country_code ) ) ||
+			( null !== $raw_country_name && ! is_string( $raw_country_name ) ) ||
+			( null !== $raw_city_name && ! is_string( $raw_city_name ) )
+		) {
+			return null;
+		}
+
+		$country_code = null;
+		if ( is_string( $raw_country_code ) ) {
+			$trimmed_code = trim( $raw_country_code );
+			if ( '' !== $trimmed_code ) {
+				$normalized_code = $this->normalize_country_code( $trimmed_code );
+				if ( null === $normalized_code ) {
+					return null;
+				}
+				$country_code = $normalized_code;
+			}
+		}
+
+		$country_name = null;
+		if ( is_string( $raw_country_name ) ) {
+			$trimmed_country = trim( $raw_country_name );
+			if ( '' !== $trimmed_country ) {
+				if ( mb_strlen( $trimmed_country ) > 120 ) {
+					return null;
+				}
+				$country_name = $trimmed_country;
+			}
+		}
+
+		$city_name = null;
+		if ( is_string( $raw_city_name ) ) {
+			$trimmed_city = trim( $raw_city_name );
+			if ( '' !== $trimmed_city ) {
+				if ( mb_strlen( $trimmed_city ) > 120 ) {
+					return null;
+				}
+				$city_name = $trimmed_city;
+			}
+		}
+
+		return array(
+			'country_code' => $country_code,
+			'country_name' => $country_name,
+			'city_name'    => $city_name,
 		);
 	}
 

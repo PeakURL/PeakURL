@@ -1,9 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { AlertCircle, Globe, RefreshCw, Search, Upload, X } from "lucide-react";
+import {
+	AlertCircle,
+	FileArchive,
+	Globe,
+	RefreshCw,
+	Search,
+	Upload,
+	X,
+} from "lucide-react";
 import { useNavigate } from "react-router";
 
 import { Button, useNotification } from "@/components";
 import { __, sprintf } from "@/i18n";
+import { cn, formatByteSize } from "@/shared/formatting";
 import {
 	useGetInstalledPluginsQuery,
 	useGetPublishedPluginsQuery,
@@ -40,6 +49,7 @@ export function AddNewPluginsView({
 
 	// Upload form state
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
+	const [isDragging, setIsDragging] = useState(false);
 	const [uploadPlugin, { isLoading: isUploading }] =
 		useUploadPluginMutation();
 
@@ -94,16 +104,60 @@ export function AddNewPluginsView({
 		setCurrentPage(1);
 	};
 
+	const validateAndSetFile = (file: File) => {
+		if (!file.name.toLowerCase().endsWith(".zip")) {
+			notification.error(__("Please select a valid .zip archive file."));
+			return false;
+		}
+		setSelectedFile(file);
+		return true;
+	};
+
 	const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (file) {
-			if (!file.name.toLowerCase().endsWith(".zip")) {
-				notification.error(
-					__("Please select a valid .zip archive file.")
-				);
-				return;
-			}
-			setSelectedFile(file);
+			validateAndSetFile(file);
+		}
+	};
+
+	const handleClearFile = (e?: React.MouseEvent) => {
+		if (e) {
+			e.stopPropagation();
+		}
+		setSelectedFile(null);
+		if (fileInputRef.current) {
+			fileInputRef.current.value = "";
+		}
+	};
+
+	const handleDragOver = (e: React.DragEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		if (!isDragging) {
+			setIsDragging(true);
+		}
+	};
+
+	const handleDragLeave = (e: React.DragEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		if (
+			e.currentTarget &&
+			e.relatedTarget &&
+			e.currentTarget.contains(e.relatedTarget as Node)
+		) {
+			return;
+		}
+		setIsDragging(false);
+	};
+
+	const handleDrop = (e: React.DragEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		setIsDragging(false);
+		const file = e.dataTransfer.files?.[0];
+		if (file) {
+			validateAndSetFile(file);
 		}
 	};
 
@@ -159,64 +213,168 @@ export function AddNewPluginsView({
 						onSubmit={handleInstallZip}
 						className="space-y-2 pt-1"
 					>
-						<div className="flex flex-col sm:flex-row sm:items-center gap-3">
-							<div className="flex items-center gap-3 min-w-0">
-								<input
-									ref={fileInputRef}
-									id="plugin-zip-file-input"
-									type="file"
-									accept=".zip"
-									onChange={handleFileSelect}
-									className="sr-only"
-									aria-label={__("Choose plugin ZIP file")}
-								/>
-								<Button
-									type="button"
-									variant="secondary"
-									onClick={() =>
-										fileInputRef.current?.click()
-									}
-									disabled={isUploading}
-									className="shrink-0"
-								>
-									{__("Choose File")}
-								</Button>
-								<span
-									className={`text-xs truncate max-w-xs sm:max-w-sm md:max-w-md ${
-										selectedFile
-											? "text-heading font-medium"
-											: "text-text-muted"
-									}`}
-									title={selectedFile?.name}
-								>
-									{selectedFile
-										? selectedFile.name
-										: __("No file chosen")}
-								</span>
+						{/* Hidden accessible file input */}
+						<input
+							ref={fileInputRef}
+							id="plugin-zip-file-input"
+							type="file"
+							accept=".zip"
+							onChange={handleFileSelect}
+							className="sr-only"
+							aria-label={__("Choose plugin ZIP file")}
+							disabled={isUploading}
+						/>
+
+						{/* Selection Area + Install Now Action */}
+						<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+							{/* Purposeful File Selection Surface */}
+							<div
+								onDragOver={handleDragOver}
+								onDragEnter={handleDragOver}
+								onDragLeave={handleDragLeave}
+								onDrop={handleDrop}
+								className="min-w-0 flex-1 max-w-xl"
+							>
+								{!selectedFile ? (
+									/* Empty Selection Surface */
+									<div
+										role="button"
+										tabIndex={0}
+										onClick={() =>
+											fileInputRef.current?.click()
+										}
+										onKeyDown={(e) => {
+											if (
+												e.key === "Enter" ||
+												e.key === " "
+											) {
+												e.preventDefault();
+												fileInputRef.current?.click();
+											}
+										}}
+										className={cn(
+											"flex items-center justify-between gap-3 p-3 rounded-lg border border-dashed transition-all cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent select-none",
+											isDragging
+												? "border-accent bg-accent/[0.06] text-heading"
+												: "border-stroke/80 bg-surface-alt/40 hover:bg-surface-alt hover:border-stroke"
+										)}
+										aria-label={__(
+											"Select plugin ZIP archive. Click or drag and drop a file here."
+										)}
+									>
+										<div className="flex items-center gap-3 min-w-0">
+											<div
+												className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-stroke/70 bg-surface text-text-muted"
+												aria-hidden="true"
+											>
+												<FileArchive size={18} />
+											</div>
+											<div className="min-w-0 text-left">
+												<div className="text-xs font-medium text-heading">
+													{isDragging
+														? __(
+																"Drop archive to select"
+															)
+														: __(
+																"Select plugin archive"
+															)}
+												</div>
+												<div className="text-[11px] text-text-muted truncate">
+													{__(
+														"Drag and drop a .zip file or click to browse"
+													)}
+												</div>
+											</div>
+										</div>
+										<Button
+											type="button"
+											variant="secondary"
+											size="sm"
+											className="shrink-0 pointer-events-none"
+											tabIndex={-1}
+										>
+											{__("Choose File")}
+										</Button>
+									</div>
+								) : (
+									/* Populated Selection State */
+									<div className="flex items-center justify-between gap-3 p-2.5 sm:p-3 rounded-lg border border-stroke bg-surface-alt/60">
+										<div className="flex items-center gap-3 min-w-0 flex-1">
+											<div
+												className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-accent/30 bg-accent/10 text-accent"
+												aria-hidden="true"
+											>
+												<FileArchive size={18} />
+											</div>
+											<div className="min-w-0 flex-1 text-left">
+												<div
+													className="text-xs font-semibold text-heading truncate"
+													title={selectedFile.name}
+												>
+													{selectedFile.name}
+												</div>
+												<div className="text-[11px] text-text-muted">
+													{formatByteSize(
+														selectedFile.size
+													)}
+												</div>
+											</div>
+										</div>
+										<div className="flex items-center gap-1.5 shrink-0">
+											<Button
+												type="button"
+												variant="ghost"
+												size="sm"
+												onClick={() =>
+													fileInputRef.current?.click()
+												}
+												disabled={isUploading}
+												className="text-xs text-text-muted hover:text-heading h-8 px-2.5"
+											>
+												{__("Replace")}
+											</Button>
+											<Button
+												type="button"
+												variant="ghost"
+												size="sm"
+												onClick={handleClearFile}
+												disabled={isUploading}
+												aria-label={__(
+													"Clear selected file"
+												)}
+												className="text-xs text-text-muted hover:text-red-500 hover:bg-red-500/10 h-8 w-8 p-0 inline-flex items-center justify-center"
+											>
+												<X size={15} />
+											</Button>
+										</div>
+									</div>
+								)}
 							</div>
 
+							{/* Install Now Button */}
 							<Button
 								type="submit"
 								disabled={!selectedFile || isUploading}
-								className="inline-flex items-center justify-center gap-1.5 shrink-0"
+								className="inline-flex items-center justify-center gap-1.5 shrink-0 self-stretch sm:self-auto h-[48px] px-4 font-medium"
 							>
 								{isUploading ? (
 									<>
 										<RefreshCw
-											size={14}
+											size={15}
 											className="animate-spin"
 										/>
 										<span>{__("Installing…")}</span>
 									</>
 								) : (
 									<>
-										<Upload size={14} />
+										<Upload size={15} />
 										<span>{__("Install Now")}</span>
 									</>
 								)}
 							</Button>
 						</div>
 
+						{/* Dynamic Limit Status Line */}
 						<p className="text-xs text-text-muted">
 							{sprintf(
 								__("Maximum upload size: %s"),
@@ -412,9 +570,13 @@ export function AddNewPluginsView({
 							{__("No plugins available yet")}
 						</h3>
 						<p className="mt-1 text-xs text-text-muted leading-relaxed">
-							{__(
-								"Published plugins will appear here. You can also install a plugin by uploading a ZIP file."
-							)}
+							{showUpload
+								? __(
+										"Published plugins will appear here once available in the directory."
+									)
+								: __(
+										"Published plugins will appear here. You can also install a plugin by uploading a ZIP file."
+									)}
 						</p>
 						{onToggleUpload && !showUpload && (
 							<div className="mt-4">

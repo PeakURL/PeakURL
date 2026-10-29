@@ -20,31 +20,33 @@ function PluginTabs({ activeTab, onTabChange, tabs }: PluginTabsProps) {
 		);
 
 	return (
-		<div className="plugins-tabs">
-			{tabs.map((tab) => (
-				<button
-					key={tab.id}
-					onClick={() => onTabChange(tab.id)}
-					className={getButtonClassName(activeTab === tab.id)}
-				>
-					<span className="plugins-tabs-button-content">
-						{tab.label}
-						{typeof tab.count === "number" && (
-							<span
-								className={getCountClassName(
-									activeTab === tab.id
-								)}
-							>
-								{tab.count}
-							</span>
+		<div className="plugins-tabs" role="tablist">
+			{tabs.map((tab) => {
+				const isActive = activeTab === tab.id;
+				return (
+					<button
+						key={tab.id}
+						type="button"
+						role="tab"
+						aria-selected={isActive}
+						onClick={() => onTabChange(tab.id)}
+						className={getButtonClassName(isActive)}
+					>
+						<span className="plugins-tabs-button-content">
+							{tab.label}
+							{typeof tab.count === "number" && (
+								<span className={getCountClassName(isActive)}>
+									{tab.count}
+								</span>
+							)}
+						</span>
+						{/* Active indicator bar */}
+						{isActive && (
+							<span className="plugins-tabs-indicator" />
 						)}
-					</span>
-					{/* Active indicator bar */}
-					{activeTab === tab.id && (
-						<span className="plugins-tabs-indicator" />
-					)}
-				</button>
-			))}
+					</button>
+				);
+			})}
 		</div>
 	);
 }

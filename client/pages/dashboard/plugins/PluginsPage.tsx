@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { ArrowLeft, Plus, ShieldCheck, Upload } from "lucide-react";
+import {
+	ArrowLeft,
+	Package,
+	Plus,
+	RefreshCw,
+	ShieldCheck,
+	Upload,
+} from "lucide-react";
 import { useLocation, useNavigate } from "react-router";
 
 import { Button, PageHeader } from "@/components";
@@ -21,7 +28,7 @@ function PluginsPage() {
 	const isAddNew = location.pathname === "/dashboard/plugins/add";
 
 	const { canManagePlugins, isLoading: isAuthLoading } = useAdminAccess();
-	const [activeTab, setActiveTab] = useState<TabId>("installed");
+	const [userSelectedTab, setUserSelectedTab] = useState<TabId | null>(null);
 	const [showUpload, setShowUpload] = useState(false);
 
 	const {
@@ -35,6 +42,26 @@ function PluginsPage() {
 	const pluginsPayload = pluginsResponse?.data;
 	const regularPlugins = pluginsPayload?.regular ?? [];
 	const mustUsePlugins = pluginsPayload?.mustUse ?? [];
+
+	const hasRegular = regularPlugins.length > 0;
+	const hasMustUse = mustUsePlugins.length > 0;
+	const hasAnyPlugins = hasRegular || hasMustUse;
+	const shouldShowTabs = hasMustUse;
+
+	// Derive the active tab from available inventory and user choice without cascading effect renders
+	const activeTab: TabId = (() => {
+		if (userSelectedTab === "must_use" && hasMustUse) {
+			return "must_use";
+		}
+		if (userSelectedTab === "installed" && (hasRegular || !hasMustUse)) {
+			return "installed";
+		}
+		// Default resolution when user hasn't selected or selection became unavailable:
+		if (!hasRegular && hasMustUse) {
+			return "must_use";
+		}
+		return "installed";
+	})();
 
 	const tabs: PluginTabItem[] = [
 		{
@@ -134,20 +161,72 @@ function PluginsPage() {
 					onToggleUpload={setShowUpload}
 					uploadLimit={pluginsPayload?.uploadLimit}
 				/>
-			) : (
-				/* Installed & Must-Use Table Views - Direct Single Table without nested container */
-				<div className="space-y-4">
-					{/* Tab Bar */}
-					<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-						<PluginTabs
-							activeTab={activeTab}
-							onTabChange={setActiveTab}
-							tabs={tabs}
+			) : isPluginsLoading ? (
+				/* Loading inventory state */
+				<div className="py-16 text-center" aria-live="polite">
+					<div className="flex items-center justify-center gap-3 text-text-muted">
+						<RefreshCw
+							size={18}
+							className="animate-spin text-accent"
 						/>
+						<span className="text-sm font-medium">
+							{__("Loading plugins…")}
+						</span>
 					</div>
+				</div>
+			) : isPluginsError ? (
+				/* Error state handled by table */
+				<InstalledPluginsTable
+					plugins={[]}
+					type="regular"
+					isLoading={false}
+					isError={true}
+					error={pluginsError}
+					onRetry={refetch}
+				/>
+			) : !hasAnyPlugins ? (
+				/* First-Use Empty State: no regular and no must-use plugins */
+				<div className="py-14 sm:py-20 text-center max-w-md mx-auto">
+					<div
+						className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-surface-alt border border-stroke/70 text-text-muted"
+						aria-hidden="true"
+					>
+						<Package size={22} />
+					</div>
+					<h3 className="text-base font-semibold text-heading">
+						{__("No plugins installed yet")}
+					</h3>
+					<p className="mt-2 text-xs sm:text-sm text-text-muted leading-relaxed">
+						{__(
+							"Browse available plugins or upload a ZIP file to get started."
+						)}
+					</p>
+					<div className="mt-5">
+						<Button
+							onClick={() => navigate("/dashboard/plugins/add")}
+							className="inline-flex items-center gap-1.5"
+						>
+							<Plus size={16} />
+							<span>{__("Add Plugin")}</span>
+						</Button>
+					</div>
+				</div>
+			) : (
+				/* Populated Views */
+				<div className="space-y-4">
+					{/* Tab Bar - Only rendered when must-use plugins exist */}
+					{shouldShowTabs && (
+						<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+							<PluginTabs
+								activeTab={activeTab}
+								onTabChange={setUserSelectedTab}
+								tabs={tabs}
+							/>
+						</div>
+					)}
 
 					{/* Must-Use Tab Hint */}
-					{activeTab === "must_use" && (
+					{shouldShowTabs && activeTab === "must_use" && (
 						<p className="text-xs text-text-muted">
 							{__(
 								"Must-use plugins are managed by the server administrator and load automatically on every request. They cannot be activated, deactivated, or deleted from the dashboard."

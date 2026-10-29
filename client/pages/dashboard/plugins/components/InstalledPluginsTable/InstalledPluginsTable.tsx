@@ -196,10 +196,10 @@ export function InstalledPluginsTable({
 				<p className="plugins-table-empty-copy">
 					{type === "must_use"
 						? __(
-								"Must-use plugins are placed in content/mu-plugins/ by the server administrator and load automatically on every request."
+								"Must-use plugins load automatically on every request and are configured directly on the server."
 							)
 						: __(
-								"Install plugins by uploading a ZIP file or placing extension directories into content/plugins/."
+								"Browse available plugins or upload a ZIP file to get started."
 							)}
 				</p>
 			</div>

@@ -16,7 +16,12 @@ use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Config\Environment;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Plugins\Metadata;
+use PeakURL\Core\Plugins\Registry;
+use PeakURL\Core\Plugins\Type;
+use PeakURL\Core\Plugins\Validator;
 use PeakURL\Core\Scheduler\Scheduler;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Http\Request;
@@ -70,10 +75,10 @@ class Service {
 	/**
 	 * Settings API.
 	 *
-	 * @var SettingsApi
+	 * @var SettingsApi|null
 	 * @since 1.0.0
 	 */
-	private SettingsApi $settings_api;
+	private ?SettingsApi $settings_api = null;
 
 	/**
 	 * GeoIP service.
@@ -219,6 +224,33 @@ class Service {
 	}
 
 	/**
+	 * Return the current plugin-management user.
+	 *
+	 * Requires manage_updates or manage_site_settings capability.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Current user.
+	 *
+	 * @throws ApiException When permission is denied.
+	 * @since 1.8.0
+	 */
+	private function get_plugins_user( Request $request ): array {
+		$user = $this->auth_service->get_current_user( $request );
+
+		if (
+			! $this->authorization->has_capability( $user, 'manage_updates' ) &&
+			! $this->authorization->has_capability( $user, 'manage_site_settings' )
+		) {
+			throw new ApiException(
+				__( 'Admin access is required.', 'peakurl' ),
+				403
+			);
+		}
+
+		return $user;
+	}
+
+	/**
 	 * Return the current dashboard admin notices.
 	 *
 	 * @param Request $request Incoming authenticated request.
@@ -256,6 +288,1085 @@ class Service {
 
 		return $service->get_status();
 	}
+
+	/**
+	 * Return safe metadata for all discovered plugins.
+	 *
+	 * Validates administrator permissions and queries the canonical Registry.
+	 * Never executes plugin code and strips internal filesystem paths.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Safe plugin inventory.
+	 * @since 1.8.0
+	 */
+	/**
+	 * Retrieve the list of active regular plugin identifiers from settings.
+	 *
+	 * @param bool $fail_hard Whether to fail explicitly when settings storage is unavailable.
+	 * @return array<int, string>
+	 * @throws ApiException When $fail_hard is true and settings persistence fails.
+	 * @since 1.8.0
+	 */
+	public function get_active_plugin_ids( bool $fail_hard = false ): array {
+		if ( ! isset( $this->settings_api ) || null === $this->settings_api ) {
+			if ( $fail_hard ) {
+				throw new ApiException(
+					__( 'Settings persistence is unavailable.', 'peakurl' ),
+					500
+				);
+			}
+			return array();
+		}
+
+		try {
+			$raw = $this->settings_api->get_option( 'active_plugins' );
+		} catch ( \Throwable $e ) {
+			if ( $fail_hard ) {
+				throw new ApiException(
+					sprintf(
+						// translators: %s: Error message.
+						__( 'Failed to retrieve active plugins: %s', 'peakurl' ),
+						$e->getMessage()
+					),
+					500
+				);
+			}
+			return array();
+		}
+
+		if ( null === $raw || '' === trim( $raw ) ) {
+			return array();
+		}
+
+		$decoded = json_decode( $raw, true );
+		if ( ! is_array( $decoded ) ) {
+			return array();
+		}
+
+		$active = array();
+		foreach ( $decoded as $id ) {
+			if ( is_string( $id ) && '' !== trim( $id ) ) {
+				$active[] = trim( $id );
+			}
+		}
+
+		return array_values( array_unique( $active ) );
+	}
+
+	/**
+	 * Return safe metadata for all discovered plugins.
+	 *
+	 * Validates administrator permissions and queries the canonical Registry.
+	 * Never executes plugin code and strips internal filesystem paths.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Safe plugin inventory.
+	 * @since 1.8.0
+	 */
+	public function get_installed_plugins( Request $request ): array {
+		$this->get_plugins_user( $request );
+
+		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
+		$registry    = new Registry( $content_dir );
+		$all         = $registry->all();
+		$regular     = $registry->regular();
+		$must_use    = $registry->must_use();
+		$active_ids  = $this->get_active_plugin_ids();
+
+		$mapped_regular = array();
+		foreach ( $regular as $id => $meta ) {
+			$is_active        = in_array( $id, $active_ids, true );
+			$mapped_regular[] = $meta->with_active( $is_active )->to_array();
+		}
+
+		$mapped_must_use = array();
+		foreach ( $must_use as $id => $meta ) {
+			$mapped_must_use[] = $meta->with_active( true )->to_array();
+		}
+
+		$mapped_items = array();
+		foreach ( $all as $key => $meta ) {
+			$is_mu          = Type::MUST_USE === $meta->type();
+			$is_active      = $is_mu || in_array( $meta->id(), $active_ids, true );
+			$mapped_items[] = $meta->with_active( $is_active )->to_array();
+		}
+
+		return array(
+			'items'       => $mapped_items,
+			'regular'     => $mapped_regular,
+			'mustUse'     => $mapped_must_use,
+			'total'       => count( $all ),
+			'uploadLimit' => $this->get_effective_upload_limit(),
+		);
+	}
+
+	/**
+	 * Activate a regular plugin.
+	 *
+	 * Re-checks manifest and compatibility before persisting activation.
+	 * Uses SettingsApi::update_option_with_lock() for concurrency safety.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Activation result payload.
+	 * @throws ApiException When permission is denied, plugin is missing, incompatible, or persistence fails.
+	 * @since 1.8.0
+	 */
+	public function activate_plugin( Request $request ): array {
+		$this->get_plugins_user( $request );
+
+		$id = trim( (string) ( $request->get_body_param( 'id' ) ?? ( $request->get_route_param( 'id' ) ?? ( $request->get_query_param( 'id' ) ?? '' ) ) ) );
+		if ( '' === $id || ! preg_match( '/^[a-zA-Z0-9_-]+$/', $id ) ) {
+			throw new ApiException(
+				__( 'Invalid plugin identifier.', 'peakurl' ),
+				400
+			);
+		}
+
+		if ( ! isset( $this->settings_api ) || null === $this->settings_api ) {
+			throw new ApiException(
+				__( 'Settings persistence is unavailable.', 'peakurl' ),
+				500
+			);
+		}
+
+		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
+		$registry    = new Registry( $content_dir );
+		$meta        = $registry->find( $id, Type::REGULAR );
+
+		if ( null === $meta ) {
+			throw new ApiException(
+				__( 'Plugin not found.', 'peakurl' ),
+				404
+			);
+		}
+
+		if ( ! $meta->is_valid() ) {
+			$errors    = $meta->errors();
+			$error_msg = ! empty( $errors )
+				? implode( ' ', $errors )
+				: __( 'Plugin manifest is invalid.', 'peakurl' );
+			throw new ApiException( $error_msg, 400 );
+		}
+
+		if ( ! $meta->is_compatible() ) {
+			$errors    = $meta->errors();
+			$error_msg = ! empty( $errors )
+				? implode( ' ', $errors )
+				: __( 'Plugin is not compatible with this environment.', 'peakurl' );
+			throw new ApiException( $error_msg, 400 );
+		}
+
+		$active_ids = array();
+		try {
+			$this->settings_api->update_option_with_lock(
+				'active_plugins',
+				function ( ?string $current_raw ) use ( $id, &$active_ids ): string {
+					$current = array();
+					if ( null !== $current_raw && '' !== trim( $current_raw ) ) {
+						$decoded = json_decode( $current_raw, true );
+						if ( is_array( $decoded ) ) {
+							foreach ( $decoded as $item ) {
+								if ( is_string( $item ) && '' !== trim( $item ) ) {
+									$current[] = trim( $item );
+								}
+							}
+						}
+					}
+					$current = array_values( array_unique( $current ) );
+					if ( ! in_array( $id, $current, true ) ) {
+						$current[] = $id;
+					}
+					sort( $current, SORT_STRING );
+					$active_ids = $current;
+
+					return peakurl_json_encode( $current );
+				}
+			);
+		} catch ( \Throwable $e ) {
+			throw new ApiException(
+				sprintf(
+					// translators: %s: Error message.
+					__( 'Failed to persist plugin activation: %s', 'peakurl' ),
+					$e->getMessage()
+				),
+				500
+			);
+		}
+
+		return array(
+			'id'            => $id,
+			'active'        => true,
+			'activePlugins' => $active_ids,
+		);
+	}
+
+	/**
+	 * Deactivate a regular plugin.
+	 *
+	 * Removes the plugin identifier from the persistent active_plugins setting.
+	 * Uses SettingsApi::update_option_with_lock() for concurrency safety.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Deactivation result payload.
+	 * @throws ApiException When permission is denied, identifier is missing, or persistence fails.
+	 * @since 1.8.0
+	 */
+	public function deactivate_plugin( Request $request ): array {
+		$this->get_plugins_user( $request );
+
+		$id = trim( (string) ( $request->get_body_param( 'id' ) ?? ( $request->get_route_param( 'id' ) ?? ( $request->get_query_param( 'id' ) ?? '' ) ) ) );
+		if ( '' === $id ) {
+			throw new ApiException(
+				__( 'Invalid plugin identifier.', 'peakurl' ),
+				400
+			);
+		}
+
+		if ( ! isset( $this->settings_api ) || null === $this->settings_api ) {
+			throw new ApiException(
+				__( 'Settings persistence is unavailable.', 'peakurl' ),
+				500
+			);
+		}
+
+		$active_ids = array();
+		try {
+			$this->settings_api->update_option_with_lock(
+				'active_plugins',
+				function ( ?string $current_raw ) use ( $id, &$active_ids ): string {
+					$current = array();
+					if ( null !== $current_raw && '' !== trim( $current_raw ) ) {
+						$decoded = json_decode( $current_raw, true );
+						if ( is_array( $decoded ) ) {
+							foreach ( $decoded as $item ) {
+								if ( is_string( $item ) && '' !== trim( $item ) ) {
+									$current[] = trim( $item );
+								}
+							}
+						}
+					}
+					$current = array_values( array_unique( $current ) );
+					$current = array_values(
+						array_filter(
+							$current,
+							static fn( string $item ): bool => $item !== $id
+						)
+					);
+					sort( $current, SORT_STRING );
+					$active_ids = $current;
+
+					return peakurl_json_encode( $current );
+				}
+			);
+		} catch ( \Throwable $e ) {
+			throw new ApiException(
+				sprintf(
+					// translators: %s: Error message.
+					__( 'Failed to persist plugin deactivation: %s', 'peakurl' ),
+					$e->getMessage()
+				),
+				500
+			);
+		}
+
+		return array(
+			'id'            => $id,
+			'active'        => false,
+			'activePlugins' => $active_ids,
+		);
+	}
+
+	/**
+	 * Safely delete an inactive regular plugin from disk.
+	 *
+	 * Enforces strict filesystem containment, rejects active plugins, and never
+	 * traverses symlinks outside the plugin directory.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Deletion result payload.
+	 * @throws ApiException When unauthorized, active, escaping containment, or deletion fails.
+	 * @since 1.8.0
+	 */
+	public function delete_plugin( Request $request ): array {
+		$this->get_plugins_user( $request );
+
+		$id = trim( (string) ( $request->get_body_param( 'id' ) ?? ( $request->get_route_param( 'id' ) ?? ( $request->get_query_param( 'id' ) ?? '' ) ) ) );
+		if ( '' === $id || ! preg_match( '/^[a-zA-Z0-9_-]+$/', $id ) ) {
+			throw new ApiException(
+				__( 'Invalid plugin identifier.', 'peakurl' ),
+				400
+			);
+		}
+
+		$active_ids = $this->get_active_plugin_ids( true );
+		if ( in_array( $id, $active_ids, true ) ) {
+			throw new ApiException(
+				__( 'Cannot delete an active plugin. Please deactivate the plugin first.', 'peakurl' ),
+				400
+			);
+		}
+
+		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
+
+		// Forbid deleting must-use plugins through dashboard.
+		$mu_dir = $content_dir . '/mu-plugins/' . $id;
+		if ( is_dir( $mu_dir ) ) {
+			throw new ApiException(
+				__( 'Must-use plugins cannot be deleted through the dashboard.', 'peakurl' ),
+				403
+			);
+		}
+
+		$plugins_root = $content_dir . '/plugins';
+		if ( ! is_dir( $plugins_root ) ) {
+			throw new ApiException(
+				__( 'Plugins directory not found.', 'peakurl' ),
+				404
+			);
+		}
+
+		$plugins_root_real = realpath( $plugins_root );
+		if ( false === $plugins_root_real ) {
+			throw new ApiException(
+				__( 'Plugins directory path could not be resolved.', 'peakurl' ),
+				500
+			);
+		}
+
+		$target_dir = $plugins_root . '/' . $id;
+		if ( ! is_dir( $target_dir ) ) {
+			throw new ApiException(
+				__( 'Plugin directory not found.', 'peakurl' ),
+				404
+			);
+		}
+
+		$target_real = realpath( $target_dir );
+		if (
+			false === $target_real ||
+			! str_starts_with( $target_real, $plugins_root_real . DIRECTORY_SEPARATOR )
+		) {
+			throw new ApiException(
+				__( 'Plugin path escapes plugins directory containment.', 'peakurl' ),
+				400
+			);
+		}
+
+		$this->safe_recursive_delete( $target_real );
+
+		if ( file_exists( $target_dir ) ) {
+			throw new ApiException(
+				__( 'Could not remove plugin directory from disk.', 'peakurl' ),
+				500
+			);
+		}
+
+		return array(
+			'id'      => $id,
+			'deleted' => true,
+		);
+	}
+
+	/**
+	 * Parse PHP shorthand byte notation (e.g. 2M, 512K, 1G) into integer bytes.
+	 *
+	 * Handles case-insensitivity, negative/zero values, and standard byte suffixes.
+	 *
+	 * @param string $size Raw ini value string.
+	 * @return int Byte count, or 0 if empty/invalid/unlimited.
+	 * @since 1.8.0
+	 */
+	public function parse_ini_size( string $size ): int {
+		$size = trim( $size );
+		if ( '' === $size ) {
+			return 0;
+		}
+
+		if ( preg_match( '/^(-?\d+)\s*([kmgb])?$/i', $size, $matches ) ) {
+			$value = (int) $matches[1];
+			if ( $value <= 0 ) {
+				return 0;
+			}
+
+			$unit = isset( $matches[2] ) ? strtolower( $matches[2] ) : '';
+			return match ( $unit ) {
+				'g'     => $value * 1024 * 1024 * 1024,
+				'm'     => $value * 1024 * 1024,
+				'k'     => $value * 1024,
+				default => $value,
+			};
+		}
+
+		return max( 0, (int) $size );
+	}
+
+	/**
+	 * Format a byte integer into a human-readable size string (e.g. "2 MB", "64 MB").
+	 *
+	 * @param int $bytes Byte count.
+	 * @return string Formatted byte string.
+	 * @since 1.8.0
+	 */
+	public function format_byte_size( int $bytes ): string {
+		if ( $bytes >= 1024 * 1024 * 1024 ) {
+			$gb = $bytes / ( 1024 * 1024 * 1024 );
+			return ( floor( $gb ) === $gb ? (string) (int) $gb : (string) round( $gb, 1 ) ) . ' GB';
+		}
+
+		if ( $bytes >= 1024 * 1024 ) {
+			$mb = $bytes / ( 1024 * 1024 );
+			return ( floor( $mb ) === $mb ? (string) (int) $mb : (string) round( $mb, 1 ) ) . ' MB';
+		}
+
+		if ( $bytes >= 1024 ) {
+			$kb = $bytes / 1024;
+			return ( floor( $kb ) === $kb ? (string) (int) $kb : (string) round( $kb, 1 ) ) . ' KB';
+		}
+
+		return $bytes . ' B';
+	}
+
+	/**
+	 * Compute the effective plugin ZIP upload limit in bytes and formatted string.
+	 *
+	 * Evaluates min(upload_max_filesize, post_max_size) while accounting for post_max_size = 0 (unlimited)
+	 * and multipart payload overhead.
+	 *
+	 * @param string|null $upload_max Optional override for upload_max_filesize (for testing).
+	 * @param string|null $post_max Optional override for post_max_size (for testing).
+	 * @return array{bytes: int, formatted: string} Effective upload limit metadata.
+	 * @since 1.8.0
+	 */
+	public function get_effective_upload_limit( ?string $upload_max = null, ?string $post_max = null ): array {
+		$upload_str = null !== $upload_max ? $upload_max : (string) ini_get( 'upload_max_filesize' );
+		$post_str   = null !== $post_max ? $post_max : (string) ini_get( 'post_max_size' );
+
+		$upload_bytes = $this->parse_ini_size( $upload_str );
+		$post_bytes   = $this->parse_ini_size( $post_str );
+
+		$effective = $upload_bytes;
+		if ( $post_bytes > 0 ) {
+			$effective = ( $upload_bytes > 0 ) ? min( $upload_bytes, $post_bytes ) : $post_bytes;
+		}
+
+		if ( isset( $this->config['PEAKURL_MAX_PLUGIN_UPLOAD_SIZE'] ) ) {
+			$app_bytes = $this->parse_ini_size( (string) $this->config['PEAKURL_MAX_PLUGIN_UPLOAD_SIZE'] );
+			if ( $app_bytes > 0 ) {
+				$effective = min( $effective, $app_bytes );
+			}
+		}
+
+		// Fallback if ini values are unparseable or zero.
+		if ( $effective <= 0 ) {
+			$effective = 2 * 1024 * 1024;
+		}
+
+		return array(
+			'bytes'     => $effective,
+			'formatted' => $this->format_byte_size( $effective ),
+		);
+	}
+
+	/**
+	 * Upload, validate, and install a regular plugin archive.
+	 *
+	 * Performs comprehensive ZIP validation, manifest check, and collision prevention.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Installed plugin metadata.
+	 * @throws ApiException When validation fails or upload is rejected.
+	 * @since 1.8.0
+	 */
+	public function upload_plugin( Request $request ): array {
+		$this->get_plugins_user( $request );
+
+		$effective_limit = $this->get_effective_upload_limit();
+
+		$file = $request->get_file( 'plugin_zip' )
+			?? ( $request->get_file( 'file' ) ?? $request->get_file( 'archive' ) );
+
+		if ( ! is_array( $file ) || empty( $file['tmp_name'] ) ) {
+			$upload_error = is_array( $file ) ? (int) ( $file['error'] ?? UPLOAD_ERR_OK ) : UPLOAD_ERR_OK;
+			if ( UPLOAD_ERR_INI_SIZE === $upload_error || UPLOAD_ERR_FORM_SIZE === $upload_error ) {
+				throw new ApiException(
+					sprintf(
+						// translators: %s: Maximum allowed archive size formatted.
+						__( 'Plugin archive exceeds the %s maximum upload limit.', 'peakurl' ),
+						$effective_limit['formatted']
+					),
+					400
+				);
+			}
+
+			throw new ApiException(
+				__( 'No plugin archive was uploaded.', 'peakurl' ),
+				400
+			);
+		}
+
+		if ( (int) ( $file['error'] ?? UPLOAD_ERR_OK ) !== UPLOAD_ERR_OK ) {
+			$err_code = (int) $file['error'];
+			if ( UPLOAD_ERR_INI_SIZE === $err_code || UPLOAD_ERR_FORM_SIZE === $err_code ) {
+				throw new ApiException(
+					sprintf(
+						// translators: %s: Maximum allowed archive size formatted.
+						__( 'Plugin archive exceeds the %s maximum upload limit.', 'peakurl' ),
+						$effective_limit['formatted']
+					),
+					400
+				);
+			}
+
+			throw new ApiException(
+				// translators: %d: Upload error code.
+				sprintf( __( 'Upload failed with error code: %d.', 'peakurl' ), $err_code ),
+				400
+			);
+		}
+
+		$tmp_file = (string) $file['tmp_name'];
+		if ( ! is_file( $tmp_file ) || ! is_readable( $tmp_file ) ) {
+			throw new ApiException(
+				__( 'Uploaded file is not readable on the server.', 'peakurl' ),
+				400
+			);
+		}
+
+		// Enforce dynamic server upload limit.
+		if ( (int) ( $file['size'] ?? 0 ) > $effective_limit['bytes'] || filesize( $tmp_file ) > $effective_limit['bytes'] ) {
+			throw new ApiException(
+				sprintf(
+					// translators: %s: Maximum allowed archive size formatted.
+					__( 'Plugin archive exceeds the %s maximum upload limit.', 'peakurl' ),
+					$effective_limit['formatted']
+				),
+				400
+			);
+		}
+
+		if ( ! class_exists( '\ZipArchive' ) ) {
+			throw new ApiException(
+				__( 'ZipArchive PHP extension is required on the server to install plugins.', 'peakurl' ),
+				500
+			);
+		}
+
+		$zip = new \ZipArchive();
+		$res = $zip->open( $tmp_file, \ZipArchive::CHECKCONS );
+		if ( true !== $res ) {
+			throw new ApiException(
+				__( 'Uploaded file is not a valid ZIP archive.', 'peakurl' ),
+				400
+			);
+		}
+
+		$max_entries    = 5000;
+		$max_total_size = 100 * 1024 * 1024; // 100 MB.
+		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase -- Built-in PHP ZipArchive property.
+		$num_files          = $zip->numFiles;
+		$total_uncompressed = 0;
+
+		if ( $num_files <= 0 || $num_files > $max_entries ) {
+			$zip->close();
+			throw new ApiException(
+				sprintf(
+					// translators: 1: Number of entries in archive, 2: Maximum allowed entries.
+					__( 'Archive contains an invalid number of entries (%1$d). Maximum permitted is %2$d.', 'peakurl' ),
+					$num_files,
+					$max_entries
+				),
+				400
+			);
+		}
+
+		$manifest_count  = 0;
+		$manifest_index  = null;
+		$manifest_path   = null;
+		$entry_points    = array();
+		$entry_names     = array();
+		$canonical_paths = array();
+
+		for ( $i = 0; $i < $num_files; $i++ ) {
+			$stat = $zip->statIndex( $i );
+			if ( false === $stat ) {
+				continue;
+			}
+
+			$raw_name = (string) $stat['name'];
+
+			// 1. Prohibit Windows backslashes immediately instead of rewriting.
+			if ( str_contains( $raw_name, '\\' ) ) {
+				$zip->close();
+				throw new ApiException(
+					__( 'Archive contains invalid path separator (backslash).', 'peakurl' ),
+					400
+				);
+			}
+
+			// 2. Prohibit null bytes and ASCII control characters.
+			if ( preg_match( '/[\x00-\x1f\x7f]/', $raw_name ) ) {
+				$zip->close();
+				throw new ApiException(
+					__( 'Archive contains unsafe path entries.', 'peakurl' ),
+					400
+				);
+			}
+
+			// 3. Prohibit absolute paths, Windows drive letters, empty path segments (//), and traversal/dot segments.
+			if (
+				str_starts_with( $raw_name, '/' ) ||
+				preg_match( '/^[a-zA-Z]:/', $raw_name ) ||
+				str_contains( $raw_name, '//' ) ||
+				preg_match( '#(^|/)\.{1,2}(/|$)#', $raw_name )
+			) {
+				$zip->close();
+				throw new ApiException(
+					__( 'Archive contains unsafe path entries.', 'peakurl' ),
+					400
+				);
+			}
+
+			// 4. Duplicate and colliding entry detection.
+			if ( isset( $entry_names[ $raw_name ] ) ) {
+				$zip->close();
+				throw new ApiException(
+					__( 'Archive contains duplicate path entries.', 'peakurl' ),
+					400
+				);
+			}
+			$entry_names[ $raw_name ] = true;
+
+			$normalized_name = rtrim( $raw_name, '/' );
+			if ( isset( $canonical_paths[ $normalized_name ] ) && $canonical_paths[ $normalized_name ] !== $raw_name ) {
+				$zip->close();
+				throw new ApiException(
+					__( 'Archive contains colliding path entries.', 'peakurl' ),
+					400
+				);
+			}
+			$canonical_paths[ $normalized_name ] = $raw_name;
+
+			// 5. Detect symlinks and unsupported entry types using ZipArchive::getExternalAttributesIndex().
+			$opsys = 0;
+			$attr  = 0;
+			if ( $zip->getExternalAttributesIndex( $i, $opsys, $attr ) ) {
+				if ( \ZipArchive::OPSYS_UNIX === $opsys ) {
+					$file_mode = ( $attr >> 16 ) & 0170000;
+					if ( 0120000 === $file_mode ) {
+						$zip->close();
+						throw new ApiException(
+							__( 'Archive contains symlinks, which are forbidden.', 'peakurl' ),
+							400
+						);
+					}
+					if ( 0 !== $file_mode && 0100000 !== $file_mode && 0040000 !== $file_mode ) {
+						$zip->close();
+						throw new ApiException(
+							__( 'Archive contains unsupported entry types.', 'peakurl' ),
+							400
+						);
+					}
+				}
+			}
+
+			// 6. Uncompressed and compressed size evaluation using comp_size.
+			$uncompressed_size   = (int) ( $stat['size'] ?? 0 );
+			$compressed_size     = (int) ( $stat['comp_size'] ?? 0 );
+			$total_uncompressed += $uncompressed_size;
+
+			if ( $total_uncompressed > $max_total_size ) {
+				$zip->close();
+				throw new ApiException(
+					__( 'Total decompressed archive size exceeds 100 MB limit.', 'peakurl' ),
+					400
+				);
+			}
+
+			if ( $uncompressed_size > 1024 ) {
+				if ( $compressed_size <= 0 || ( $uncompressed_size / $compressed_size ) > 100 ) {
+					$zip->close();
+					throw new ApiException(
+						__( 'Archive entry exceeds maximum safe compression ratio.', 'peakurl' ),
+						400
+					);
+				}
+			}
+
+			// 7. Track manifests and entry point files.
+			$basename = basename( $raw_name );
+			if ( 'plugin.json' === $basename ) {
+				++$manifest_count;
+				if ( $manifest_count > 1 ) {
+					$zip->close();
+					throw new ApiException(
+						__( 'Archive contains multiple plugin manifests.', 'peakurl' ),
+						400
+					);
+				}
+				$manifest_index = $i;
+				$manifest_path  = $raw_name;
+			} elseif ( 'plugin.php' === $basename ) {
+				$entry_points[ $raw_name ] = $i;
+			}
+		}
+
+		if ( null === $manifest_index || null === $manifest_path ) {
+			$zip->close();
+			throw new ApiException(
+				__( 'Archive must contain plugin.json.', 'peakurl' ),
+				400
+			);
+		}
+
+		$manifest_dir = str_contains( $manifest_path, '/' ) ? dirname( $manifest_path ) : '';
+		$root_folder  = null;
+
+		if ( '' !== $manifest_dir && '.' !== $manifest_dir ) {
+			$dir_segments = explode( '/', $manifest_dir );
+			if ( count( $dir_segments ) > 1 ) {
+				$zip->close();
+				throw new ApiException(
+					__( 'Archive contains plugin manifest nested beyond supported top-level package directory.', 'peakurl' ),
+					400
+				);
+			}
+			$root_folder = $dir_segments[0];
+
+			// Enforce that all entries in the package reside within this single top-level directory.
+			foreach ( array_keys( $entry_names ) as $name ) {
+				if ( $name !== $root_folder && $name !== $root_folder . '/' && ! str_starts_with( $name, $root_folder . '/' ) ) {
+					$zip->close();
+					throw new ApiException(
+						__( 'Archive contains entries outside the single top-level package directory.', 'peakurl' ),
+						400
+					);
+				}
+			}
+
+			$expected_entry_point = $root_folder . '/plugin.php';
+		} else {
+			// Root package layout: plugin.json and plugin.php must both be at root.
+			$expected_entry_point = 'plugin.php';
+		}
+
+		if ( ! isset( $entry_points[ $expected_entry_point ] ) ) {
+			$zip->close();
+			throw new ApiException(
+				__( 'Archive must contain plugin.php in the exact same directory as plugin.json.', 'peakurl' ),
+				400
+			);
+		}
+
+		// Read and validate manifest directly from archive memory.
+		$manifest_raw = $zip->getFromIndex( $manifest_index );
+		if ( false === $manifest_raw || strlen( $manifest_raw ) > Validator::MAX_MANIFEST_BYTES ) {
+			$zip->close();
+			throw new ApiException(
+				__( 'plugin.json is missing or exceeds 64 KB limit.', 'peakurl' ),
+				400
+			);
+		}
+
+		$validator = new Validator();
+		$decoded   = json_decode( $manifest_raw, true );
+		if ( ! is_array( $decoded ) ) {
+			$zip->close();
+			throw new ApiException(
+				__( 'plugin.json contains invalid JSON.', 'peakurl' ),
+				400
+			);
+		}
+
+		$validation = $validator->validate( $decoded );
+		if ( ! $validation['valid'] ) {
+			$zip->close();
+			throw new ApiException(
+				sprintf(
+					// translators: %s: Comma-separated list of validation errors.
+					__( 'Manifest validation failed: %s', 'peakurl' ),
+					implode( '; ', $validation['errors'] )
+				),
+				400
+			);
+		}
+
+		$requires      = (string) ( $validation['manifest']['requires'] ?? '' );
+		$tested_up_to  = (string) ( $validation['manifest']['testedUpTo'] ?? '' );
+		$php_req       = (string) ( $validation['manifest']['php'] ?? '' );
+		$host_version  = (string) ( $this->config[ Constants::VERSION ] ?? '' );
+		$compatibility = $validator->check_compatibility(
+			$requires,
+			$tested_up_to,
+			$php_req,
+			'' !== $host_version ? $host_version : null
+		);
+		if ( ! $compatibility['compatible'] ) {
+			$zip->close();
+			throw new ApiException(
+				sprintf(
+					// translators: %s: Comma-separated list of compatibility errors.
+					__( 'Plugin is incompatible with this system: %s', 'peakurl' ),
+					implode( '; ', $compatibility['errors'] )
+				),
+				400
+			);
+		}
+
+		// Derive and validate identifier.
+		$candidate_id = null !== $root_folder ? (string) $root_folder : '';
+		if ( '' === $candidate_id && isset( $decoded['id'] ) && is_string( $decoded['id'] ) ) {
+			$candidate_id = trim( $decoded['id'] );
+		}
+		if ( '' === $candidate_id ) {
+			$candidate_id = preg_replace( '/[^a-z0-9_-]/', '-', strtolower( (string) ( $decoded['name'] ?? '' ) ) ) ?? '';
+			$candidate_id = trim( $candidate_id, '-_' );
+		}
+
+		if ( '' === $candidate_id || ! preg_match( '/^[a-zA-Z0-9_-]+$/', $candidate_id ) ) {
+			$zip->close();
+			throw new ApiException(
+				__( 'Could not determine a valid plugin folder identifier from archive.', 'peakurl' ),
+				400
+			);
+		}
+
+		$content_dir    = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
+		$plugins_parent = $content_dir . '/plugins';
+		$mu_parent      = $content_dir . '/mu-plugins';
+		$target_dest    = $plugins_parent . '/' . $candidate_id;
+		$mu_target      = $mu_parent . '/' . $candidate_id;
+
+		if (
+			is_link( $target_dest ) || file_exists( $target_dest ) || is_dir( $target_dest ) ||
+			is_link( $mu_target ) || file_exists( $mu_target ) || is_dir( $mu_target )
+		) {
+			$zip->close();
+			throw new ApiException(
+				sprintf(
+					// translators: %s: Plugin identifier.
+					__( 'A plugin with identifier "%s" is already installed.', 'peakurl' ),
+					$candidate_id
+				),
+				409
+			);
+		}
+
+		// Ensure content/plugins directory exists.
+		if ( ! is_dir( $plugins_parent ) ) {
+			mkdir( $plugins_parent, 0755, true );
+		}
+
+		// Stage extracted files on the EXACT SAME filesystem as the destination.
+		$stage_token = bin2hex( random_bytes( 8 ) );
+		$temp_stage  = $plugins_parent . '/.tmp_install_' . $candidate_id . '_' . $stage_token;
+		if ( ! mkdir( $temp_stage, 0755, true ) ) {
+			$zip->close();
+			throw new ApiException(
+				__( 'Could not allocate staging directory on plugins filesystem.', 'peakurl' ),
+				500
+			);
+		}
+
+		$moved = false;
+		try {
+			if ( ! $zip->extractTo( $temp_stage ) ) {
+				throw new ApiException(
+					__( 'Failed to extract plugin archive.', 'peakurl' ),
+					500
+				);
+			}
+			$zip->close();
+
+			$source_dir = null !== $root_folder ? $temp_stage . '/' . $root_folder : $temp_stage;
+			if ( ! is_dir( $source_dir ) ) {
+				throw new ApiException(
+					__( 'Extracted plugin directory could not be located.', 'peakurl' ),
+					500
+				);
+			}
+
+			// Verify on-disk files before final rename.
+			if ( $this->contains_symlink( $source_dir ) ) {
+				throw new ApiException(
+					__( 'Extracted package contains forbidden symbolic links.', 'peakurl' ),
+					400
+				);
+			}
+
+			$disk_manifest_file = $source_dir . '/plugin.json';
+			$disk_entry_file    = $source_dir . '/plugin.php';
+			if (
+				! is_file( $disk_manifest_file ) ||
+				is_link( $disk_manifest_file ) ||
+				! is_file( $disk_entry_file ) ||
+				is_link( $disk_entry_file )
+			) {
+				throw new ApiException(
+					__( 'Package files could not be verified on disk before installation.', 'peakurl' ),
+					400
+				);
+			}
+
+			// Re-check target destination collisions immediately before rename (concurrency defense).
+			if ( is_link( $target_dest ) || file_exists( $target_dest ) || is_dir( $target_dest ) ) {
+				throw new ApiException(
+					sprintf(
+						// translators: %s: Plugin identifier.
+						__( 'A plugin with identifier "%s" is already installed.', 'peakurl' ),
+						$candidate_id
+					),
+					409
+				);
+			}
+
+			// Atomic move on the same filesystem.
+			if ( ! @rename( $source_dir, $target_dest ) ) {
+				throw new ApiException(
+					__( 'Failed to move extracted plugin to content/plugins directory.', 'peakurl' ),
+					500
+				);
+			}
+			$moved = true;
+
+			// Normalize permissions on installed directory.
+			$this->chmod_recursive( $target_dest, 0755, 0644 );
+
+			// Post-move verification with Registry without executing PHP.
+			$registry = new Registry( $content_dir );
+			$meta     = $registry->find( $candidate_id, Type::REGULAR );
+			if ( null === $meta || ! $meta->is_valid() || ! $meta->is_compatible() ) {
+				$err = $meta ? implode( '; ', $meta->errors() ) : 'Discovery verification failed';
+				throw new \RuntimeException( $err );
+			}
+		} catch ( \Throwable $e ) {
+			if ( $moved && ( is_dir( $target_dest ) || is_link( $target_dest ) ) ) {
+				$this->safe_recursive_delete( $target_dest );
+			}
+			if ( $e instanceof ApiException ) {
+				throw $e;
+			}
+			throw new ApiException(
+				sprintf(
+					// translators: %s: Failure reason.
+					__( 'Plugin installation failed verification: %s', 'peakurl' ),
+					$e->getMessage()
+				),
+				500
+			);
+		} finally {
+			if ( is_dir( $temp_stage ) ) {
+				$this->safe_recursive_delete( $temp_stage );
+			}
+		}
+
+		return $meta->with_active( false )->to_array();
+	}
+
+	/**
+	 * Recursively detect whether a directory contains any symbolic links.
+	 *
+	 * @param string $dir Path to inspect.
+	 * @return bool True if any symlink is detected, false otherwise.
+	 */
+	private function contains_symlink( string $dir ): bool {
+		if ( is_link( $dir ) ) {
+			return true;
+		}
+		if ( ! is_dir( $dir ) ) {
+			return false;
+		}
+
+		$entries = scandir( $dir );
+		if ( false === $entries ) {
+			return false;
+		}
+
+		foreach ( $entries as $entry ) {
+			if ( '.' === $entry || '..' === $entry ) {
+				continue;
+			}
+			$path = $dir . DIRECTORY_SEPARATOR . $entry;
+			if ( is_link( $path ) ) {
+				return true;
+			}
+			if ( is_dir( $path ) && $this->contains_symlink( $path ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Recursively set directory and file permissions.
+	 *
+	 * @param string $path Target root directory.
+	 * @param int    $dir_mode Directory permission octal.
+	 * @param int    $file_mode File permission octal.
+	 * @return void
+	 */
+	private function chmod_recursive( string $path, int $dir_mode, int $file_mode ): void {
+		if ( ! is_dir( $path ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Best-effort permissions fixup during install.
+		@chmod( $path, $dir_mode );
+
+		$entries = scandir( $path );
+		if ( false === $entries ) {
+			return;
+		}
+
+		foreach ( $entries as $entry ) {
+			if ( '.' === $entry || '..' === $entry ) {
+				continue;
+			}
+			$full_path = $path . '/' . $entry;
+			if ( is_dir( $full_path ) ) {
+				$this->chmod_recursive( $full_path, $dir_mode, $file_mode );
+			} else {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Best-effort permissions fixup during install.
+				@chmod( $full_path, $file_mode );
+			}
+		}
+	}
+
+	/**
+	 * Safely delete a directory and its contents without traversing symlinks.
+	 *
+	 * @param string $dir Target directory path.
+	 * @return void
+	 */
+	private function safe_recursive_delete( string $dir ): void {
+		if ( ! is_dir( $dir ) ) {
+			return;
+		}
+
+		$entries = scandir( $dir );
+		if ( false === $entries ) {
+			return;
+		}
+
+		foreach ( $entries as $entry ) {
+			if ( '.' === $entry || '..' === $entry ) {
+				continue;
+			}
+
+			$path = $dir . DIRECTORY_SEPARATOR . $entry;
+			if ( is_link( $path ) ) {
+				@unlink( $path );
+			} elseif ( is_dir( $path ) ) {
+				$this->safe_recursive_delete( $path );
+			} else {
+				@unlink( $path );
+			}
+		}
+
+		@rmdir( $dir );
+	}
+
+
 
 	/**
 	 * Get the shared dashboard notice context for the current user.

@@ -492,6 +492,36 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'manage_updates',
 			'coverage'   => array( 'contract', 'auth' ),
 		),
+		'GET /api/v1/plugins'                              => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth' ),
+		),
+		'GET /api/v1/system/plugins'                       => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth', 'e2e' ),
+		),
+		'POST /api/v1/system/plugins/activate'             => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth', 'e2e' ),
+		),
+		'POST /api/v1/system/plugins/deactivate'           => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth', 'e2e' ),
+		),
+		'POST /api/v1/system/plugins/delete'               => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth', 'e2e' ),
+		),
+		'POST /api/v1/system/plugins/upload'               => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth', 'e2e' ),
+		),
 		'GET /api/v1/system/cron'                          => array(
 			'area'       => 'System',
 			'capability' => 'manage_updates',

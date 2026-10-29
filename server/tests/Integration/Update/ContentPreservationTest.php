@@ -85,6 +85,9 @@ class ContentPreservationTest extends TestCase {
 		$this->filesystem->mkdir_p( $this->source_root . '/content/plugins/custom-plugin' );
 		file_put_contents( $this->source_root . '/content/plugins/custom-plugin/plugin.php', '<?php // custom plugin' );
 
+		$this->filesystem->mkdir_p( $this->source_root . '/content/mu-plugins/custom-mu-plugin' );
+		file_put_contents( $this->source_root . '/content/mu-plugins/custom-mu-plugin/plugin.php', '<?php // custom mu-plugin' );
+
 		$this->filesystem->mkdir_p( $this->source_root . '/content/languages' );
 		file_put_contents( $this->source_root . '/content/languages/fr.json', '{"greeting": "bonjour"}' );
 		file_put_contents( $this->source_root . '/content/languages/en.json', '{"greeting": "hello v1"}' );
@@ -137,6 +140,8 @@ class ContentPreservationTest extends TestCase {
 
 		$this->assertFileExists( $this->source_root . '/content/plugins/custom-plugin/plugin.php' );
 		$this->assertSame( '<?php // custom plugin', file_get_contents( $this->source_root . '/content/plugins/custom-plugin/plugin.php' ) );
+		$this->assertFileExists( $this->source_root . '/content/mu-plugins/custom-mu-plugin/plugin.php' );
+		$this->assertSame( '<?php // custom mu-plugin', file_get_contents( $this->source_root . '/content/mu-plugins/custom-mu-plugin/plugin.php' ) );
 
 		$this->assertFileExists( $this->source_root . '/content/languages/fr.json' );
 		$this->assertSame( '{"greeting": "bonjour"}', file_get_contents( $this->source_root . '/content/languages/fr.json' ) );
@@ -251,6 +256,9 @@ class ContentPreservationTest extends TestCase {
 		$this->filesystem->mkdir_p( $this->source_root . '/content/plugins/custom-plugin' );
 		file_put_contents( $this->source_root . '/content/plugins/custom-plugin/plugin.php', '<?php // custom plugin' );
 
+		$this->filesystem->mkdir_p( $this->source_root . '/content/mu-plugins/custom-mu-plugin' );
+		file_put_contents( $this->source_root . '/content/mu-plugins/custom-mu-plugin/plugin.php', '<?php // custom mu-plugin' );
+
 		$this->filesystem->mkdir_p( $this->source_root . '/content/languages' );
 		file_put_contents( $this->source_root . '/content/languages/fr.json', '{"greeting": "bonjour"}' );
 		file_put_contents( $this->source_root . '/content/languages/en.json', '{"greeting": "hello v1"}' );
@@ -322,6 +330,8 @@ class ContentPreservationTest extends TestCase {
 		$this->assertSame( 'avatar-binary-data', file_get_contents( $this->source_root . '/content/uploads/avatar.png' ) );
 		$this->assertFileExists( $this->source_root . '/content/plugins/custom-plugin/plugin.php' );
 		$this->assertSame( '<?php // custom plugin', file_get_contents( $this->source_root . '/content/plugins/custom-plugin/plugin.php' ) );
+		$this->assertFileExists( $this->source_root . '/content/mu-plugins/custom-mu-plugin/plugin.php' );
+		$this->assertSame( '<?php // custom mu-plugin', file_get_contents( $this->source_root . '/content/mu-plugins/custom-mu-plugin/plugin.php' ) );
 		$this->assertFileExists( $this->source_root . '/content/languages/fr.json' );
 		$this->assertSame( '{"greeting": "bonjour"}', file_get_contents( $this->source_root . '/content/languages/fr.json' ) );
 		$this->assertFileExists( $this->source_root . '/content/cache/analytics.cache' );

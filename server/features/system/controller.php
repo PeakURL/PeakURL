@@ -77,6 +77,79 @@ class Controller extends BaseController {
 	}
 
 	/**
+	 * Return installed plugins from regular and must-use directories.
+	 *
+	 * Metadata-only discovery. Never executes plugin code.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON success response.
+	 * @since 1.8.0
+	 */
+	public function plugins( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->get_installed_plugins( $request ),
+			__( 'Installed plugins loaded.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Activate a regular plugin.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 * @since 1.8.0
+	 */
+	public function activate_plugin( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->activate_plugin( $request ),
+			__( 'Plugin activated.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Deactivate a regular plugin.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 * @since 1.8.0
+	 */
+	public function deactivate_plugin( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->deactivate_plugin( $request ),
+			__( 'Plugin deactivated.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Safely delete an inactive regular plugin.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 * @since 1.8.0
+	 */
+	public function delete_plugin( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->delete_plugin( $request ),
+			__( 'Plugin deleted.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Upload and install a regular plugin archive.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 * @since 1.8.0
+	 */
+	public function upload_plugin( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->upload_plugin( $request ),
+			__( 'Plugin installed successfully.', 'peakurl' ),
+		);
+	}
+
+
+	/**
 	 * Return the cached update status.
 	 *
 	 * @param Request $request Incoming HTTP request.

@@ -18,12 +18,17 @@ export const useAdminAccess = () => {
 		canDeleteLinks && Boolean(capabilities.deleteAnyLink);
 	const canManageIntegrations = Boolean(capabilities.manageIntegrations);
 	const canManageMcp = Boolean(capabilities.manageMcp);
+	const canManagePlugins =
+		isAdmin &&
+		(Boolean(capabilities.manageUpdates) ||
+			Boolean(capabilities.manageSiteSettings));
 
 	return {
 		user,
 		capabilities,
 		isAdmin,
 		canManageUsers,
+		canManagePlugins,
 		canManageSiteSettings: Boolean(capabilities.manageSiteSettings),
 		canManageApiKeys: Boolean(capabilities.manageApiKeys),
 		canManageIntegrations,

@@ -4,7 +4,7 @@
 	}
 
 	.plugins-page-loading {
-		@apply rounded-lg border border-stroke bg-surface p-10 text-center;
+		@apply rounded-xl border border-stroke bg-surface p-10 text-center;
 	}
 
 	.plugins-page-loading-spinner {
@@ -12,7 +12,7 @@
 	}
 
 	.plugins-page-gate {
-		@apply rounded-lg border border-stroke bg-surface p-10 text-center shadow-sm;
+		@apply rounded-xl border border-stroke bg-surface p-10 text-center shadow-xs;
 	}
 
 	.plugins-page-gate-icon {
@@ -27,203 +27,18 @@
 		@apply mt-2 text-sm text-text-muted;
 	}
 
-	/* Waitlist Banner */
-	.plugins-page-waitlist-banner {
-		@apply rounded-xl border border-selected-border bg-linear-to-br from-selected/50 to-surface p-4 sm:p-5;
-	}
-
-	.plugins-page-waitlist-layout {
-		@apply flex flex-col gap-3.5 sm:flex-row sm:items-center sm:justify-between;
-	}
-
-	.plugins-page-waitlist-copy {
-		@apply flex-1 min-w-0 space-y-1;
-		text-align: start;
-	}
-
-	.plugins-page-waitlist-heading {
-		@apply flex flex-wrap items-center gap-2 text-heading;
-	}
-
-	.plugins-page-waitlist-badge {
-		@apply inline-flex items-center gap-1 rounded-full border border-selected-border bg-selected px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent;
-	}
-
-	.plugins-page-waitlist-title {
-		@apply text-sm font-semibold text-heading;
-	}
-
-	.plugins-page-waitlist-text {
-		@apply text-xs leading-relaxed text-text-muted;
-	}
-
-	.plugins-page-waitlist-action {
-		@apply shrink-0 pt-1 sm:pt-0;
-	}
-
-	.plugins-page-waitlist-button {
-		@apply inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-action px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-action/90 hover:shadow-md active:shadow-xs;
-	}
-
 	/* Main Panel */
 	.plugins-page-panel {
-		@apply rounded-xl border border-stroke bg-surface p-4 sm:p-5 shadow-xs;
+		@apply rounded-xl border border-stroke bg-surface p-4 sm:p-5 shadow-xs min-w-0 max-w-full;
 		text-align: start;
 	}
 
 	.plugins-page-toolbar {
-		@apply mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-stroke pb-4;
+		@apply mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-stroke pb-4 min-w-0 max-w-full;
 	}
 
-	.plugins-page-toolbar-controls {
-		@apply flex items-center gap-2;
-	}
-
-	.plugins-page-search {
-		@apply relative max-w-55 flex-1;
-	}
-
-	.plugins-page-search-field {
-		@apply pointer-events-none flex h-10 w-full items-center rounded-lg border border-field-border bg-field-readonly-bg text-xs text-field-disabled-text;
-		-webkit-padding-start: 2rem;
-		padding-inline-start: 2rem;
-		-webkit-padding-end: 0.75rem;
-		padding-inline-end: 0.75rem;
-		text-align: start;
-	}
-
-	.plugins-page-search-icon {
-		@apply pointer-events-none absolute inset-y-0 flex items-center text-text-muted;
-		inset-inline-start: 0;
-		-webkit-padding-start: 0.625rem;
-		padding-inline-start: 0.625rem;
-		-webkit-padding-end: 0;
-		padding-inline-end: 0;
-	}
-
-	.plugins-page-view-toggle {
-		@apply flex rounded-lg border border-stroke;
-	}
-
-	.plugins-page-view-button {
-		@apply flex h-10 w-10 items-center justify-center transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent;
-	}
-
-	.plugins-page-view-button-grid {
-		border-start-start-radius: 0.5rem;
-		border-end-start-radius: 0.5rem;
-	}
-
-	.plugins-page-view-button-list {
-		-webkit-border-start: 1px solid var(--color-stroke);
-		border-inline-start: 1px solid var(--color-stroke);
-		border-start-end-radius: 0.5rem;
-		border-end-end-radius: 0.5rem;
-	}
-
-	.plugins-page-view-button-active {
-		@apply bg-selected text-selected-ink;
-	}
-
-	.plugins-page-view-button-inactive {
-		@apply text-text-muted hover:bg-surface-alt;
-	}
-
-	.plugins-page-banner {
-		@apply mb-4 flex items-center gap-3 rounded-lg border border-stroke/60 px-4 py-3;
-	}
-
-	.plugins-page-banner-featured {
-		@apply bg-accent/5 border-accent/20;
-	}
-
-	.plugins-page-banner-popular {
-		@apply bg-orange-500/5 border-orange-500/20;
-	}
-
-	.plugins-page-banner-icon {
-		@apply shrink-0;
-	}
-
-	.plugins-page-banner-icon-featured {
-		@apply text-accent;
-	}
-
-	.plugins-page-banner-icon-popular {
-		@apply text-orange-500;
-	}
-
-	.plugins-page-banner-title {
-		@apply text-xs font-semibold text-heading;
-	}
-
-	.plugins-page-banner-copy {
-		@apply text-xs text-text-muted;
-	}
-
-	.plugins-page-content-wrapper {
-		@apply relative overflow-hidden;
-	}
-
-	.plugins-page-grid {
-		@apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
-	}
-
-	.plugins-page-content-overlay {
-		@apply pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-surface via-surface/80 to-transparent;
-	}
-
-	/* Roadmap Section */
-	.plugins-page-roadmap {
-		@apply overflow-hidden rounded-xl border border-stroke bg-surface p-4 sm:p-6 shadow-xs;
-		text-align: start;
-	}
-
-	.plugins-page-roadmap-inner {
-		@apply relative;
-	}
-
-	.plugins-page-roadmap-glow-end {
-		@apply pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-accent/5 blur-3xl;
-	}
-
-	.plugins-page-roadmap-glow-start {
-		@apply pointer-events-none absolute -left-10 bottom-0 h-44 w-44 rounded-full bg-accent/5 blur-3xl;
-	}
-
-	.plugins-page-roadmap-copy {
-		@apply relative mx-auto max-w-2xl text-center;
-	}
-
-	.plugins-page-roadmap-icon {
-		@apply mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-selected text-selected-ink;
-	}
-
-	.plugins-page-roadmap-title {
-		@apply text-xl font-semibold tracking-tight text-heading sm:text-2xl;
-	}
-
-	.plugins-page-roadmap-description {
-		@apply mx-auto mt-2 max-w-lg text-xs leading-relaxed text-text-muted;
-	}
-
-	.plugins-page-roadmap-grid {
-		@apply relative mt-6 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3;
-	}
-
-	.plugins-page-roadmap-card {
-		@apply rounded-lg border border-stroke bg-surface-alt/40 p-4 transition-all duration-200 hover:shadow-xs hover:border-stroke-strong;
-	}
-
-	.plugins-page-roadmap-card-icon {
-		@apply mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg bg-surface text-accent shadow-xs border border-stroke/60;
-	}
-
-	.plugins-page-roadmap-card-title {
-		@apply text-xs font-semibold text-heading;
-	}
-
-	.plugins-page-roadmap-card-copy {
-		@apply mt-1 text-xs leading-relaxed text-text-muted;
+	/* Footer link to public directory */
+	.plugins-page-footer-note {
+		@apply mt-6 rounded-xl border border-stroke/60 bg-surface-alt/30 p-4;
 	}
 }

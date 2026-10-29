@@ -1,6 +1,12 @@
 @layer components {
 	.plugins-tabs {
-		@apply flex items-center gap-1 overflow-x-auto;
+		@apply flex items-center gap-1 overflow-x-auto max-w-full min-w-0;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	.plugins-tabs::-webkit-scrollbar {
+		display: none;
 	}
 
 	.plugins-tabs-button {

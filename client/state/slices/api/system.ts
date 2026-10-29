@@ -19,6 +19,10 @@ import type {
 	RunCronJobResult,
 	RunDueJobsResult,
 	UpdateCronJobPayload,
+	InstalledPlugin,
+	InstalledPluginsPayload,
+	PublishedPluginsQueryParams,
+	PublishedPluginsResponse,
 } from "@/api";
 
 import baseApi from "./base";
@@ -68,6 +72,7 @@ const DATABASE_UPDATE_TAGS = [
 ] as const;
 const MCP_SETTINGS_TAGS = ["McpSettings"] as const;
 const MCP_CONNECTIONS_TAGS = ["McpConnections"] as const;
+const PLUGINS_TAGS = ["Plugins"] as const;
 const MCP_TOOLS_TAGS = ["McpTools"] as const;
 const MCP_SETTINGS_CHANGE_TAGS = ["McpSettings", "McpTools"] as const;
 
@@ -191,6 +196,93 @@ export const systemApi = baseApi.injectEndpoints({
 		getSystemStatus: build.query<SystemStatusResponse, void>({
 			query: () => API_ROUTES.system.status,
 			providesTags: SYSTEM_STATUS_TAGS,
+		}),
+		getInstalledPlugins: build.query<
+			ApiDataResponse<InstalledPluginsPayload>,
+			void
+		>({
+			query: () => API_ROUTES.system.plugins,
+			providesTags: PLUGINS_TAGS,
+		}),
+		getPublishedPlugins: build.query<
+			PublishedPluginsResponse,
+			PublishedPluginsQueryParams | void
+		>({
+			query: (params) => {
+				const queryParams = new URLSearchParams();
+				if (params?.q?.trim()) {
+					queryParams.set("q", params.q.trim());
+				}
+				if (params?.sort) {
+					queryParams.set("sort", params.sort);
+				}
+				if (params?.page) {
+					queryParams.set("page", String(params.page));
+				}
+				if (params?.limit) {
+					queryParams.set("limit", String(params.limit));
+				}
+				if (params?.tag) {
+					queryParams.set("tag", params.tag);
+				}
+				const qs = queryParams.toString();
+				return {
+					url: `https://api.peakurl.org/v1/plugins${qs ? `?${qs}` : ""}`,
+					credentials: "omit",
+				};
+			},
+		}),
+		activatePlugin: build.mutation<
+			ApiDataResponse<{
+				id: string;
+				active: boolean;
+				activePlugins: string[];
+			}>,
+			{ id: string }
+		>({
+			query: ({ id }) => ({
+				url: API_ROUTES.system.pluginsActivate,
+				method: "POST",
+				body: { id },
+			}),
+			invalidatesTags: PLUGINS_TAGS,
+		}),
+		deactivatePlugin: build.mutation<
+			ApiDataResponse<{
+				id: string;
+				active: boolean;
+				activePlugins: string[];
+			}>,
+			{ id: string }
+		>({
+			query: ({ id }) => ({
+				url: API_ROUTES.system.pluginsDeactivate,
+				method: "POST",
+				body: { id },
+			}),
+			invalidatesTags: PLUGINS_TAGS,
+		}),
+		deletePlugin: build.mutation<
+			ApiDataResponse<{ id: string; deleted: boolean }>,
+			{ id: string }
+		>({
+			query: ({ id }) => ({
+				url: API_ROUTES.system.pluginsDelete,
+				method: "POST",
+				body: { id },
+			}),
+			invalidatesTags: PLUGINS_TAGS,
+		}),
+		uploadPlugin: build.mutation<
+			ApiDataResponse<InstalledPlugin>,
+			FormData
+		>({
+			query: (formData) => ({
+				url: API_ROUTES.system.pluginsUpload,
+				method: "POST",
+				body: formData,
+			}),
+			invalidatesTags: PLUGINS_TAGS,
 		}),
 		saveGeneralSettings: build.mutation<
 			ApiDataResponse<SiteSettings>,
@@ -526,6 +618,12 @@ export const {
 	useGetAdminNoticesQuery,
 	useGetGeneralSettingsQuery,
 	useGetSystemStatusQuery,
+	useGetInstalledPluginsQuery,
+	useGetPublishedPluginsQuery,
+	useActivatePluginMutation,
+	useDeactivatePluginMutation,
+	useDeletePluginMutation,
+	useUploadPluginMutation,
 	useGetCacheStatusQuery,
 	useSaveGeneralSettingsMutation,
 	useSaveCacheConfigurationMutation,

@@ -1,26 +1,10 @@
 @layer components {
-	.plugins-status-pill {
-		@apply inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold;
-	}
-
-	.plugins-status-pill-active {
-		@apply gap-1.5 border border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400;
-	}
-
-	.plugins-status-pill-inactive {
-		@apply border border-gray-500/20 bg-gray-500/10 text-gray-600 dark:text-gray-400;
-	}
-
-	.plugins-status-pill-dot {
-		@apply h-1.5 w-1.5 rounded-full bg-emerald-500;
-	}
-
 	.plugins-table-empty {
-		@apply rounded-lg border border-dashed border-stroke bg-surface-alt/30 px-6 py-10 text-center;
+		@apply px-4 py-16 text-center max-w-md mx-auto;
 	}
 
 	.plugins-table-empty-icon {
-		@apply mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-surface-alt text-text-muted;
+		@apply mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-surface-alt text-text-muted border border-stroke/60;
 	}
 
 	.plugins-table-empty-title {
@@ -28,11 +12,11 @@
 	}
 
 	.plugins-table-empty-copy {
-		@apply mt-1 text-xs text-text-muted;
+		@apply mt-1 text-xs text-text-muted leading-relaxed;
 	}
 
 	.plugins-table {
-		@apply overflow-hidden rounded-lg border border-stroke bg-surface shadow-xs;
+		@apply w-full overflow-hidden;
 	}
 
 	.plugins-table-wrap {
@@ -40,7 +24,7 @@
 	}
 
 	.plugins-table-grid {
-		@apply min-w-full;
+		@apply min-w-full table-auto divide-y divide-stroke;
 	}
 
 	.plugins-table-head-row {
@@ -49,7 +33,7 @@
 	}
 
 	.plugins-table-head-cell {
-		@apply px-4 py-3 text-xs font-semibold uppercase tracking-wide text-table-head-text;
+		@apply px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-table-head-text;
 		text-align: start;
 	}
 
@@ -58,36 +42,19 @@
 	}
 
 	.plugins-table-row {
-		@apply transition-colors hover:bg-surface-alt/40 border-b border-stroke/60 last:border-0;
+		@apply transition-colors hover:bg-surface-alt/40 border-b border-stroke/60;
 	}
 
 	.plugins-table-cell {
-		@apply px-4 py-3.5;
+		@apply px-4 py-3.5 text-xs text-text-muted;
 		text-align: start;
+	}
+
+	.plugins-table-cell-end {
+		text-align: end;
 	}
 
 	.plugins-table-main {
 		@apply flex items-center justify-start gap-3;
-	}
-
-	.plugins-table-icon {
-		@apply flex h-9 w-9 shrink-0 items-center justify-center rounded-lg opacity-80;
-	}
-
-	.plugins-table-icon-fill {
-		@apply h-4.5 w-4.5 rounded bg-white/30;
-	}
-
-	.plugins-table-copy {
-		@apply min-w-0 flex-1 space-y-1;
-		text-align: start;
-	}
-
-	.plugins-table-actions {
-		@apply flex items-center justify-end gap-1;
-	}
-
-	.plugins-table-more {
-		@apply flex h-8 w-8 items-center justify-center rounded-lg text-text-muted opacity-50;
 	}
 }

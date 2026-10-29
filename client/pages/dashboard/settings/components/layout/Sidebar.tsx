@@ -73,7 +73,9 @@ const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 										className={getIconClassName(isActive)}
 									/>
 								)}
-								{tab.name}
+								<span className="flex-1 truncate">
+									{tab.name}
+								</span>
 							</Link>
 						);
 					})}

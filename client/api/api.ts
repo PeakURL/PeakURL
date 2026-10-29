@@ -529,6 +529,41 @@ export const API_ROUTES = {
 		notices: apiPath("system", "notices"),
 
 		/**
+		 * Relative API path: `system/plugins`.
+		 *
+		 * Loads discovered installed plugin inventory.
+		 */
+		plugins: apiPath("system", "plugins"),
+
+		/**
+		 * Relative API path: `system/plugins/activate`.
+		 *
+		 * Activates an installed regular plugin.
+		 */
+		pluginsActivate: apiPath("system", "plugins", "activate"),
+
+		/**
+		 * Relative API path: `system/plugins/deactivate`.
+		 *
+		 * Deactivates an active regular plugin.
+		 */
+		pluginsDeactivate: apiPath("system", "plugins", "deactivate"),
+
+		/**
+		 * Relative API path: `system/plugins/delete`.
+		 *
+		 * Deletes an inactive regular plugin directory.
+		 */
+		pluginsDelete: apiPath("system", "plugins", "delete"),
+
+		/**
+		 * Relative API path: `system/plugins/upload`.
+		 *
+		 * Uploads and extracts a regular plugin ZIP archive.
+		 */
+		pluginsUpload: apiPath("system", "plugins", "upload"),
+
+		/**
 		 * Relative API path: `system/status`.
 		 *
 		 * Loads system status and diagnostics.

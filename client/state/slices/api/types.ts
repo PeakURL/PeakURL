@@ -140,7 +140,8 @@ export type ApiTagType =
 	| "Roles"
 	| "McpSettings"
 	| "McpConnections"
-	| "McpTools";
+	| "McpTools"
+	| "Plugins";
 
 /**
  * Ordered list of RTK Query cache tags registered on the base API instance.
@@ -172,6 +173,7 @@ export const API_TAG_TYPES: ApiTagType[] = [
 	"McpSettings",
 	"McpConnections",
 	"McpTools",
+	"Plugins",
 ];
 
 /**

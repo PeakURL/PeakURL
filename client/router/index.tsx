@@ -197,6 +197,7 @@ function AppRouter() {
 					<Route element={<AdminOnlyRoute />}>
 						<Route path="activity" element={<ActivityPage />} />
 						<Route path="plugins" element={<PluginsPage />} />
+						<Route path="plugins/add" element={<PluginsPage />} />
 						<Route path="users" element={<UsersPage />} />
 					</Route>
 					<Route

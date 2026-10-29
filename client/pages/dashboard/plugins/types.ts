@@ -1,14 +1,7 @@
-import type { LucideIcon } from "lucide-react";
-
 /**
  * Supported plugin dashboard tabs.
  */
-export type TabId = "installed" | "browse" | "featured" | "popular";
-
-/**
- * Available layout modes for plugin cards.
- */
-export type ViewMode = "grid" | "list";
+export type TabId = "installed" | "must_use";
 
 /**
  * Tab metadata rendered in the plugin header.
@@ -24,19 +17,23 @@ export interface PluginTabItem {
 	count?: number;
 }
 
-/**
- * Props for a single roadmap feature card.
- */
-export interface FeatureRoadmapCardProps {
-	/** Lucide icon rendered for the roadmap item. */
-	icon: LucideIcon;
+export type {
+	InstalledPlugin,
+	InstalledPluginsPayload,
+	PluginUploadLimit,
+	PluginType,
+	PluginResourceLinks,
+} from "@/api";
 
-	/** Roadmap feature title. */
-	title: string;
-
-	/** Supporting roadmap description. */
-	description: string;
-
-	/** Gradient utility classes applied to the card background. */
-	gradient: string;
-}
+export type {
+	PublishedPluginListing,
+	PublishedPluginAuthor,
+	PublishedPluginTag,
+	PublishedPluginMedia,
+	PublishedPluginTrust,
+	PublishedPluginDistribution,
+	PublishedPluginsPagination,
+	PublishedPluginsResponse,
+	PublishedPluginsQueryParams,
+	PluginSortOption,
+} from "@/api";

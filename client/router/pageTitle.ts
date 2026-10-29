@@ -85,6 +85,10 @@ export function getPageTitle(pathname: string): string {
 		return withSiteTitleSuffix(__("Plugins"));
 	}
 
+	if ("/dashboard/plugins/add" === pathname) {
+		return withSiteTitleSuffix(__("Add Plugins"));
+	}
+
 	if ("/dashboard/users" === pathname) {
 		return withSiteTitleSuffix(__("Users"));
 	}

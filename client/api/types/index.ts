@@ -13,6 +13,7 @@ export type * from "./cron";
 export type * from "./imports";
 export type * from "./links";
 export type * from "./notices";
+export type * from "./plugins";
 export type * from "./roles";
 export type * from "./settings";
 export type * from "./system";

@@ -78,7 +78,10 @@ function getDashboardBodyClassNames(pathname: string): string[] {
 		return classes;
 	}
 
-	if ("/dashboard/plugins" === pathname) {
+	if (
+		"/dashboard/plugins" === pathname ||
+		"/dashboard/plugins/add" === pathname
+	) {
 		classes.push("page-dashboard-plugins");
 		return classes;
 	}

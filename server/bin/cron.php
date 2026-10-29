@@ -50,6 +50,7 @@ try {
 }
 
 $connection = new Connection( $config );
+\PeakURL\Core\Plugins\Loader::bootstrap( $config, $connection );
 
 $logger = function ( string $message ): void {
 	$timestamp = gmdate( 'Y-m-d H:i:s' );

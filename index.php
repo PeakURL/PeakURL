@@ -680,6 +680,7 @@ if ( '/' === $relative_path && InstallationState::READY === $install_state ) {
 	$connection   = new Connection( $app_config );
 	$settings_api = new SettingsApi( new PeakURL_DB( $connection ) );
 	\PeakURL\Core\Scheduler\BackgroundDispatcher::register_hooks( $app_config, $connection );
+	\PeakURL\Core\Plugins\Loader::bootstrap( $app_config, $connection, $settings_api );
 
 	$landing_page_mode = $settings_api->get_option( 'landing_page_mode' );
 	if ( empty( $landing_page_mode ) ) {
@@ -716,6 +717,7 @@ $app_config = Configuration::bootstrap( $runtime_path );
 $connection = new Connection( $app_config );
 load_i18n( $app_config, $connection );
 \PeakURL\Core\Scheduler\BackgroundDispatcher::register_hooks( $app_config, $connection );
+\PeakURL\Core\Plugins\Loader::bootstrap( $app_config, $connection );
 
 /**
  * Fires after PeakURL has loaded configuration, translations, and shared helpers.

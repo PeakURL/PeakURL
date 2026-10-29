@@ -139,7 +139,8 @@ class Application {
 		$schema         = new DatabaseSchema( $connection, $schema_path );
 		$content_dir    = (string) ( $config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
 
-		$settings_api  = new SettingsApi( $db );
+		$settings_api = new SettingsApi( $db );
+		\PeakURL\Core\Plugins\Loader::bootstrap( $this->config, $this->connection, $settings_api );
 		$users_api     = new UsersApi( $db );
 		$links_api     = new LinksApi( $db, null, $settings_api );
 		$cache_service = CacheManager::resolve( $config, $content_dir );
@@ -870,6 +871,12 @@ class Application {
 			array(
 				array( 'get', '/system/notices', array( $system, 'notices' ) ),
 				array( 'get', '/system/status', array( $system, 'status' ) ),
+				array( 'get', '/system/plugins', array( $system, 'plugins' ) ),
+				array( 'get', '/plugins', array( $system, 'plugins' ) ),
+				array( 'post', '/system/plugins/activate', array( $system, 'activate_plugin' ) ),
+				array( 'post', '/system/plugins/deactivate', array( $system, 'deactivate_plugin' ) ),
+				array( 'post', '/system/plugins/delete', array( $system, 'delete_plugin' ) ),
+				array( 'post', '/system/plugins/upload', array( $system, 'upload_plugin' ) ),
 				array( 'get', '/system/update', array( $system, 'update_status' ) ),
 				array( 'post', '/system/update/check', array( $system, 'update_check' ) ),
 				array( 'post', '/system/update/apply', array( $system, 'update_apply' ) ),

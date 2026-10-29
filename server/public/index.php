@@ -114,6 +114,7 @@ if ( 'OPTIONS' === ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 
 $connection = new Connection( $config );
 load_i18n( $config, $connection );
+\PeakURL\Core\Plugins\Loader::bootstrap( $config, $connection );
 
 /**
  * Fires after PeakURL has loaded configuration, translations, and shared helpers.

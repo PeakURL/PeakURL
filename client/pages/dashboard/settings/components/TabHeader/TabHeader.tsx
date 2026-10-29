@@ -10,6 +10,7 @@ interface TabHeaderProps {
 	description: string;
 	documentationHref?: string;
 	actions?: ReactNode;
+	badge?: ReactNode;
 }
 
 /** Plain tab introduction, distinct from the grouped section headings beneath it. */
@@ -19,11 +20,14 @@ export function TabHeader({
 	description,
 	documentationHref,
 	actions,
+	badge,
 }: TabHeaderProps) {
 	return (
 		<div className="settings-tab-header">
 			<div className="settings-tab-header-copy">
-				<SectionTitle icon={icon}>{title}</SectionTitle>
+				<SectionTitle icon={icon} badge={badge}>
+					{title}
+				</SectionTitle>
 				<p className="settings-group-description">{description}</p>
 			</div>
 			{(documentationHref || actions) && (

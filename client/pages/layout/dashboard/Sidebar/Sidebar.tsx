@@ -35,7 +35,7 @@ const getNavItems = (
 			: basePath.endsWith("/") && basePath.length > 1
 				? basePath.slice(0, -1)
 				: basePath || "/dashboard";
-	const navigation = [
+	const navigation: NavItem[] = [
 		{
 			name: __("Overview"),
 			href: base || "/",
@@ -57,6 +57,8 @@ const getNavItems = (
 			href: `${base || ""}/plugins`,
 			icon: dashboardPageIcons.plugins,
 			adminOnly: true,
+			badge: __("Preview"),
+			badgeVariant: "preview",
 		},
 		{
 			name: __("Tools"),
@@ -449,6 +451,18 @@ export const Sidebar = ({
 												{formatCount(totalLinks)}
 											</span>
 										)}
+									{item.badge && (
+										<span
+											className={cn(
+												getLinkBadgeClassName(isActive),
+												item.badgeVariant ===
+													"preview" &&
+													"dashboard-sidebar-link-badge-preview"
+											)}
+										>
+											{item.badge}
+										</span>
+									)}
 								</Link>
 							);
 						})}

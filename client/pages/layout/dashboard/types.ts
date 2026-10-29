@@ -75,6 +75,12 @@ export interface NavItem {
 
 	/** Nested child links for collapsible sections. */
 	children?: NavChild[];
+
+	/** Optional badge label rendered beside the item label. */
+	badge?: string;
+
+	/** Visual styling variant for the badge. */
+	badgeVariant?: "neutral" | "preview" | "accent";
 }
 
 /**

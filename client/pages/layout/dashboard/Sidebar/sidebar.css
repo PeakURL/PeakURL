@@ -165,12 +165,20 @@
 
 	.dashboard-sidebar-link-badge {
 		@apply rounded-md bg-surface-alt px-2 py-0.5 text-xs font-semibold text-text-muted transition-[opacity,max-width] duration-200;
-		max-width: 60px;
+		max-width: 80px;
 		opacity: 1;
 	}
 
 	.dashboard-sidebar-link-badge-active {
 		@apply bg-selected-ink/10 text-selected-ink;
+	}
+
+	.dashboard-sidebar-link-badge-preview {
+		@apply rounded border border-stroke/70 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-text-muted;
+	}
+
+	.dashboard-sidebar-link-badge-active.dashboard-sidebar-link-badge-preview {
+		@apply border-selected-border/80 bg-selected-ink/10 text-selected-ink;
 	}
 
 	.dashboard-sidebar-footer {

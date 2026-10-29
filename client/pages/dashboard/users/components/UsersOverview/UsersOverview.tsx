@@ -29,6 +29,9 @@ export function UsersOverview({
 							>
 								<Shield size={16} />
 								<span>{__("Manage Roles & Capabilities")}</span>
+								<span className="users-page-roles-badge-new">
+									{__("New")}
+								</span>
 							</Button>
 						) : null}
 						<Button

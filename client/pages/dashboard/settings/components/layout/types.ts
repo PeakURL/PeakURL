@@ -38,6 +38,16 @@ export interface SettingsTabItem {
 	 * Icon associated with the tab.
 	 */
 	icon: SettingsTabIcon;
+
+	/**
+	 * Optional badge label shown beside the tab name (e.g., "New").
+	 */
+	badge?: string;
+
+	/**
+	 * Visual styling variant for the badge.
+	 */
+	badgeVariant?: "new" | "preview" | "neutral";
 }
 
 /**

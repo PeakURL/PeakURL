@@ -7,16 +7,22 @@ export type SettingsIconComponent =
 interface SectionTitleProps {
 	icon: SettingsIconComponent;
 	children: ReactNode;
+	badge?: ReactNode;
 }
 
 /** Consistent section identity for settings forms, status summaries, and controls. */
-export function SectionTitle({ icon: Icon, children }: SectionTitleProps) {
+export function SectionTitle({
+	icon: Icon,
+	children,
+	badge,
+}: SectionTitleProps) {
 	return (
 		<h2 className="settings-section-title">
 			<span className="settings-section-icon" aria-hidden="true">
 				<Icon size={18} />
 			</span>
 			<span>{children}</span>
+			{badge}
 		</h2>
 	);
 }

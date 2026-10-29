@@ -239,6 +239,11 @@ export function McpTab({ notification }: McpTabProps) {
 				<TabHeader
 					icon={McpIcon}
 					title={__("Model Context Protocol (MCP)")}
+					badge={
+						<span className="mcp-badge mcp-badge-neutral text-[11px] font-medium">
+							{__("Preview")}
+						</span>
+					}
 					description={__(
 						"Connect AI clients directly to PeakURL using Model Context Protocol (MCP) and OAuth 2.0 PKCE."
 					)}

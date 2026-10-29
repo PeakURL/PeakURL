@@ -27,7 +27,16 @@
 	}
 
 	.users-page-hero-action-button {
-		@apply whitespace-nowrap justify-center w-full sm:w-auto;
+		@apply relative whitespace-nowrap justify-center w-full sm:w-auto;
+	}
+
+	.users-page-roles-badge-new {
+		@apply absolute -top-2.5 end-3 z-10 pointer-events-none rounded border border-accent/25 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-accent shadow-xs;
+		background-color: color-mix(
+			in srgb,
+			var(--color-accent) 15%,
+			var(--color-surface, #ffffff)
+		);
 	}
 
 	/* Overview Metric Cards - Uniform 4-column grid */

@@ -37,4 +37,16 @@
 	.settings-sidebar-icon-inactive {
 		@apply text-text-muted;
 	}
+
+	.settings-sidebar-link-badge {
+		@apply shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-colors;
+	}
+
+	.settings-sidebar-link-badge-new {
+		@apply border border-accent/25 bg-accent/15 text-accent;
+	}
+
+	.settings-sidebar-link-active .settings-sidebar-link-badge-new {
+		@apply border-selected-border bg-selected-ink/15 text-selected-ink;
+	}
 }

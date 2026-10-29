@@ -76,6 +76,19 @@ const Sidebar = ({ tabs, activeTab }: SidebarProps) => {
 								<span className="flex-1 truncate">
 									{tab.name}
 								</span>
+								{tab.badge && (
+									<span
+										className={cn(
+											"settings-sidebar-link-badge",
+											tab.badgeVariant === "new" &&
+												"settings-sidebar-link-badge-new",
+											isActive &&
+												"settings-sidebar-link-badge-active"
+										)}
+									>
+										{tab.badge}
+									</span>
+								)}
 							</Link>
 						);
 					})}

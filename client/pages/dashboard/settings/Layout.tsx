@@ -45,6 +45,8 @@ function Layout({ children }: SettingsLayoutProps) {
 			id: "mcp",
 			name: __("MCP Server"),
 			icon: "mcp",
+			badge: __("New"),
+			badgeVariant: "new",
 		});
 	}
 

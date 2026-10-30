@@ -7,7 +7,7 @@ PeakURL uses a modern, high-performance quality toolchain tailored to our open-s
 - **Web & Dashboard UI**: Modern ESLint Flat Config (`eslint.config.js`) with TypeScript-ESLint, React Hooks, JSX A11y accessibility standards, and Prettier formatting.
 - **PHP Application Runtime**: PHP_CodeSniffer and PHPCBF using WordPress Coding Standards (WordPressCS) via `phpcs.xml`.
 - **Pre-commit Automation**: Husky + `lint-staged` ensuring staged files are formatted and linted before commits.
-- **Continuous Integration**: GitHub Actions CI Quality Gate (`.github/workflows/ci.yml`) enforcing format checks, linting, syntax validation, and production builds on every PR and push to `main`.
+- **Continuous Integration**: GitHub Actions CI Quality Gate (`.github/workflows/ci.yml`) enforcing format checks, linting, syntax validation, automated tests, and production builds on every PR and push to `main`.
 
 ---
 
@@ -176,14 +176,21 @@ Configuration lives in [`package.json`](../../package.json) under the `"lint-sta
 
 ## GitHub Actions CI Quality Gate
 
-Continuous Integration is configured via [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). Every pull request and push to the `main` branch undergoes automated quality verification:
+Continuous Integration is managed through [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml). To keep feedback quick, the workflow detects which files changed and conditionally runs the relevant jobs:
 
-1. **Environment Setup**: Node.js 24 and PHP 8.3+ (matrix validating PHP 8.3, 8.4, and 8.5) with required PDO/Zip extensions.
-2. **Dependency Installation**: `npm ci` & `composer install` (in `server/`).
-3. **Format Check**: `npm run format:check` (Prettier & PHPCS).
-4. **Linters**: `npm run lint` (ESLint with Flat Config & PHPCS with WordPressCS).
-5. **PHP Syntax Check**: `npm run lint:php:syntax` (`php -l` sweep).
-6. **TypeScript & Production Build**: `npm run build` (`tsc -b && vite build`).
+- **Backend Job**: Runs when PHP source files, database migrations, backend scripts, `compose.yaml`, or root entrypoints change. Across a PHP matrix (8.3, 8.4, and 8.5) backed by a MySQL 8.4 service container, it checks coding standards (`composer --working-dir=server run phpcs`), validates PHP syntax (`npm run lint:php:syntax`), sets up the test database, and runs PHPUnit tests (`npm run test:server`).
+- **Frontend Job**: Runs when dashboard files under `client/`, dependencies, build configuration, or unit tests under `tests/unit/` change. On Node.js 24, it checks Prettier formatting (`npm run format:web:check`), runs ESLint (`npm run lint:web`), executes Playwright unit tests (`npm run test:unit`), and verifies the TypeScript build (`npm run build`).
+- **Release Check Job**: Runs when packaging scripts or version metadata change, verifying that the self-hosted release package builds cleanly (`npm run release:build`).
+
+### End-to-End Workflow
+
+Browser end-to-end tests and authentication smoke tests run via [`.github/workflows/e2e.yml`](../../.github/workflows/e2e.yml). This workflow runs on pull requests targeting `main` that modify application code, Docker assets, or test files (including `client/**`, `server/**`, `docker/**`, `compose.yaml`, `tests/e2e/**`, `scripts/smoke-auth.sh`, root entrypoints, and package manifests):
+
+- Starts the Docker stack and waits for the `peakurl-server` and `peakurl-client` containers to report healthy.
+- Runs authentication smoke tests: `npm run smoke:auth`.
+- Runs browser E2E tests: `npx playwright test --project=chromium`.
+
+Documentation-only modifications and paths outside these filters do not trigger the E2E workflow.
 
 ---
 
@@ -201,7 +208,10 @@ npm run lint
 # 3. Check PHP syntax
 npm run lint:php:syntax
 
-# 4. Verify TypeScript and production build
+# 4. Run automated tests (requires MySQL test DB for server integration tests)
+npm test
+
+# 5. Verify TypeScript and production build
 npm run build
 ```
 
@@ -210,6 +220,7 @@ If you only worked on the React UI:
 ```bash
 npm run format:web
 npm run lint:web:fix
+npm run test:unit
 npm run build
 ```
 
@@ -219,7 +230,10 @@ If you only worked on the PHP runtime:
 npm run format:php
 npm run lint:php
 npm run lint:php:syntax
+npm run test:server
 ```
+
+For browser E2E tests (`npx playwright test --project=chromium`) and auth smoke tests (`npm run smoke:auth`), see the [Automated Testing guide in DEVELOPMENT.md](DEVELOPMENT.md#automated-testing).
 
 ## Editor Notes
 

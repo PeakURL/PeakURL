@@ -522,6 +522,36 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'manage_updates',
 			'coverage'   => array( 'contract', 'auth', 'e2e' ),
 		),
+		'GET /api/v1/system/plugins/extensions'            => array(
+			'area'       => 'System',
+			'capability' => 'authenticated',
+			'coverage'   => array( 'contract', 'auth', 'integration' ),
+		),
+		'GET /api/v1/system/plugins/{slug}/page/{pageId}'  => array(
+			'area'       => 'System',
+			'capability' => 'authenticated',
+			'coverage'   => array( 'contract', 'auth', 'integration' ),
+		),
+		'GET /api/v1/system/plugins/{slug}/settings'       => array(
+			'area'       => 'System',
+			'capability' => 'manage_site_settings',
+			'coverage'   => array( 'contract', 'auth', 'integration' ),
+		),
+		'POST /api/v1/system/plugins/{slug}/settings'      => array(
+			'area'       => 'System',
+			'capability' => 'manage_site_settings',
+			'coverage'   => array( 'contract', 'auth', 'integration' ),
+		),
+		'POST /api/v1/system/plugins/{slug}/actions/{actionId}' => array(
+			'area'       => 'System',
+			'capability' => 'authenticated',
+			'coverage'   => array( 'contract', 'auth', 'integration' ),
+		),
+		'GET /api/v1/system/plugins/{slug}/assets/{assetPath:+}' => array(
+			'area'       => 'System',
+			'capability' => 'authenticated',
+			'coverage'   => array( 'contract', 'auth', 'integration' ),
+		),
 		'GET /api/v1/system/cron'                          => array(
 			'area'       => 'System',
 			'capability' => 'manage_updates',

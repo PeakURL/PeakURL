@@ -254,10 +254,17 @@ class Router {
 
 		foreach ( $parts as $part ) {
 			if (
-				preg_match( '/^\{([^}]+)\}$/', $part, $matches )
+				preg_match( '/^\{([^}:]+)(?::(\+|\*))?\}$/', $part, $matches )
 			) {
-				$params[] = $matches[1];
-				$regex   .= '([^/]+)';
+				$params[]   = $matches[1];
+				$quantifier = $matches[2] ?? '';
+				if ( '+' === $quantifier ) {
+					$regex .= '(.+)';
+				} elseif ( '*' === $quantifier ) {
+					$regex .= '(.*)';
+				} else {
+					$regex .= '([^/]+)';
+				}
 				continue;
 			}
 

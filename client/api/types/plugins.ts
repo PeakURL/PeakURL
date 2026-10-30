@@ -16,7 +16,8 @@ export type PluginType = "regular" | "must_use";
  */
 export interface PluginResourceLinks {
 	readonly licenseUri?: string;
-	readonly homepage?: string;
+	readonly pluginUri?: string;
+	readonly authorUri?: string | null;
 	readonly documentation?: string;
 	readonly repository?: string;
 	readonly support?: string;
@@ -35,7 +36,7 @@ export interface InstalledPlugin extends PluginResourceLinks {
 	readonly typeLabel: string;
 	/** Display name from manifest. */
 	readonly name: string;
-	/** Short plain-text description extracted from README if available. */
+	/** Short plain-text description extracted from manifest or README. */
 	readonly description?: string | null;
 	/** Semantic version string. */
 	readonly version: string;
@@ -47,16 +48,20 @@ export interface InstalledPlugin extends PluginResourceLinks {
 	readonly php: string;
 	/** License identifier. */
 	readonly license: string;
+	/** Independent translation text domain matching plugin slug. */
+	readonly textDomain?: string;
+	/** Relative directory containing translation files. */
+	readonly domainPath?: string;
 	/** Whether manifest passed schema and structural validation. */
 	readonly valid: boolean;
 	/** Whether plugin is compatible with current host environment. */
 	readonly compatible: boolean;
 	/** Whether the regular plugin is currently active. */
 	readonly active?: boolean;
-	/** Author / publisher name if present in manifest or directory metadata. */
-	readonly author?: string;
-	/** Verified author / publisher profile URL if available. */
-	readonly authorUrl?: string;
+	/** Author / publisher name if present in manifest or header metadata. */
+	readonly author?: string | null;
+	/** Verified author / publisher website URL if available. */
+	readonly authorUri?: string | null;
 	/** Validation error messages. */
 	readonly errors: readonly string[];
 	/** Compatibility warning messages. */
@@ -229,4 +234,94 @@ export interface PublishedPluginsQueryParams {
 	readonly page?: number;
 	readonly limit?: number;
 	readonly tag?: string;
+}
+
+/**
+ * Registered scoped browser asset definition.
+ */
+export interface PluginAssetDescriptor {
+	readonly pluginSlug: string;
+	readonly file: string;
+	readonly url: string;
+	readonly type: "script" | "style";
+	readonly scope: string;
+	readonly pageId?: string | null;
+	readonly version?: string;
+}
+
+/**
+ * Form field definition in declarative plugin admin page.
+ */
+export interface PluginFormFieldDescriptor {
+	readonly key: string;
+	readonly label: string;
+	readonly type: "text" | "textarea" | "switch" | "select" | "number";
+	readonly description?: string;
+	readonly default?: unknown;
+	readonly placeholder?: string;
+	readonly options?: readonly {
+		readonly label: string;
+		readonly value: string | number;
+	}[];
+}
+
+/**
+ * Declarative section in plugin admin page.
+ */
+export interface PluginPageSectionDescriptor {
+	readonly id: string;
+	readonly title: string;
+	readonly description?: string;
+	readonly fields: readonly PluginFormFieldDescriptor[];
+}
+
+/**
+ * Page action button definition.
+ */
+export interface PluginPageActionDescriptor {
+	readonly id: string;
+	readonly label: string;
+	readonly variant?: "primary" | "secondary" | "danger";
+	readonly capability?: string;
+}
+
+/**
+ * Registered admin page descriptor.
+ */
+export interface PluginPageDescriptor {
+	readonly pluginSlug: string;
+	readonly pageId: string;
+	readonly title: string;
+	readonly menuTitle: string;
+	readonly capability: string;
+	readonly icon: string;
+	readonly order: number;
+	readonly sections: readonly PluginPageSectionDescriptor[];
+	readonly actions: readonly PluginPageActionDescriptor[];
+	readonly values?: Record<string, unknown>;
+	readonly assets?: readonly PluginAssetDescriptor[];
+}
+
+/**
+ * Native UI extension point descriptor.
+ */
+export interface PluginUIExtensionDescriptor {
+	readonly id: string;
+	readonly pluginSlug: string;
+	readonly location: "links_overview_actions";
+	readonly label: string;
+	readonly actionId: string;
+	readonly capability: string;
+	readonly icon?: string;
+	readonly confirm?: string | null;
+	readonly assets?: readonly PluginAssetDescriptor[];
+	readonly invalidates?: readonly ("Plugins" | "Analytics" | "Urls")[];
+}
+
+/**
+ * Payload returned by GET /api/v1/system/plugins/extensions.
+ */
+export interface PluginExtensionsPayload {
+	readonly pages: readonly PluginPageDescriptor[];
+	readonly uiExtensions: readonly PluginUIExtensionDescriptor[];
 }

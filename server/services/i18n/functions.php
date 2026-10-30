@@ -210,6 +210,30 @@ if ( ! function_exists( 'is_rtl' ) ) {
 	}
 }
 
+if ( ! function_exists( 'load_plugin_textdomain' ) ) {
+	/**
+	 * Load a plugin gettext translation catalog.
+	 *
+	 * @param string      $domain        Unique plugin text domain.
+	 * @param string      $languages_dir Directory path containing translation files.
+	 * @param string|null $plugin_path   Optional root plugin directory path for boundary verification.
+	 * @return bool
+	 * @since 1.8.0
+	 */
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Public helper naming.
+	function load_plugin_textdomain(
+		string $domain,
+		string $languages_dir,
+		?string $plugin_path = null
+	): bool {
+		if ( empty( $languages_dir ) ) {
+			return false;
+		}
+
+		return get_i18n_service()->load_plugin_textdomain( $domain, $languages_dir, $plugin_path );
+	}
+}
+
 if ( ! function_exists( 'translate' ) ) {
 	/**
 	 * Translate a text string.
@@ -224,11 +248,7 @@ if ( ! function_exists( 'translate' ) ) {
 	// phpcs:disable WordPress.WP.I18n -- Intentional core translation helpers.
 	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- Intentional public helper naming.
 	function translate( string $text, string $domain = 'default' ): string {
-		if ( 'default' !== $domain && 'peakurl' !== $domain ) {
-			return $text;
-		}
-
-		return get_i18n_service()->translate( $text );
+		return get_i18n_service()->translate( $text, null, null, $domain );
 	}
 }
 
@@ -250,11 +270,7 @@ if ( ! function_exists( 'translate_with_gettext_context' ) ) {
 		string $context,
 		string $domain = 'default'
 	): string {
-		if ( 'default' !== $domain && 'peakurl' !== $domain ) {
-			return $text;
-		}
-
-		return get_i18n_service()->translate( $text, $context );
+		return get_i18n_service()->translate( $text, $context, null, $domain );
 	}
 }
 
@@ -356,14 +372,13 @@ if ( ! function_exists( '_n' ) ) {
 		int $number,
 		string $domain = 'default'
 	): string {
-		if ( 'default' !== $domain && 'peakurl' !== $domain ) {
-			return 1 === abs( $number ) ? $single : $plural;
-		}
-
 		return get_i18n_service()->translate_plural(
 			$single,
 			$plural,
 			$number,
+			null,
+			null,
+			$domain
 		);
 	}
 }
@@ -390,15 +405,13 @@ if ( ! function_exists( '_nx' ) ) {
 		string $context,
 		string $domain = 'default'
 	): string {
-		if ( 'default' !== $domain && 'peakurl' !== $domain ) {
-			return 1 === abs( $number ) ? $single : $plural;
-		}
-
 		return get_i18n_service()->translate_plural(
 			$single,
 			$plural,
 			$number,
 			$context,
+			null,
+			$domain
 		);
 	}
 }

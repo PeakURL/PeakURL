@@ -56,6 +56,7 @@ class LoaderTest extends TestCase {
 					'testedUpTo' => '1.8.0',
 					'php'        => '8.0',
 					'license'    => 'MIT',
+					'textDomain' => 'test-mu',
 				)
 			)
 		);
@@ -100,6 +101,7 @@ class LoaderTest extends TestCase {
 					'testedUpTo' => '1.8.0',
 					'php'        => '8.0',
 					'license'    => 'MIT',
+					'textDomain' => 'test-regular',
 				)
 			)
 		);
@@ -165,6 +167,7 @@ class LoaderTest extends TestCase {
 					'testedUpTo' => '99.0.0',
 					'php'        => '99.0.0',
 					'license'    => 'MIT',
+					'textDomain' => 'incompatible-plugin',
 				)
 			)
 		);
@@ -205,6 +208,7 @@ class LoaderTest extends TestCase {
 					'testedUpTo' => '1.8.0',
 					'php'        => '8.0',
 					'license'    => 'MIT',
+					'textDomain' => 'fatal-plugin',
 				)
 			)
 		);
@@ -247,6 +251,7 @@ class LoaderTest extends TestCase {
 					'testedUpTo' => '1.8.0',
 					'php'        => '8.0',
 					'license'    => 'MIT',
+					'textDomain' => 'mu-fatal',
 				)
 			)
 		);

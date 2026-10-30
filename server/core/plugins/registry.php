@@ -374,17 +374,33 @@ class Registry {
 			);
 		}
 
+		// 4b. Optional WordPress-inspired PHP comment header inspection (without PHP execution).
+		if ( empty( $entry_errors ) && isset( $entry_real ) && is_string( $entry_real ) ) {
+			$header_res = $this->validator->read_php_header( $entry_real );
+			if ( ! empty( $header_res['errors'] ) ) {
+				$entry_errors = array_merge( $entry_errors, $header_res['errors'] );
+			} elseif ( $header_res['has_header'] ) {
+				$mismatch_errors = $this->validator->validate_manifest_against_header( $parsed['manifest'], $header_res['headers'] );
+				if ( ! empty( $mismatch_errors ) ) {
+					$entry_errors = array_merge( $entry_errors, $mismatch_errors );
+				}
+			}
+		}
+
 		// 5. Validate manifest structure, types, and host compatibility.
 		$validation = $this->validator->validate(
 			$parsed['manifest'],
 			$this->host_version,
-			$this->php_version
+			$this->php_version,
+			$id
 		);
 
 		$all_errors = array_merge( $validation['errors'], $entry_errors );
 		$is_valid   = $validation['valid'] && empty( $entry_errors );
 
-		$description = $this->extract_readme_description( $plugin_dir_real );
+		$description = isset( $parsed['manifest']['description'] ) && is_string( $parsed['manifest']['description'] ) && '' !== trim( $parsed['manifest']['description'] )
+			? trim( $parsed['manifest']['description'] )
+			: $this->extract_readme_description( $plugin_dir_real );
 
 		return new Metadata(
 			array(
@@ -392,11 +408,16 @@ class Registry {
 				'type'          => $type,
 				'name'          => (string) ( $parsed['manifest']['name'] ?? $id ),
 				'description'   => $description,
+				'pluginUri'     => (string) ( $parsed['manifest']['pluginUri'] ?? '' ),
+				'author'        => (string) ( $parsed['manifest']['author'] ?? '' ),
+				'authorUri'     => (string) ( $parsed['manifest']['authorUri'] ?? '' ),
 				'version'       => (string) ( $parsed['manifest']['version'] ?? '' ),
 				'requires'      => (string) ( $parsed['manifest']['requires'] ?? '' ),
-				'tested_up_to'  => (string) ( $parsed['manifest']['testedUpTo'] ?? '' ),
+				'testedUpTo'    => (string) ( $parsed['manifest']['testedUpTo'] ?? '' ),
 				'php'           => (string) ( $parsed['manifest']['php'] ?? '' ),
 				'license'       => (string) ( $parsed['manifest']['license'] ?? '' ),
+				'textDomain'    => (string) ( $parsed['manifest']['textDomain'] ?? $id ),
+				'domainPath'    => (string) ( $parsed['manifest']['domainPath'] ?? '/languages' ),
 				'valid'         => $is_valid,
 				'compatible'    => $is_valid && $validation['compatible'],
 				'errors'        => $all_errors,

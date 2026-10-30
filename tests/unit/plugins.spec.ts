@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { API_ROUTES } from "../../client/api";
+import { resolvePluginActionInvalidatedTags } from "../../client/state/slices/api/system";
 import type {
 	InstalledPlugin,
 	InstalledPluginsPayload,
@@ -35,7 +36,10 @@ test.describe("Installed Plugins Contract & API Route Tests", () => {
 			active: false,
 			errors: [],
 			warnings: [],
-			homepage: "https://example.com/plugin",
+			pluginUri: "https://example.com/plugin",
+			description: "Example plugin description.",
+			author: "Example Author",
+			authorUri: "https://example.com/author",
 			documentation: "https://example.com/plugin/docs",
 		};
 
@@ -171,5 +175,65 @@ test.describe("Installed Plugins Contract & API Route Tests", () => {
 	test("Dashboard TabId supports only installed and must_use", () => {
 		const validTabs: TabId[] = ["installed", "must_use"];
 		expect(validTabs).toHaveLength(2);
+	});
+
+	test("API_ROUTES defines extension registry, pages, settings, actions, and asset endpoints", () => {
+		expect(API_ROUTES.system.pluginExtensions).toBe(
+			"system/plugins/extensions"
+		);
+		expect(API_ROUTES.system.pluginPage("social-card", "settings")).toBe(
+			"system/plugins/social-card/page/settings"
+		);
+		expect(API_ROUTES.system.pluginSettings("social-card")).toBe(
+			"system/plugins/social-card/settings"
+		);
+		expect(
+			API_ROUTES.system.pluginAction("social-card", "generate_cache")
+		).toBe("system/plugins/social-card/actions/generate_cache");
+		expect(API_ROUTES.system.pluginAsset("social-card", "admin.css")).toBe(
+			"system/plugins/social-card/assets/admin.css"
+		);
+	});
+
+	test("dispatchPluginAction tag invalidation selectively refreshes Analytics and Urls via explicit invalidations", () => {
+		// 1. General plugin action without explicit invalidations only invalidates Plugins tag
+		const generalTags = resolvePluginActionInvalidatedTags();
+		expect(generalTags).toEqual(["Plugins"]);
+
+		// 2. Action with empty invalidations list only invalidates Plugins tag
+		const emptyTags = resolvePluginActionInvalidatedTags([]);
+		expect(emptyTags).toEqual(["Plugins"]);
+
+		// 3. Action declaring Analytics and Urls invalidates Plugins, Analytics, and Urls LIST
+		const historyResetTags = resolvePluginActionInvalidatedTags([
+			"Analytics",
+			"Urls",
+		]);
+		expect(historyResetTags).toContain("Plugins");
+		expect(historyResetTags).toContain("Analytics");
+		expect(historyResetTags).toContainEqual({ type: "Urls", id: "LIST" });
+		expect(historyResetTags).toHaveLength(3);
+
+		// 4. Action with explicit target URL in payload also invalidates the targeted URL cache entry
+		const targetedResetTags = resolvePluginActionInvalidatedTags(
+			["Analytics", "Urls"],
+			{ url_id: 42 }
+		);
+		expect(targetedResetTags).toContain("Plugins");
+		expect(targetedResetTags).toContain("Analytics");
+		expect(targetedResetTags).toContainEqual({ type: "Urls", id: "LIST" });
+		expect(targetedResetTags).toContainEqual({ type: "Urls", id: "42" });
+		expect(targetedResetTags).toHaveLength(4);
+
+		// 5. Target URL supports camelCase urlId when Urls invalidation is declared
+		const camelTargetedTags = resolvePluginActionInvalidatedTags(
+			["Analytics", "Urls"],
+			{ urlId: 101 }
+		);
+		expect(camelTargetedTags).toContain("Plugins");
+		expect(camelTargetedTags).toContain("Analytics");
+		expect(camelTargetedTags).toContainEqual({ type: "Urls", id: "LIST" });
+		expect(camelTargetedTags).toContainEqual({ type: "Urls", id: "101" });
+		expect(camelTargetedTags).toHaveLength(4);
 	});
 });

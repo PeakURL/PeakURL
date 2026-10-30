@@ -208,6 +208,8 @@ class Loader {
 			$loader->settings_api = $settings_api;
 		}
 
+		require_once __DIR__ . '/functions.php';
+
 		$loader->load_plugins();
 
 		return $loader;
@@ -237,7 +239,8 @@ class Loader {
 
 				$entry_point = $metadata->plugin_path() . '/plugin.php';
 				if ( is_file( $entry_point ) && is_readable( $entry_point ) ) {
-					$this->execute_entry_point( $entry_point );
+					$this->load_plugin_i18n( $metadata );
+					$this->execute_entry_point( $id, $entry_point );
 					$this->loaded_mu[ $id ] = $metadata->with_active( true )->with_loaded( true );
 				}
 			}
@@ -260,7 +263,8 @@ class Loader {
 
 				$entry_point = $metadata->plugin_path() . '/plugin.php';
 				if ( is_file( $entry_point ) && is_readable( $entry_point ) ) {
-					$this->execute_entry_point( $entry_point );
+					$this->load_plugin_i18n( $metadata );
+					$this->execute_entry_point( $id, $entry_point );
 					$this->loaded_regular[ $id ] = $metadata->with_active( true )->with_loaded( true );
 				}
 			}
@@ -272,13 +276,49 @@ class Loader {
 	}
 
 	/**
+	 * Automatically register and load translation files for an active plugin.
+	 *
+	 * @param Metadata $metadata Validated plugin metadata.
+	 * @return void
+	 */
+	private function load_plugin_i18n( Metadata $metadata ): void {
+		if ( ! function_exists( 'get_i18n_service' ) ) {
+			return;
+		}
+
+		$domain = $metadata->text_domain();
+		if ( '' === $domain ) {
+			return;
+		}
+
+		$languages_rel = ltrim( $metadata->domain_path(), '/' );
+		$languages_dir = $metadata->plugin_path() . ( '' !== $languages_rel ? '/' . $languages_rel : '' );
+
+		if ( is_dir( $languages_dir ) ) {
+			get_i18n_service()->load_plugin_textdomain(
+				$domain,
+				$languages_dir,
+				$metadata->plugin_path()
+			);
+		}
+	}
+
+	/**
 	 * Safely execute a validated plugin entry point.
 	 *
+	 * Sets the plugin context in Extensions during execution and clears it afterwards.
+	 *
+	 * @param string $plugin_slug Plugin identifier.
 	 * @param string $entry_point Absolute path to plugin.php.
 	 * @return void
 	 */
-	private function execute_entry_point( string $entry_point ): void {
-		require $entry_point;
+	private function execute_entry_point( string $plugin_slug, string $entry_point ): void {
+		Extensions::get_instance()->set_current_plugin( $plugin_slug );
+		try {
+			require $entry_point;
+		} finally {
+			Extensions::get_instance()->set_current_plugin( null );
+		}
 	}
 
 	/**

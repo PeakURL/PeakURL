@@ -1,0 +1,12 @@
+{
+  "$schema": "https://peakurl.org/schemas/v1/plugin.json",
+  "name": "Example Plugin",
+  "version": "1.0.0",
+  "requires": "1.7.0",
+  "testedUpTo": "1.8.0",
+  "php": "8.3",
+  "license": "MIT",
+  "textDomain": "example-plugin",
+  "domainPath": "/languages",
+  "description": "Demonstrates standard regular plugin packaging for PeakURL."
+}

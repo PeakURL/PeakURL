@@ -21,6 +21,8 @@ import type {
 	UpdateCronJobPayload,
 	InstalledPlugin,
 	InstalledPluginsPayload,
+	PluginExtensionsPayload,
+	PluginPageDescriptor,
 	PublishedPluginsQueryParams,
 	PublishedPluginsResponse,
 } from "@/api";
@@ -75,6 +77,54 @@ const MCP_CONNECTIONS_TAGS = ["McpConnections"] as const;
 const PLUGINS_TAGS = ["Plugins"] as const;
 const MCP_TOOLS_TAGS = ["McpTools"] as const;
 const MCP_SETTINGS_CHANGE_TAGS = ["McpSettings", "McpTools"] as const;
+
+export type PluginActionInvalidationTarget = "Plugins" | "Analytics" | "Urls";
+
+export interface DispatchPluginActionArgs {
+	slug: string;
+	actionId: string;
+	payload?: Record<string, unknown>;
+	invalidates?: readonly PluginActionInvalidationTarget[];
+}
+
+/**
+ * Resolves the appropriate cache tags to invalidate when a plugin action completes.
+ * Uses explicit invalidations declared by the action, avoiding heuristic string matching.
+ */
+export function resolvePluginActionInvalidatedTags(
+	invalidates?: readonly PluginActionInvalidationTarget[],
+	payload?: Record<string, unknown>
+): Array<
+	| "Plugins"
+	| "Analytics"
+	| { type: "Urls"; id: string }
+	| { type: "Plugins"; id: string }
+> {
+	const tags: Array<
+		| "Plugins"
+		| "Analytics"
+		| { type: "Urls"; id: string }
+		| { type: "Plugins"; id: string }
+	> = ["Plugins"];
+
+	if (!invalidates || invalidates.length === 0) {
+		return tags;
+	}
+
+	if (invalidates.includes("Analytics")) {
+		tags.push("Analytics");
+	}
+
+	if (invalidates.includes("Urls")) {
+		tags.push({ type: "Urls", id: "LIST" });
+		const targetUrlId = payload?.url_id ?? payload?.urlId;
+		if (targetUrlId) {
+			tags.push({ type: "Urls", id: String(targetUrlId) });
+		}
+	}
+
+	return tags;
+}
 
 /**
  * Check whether general settings must be saved as multipart form data.
@@ -283,6 +333,61 @@ export const systemApi = baseApi.injectEndpoints({
 				body: formData,
 			}),
 			invalidatesTags: PLUGINS_TAGS,
+		}),
+		getPluginExtensions: build.query<
+			ApiDataResponse<PluginExtensionsPayload>,
+			void
+		>({
+			query: () => API_ROUTES.system.pluginExtensions,
+			providesTags: PLUGINS_TAGS,
+		}),
+		getPluginPage: build.query<
+			ApiDataResponse<PluginPageDescriptor>,
+			{ slug: string; pageId: string }
+		>({
+			query: ({ slug, pageId }) =>
+				API_ROUTES.system.pluginPage(slug, pageId),
+			providesTags: PLUGINS_TAGS,
+		}),
+		getPluginSettings: build.query<
+			ApiDataResponse<{
+				pluginSlug: string;
+				settings: Record<string, unknown>;
+			}>,
+			{ slug: string }
+		>({
+			query: ({ slug }) => API_ROUTES.system.pluginSettings(slug),
+			providesTags: PLUGINS_TAGS,
+		}),
+		updatePluginSettings: build.mutation<
+			ApiDataResponse<{
+				pluginSlug: string;
+				settings: Record<string, unknown>;
+			}>,
+			{ slug: string; settings: Record<string, unknown> }
+		>({
+			query: ({ slug, settings }) => ({
+				url: API_ROUTES.system.pluginSettings(slug),
+				method: "POST",
+				body: { settings },
+			}),
+			invalidatesTags: PLUGINS_TAGS,
+		}),
+		dispatchPluginAction: build.mutation<
+			ApiDataResponse<Record<string, unknown>>,
+			DispatchPluginActionArgs
+		>({
+			query: ({ slug, actionId, payload }) => ({
+				url: API_ROUTES.system.pluginAction(slug, actionId),
+				method: "POST",
+				body: payload ?? {},
+			}),
+			invalidatesTags: (_result, error, { invalidates, payload }) => {
+				if (error) {
+					return [];
+				}
+				return resolvePluginActionInvalidatedTags(invalidates, payload);
+			},
 		}),
 		saveGeneralSettings: build.mutation<
 			ApiDataResponse<SiteSettings>,
@@ -624,6 +729,11 @@ export const {
 	useDeactivatePluginMutation,
 	useDeletePluginMutation,
 	useUploadPluginMutation,
+	useGetPluginExtensionsQuery,
+	useGetPluginPageQuery,
+	useGetPluginSettingsQuery,
+	useUpdatePluginSettingsMutation,
+	useDispatchPluginActionMutation,
 	useGetCacheStatusQuery,
 	useSaveGeneralSettingsMutation,
 	useSaveCacheConfigurationMutation,

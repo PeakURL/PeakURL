@@ -118,6 +118,22 @@ export function initializeI18n(): Promise<void> {
 		const textDirection = data.textDirection || getLocaleDirection(locale);
 
 		setLocaleData(localeData, domain);
+
+		// Register all domain catalogs provided by active plugins in locale_data
+		if (isObjectRecord(data.i18n?.locale_data)) {
+			for (const [domainKey, messages] of Object.entries(
+				data.i18n.locale_data
+			)) {
+				if (
+					domainKey !== "messages" &&
+					domainKey !== domain &&
+					isLocaleMessageMap(messages)
+				) {
+					setLocaleData(messages, domainKey);
+				}
+			}
+		}
+
 		const nextData = updatePeakURLData({
 			...data,
 			locale,
@@ -139,21 +155,25 @@ export function initializeI18n(): Promise<void> {
 }
 
 /**
- * Translation helpers bound to PeakURL's active text domain.
+ * Translation helpers bound to PeakURL's active text domain by default,
+ * with support for independent plugin text domains.
  */
 export const translate = <Text extends string>(
-	text: Text
-): TransformedText<Text> => wpTranslate(text, TEXT_DOMAIN);
+	text: Text,
+	domain: string = TEXT_DOMAIN
+): TransformedText<Text> => wpTranslate(text, domain);
 export const translateWithContext = <Text extends string>(
 	text: Text,
-	context: string
-): TransformedText<Text> => wpTranslateWithContext(text, context, TEXT_DOMAIN);
+	context: string,
+	domain: string = TEXT_DOMAIN
+): TransformedText<Text> => wpTranslateWithContext(text, context, domain);
 export const translatePlural = <Single extends string, Plural extends string>(
 	single: Single,
 	plural: Plural,
-	count: number
+	count: number,
+	domain: string = TEXT_DOMAIN
 ): TransformedText<Single | Plural> =>
-	wpTranslatePlural(single, plural, count, TEXT_DOMAIN);
+	wpTranslatePlural(single, plural, count, domain);
 
 export {
 	sprintf,

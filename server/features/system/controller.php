@@ -142,10 +142,98 @@ class Controller extends BaseController {
 	 * @since 1.8.0
 	 */
 	public function upload_plugin( Request $request ): array {
+		$result    = $this->system_service->upload_plugin( $request );
+		$is_update = ! empty( $result['updated'] );
+		$message   = $is_update
+			? __( 'Plugin updated successfully.', 'peakurl' )
+			: __( 'Plugin installed successfully.', 'peakurl' );
+
 		return $this->success_response(
-			$this->system_service->upload_plugin( $request ),
-			__( 'Plugin installed successfully.', 'peakurl' ),
+			$result,
+			$message,
+			$is_update ? 200 : 201
 		);
+	}
+
+	/**
+	 * Retrieve registered pages and UI extensions visible to the current user.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 * @since 1.8.0
+	 */
+	public function plugin_extensions( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->get_plugin_extensions( $request ),
+			__( 'Plugin extensions retrieved.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Retrieve a specific plugin admin page descriptor.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 * @since 1.8.0
+	 */
+	public function get_plugin_page( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->get_plugin_page( $request ),
+			__( 'Plugin page retrieved.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Retrieve stored settings for a plugin.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 * @since 1.8.0
+	 */
+	public function get_plugin_settings( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->get_plugin_settings( $request ),
+			__( 'Plugin settings retrieved.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Update stored settings for a plugin.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 * @since 1.8.0
+	 */
+	public function update_plugin_settings( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->update_plugin_settings( $request ),
+			__( 'Plugin settings updated successfully.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Dispatch an authorized plugin backend action callback.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 * @since 1.8.0
+	 */
+	public function dispatch_plugin_action( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->dispatch_plugin_action( $request ),
+			__( 'Plugin action executed successfully.', 'peakurl' ),
+		);
+	}
+
+	/**
+	 * Serve an approved, scoped browser asset registered by an active plugin.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Raw HTTP response.
+	 * @since 1.8.0
+	 */
+	public function serve_plugin_asset( Request $request ): array {
+		return $this->system_service->serve_plugin_asset( $request );
 	}
 
 

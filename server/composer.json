@@ -31,6 +31,7 @@
 		"files": [
 			"core/config/functions.php",
 			"core/hooks/functions.php",
+			"core/plugins/functions.php",
 			"services/database/functions.php",
 			"services/i18n/functions.php",
 			"services/cache/functions.php",

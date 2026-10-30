@@ -16,18 +16,22 @@ import {
 
 import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { useGetUrlsQuery } from "@/state/slices/api";
+import { useGetPluginExtensionsQuery } from "@/state/slices/api/system";
 import { useAdminAccess } from "@/hooks";
 import { Logo } from "@/components";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __ } from "@/i18n";
 import { SPONSOR_URL } from "@/constants";
 import { cn, formatCount } from "@/shared/formatting";
+import type { PluginPageDescriptor } from "@/api/types/plugins";
 
 import type { NavItem, SidebarProps } from "../types";
 
 const getNavItems = (
 	basePath = "/dashboard",
-	canManageUsers = false
+	canManageUsers = false,
+	pluginPages: readonly PluginPageDescriptor[] = [],
+	canManagePlugins = false
 ): NavItem[] => {
 	const base =
 		basePath === "/"
@@ -54,11 +58,37 @@ const getNavItems = (
 		},
 		{
 			name: __("Plugins"),
-			href: `${base || ""}/plugins`,
+			href: canManagePlugins
+				? `${base || ""}/plugins`
+				: pluginPages.length > 0 && pluginPages[0]
+					? `${base || ""}/plugins/page/${pluginPages[0].pluginSlug}/${pluginPages[0].pageId}`
+					: `${base || ""}/plugins`,
 			icon: dashboardPageIcons.plugins,
-			adminOnly: true,
+			isVisible: canManagePlugins || pluginPages.length > 0,
 			badge: __("Preview"),
 			badgeVariant: "preview",
+			children:
+				pluginPages.length > 0
+					? [
+							...(canManagePlugins
+								? [
+										{
+											name: __("Installed Plugins"),
+											href: `${base || ""}/plugins`,
+											activeBasePath: `${base || ""}/plugins`,
+										},
+										{
+											name: __("Add New"),
+											href: `${base || ""}/plugins/add`,
+										},
+									]
+								: []),
+							...pluginPages.map((page) => ({
+								name: page.menuTitle || page.title,
+								href: `${base || ""}/plugins/page/${page.pluginSlug}/${page.pageId}`,
+							})),
+						]
+					: undefined,
 		},
 		{
 			name: __("Tools"),
@@ -114,6 +144,10 @@ const getNavItems = (
 			};
 		})
 		.filter((item) => {
+			if (item.isVisible !== undefined) {
+				return item.isVisible;
+			}
+
 			if (item.adminOnly && !canManageUsers) {
 				return false;
 			}
@@ -199,7 +233,8 @@ export const Sidebar = ({
 	const location = useLocation();
 	const pathname = location.pathname;
 	const { data: urlsRes } = useGetUrlsQuery(undefined);
-	const { canManageUsers } = useAdminAccess();
+	const { canManageUsers, canManagePlugins, hasCapability, user } =
+		useAdminAccess();
 	const totalLinks = urlsRes?.data?.meta?.totalItems ?? 0;
 
 	const CollapseIcon = isRtl
@@ -210,9 +245,29 @@ export const Sidebar = ({
 			? PanelLeftOpen
 			: PanelLeftClose;
 
+	const { data: extensionsResponse } = useGetPluginExtensionsQuery(
+		undefined,
+		{
+			skip: !user,
+		}
+	);
+
+	const pluginPages = useMemo(() => {
+		const rawPages = extensionsResponse?.data?.pages ?? [];
+		return rawPages.filter(
+			(page) => !page.capability || hasCapability(page.capability)
+		);
+	}, [extensionsResponse?.data?.pages, hasCapability]);
+
 	const navigation = useMemo(
-		() => getNavItems(basePath, canManageUsers),
-		[basePath, canManageUsers]
+		() =>
+			getNavItems(
+				basePath,
+				canManageUsers,
+				pluginPages,
+				canManagePlugins
+			),
+		[basePath, canManageUsers, pluginPages, canManagePlugins]
 	);
 	const base =
 		basePath === "/"

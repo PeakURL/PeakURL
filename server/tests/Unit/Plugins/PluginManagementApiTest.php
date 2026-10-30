@@ -105,6 +105,8 @@ class PluginManagementApiTest extends TestCase {
 					'testedUpTo' => '1.8.0',
 					'php'        => '8.0',
 					'license'    => 'MIT',
+					'textDomain' => 'test-plugin',
+					'domainPath' => '/languages',
 				)
 			)
 		);
@@ -315,6 +317,8 @@ class PluginManagementApiTest extends TestCase {
 					'testedUpTo' => '1.8.0',
 					'php'        => '8.0',
 					'license'    => 'MIT',
+					'textDomain' => 'custom-plugin',
+					'domainPath' => '/languages',
 				)
 			)
 		);

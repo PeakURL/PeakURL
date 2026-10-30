@@ -564,6 +564,37 @@ export const API_ROUTES = {
 		pluginsUpload: apiPath("system", "plugins", "upload"),
 
 		/**
+		 * Relative API path: `system/plugins/extensions`.
+		 *
+		 * Loads active plugin page descriptors and UI extension points.
+		 */
+		pluginExtensions: apiPath("system", "plugins", "extensions"),
+
+		/**
+		 * Relative API path: `system/plugins/:slug/page/:pageId`.
+		 */
+		pluginPage: (slug: string, pageId: string) =>
+			apiPath("system", "plugins", slug, "page", pageId),
+
+		/**
+		 * Relative API path: `system/plugins/:slug/settings`.
+		 */
+		pluginSettings: (slug: string) =>
+			apiPath("system", "plugins", slug, "settings"),
+
+		/**
+		 * Relative API path: `system/plugins/:slug/actions/:actionId`.
+		 */
+		pluginAction: (slug: string, actionId: string) =>
+			apiPath("system", "plugins", slug, "actions", actionId),
+
+		/**
+		 * Relative API path: `system/plugins/:slug/assets/:assetPath`.
+		 */
+		pluginAsset: (slug: string, assetPath: string) =>
+			apiPath("system", "plugins", slug, "assets", assetPath),
+
+		/**
 		 * Relative API path: `system/status`.
 		 *
 		 * Loads system status and diagnostics.

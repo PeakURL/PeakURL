@@ -87,6 +87,66 @@ Vite hot reload is available on the client service. If the dashboard appears sta
 docker compose up --build
 ```
 
+## Automated Testing
+
+PeakURL includes automated test suites covering backend PHP logic, frontend utilities and components, browser end-to-end workflows, and authentication security.
+
+### Test Suites and Directory Structure
+
+- **Backend Tests (PHPUnit)**:
+    - `server/tests/Unit/`: Unit tests for classes, utilities, configuration, validation rules, hooks, and services without database dependencies.
+    - `server/tests/Integration/`: Integration tests that verify database persistence, schema migrations, role authorization, authentication lifecycles, and API route contracts against MySQL.
+- **Frontend and E2E Tests (Playwright)**:
+    - `tests/unit/`: Playwright unit tests for frontend utilities, dates, CSV handling, API client contracts, and component logic.
+    - `tests/e2e/`: Browser end-to-end tests exercising user workflows across authentication, link creation and expiration, settings, tools, drawers, and modal interactions.
+
+### Running Tests
+
+Execute the test suites locally using the following commands:
+
+```bash
+# Run PHP unit and integration tests via PHPUnit
+npm run test:server
+
+# Run Playwright frontend unit tests
+npm run test:unit
+
+# Run server test suites (unit + integration) and frontend unit tests
+npm test
+
+# Run browser E2E tests in Chromium
+npx playwright test --project=chromium
+
+# Run authentication and secure-cookie smoke tests
+npm run smoke:auth
+```
+
+> [!NOTE]
+> `npm test` runs both `npm run test:server` and `npm run test:unit`. Because the backend PHPUnit suite includes integration tests (`server/tests/Integration/`) that verify database operations and migrations against MySQL, running backend tests requires an active MySQL test database configured to match `server/phpunit.xml` (by default, `127.0.0.1:3307` with database `peakurl_test`, as provided by the local Docker stack).
+>
+> The `npm run test:e2e` script runs `playwright test` without project filtering, which executes the complete Playwright test set across both configured projects (`unit` and `chromium`). When you want to run only browser E2E tests, target Chromium directly with `npx playwright test --project=chromium`.
+
+### Environment Requirements for E2E and Smoke Tests
+
+Unlike unit tests, browser E2E tests and auth smoke tests interact with a live application instance:
+
+- **Local Stack Running**: The local Docker development stack must be active and healthy (`docker compose up -d --build`).
+- **Base URLs**:
+    - Playwright E2E tests target `https://peakurl.dev` by default, configurable via `PEAKURL_TEST_URL`.
+    - The auth smoke test (`scripts/smoke-auth.sh`) connects to `https://peakurl.dev` and `https://api.peakurl.dev` by default, configurable via `PEAKURL_URL`, `API_URL`, and `APP_URL`.
+- **Test Credentials**: Smoke and E2E tests require administrative credentials. Provide your admin password via `PEAKURL_TEST_PASSWORD` (and optionally `PEAKURL_TEST_IDENTIFIER`, which defaults to `admin`):
+
+```bash
+PEAKURL_TEST_PASSWORD="your-admin-password" npm run smoke:auth
+PEAKURL_TEST_PASSWORD="your-admin-password" npx playwright test --project=chromium
+```
+
+- **Built Public Assets**: When testing standalone public scripts (such as the installer, status pages, or CAPTCHA interstitials) against mocked providers without database dependencies:
+
+```bash
+PEAKURL_TEST_BUILT_ASSETS=1 npx playwright test tests/e2e/public --project=chromium
+```
+
 ## Release Testing
 
 PeakURL includes a dedicated local release test site at `https://peakurl.test`.
@@ -136,54 +196,41 @@ Stop the stack:
 docker compose down
 ```
 
-Build the dashboard and public-page scripts:
+Build dashboard and public assets:
 
 ```bash
 npm run build
 ```
 
-The build also bundles and minifies the standalone CAPTCHA and installer scripts
-into `build/server/`. Release assembly copies these over the corresponding PHP
-runtime assets. Their readable source files stay in `server/features/links/` and
-`server/services/install/`; PHP embeds the compiled scripts inline, so public
-access checks and setup do not load the dashboard bundle. Run `npm run build:public`
-to rebuild only these scripts.
+`npm run build` builds the React dashboard and compiles the standalone public scripts (`server/features/links/publicCaptcha.js`, `server/services/install/installer.js`, and `server/services/install/languagePicker.js`) into `build/server/`. Release assembly copies these minified bundles over the corresponding PHP runtime assets.
 
-To check the production scripts against mocked CAPTCHA providers and installer
-forms without accessing a database:
+PHP embeds the compiled scripts inline so public link access checks, installer screens, and language selection do not load the full dashboard bundle. If you are only modifying these standalone scripts, you can rebuild them quickly without rebuilding the dashboard:
 
 ```bash
-PEAKURL_TEST_BUILT_ASSETS=1 npx playwright test tests/e2e/public --project=chromium
+npm run build:public
 ```
 
-Build the release package:
+Build the packaged release:
 
 ```bash
 npm run release:build
 ```
 
-Run the main lint pass:
+Run code standards and syntax checks:
 
 ```bash
 npm run lint
-```
-
-Run PHP standards checks:
-
-```bash
-composer --working-dir=server run phpcs
-```
-
-Run PHP syntax checks:
-
-```bash
 npm run lint:php:syntax
 ```
 
-Run the auth smoke test:
+Run automated tests (see [Automated Testing](#automated-testing) for prerequisites and suite details):
 
 ```bash
-npm run smoke:auth
+npm test                               # Server test suites and frontend unit tests
+npm run test:server                    # PHPUnit unit and integration tests (requires MySQL test DB)
+npm run test:unit                      # Playwright frontend unit tests
+npx playwright test --project=chromium # Browser E2E tests (requires running local stack)
+npm run smoke:auth                     # Authentication smoke tests (requires running local stack)
 ```
 
 For linting and formatting details, see the [Linting and Formatting guide](LINTING.md).

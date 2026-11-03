@@ -117,4 +117,150 @@ class Loader {
 			),
 		);
 	}
+
+	/**
+	 * Load a domain-specific PHP gettext catalog from a languages directory.
+	 *
+	 * @param string $domain        Gettext text domain.
+	 * @param string $languages_dir Absolute directory path.
+	 * @param string $locale        Locale identifier.
+	 * @return GettextTranslations|null
+	 * @since 1.8.0
+	 */
+	public function load_domain_catalog(
+		string $domain,
+		string $languages_dir,
+		string $locale
+	): ?GettextTranslations {
+		$real_dir = realpath( $languages_dir );
+		if ( false === $real_dir || ! is_dir( $real_dir ) || is_link( $languages_dir ) ) {
+			return null;
+		}
+		$clean_dir = rtrim( $real_dir, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR;
+
+		$candidates = $this->get_domain_catalog_candidates( $domain, $languages_dir, $locale );
+
+		foreach ( $candidates as $path ) {
+			if ( is_link( $path ) || ! is_file( $path ) || ! is_readable( $path ) ) {
+				continue;
+			}
+			$real_file = realpath( $path );
+			if ( false === $real_file || is_link( $real_file ) || ! str_starts_with( $real_file, $clean_dir ) ) {
+				continue;
+			}
+
+			try {
+				if ( str_ends_with( $path, '.mo' ) ) {
+					$catalog = ( new MoLoader() )->loadFile( $path );
+					$catalog->setDomain( $domain );
+
+					return $catalog;
+				}
+
+				if ( str_ends_with( $path, '.po' ) ) {
+					$catalog = ( new PoLoader() )->loadFile( $path );
+					$catalog->setDomain( $domain );
+
+					return $catalog;
+				}
+			} catch ( \Throwable ) {
+				continue;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Return the dashboard JSON translation catalog for a domain and locale if present.
+	 *
+	 * @param string $domain        Gettext text domain.
+	 * @param string $languages_dir Absolute directory path.
+	 * @param string $locale        Locale identifier.
+	 * @return array<string, mixed>|null
+	 * @since 1.8.0
+	 */
+	public function get_domain_dashboard_catalog(
+		string $domain,
+		string $languages_dir,
+		string $locale
+	): ?array {
+		$real_dir = realpath( $languages_dir );
+		if ( false === $real_dir || ! is_dir( $real_dir ) || is_link( $languages_dir ) ) {
+			return null;
+		}
+		$clean_dir = rtrim( $real_dir, DIRECTORY_SEPARATOR ) . DIRECTORY_SEPARATOR;
+
+		$candidates = $this->get_domain_json_candidates( $domain, $languages_dir, $locale );
+
+		foreach ( $candidates as $path ) {
+			if ( is_link( $path ) || ! is_file( $path ) || ! is_readable( $path ) ) {
+				continue;
+			}
+			$real_file = realpath( $path );
+			if ( false === $real_file || is_link( $real_file ) || ! str_starts_with( $real_file, $clean_dir ) ) {
+				continue;
+			}
+
+			$contents = file_get_contents( $path );
+			if ( false !== $contents ) {
+				$decoded = json_decode( $contents, true );
+				if ( is_array( $decoded ) ) {
+					return $decoded;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Build candidate file paths for gettext translation catalogs.
+	 *
+	 * @param string $domain Gettext text domain.
+	 * @param string $dir    Languages directory.
+	 * @param string $locale Locale identifier.
+	 * @return array<int, string>
+	 */
+	private function get_domain_catalog_candidates( string $domain, string $dir, string $locale ): array {
+		$clean_dir = rtrim( $dir, '/\\' );
+		$locales   = array( $locale );
+		if ( str_contains( $locale, '_' ) ) {
+			$locales[] = explode( '_', $locale )[0];
+		}
+
+		$candidates = array();
+		foreach ( $locales as $loc ) {
+			$candidates[] = $clean_dir . DIRECTORY_SEPARATOR . sprintf( '%s-%s.mo', $domain, $loc );
+			$candidates[] = $clean_dir . DIRECTORY_SEPARATOR . sprintf( '%s-%s.po', $domain, $loc );
+			$candidates[] = $clean_dir . DIRECTORY_SEPARATOR . sprintf( '%s.mo', $loc );
+			$candidates[] = $clean_dir . DIRECTORY_SEPARATOR . sprintf( '%s.po', $loc );
+		}
+
+		return $candidates;
+	}
+
+	/**
+	 * Build candidate file paths for dashboard JSON catalogs.
+	 *
+	 * @param string $domain Gettext text domain.
+	 * @param string $dir    Languages directory.
+	 * @param string $locale Locale identifier.
+	 * @return array<int, string>
+	 */
+	private function get_domain_json_candidates( string $domain, string $dir, string $locale ): array {
+		$clean_dir = rtrim( $dir, '/\\' );
+		$locales   = array( $locale );
+		if ( str_contains( $locale, '_' ) ) {
+			$locales[] = explode( '_', $locale )[0];
+		}
+
+		$candidates = array();
+		foreach ( $locales as $loc ) {
+			$candidates[] = $clean_dir . DIRECTORY_SEPARATOR . sprintf( '%s-%s.json', $domain, $loc );
+			$candidates[] = $clean_dir . DIRECTORY_SEPARATOR . sprintf( '%s.json', $loc );
+		}
+
+		return $candidates;
+	}
 }

@@ -42,6 +42,8 @@ export type LocaleMessageMap = Record<string, LocaleMessageEntry>;
 export interface I18nLocaleData {
 	/** Translation messages grouped under the default `messages` domain. */
 	messages?: LocaleMessageMap;
+	/** Additional translation messages keyed by independent domain (e.g. plugin text domains). */
+	[domain: string]: LocaleMessageMap | undefined;
 }
 
 /**

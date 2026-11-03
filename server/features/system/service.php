@@ -18,6 +18,7 @@ use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Plugins\Extensions;
 use PeakURL\Core\Plugins\Metadata;
 use PeakURL\Core\Plugins\Registry;
 use PeakURL\Core\Plugins\Type;
@@ -1136,10 +1137,17 @@ class Service {
 		$target_dest    = $plugins_parent . '/' . $candidate_id;
 		$mu_target      = $mu_parent . '/' . $candidate_id;
 
-		if (
-			is_link( $target_dest ) || file_exists( $target_dest ) || is_dir( $target_dest ) ||
-			is_link( $mu_target ) || file_exists( $mu_target ) || is_dir( $mu_target )
-		) {
+		// Must-use plugins are server-operator managed and cannot be updated through the dashboard.
+		if ( is_link( $mu_target ) || file_exists( $mu_target ) || is_dir( $mu_target ) ) {
+			$zip->close();
+			throw new ApiException(
+				__( 'Must-use plugins cannot be updated through the dashboard.', 'peakurl' ),
+				403
+			);
+		}
+
+		// Symbolic links at the destination path are rejected as security violations.
+		if ( is_link( $target_dest ) ) {
 			$zip->close();
 			throw new ApiException(
 				sprintf(
@@ -1156,19 +1164,94 @@ class Service {
 			mkdir( $plugins_parent, 0755, true );
 		}
 
-		// Stage extracted files on the EXACT SAME filesystem as the destination.
-		$stage_token = bin2hex( random_bytes( 8 ) );
-		$temp_stage  = $plugins_parent . '/.tmp_install_' . $candidate_id . '_' . $stage_token;
-		if ( ! mkdir( $temp_stage, 0755, true ) ) {
+		$lock_file   = $plugins_parent . '/.lock_' . $candidate_id;
+		$lock_handle = @fopen( $lock_file, 'c+' );
+		if ( false === $lock_handle || ! flock( $lock_handle, LOCK_EX | LOCK_NB ) ) {
+			if ( is_resource( $lock_handle ) ) {
+				fclose( $lock_handle );
+			}
 			$zip->close();
 			throw new ApiException(
-				__( 'Could not allocate staging directory on plugins filesystem.', 'peakurl' ),
-				500
+				sprintf(
+					/* translators: %s: Plugin identifier */
+					__( 'An installation or update is already in progress for plugin \'%s\'.', 'peakurl' ),
+					$candidate_id
+				),
+				409
 			);
 		}
 
-		$moved = false;
+		$temp_stage       = null;
+		$backup_dest      = null;
+		$backup_preserved = false;
+		$moved            = false;
+
 		try {
+			$is_update        = is_dir( $target_dest ) || file_exists( $target_dest );
+			$existing_version = null;
+			$was_active       = false;
+
+			if ( $is_update ) {
+				$existing_registry = new Registry( $content_dir );
+				$existing_meta     = $existing_registry->find( $candidate_id, Type::REGULAR );
+
+				if ( null === $existing_meta || ! $existing_meta->is_valid() ) {
+					$zip->close();
+					throw new ApiException(
+						sprintf(
+							// translators: %s: Plugin identifier.
+							__( 'A plugin with identifier "%s" is already installed.', 'peakurl' ),
+							$candidate_id
+						),
+						409
+					);
+				}
+
+				$existing_version = $existing_meta->version();
+				$new_version      = (string) ( $decoded['version'] ?? '' );
+
+				$cmp = $validator->compare_versions( $new_version, $existing_version );
+
+				if ( $cmp < 0 ) {
+					$zip->close();
+					throw new ApiException(
+						sprintf(
+							// translators: 1: Existing version, 2: Uploaded version.
+							__( 'Cannot downgrade plugin from version %1$s to %2$s.', 'peakurl' ),
+							$existing_version,
+							$new_version
+						),
+						400
+					);
+				}
+
+				if ( 0 === $cmp ) {
+					$zip->close();
+					throw new ApiException(
+						sprintf(
+							// translators: %s: Installed plugin version.
+							__( 'Plugin version %s is already installed.', 'peakurl' ),
+							$existing_version
+						),
+						409
+					);
+				}
+
+				$active_plugins = $this->get_active_plugin_ids();
+				$was_active     = in_array( $candidate_id, $active_plugins, true );
+			}
+
+			// Stage extracted files on the EXACT SAME filesystem as the destination.
+			$stage_token = bin2hex( random_bytes( 8 ) );
+			$temp_stage  = $plugins_parent . '/.tmp_install_' . $candidate_id . '_' . $stage_token;
+			if ( ! mkdir( $temp_stage, 0755, true ) ) {
+				$zip->close();
+				throw new ApiException(
+					__( 'Could not allocate staging directory on plugins filesystem.', 'peakurl' ),
+					500
+				);
+			}
+
 			if ( ! $zip->extractTo( $temp_stage ) ) {
 				throw new ApiException(
 					__( 'Failed to extract plugin archive.', 'peakurl' ),
@@ -1207,8 +1290,17 @@ class Service {
 				);
 			}
 
-			// Re-check target destination collisions immediately before rename (concurrency defense).
-			if ( is_link( $target_dest ) || file_exists( $target_dest ) || is_dir( $target_dest ) ) {
+			// For updates, safely stage existing plugin directory as a backup on the same filesystem.
+			if ( $is_update && is_dir( $target_dest ) ) {
+				$backup_dest = $plugins_parent . '/.backup_' . $candidate_id . '_' . $stage_token;
+				if ( ! @rename( $target_dest, $backup_dest ) ) {
+					throw new ApiException(
+						__( 'Failed to stage existing plugin backup before update.', 'peakurl' ),
+						500
+					);
+				}
+			} elseif ( ! $is_update && ( is_link( $target_dest ) || file_exists( $target_dest ) || is_dir( $target_dest ) ) ) {
+				// Re-check target destination collisions immediately before rename (concurrency defense for new installs).
 				throw new ApiException(
 					sprintf(
 						// translators: %s: Plugin identifier.
@@ -1238,10 +1330,50 @@ class Service {
 				$err = $meta ? implode( '; ', $meta->errors() ) : 'Discovery verification failed';
 				throw new \RuntimeException( $err );
 			}
+
+			// Clean up backup directory after verified successful upgrade.
+			if ( null !== $backup_dest && is_dir( $backup_dest ) ) {
+				$this->safe_recursive_delete( $backup_dest );
+				$backup_dest = null;
+			}
 		} catch ( \Throwable $e ) {
 			if ( $moved && ( is_dir( $target_dest ) || is_link( $target_dest ) ) ) {
 				$this->safe_recursive_delete( $target_dest );
 			}
+			$restoration_failed = false;
+
+			// Restore backup if update failed.
+			if ( null !== $backup_dest && is_dir( $backup_dest ) ) {
+				if ( ! file_exists( $target_dest ) && ! is_dir( $target_dest ) && ! is_link( $target_dest ) ) {
+					$restored = @rename( $backup_dest, $target_dest );
+					if ( ! $restored ) {
+						$backup_preserved   = true;
+						$restoration_failed = true;
+					} else {
+						$backup_dest = null;
+					}
+				} else {
+					$backup_preserved   = true;
+					$restoration_failed = true;
+				}
+			}
+
+			if ( $restoration_failed ) {
+				error_log(
+					sprintf(
+						'PeakURL Plugin Upgrade Rollback Failed for "%s": %s. Preserved backup at: %s',
+						$candidate_id,
+						$e->getMessage(),
+						(string) $backup_dest
+					)
+				);
+
+				throw new ApiException(
+					__( 'Plugin update failed and automatic restoration could not be completed. The previous working plugin package has been preserved on the server. Please contact your system administrator.', 'peakurl' ),
+					500
+				);
+			}
+
 			if ( $e instanceof ApiException ) {
 				throw $e;
 			}
@@ -1254,12 +1386,693 @@ class Service {
 				500
 			);
 		} finally {
-			if ( is_dir( $temp_stage ) ) {
+			if ( null !== $temp_stage && is_dir( $temp_stage ) ) {
 				$this->safe_recursive_delete( $temp_stage );
+			}
+			if ( is_resource( $lock_handle ) ) {
+				flock( $lock_handle, LOCK_UN );
+				fclose( $lock_handle );
 			}
 		}
 
-		return $meta->with_active( false )->to_array();
+		$payload                    = $meta->with_active( $was_active )->to_array();
+		$payload['updated']         = $is_update;
+		$payload['previousVersion'] = $existing_version;
+
+		return $payload;
+	}
+
+	/**
+	 * Determine whether a plugin is currently active or a must-use plugin.
+	 *
+	 * @param string $slug Plugin identifier.
+	 * @return bool True if active or must-use, false otherwise.
+	 * @since 1.8.0
+	 */
+	public function is_plugin_active( string $slug ): bool {
+		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
+		$mu_target   = $content_dir . '/mu-plugins/' . $slug;
+		if ( is_dir( $mu_target ) ) {
+			return true;
+		}
+
+		$active_ids = $this->get_active_plugin_ids();
+
+		return in_array( $slug, $active_ids, true );
+	}
+
+	/**
+	 * Retrieve raw stored settings for a plugin.
+	 *
+	 * @param string $slug           Plugin identifier.
+	 * @param bool   $throw_on_error Whether to throw when settings storage fails.
+	 * @return array<string, mixed> Stored setting values.
+	 * @throws ApiException When storage fails and $throw_on_error is true.
+	 * @since 1.8.0
+	 */
+	public function get_plugin_settings_data( string $slug, bool $throw_on_error = false ): array {
+		if ( ! isset( $this->settings_api ) || null === $this->settings_api ) {
+			if ( $throw_on_error ) {
+				throw new ApiException( __( 'Settings storage is unavailable.', 'peakurl' ), 500 );
+			}
+			return array();
+		}
+
+		try {
+			$raw = $this->settings_api->get_option( 'plugin_' . $slug . '_settings' );
+		} catch ( \Throwable $e ) {
+			if ( $throw_on_error ) {
+				throw new ApiException(
+					sprintf(
+						/* translators: %s: Failure message */
+						__( 'Failed to retrieve plugin settings from storage: %s', 'peakurl' ),
+						$e->getMessage()
+					),
+					500
+				);
+			}
+			return array();
+		}
+
+		if ( null === $raw || '' === trim( $raw ) ) {
+			return array();
+		}
+
+		$decoded = json_decode( $raw, true );
+		if ( ! is_array( $decoded ) ) {
+			if ( $throw_on_error ) {
+				throw new ApiException( __( 'Stored plugin settings could not be decoded.', 'peakurl' ), 500 );
+			}
+			return array();
+		}
+
+		return $decoded;
+	}
+
+	/**
+	 * Retrieve registered pages and UI extensions visible to the current authenticated user.
+	 *
+	 * Filters descriptors so inactive plugins and unauthorized capabilities are never exposed.
+	 *
+	 * @param Request $request Incoming authenticated request.
+	 * @return array<string, mixed> Filtered pages and UI extensions.
+	 * @since 1.8.0
+	 */
+	public function get_plugin_extensions( Request $request ): array {
+		$user = $this->auth_service->get_current_user( $request );
+
+		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
+		$registry    = new Registry( $content_dir );
+		$active_ids  = $this->get_active_plugin_ids();
+		$mu_plugins  = array_keys( $registry->must_use() );
+
+		$is_active = static function ( string $slug ) use ( $active_ids, $mu_plugins ): bool {
+			return in_array( $slug, $active_ids, true ) || in_array( $slug, $mu_plugins, true );
+		};
+
+		$extensions = Extensions::get_instance();
+		$pages      = array();
+
+		foreach ( $extensions->get_pages() as $page ) {
+			if ( ! $is_active( $page['plugin_slug'] ) ) {
+				continue;
+			}
+
+			if ( ! $this->authorization->has_capability( $user, $page['capability'] ) ) {
+				continue;
+			}
+
+			$assets = $extensions->get_assets( $page['plugin_slug'], 'page', $page['page_id'] );
+
+			$pages[] = array(
+				'pluginSlug' => $page['plugin_slug'],
+				'pageId'     => $page['page_id'],
+				'title'      => $page['title'],
+				'menuTitle'  => $page['menu_title'],
+				'capability' => $page['capability'],
+				'icon'       => $page['icon'],
+				'order'      => $page['order'],
+				'sections'   => $page['sections'],
+				'actions'    => $page['actions'],
+				'assets'     => $assets,
+			);
+		}
+
+		// Sort pages by order asc, title asc.
+		usort(
+			$pages,
+			static function ( array $a, array $b ): int {
+				if ( $a['order'] === $b['order'] ) {
+					return strcmp( $a['title'], $b['title'] );
+				}
+				return $a['order'] <=> $b['order'];
+			}
+		);
+
+		$ui_extensions = array();
+		foreach ( $extensions->get_ui_extensions() as $ext ) {
+			if ( ! $is_active( $ext['plugin_slug'] ) ) {
+				continue;
+			}
+
+			if ( ! $this->authorization->has_capability( $user, $ext['capability'] ) ) {
+				continue;
+			}
+
+			$assets = $extensions->get_assets( $ext['plugin_slug'], 'links_overview' );
+
+			$ui_extensions[] = array(
+				'id'         => $ext['id'],
+				'pluginSlug' => $ext['plugin_slug'],
+				'location'   => $ext['location'],
+				'label'      => $ext['label'],
+				'actionId'   => $ext['action_id'],
+				'capability' => $ext['capability'],
+				'icon'       => $ext['icon'],
+				'confirm'    => $ext['confirm'],
+				'assets'     => $assets,
+			);
+		}
+
+		return array(
+			'pages'        => $pages,
+			'uiExtensions' => $ui_extensions,
+		);
+	}
+
+	/**
+	 * Retrieve a specific plugin admin page descriptor populated with current setting values.
+	 *
+	 * @param Request $request Incoming authenticated request.
+	 * @return array<string, mixed> Page descriptor and current values.
+	 * @throws ApiException When plugin is inactive, page not found, or user lacks capability.
+	 * @since 1.8.0
+	 */
+	public function get_plugin_page( Request $request ): array {
+		$user = $this->auth_service->get_current_user( $request );
+
+		$slug    = (string) $request->get_route_param( 'slug' );
+		$page_id = (string) $request->get_route_param( 'pageId' );
+
+		if ( ! $this->is_plugin_active( $slug ) ) {
+			throw new ApiException( __( 'Plugin is not active.', 'peakurl' ), 404 );
+		}
+
+		$page = Extensions::get_instance()->get_page( $slug, $page_id );
+		if ( null === $page ) {
+			throw new ApiException( __( 'Plugin page not found.', 'peakurl' ), 404 );
+		}
+
+		if ( ! $this->authorization->has_capability( $user, $page['capability'] ) ) {
+			throw new ApiException( __( 'You do not have permission to access this page.', 'peakurl' ), 403 );
+		}
+
+		$stored_values = $this->get_plugin_settings_data( $slug );
+		$defaults      = array();
+
+		// Merge defaults from schema fields.
+		$schema = Extensions::get_instance()->get_settings_schema( $slug );
+		if ( isset( $schema['fields'] ) && is_array( $schema['fields'] ) ) {
+			foreach ( $schema['fields'] as $f_key => $f_def ) {
+				if ( is_array( $f_def ) && array_key_exists( 'default', $f_def ) ) {
+					$defaults[ (string) $f_key ] = $f_def['default'];
+				}
+			}
+		}
+
+		// Merge defaults from page section fields.
+		if ( isset( $page['sections'] ) && is_array( $page['sections'] ) ) {
+			foreach ( $page['sections'] as $section ) {
+				if ( is_array( $section ) && isset( $section['fields'] ) && is_array( $section['fields'] ) ) {
+					foreach ( $section['fields'] as $field ) {
+						if ( is_array( $field ) && isset( $field['key'] ) && array_key_exists( 'default', $field ) ) {
+							if ( ! array_key_exists( (string) $field['key'], $defaults ) ) {
+								$defaults[ (string) $field['key'] ] = $field['default'];
+							}
+						}
+					}
+				}
+			}
+		}
+
+		$values = array_merge( $defaults, $stored_values );
+		$assets = Extensions::get_instance()->get_assets( $slug, 'page', $page_id );
+
+		return array(
+			'pluginSlug' => $slug,
+			'pageId'     => $page_id,
+			'title'      => $page['title'],
+			'menuTitle'  => $page['menu_title'],
+			'capability' => $page['capability'],
+			'icon'       => $page['icon'],
+			'order'      => $page['order'],
+			'sections'   => $page['sections'],
+			'actions'    => $page['actions'],
+			'values'     => $values,
+			'assets'     => $assets,
+		);
+	}
+
+	/**
+	 * Retrieve stored settings and schema for a plugin.
+	 *
+	 * @param Request $request Incoming authenticated request.
+	 * @return array<string, mixed> Settings values and schema.
+	 * @throws ApiException When plugin is inactive or user lacks capability.
+	 * @since 1.8.0
+	 */
+	public function get_plugin_settings( Request $request ): array {
+		$user = $this->auth_service->get_current_user( $request );
+
+		$slug   = (string) $request->get_route_param( 'slug' );
+		$schema = Extensions::get_instance()->get_settings_schema( $slug );
+		$cap    = (string) ( $schema['capability'] ?? 'manage_site_settings' );
+
+		if ( ! $this->authorization->has_capability( $user, $cap ) ) {
+			throw new ApiException( __( 'You do not have permission to view these settings.', 'peakurl' ), 403 );
+		}
+
+		if ( ! $this->is_plugin_active( $slug ) ) {
+			throw new ApiException( __( 'Plugin is not active.', 'peakurl' ), 404 );
+		}
+
+		$settings = $this->get_plugin_settings_data( $slug );
+
+		return array(
+			'pluginSlug' => $slug,
+			'settings'   => $settings,
+			'schema'     => $schema,
+		);
+	}
+
+	/**
+	 * Update stored settings for a plugin.
+	 *
+	 * Enforces the registered schema fields, types, and allowed options.
+	 * Updates settings atomically using row-level locking to prevent race conditions.
+	 *
+	 * @param Request $request Incoming authenticated request.
+	 * @return array<string, mixed> Updated settings payload.
+	 * @throws ApiException When plugin is inactive, storage unavailable, validation fails, or user lacks capability.
+	 * @since 1.8.0
+	 */
+	public function update_plugin_settings( Request $request ): array {
+		$user = $this->auth_service->get_current_user( $request );
+
+		$slug   = (string) $request->get_route_param( 'slug' );
+		$schema = Extensions::get_instance()->get_settings_schema( $slug );
+		$cap    = (string) ( $schema['capability'] ?? 'manage_site_settings' );
+
+		if ( ! $this->authorization->has_capability( $user, $cap ) ) {
+			throw new ApiException( __( 'You do not have permission to update these settings.', 'peakurl' ), 403 );
+		}
+
+		if ( ! $this->is_plugin_active( $slug ) ) {
+			throw new ApiException( __( 'Plugin is not active.', 'peakurl' ), 404 );
+		}
+
+		if ( null === $schema ) {
+			throw new ApiException( __( 'Plugin has not registered a settings schema.', 'peakurl' ), 400 );
+		}
+
+		if ( ! isset( $this->settings_api ) || null === $this->settings_api ) {
+			throw new ApiException( __( 'Settings storage is unavailable.', 'peakurl' ), 500 );
+		}
+
+		$input = $request->get_body_param( 'settings' ) ?? $request->get_body_params();
+		if ( ! is_array( $input ) ) {
+			throw new ApiException( __( 'Invalid settings payload.', 'peakurl' ), 400 );
+		}
+
+		// Map registered schema fields.
+		$fields_def = array();
+		foreach ( (array) ( $schema['fields'] ?? array() ) as $field ) {
+			if ( is_array( $field ) && isset( $field['key'] ) ) {
+				$fields_def[ (string) $field['key'] ] = $field;
+			}
+		}
+
+		// Validate submitted input strictly against the schema.
+		$validated_input = array();
+		foreach ( $input as $key => $value ) {
+			$field_key = (string) $key;
+			if ( ! isset( $fields_def[ $field_key ] ) ) {
+				throw new ApiException(
+					sprintf(
+						/* translators: %s: Unrecognized setting key */
+						__( 'Setting key \'%s\' is not permitted by the registered schema.', 'peakurl' ),
+						$field_key
+					),
+					400
+				);
+			}
+
+			$field_def  = $fields_def[ $field_key ];
+			$field_type = (string) ( $field_def['type'] ?? 'string' );
+
+			switch ( $field_type ) {
+				case 'boolean':
+					if ( ! is_bool( $value ) ) {
+						throw new ApiException(
+							sprintf(
+								/* translators: %s: Setting key */
+								__( 'Setting \'%s\' must be a boolean.', 'peakurl' ),
+								$field_key
+							),
+							400
+						);
+					}
+					$validated_input[ $field_key ] = $value;
+					break;
+
+				case 'integer':
+					if ( ! is_int( $value ) && ! ( is_numeric( $value ) && ( (int) $value ) === ( $value + 0 ) && ! is_float( $value + 0 ) ) ) {
+						throw new ApiException(
+							sprintf(
+								/* translators: %s: Setting key */
+								__( 'Setting \'%s\' must be an integer.', 'peakurl' ),
+								$field_key
+							),
+							400
+						);
+					}
+					$validated_input[ $field_key ] = (int) $value;
+					break;
+
+				case 'number':
+					if ( ! is_numeric( $value ) ) {
+						throw new ApiException(
+							sprintf(
+								/* translators: %s: Setting key */
+								__( 'Setting \'%s\' must be numeric.', 'peakurl' ),
+								$field_key
+							),
+							400
+						);
+					}
+					$validated_input[ $field_key ] = is_float( $value + 0 ) ? (float) $value : (int) $value;
+					break;
+
+				case 'select':
+					if ( ! is_string( $value ) && ! is_numeric( $value ) ) {
+						throw new ApiException(
+							sprintf(
+								/* translators: %s: Setting key */
+								__( 'Setting \'%s\' must be a string.', 'peakurl' ),
+								$field_key
+							),
+							400
+						);
+					}
+					$selected_value = (string) $value;
+					$allowed_opts   = array();
+					foreach ( (array) ( $field_def['options'] ?? array() ) as $opt ) {
+						if ( is_array( $opt ) && isset( $opt['value'] ) ) {
+							$allowed_opts[] = (string) $opt['value'];
+						} elseif ( is_scalar( $opt ) ) {
+							$allowed_opts[] = (string) $opt;
+						}
+					}
+					if ( ! empty( $allowed_opts ) && ! in_array( $selected_value, $allowed_opts, true ) ) {
+						throw new ApiException(
+							sprintf(
+								/* translators: %s: Setting key */
+								__( 'Selected option for setting \'%s\' is not allowed.', 'peakurl' ),
+								$field_key
+							),
+							400
+						);
+					}
+					$validated_input[ $field_key ] = $selected_value;
+					break;
+
+				case 'string':
+				default:
+					if ( ! is_string( $value ) ) {
+						throw new ApiException(
+							sprintf(
+								/* translators: %s: Setting key */
+								__( 'Setting \'%s\' must be a string.', 'peakurl' ),
+								$field_key
+							),
+							400
+						);
+					}
+					// Reject control characters.
+					if ( preg_match( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $value ) ) {
+						throw new ApiException(
+							sprintf(
+								/* translators: %s: Setting key */
+								__( 'Setting \'%s\' contains forbidden control characters.', 'peakurl' ),
+								$field_key
+							),
+							400
+						);
+					}
+					$validated_input[ $field_key ] = $value;
+					break;
+			}
+		}
+
+		$key               = 'plugin_' . $slug . '_settings';
+		$merged_settings   = array();
+		$existing_settings = array();
+
+		try {
+			$this->settings_api->update_option_with_lock(
+				$key,
+				function ( ?string $current_raw ) use ( $validated_input, &$merged_settings, &$existing_settings ): string {
+					$existing = array();
+					if ( null !== $current_raw && '' !== trim( $current_raw ) ) {
+						$decoded = json_decode( $current_raw, true );
+						if ( ! is_array( $decoded ) ) {
+							throw new \RuntimeException( 'Stored plugin settings could not be decoded.' );
+						}
+						$existing = $decoded;
+					}
+					$existing_settings = $existing;
+					$merged            = array_merge( $existing, $validated_input );
+					$merged_settings   = $merged;
+
+					$encoded = json_encode( $merged );
+					if ( false === $encoded ) {
+						throw new \RuntimeException( 'Settings could not be encoded.' );
+					}
+
+					return $encoded;
+				}
+			);
+		} catch ( \Throwable $e ) {
+			throw new ApiException(
+				sprintf(
+					/* translators: %s: Error message */
+					__( 'Failed to update plugin settings: %s', 'peakurl' ),
+					$e->getMessage()
+				),
+				500
+			);
+		}
+
+		if ( function_exists( 'do_action' ) ) {
+			\do_action( 'plugin_settings_updated', $slug, $merged_settings, $existing_settings );
+		}
+
+		return array(
+			'pluginSlug' => $slug,
+			'settings'   => $merged_settings,
+		);
+	}
+
+	/**
+	 * Dispatch an authorized plugin backend action callback.
+	 *
+	 * @param Request $request Incoming authenticated request.
+	 * @return array<string, mixed> Action execution response.
+	 * @throws ApiException When plugin is inactive, action not found, or user lacks capability.
+	 * @since 1.8.0
+	 */
+	public function dispatch_plugin_action( Request $request ): array {
+		$user = $this->auth_service->get_current_user( $request );
+
+		$slug      = (string) $request->get_route_param( 'slug' );
+		$action_id = (string) $request->get_route_param( 'actionId' );
+
+		if ( ! $this->is_plugin_active( $slug ) ) {
+			throw new ApiException( __( 'Plugin is not active.', 'peakurl' ), 404 );
+		}
+
+		$action = Extensions::get_instance()->get_action( $slug, $action_id );
+		if ( null === $action ) {
+			throw new ApiException( __( 'Plugin action not found.', 'peakurl' ), 404 );
+		}
+
+		if ( ! $this->authorization->has_capability( $user, $action['capability'] ) ) {
+			throw new ApiException( __( 'You do not have permission to execute this action.', 'peakurl' ), 403 );
+		}
+
+		$result = call_user_func(
+			$action['handler'],
+			$request,
+			array(
+				'user'        => $user,
+				'plugin_slug' => $slug,
+				'action_id'   => $action_id,
+			)
+		);
+
+		return is_array( $result ) ? $result : array( 'result' => $result );
+	}
+
+	/**
+	 * Serve an approved, scoped browser asset registered by an active plugin.
+	 *
+	 * Browser assets are authenticated administrative resources. Rejects traversal,
+	 * unregistered assets, source maps, PHP, and sensitive file types.
+	 *
+	 * @param Request $request Incoming request.
+	 * @return array<string, mixed> Structured response with MIME type, ETag, and body.
+	 * @throws ApiException When asset is invalid, forbidden, unauthenticated, or not found.
+	 * @since 1.8.0
+	 */
+	public function serve_plugin_asset( Request $request ): array {
+		// Plugin browser assets are authenticated administrative resources.
+		$user = $this->auth_service->get_current_user( $request );
+		if ( null === $user ) {
+			throw new ApiException( __( 'Authentication is required to access plugin assets.', 'peakurl' ), 401 );
+		}
+
+		$slug       = (string) $request->get_route_param( 'slug' );
+		$asset_path = (string) $request->get_route_param( 'assetPath' );
+
+		if ( '' === $slug || ! preg_match( '/^[a-z0-9_-]+$/', $slug ) ) {
+			throw new ApiException( __( 'Invalid plugin identifier.', 'peakurl' ), 400 );
+		}
+
+		if ( ! $this->authorization->has_capability( $user, 'access_dashboard' ) ) {
+			throw new ApiException( __( 'You do not have permission to access plugin assets.', 'peakurl' ), 403 );
+		}
+
+		// Inactive plugins cannot serve assets.
+		if ( ! $this->is_plugin_active( $slug ) ) {
+			throw new ApiException( __( 'Plugin is not active.', 'peakurl' ), 404 );
+		}
+
+		// Strictly reject directory traversal, backslashes, absolute paths, or hidden files without normalization.
+		if (
+			str_contains( $asset_path, '\\' ) ||
+			str_starts_with( $asset_path, '/' ) ||
+			str_contains( $asset_path, '..' ) ||
+			str_starts_with( $asset_path, '.' ) ||
+			str_contains( $asset_path, '/.' )
+		) {
+			throw new ApiException( __( 'Invalid asset path.', 'peakurl' ), 400 );
+		}
+
+		if ( str_starts_with( $asset_path, 'assets/' ) ) {
+			$clean_path = substr( $asset_path, 7 );
+		} else {
+			$clean_path = $asset_path;
+		}
+
+		if ( '' === $clean_path ) {
+			throw new ApiException( __( 'Asset path cannot be empty.', 'peakurl' ), 400 );
+		}
+
+		// Verify asset is explicitly registered by the plugin.
+		$registered_assets = Extensions::get_instance()->get_assets( $slug );
+		$is_registered     = false;
+		foreach ( $registered_assets as $asset ) {
+			if ( $asset['file'] === $clean_path ) {
+				$is_registered = true;
+				break;
+			}
+		}
+
+		if ( ! $is_registered ) {
+			throw new ApiException( __( 'Asset is not registered for this plugin.', 'peakurl' ), 404 );
+		}
+
+		// Strictly disallow PHP, configuration, source maps, and other sensitive files.
+		$ext = strtolower( pathinfo( $clean_path, PATHINFO_EXTENSION ) );
+		if ( in_array( $ext, array( 'php', 'phtml', 'phar', 'json', 'env', 'config', 'lock', 'sql', 'sh', 'map', 'ts', 'tsx', 'md' ), true ) ) {
+			throw new ApiException( __( 'Access to executable, configuration, and source map files is forbidden.', 'peakurl' ), 403 );
+		}
+
+		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
+		$plugin_dir  = $content_dir . '/plugins/' . $slug;
+		if ( ! is_dir( $plugin_dir ) ) {
+			$plugin_dir = $content_dir . '/mu-plugins/' . $slug;
+		}
+
+		if ( ! is_dir( $plugin_dir ) ) {
+			throw new ApiException( __( 'Plugin directory not found.', 'peakurl' ), 404 );
+		}
+
+		$assets_dir = realpath( $plugin_dir . '/assets' );
+		if ( false === $assets_dir || ! is_dir( $assets_dir ) ) {
+			throw new ApiException( __( 'Plugin has no approved assets directory.', 'peakurl' ), 404 );
+		}
+
+		$target_file = realpath( $assets_dir . '/' . $clean_path );
+		if (
+			false === $target_file ||
+			! is_file( $target_file ) ||
+			is_link( $target_file ) ||
+			! is_readable( $target_file ) ||
+			! str_starts_with( $target_file, $assets_dir . DIRECTORY_SEPARATOR )
+		) {
+			throw new ApiException( __( 'Asset file not found.', 'peakurl' ), 404 );
+		}
+
+		$mime_types = array(
+			'js'    => 'application/javascript; charset=utf-8',
+			'mjs'   => 'application/javascript; charset=utf-8',
+			'css'   => 'text/css; charset=utf-8',
+			'svg'   => 'image/svg+xml',
+			'png'   => 'image/png',
+			'jpg'   => 'image/jpeg',
+			'jpeg'  => 'image/jpeg',
+			'webp'  => 'image/webp',
+			'gif'   => 'image/gif',
+			'ico'   => 'image/x-icon',
+			'woff2' => 'font/woff2',
+			'woff'  => 'font/woff',
+			'ttf'   => 'font/ttf',
+		);
+
+		$content_type = $mime_types[ $ext ] ?? null;
+		if ( null === $content_type ) {
+			throw new ApiException( __( 'Unsupported asset MIME type.', 'peakurl' ), 403 );
+		}
+
+		$contents = file_get_contents( $target_file );
+		if ( false === $contents ) {
+			throw new ApiException( __( 'Failed to read asset file.', 'peakurl' ), 500 );
+		}
+
+		$etag          = '"' . md5( $contents ) . '"';
+		$if_none_match = $request->get_header( 'If-None-Match' );
+		if ( null !== $if_none_match && trim( $if_none_match ) === $etag ) {
+			return array(
+				'status'  => 304,
+				'headers' => array(
+					'ETag'          => $etag,
+					'Cache-Control' => 'private, no-transform, max-age=3600',
+				),
+				'body'    => '',
+			);
+		}
+
+		return array(
+			'status'  => 200,
+			'headers' => array(
+				'Content-Type'   => $content_type,
+				'ETag'           => $etag,
+				'Cache-Control'  => 'private, no-transform, max-age=3600',
+				'Content-Length' => (string) strlen( $contents ),
+			),
+			'body'    => $contents,
+		);
 	}
 
 	/**

@@ -94,6 +94,8 @@ class PluginConcurrencyTest extends TestCase {
 					'testedUpTo' => '1.8.0',
 					'php'        => '8.3',
 					'license'    => 'MIT',
+					'textDomain' => $id,
+					'domainPath' => '/languages',
 				)
 			)
 		);

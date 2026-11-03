@@ -94,21 +94,28 @@ class PluginUploadSecurityTest extends TestCase {
 	}
 
 	private function create_valid_manifest( array $overrides = array() ): array {
+		$name = (string) ( $overrides['name'] ?? 'Sec Plugin' );
 		return array_merge(
 			array(
 				'$schema'    => 'https://peakurl.org/schemas/v1/plugin.json',
-				'name'       => 'Secure Plugin',
+				'name'       => $name,
 				'version'    => '1.0.0',
 				'requires'   => '1.0.0',
 				'testedUpTo' => '1.8.0',
 				'php'        => '8.3',
 				'license'    => 'MIT',
+				'textDomain' => \PeakURL\Core\Plugins\Validator::slugify( $name ),
+				'domainPath' => '/languages',
 			),
 			$overrides
 		);
 	}
 
-	private function create_upload_request( string $zip_path, string $original_name = 'package.zip' ): Request {
+	private function create_upload_request(
+		string $zip_path,
+		string $original_name = 'package.zip',
+		array $body_params = array()
+	): Request {
 		$files = array(
 			'plugin_zip' => array(
 				'tmp_name' => $zip_path,
@@ -118,7 +125,7 @@ class PluginUploadSecurityTest extends TestCase {
 			),
 		);
 
-		return new Request( 'POST', '/api/v1/system/plugins/upload', array(), array(), array(), $files );
+		return new Request( 'POST', '/api/v1/system/plugins/upload', array(), $body_params, array(), $files );
 	}
 
 	public function test_upload_plugin_rejects_backslash_path(): void {
@@ -447,7 +454,8 @@ class PluginUploadSecurityTest extends TestCase {
 			json_encode(
 				$this->create_valid_manifest(
 					array(
-						'name' => 'Valid Installed Plugin',
+						'name'       => 'Valid Plugin',
+						'textDomain' => 'valid-plugin',
 					)
 				)
 			)
@@ -461,7 +469,7 @@ class PluginUploadSecurityTest extends TestCase {
 		$response = $service->upload_plugin( $request );
 
 		$this->assertSame( 'valid-plugin', $response['id'] );
-		$this->assertSame( 'Valid Installed Plugin', $response['name'] );
+		$this->assertSame( 'Valid Plugin', $response['name'] );
 		$this->assertFalse( $response['active'] );
 		$this->assertTrue( $response['valid'] );
 		$this->assertTrue( $response['compatible'] );
@@ -622,6 +630,209 @@ class PluginUploadSecurityTest extends TestCase {
 		$this->expectException( ApiException::class );
 		$this->expectExceptionMessage( sprintf( 'Plugin archive exceeds the %s maximum upload limit.', $effective['formatted'] ) );
 		$service->upload_plugin( $request );
+	}
+
+	public function test_upload_plugin_rejects_updating_must_use_plugin(): void {
+		$mu_dir = $this->temp_dir . '/mu-plugins/mu-sec-plugin';
+		mkdir( $mu_dir, 0777, true );
+		file_put_contents( $mu_dir . '/plugin.json', json_encode( $this->create_valid_manifest() ) );
+		file_put_contents( $mu_dir . '/plugin.php', "<?php // MU\n" );
+
+		$zip_file = $this->temp_dir . '/update_mu.zip';
+		$zip      = new ZipArchive();
+		$zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+		$zip->addFromString( 'mu-sec-plugin/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.1.0' ) ) ) );
+		$zip->addFromString( 'mu-sec-plugin/plugin.php', "<?php // Updated MU\n" );
+		$zip->close();
+
+		$service = $this->create_service();
+		$request = $this->create_upload_request( $zip_file );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+		$this->expectExceptionMessage( 'Must-use plugins cannot be updated through the dashboard.' );
+		$service->upload_plugin( $request );
+	}
+
+	public function test_upload_plugin_rejects_downgrade(): void {
+		$plugin_dir = $this->temp_dir . '/plugins/sec-plugin';
+		mkdir( $plugin_dir, 0777, true );
+		file_put_contents( $plugin_dir . '/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.2.0' ) ) ) );
+		file_put_contents( $plugin_dir . '/plugin.php', "<?php // v1.2.0\n" );
+
+		$zip_file = $this->temp_dir . '/downgrade.zip';
+		$zip      = new ZipArchive();
+		$zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+		$zip->addFromString( 'sec-plugin/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.1.0' ) ) ) );
+		$zip->addFromString( 'sec-plugin/plugin.php', "<?php // v1.1.0\n" );
+		$zip->close();
+
+		$service = $this->create_service();
+		$request = $this->create_upload_request( $zip_file );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 400 );
+		$this->expectExceptionMessage( 'Cannot downgrade plugin from version 1.2.0 to 1.1.0.' );
+		$service->upload_plugin( $request );
+	}
+
+	public function test_upload_plugin_rejects_identical_version_immutable_policy(): void {
+		$plugin_dir = $this->temp_dir . '/plugins/sec-plugin';
+		mkdir( $plugin_dir, 0777, true );
+		file_put_contents( $plugin_dir . '/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.0.0' ) ) ) );
+		file_put_contents( $plugin_dir . '/plugin.php', "<?php // v1.0.0\n" );
+
+		$zip_file = $this->temp_dir . '/same_version.zip';
+		$zip      = new ZipArchive();
+		$zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+		$zip->addFromString( 'sec-plugin/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.0.0' ) ) ) );
+		$zip->addFromString( 'sec-plugin/plugin.php', "<?php // v1.0.0\n" );
+		$zip->close();
+
+		$service = $this->create_service();
+		$request = $this->create_upload_request( $zip_file );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 409 );
+		$this->expectExceptionMessage( 'Plugin version 1.0.0 is already installed.' );
+		$service->upload_plugin( $request );
+	}
+
+	public function test_upload_plugin_rejects_same_version_even_with_overwrite_flag(): void {
+		$plugin_dir = $this->temp_dir . '/plugins/sec-plugin';
+		mkdir( $plugin_dir, 0777, true );
+		file_put_contents( $plugin_dir . '/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.0.0' ) ) ) );
+		file_put_contents( $plugin_dir . '/plugin.php', "<?php // v1.0.0\n" );
+
+		$zip_file = $this->temp_dir . '/same_version_overwrite.zip';
+		$zip      = new ZipArchive();
+		$zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+		$zip->addFromString( 'sec-plugin/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.0.0' ) ) ) );
+		$zip->addFromString( 'sec-plugin/plugin.php', "<?php // Reinstalled v1.0.0\n" );
+		$zip->close();
+
+		$service = $this->create_service();
+		$request = $this->create_upload_request( $zip_file, 'package.zip', array( 'overwrite' => '1' ) );
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 409 );
+		$this->expectExceptionMessage( 'Plugin version 1.0.0 is already installed.' );
+		$service->upload_plugin( $request );
+	}
+
+	public function test_upload_plugin_upgrades_cleanly_and_preserves_active_state(): void {
+		$plugin_dir = $this->temp_dir . '/plugins/sec-plugin';
+		mkdir( $plugin_dir, 0777, true );
+		file_put_contents( $plugin_dir . '/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.0.0' ) ) ) );
+		file_put_contents( $plugin_dir . '/plugin.php', "<?php // v1.0.0\n" );
+
+		$settings_api = $this->createMock( SettingsApi::class );
+		$settings_api->method( 'get_option' )
+			->with( 'active_plugins' )
+			->willReturn( json_encode( array( 'sec-plugin' ) ) );
+
+		$zip_file = $this->temp_dir . '/upgrade_v110.zip';
+		$zip      = new ZipArchive();
+		$zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+		$zip->addFromString( 'sec-plugin/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.1.0' ) ) ) );
+		$zip->addFromString( 'sec-plugin/plugin.php', "<?php // v1.1.0 upgraded\n" );
+		$zip->addFromString( 'sec-plugin/server/services/upgrade.php', "<?php // new service\n" );
+		$zip->close();
+
+		$service = $this->create_service( array( 'administrator' ), $settings_api );
+		$request = $this->create_upload_request( $zip_file );
+
+		$result = $service->upload_plugin( $request );
+
+		$this->assertTrue( $result['updated'] );
+		$this->assertSame( '1.0.0', $result['previousVersion'] );
+		$this->assertSame( '1.1.0', $result['version'] );
+		$this->assertTrue( $result['active'] );
+		$this->assertFileExists( $plugin_dir . '/server/services/upgrade.php' );
+	}
+
+	public function test_upload_plugin_restores_backup_on_post_move_verification_failure(): void {
+		$plugin_dir = $this->temp_dir . '/plugins/sec-plugin';
+		mkdir( $plugin_dir, 0777, true );
+		file_put_contents( $plugin_dir . '/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.0.0' ) ) ) );
+		file_put_contents( $plugin_dir . '/plugin.php', "<?php // v1.0.0\n" );
+		file_put_contents( $plugin_dir . '/original_marker.txt', 'must_survive' );
+
+		// Create a ZIP with a valid plugin.json but a conflicting plugin.php header.
+		// upload_plugin validates plugin.json pre-move; Registry::find validates plugin.php header post-move.
+		$zip_file = $this->temp_dir . '/corrupt_upgrade.zip';
+		$zip      = new ZipArchive();
+		$zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+		$zip->addFromString(
+			'sec-plugin/plugin.json',
+			json_encode(
+				$this->create_valid_manifest(
+					array(
+						'version' => '1.1.0',
+					)
+				)
+			)
+		);
+		$zip->addFromString(
+			'sec-plugin/plugin.php',
+			"<?php\n/**\n * Plugin Name: Secure Plugin\n * Version: 9.9.9\n */\n"
+		);
+		$zip->close();
+
+		$service = $this->create_service();
+		$request = $this->create_upload_request( $zip_file );
+
+		try {
+			$service->upload_plugin( $request );
+			$this->fail( 'Expected ApiException on incompatible post-move verification.' );
+		} catch ( ApiException $e ) {
+			$this->assertSame( 500, $e->getCode() );
+			$this->assertStringContainsString( 'Plugin installation failed verification', $e->getMessage() );
+		}
+
+		// Verify original directory still exists, original marker survived, version is still 1.0.0.
+		$this->assertFileExists( $plugin_dir . '/original_marker.txt' );
+		$manifest_disk = json_decode( (string) file_get_contents( $plugin_dir . '/plugin.json' ), true );
+		$this->assertSame( '1.0.0', $manifest_disk['version'] );
+	}
+
+	public function test_concurrent_upgrade_locking_rejects_simultaneous_updates(): void {
+		$plugin_dir = $this->temp_dir . '/plugins/sec-plugin';
+		mkdir( $plugin_dir, 0777, true );
+		file_put_contents( $plugin_dir . '/plugin.json', json_encode( $this->create_valid_manifest( array( 'version' => '1.0.0' ) ) ) );
+		file_put_contents( $plugin_dir . '/plugin.php', "<?php // v1.0.0\n" );
+
+		// Simulate another active upload process acquiring the exclusive file lock.
+		$lock_file   = $this->temp_dir . '/plugins/.lock_sec-plugin';
+		$lock_handle = fopen( $lock_file, 'c+' );
+		$this->assertIsResource( $lock_handle );
+		$locked = flock( $lock_handle, LOCK_EX | LOCK_NB );
+		$this->assertTrue( $locked );
+
+		try {
+			$zip_file = $this->temp_dir . '/simultaneous_update.zip';
+			$zip      = new ZipArchive();
+			$zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE );
+			$zip->addFromString(
+				'sec-plugin/plugin.json',
+				json_encode( $this->create_valid_manifest( array( 'version' => '1.1.0' ) ) )
+			);
+			$zip->addFromString( 'sec-plugin/plugin.php', "<?php // v1.1.0\n" );
+			$zip->close();
+
+			$service = $this->create_service();
+			$request = $this->create_upload_request( $zip_file );
+
+			$this->expectException( ApiException::class );
+			$this->expectExceptionCode( 409 );
+			$this->expectExceptionMessage( 'An installation or update is already in progress for plugin \'sec-plugin\'.' );
+
+			$service->upload_plugin( $request );
+		} finally {
+			flock( $lock_handle, LOCK_UN );
+			fclose( $lock_handle );
+			@unlink( $lock_file );
+		}
 	}
 
 	private function recursive_rmdir( string $dir ): void {

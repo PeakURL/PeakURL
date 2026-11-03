@@ -397,10 +397,10 @@ export function InstalledPluginsTable({
 												{plugin.author && (
 													<span>
 														{__("By")}{" "}
-														{plugin.authorUrl ? (
+														{plugin.authorUri ? (
 															<a
 																href={
-																	plugin.authorUrl
+																	plugin.authorUri
 																}
 																target="_blank"
 																rel="noopener noreferrer"
@@ -417,7 +417,7 @@ export function InstalledPluginsTable({
 												)}
 
 												{plugin.author &&
-													(plugin.homepage ||
+													(plugin.pluginUri ||
 														plugin.documentation) && (
 														<span
 															className="text-text-muted/40"
@@ -427,9 +427,9 @@ export function InstalledPluginsTable({
 														</span>
 													)}
 
-												{plugin.homepage && (
+												{plugin.pluginUri && (
 													<a
-														href={plugin.homepage}
+														href={plugin.pluginUri}
 														target="_blank"
 														rel="noopener noreferrer"
 														className="inline-flex items-center gap-1 font-medium text-accent hover:underline"
@@ -445,7 +445,7 @@ export function InstalledPluginsTable({
 													</a>
 												)}
 
-												{plugin.homepage &&
+												{plugin.pluginUri &&
 													plugin.documentation && (
 														<span
 															className="text-text-muted/40"
@@ -657,15 +657,15 @@ export function InstalledPluginsTable({
 
 							{/* Attribution & Resource Links */}
 							{(plugin.author ||
-								plugin.homepage ||
+								plugin.pluginUri ||
 								plugin.documentation) && (
 								<div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-text-muted pt-0.5">
 									{plugin.author && (
 										<span>
 											{__("By")}{" "}
-											{plugin.authorUrl ? (
+											{plugin.authorUri ? (
 												<a
-													href={plugin.authorUrl}
+													href={plugin.authorUri}
 													target="_blank"
 													rel="noopener noreferrer"
 													className="font-medium text-heading hover:text-accent hover:underline"
@@ -681,7 +681,7 @@ export function InstalledPluginsTable({
 									)}
 
 									{plugin.author &&
-										(plugin.homepage ||
+										(plugin.pluginUri ||
 											plugin.documentation) && (
 											<span
 												className="text-text-muted/40"
@@ -691,9 +691,9 @@ export function InstalledPluginsTable({
 											</span>
 										)}
 
-									{plugin.homepage && (
+									{plugin.pluginUri && (
 										<a
-											href={plugin.homepage}
+											href={plugin.pluginUri}
 											target="_blank"
 											rel="noopener noreferrer"
 											className="inline-flex items-center gap-1 font-medium text-accent hover:underline"
@@ -705,7 +705,7 @@ export function InstalledPluginsTable({
 										</a>
 									)}
 
-									{plugin.homepage &&
+									{plugin.pluginUri &&
 										plugin.documentation && (
 											<span
 												className="text-text-muted/40"

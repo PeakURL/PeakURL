@@ -82,11 +82,46 @@ final class Metadata {
 	private string $license;
 
 	/**
-	 * Short plain-text description extracted from package README.
+	 * Independent translation domain matching plugin slug.
+	 *
+	 * @var string
+	 */
+	private string $text_domain;
+
+	/**
+	 * Relative path to languages directory.
+	 *
+	 * @var string
+	 */
+	private string $domain_path;
+
+	/**
+	 * Short plain-text description extracted from package README or manifest.
 	 *
 	 * @var string|null
 	 */
 	private ?string $description;
+
+	/**
+	 * Canonical plugin website or details URL.
+	 *
+	 * @var string|null
+	 */
+	private ?string $plugin_uri;
+
+	/**
+	 * Human-readable author or organization name.
+	 *
+	 * @var string|null
+	 */
+	private ?string $author;
+
+	/**
+	 * Absolute HTTP or HTTPS URL to author website or profile.
+	 *
+	 * @var string|null
+	 */
+	private ?string $author_uri;
 
 	/**
 	 * Whether the manifest passed structural and semantic schema validation.
@@ -167,10 +202,15 @@ final class Metadata {
 		$this->name          = (string) ( $data['name'] ?? '' );
 		$this->version       = (string) ( $data['version'] ?? '' );
 		$this->requires      = (string) ( $data['requires'] ?? '' );
-		$this->tested_up_to  = (string) ( $data['tested_up_to'] ?? ( $data['testedUpTo'] ?? '' ) );
+		$this->tested_up_to  = (string) ( $data['testedUpTo'] ?? '' );
 		$this->php           = (string) ( $data['php'] ?? '' );
 		$this->license       = (string) ( $data['license'] ?? '' );
+		$this->text_domain   = (string) ( $data['textDomain'] ?? $this->id );
+		$this->domain_path   = isset( $data['domainPath'] ) && is_string( $data['domainPath'] ) && '' !== trim( $data['domainPath'] ) ? trim( $data['domainPath'] ) : '/languages';
 		$this->description   = isset( $data['description'] ) && is_string( $data['description'] ) && '' !== trim( $data['description'] ) ? trim( $data['description'] ) : null;
+		$this->plugin_uri    = isset( $data['pluginUri'] ) && is_string( $data['pluginUri'] ) && '' !== trim( $data['pluginUri'] ) ? trim( $data['pluginUri'] ) : null;
+		$this->author        = isset( $data['author'] ) && is_string( $data['author'] ) && '' !== trim( $data['author'] ) ? trim( $data['author'] ) : null;
+		$this->author_uri    = isset( $data['authorUri'] ) && is_string( $data['authorUri'] ) && '' !== trim( $data['authorUri'] ) ? trim( $data['authorUri'] ) : null;
 		$this->valid         = (bool) ( $data['valid'] ?? false );
 		$this->compatible    = (bool) ( $data['compatible'] ?? false );
 		$this->active        = (bool) ( $data['active'] ?? false );
@@ -207,7 +247,7 @@ final class Metadata {
 				'description'   => null,
 				'version'       => '',
 				'requires'      => '',
-				'tested_up_to'  => '',
+				'testedUpTo'    => '',
 				'php'           => '',
 				'license'       => '',
 				'valid'         => false,
@@ -296,12 +336,57 @@ final class Metadata {
 	}
 
 	/**
-	 * Get the short plain-text description extracted from package README.
+	 * Get the translation text domain.
+	 *
+	 * @return string
+	 */
+	public function text_domain(): string {
+		return $this->text_domain;
+	}
+
+	/**
+	 * Get the relative translation files directory path.
+	 *
+	 * @return string
+	 */
+	public function domain_path(): string {
+		return $this->domain_path;
+	}
+
+	/**
+	 * Get the short plain-text description.
 	 *
 	 * @return string|null
 	 */
 	public function description(): ?string {
 		return $this->description;
+	}
+
+	/**
+	 * Get the canonical plugin website or details URL.
+	 *
+	 * @return string|null
+	 */
+	public function plugin_uri(): ?string {
+		return $this->plugin_uri;
+	}
+
+	/**
+	 * Get the human-readable author or organization name.
+	 *
+	 * @return string|null
+	 */
+	public function author(): ?string {
+		return $this->author;
+	}
+
+	/**
+	 * Get the author website or profile URL.
+	 *
+	 * @return string|null
+	 */
+	public function author_uri(): ?string {
+		return $this->author_uri;
 	}
 
 	/**
@@ -425,11 +510,16 @@ final class Metadata {
 			'typeLabel'   => $this->type->label(),
 			'name'        => $this->name,
 			'description' => $this->description,
+			'pluginUri'   => $this->plugin_uri,
+			'author'      => $this->author,
+			'authorUri'   => $this->author_uri,
 			'version'     => $this->version,
 			'requires'    => $this->requires,
 			'testedUpTo'  => $this->tested_up_to,
 			'php'         => $this->php,
 			'license'     => $this->license,
+			'textDomain'  => $this->text_domain,
+			'domainPath'  => $this->domain_path,
 			'valid'       => $this->valid,
 			'compatible'  => $this->compatible,
 			'active'      => $this->active,
@@ -439,7 +529,7 @@ final class Metadata {
 			'links'       => $this->links,
 		);
 
-		foreach ( array( 'licenseUri', 'homepage', 'documentation', 'repository', 'support', 'issues' ) as $link_key ) {
+		foreach ( array( 'licenseUri', 'pluginUri', 'authorUri', 'documentation', 'repository', 'support', 'issues' ) as $link_key ) {
 			if ( isset( $this->links[ $link_key ] ) ) {
 				$result[ $link_key ] = $this->links[ $link_key ];
 			}

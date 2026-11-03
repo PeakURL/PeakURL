@@ -39,6 +39,11 @@ class Validator {
 	public const int MAX_MANIFEST_BYTES = 65536;
 
 	/**
+	 * Maximum bytes to read for PHP header inspection (8 KB).
+	 */
+	public const int MAX_HEADER_READ_BYTES = 8192;
+
+	/**
 	 * Required manifest property names.
 	 *
 	 * @var array<int, string>
@@ -50,6 +55,7 @@ class Validator {
 		'testedUpTo',
 		'php',
 		'license',
+		'textDomain',
 	);
 
 	/**
@@ -59,8 +65,12 @@ class Validator {
 	 */
 	public const array OPTIONAL_FIELDS = array(
 		'$schema',
+		'domainPath',
 		'licenseUri',
-		'homepage',
+		'pluginUri',
+		'description',
+		'author',
+		'authorUri',
 		'documentation',
 		'repository',
 		'support',
@@ -68,9 +78,50 @@ class Validator {
 	);
 
 	/**
-	 * Strict SemVer 2.0.0 regular expression.
+	 * WordPress-inspired PHP comment headers recognized in plugin.php.
+	 *
+	 * @var array<string, string>
 	 */
-	private const string SEMVER_REGEX = '/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/';
+	public const array KNOWN_PHP_HEADERS = array(
+		'Plugin Name'      => 'name',
+		'Plugin URI'       => 'pluginUri',
+		'Description'      => 'description',
+		'Version'          => 'version',
+		'Requires PeakURL' => 'requires',
+		'Tested up to'     => 'testedUpTo',
+		'Requires PHP'     => 'php',
+		'Author'           => 'author',
+		'Author URI'       => 'authorUri',
+		'License'          => 'license',
+		'License URI'      => 'licenseUri',
+		'Text Domain'      => 'textDomain',
+		'Domain Path'      => 'domainPath',
+	);
+
+	/**
+	 * Reserved translation text domains forbidden for plugins.
+	 *
+	 * @var array<int, string>
+	 */
+	public const array RESERVED_DOMAINS = array(
+		'peakurl',
+		'default',
+		'core',
+		'system',
+		'messages',
+		'admin',
+		'api',
+	);
+
+	/**
+	 * Stable Plugin release version pattern (MAJOR.MINOR.PATCH beginning with 0.1.0 or higher).
+	 */
+	private const string PLUGIN_VERSION_REGEX = '/^(?:0\.[1-9]\d*|[1-9]\d*\.(?:0|[1-9]\d*))\.(?:0|[1-9]\d*)$/D';
+
+	/**
+	 * Stable three-component compatibility version pattern (MAJOR.MINOR.PATCH).
+	 */
+	private const string COMPAT_VERSION_REGEX = '/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/D';
 
 	/**
 	 * PHP version notation pattern (X.Y or X.Y.Z).
@@ -86,6 +137,16 @@ class Validator {
 	 * Pattern forbidding leading or trailing whitespace (including newlines and tabs).
 	 */
 	private const string NO_SURROUNDING_WHITESPACE_REGEX = '/^\S(?:.*\S)?$/uD';
+
+	/**
+	 * Pattern enforcing kebab-case textDomain.
+	 */
+	private const string TEXT_DOMAIN_REGEX = '/^[a-z0-9]+(?:-[a-z0-9]+)*$/D';
+
+	/**
+	 * Pattern enforcing relative domainPath starting with a slash.
+	 */
+	private const string DOMAIN_PATH_REGEX = '/^\/[^\s\x00-\x1f\x7f]+$/D';
 
 	/**
 	 * Read and parse a local plugin.json file.
@@ -151,12 +212,14 @@ class Validator {
 	 * @param array<string, mixed> $manifest     Parsed manifest data.
 	 * @param string|null          $host_version Installed PeakURL version.
 	 * @param string|null          $php_version  Host PHP version.
+	 * @param string|null          $plugin_slug  Optional target plugin slug.
 	 * @return array<string, mixed> Validation outcome map.
 	 */
 	public function validate(
 		array $manifest,
 		?string $host_version = null,
-		?string $php_version = null
+		?string $php_version = null,
+		?string $plugin_slug = null
 	): array {
 		$errors   = array();
 		$warnings = array();
@@ -216,12 +279,41 @@ class Validator {
 			}
 		}
 
-		// 6. SemVer 2.0.0 checks.
-		$version_fields = array( 'version', 'requires', 'testedUpTo' );
-		foreach ( $version_fields as $field ) {
+		if ( isset( $manifest['description'] ) && is_string( $manifest['description'] ) ) {
+			$desc_len = mb_strlen( $manifest['description'], 'UTF-8' );
+			if ( $desc_len < 1 || $desc_len > 500 ) {
+				$errors[] = 'Field "description" must be between 1 and 500 characters.';
+			}
+			if ( ! preg_match( self::NO_SURROUNDING_WHITESPACE_REGEX, $manifest['description'] ) ) {
+				$errors[] = 'Field "description" cannot have leading or trailing whitespace.';
+			}
+			if ( preg_match( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $manifest['description'] ) ) {
+				$errors[] = 'Field "description" contains invalid control characters.';
+			}
+		}
+
+		if ( isset( $manifest['author'] ) && is_string( $manifest['author'] ) ) {
+			$author_len = mb_strlen( $manifest['author'], 'UTF-8' );
+			if ( $author_len < 1 || $author_len > 100 ) {
+				$errors[] = 'Field "author" must be between 1 and 100 characters.';
+			}
+			if ( ! preg_match( self::NO_SURROUNDING_WHITESPACE_REGEX, $manifest['author'] ) ) {
+				$errors[] = 'Field "author" cannot have leading or trailing whitespace.';
+			}
+		}
+
+		// 6. Stable version checks.
+		if ( isset( $manifest['version'] ) && is_string( $manifest['version'] ) ) {
+			if ( ! preg_match( self::PLUGIN_VERSION_REGEX, $manifest['version'] ) ) {
+				$errors[] = 'Field "version" must be a valid plugin release version in the form MAJOR.MINOR.PATCH beginning with 0.1.0 or higher (0.0.x versions, prerelease suffixes, and build metadata are not permitted).';
+			}
+		}
+
+		$compat_fields = array( 'requires', 'testedUpTo' );
+		foreach ( $compat_fields as $field ) {
 			if ( isset( $manifest[ $field ] ) && is_string( $manifest[ $field ] ) ) {
-				if ( ! preg_match( self::SEMVER_REGEX, $manifest[ $field ] ) ) {
-					$errors[] = sprintf( 'Field "%s" must be valid SemVer 2.0.0.', $field );
+				if ( ! preg_match( self::COMPAT_VERSION_REGEX, $manifest[ $field ] ) ) {
+					$errors[] = sprintf( 'Field "%s" must be a stable three-component version in the form MAJOR.MINOR.PATCH.', $field );
 				}
 			}
 		}
@@ -234,12 +326,53 @@ class Validator {
 		}
 
 		// 8. Resource URLs validation.
-		$url_fields = array( 'licenseUri', 'homepage', 'documentation', 'repository', 'support', 'issues' );
+		$url_fields = array( 'licenseUri', 'pluginUri', 'authorUri', 'documentation', 'repository', 'support', 'issues' );
 		foreach ( $url_fields as $field ) {
 			if ( isset( $manifest[ $field ] ) && is_string( $manifest[ $field ] ) ) {
+				if ( mb_strlen( $manifest[ $field ], 'UTF-8' ) > 2048 ) {
+					$errors[] = sprintf( 'Field "%s" cannot exceed 2048 characters.', $field );
+				}
 				if ( ! preg_match( self::URL_REGEX, $manifest[ $field ] ) ) {
 					$errors[] = sprintf( 'Field "%s" must be an absolute http:// or https:// URL without whitespace or control characters.', $field );
 				}
+			}
+		}
+
+		// 8b. Internationalization fields validation.
+		if ( isset( $manifest['textDomain'] ) && is_string( $manifest['textDomain'] ) ) {
+			$domain_len = mb_strlen( $manifest['textDomain'], 'UTF-8' );
+			if ( $domain_len < 1 || $domain_len > 100 ) {
+				$errors[] = 'Field "textDomain" must be between 1 and 100 characters.';
+			}
+			if ( ! preg_match( self::TEXT_DOMAIN_REGEX, $manifest['textDomain'] ) ) {
+				$errors[] = 'Field "textDomain" must be lowercase alphanumeric with hyphens (kebab-case).';
+			}
+			if ( in_array( strtolower( $manifest['textDomain'] ), self::RESERVED_DOMAINS, true ) ) {
+				$errors[] = 'Field "textDomain" is not available. Please choose another.';
+			}
+			if ( isset( $manifest['name'] ) && is_string( $manifest['name'] ) ) {
+				$canonical_slug = self::slugify( $manifest['name'] );
+				$domain         = strtolower( trim( $manifest['textDomain'] ) );
+				$target_slug    = ( null !== $plugin_slug && '' !== trim( $plugin_slug ) )
+					? strtolower( trim( $plugin_slug ) )
+					: $canonical_slug;
+
+				if ( $domain !== $target_slug ) {
+					$errors[] = sprintf(
+						'Field "textDomain" must match the plugin slug ("%s").',
+						$target_slug
+					);
+				}
+			}
+		}
+
+		if ( isset( $manifest['domainPath'] ) && is_string( $manifest['domainPath'] ) ) {
+			$path_len = strlen( $manifest['domainPath'] );
+			if ( $path_len < 1 || $path_len > 255 ) {
+				$errors[] = 'Field "domainPath" cannot exceed 255 characters.';
+			}
+			if ( ! preg_match( self::DOMAIN_PATH_REGEX, $manifest['domainPath'] ) || str_contains( $manifest['domainPath'], '..' ) ) {
+				$errors[] = 'Field "domainPath" must be a relative directory starting with "/" and must not contain "..".';
 			}
 		}
 
@@ -248,8 +381,8 @@ class Validator {
 			isset( $manifest['requires'], $manifest['testedUpTo'] ) &&
 			is_string( $manifest['requires'] ) &&
 			is_string( $manifest['testedUpTo'] ) &&
-			preg_match( self::SEMVER_REGEX, $manifest['requires'] ) &&
-			preg_match( self::SEMVER_REGEX, $manifest['testedUpTo'] )
+			preg_match( self::COMPAT_VERSION_REGEX, $manifest['requires'] ) &&
+			preg_match( self::COMPAT_VERSION_REGEX, $manifest['testedUpTo'] )
 		) {
 			if ( $this->compare_versions( $manifest['testedUpTo'], $manifest['requires'] ) < 0 ) {
 				$errors[] = 'Field "testedUpTo" must be greater than or equal to "requires".';
@@ -288,6 +421,7 @@ class Validator {
 			'errors'     => $errors,
 			'warnings'   => $warnings,
 			'links'      => $links,
+			'manifest'   => $manifest,
 		);
 	}
 
@@ -367,31 +501,21 @@ class Validator {
 	}
 
 	/**
-	 * Compare two SemVer 2.0.0 version strings per specification precedence rules.
+	 * Compare two stable semantic version strings.
 	 *
-	 * - Build metadata is stripped before comparison per SemVer 2.0.0 Section 10.
-	 * - Pre-release versions have lower precedence than normal versions.
-	 * - Large numeric identifiers are compared with exact precision without overflow.
+	 * Compares major, minor, and patch segments with exact numeric string precision.
 	 *
 	 * @param string $v1 First semantic version string.
 	 * @param string $v2 Second semantic version string.
 	 * @return int -1 if $v1 < $v2, 0 if equal, 1 if $v1 > $v2.
 	 */
 	public function compare_versions( string $v1, string $v2 ): int {
-		// Strip build metadata per SemVer 2.0.0 Section 10.
-		$clean_v1 = preg_replace( '/\+.*$/', '', $v1 ) ?? $v1;
-		$clean_v2 = preg_replace( '/\+.*$/', '', $v2 ) ?? $v2;
-
-		if ( $clean_v1 === $clean_v2 ) {
+		if ( $v1 === $v2 ) {
 			return 0;
 		}
 
-		// Separate normal version from pre-release tag.
-		$parts_1 = explode( '-', $clean_v1, 2 );
-		$parts_2 = explode( '-', $clean_v2, 2 );
-
-		$core_1 = explode( '.', $parts_1[0] );
-		$core_2 = explode( '.', $parts_2[0] );
+		$core_1 = explode( '.', $v1 );
+		$core_2 = explode( '.', $v2 );
 
 		// Compare major, minor, patch with exact numeric precision.
 		for ( $i = 0; $i < 3; $i++ ) {
@@ -401,58 +525,6 @@ class Validator {
 			if ( 0 !== $cmp ) {
 				return $cmp;
 			}
-		}
-
-		$has_pre_1 = isset( $parts_1[1] );
-		$has_pre_2 = isset( $parts_2[1] );
-
-		// Normal version has higher precedence than pre-release version.
-		if ( ! $has_pre_1 && $has_pre_2 ) {
-			return 1;
-		}
-		if ( $has_pre_1 && ! $has_pre_2 ) {
-			return -1;
-		}
-		if ( ! $has_pre_1 && ! $has_pre_2 ) {
-			return 0;
-		}
-
-		// Compare pre-release identifiers dot-by-dot.
-		$pre_1_ids = explode( '.', $parts_1[1] );
-		$pre_2_ids = explode( '.', $parts_2[1] );
-		$max_len   = max( count( $pre_1_ids ), count( $pre_2_ids ) );
-
-		for ( $i = 0; $i < $max_len; $i++ ) {
-			if ( ! isset( $pre_1_ids[ $i ] ) ) {
-				return -1; // Fewer identifiers = lower precedence.
-			}
-			if ( ! isset( $pre_2_ids[ $i ] ) ) {
-				return 1;
-			}
-
-			$id_1 = $pre_1_ids[ $i ];
-			$id_2 = $pre_2_ids[ $i ];
-
-			if ( $id_1 === $id_2 ) {
-				continue;
-			}
-
-			$is_num_1 = preg_match( '/^\d+$/', $id_1 ) === 1;
-			$is_num_2 = preg_match( '/^\d+$/', $id_2 ) === 1;
-
-			if ( $is_num_1 && $is_num_2 ) {
-				return $this->compare_numeric_strings( $id_1, $id_2 );
-			}
-
-			if ( $is_num_1 && ! $is_num_2 ) {
-				return -1; // Numeric identifiers have lower precedence than non-numeric.
-			}
-
-			if ( ! $is_num_1 && $is_num_2 ) {
-				return 1;
-			}
-
-			return strcmp( $id_1, $id_2 ) < 0 ? -1 : 1;
 		}
 
 		return 0;
@@ -480,5 +552,201 @@ class Validator {
 		}
 
 		return strcmp( $a, $b ) < 0 ? -1 : 1;
+	}
+
+	/**
+	 * Parse optional WordPress-inspired plugin metadata headers from plugin.php without execution.
+	 *
+	 * Reads at most 8 KB from the start of the file, never includes or evaluates code,
+	 * parses the first PHP docblock/comment, and strictly validates known fields.
+	 *
+	 * @param string $entrypoint_path Absolute path to plugin.php.
+	 * @return array<string, mixed> Map containing 'has_header', 'headers', and 'errors'.
+	 */
+	public function read_php_header( string $entrypoint_path ): array {
+		if ( ! is_file( $entrypoint_path ) || ! is_readable( $entrypoint_path ) ) {
+			return array(
+				'has_header' => false,
+				'headers'    => array(),
+				'errors'     => array( 'Plugin entrypoint file is missing or unreadable.' ),
+			);
+		}
+
+		$fp = @fopen( $entrypoint_path, 'rb' );
+		if ( false === $fp ) {
+			return array(
+				'has_header' => false,
+				'headers'    => array(),
+				'errors'     => array( 'Failed to open plugin entrypoint file.' ),
+			);
+		}
+
+		$chunk = fread( $fp, self::MAX_HEADER_READ_BYTES );
+		fclose( $fp );
+
+		if ( false === $chunk || '' === $chunk ) {
+			return array(
+				'has_header' => false,
+				'headers'    => array(),
+				'errors'     => array(),
+			);
+		}
+
+		// Tokenize chunk to find the genuine leading PHP docblock/comment without code execution.
+		$tokens       = token_get_all( $chunk );
+		$comment_body = null;
+
+		foreach ( $tokens as $token ) {
+			if ( is_array( $token ) ) {
+				$token_id   = $token[0];
+				$token_text = $token[1];
+
+				if ( T_OPEN_TAG === $token_id || T_WHITESPACE === $token_id ) {
+					continue;
+				}
+
+				if ( T_DOC_COMMENT === $token_id || T_COMMENT === $token_id ) {
+					// Must be a leading block comment starting with /* or /**.
+					if ( str_starts_with( $token_text, '/*' ) ) {
+						$comment_body = $token_text;
+					}
+					break;
+				}
+
+				// Any executable code token encountered before a comment means no leading header block.
+				break;
+			} else {
+				// Single character token before comment means no leading header block.
+				break;
+			}
+		}
+
+		if ( null === $comment_body ) {
+			return array(
+				'has_header' => false,
+				'headers'    => array(),
+				'errors'     => array(),
+			);
+		}
+
+		// Strip opening /* or /** and closing */.
+		$inner_comment = preg_replace( '/^\/\*\*?|\*\/$/', '', $comment_body ) ?? '';
+		$lines         = preg_split( '/\r\n|\r|\n/', $inner_comment );
+		if ( false === $lines ) {
+			return array(
+				'has_header' => false,
+				'headers'    => array(),
+				'errors'     => array(),
+			);
+		}
+
+		$headers      = array();
+		$errors       = array();
+		$seen_headers = array();
+		$has_header   = false;
+
+		foreach ( $lines as $line ) {
+			$trimmed = trim( $line );
+			$cleaned = ltrim( $trimmed, "* \t" );
+			if ( '' === $cleaned ) {
+				continue;
+			}
+
+			// Match "Header Name: Value" pattern.
+			if ( preg_match( '/^([A-Za-z0-9\s_-]+?):\s*(.*)$/', $cleaned, $parts ) ) {
+				$raw_header_name = trim( $parts[1] );
+				$raw_value       = trim( $parts[2] );
+
+				// Check against known headers.
+				$matched_prop           = null;
+				$canonical_header_label = $raw_header_name;
+				foreach ( self::KNOWN_PHP_HEADERS as $header_label => $prop_name ) {
+					if ( strcasecmp( $raw_header_name, $header_label ) === 0 ) {
+						$matched_prop           = $prop_name;
+						$canonical_header_label = $header_label;
+						break;
+					}
+				}
+
+				if ( null === $matched_prop ) {
+					// Reject unsupported WordPress headers or ambiguous header definitions.
+					if ( in_array( strtolower( $raw_header_name ), array( 'network', 'update uri', 'requires plugins' ), true ) ) {
+						$errors[] = sprintf( 'Unsupported WordPress-specific header "%s" in plugin.php.', $raw_header_name );
+					}
+					continue;
+				}
+
+				$has_header = true;
+				if ( isset( $seen_headers[ $matched_prop ] ) ) {
+					$errors[] = sprintf( 'Duplicate PHP header "%s" found in plugin.php comment block.', $canonical_header_label );
+					continue;
+				}
+
+				$seen_headers[ $matched_prop ] = true;
+				$headers[ $matched_prop ]      = $raw_value;
+			}
+		}
+
+		return array(
+			'has_header' => $has_header,
+			'headers'    => $headers,
+			'errors'     => $errors,
+		);
+	}
+
+	/**
+	 * Verify that PHP comment header values match the canonical plugin.json manifest.
+	 *
+	 * When a property exists in both plugin.php header and plugin.json, their values
+	 * must be consistent. PHP header values never override plugin.json.
+	 *
+	 * @param array<string, mixed>  $manifest    Parsed manifest data.
+	 * @param array<string, string> $header_data Extracted PHP header data.
+	 * @return array<int, string> List of mismatch error messages.
+	 */
+	public function validate_manifest_against_header( array $manifest, array $header_data ): array {
+		$errors = array();
+
+		foreach ( $header_data as $prop => $header_val ) {
+			if ( ! array_key_exists( $prop, $manifest ) ) {
+				$errors[] = sprintf(
+					'Header "%s" is declared in plugin.php but missing from plugin.json. All plugin metadata must be declared in plugin.json.',
+					$prop
+				);
+				continue;
+			}
+
+			$manifest_val = trim( (string) $manifest[ $prop ] );
+			if ( $header_val !== $manifest_val ) {
+				$errors[] = sprintf(
+					'Mismatch between plugin.php header and plugin.json for "%s" (header: "%s", manifest: "%s").',
+					$prop,
+					$header_val,
+					$manifest_val
+				);
+			}
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Convert a plugin name to a canonical kebab-case slug candidate.
+	 *
+	 * @param string $name Raw plugin name.
+	 * @return string Canonical slug candidate.
+	 */
+	public static function slugify( string $name ): string {
+		$clean = trim( $name );
+		$clean = strtolower( $clean );
+		$clean = (string) preg_replace( '/[^a-z0-9\s_-]/', '', $clean );
+		$clean = (string) preg_replace( '/[\s_]+/', '-', $clean );
+		$clean = trim( $clean, '-' );
+
+		if ( '' === $clean || strlen( $clean ) < 2 ) {
+			return 'plugin';
+		}
+
+		return substr( $clean, 0, 64 );
 	}
 }

@@ -53,15 +53,18 @@ class PluginBootstrapLifecycleTest extends TestCase {
 	}
 
 	private function create_valid_manifest( array $overrides = array() ): array {
+		$name = (string) ( $overrides['name'] ?? 'Lifecycle Plugin' );
 		return array_merge(
 			array(
 				'$schema'    => 'https://peakurl.org/schemas/v1/plugin.json',
-				'name'       => 'Lifecycle Plugin',
+				'name'       => $name,
 				'version'    => '1.0.0',
 				'requires'   => '1.0.0',
 				'testedUpTo' => '1.8.0',
 				'php'        => '8.3',
 				'license'    => 'MIT',
+				'textDomain' => \PeakURL\Core\Plugins\Validator::slugify( $name ),
+				'domainPath' => '/languages',
 			),
 			$overrides
 		);
@@ -78,7 +81,17 @@ class PluginBootstrapLifecycleTest extends TestCase {
 
 		$reg_dir = $this->temp_dir . '/plugins/beta-reg';
 		mkdir( $reg_dir, 0777, true );
-		file_put_contents( $reg_dir . '/plugin.json', json_encode( $this->create_valid_manifest( array( 'name' => 'Beta Regular' ) ) ) );
+		file_put_contents(
+			$reg_dir . '/plugin.json',
+			json_encode(
+				$this->create_valid_manifest(
+					array(
+						'name'       => 'Beta Regular',
+						'textDomain' => 'beta-reg',
+					)
+				)
+			)
+		);
 		file_put_contents(
 			$reg_dir . '/plugin.php',
 			"<?php\n\$GLOBALS['event_order'][] = 'regular_executed';\n"
@@ -209,7 +222,17 @@ class PluginBootstrapLifecycleTest extends TestCase {
 
 		$reg_dir = $this->temp_dir . '/plugins/recovery-reg';
 		mkdir( $reg_dir, 0777, true );
-		file_put_contents( $reg_dir . '/plugin.json', json_encode( $this->create_valid_manifest( array( 'name' => 'Recovery Regular' ) ) ) );
+		file_put_contents(
+			$reg_dir . '/plugin.json',
+			json_encode(
+				$this->create_valid_manifest(
+					array(
+						'name'       => 'Recovery Regular',
+						'textDomain' => 'recovery-reg',
+					)
+				)
+			)
+		);
 		file_put_contents( $reg_dir . '/plugin.php', "<?php \$GLOBALS['rec_reg_run'] = true;\n" );
 
 		$settings = $this->createMock( SettingsApi::class );

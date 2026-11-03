@@ -73,6 +73,9 @@ export interface NavItem {
 	/** Whether the item requires admin access. */
 	adminOnly?: boolean;
 
+	/** Explicit visibility override controlling whether the item is rendered. */
+	isVisible?: boolean;
+
 	/** Nested child links for collapsible sections. */
 	children?: NavChild[];
 

@@ -66,7 +66,7 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 								active: isExampleActive,
 								errors: [],
 								warnings: [],
-								homepage: "https://example.com/plugin",
+								pluginUri: "https://example.com/plugin",
 								documentation:
 									"https://example.com/plugin/docs",
 							},
@@ -89,7 +89,7 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 								active: isExampleActive,
 								errors: [],
 								warnings: [],
-								homepage: "https://example.com/plugin",
+								pluginUri: "https://example.com/plugin",
 								documentation:
 									"https://example.com/plugin/docs",
 							},

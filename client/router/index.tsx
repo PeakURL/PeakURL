@@ -14,6 +14,7 @@ import {
 	LinksPage,
 	LoginPage,
 	NotFoundPage,
+	PluginAdminPageView,
 	PluginsPage,
 	ResetPasswordPage,
 	ScheduledJobsPage,
@@ -127,6 +128,20 @@ function AdminOnlyRoute() {
 	return <Outlet />;
 }
 
+function PluginsManageRoute() {
+	const { canManagePlugins, isLoading } = useAdminAccess();
+
+	if (isLoading) {
+		return null;
+	}
+
+	if (!canManagePlugins) {
+		return <Navigate replace to="/dashboard/links" />;
+	}
+
+	return <Outlet />;
+}
+
 function AppRouter() {
 	return (
 		<>
@@ -194,10 +209,16 @@ function AppRouter() {
 						</Route>
 						<Route path="*" element={<NotFoundPage />} />
 					</Route>
-					<Route element={<AdminOnlyRoute />}>
-						<Route path="activity" element={<ActivityPage />} />
+					<Route element={<PluginsManageRoute />}>
 						<Route path="plugins" element={<PluginsPage />} />
 						<Route path="plugins/add" element={<PluginsPage />} />
+					</Route>
+					<Route
+						path="plugins/page/:slug/:pageId"
+						element={<PluginAdminPageView />}
+					/>
+					<Route element={<AdminOnlyRoute />}>
+						<Route path="activity" element={<ActivityPage />} />
 						<Route path="users" element={<UsersPage />} />
 					</Route>
 					<Route

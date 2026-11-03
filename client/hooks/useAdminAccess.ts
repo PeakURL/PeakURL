@@ -23,10 +23,34 @@ export const useAdminAccess = () => {
 		(Boolean(capabilities.manageUpdates) ||
 			Boolean(capabilities.manageSiteSettings));
 
+	const hasCapability = (capabilityName?: string): boolean => {
+		if (!capabilityName || capabilityName.trim() === "") {
+			return false;
+		}
+		const key = capabilityName.trim();
+		if (
+			key in capabilities &&
+			Boolean(capabilities[key as keyof typeof capabilities])
+		) {
+			return true;
+		}
+		const camelKey = key.replace(/_([a-z])/g, (_, letter) =>
+			letter.toUpperCase()
+		);
+		if (
+			camelKey in capabilities &&
+			Boolean(capabilities[camelKey as keyof typeof capabilities])
+		) {
+			return true;
+		}
+		return false;
+	};
+
 	return {
 		user,
 		capabilities,
 		isAdmin,
+		hasCapability,
 		canManageUsers,
 		canManagePlugins,
 		canManageSiteSettings: Boolean(capabilities.manageSiteSettings),

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
 	AlertCircle,
+	ExternalLink,
 	FileArchive,
 	Globe,
 	RefreshCw,
@@ -11,6 +12,7 @@ import {
 import { useNavigate } from "react-router";
 
 import { Button, useNotification } from "@/components";
+import { SUBMIT_PLUGIN_URL } from "@/constants";
 import { __, sprintf } from "@/i18n";
 import { cn, formatByteSize } from "@/shared/formatting";
 import {
@@ -578,8 +580,8 @@ export function AddNewPluginsView({
 										"Published plugins will appear here. You can also install a plugin by uploading a ZIP file."
 									)}
 						</p>
-						{onToggleUpload && !showUpload && (
-							<div className="mt-4">
+						<div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
+							{onToggleUpload && !showUpload && (
 								<Button
 									variant="secondary"
 									size="sm"
@@ -588,8 +590,17 @@ export function AddNewPluginsView({
 									<Upload size={14} className="mr-1.5" />
 									{__("Upload Plugin")}
 								</Button>
-							</div>
-						)}
+							)}
+							<a
+								href={SUBMIT_PLUGIN_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="button button-outline button-sm inline-flex items-center gap-1.5"
+							>
+								<ExternalLink size={14} />
+								<span>{__("Submit a Plugin")}</span>
+							</a>
+						</div>
 					</div>
 				)
 			) : (

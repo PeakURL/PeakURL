@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { Button, ConfirmDialog, useNotification } from "@/components";
+import { SUBMIT_PLUGIN_URL } from "@/constants";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 import { cn } from "@/shared/formatting";
@@ -202,6 +203,19 @@ export function InstalledPluginsTable({
 								"Browse available plugins or upload a ZIP file to get started."
 							)}
 				</p>
+				{type === "regular" && (
+					<div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
+						<a
+							href={SUBMIT_PLUGIN_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="button button-outline button-sm inline-flex items-center gap-1.5"
+						>
+							<ExternalLink size={14} />
+							<span>{__("Submit a Plugin")}</span>
+						</a>
+					</div>
+				)}
 			</div>
 		);
 	}

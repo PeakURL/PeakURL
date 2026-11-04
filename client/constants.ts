@@ -127,9 +127,9 @@ export const INTERNAL_API_ORIGIN =
 	import.meta.env?.VITE_INTERNAL_API_ORIGIN || API_ORIGIN;
 
 /**
- * Public waitlist URL for the plugins preview surface.
+ * Public submission URL for community and third-party plugins.
  */
-export const PLUGINS_WAITLIST_URL = "https://go.peakurl.org/join-plugins-list";
+export const SUBMIT_PLUGIN_URL = "https://go.peakurl.org/submit-plugin";
 
 /**
  * Default external site link for the brand logo on public auth recovery pages.

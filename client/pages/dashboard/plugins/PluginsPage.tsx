@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
 	ArrowLeft,
+	ExternalLink,
 	Package,
 	Plus,
 	RefreshCw,
@@ -10,6 +11,7 @@ import {
 import { useLocation, useNavigate } from "react-router";
 
 import { Button, PageHeader } from "@/components";
+import { SUBMIT_PLUGIN_URL } from "@/constants";
 import { useAdminAccess } from "@/hooks";
 import { __ } from "@/i18n";
 import { dashboardPageIcons } from "@/pages/dashboard/navigation";
@@ -128,6 +130,15 @@ function PluginsPage() {
 								<ArrowLeft size={16} />
 								<span>{__("Installed Plugins")}</span>
 							</Button>
+							<a
+								href={SUBMIT_PLUGIN_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="button button-outline button-md inline-flex items-center gap-1.5"
+							>
+								<ExternalLink size={16} />
+								<span>{__("Submit a Plugin")}</span>
+							</a>
 							<Button
 								variant={showUpload ? "secondary" : "primary"}
 								onClick={() => setShowUpload((prev) => !prev)}
@@ -142,13 +153,26 @@ function PluginsPage() {
 							</Button>
 						</div>
 					) : (
-						<Button
-							onClick={() => navigate("/dashboard/plugins/add")}
-							className="inline-flex items-center gap-1.5"
-						>
-							<Plus size={16} />
-							<span>{__("Add New")}</span>
-						</Button>
+						<div className="flex items-center gap-2.5">
+							<a
+								href={SUBMIT_PLUGIN_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="button button-outline button-md inline-flex items-center gap-1.5"
+							>
+								<ExternalLink size={16} />
+								<span>{__("Submit a Plugin")}</span>
+							</a>
+							<Button
+								onClick={() =>
+									navigate("/dashboard/plugins/add")
+								}
+								className="inline-flex items-center gap-1.5"
+							>
+								<Plus size={16} />
+								<span>{__("Add New")}</span>
+							</Button>
+						</div>
 					)
 				}
 			/>
@@ -201,7 +225,7 @@ function PluginsPage() {
 							"Browse available plugins or upload a ZIP file to get started."
 						)}
 					</p>
-					<div className="mt-5">
+					<div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
 						<Button
 							onClick={() => navigate("/dashboard/plugins/add")}
 							className="inline-flex items-center gap-1.5"
@@ -209,6 +233,15 @@ function PluginsPage() {
 							<Plus size={16} />
 							<span>{__("Add Plugin")}</span>
 						</Button>
+						<a
+							href={SUBMIT_PLUGIN_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="button button-outline button-md inline-flex items-center gap-1.5"
+						>
+							<ExternalLink size={16} />
+							<span>{__("Submit a Plugin")}</span>
+						</a>
 					</div>
 				</div>
 			) : (

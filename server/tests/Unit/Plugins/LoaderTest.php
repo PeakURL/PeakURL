@@ -275,8 +275,14 @@ class LoaderTest extends TestCase {
 	}
 
 	public function test_real_sample_plugins_hook_registration(): void {
-		$repo_root = dirname( __DIR__, 4 );
-		$registry  = new Registry( $repo_root . '/content' );
+		$repo_root   = dirname( __DIR__, 4 );
+		$content_dir = $repo_root . '/content';
+
+		if ( ! is_dir( $content_dir . '/plugins/example-plugin' ) || ! is_dir( $content_dir . '/mu-plugins/system-integration' ) ) {
+			$this->markTestSkipped( 'Repository sample plugins not present in content directory.' );
+		}
+
+		$registry = new Registry( $content_dir );
 
 		// 1. Without active regular plugins, only MU should load and register filter.
 		$settings_mock = $this->createMock( SettingsApi::class );

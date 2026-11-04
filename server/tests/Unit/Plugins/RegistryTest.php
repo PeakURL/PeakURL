@@ -35,6 +35,10 @@ class RegistryTest extends TestCase {
 		$repo_root   = dirname( __DIR__, 4 );
 		$content_dir = $repo_root . '/content';
 
+		if ( ! is_dir( $content_dir . '/plugins/example-plugin' ) || ! is_dir( $content_dir . '/mu-plugins/system-integration' ) ) {
+			$this->markTestSkipped( 'Repository sample plugins not present in content directory.' );
+		}
+
 		$registry = new Registry( $content_dir, null, '1.8.0', '8.3.0' );
 		$all      = $registry->all();
 		$regular  = $registry->regular();
@@ -88,6 +92,10 @@ class RegistryTest extends TestCase {
 	public function test_plugin_php_is_not_executed_during_discovery(): void {
 		$repo_root   = dirname( __DIR__, 4 );
 		$content_dir = $repo_root . '/content';
+
+		if ( ! is_dir( $content_dir . '/plugins/example-plugin' ) || ! is_dir( $content_dir . '/mu-plugins/system-integration' ) ) {
+			$this->markTestSkipped( 'Repository sample plugins not present in content directory.' );
+		}
 
 		$registry = new Registry( $content_dir, null, '1.8.0', '8.3.0' );
 		$registry->all();

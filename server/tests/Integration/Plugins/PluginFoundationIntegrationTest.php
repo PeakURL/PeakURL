@@ -37,6 +37,7 @@ use PeakURL\Features\System\Controller as SystemController;
 use PeakURL\Features\System\Service as SystemService;
 use PeakURL\Http\Request;
 use PeakURL\Http\Response;
+use PeakURL\Tests\Support\FilesystemHelper;
 use ZipArchive;
 
 class PluginFoundationIntegrationTest extends TestCase {
@@ -70,30 +71,8 @@ class PluginFoundationIntegrationTest extends TestCase {
 		Hooks::remove_all();
 		Hooks::reset_actions();
 
-		$this->recursive_rmdir( $this->temp_dir );
+		FilesystemHelper::recursive_delete( $this->temp_dir );
 		parent::tearDown();
-	}
-
-	private function recursive_rmdir( string $dir ): void {
-		if ( ! is_dir( $dir ) ) {
-			return;
-		}
-		$items = scandir( $dir );
-		if ( false === $items ) {
-			return;
-		}
-		foreach ( $items as $item ) {
-			if ( '.' === $item || '..' === $item ) {
-				continue;
-			}
-			$path = $dir . '/' . $item;
-			if ( is_dir( $path ) ) {
-				$this->recursive_rmdir( $path );
-			} else {
-				unlink( $path );
-			}
-		}
-		rmdir( $dir );
 	}
 
 	private function create_system_service(

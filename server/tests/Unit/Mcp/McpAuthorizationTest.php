@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace PeakURL\Tests\Unit\Mcp;
 
 use PHPUnit\Framework\TestCase;
-use PeakURL\Api\SettingsApi;
 use PeakURL\Api\UsersApi;
+use PeakURL\Tests\Support\InMemorySettingsApi;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Features\Mcp\Authorization;
 use PeakURL\Features\Mcp\Constants;
@@ -59,33 +59,7 @@ class McpAuthorizationTest extends TestCase {
 				}
 			);
 
-		$settings_api = new class( $this->settings_store ) extends SettingsApi {
-			/** @var array<string, string> */
-			private array $store;
-
-			public function __construct( array &$store ) {
-				$this->store = &$store;
-			}
-
-			public function get_option( string $name ): ?string {
-				return $this->store[ $name ] ?? null;
-			}
-
-			public function update_option( string $name, string $value, string $updated_at = '', bool $autoload = true ): void {
-				$this->store[ $name ] = (string) $value;
-			}
-
-			public function update_option_with_lock( string $name, callable $modifier ): ?string {
-				$val     = $this->store[ $name ] ?? null;
-				$new_val = $modifier( $val );
-				if ( null === $new_val ) {
-					unset( $this->store[ $name ] );
-				} else {
-					$this->store[ $name ] = (string) $new_val;
-				}
-				return $new_val;
-			}
-		};
+		$settings_api = new InMemorySettingsApi( $this->settings_store );
 
 		$users_api = new UsersApi( $mock_db );
 		$roles     = new Roles( $settings_api, $users_api );

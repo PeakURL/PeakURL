@@ -1,13 +1,13 @@
 <?php
 /**
- * Integration tests for the PeakURL Authorization Matrix and role enforcement.
+ * Unit tests for the PeakURL Authorization Matrix and role enforcement.
  *
- * @package PeakURL\Tests\Integration\Auth
+ * @package PeakURL\Tests\Unit\Auth
  */
 
 declare(strict_types=1);
 
-namespace PeakURL\Tests\Integration\Auth;
+namespace PeakURL\Tests\Unit\Auth;
 
 use PHPUnit\Framework\TestCase;
 use PeakURL\Api\SettingsApi;

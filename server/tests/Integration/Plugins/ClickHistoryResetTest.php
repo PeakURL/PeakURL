@@ -42,6 +42,7 @@ use PeakURL\Features\System\Service as SystemService;
 use PeakURL\Http\Request;
 use PeakURL\Services\Database\Connection;
 use PeakURL\Services\I18n;
+use PeakURL\Tests\Support\FilesystemHelper;
 use ZipArchive;
 
 class ClickHistoryResetTest extends TestCase {
@@ -93,7 +94,7 @@ class ClickHistoryResetTest extends TestCase {
 			set_i18n_service( $this->original_i18n );
 		}
 
-		$this->recursive_rmdir( $this->temp_dir );
+		FilesystemHelper::recursive_delete( $this->temp_dir );
 		parent::tearDown();
 	}
 
@@ -166,28 +167,6 @@ class ClickHistoryResetTest extends TestCase {
 		$stmt    = $this->pdo->prepare( "SELECT COUNT(*) FROM {$this->table_prefix}urls WHERE id IN ({$in_urls})" );
 		$stmt->execute( $this->created_url_ids );
 		return (int) $stmt->fetchColumn();
-	}
-
-	private function recursive_rmdir( string $dir ): void {
-		if ( ! is_dir( $dir ) ) {
-			return;
-		}
-		$items = scandir( $dir );
-		if ( false === $items ) {
-			return;
-		}
-		foreach ( $items as $item ) {
-			if ( '.' === $item || '..' === $item ) {
-				continue;
-			}
-			$path = $dir . '/' . $item;
-			if ( is_dir( $path ) ) {
-				$this->recursive_rmdir( $path );
-			} else {
-				@unlink( $path );
-			}
-		}
-		@rmdir( $dir );
 	}
 
 	private function create_system_service(

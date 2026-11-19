@@ -20,6 +20,7 @@ use PeakURL\Core\Plugins\Metadata;
 use PeakURL\Core\Plugins\Registry;
 use PeakURL\Core\Plugins\Type;
 use PeakURL\Services\I18n;
+use PeakURL\Tests\Support\FilesystemHelper;
 
 /**
  * Tests independent text domains, catalog loading, fallback behavior, and path safety.
@@ -49,33 +50,8 @@ class PluginI18nTest extends TestCase {
 
 	protected function tearDown(): void {
 		set_i18n_service( null );
-		$this->recursive_rmdir( $this->temp_dir );
+		FilesystemHelper::recursive_delete( $this->temp_dir );
 		parent::tearDown();
-	}
-
-	private function recursive_rmdir( string $dir ): void {
-		if ( ! is_dir( $dir ) ) {
-			return;
-		}
-
-		$items = scandir( $dir );
-		if ( false === $items ) {
-			return;
-		}
-
-		foreach ( $items as $item ) {
-			if ( '.' === $item || '..' === $item ) {
-				continue;
-			}
-			$path = $dir . '/' . $item;
-			if ( is_dir( $path ) ) {
-				$this->recursive_rmdir( $path );
-			} else {
-				@unlink( $path );
-			}
-		}
-
-		@rmdir( $dir );
 	}
 
 	private function create_plugin_catalog(

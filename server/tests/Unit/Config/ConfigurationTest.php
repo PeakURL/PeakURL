@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use PeakURL\Core\Config\Configuration;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
+use PeakURL\Tests\Support\FilesystemHelper;
 use RuntimeException;
 
 class ConfigurationTest extends TestCase {
@@ -29,7 +30,7 @@ class ConfigurationTest extends TestCase {
 
 	protected function tearDown(): void {
 		Environment::set_instance( $this->original_instance );
-		$this->recursive_delete( $this->temp_dir );
+		FilesystemHelper::recursive_delete( $this->temp_dir );
 		parent::tearDown();
 	}
 
@@ -226,30 +227,5 @@ class ConfigurationTest extends TestCase {
 		} finally {
 			restore_error_handler();
 		}
-	}
-
-	private function recursive_delete( string $dir ): void {
-		if ( ! is_dir( $dir ) ) {
-			return;
-		}
-
-		$items = scandir( $dir );
-		if ( false === $items ) {
-			return;
-		}
-
-		foreach ( $items as $item ) {
-			if ( '.' === $item || '..' === $item ) {
-				continue;
-			}
-			$path = $dir . '/' . $item;
-			if ( is_dir( $path ) ) {
-				$this->recursive_delete( $path );
-			} else {
-				unlink( $path );
-			}
-		}
-
-		rmdir( $dir );
 	}
 }

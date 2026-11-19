@@ -18,6 +18,7 @@ use PeakURL\Core\Plugins\Extensions;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\System\Service as SystemService;
 use PeakURL\Http\Request;
+use PeakURL\Tests\Support\FilesystemHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,7 +39,7 @@ class PluginExtensionsTest extends TestCase {
 
 	protected function tearDown(): void {
 		Extensions::get_instance()->reset();
-		$this->recursive_rmdir( $this->temp_dir );
+		FilesystemHelper::recursive_delete( $this->temp_dir );
 		parent::tearDown();
 	}
 
@@ -582,30 +583,5 @@ class PluginExtensionsTest extends TestCase {
 				'action_id'   => 'some-action',
 			)
 		);
-	}
-
-	private function recursive_rmdir( string $dir ): void {
-		if ( ! is_dir( $dir ) ) {
-			return;
-		}
-
-		$entries = scandir( $dir );
-		if ( false === $entries ) {
-			return;
-		}
-
-		foreach ( $entries as $entry ) {
-			if ( '.' === $entry || '..' === $entry ) {
-				continue;
-			}
-			$path = $dir . '/' . $entry;
-			if ( is_dir( $path ) ) {
-				$this->recursive_rmdir( $path );
-			} else {
-				unlink( $path );
-			}
-		}
-
-		rmdir( $dir );
 	}
 }

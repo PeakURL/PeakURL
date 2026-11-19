@@ -8,12 +8,12 @@
  * 3. Unauthorized users lacking 'delete_all_links' are rejected with 403 Forbidden.
  * 4. No destructive repository mutations occur when authorization fails.
  *
- * @package PeakURL\Tests\Integration\Links
+ * @package PeakURL\Tests\Unit\Links
  */
 
 declare(strict_types=1);
 
-namespace PeakURL\Tests\Integration\Links;
+namespace PeakURL\Tests\Unit\Links;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;

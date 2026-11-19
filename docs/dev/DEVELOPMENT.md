@@ -16,7 +16,7 @@ PeakURL runs a Docker-based development stack with:
 Install the following tools before starting:
 
 - Docker Desktop with `docker compose`
-- Node.js 24
+- Node.js 26
 - npm
 - PHP 8.3+ (PHP 8.3, 8.4, or 8.5) for local CLI checks
 - Composer

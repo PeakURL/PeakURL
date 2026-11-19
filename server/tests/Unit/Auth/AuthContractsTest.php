@@ -1,13 +1,13 @@
 <?php
 /**
- * Integration tests for Auth Controller and Service contracts (QA-003, QA-004, QA-007).
+ * Unit tests for Auth Service method contracts.
  *
- * @package PeakURL\Tests\Integration\Auth
+ * @package PeakURL\Tests\Unit\Auth
  */
 
 declare(strict_types=1);
 
-namespace PeakURL\Tests\Integration\Auth;
+namespace PeakURL\Tests\Unit\Auth;
 
 use PHPUnit\Framework\TestCase;
 use PeakURL\Features\Auth\Controller as AuthController;

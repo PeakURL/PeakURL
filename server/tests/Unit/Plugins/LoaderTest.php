@@ -15,6 +15,7 @@ use PeakURL\Core\Hooks\Hooks;
 use PeakURL\Core\Plugins\Loader;
 use PeakURL\Core\Plugins\Registry;
 use PeakURL\Services\Database\PeakURL_DB;
+use PeakURL\Tests\Support\FilesystemHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,7 +38,7 @@ class LoaderTest extends TestCase {
 		Loader::reset_instance();
 		Hooks::remove_all();
 		Hooks::reset_actions();
-		$this->recursive_rmdir( $this->temp_dir );
+		FilesystemHelper::recursive_delete( $this->temp_dir );
 		parent::tearDown();
 	}
 
@@ -319,30 +320,5 @@ class LoaderTest extends TestCase {
 
 		$filtered_reg = Hooks::apply_filters( 'peakurl_example_plugin_filter', 'url123' );
 		$this->assertSame( 'filtered_by_example_plugin:url123', $filtered_reg );
-	}
-
-	private function recursive_rmdir( string $dir ): void {
-		if ( ! is_dir( $dir ) ) {
-			return;
-		}
-
-		$entries = scandir( $dir );
-		if ( false === $entries ) {
-			return;
-		}
-
-		foreach ( $entries as $entry ) {
-			if ( '.' === $entry || '..' === $entry ) {
-				continue;
-			}
-			$path = $dir . '/' . $entry;
-			if ( is_dir( $path ) ) {
-				$this->recursive_rmdir( $path );
-			} else {
-				@unlink( $path );
-			}
-		}
-
-		@rmdir( $dir );
 	}
 }

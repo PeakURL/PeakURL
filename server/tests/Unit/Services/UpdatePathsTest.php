@@ -1,13 +1,13 @@
 <?php
 /**
- * Integration tests for Updater layout paths (QA-010 regression).
+ * Unit tests for Updater layout paths (QA-010 regression).
  *
- * @package PeakURL\Tests\Integration\Update
+ * @package PeakURL\Tests\Unit\Services
  */
 
 declare(strict_types=1);
 
-namespace PeakURL\Tests\Integration\Update;
+namespace PeakURL\Tests\Unit\Services;
 
 use PHPUnit\Framework\TestCase;
 use PeakURL\Services\Update\Context;

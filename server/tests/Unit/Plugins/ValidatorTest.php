@@ -393,6 +393,25 @@ PHP;
 		}
 	}
 
+	public function test_read_php_header_handles_bom_and_crlf_before_manifest_comparison(): void {
+		$temp_file = tempnam( sys_get_temp_dir(), 'php_header_test_' );
+		$php_code  = "\xEF\xBB\xBF\r\n<?php\r\n/**\r\n * Version: 1.1.0\r\n */\r\n";
+		file_put_contents( $temp_file, $php_code );
+
+		try {
+			$result = $this->validator->read_php_header( $temp_file );
+			$this->assertTrue( $result['has_header'] );
+			$this->assertSame( array( 'version' => '1.1.0' ), $result['headers'] );
+			$this->assertEmpty( $result['errors'] );
+
+			$errors = $this->validator->validate_manifest_against_header( $this->get_minimal_manifest(), $result['headers'] );
+			$this->assertCount( 1, $errors );
+			$this->assertStringContainsString( 'Mismatch between plugin.php header and plugin.json for "version"', $errors[0] );
+		} finally {
+			unlink( $temp_file );
+		}
+	}
+
 	public function test_validate_manifest_against_header_rejects_missing_manifest_property(): void {
 		$manifest = $this->get_minimal_manifest();
 		$header   = array(

@@ -592,6 +592,9 @@ class Validator {
 			);
 		}
 
+		// Match the directory inspector's handling of a UTF-8 BOM and leading whitespace.
+		$chunk = preg_replace( '/\A(?:\xEF\xBB\xBF)?[ \t\r\n]*/', '', $chunk ) ?? $chunk;
+
 		// Tokenize chunk to find the genuine leading PHP docblock/comment without code execution.
 		$tokens       = token_get_all( $chunk );
 		$comment_body = null;

@@ -334,6 +334,17 @@ export const systemApi = baseApi.injectEndpoints({
 			}),
 			invalidatesTags: PLUGINS_TAGS,
 		}),
+		installDirectoryPlugin: build.mutation<
+			ApiDataResponse<InstalledPlugin>,
+			{ slug: string; version: string }
+		>({
+			query: (release) => ({
+				url: API_ROUTES.system.pluginsInstall,
+				method: "POST",
+				body: release,
+			}),
+			invalidatesTags: PLUGINS_TAGS,
+		}),
 		getPluginExtensions: build.query<
 			ApiDataResponse<PluginExtensionsPayload>,
 			void
@@ -729,6 +740,7 @@ export const {
 	useDeactivatePluginMutation,
 	useDeletePluginMutation,
 	useUploadPluginMutation,
+	useInstallDirectoryPluginMutation,
 	useGetPluginExtensionsQuery,
 	useGetPluginPageQuery,
 	useGetPluginSettingsQuery,

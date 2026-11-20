@@ -30,6 +30,8 @@ export interface PluginResourceLinks {
 export interface InstalledPlugin extends PluginResourceLinks {
 	/** Directory-derived identifier. */
 	readonly id: string;
+	/** Public directory slug for a plugin installed from the directory. */
+	readonly directorySlug?: string;
 	/** Installation type ('regular' or 'must_use'). */
 	readonly type: PluginType;
 	/** Human-readable category label ('Regular' or 'Must-Use'). */

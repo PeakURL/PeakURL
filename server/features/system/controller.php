@@ -156,6 +156,20 @@ class Controller extends BaseController {
 	}
 
 	/**
+	 * Install a verified release from the public plugin directory.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> JSON response.
+	 */
+	public function install_directory_plugin( Request $request ): array {
+		return $this->success_response(
+			$this->system_service->install_directory_plugin( $request ),
+			__( 'Plugin installed successfully.', 'peakurl' ),
+			201
+		);
+	}
+
+	/**
 	 * Retrieve registered pages and UI extensions visible to the current user.
 	 *
 	 * @param Request $request Incoming HTTP request.

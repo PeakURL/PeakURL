@@ -564,6 +564,11 @@ export const API_ROUTES = {
 		pluginsUpload: apiPath("system", "plugins", "upload"),
 
 		/**
+		 * Installs a specific release from the public plugin directory.
+		 */
+		pluginsInstall: apiPath("system", "plugins", "install"),
+
+		/**
 		 * Relative API path: `system/plugins/extensions`.
 		 *
 		 * Loads active plugin page descriptors and UI extension points.

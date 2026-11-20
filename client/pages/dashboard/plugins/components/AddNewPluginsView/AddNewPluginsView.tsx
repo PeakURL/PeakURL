@@ -57,6 +57,7 @@ export function AddNewPluginsView({
 
 	// Dynamic upload limits from query or parent prop
 	const { data: installedResponse } = useGetInstalledPluginsQuery();
+	const installedPlugins = installedResponse?.data?.items ?? [];
 	const effectiveLimit = uploadLimit ?? installedResponse?.data?.uploadLimit;
 	const maxUploadSizeFormatted = effectiveLimit?.formatted ?? "2 MB";
 
@@ -480,8 +481,7 @@ export function AddNewPluginsView({
 
 			{/* Content Area */}
 			{isLoading ? (
-				/* Loading Skeletons in 2-column grid */
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+				<div className="plugins-directory-grid">
 					{Array.from({ length: 4 }).map((_, idx) => (
 						<div
 							key={idx}
@@ -604,10 +604,17 @@ export function AddNewPluginsView({
 					</div>
 				)
 			) : (
-				/* Cards Grid (2 columns on desktop) */
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+				<div className="plugins-directory-grid">
 					{plugins.map((plugin) => (
-						<DirectoryCard key={plugin.id} plugin={plugin} />
+						<DirectoryCard
+							key={plugin.id}
+							plugin={plugin}
+							installedPlugin={installedPlugins.find(
+								(installed) =>
+									(installed.directorySlug ??
+										installed.id) === plugin.slug
+							)}
+						/>
 					))}
 				</div>
 			)}

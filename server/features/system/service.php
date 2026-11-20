@@ -18,6 +18,7 @@ use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
 use PeakURL\Core\Errors\ApiException;
+use PeakURL\Core\Plugins\Directory as PluginDirectory;
 use PeakURL\Core\Plugins\Extensions;
 use PeakURL\Core\Plugins\Metadata;
 use PeakURL\Core\Plugins\Registry;
@@ -48,6 +49,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 1.0.0
  */
 class Service {
+
+	/**
+	 * Installer-owned file recording the public directory slug.
+	 */
+	private const string DIRECTORY_SLUG_FILE = '.peakurl-directory';
 
 	/**
 	 * Shared database wrapper.
@@ -376,26 +382,29 @@ class Service {
 
 		$mapped_regular = array();
 		foreach ( $regular as $id => $meta ) {
-			$is_active        = in_array( $id, $active_ids, true );
-			$mapped_regular[] = $meta->with_active( $is_active )->to_array();
+			$is_active             = in_array( $id, $active_ids, true );
+			$mapped_regular[ $id ] = $meta->with_active( $is_active )->to_array();
+			$directory_slug        = $this->read_directory_slug( $meta->plugin_path() );
+			if ( null !== $directory_slug ) {
+				$mapped_regular[ $id ]['directorySlug'] = $directory_slug;
+			}
 		}
 
 		$mapped_must_use = array();
 		foreach ( $must_use as $id => $meta ) {
-			$mapped_must_use[] = $meta->with_active( true )->to_array();
+			$mapped_must_use[ $id ] = $meta->with_active( true )->to_array();
 		}
 
 		$mapped_items = array();
-		foreach ( $all as $key => $meta ) {
-			$is_mu          = Type::MUST_USE === $meta->type();
-			$is_active      = $is_mu || in_array( $meta->id(), $active_ids, true );
-			$mapped_items[] = $meta->with_active( $is_active )->to_array();
+		foreach ( $all as $meta ) {
+			$id             = $meta->id();
+			$mapped_items[] = Type::MUST_USE === $meta->type() ? $mapped_must_use[ $id ] : $mapped_regular[ $id ];
 		}
 
 		return array(
 			'items'       => $mapped_items,
-			'regular'     => $mapped_regular,
-			'mustUse'     => $mapped_must_use,
+			'regular'     => array_values( $mapped_regular ),
+			'mustUse'     => array_values( $mapped_must_use ),
 			'total'       => count( $all ),
 			'uploadLimit' => $this->get_effective_upload_limit(),
 		);
@@ -845,6 +854,75 @@ class Service {
 			);
 		}
 
+		return $this->install_plugin_archive( $tmp_file );
+	}
+
+	/**
+	 * Install a specific release from the public plugin directory.
+	 *
+	 * @param Request $request Incoming HTTP request.
+	 * @return array<string, mixed> Installed plugin metadata.
+	 * @throws ApiException When installation fails.
+	 */
+	public function install_directory_plugin( Request $request ): array {
+		$this->get_plugins_user( $request );
+
+		$slug    = $request->get_body_param( 'slug' );
+		$version = $request->get_body_param( 'version' );
+		if ( ! is_string( $slug ) || ! is_string( $version ) ) {
+			throw new ApiException( __( 'A valid plugin slug and release version are required.', 'peakurl' ), 400 );
+		}
+
+		$archive = tmpfile();
+		if ( false === $archive ) {
+			throw new ApiException( __( 'Could not allocate a temporary file for the plugin download.', 'peakurl' ), 500 );
+		}
+
+		try {
+			$directory = new PluginDirectory();
+			$directory->download_release( $slug, $version, $archive, (string) ( $this->config[ Constants::VERSION ] ?? '' ) );
+			$path = stream_get_meta_data( $archive )['uri'];
+			return $this->install_plugin_archive(
+				$path,
+				array(
+					'slug'    => $slug,
+					'version' => $version,
+				)
+			);
+		} finally {
+			fclose( $archive );
+		}
+	}
+
+	/**
+	 * Read the directory slug recorded alongside an installed plugin.
+	 *
+	 * @param string $plugin_path Local plugin directory.
+	 * @return string|null Directory slug, if recorded.
+	 */
+	private function read_directory_slug( string $plugin_path ): ?string {
+		if ( '' === $plugin_path ) {
+			return null;
+		}
+
+		$path = $plugin_path . '/' . self::DIRECTORY_SLUG_FILE;
+		if ( is_link( $path ) || ! is_file( $path ) ) {
+			return null;
+		}
+
+		$slug = @file_get_contents( $path, false, null, 0, 81 );
+		return is_string( $slug ) && PluginDirectory::is_valid_slug( $slug ) ? $slug : null;
+	}
+
+	/**
+	 * Validate and install a local plugin archive.
+	 *
+	 * @param string                                  $tmp_file          Temporary archive path.
+	 * @param array{slug: string, version: string}|null $directory_release Directory release, for first-time catalog installs.
+	 * @return array<string, mixed> Installed plugin metadata.
+	 * @throws ApiException When archive validation or installation fails.
+	 */
+	private function install_plugin_archive( string $tmp_file, ?array $directory_release = null ): array {
 		if ( ! class_exists( '\ZipArchive' ) ) {
 			throw new ApiException(
 				__( 'ZipArchive PHP extension is required on the server to install plugins.', 'peakurl' ),
@@ -856,7 +934,7 @@ class Service {
 		$res = $zip->open( $tmp_file, \ZipArchive::CHECKCONS );
 		if ( true !== $res ) {
 			throw new ApiException(
-				__( 'Uploaded file is not a valid ZIP archive.', 'peakurl' ),
+				__( 'Plugin package is not a valid ZIP archive.', 'peakurl' ),
 				400
 			);
 		}
@@ -1078,6 +1156,11 @@ class Service {
 			);
 		}
 
+		if ( null !== $directory_release && ( $decoded['version'] ?? null ) !== $directory_release['version'] ) {
+			$zip->close();
+			throw new ApiException( __( 'The plugin package version does not match the directory release.', 'peakurl' ), 502 );
+		}
+
 		$validation = $validator->validate( $decoded );
 		if ( ! $validation['valid'] ) {
 			$zip->close();
@@ -1190,8 +1273,14 @@ class Service {
 			$is_update        = is_dir( $target_dest ) || file_exists( $target_dest );
 			$existing_version = null;
 			$was_active       = false;
+			$installed_slug   = $directory_release['slug'] ?? null;
 
 			if ( $is_update ) {
+				if ( null !== $directory_release ) {
+					$zip->close();
+					throw new ApiException( __( 'This plugin is already installed.', 'peakurl' ), 409 );
+				}
+
 				$existing_registry = new Registry( $content_dir );
 				$existing_meta     = $existing_registry->find( $candidate_id, Type::REGULAR );
 
@@ -1239,6 +1328,7 @@ class Service {
 
 				$active_plugins = $this->get_active_plugin_ids();
 				$was_active     = in_array( $candidate_id, $active_plugins, true );
+				$installed_slug = $this->read_directory_slug( $target_dest );
 			}
 
 			// Stage extracted files on the EXACT SAME filesystem as the destination.
@@ -1288,6 +1378,14 @@ class Service {
 					__( 'Package files could not be verified on disk before installation.', 'peakurl' ),
 					400
 				);
+			}
+
+			$source_marker = $source_dir . '/' . self::DIRECTORY_SLUG_FILE;
+			if ( file_exists( $source_marker ) ) {
+				throw new ApiException( __( 'The plugin package contains a reserved file.', 'peakurl' ), 400 );
+			}
+			if ( null !== $installed_slug && strlen( $installed_slug ) !== file_put_contents( $source_marker, $installed_slug ) ) {
+				throw new ApiException( __( 'Could not save the plugin directory association.', 'peakurl' ), 500 );
 			}
 
 			// For updates, safely stage existing plugin directory as a backup on the same filesystem.
@@ -1398,6 +1496,9 @@ class Service {
 		$payload                    = $meta->with_active( $was_active )->to_array();
 		$payload['updated']         = $is_update;
 		$payload['previousVersion'] = $existing_version;
+		if ( null !== $installed_slug ) {
+			$payload['directorySlug'] = $installed_slug;
+		}
 
 		return $payload;
 	}

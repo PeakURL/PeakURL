@@ -1,0 +1,21 @@
+@layer components {
+	.plugins-add-new-view {
+		container: plugin-directory / inline-size;
+	}
+
+	.plugins-directory-grid {
+		@apply grid grid-cols-1 gap-4;
+	}
+
+	@container plugin-directory (min-width: 40rem) {
+		.plugins-directory-grid {
+			@apply grid-cols-2;
+		}
+	}
+
+	@container plugin-directory (min-width: 64rem) {
+		.plugins-directory-grid {
+			@apply grid-cols-3;
+		}
+	}
+}

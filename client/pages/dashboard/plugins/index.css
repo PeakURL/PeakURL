@@ -1,3 +1,4 @@
 @import "./plugins-page.css";
+@import "./components/AddNewPluginsView/add-new-plugins-view.css";
 @import "./components/PluginTabs/plugin-tabs.css";
 @import "./components/InstalledPluginsTable/installed-plugins-table.css";

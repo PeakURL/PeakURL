@@ -253,9 +253,75 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 		await expect(page).toHaveURL(/\/dashboard\/plugins\/add/);
 	});
 
-	test("Add New view displays directory cards, upload toggle, and clean empty state", async ({
+	test("Add New installs and activates a published plugin while still offering ZIP uploads", async ({
 		page,
 	}) => {
+		const installedPlugin = {
+			id: "utm-policy-enforcer",
+			directorySlug: "utm-policy-enforcer-2",
+			name: "UTM Policy Enforcer",
+			type: "regular",
+			typeLabel: "Regular",
+			version: "1.0.0",
+			valid: true,
+			compatible: true,
+			active: false,
+			errors: [],
+			warnings: [],
+		};
+		let installed = false;
+		let attempts = 0;
+		await page.route("**/api/v1/system/plugins", (route) => {
+			const items = installed ? [installedPlugin] : [];
+			return route.fulfill({
+				json: {
+					data: {
+						items,
+						regular: items,
+						mustUse: [],
+						total: items.length,
+					},
+				},
+			});
+		});
+		await page.route("**/api/v1/system/plugins/install", (route) => {
+			expect(route.request().method()).toBe("POST");
+			expect(route.request().postDataJSON()).toEqual({
+				slug: installedPlugin.directorySlug,
+				version: installedPlugin.version,
+			});
+			attempts++;
+			if (attempts === 1) {
+				return route.fulfill({
+					status: 502,
+					json: {
+						message: "The plugin directory could not be reached.",
+					},
+				});
+			}
+			installed = true;
+			return route.fulfill({
+				status: 201,
+				json: { data: installedPlugin },
+			});
+		});
+		await page.route("**/api/v1/system/plugins/activate", (route) => {
+			expect(route.request().method()).toBe("POST");
+			expect(route.request().postDataJSON()).toEqual({
+				id: installedPlugin.id,
+			});
+			installedPlugin.active = true;
+			return route.fulfill({
+				json: {
+					data: {
+						id: installedPlugin.id,
+						active: true,
+						activePlugins: [installedPlugin.id],
+					},
+				},
+			});
+		});
+
 		// Mock official PeakURL.org directory API
 		await page.route("https://api.peakurl.org/v1/plugins*", (route) =>
 			route.fulfill({
@@ -265,7 +331,7 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 						items: [
 							{
 								id: "plugin_123",
-								slug: "utm-policy-enforcer",
+								slug: installedPlugin.directorySlug,
 								name: "UTM Policy Enforcer",
 								summary:
 									"Enforce standard UTM tracking parameters on all short links.",
@@ -289,6 +355,11 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 								tags: [
 									{ slug: "marketing", label: "Marketing" },
 								],
+								distribution: {
+									downloadUrl:
+										"/v1/plugins/utm-policy-enforcer-2/releases/1.0.0/download",
+									sha256: "a".repeat(64),
+								},
 							},
 						],
 						pagination: {
@@ -333,8 +404,50 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 		await expect(detailLink).toBeVisible();
 		await expect(detailLink).toHaveAttribute(
 			"href",
-			"https://peakurl.org/plugin/utm-policy-enforcer"
+			"https://peakurl.org/plugin/utm-policy-enforcer-2"
 		);
+		await expect(page.getByRole("link", { name: "Download" })).toHaveCount(
+			0
+		);
+
+		const directoryGrid = page.locator(".plugins-directory-grid");
+		await expect(directoryGrid).toHaveCSS(
+			"grid-template-columns",
+			/^\S+ \S+ \S+$/
+		);
+		await page.setViewportSize({ width: 1100, height: 900 });
+		await expect(directoryGrid).toHaveCSS(
+			"grid-template-columns",
+			/^\S+ \S+$/
+		);
+		await page.setViewportSize({ width: 390, height: 844 });
+		await expect(directoryGrid).toHaveCSS("grid-template-columns", /^\S+$/);
+		await page.setViewportSize({ width: 1440, height: 900 });
+
+		const directoryInstall = page.getByRole("button", {
+			name: "Install Now",
+		});
+		await directoryInstall.click();
+		await expect(
+			page.getByText("The plugin directory could not be reached.")
+		).toBeVisible();
+		await directoryInstall.click();
+		const activateButton = page.getByRole("button", {
+			name: "Activate",
+			exact: true,
+		});
+		await expect(activateButton).toBeEnabled();
+
+		await page.reload();
+		await activateButton.click();
+		const activeButton = page.getByRole("button", {
+			name: "Active",
+			exact: true,
+		});
+		await expect(activeButton).toBeDisabled();
+		await expect(page).toHaveURL(/\/dashboard\/plugins\/add$/);
+		await page.reload();
+		await expect(activeButton).toBeDisabled();
 
 		// Clicking Upload Plugin toggles upload form
 		await uploadToggleBtn.click();
@@ -391,6 +504,9 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 		// Click back to return to Installed Plugins
 		await backBtn.click();
 		await expect(page).toHaveURL(/\/dashboard\/plugins$/);
+		await expect(
+			page.getByRole("button", { name: "Deactivate", exact: true })
+		).toBeVisible();
 	});
 
 	test("displays first-use empty state with Add Plugin action and hides tab bar when no plugins installed", async ({

@@ -1,18 +1,25 @@
 import { useState } from "react";
 import {
 	BadgeCheck,
-	Download,
 	ExternalLink,
 	Package,
 	ShieldCheck,
 	Tag,
 } from "lucide-react";
 
+import { Button, useNotification } from "@/components";
 import { __ } from "@/i18n";
-import type { PublishedPluginListing } from "../../types";
+import { getErrorMessage } from "@/shared/errors";
+import {
+	useActivatePluginMutation,
+	useInstallDirectoryPluginMutation,
+} from "@/state/slices/api/system";
+
+import type { InstalledPlugin, PublishedPluginListing } from "../../types";
 
 export interface DirectoryCardProps {
 	plugin: PublishedPluginListing;
+	installedPlugin?: InstalledPlugin;
 }
 
 /**
@@ -66,26 +73,63 @@ function sanitizeUrl(
 	return null;
 }
 
-export function DirectoryCard({ plugin }: DirectoryCardProps) {
+export function DirectoryCard({ plugin, installedPlugin }: DirectoryCardProps) {
 	const [imageFailed, setImageFailed] = useState(false);
+	const notification = useNotification();
+	const [installPlugin, { data: installation, isLoading: isInstalling }] =
+		useInstallDirectoryPluginMutation();
+	const [activatePlugin, { data: activation, isLoading: isActivating }] =
+		useActivatePluginMutation();
+	const installed = installedPlugin ?? installation?.data;
+	const isActive =
+		installed?.active ||
+		(activation?.data?.active && activation.data.id === installed?.id);
+	const canActivate =
+		installed?.type === "regular" &&
+		installed.valid &&
+		installed.compatible;
 	const rawIcon = plugin.media?.icon128 || plugin.media?.icon256;
 	const iconUrl = sanitizeUrl(rawIcon, "https://peakurl.org");
 	const isOfficial = Boolean(plugin.directoryTrust?.isOfficial);
 	const isVerifiedAuthor = Boolean(plugin.directoryTrust?.isVerifiedAuthor);
+	const tags = plugin.tags?.slice(0, 2) ?? [];
 	const safeSlug = encodeURIComponent(plugin.slug.trim());
 	const detailUrl = `https://peakurl.org/plugin/${safeSlug}`;
-	const downloadUrl = sanitizeUrl(
-		plugin.distribution?.downloadUrl,
-		"https://api.peakurl.org"
-	);
 	const authorUrl = sanitizeUrl(
 		plugin.author?.profileUrl,
 		"https://peakurl.org"
 	);
 
+	const handleInstall = async () => {
+		try {
+			await installPlugin({
+				slug: plugin.slug,
+				version: plugin.version,
+			}).unwrap();
+			notification.success(
+				__("Plugin installed successfully. It is ready for activation.")
+			);
+		} catch (error: unknown) {
+			notification.error(
+				getErrorMessage(error, __("Failed to install plugin."))
+			);
+		}
+	};
+
+	const handleActivate = async (id: string) => {
+		try {
+			await activatePlugin({ id }).unwrap();
+			notification.success(__("Plugin activated."));
+		} catch (error: unknown) {
+			notification.error(
+				getErrorMessage(error, __("Failed to activate plugin."))
+			);
+		}
+	};
+
 	return (
 		<article
-			className="plugins-directory-card flex h-full flex-col justify-between rounded-xl border border-stroke bg-surface p-5 shadow-xs transition-all hover:border-stroke-strong hover:shadow-sm"
+			className="plugins-directory-card flex h-full min-w-0 flex-col justify-between rounded-xl border border-stroke bg-surface p-4 shadow-xs transition-all hover:border-stroke-strong hover:shadow-sm"
 			data-plugin-slug={plugin.slug}
 		>
 			<div>
@@ -162,10 +206,11 @@ export function DirectoryCard({ plugin }: DirectoryCardProps) {
 					</div>
 				)}
 
-				{/* Summary */}
-				<p className="mt-3 line-clamp-3 text-xs text-text-muted leading-relaxed">
-					{plugin.summary}
-				</p>
+				{plugin.summary && plugin.summary !== plugin.name && (
+					<p className="mt-3 line-clamp-3 text-xs text-text-muted leading-relaxed">
+						{plugin.summary}
+					</p>
+				)}
 
 				{/* Requirements */}
 				<div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-text-muted font-mono">
@@ -186,53 +231,58 @@ export function DirectoryCard({ plugin }: DirectoryCardProps) {
 			</div>
 
 			{/* Footer: Tags and Actions */}
-			<div className="mt-5 border-t border-stroke/60 pt-3.5">
-				<div className="flex items-center justify-between gap-2">
-					{/* Category/Tags */}
-					<div className="flex flex-wrap items-center gap-1.5 min-w-0">
-						{plugin.tags && plugin.tags.length > 0 ? (
-							plugin.tags.slice(0, 2).map((t) => (
-								<span
-									key={t.slug}
-									className="inline-flex items-center gap-1 rounded-md border border-stroke/60 bg-surface-alt px-2 py-0.5 text-[11px] font-medium text-text-muted"
-								>
-									<Tag size={10} className="text-accent" />
-									<span className="truncate max-w-[80px]">
-										{t.label}
-									</span>
-								</span>
-							))
-						) : (
-							<span className="text-xs text-text-muted">—</span>
-						)}
-					</div>
-
-					{/* Actions */}
-					<div className="flex items-center gap-2.5 shrink-0">
-						{downloadUrl && (
-							<a
-								href={downloadUrl}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="inline-flex items-center gap-1 text-xs text-text-muted hover:text-heading transition-colors"
-								title={__("Download ZIP package")}
+			<div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-stroke/60 pt-3">
+				{tags.length > 0 && (
+					<div className="flex min-w-0 flex-wrap items-center gap-1.5">
+						{tags.map((tag) => (
+							<span
+								key={tag.slug}
+								className="inline-flex items-center gap-1 rounded-md border border-stroke/60 bg-surface-alt px-2 py-0.5 text-[11px] font-medium text-text-muted"
 							>
-								<Download size={13} />
-								<span className="hidden sm:inline">
-									{__("Download")}
+								<Tag size={10} className="text-accent" />
+								<span className="truncate max-w-[80px]">
+									{tag.label}
 								</span>
-							</a>
-						)}
-						<a
-							href={detailUrl}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
-						>
-							<span>{__("View Details")}</span>
-							<ExternalLink size={12} />
-						</a>
+							</span>
+						))}
 					</div>
+				)}
+				<div className="ms-auto flex flex-wrap items-center gap-2.5">
+					<a
+						href={detailUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="inline-flex items-center gap-1 text-xs font-medium text-accent hover:underline"
+					>
+						<span>{__("View Details")}</span>
+						<ExternalLink size={12} />
+					</a>
+					{installed ? (
+						<Button
+							size="xs"
+							disabled={isActive || !canActivate}
+							loading={isActivating}
+							onClick={() => handleActivate(installed.id)}
+						>
+							{isActive
+								? __("Active")
+								: isActivating
+									? __("Activating…")
+									: __("Activate")}
+						</Button>
+					) : (
+						plugin.distribution?.sha256 && (
+							<Button
+								size="xs"
+								loading={isInstalling}
+								onClick={handleInstall}
+							>
+								{isInstalling
+									? __("Installing…")
+									: __("Install Now")}
+							</Button>
+						)
+					)}
 				</div>
 			</div>
 		</article>

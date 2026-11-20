@@ -522,6 +522,11 @@ class RouteInventoryTest extends TestCase {
 			'capability' => 'manage_updates',
 			'coverage'   => array( 'contract', 'auth', 'e2e' ),
 		),
+		'POST /api/v1/system/plugins/install'              => array(
+			'area'       => 'System',
+			'capability' => 'manage_updates',
+			'coverage'   => array( 'contract', 'auth', 'e2e' ),
+		),
 		'GET /api/v1/system/plugins/extensions'            => array(
 			'area'       => 'System',
 			'capability' => 'authenticated',

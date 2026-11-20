@@ -147,6 +147,23 @@ class PluginFoundationIntegrationTest extends TestCase {
 		return $service_inst;
 	}
 
+	public function test_directory_install_requires_plugin_management_permission(): void {
+		$service = $this->create_system_service( array( 'editor' ) );
+		$request = new Request(
+			'POST',
+			'/api/v1/system/plugins/install',
+			array(),
+			array(
+				'slug'    => 'social-preview',
+				'version' => '1.0.0',
+			)
+		);
+
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+		$service->install_directory_plugin( $request );
+	}
+
 	private function build_sample_zip( string $version = '1.0.0' ): string {
 		$zip_file = $this->temp_dir . "/social-preview-{$version}.zip";
 		$zip      = new ZipArchive();

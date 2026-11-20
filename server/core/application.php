@@ -877,6 +877,7 @@ class Application {
 				array( 'post', '/system/plugins/deactivate', array( $system, 'deactivate_plugin' ) ),
 				array( 'post', '/system/plugins/delete', array( $system, 'delete_plugin' ) ),
 				array( 'post', '/system/plugins/upload', array( $system, 'upload_plugin' ) ),
+				array( 'post', '/system/plugins/install', array( $system, 'install_directory_plugin' ) ),
 				array( 'get', '/system/plugins/extensions', array( $system, 'plugin_extensions' ) ),
 				array( 'get', '/system/plugins/{slug}/page/{pageId}', array( $system, 'get_plugin_page' ) ),
 				array( 'get', '/system/plugins/{slug}/settings', array( $system, 'get_plugin_settings' ) ),

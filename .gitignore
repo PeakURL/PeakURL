@@ -38,6 +38,9 @@ core/.env
 /content/uploads/favicon/favicon.png
 /content/uploads/favicon/site.webmanifest
 /content/debug.log
+/content/plugins/*
+!/content/plugins/index.php
+!/content/plugins/example-plugin/
 /content/cache/*
 !/content/cache/.htaccess
 !/content/cache/index.php

@@ -26,9 +26,6 @@ PHP runtime libraries shipped in the release
   https://github.com/PHPMailer/PHPMailer
 
 Bundled dashboard and frontend components
-- PeakURL logo link artwork — Lucide/Feather, ISC/MIT
-  Full license notices: assets/LICENSE-Lucide.txt in releases;
-  client/assets/logo/LICENSE-Lucide.txt in the source repository.
 - Model Context Protocol (MCP) icon — Devicon, MIT
   Full license notices: assets/LICENSE-Devicons.txt in releases;
   client/assets/mcp/LICENSE-Devicons.txt in the source repository.

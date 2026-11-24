@@ -4,6 +4,11 @@
 	}
 	.logo-mark {
 		@apply block shrink-0;
+		color-scheme: light;
+	}
+	.dark .logo-mark,
+	.logo-dark .logo-mark {
+		color-scheme: dark;
 	}
 	.logo-name {
 		@apply overflow-hidden whitespace-nowrap font-semibold tracking-tight transition-[max-width,opacity] duration-200;

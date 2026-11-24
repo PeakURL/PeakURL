@@ -88,6 +88,10 @@ export default defineConfig({
 				target: devProxyTarget,
 				changeOrigin: true,
 			},
+			"/favicon.svg": {
+				target: devProxyTarget,
+				changeOrigin: true,
+			},
 			"/favicon.ico": {
 				target: devProxyTarget,
 				changeOrigin: true,

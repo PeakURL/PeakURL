@@ -88,9 +88,9 @@ verify_release_package() {
 		CREDITS.txt \
 		api/index.php \
 		assets/peakurl.svg \
-		assets/LICENSE-Lucide.txt \
 		assets/LICENSE-Devicons.txt \
 		assets/default-favicon.png \
+		assets/default-favicon.svg \
 		assets/default-site.webmanifest \
 		content/index.php \
 		content/landing-page.html \
@@ -231,9 +231,9 @@ trap restore_composer_dependencies EXIT HUP INT TERM
 cd "$ROOT_DIR"
 
 require_file "$ROOT_DIR/client/assets/logo/peakurl.svg"
-require_file "$ROOT_DIR/client/assets/logo/LICENSE-Lucide.txt"
 require_file "$ROOT_DIR/client/assets/mcp/LICENSE-Devicons.txt"
 require_file "$ROOT_DIR/server/public/default-favicon.png"
+require_file "$ROOT_DIR/server/public/default-favicon.svg"
 require_file "$ROOT_DIR/server/public/default-site.webmanifest"
 require_file "$ROOT_DIR/server/features/links/publicCaptcha.js"
 require_file "$ROOT_DIR/server/services/status-illustrations/manifest.json"
@@ -274,9 +274,9 @@ cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/app.html"
 copy_release_tree "$UI_BUILD_DIR/assets" "$RELEASE_DIR/assets" \
 	--exclude='.DS_Store'
 cp "$ROOT_DIR/client/assets/logo/peakurl.svg" "$RELEASE_DIR/assets/peakurl.svg"
-cp "$ROOT_DIR/client/assets/logo/LICENSE-Lucide.txt" "$RELEASE_DIR/assets/LICENSE-Lucide.txt"
 cp "$ROOT_DIR/client/assets/mcp/LICENSE-Devicons.txt" "$RELEASE_DIR/assets/LICENSE-Devicons.txt"
 cp "$ROOT_DIR/server/public/default-favicon.png" "$RELEASE_DIR/assets/default-favicon.png"
+cp "$ROOT_DIR/server/public/default-favicon.svg" "$RELEASE_DIR/assets/default-favicon.svg"
 cp "$ROOT_DIR/server/public/default-site.webmanifest" "$RELEASE_DIR/assets/default-site.webmanifest"
 
 # 3. Server Runtime Allowlist (Flattened into release root, excluding dev tests & caches)

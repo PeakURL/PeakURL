@@ -192,6 +192,7 @@ $is_favicon = static function ( string $relative_path ): bool {
 		array(
 			'/favicon.ico',
 			'/favicon.png',
+			'/favicon.svg',
 			'/apple-touch-icon.png',
 			'/site.webmanifest',
 		),
@@ -279,6 +280,13 @@ $favicon_markup = static function (
 	$markup = '<link data-peakurl-favicon="1" rel="icon" type="image/png" href="' . $icon_url . '"' . $sizes_attr . '>' .
 		"\n" .
 		'<link data-peakurl-favicon="1" rel="shortcut icon" type="image/png" href="' . $shortcut_url . '">';
+
+	if ( empty( $favicon['isCustom'] ) ) {
+		$svg_url = htmlspecialchars( (string) ( $favicon['svgUrl'] ?? '' ), ENT_QUOTES, 'UTF-8' );
+		if ( '' !== $svg_url ) {
+			$markup .= "\n" . '<link data-peakurl-favicon="1" rel="icon" type="image/svg+xml" sizes="any" href="' . $svg_url . '">';
+		}
+	}
 
 	if ( '' !== $apple_touch_url ) {
 		$markup .=
@@ -585,6 +593,18 @@ if ( $is_favicon( $relative_path ) ) {
 	if ( empty( $favicon_assets['configured'] ) ) {
 		http_response_code( 404 );
 		exit();
+	}
+
+	if ( '/favicon.svg' === $relative_path ) {
+		if ( ! empty( $favicon_assets['isCustom'] ) ) {
+			http_response_code( 404 );
+			exit();
+		}
+		$send_file(
+			$environment->get_default_favicon_svg_path(),
+			'image/svg+xml',
+			3600,
+		);
 	}
 
 	if ( '/site.webmanifest' === $relative_path ) {

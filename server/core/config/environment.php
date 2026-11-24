@@ -336,6 +336,17 @@ class Environment {
 	}
 
 	/**
+	 * Return the bundled adaptive browser favicon path.
+	 *
+	 * @return string
+	 */
+	public function get_default_favicon_svg_path(): string {
+		return $this->is_development
+			? $this->source_root . '/server/public/default-favicon.svg'
+			: $this->source_root . '/assets/default-favicon.svg';
+	}
+
+	/**
 	 * Return the bundled vector shared by the dashboard and server-rendered branding.
 	 *
 	 * @return string

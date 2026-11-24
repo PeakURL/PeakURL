@@ -1,35 +1,15 @@
-<svg
-	xmlns="http://www.w3.org/2000/svg"
-	width="72"
-	height="72"
-	viewBox="0 0 72 72"
-	fill="none"
-	role="img"
-	aria-label="PeakURL"
-	focusable="false"
->
-	<title>PeakURL</title>
-	<rect width="72" height="72" rx="19" fill="#2b3040"></rect>
-	<path
-		d="M62.2 38.5V20.5A10.7 10.7 0 0 0 51.5 9.8H20.5A10.7 10.7 0 0 0 9.8 20.5V51.5A10.7 10.7 0 0 0 20.5 62.2H38.5"
-		stroke="#b5c8fa"
-		stroke-opacity="0.72"
-		stroke-width="1.8"
-		stroke-linecap="round"
-	></path>
-	<path
-		d="M21.5 52.5V19.5H35.2C44.4 19.5 49.8 24 49.8 31.5C49.8 39.2 44.4 43.5 35.2 43.5H27.9V52.5H21.5ZM27.9 25.3V37.7H34.8C40.5 37.7 43.4 35.7 43.4 31.5C43.4 27.3 40.5 25.3 34.8 25.3H27.9Z"
-		fill="#ffffff"
-		fill-rule="evenodd"
-	></path>
-	<g
-		transform="translate(43.8 43.8) scale(0.85)"
-		stroke="#b5c8fa"
-		stroke-linecap="round"
-		stroke-linejoin="round"
-		stroke-width="2.8"
-	>
-		<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-		<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-	</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="PeakURL">
+ <title>PeakURL</title>
+ <style>
+ @media (prefers-color-scheme: dark) {
+   g { fill: #b5c8fa; }
+   circle { fill: #ffffff; }
+ }
+ </style>
+ <g fill="#2b3040">
+  <rect x="18.5" y="25.5" width="59" height="11" rx="5.5"/>
+  <rect x="18.5" y="42.5" width="44" height="11" rx="5.5"/>
+  <rect x="18.5" y="59.5" width="29" height="11" rx="5.5"/>
+ </g>
+ <circle cx="65" cy="65" r="6.5" fill="#b5c8fa"/>
 </svg>

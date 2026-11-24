@@ -117,6 +117,15 @@ export function applyDocumentFavicon(favicon?: FaviconData | null): void {
 		href: shortcutIconUrl || iconUrl,
 	});
 
+	if (!favicon.isCustom) {
+		appendManagedHeadTag("link", {
+			rel: "icon",
+			type: "image/svg+xml",
+			sizes: "any",
+			href: getManagedFaviconUrl("favicon.svg", favicon.updatedAt),
+		});
+	}
+
 	if (appleTouchUrl) {
 		appendManagedHeadTag("link", {
 			rel: "apple-touch-icon",

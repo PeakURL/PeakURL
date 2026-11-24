@@ -10,6 +10,10 @@ $favicon_map  = array(
 		'fallback_path' => '/app/server/public/default-favicon.png',
 		'content_type'  => 'image/png',
 	),
+	'/favicon.svg'          => array(
+		'path'          => '/app/server/public/default-favicon.svg',
+		'content_type'  => 'image/svg+xml',
+	),
 	'/favicon.ico'          => array(
 		'path'          => '/app/content/uploads/favicon/favicon.png',
 		'fallback_path' => '/app/server/public/default-favicon.png',

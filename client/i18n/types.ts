@@ -70,6 +70,9 @@ export interface FaviconData {
 	/** Legacy favicon route URL. */
 	iconUrl?: string | null;
 
+	/** Adaptive SVG browser favicon URL for the bundled default. */
+	svgUrl?: string | null;
+
 	/** Apple touch icon URL. */
 	appleTouchUrl?: string | null;
 

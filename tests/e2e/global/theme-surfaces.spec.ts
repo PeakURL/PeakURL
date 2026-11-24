@@ -105,6 +105,17 @@ for (const theme of ["light", "dark"] as const) {
 				["/dashboard/tools/scheduled-jobs", ".scheduled-jobs-table th"],
 			] as const) {
 				await page.goto(path);
+				const mark = page.locator(".dashboard-sidebar-logo .logo-mark");
+				await expect(mark).toBeVisible();
+				await expect(mark).toHaveCSS("color-scheme", theme);
+				await expect
+					.poll(() =>
+						mark.evaluate(
+							(image: HTMLImageElement) =>
+								image.complete && image.naturalWidth > 0
+						)
+					)
+					.toBe(true);
 				const label = page
 					.locator(heading)
 					.filter({ hasText: /\S/ })

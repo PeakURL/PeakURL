@@ -23,8 +23,8 @@ export function Logo({
 				src={peakurlLogoUrl}
 				alt=""
 				aria-hidden="true"
-				width="72"
-				height="72"
+				width="96"
+				height="96"
 				className="logo-mark"
 			/>
 			{showName && <span className="logo-name">{PEAKURL_NAME}</span>}

@@ -596,10 +596,6 @@ if ( $is_favicon( $relative_path ) ) {
 	}
 
 	if ( '/favicon.svg' === $relative_path ) {
-		if ( ! empty( $favicon_assets['isCustom'] ) ) {
-			http_response_code( 404 );
-			exit();
-		}
 		$send_file(
 			$environment->get_default_favicon_svg_path(),
 			'image/svg+xml',

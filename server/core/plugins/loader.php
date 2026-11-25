@@ -398,6 +398,15 @@ class Loader {
 	}
 
 	/**
+	 * Return all discovered plugins, including inactive plugins.
+	 *
+	 * @return array<string, Metadata>
+	 */
+	public function get_installed_plugins(): array {
+		return $this->registry->all();
+	}
+
+	/**
 	 * Return all currently active regular plugin IDs.
 	 *
 	 * @return array<int, string>

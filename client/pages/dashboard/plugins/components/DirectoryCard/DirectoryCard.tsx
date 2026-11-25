@@ -10,6 +10,7 @@ import {
 import { Button, useNotification } from "@/components";
 import { __ } from "@/i18n";
 import { getErrorMessage } from "@/shared/errors";
+import { formatCount } from "@/shared/formatting";
 import {
 	useActivatePluginMutation,
 	useInstallDirectoryPluginMutation,
@@ -229,6 +230,25 @@ export function DirectoryCard({ plugin, installedPlugin }: DirectoryCardProps) {
 					)}
 				</div>
 			</div>
+
+			<dl className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-text-muted">
+				<div className="flex items-baseline gap-1.5">
+					<dt>{__("Active installs")}</dt>
+					<dd className="font-semibold tabular-nums text-heading">
+						{formatCount(
+							plugin.installationStats?.activeInstalls ?? 0
+						)}
+					</dd>
+				</div>
+				{plugin.downloadCount !== undefined && (
+					<div className="flex items-baseline gap-1.5">
+						<dt>{__("Downloads")}</dt>
+						<dd className="font-semibold tabular-nums text-heading">
+							{formatCount(plugin.downloadCount)}
+						</dd>
+					</div>
+				)}
+			</dl>
 
 			{/* Footer: Tags and Actions */}
 			<div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-stroke/60 pt-3">

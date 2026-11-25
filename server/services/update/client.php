@@ -55,17 +55,49 @@ class Client {
 	 * @since 1.7.0 Added $params with RFC 3986 query encoding.
 	 */
 	public function get( string $url, string $accept, array $params = array() ): string {
-		$url = $this->get_https_url(
+		return $this->request( $url, $accept, $params );
+	}
+
+	/**
+	 * Send a JSON POST and return the update response.
+	 *
+	 * @param string               $url     Remote URL.
+	 * @param array<string, mixed> $params  Query parameters.
+	 * @param array<string, mixed> $payload JSON request payload.
+	 * @return string Response body.
+	 */
+	public function post_json( string $url, array $params, array $payload ): string {
+		return $this->request( $url, 'application/json', $params, json_encode( $payload, JSON_THROW_ON_ERROR ) );
+	}
+
+	/**
+	 * Send an HTTPS request with an optional JSON body.
+	 *
+	 * @param string               $url    Remote URL.
+	 * @param string               $accept Accept header value.
+	 * @param array<string, mixed> $params Query parameters.
+	 * @param string|null          $body   JSON body for POST requests.
+	 * @return string Response body.
+	 */
+	private function request( string $url, string $accept, array $params, ?string $body = null ): string {
+		$url     = $this->get_https_url(
 			$url,
 			__( 'remote update URL', 'peakurl' ),
 		);
-		$url = $this->build_url( $url, $params );
-
-		if ( function_exists( 'curl_init' ) ) {
-			return $this->get_curl( $url, $accept );
+		$url     = $this->build_url( $url, $params );
+		$headers = array(
+			'Accept: ' . $accept,
+			'User-Agent: ' . UserAgent::format( $this->context->get_current_version() ),
+		);
+		if ( null !== $body ) {
+			$headers[] = 'Content-Type: application/json';
 		}
 
-		return $this->get_stream( $url, $accept );
+		if ( function_exists( 'curl_init' ) ) {
+			return $this->request_curl( $url, $headers, $body );
+		}
+
+		return $this->request_stream( $url, $headers, $body );
 	}
 
 	/**
@@ -155,16 +187,17 @@ class Client {
 	}
 
 	/**
-	 * HTTP GET via cURL.
+	 * Send a request via cURL.
 	 *
-	 * @param string $url    Remote URL.
-	 * @param string $accept Accept header value.
+	 * @param string        $url     Remote URL.
+	 * @param list<string>  $headers Request headers.
+	 * @param string|null   $body    JSON request body.
 	 * @return string Response body.
 	 *
 	 * @throws \RuntimeException On cURL failure or non-2xx status.
 	 * @since 1.0.14
 	 */
-	private function get_curl( string $url, string $accept ): string {
+	private function request_curl( string $url, array $headers, ?string $body ): string {
 		$curl = curl_init( $url );
 
 		if ( false === $curl ) {
@@ -177,17 +210,18 @@ class Client {
 			$curl,
 			array(
 				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_FOLLOWLOCATION => null === $body,
 				CURLOPT_MAXREDIRS      => 5,
 				CURLOPT_TIMEOUT        => 30,
 				CURLOPT_SSL_VERIFYPEER => true,
 				CURLOPT_SSL_VERIFYHOST => 2,
-				CURLOPT_HTTPHEADER     => array(
-					'Accept: ' . $accept,
-					'User-Agent: ' . UserAgent::format( $this->context->get_current_version() ),
-				),
+				CURLOPT_HTTPHEADER     => $headers,
 			),
 		);
+
+		if ( null !== $body ) {
+			curl_setopt( $curl, CURLOPT_POSTFIELDS, $body );
+		}
 
 		if ( defined( 'CURLOPT_PROTOCOLS' ) && defined( 'CURLPROTO_HTTPS' ) ) {
 			curl_setopt( $curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTPS );
@@ -222,30 +256,32 @@ class Client {
 	}
 
 	/**
-	 * HTTP GET via PHP streams.
+	 * Send a request via PHP streams.
 	 *
-	 * @param string $url    Remote URL.
-	 * @param string $accept Accept header value.
+	 * @param string        $url     Remote URL.
+	 * @param list<string>  $headers Request headers.
+	 * @param string|null   $body    JSON request body.
 	 * @return string Response body.
 	 *
 	 * @throws \RuntimeException On stream failure or non-2xx status.
 	 * @since 1.0.14
 	 */
-	private function get_stream( string $url, string $accept ): string {
+	private function request_stream( string $url, array $headers, ?string $body ): string {
+		$http_options = array(
+			'method'        => 'GET',
+			'timeout'       => 30,
+			'ignore_errors' => true,
+			'header'        => implode( "\r\n", $headers ),
+		);
+		if ( null !== $body ) {
+			$http_options['method']          = 'POST';
+			$http_options['content']         = $body;
+			$http_options['follow_location'] = 0;
+		}
+
 		$context = stream_context_create(
 			array(
-				'http' => array(
-					'method'        => 'GET',
-					'timeout'       => 30,
-					'ignore_errors' => true,
-					'header'        => implode(
-						"\r\n",
-						array(
-							'Accept: ' . $accept,
-							'User-Agent: ' . UserAgent::format( $this->context->get_current_version() ),
-						),
-					),
-				),
+				'http' => $http_options,
 				'ssl'  => array(
 					'verify_peer'       => true,
 					'verify_peer_name'  => true,

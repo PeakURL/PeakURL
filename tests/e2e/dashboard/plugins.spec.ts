@@ -335,6 +335,11 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 								name: "UTM Policy Enforcer",
 								summary:
 									"Enforce standard UTM tracking parameters on all short links.",
+								installationStats: {
+									activeInstalls: 3,
+									totalInstalls: 5,
+								},
+								downloadCount: 1_234,
 								version: "1.0.0",
 								requires: "1.7.0",
 								php: "8.3",
@@ -398,6 +403,19 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 		await expect(page.getByText("UTM Policy Enforcer")).toBeVisible();
 		await expect(page.getByText("By Alex Morgan")).toBeVisible();
 		await expect(page.getByText("v1.0.0")).toBeVisible();
+		const directoryCard = page.getByRole("article");
+		await expect(
+			directoryCard
+				.getByText("Active installs", { exact: true })
+				.locator("..")
+				.locator("dd")
+		).toHaveText("3");
+		await expect(
+			directoryCard
+				.getByText("Downloads", { exact: true })
+				.locator("..")
+				.locator("dd")
+		).toHaveText("1,234");
 
 		// View Details action link
 		const detailLink = page.getByRole("link", { name: "View Details" });

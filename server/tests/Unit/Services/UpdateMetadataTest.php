@@ -13,6 +13,9 @@ namespace PeakURL\Tests\Unit\Services;
 use PHPUnit\Framework\TestCase;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
+use PeakURL\Core\Plugins\Directory;
+use PeakURL\Core\Plugins\Loader;
+use PeakURL\Core\Plugins\Metadata as PluginMetadata;
 use PeakURL\Http\UserAgent;
 use PeakURL\Services\Database\Context as SchemaContext;
 use PeakURL\Services\Database\PeakURL_DB;
@@ -20,11 +23,92 @@ use PeakURL\Services\Database\Upgrade as SchemaUpgrade;
 use PeakURL\Services\Update\Client;
 use PeakURL\Services\Update\Context as UpdateContext;
 use PeakURL\Services\Update\Filesystem;
+use PeakURL\Services\Update\Manifest;
 use PeakURL\Services\Update\Metadata;
 use PeakURL\Utils\Str;
 use ReflectionMethod;
 
 class UpdateMetadataTest extends TestCase {
+
+	public function test_plugin_installations_include_all_releases_and_use_published_slugs(): void {
+		$path = sys_get_temp_dir() . '/peakurl-directory-' . bin2hex( random_bytes( 8 ) );
+		mkdir( $path );
+		$marker = $path . '/' . Directory::SLUG_FILE;
+		file_put_contents( $marker, 'click-history-reset-2' );
+
+		$original_loader = Loader::get_instance();
+		try {
+			$plugins = array();
+			for ( $index = 0; $index < 50; ++$index ) {
+				$plugins[] = new PluginMetadata(
+					array(
+						'id'      => 'test-plugin-' . $index,
+						'version' => '1.0.0',
+						'valid'   => true,
+					)
+				);
+			}
+			$plugins[] = new PluginMetadata(
+				array(
+					'id'          => 'click-history-reset',
+					'version'     => '1.1.1',
+					'valid'       => true,
+					'plugin_path' => $path,
+				)
+			);
+			$loader    = $this->createMock( Loader::class );
+			$loader->method( 'is_bootstrapped' )->willReturn( true );
+			$loader->method( 'is_settings_available' )->willReturn( true );
+			$loader->method( 'get_installed_plugins' )->willReturn( $plugins );
+			$loader->method( 'is_loaded' )->willReturn( true );
+			Loader::set_instance( $loader );
+
+			$metadata      = new Metadata(
+				new UpdateContext( array(), new Filesystem() ),
+				$this->createMock( SettingsApi::class ),
+				$this->createMock( PeakURL_DB::class )
+			);
+			$installations = $metadata->get_plugin_installations();
+			$this->assertCount( 51, $installations );
+			$this->assertSame( array( hash( 'sha256', 'click-history-reset-2@1.1.1' ), true ), $installations[50] );
+		} finally {
+			Loader::set_instance( $original_loader );
+			unlink( $marker );
+			rmdir( $path );
+		}
+	}
+
+	public function test_update_check_continues_when_sending_plugin_installations_fails(): void {
+		$url           = Constants::DEFAULT_UPDATE_MANIFEST_URL;
+		$query         = array( 'installation_id' => 'c3a502c3-9d93-4e44-b0a0-04359cf9bc41' );
+		$installations = array( array( hash( 'sha256', 'click-history-reset-2@1.1.1' ), true ) );
+		$metadata      = $this->createMock( Metadata::class );
+		$metadata->method( 'to_array' )->willReturn( $query );
+		$metadata->method( 'get_plugin_installations' )->willReturn( $installations );
+
+		$client = $this->createMock( Client::class );
+		$client->method( 'get_https_url' )->willReturnArgument( 0 );
+		$client->expects( $this->once() )
+			->method( 'post_json' )
+			->with( $url, $query, array( 'plugin_installations' => $installations ) )
+			->willThrowException( new \RuntimeException( 'Could not send plugin installations.' ) );
+		$client->expects( $this->once() )
+			->method( 'get' )
+			->with( $url, 'application/json', $query )
+			->willReturn(
+				json_encode(
+					array(
+						'version'        => '1.8.1',
+						'packageUrl'     => 'https://releases.peakurl.org/peakurl.zip',
+						'checksumSha256' => str_repeat( 'a', 64 ),
+					),
+					JSON_THROW_ON_ERROR
+				)
+			);
+
+		$manifest = new Manifest( new UpdateContext( array(), new Filesystem() ), $client, $metadata );
+		$this->assertSame( '1.8.1', $manifest->fetch_manifest()['version'] );
+	}
 
 	public function test_uuid_v4_canonical_format_and_version_and_variant(): void {
 		$uuid = Str::uuid();

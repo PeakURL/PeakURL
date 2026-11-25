@@ -13,6 +13,8 @@ namespace PeakURL\Services\Update;
 use PeakURL\Api\SettingsApi;
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
+use PeakURL\Core\Plugins\Directory;
+use PeakURL\Core\Plugins\Loader;
 use PeakURL\Services\Database\PeakURL_DB;
 
 // If this file is called directly, abort.
@@ -103,6 +105,36 @@ class Metadata {
 			'site_url'         => $this->get_site_url(),
 			'installation_id'  => $this->get_installation_id(),
 		);
+	}
+
+	/**
+	 * Get the installed plugin releases and their loaded state for update checks.
+	 *
+	 * @return list<array{string, bool}>|null Release fingerprint and loaded state for each plugin.
+	 */
+	public function get_plugin_installations(): ?array {
+		$loader = Loader::get_instance();
+		if ( ! $loader->is_bootstrapped() || ! $loader->is_settings_available() ) {
+			return null;
+		}
+
+		$release_states = array();
+		foreach ( $loader->get_installed_plugins() as $plugin ) {
+			if ( ! $plugin->is_valid() ) {
+				continue;
+			}
+
+			$plugin_slug                    = Directory::get_installed_slug( $plugin->plugin_path() ) ?? $plugin->id();
+			$fingerprint                    = hash( 'sha256', $plugin_slug . '@' . $plugin->version() );
+			$release_states[ $fingerprint ] = ( $release_states[ $fingerprint ] ?? false ) || $loader->is_loaded( $plugin->id() );
+		}
+
+		$installations = array();
+		foreach ( $release_states as $fingerprint => $is_loaded ) {
+			$installations[] = array( $fingerprint, $is_loaded );
+		}
+
+		return $installations;
 	}
 
 	/**

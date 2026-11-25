@@ -22,6 +22,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Directory {
 
+	/** Installer-owned file recording the published directory slug. */
+	public const string SLUG_FILE = '.peakurl-directory';
+
 	private const string API_URL         = 'https://api.peakurl.org/v1/plugins';
 	private const int MAX_METADATA_BYTES = 16 * 1024;
 	private const int MAX_PACKAGE_BYTES  = 25 * 1024 * 1024;
@@ -32,8 +35,28 @@ class Directory {
 	 * @param string $slug Directory slug.
 	 * @return bool Whether the slug is valid.
 	 */
-	public static function is_valid_slug( string $slug ): bool {
+	private static function is_valid_slug( string $slug ): bool {
 		return 1 === preg_match( '/\A[a-z0-9][a-z0-9-]{0,79}\z/', $slug );
+	}
+
+	/**
+	 * Read the published directory slug associated with a local installation.
+	 *
+	 * @param string $plugin_path Local plugin directory.
+	 * @return string|null Directory slug, if recorded.
+	 */
+	public static function get_installed_slug( string $plugin_path ): ?string {
+		if ( '' === $plugin_path ) {
+			return null;
+		}
+
+		$path = $plugin_path . '/' . self::SLUG_FILE;
+		if ( is_link( $path ) || ! is_file( $path ) ) {
+			return null;
+		}
+
+		$slug = @file_get_contents( $path, false, null, 0, 81 );
+		return is_string( $slug ) && self::is_valid_slug( $slug ) ? $slug : null;
 	}
 
 	/**

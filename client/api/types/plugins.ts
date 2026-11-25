@@ -172,6 +172,11 @@ export interface PublishedPluginListing {
 	readonly slug: string;
 	readonly name: string;
 	readonly summary: string;
+	readonly downloadCount?: number;
+	readonly installationStats?: {
+		readonly activeInstalls: number;
+		readonly totalInstalls: number;
+	} | null;
 	readonly tags?: readonly PublishedPluginTag[];
 	readonly version: string;
 	readonly releaseDate?: string;

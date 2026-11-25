@@ -129,11 +129,22 @@ class Manifest {
 	 * @since 1.0.14
 	 */
 	public function fetch_manifest(): array {
-		$body    = $this->client->get(
-			$this->get_manifest_url(),
-			'application/json',
-			$this->metadata->to_array(),
-		);
+		$url   = $this->get_manifest_url();
+		$query = $this->metadata->to_array();
+		$body  = null;
+		if ( Constants::DEFAULT_UPDATE_MANIFEST_URL === $url && '' !== $query['installation_id'] ) {
+			try {
+				$plugin_installations = $this->metadata->get_plugin_installations();
+				if ( null !== $plugin_installations ) {
+					$body = $this->client->post_json( $url, $query, array( 'plugin_installations' => $plugin_installations ) );
+				}
+			} catch ( \Throwable ) {
+				// Update checks can continue when plugin installation data is unavailable.
+			}
+		}
+
+		$body ??= $this->client->get( $url, 'application/json', $query );
+
 		$payload = json_decode( $body, true );
 
 		if ( ! is_array( $payload ) ) {

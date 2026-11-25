@@ -51,11 +51,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Service {
 
 	/**
-	 * Installer-owned file recording the public directory slug.
-	 */
-	private const string DIRECTORY_SLUG_FILE = '.peakurl-directory';
-
-	/**
 	 * Shared database wrapper.
 	 *
 	 * @var PeakURL_DB
@@ -384,7 +379,7 @@ class Service {
 		foreach ( $regular as $id => $meta ) {
 			$is_active             = in_array( $id, $active_ids, true );
 			$mapped_regular[ $id ] = $meta->with_active( $is_active )->to_array();
-			$directory_slug        = $this->read_directory_slug( $meta->plugin_path() );
+			$directory_slug        = PluginDirectory::get_installed_slug( $meta->plugin_path() );
 			if ( null !== $directory_slug ) {
 				$mapped_regular[ $id ]['directorySlug'] = $directory_slug;
 			}
@@ -895,26 +890,6 @@ class Service {
 	}
 
 	/**
-	 * Read the directory slug recorded alongside an installed plugin.
-	 *
-	 * @param string $plugin_path Local plugin directory.
-	 * @return string|null Directory slug, if recorded.
-	 */
-	private function read_directory_slug( string $plugin_path ): ?string {
-		if ( '' === $plugin_path ) {
-			return null;
-		}
-
-		$path = $plugin_path . '/' . self::DIRECTORY_SLUG_FILE;
-		if ( is_link( $path ) || ! is_file( $path ) ) {
-			return null;
-		}
-
-		$slug = @file_get_contents( $path, false, null, 0, 81 );
-		return is_string( $slug ) && PluginDirectory::is_valid_slug( $slug ) ? $slug : null;
-	}
-
-	/**
 	 * Validate and install a local plugin archive.
 	 *
 	 * @param string                                  $tmp_file          Temporary archive path.
@@ -1328,7 +1303,7 @@ class Service {
 
 				$active_plugins = $this->get_active_plugin_ids();
 				$was_active     = in_array( $candidate_id, $active_plugins, true );
-				$installed_slug = $this->read_directory_slug( $target_dest );
+				$installed_slug = PluginDirectory::get_installed_slug( $target_dest );
 			}
 
 			// Stage extracted files on the EXACT SAME filesystem as the destination.
@@ -1380,7 +1355,7 @@ class Service {
 				);
 			}
 
-			$source_marker = $source_dir . '/' . self::DIRECTORY_SLUG_FILE;
+			$source_marker = $source_dir . '/' . PluginDirectory::SLUG_FILE;
 			if ( file_exists( $source_marker ) ) {
 				throw new ApiException( __( 'The plugin package contains a reserved file.', 'peakurl' ), 400 );
 			}

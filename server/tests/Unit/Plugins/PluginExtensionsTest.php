@@ -210,6 +210,32 @@ class PluginExtensionsTest extends TestCase {
 		$extensions = $ext->get_ui_extensions( 'links_overview_actions' );
 		$this->assertArrayHasKey( 'audit-link-action', $extensions );
 		$this->assertSame( 'Audit All Links', $extensions['audit-link-action']['label'] );
+
+		$ext->register_ui_extension(
+			array(
+				'id'          => 'audit-single-link',
+				'plugin_slug' => 'audit-logger',
+				'location'    => 'link_stats_actions',
+				'label'       => 'Audit This Link',
+				'action_id'   => 'audit_link',
+				'capability'  => 'manage_audit_logs',
+			)
+		);
+
+		$ext->register_asset( 'audit-logger', 'overview.css', 'style', array( 'scope' => 'links_overview' ) );
+		$ext->register_asset( 'audit-logger', 'link-stats.css', 'style', array( 'scope' => 'link_stats' ) );
+
+		$settings_api = $this->createMock( SettingsApi::class );
+		$settings_api->method( 'get_option' )
+			->with( 'active_plugins' )
+			->willReturn( json_encode( array( 'audit-logger' ) ) );
+
+		$request = new Request( 'GET', '/api/v1/system/plugins/extensions', array(), array() );
+		$service = $this->create_service( array( 'editor' ), $settings_api, array( 'manage_audit_logs', 'view_analytics' ) );
+		$result  = $service->get_plugin_extensions( $request );
+
+		$this->assertSame( array( 'audit-single-link' ), array_column( $result['uiExtensions'], 'id' ) );
+		$this->assertSame( array( 'link-stats.css' ), array_column( $result['uiExtensions'][0]['assets'], 'file' ) );
 	}
 
 	public function test_get_plugin_extensions_filters_inactive_plugins(): void {

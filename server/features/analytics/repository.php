@@ -241,14 +241,15 @@ class Repository {
 	 * @since 1.0.0
 	 */
 	public function get_last_month_period( array $period, int $days ): array {
-		$days     = max( 1, $days );
-		$timezone = new \DateTimeZone(
+		$days         = max( 1, $days );
+		$timezone     = new \DateTimeZone(
 			(string) ( $period['timezone'] ?? Constants::DEFAULT_TIMEZONE ),
 		);
-		$start    = ( new \DateTimeImmutable(
-			(string) ( $period['start_date'] ?? 'now' ),
-			$timezone,
-		) )->setTime( 0, 0, 0 );
+		$utc_timezone = new \DateTimeZone( 'UTC' );
+		$is_hourly    = '24h' === ( $period['key'] ?? '' );
+		$start        = $is_hourly
+			? ( new \DateTimeImmutable( $period['start_at'], $utc_timezone ) )->setTimezone( $timezone )
+			: ( new \DateTimeImmutable( (string) ( $period['start_date'] ?? 'now' ), $timezone ) )->setTime( 0, 0, 0 );
 
 		$last_month_base = $start
 			->modify( 'first day of this month' )
@@ -263,8 +264,9 @@ class Repository {
 			(int) $last_month_base->format( 'm' ),
 			$last_month_day,
 		);
-		$last_month_end   = $last_month_start->modify( '+' . $days . ' days' );
-		$utc_timezone     = new \DateTimeZone( 'UTC' );
+		$last_month_end   = $is_hourly
+			? $last_month_start->setTimezone( $utc_timezone )->add( new \DateInterval( 'PT24H' ) )->setTimezone( $timezone )
+			: $last_month_start->modify( '+' . $days . ' days' );
 
 		return array(
 			'type'       => 'lastMonth',
@@ -276,7 +278,7 @@ class Repository {
 				->setTimezone( $utc_timezone )
 				->format( 'Y-m-d H:i:s' ),
 			'start_date' => $last_month_start->format( 'Y-m-d' ),
-			'end_date'   => $last_month_end->modify( '-1 day' )->format( 'Y-m-d' ),
+			'end_date'   => $last_month_end->modify( $is_hourly ? '-1 second' : '-1 day' )->format( 'Y-m-d' ),
 		);
 	}
 
@@ -501,7 +503,7 @@ class Repository {
 	 * @param string|null $custom_date_from Custom range start date.
 	 * @param string|null $custom_date_to   Custom range end date.
 	 * @param string|null $created_at       Link creation datetime in UTC.
-	 * @return array{key: string, days: int, start_at: string|null, end_at: string|null, start_date: string|null, end_date: string|null, series_start_at?: string}
+	 * @return array{key: string, days: int, start_at: string|null, end_at: string|null, start_date: string|null, end_date: string|null, series_start_at?: string, series_start_date?: string, timezone?: string}
 	 * @since 1.0.0
 	 */
 	public function get_link_stats_period(
@@ -530,18 +532,22 @@ class Repository {
 			$period        = $this->get_analytics_period( $lifetime_days );
 
 			return array(
-				'key'             => 'all',
-				'days'            => $lifetime_days,
-				'start_at'        => null,
-				'end_at'          => null,
-				'start_date'      => null,
-				'end_date'        => null,
-				'series_start_at' => $period['start_at'],
+				'key'               => 'all',
+				'days'              => $lifetime_days,
+				'start_at'          => null,
+				'end_at'            => null,
+				'start_date'        => null,
+				'end_date'          => null,
+				'series_start_at'   => $period['start_at'],
+				'series_start_date' => $period['start_date'],
 			);
 		}
 
+		if ( '24h' === $range ) {
+			return $this->get_rolling_24_hour_period();
+		}
+
 		$resolved_days = match ( $range ) {
-			'24h'   => 1,
 			'30d'   => 30,
 			'90d'   => 90,
 			default => 7,
@@ -549,12 +555,36 @@ class Repository {
 		$period = $this->get_analytics_period( $resolved_days );
 
 		return array(
-			'key'        => '24h' === $range ? '24h' : ( '30d' === $range ? '30d' : ( '90d' === $range ? '90d' : '7d' ) ),
+			'key'        => in_array( $range, array( '30d', '90d' ), true ) ? $range : '7d',
 			'days'       => $resolved_days,
 			'start_at'   => $period['start_at'],
 			'end_at'     => null,
 			'start_date' => $period['start_date'],
 			'end_date'   => null,
+		);
+	}
+
+	/**
+	 * Get 24 elapsed hours ending at the reporting instant.
+	 *
+	 * @param \DateTimeImmutable|null $reporting_time Optional current instant.
+	 * @return array{key: string, days: int, start_at: string, end_at: string, start_date: string, end_date: string, timezone: string}
+	 * @since 1.9.0
+	 */
+	public function get_rolling_24_hour_period( ?\DateTimeImmutable $reporting_time = null ): array {
+		$utc      = new \DateTimeZone( 'UTC' );
+		$timezone = $this->get_analytics_timezone();
+		$end      = ( $reporting_time ?? new \DateTimeImmutable( 'now', $utc ) )->setTimezone( $utc );
+		$start    = $end->sub( new \DateInterval( 'PT24H' ) );
+
+		return array(
+			'key'        => '24h',
+			'days'       => 1,
+			'start_at'   => $start->format( 'Y-m-d H:i:s' ),
+			'end_at'     => $end->format( 'Y-m-d H:i:s' ),
+			'start_date' => $start->setTimezone( $timezone )->format( 'Y-m-d' ),
+			'end_date'   => $end->setTimezone( $timezone )->format( 'Y-m-d' ),
+			'timezone'   => $timezone->getName(),
 		);
 	}
 
@@ -702,17 +732,17 @@ class Repository {
 
 		$lifetime_days = $this->get_link_lifetime_days( $created_at );
 
-		$last_7_period  = $this->get_analytics_period( 7 );
-		$last_30_period = $this->get_analytics_period( 30 );
+		$is_rolling_24_hours = '24h' === ( $period['key'] ?? '' );
+		$selected            = $this->format_link_period_summary( $period, $days, $url_id, 'selected' );
+		$last_24_hours       = $is_rolling_24_hours
+			? array_merge( $selected, array( 'key' => 'last24Hours' ) )
+			: $this->format_link_period_summary( $this->get_rolling_24_hour_period(), 1, $url_id, 'last24Hours' );
+		$last_7_period       = $this->get_analytics_period( 7 );
+		$last_30_period      = $this->get_analytics_period( 30 );
 
 		return array(
-			'selected'   => $this->format_link_period_summary(
-				$period,
-				$days,
-				$url_id,
-				'selected',
-			),
-			'allTime'    => array(
+			'selected'    => $selected,
+			'allTime'     => array(
 				'key'             => 'allTime',
 				'totalClicks'     => $current_total_clicks,
 				'uniqueClicks'    => $current_unique_clicks,
@@ -726,13 +756,14 @@ class Repository {
 				),
 				'averageUnit'     => 'day',
 			),
-			'last7Days'  => $this->format_link_period_summary(
+			'last24Hours' => $last_24_hours,
+			'last7Days'   => $this->format_link_period_summary(
 				$last_7_period,
 				7,
 				$url_id,
 				'last7Days',
 			),
-			'last30Days' => $this->format_link_period_summary(
+			'last30Days'  => $this->format_link_period_summary(
 				$last_30_period,
 				30,
 				$url_id,
@@ -786,6 +817,8 @@ class Repository {
 			$total_clicks,
 		);
 
+		$is_hourly = '24h' === ( $period['key'] ?? '' );
+
 		return array(
 			'key'             => $type,
 			'totalClicks'     => $total_clicks,
@@ -795,10 +828,10 @@ class Repository {
 				$unique_clicks,
 			),
 			'averageClicks'   => round(
-				$total_clicks / max( 1, $days ),
+				$total_clicks / ( $is_hourly ? 24 : max( 1, $days ) ),
 				2,
 			),
-			'averageUnit'     => $days <= 1 ? 'hour' : 'day',
+			'averageUnit'     => $is_hourly ? 'hour' : 'day',
 		);
 	}
 
@@ -919,34 +952,6 @@ class Repository {
 	}
 
 	/**
-	 * Query time-series traffic series for a standard rolling window.
-	 *
-	 * @param string|null               $url_id Optional URL ID filter.
-	 * @param int                       $days   Number of days in the window.
-	 * @param array<string, mixed>|null $user   Current user for capability scoping.
-	 * @return array<string, mixed> Traffic series with labels, clicks, unique, and granularity.
-	 * @since 1.0.0
-	 */
-	public function query_traffic_series(
-		?string $url_id = null,
-		int $days = 7,
-		?array $user = null
-	): array {
-		$period = $this->get_analytics_period( $days );
-
-		return $this->query_traffic_series_range(
-			$url_id,
-			$period['start_date'],
-			$days,
-			$period['start_at'],
-			null,
-			$period['timezone'],
-			$user,
-			'day',
-		);
-	}
-
-	/**
 	 * Get a date-bucketed traffic time series for a specific date range.
 	 *
 	 * @param string|null               $url_id      Optional URL ID to scope the series.
@@ -956,7 +961,7 @@ class Repository {
 	 * @param string|null               $end_at      Optional exclusive UTC end timestamp.
 	 * @param string                    $timezone    Timezone used for local buckets.
 	 * @param array<string, mixed>|null $user        Optional user scope for site-level charts.
-	 * @param string                    $granularity Bucket size, either day or month.
+	 * @param string                    $granularity Bucket size (hour, day or month).
 	 * @return array<string, mixed> Traffic series with labels, clicks, unique, and granularity.
 	 * @since 1.0.0
 	 */
@@ -971,7 +976,7 @@ class Repository {
 		string $granularity = 'day'
 	): array {
 		$tz          = new \DateTimeZone( $timezone );
-		$granularity = 'month' === $granularity ? 'month' : 'day';
+		$granularity = in_array( $granularity, array( 'hour', 'month' ), true ) ? $granularity : 'day';
 		$join_sql    = '';
 		$conditions  = array( 'c.clicked_at >= :start_at' );
 		$params      = array( 'start_at' => $start_at );
@@ -1007,43 +1012,50 @@ class Repository {
 			$params,
 		);
 
-		$lookup      = array();
-		$range_start = ( new \DateTimeImmutable(
-			$start_date,
-			$tz
-		) )->setTime( 0, 0, 0 );
-		$range_end   = $range_start->modify( '+' . max( 0, $days - 1 ) . ' days' );
-		$cursor      = $range_start;
+		$lookup     = array();
+		$utc        = new \DateTimeZone( 'UTC' );
+		$is_hourly  = 'hour' === $granularity;
+		$is_monthly = 'month' === $granularity;
+		$format     = $is_monthly ? 'Y-m-01' : 'Y-m-d';
+		$interval   = new \DateInterval( $is_monthly ? 'P1M' : 'P1D' );
 
-		if ( 'month' === $granularity ) {
-			$cursor    = $range_start->modify( 'first day of this month' );
-			$range_end = $range_end->modify( 'first day of this month' );
+		if ( $is_hourly ) {
+			// UTC buckets stay distinct when local clocks repeat an hour.
+			$cursor      = new \DateTimeImmutable( $start_at, $utc );
+			$range_end   = ( new \DateTimeImmutable( $end_at ?? $start_at, $utc ) )->modify( '-1 second' );
+			$start_epoch = $cursor->getTimestamp();
+			$interval    = new \DateInterval( 'PT1H' );
+		} else {
+			$cursor    = ( new \DateTimeImmutable( $start_date, $tz ) )->setTime( 0, 0, 0 );
+			$range_end = $cursor->modify( '+' . max( 0, $days - 1 ) . ' days' );
+			if ( $is_monthly ) {
+				$cursor    = $cursor->modify( 'first day of this month' );
+				$range_end = $range_end->modify( 'first day of this month' );
+			}
 		}
 
 		while ( $cursor <= $range_end ) {
-			$date            = 'month' === $granularity
-				? $cursor->format( 'Y-m-01' )
-				: $cursor->format( 'Y-m-d' );
-			$lookup[ $date ] = array(
+			$key            = $is_hourly ? $cursor->getTimestamp() : $cursor->format( $format );
+			$lookup[ $key ] = array(
 				'clicks' => 0,
 				'unique' => array(),
 			);
-			$cursor          = $cursor->modify( 'month' === $granularity ? '+1 month' : '+1 day' );
+			$cursor         = $cursor->add( $interval );
 		}
 
 		foreach ( $rows as $row ) {
 			try {
 				$clicked_at = new \DateTimeImmutable(
 					(string) $row['clicked_at'],
-					new \DateTimeZone( 'UTC' ),
+					$utc,
 				);
 			} catch ( \Exception $exception ) {
 				continue;
 			}
 
-			$bucket_date = $clicked_at->setTimezone( $tz )->format(
-				'month' === $granularity ? 'Y-m-01' : 'Y-m-d'
-			);
+			$bucket_date = $is_hourly
+				? $start_epoch + 3600 * (int) floor( ( $clicked_at->getTimestamp() - $start_epoch ) / 3600 )
+				: $clicked_at->setTimezone( $tz )->format( $format );
 
 			if ( ! isset( $lookup[ $bucket_date ] ) ) {
 				continue;
@@ -1065,7 +1077,7 @@ class Repository {
 		foreach ( $lookup as $date => $bucket ) {
 			$click_count = (int) ( $bucket['clicks'] ?? 0 );
 
-			$labels[] = $date;
+			$labels[] = $is_hourly ? gmdate( 'Y-m-d\TH:i:s\Z', $date ) : $date;
 			$clicks[] = $click_count;
 			$unique[] = min(
 				count( (array) ( $bucket['unique'] ?? array() ) ),

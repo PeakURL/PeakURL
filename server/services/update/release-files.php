@@ -233,9 +233,15 @@ class ReleaseFiles {
 		}
 
 		$content_paths = array();
+		$landing_page  = $this->filesystem->join_path( $this->context->get_content_dir(), 'landing-page.html' );
 
 		foreach ( $scan_results as $entry ) {
 			if ( '.' === $entry || '..' === $entry ) {
+				continue;
+			}
+
+			if ( 'landing-page.html' === $entry && ( file_exists( $landing_page ) || is_link( $landing_page ) ) ) {
+				// Owners edit this file in place. Leave it out of backup, apply and rollback.
 				continue;
 			}
 

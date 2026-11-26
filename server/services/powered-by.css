@@ -8,12 +8,18 @@
 	border: 1px solid
 		color-mix(
 			in srgb,
-			var(--color-stroke, var(--status-line, #d9dee7)) 75%,
+			var(--color-stroke, var(--status-line, var(--border, #d5e4e0))) 75%,
 			transparent
 		);
 	border-radius: 999px;
-	background: var(--color-surface, var(--status-surface, #fff));
-	color: var(--color-text-muted, var(--status-muted, #596579));
+	background: var(
+		--color-surface,
+		var(--status-surface, var(--surface, #ffffff))
+	);
+	color: var(
+		--color-text-muted,
+		var(--status-muted, var(--text-muted, #536c6a))
+	);
 	font-family: inherit;
 	font-size: 12px;
 	font-weight: 400;
@@ -27,25 +33,48 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 7px;
-	color: var(--color-heading, var(--status-ink, #2b3040));
-	font-size: 13px;
-	font-weight: 600;
+	color: var(
+		--color-heading,
+		var(--status-ink, var(--text-heading, #17373b))
+	);
 	white-space: nowrap;
 }
-.powered-by img {
+.powered-by img,
+.powered-by .powered-by-mark {
 	display: block;
-	width: 22px;
-	height: 22px;
+	width: 20px;
+	height: 20px;
 	flex: none;
+}
+.powered-by .powered-by-wordmark {
+	display: block;
+	width: auto;
+	height: 11px;
+	flex: none;
+}
+.powered-by-sr {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
 }
 .powered-by:hover {
 	border-color: var(
 		--color-field-border-hover,
-		var(--status-accent, #5c719f)
+		var(--status-accent, var(--border-control-hover, #536c6a))
 	);
 }
 .powered-by:focus-visible {
-	outline: 2px solid var(--color-field-focus, var(--status-accent, #5c719f));
+	outline: 2px solid
+		var(
+			--color-field-focus,
+			var(--status-accent, var(--focus-ring, #126e68))
+		);
 	outline-offset: 3px;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -55,10 +84,12 @@
 }
 
 .powered-by-inverse {
-	--color-stroke: #364155;
-	--color-surface: #1c2230;
-	--color-text-muted: #b1bbcc;
-	--color-heading: #f8fafc;
-	--color-field-border-hover: #6d7c94;
-	--color-field-focus: #b5c8fa;
+	--logo-foreground: #83dccc;
+	--logo-dot: #ffffff;
+	--color-stroke: #2b3834;
+	--color-surface: #141d1b;
+	--color-text-muted: #a9c1bb;
+	--color-heading: #edf5f2;
+	--color-field-border-hover: #71918a;
+	--color-field-focus: #83dccc;
 }

@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php if ( '' !== $error_message ) : ?>
 	<div class="error-box" role="alert">
-		<div class="bang">!</div>
+		<span class="bang" aria-hidden="true">!</span>
 		<p><?php echo htmlspecialchars( $error_message, ENT_QUOTES, 'UTF-8' ); ?></p>
 	</div>
 <?php endif; ?>
@@ -44,17 +44,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="grid">
 			<div class="field">
 				<label for="owner_username"><?php echo esc_html__( 'Username', 'peakurl' ); ?></label>
-				<input id="owner_username" name="owner_username" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'owner_username' ); ?>" placeholder="admin" required>
-				<p class="hint"><?php echo esc_html__( 'Use letters, numbers, periods, hyphens, underscores, or @.', 'peakurl' ); ?></p>
+				<input id="owner_username" name="owner_username" type="text" autocomplete="username" spellcheck="false" autocapitalize="none" value="<?php echo InstallScreen::get_escaped_value( $values, 'owner_username' ); ?>" placeholder="admin" required aria-describedby="owner_username-hint">
+				<p class="hint" id="owner_username-hint"><?php echo esc_html__( 'Use letters, numbers, periods, hyphens, underscores, or @.', 'peakurl' ); ?></p>
 			</div>
 			<div class="field">
 				<label for="owner_email"><?php echo esc_html__( 'Email', 'peakurl' ); ?></label>
-				<input id="owner_email" name="owner_email" type="email" value="<?php echo InstallScreen::get_escaped_value( $values, 'owner_email' ); ?>" placeholder="<?php echo esc_attr__( 'you@company.com', 'peakurl' ); ?>" required>
+				<input id="owner_email" name="owner_email" type="email" autocomplete="email" value="<?php echo InstallScreen::get_escaped_value( $values, 'owner_email' ); ?>" placeholder="<?php echo esc_attr__( 'you@company.com', 'peakurl' ); ?>" required>
 			</div>
 			<div class="field full">
 				<label for="owner_password"><?php echo esc_html__( 'Password', 'peakurl' ); ?></label>
-				<input id="owner_password" name="owner_password" type="password" autocomplete="new-password" value="<?php echo InstallScreen::get_escaped_value( $values, 'owner_password' ); ?>" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required>
-				<p class="hint"><?php echo esc_html__( 'Use at least 8 characters.', 'peakurl' ); ?></p>
+				<input id="owner_password" name="owner_password" type="password" autocomplete="new-password" value="<?php echo InstallScreen::get_escaped_value( $values, 'owner_password' ); ?>" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" required aria-describedby="owner_password-hint">
+				<p class="hint" id="owner_password-hint"><?php echo esc_html__( 'Use at least 8 characters.', 'peakurl' ); ?></p>
 			</div>
 		</div>
 		<div class="actions">

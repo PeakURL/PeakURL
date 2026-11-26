@@ -37,10 +37,11 @@ class Brand {
 	 * @return string Escaped, accessible badge markup.
 	 */
 	public static function get_powered_by_badge(): string {
-		$logo  = htmlspecialchars( Logo::get_data_url(), ENT_QUOTES, 'UTF-8' );
-		$label = htmlspecialchars( function_exists( '__' ) ? __( 'Powered by', 'peakurl' ) : 'Powered by', ENT_QUOTES, 'UTF-8' );
+		$logo     = Logo::get_inline_svg( 20, 'powered-by-mark' );
+		$wordmark = self::get_wordmark_svg( 'powered-by-wordmark' );
+		$label    = htmlspecialchars( function_exists( '__' ) ? __( 'Powered by', 'peakurl' ) : 'Powered by', ENT_QUOTES, 'UTF-8' );
 
-		return '<a class="powered-by" href="https://peakurl.org?utm_source=peakurl_public&amp;utm_medium=public_page&amp;utm_campaign=powered_by" target="_blank" rel="noopener noreferrer"><span>' . $label . '</span><span class="powered-by-brand"><img src="' . $logo . '" alt="" width="22" height="22">PeakURL</span></a>';
+		return '<a class="powered-by" href="https://peakurl.org?utm_source=peakurl_public&amp;utm_medium=public_page&amp;utm_campaign=powered_by" target="_blank" rel="noopener noreferrer"><span>' . $label . '</span><span class="powered-by-brand">' . $logo . $wordmark . '<span class="powered-by-sr">PeakURL</span></span></a>';
 	}
 
 	/**
@@ -50,5 +51,29 @@ class Brand {
 	 */
 	public static function get_badge_styles(): string {
 		return (string) file_get_contents( __DIR__ . '/powered-by.css' );
+	}
+
+	/**
+	 * Render the canonical vector Plus Jakarta Sans Bold (700) PeakURL wordmark.
+	 *
+	 * Falls back to a plain span if the bundled vector file is unavailable during
+	 * partial deployments.
+	 *
+	 * @param string $class_name Optional CSS class attribute.
+	 * @return string Trusted inline SVG wordmark or escaped fallback span.
+	 * @since 1.9.0
+	 */
+	public static function get_wordmark_svg( string $class_name = '' ): string {
+		$path = \PeakURL\Core\Config\Environment::get_instance()->get_wordmark_path();
+		$svg  = is_readable( $path ) ? file_get_contents( $path ) : false;
+
+		if ( false === $svg || '' === trim( $svg ) ) {
+			$class_attr = '' !== trim( $class_name )
+				? ' class="' . htmlspecialchars( trim( $class_name ), ENT_QUOTES, 'UTF-8' ) . '"'
+				: '';
+			return '<span' . $class_attr . '>PeakURL</span>';
+		}
+
+		return Logo::prepare_decorative_svg( $svg, $class_name );
 	}
 }

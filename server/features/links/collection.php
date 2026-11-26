@@ -369,8 +369,12 @@ class LinkCollection {
 
 		$range = trim( (string) ( $query['range'] ?? '' ) );
 		if ( in_array( $range, array( '24h', '7d', '30d' ), true ) ) {
-			$days        = '24h' === $range ? 1 : ( '30d' === $range ? 30 : 7 );
-			$period      = $this->analytics_service->get_analytics_period( $days );
+			$days   = '24h' === $range ? 1 : ( '30d' === $range ? 30 : 7 );
+			$period = $this->analytics_service->get_analytics_period( $days );
+			if ( '24h' === $range && isset( $stats_params['stats_start_at'] ) ) {
+				$period['key']      = '24h';
+				$period['start_at'] = $stats_params['stats_start_at'];
+			}
 			$last_period = $this->analytics_service->get_last_month_period( $period, $days );
 
 			$last_stats_params = array(

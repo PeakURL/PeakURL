@@ -104,7 +104,7 @@ $database_step_url = htmlspecialchars(
 
 	<?php if ( '' !== $error_message ) : ?>
 		<div class="error-box" role="alert">
-			<div class="bang">!</div>
+			<span class="bang" aria-hidden="true">!</span>
 			<p><?php echo htmlspecialchars( $error_message, ENT_QUOTES, 'UTF-8' ); ?></p>
 		</div>
 	<?php endif; ?>
@@ -122,11 +122,11 @@ $database_step_url = htmlspecialchars(
 			<div class="grid">
 				<div class="field">
 					<label for="db_name"><?php echo esc_html__( 'Database name', 'peakurl' ); ?></label>
-					<input id="db_name" name="db_name" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_name' ); ?>" placeholder="peakurl" required>
+					<input id="db_name" name="db_name" type="text" spellcheck="false" autocapitalize="none" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_name' ); ?>" placeholder="peakurl" required>
 				</div>
 				<div class="field">
 					<label for="db_user"><?php echo esc_html__( 'Username', 'peakurl' ); ?></label>
-					<input id="db_user" name="db_user" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_user' ); ?>" placeholder="db_user" required>
+					<input id="db_user" name="db_user" type="text" spellcheck="false" autocapitalize="none" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_user' ); ?>" placeholder="db_user" required>
 				</div>
 				<div class="field">
 					<label for="db_password"><?php echo esc_html__( 'Password', 'peakurl' ); ?></label>
@@ -134,7 +134,7 @@ $database_step_url = htmlspecialchars(
 				</div>
 				<div class="field">
 					<label for="db_host"><?php echo esc_html__( 'Host', 'peakurl' ); ?></label>
-					<input id="db_host" name="db_host" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_host' ); ?>" placeholder="localhost" required>
+					<input id="db_host" name="db_host" type="text" spellcheck="false" autocapitalize="none" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_host' ); ?>" placeholder="localhost" required>
 				</div>
 			</div>
 			<div class="divider"></div>
@@ -146,8 +146,8 @@ $database_step_url = htmlspecialchars(
 				</div>
 				<div class="field">
 					<label for="db_prefix"><?php echo esc_html__( 'Table prefix', 'peakurl' ); ?></label>
-					<input id="db_prefix" name="db_prefix" type="text" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_prefix' ); ?>" required>
-					<p class="hint"><?php echo esc_html__( 'Use letters, numbers, and underscores. The default is peakurl_.', 'peakurl' ); ?></p>
+					<input id="db_prefix" name="db_prefix" type="text" spellcheck="false" autocapitalize="none" value="<?php echo InstallScreen::get_escaped_value( $values, 'db_prefix' ); ?>" required aria-describedby="db_prefix-hint">
+					<p class="hint" id="db_prefix-hint"><?php echo esc_html__( 'Use letters, numbers, and underscores. The default is peakurl_.', 'peakurl' ); ?></p>
 				</div>
 			</div>
 			<div class="actions">

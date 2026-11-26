@@ -202,7 +202,7 @@ class AnalyticsHooksTest extends TestCase {
 		);
 		$this->repository->method( 'get_dashboard_link_count' )->willReturn( 15 );
 		$this->repository->method( 'group_click_metrics' )->willReturn( array() );
-		$this->repository->method( 'query_traffic_series' )->willReturn( array() );
+		$this->repository->method( 'query_traffic_series_range' )->willReturn( array() );
 
 		add_filter(
 			'analytics_metrics',
@@ -399,7 +399,7 @@ class AnalyticsHooksTest extends TestCase {
 		);
 		$this->repository->method( 'get_dashboard_link_count' )->willReturn( 15 );
 		$this->repository->method( 'group_click_metrics' )->willReturn( array() );
-		$this->repository->method( 'query_traffic_series' )->willReturn( array() );
+		$this->repository->method( 'query_traffic_series_range' )->willReturn( array() );
 
 		add_filter(
 			'analytics_metrics',

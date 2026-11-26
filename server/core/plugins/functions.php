@@ -108,6 +108,11 @@ if ( ! function_exists( 'register_plugin_ui_extension' ) ) {
 	/**
 	 * Register a native UI extension point on an existing dashboard screen.
 	 *
+	 * Actions in `link_stats_actions` receive the current link ID as `url_id`
+	 * in the action request body.
+	 * The dashboard exposes `data-plugin-action-location` on the container
+	 * and `data-plugin-slug` on each action button for scoped styles.
+	 *
 	 * @param array<string, mixed> $descriptor UI extension descriptor.
 	 * @return bool True if registered.
 	 * @since 1.8.0

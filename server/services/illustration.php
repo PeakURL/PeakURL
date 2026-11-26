@@ -13,6 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Resolves the same illustration manifest consumed by the React client. */
 class Illustration {
+	/** Let embedded SVG images follow an explicit document theme. */
+	public static function get_theme_script(): string {
+		return (string) file_get_contents( __DIR__ . '/status-artwork.js' );
+	}
+
 	/**
 	 * Embed an allowlisted illustration without a network or database dependency.
 	 *

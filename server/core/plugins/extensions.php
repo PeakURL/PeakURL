@@ -77,6 +77,22 @@ class Extensions {
 	);
 
 	/**
+	 * Browser asset scopes and dashboard permissions for UI extension locations.
+	 *
+	 * @var array<string, array{asset_scope: string, capability: string}>
+	 */
+	public const UI_EXTENSION_LOCATIONS = array(
+		'links_overview_actions' => array(
+			'asset_scope' => 'links_overview',
+			'capability'  => 'view_links',
+		),
+		'link_stats_actions'     => array(
+			'asset_scope' => 'link_stats',
+			'capability'  => 'view_analytics',
+		),
+	);
+
+	/**
 	 * Singleton instance.
 	 *
 	 * @var self|null
@@ -522,7 +538,7 @@ class Extensions {
 	 * Retrieve registered assets for a plugin.
 	 *
 	 * @param string      $plugin_slug Plugin identifier.
-	 * @param string|null $scope       Optional scope filter ('page' or 'links_overview').
+	 * @param string|null $scope       Optional page or UI extension asset scope.
 	 * @param string|null $page_id     Optional page ID filter.
 	 * @return array<int, array<string, mixed>>
 	 */
@@ -592,9 +608,8 @@ class Extensions {
 			);
 		}
 
-		$valid_locations = array( 'links_overview_actions' );
-		if ( ! in_array( $location, $valid_locations, true ) ) {
-			throw new ApiException( __( 'Unsupported UI extension location. Only \'links_overview_actions\' is supported.', 'peakurl' ), 400 );
+		if ( ! isset( self::UI_EXTENSION_LOCATIONS[ $location ] ) ) {
+			throw new ApiException( __( 'Unsupported UI extension location.', 'peakurl' ), 400 );
 		}
 
 		if ( '' === $label ) {

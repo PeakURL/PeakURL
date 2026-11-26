@@ -551,7 +551,6 @@ class Controller extends BaseController {
 			return JsonResponse::text(
 				$this->format_password_page(
 					$request,
-					$this->route_param( $request, 'id' ),
 					(string) ( $result['message'] ?? '' ),
 				),
 				'password_invalid' === ( $result['status'] ?? '' ) ? 401 : 200,
@@ -602,14 +601,12 @@ class Controller extends BaseController {
 	 * Get the public password page for a protected short link.
 	 *
 	 * @param Request $request Current HTTP request.
-	 * @param string  $id      Short code or alias.
 	 * @param string  $error   Optional error message.
 	 * @return string HTML page markup.
 	 * @since 1.0.0
 	 */
 	private function format_password_page(
 		Request $request,
-		string $id,
 		string $error = ''
 	): string {
 		$form_action  = htmlspecialchars(
@@ -618,11 +615,13 @@ class Controller extends BaseController {
 			'UTF-8',
 		);
 		$error_markup = '';
+		$error_attrs  = '';
 
 		if ( '' !== trim( $error ) ) {
+			$error_attrs  = ' aria-invalid="true" aria-describedby="password-error"';
 			$error_markup =
-				'<div class="alert" role="alert">' .
-				'<svg class="alert-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg>' .
+				'<div class="alert" id="password-error" role="alert">' .
+				'<svg class="alert-icon" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd"/></svg>' .
 				'<span>' . htmlspecialchars( $error, ENT_QUOTES, 'UTF-8' ) . '</span>' .
 				'</div>';
 		}
@@ -635,13 +634,13 @@ class Controller extends BaseController {
 			'<div class="field">' .
 			'<label class="label" for="link_password">' . __( 'Password', 'peakurl' ) . '</label>' .
 			'<div class="input-wrap">' .
-			'<svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' .
-			'<input class="input" id="link_password" name="link_password" type="password" autocomplete="current-password" placeholder="' . __( 'Enter password', 'peakurl' ) . '" required autofocus>' .
+			'<svg class="input-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' .
+			'<input class="input" id="link_password" name="link_password" type="password" autocomplete="current-password" placeholder="' . esc_attr__( 'Enter password', 'peakurl' ) . '" required' . $error_attrs . '>' .
 			'</div>' .
 			'</div>' .
 			'<button class="btn" type="submit">' .
 			'<span>' . __( 'Continue', 'peakurl' ) . '</span>' .
-			'<svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L11.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 11-1.04-1.08l3.158-2.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>' .
+			'<svg class="btn-arrow" aria-hidden="true" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L11.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 11-1.04-1.08l3.158-2.96H3.75A.75.75 0 013 10z" clip-rule="evenodd"/></svg>' .
 			'</button>' .
 			'</form>';
 

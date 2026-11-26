@@ -38,6 +38,14 @@ class PluginAssetSecurityTest extends TestCase {
 		$this->temp_dir = sys_get_temp_dir() . '/peakurl_asset_test_' . uniqid();
 		mkdir( $this->temp_dir . '/plugins/test-plugin/assets', 0777, true );
 		mkdir( $this->temp_dir . '/mu-plugins', 0777, true );
+		Extensions::get_instance()->register_page(
+			array(
+				'plugin_slug' => 'test-plugin',
+				'page_id'     => 'diagnostics',
+				'title'       => 'Diagnostics',
+				'capability'  => 'manage_site_settings',
+			)
+		);
 	}
 
 	protected function tearDown(): void {
@@ -62,8 +70,7 @@ class PluginAssetSecurityTest extends TestCase {
 				->willReturn( $user );
 		}
 
-		$roles = $this->createMock( Roles::class );
-		$roles->method( 'has_capability' )->willReturn( true );
+		$roles         = new Roles();
 		$authorization = new Authorization( $roles );
 
 		$settings_api = $this->createMock( SettingsApi::class );
@@ -122,11 +129,11 @@ class PluginAssetSecurityTest extends TestCase {
 		return $request;
 	}
 
-	public function test_serve_plugin_asset_serves_valid_js_and_css_with_caching(): void {
+	public function test_serve_plugin_asset_enforces_page_permissions_before_revalidating(): void {
 		$js_path = $this->temp_dir . '/plugins/test-plugin/assets/admin.js';
 		file_put_contents( $js_path, 'console.log("PeakURL Plugin");' );
 
-		Extensions::get_instance()->register_asset( 'test-plugin', 'admin.js', 'script' );
+		Extensions::get_instance()->register_asset( 'test-plugin', 'admin.js', 'script', array( 'page_id' => 'diagnostics' ) );
 
 		$service  = $this->create_service();
 		$request  = $this->create_asset_request( 'test-plugin', 'admin.js' );
@@ -135,7 +142,7 @@ class PluginAssetSecurityTest extends TestCase {
 		$this->assertSame( 200, $response['status'] );
 		$this->assertSame( 'application/javascript; charset=utf-8', $response['headers']['Content-Type'] );
 		$this->assertNotEmpty( $response['headers']['ETag'] );
-		$this->assertStringContainsString( 'private, no-transform, max-age=3600', $response['headers']['Cache-Control'] );
+		$this->assertSame( 'private, no-transform, no-cache', $response['headers']['Cache-Control'] );
 		$this->assertSame( 'console.log("PeakURL Plugin");', $response['body'] );
 
 		// Test ETag If-None-Match => 304 Not Modified.
@@ -143,6 +150,17 @@ class PluginAssetSecurityTest extends TestCase {
 		$etag_response = $service->serve_plugin_asset( $etag_request );
 		$this->assertSame( 304, $etag_response['status'] );
 		$this->assertSame( '', $etag_response['body'] );
+
+		$editor_service = $this->create_service(
+			array( 'test-plugin' ),
+			array(
+				'id'   => 2,
+				'role' => 'editor',
+			)
+		);
+		$this->expectException( ApiException::class );
+		$this->expectExceptionCode( 403 );
+		$editor_service->serve_plugin_asset( $etag_request );
 	}
 
 	public function test_serve_plugin_asset_requires_authentication(): void {

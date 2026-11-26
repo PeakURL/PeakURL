@@ -166,6 +166,17 @@ class ContentPreservationTest extends TestCase {
 		$this->assertFileDoesNotExist( $this->source_root . '/core/old-class.php' );
 	}
 
+	public function test_update_supplies_a_default_when_no_landing_page_exists(): void {
+		$this->filesystem->mkdir_p( $this->package_root . '/content' );
+		$default_page = (string) file_get_contents( ABSPATH . 'content/landing-page.html' );
+		file_put_contents( $this->package_root . '/content/landing-page.html', $default_page );
+
+		$paths = $this->release_files->get_content_paths( $this->package_root );
+		$this->assertContains( 'landing-page.html', $paths );
+		$this->release_files->copy_content_paths( $paths, $this->package_root );
+		$this->assertSame( $default_page, file_get_contents( $this->source_root . '/content/landing-page.html' ) );
+	}
+
 	public function test_rollback_restores_original_state_on_failure(): void {
 		// Seed initial state.
 		file_put_contents( $this->source_root . '/index.php', '<?php // original index' );
@@ -252,6 +263,8 @@ class ContentPreservationTest extends TestCase {
 
 		$this->filesystem->mkdir_p( $this->source_root . '/content/uploads' );
 		file_put_contents( $this->source_root . '/content/uploads/avatar.png', 'avatar-binary-data' );
+		$custom_landing = "<!doctype html>\n<h1>Owner's landing page</h1>\n";
+		file_put_contents( $this->source_root . '/content/landing-page.html', $custom_landing );
 
 		$this->filesystem->mkdir_p( $this->source_root . '/content/plugins/custom-plugin' );
 		file_put_contents( $this->source_root . '/content/plugins/custom-plugin/plugin.php', '<?php // custom plugin' );
@@ -272,6 +285,7 @@ class ContentPreservationTest extends TestCase {
 		$this->assertTrue( $zip->open( $zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE ) );
 		$zip->addFromString( 'index.php', '<?php // v2 index' );
 		$zip->addFromString( 'app.html', '<!-- v2 app -->' );
+		$zip->addFile( ABSPATH . 'content/landing-page.html', 'content/landing-page.html' );
 		$zip->addFromString( 'core/v2-file.php', '<?php // v2 file' );
 		$zip->addFromString( 'content/languages/en.json', '{"greeting": "hello v2"}' );
 		$zip->addFromString( 'content/languages/es.json', '{"greeting": "hola"}' );
@@ -319,6 +333,7 @@ class ContentPreservationTest extends TestCase {
 		$this->assertSame( '2.0.0', $result['version'] );
 		$this->assertSame( 'https://releases.peakurl.org/package/peakurl-2.0.0.zip', $result['packageUrl'] );
 		$this->assertNotEmpty( $result['appliedAt'] );
+		$this->assertSame( $custom_landing, file_get_contents( $this->source_root . '/content/landing-page.html' ) );
 
 		// 5. Verify preservation, update, and cleanup.
 		// Config survived byte-for-byte.

@@ -111,5 +111,10 @@ class StatusPageTest extends TestCase {
 		$this->assertStringContainsString( '<html lang="ar" dir="rtl"', $html );
 		$this->assertSame( 1, substr_count( $html, '<meta name="generator"' ) );
 		$this->assertStringContainsString( 'content="PeakURL 9.9.9"', $html );
+		$this->assertStringContainsString( '--background:', $html );
+		$this->assertStringContainsString( 'status-brand-wordmark', $html );
+		$this->assertStringContainsString( 'powered-by-wordmark', $html );
+		$this->assertStringNotContainsString( 'PlusJakartaSans', $html );
+		$this->assertStringContainsString( 'var(--logo-foreground, #126e68)', $html );
 	}
 }

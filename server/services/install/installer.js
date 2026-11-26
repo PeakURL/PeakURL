@@ -10,6 +10,29 @@
 	} catch {}
 	documentRoot.dataset.statusTheme = theme;
 
+	// Lock the submit button until navigation, then restore it after Back.
+	const submitSelector =
+		'form[method="post"] button.btn-primary[type="submit"]';
+	document.addEventListener("submit", (event) => {
+		if (!(event.target instanceof HTMLFormElement)) return;
+		const submit = event.target.querySelector(
+			'button.btn-primary[type="submit"]'
+		);
+		if (!(submit instanceof HTMLButtonElement)) return;
+		if (submit.disabled) {
+			event.preventDefault();
+			return;
+		}
+		submit.disabled = true;
+		event.target.setAttribute("aria-busy", "true");
+	});
+	window.addEventListener("pageshow", () => {
+		for (const submit of document.querySelectorAll(submitSelector)) {
+			submit.disabled = false;
+			submit.form?.removeAttribute("aria-busy");
+		}
+	});
+
 	document.addEventListener(
 		"DOMContentLoaded",
 		() => {

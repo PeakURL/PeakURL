@@ -450,7 +450,8 @@ PHP;
 		$this->assertSame( 'clear_history', $ui_entry['action_id'] );
 		$this->assertSame( 'manage_site_settings', $ui_entry['capability'] );
 		$this->assertSame( 'sparkles', $ui_entry['icon'] );
-		$this->assertSame( array( 'Analytics', 'Urls' ), $ui_entry['invalidates'] );
+		$dashboard_extensions = $service->get_plugin_extensions( new Request( 'GET', '/api/v1/system/plugins/extensions', array(), array() ) );
+		$this->assertSame( array( 'Analytics', 'Urls' ), $dashboard_extensions['uiExtensions'][0]['invalidates'] );
 
 		// 8. Action Execution Authorization: Denied for non-admin lacking manage_site_settings
 		$editor_service = $this->create_system_service( array( 'editor' ), array() );

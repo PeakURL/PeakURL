@@ -100,13 +100,26 @@ class Favicon {
 			}
 		}
 
-		$icon_path = (string) ( $icon['iconPath'] ?? '' );
-		$version   = $this->manifest->get_version_token( $icon, $icon_path );
-		$sizes     = $this->manifest->get_icon_sizes( $icon );
+		$icon_path           = (string) ( $icon['iconPath'] ?? '' );
+		$is_custom           = ! empty( $icon['isCustom'] );
+		$svg_icon_path       = ! $is_custom ? $this->default_svg_icon_path() : '';
+		$light_svg_icon_path = ! $is_custom ? $this->default_light_svg_icon_path() : '';
+		$dark_svg_icon_path  = ! $is_custom ? $this->default_dark_svg_icon_path() : '';
+		$version             = $this->manifest->get_version_token( $icon, $icon_path );
+		$sizes               = $this->manifest->get_icon_sizes( $icon );
 
 		return array(
 			'configured'      => true,
-			'isCustom'        => ! empty( $icon['isCustom'] ),
+			'isCustom'        => $is_custom,
+			'svgUrl'          => ! $is_custom && '' !== $svg_icon_path
+				? $this->favicon_url( 'favicon.svg', $version )
+				: null,
+			'lightSvgUrl'     => ! $is_custom && '' !== $light_svg_icon_path
+				? $this->favicon_url( 'favicon-light.svg', $version )
+				: null,
+			'darkSvgUrl'      => ! $is_custom && '' !== $dark_svg_icon_path
+				? $this->favicon_url( 'favicon-dark.svg', $version )
+				: null,
 			'url'             => $this->favicon_url( 'favicon.png', $version ),
 			'iconUrl'         => $this->favicon_url( 'favicon.ico', $version ),
 			'appleTouchUrl'   => $this->favicon_url( 'apple-touch-icon.png', $version ),
@@ -157,18 +170,22 @@ class Favicon {
 			}
 		}
 
-		$manifest_path = $this->manifest->get_path(
-			! empty( $icon['isCustom'] ),
-		);
+		$is_custom     = ! empty( $icon['isCustom'] );
+		$manifest_path = $this->manifest->get_path( $is_custom );
+		$app_icon_path = ! $is_custom ? $this->default_app_icon_path() : '';
 
 		return array(
-			'configured'   => true,
-			'isCustom'     => ! empty( $icon['isCustom'] ),
-			'iconPath'     => $icon_path,
-			'manifestPath' => $manifest_path,
-			'mimeType'     => 'image/png',
-			'sizes'        => $this->manifest->get_icon_sizes( $icon ),
-			'version'      => $this->manifest->get_version_token( $icon, $icon_path ),
+			'configured'       => true,
+			'isCustom'         => $is_custom,
+			'iconPath'         => $icon_path,
+			'appIconPath'      => '' !== $app_icon_path ? $app_icon_path : $icon_path,
+			'svgIconPath'      => ! $is_custom ? $this->default_svg_icon_path() : '',
+			'lightSvgIconPath' => ! $is_custom ? $this->default_light_svg_icon_path() : '',
+			'darkSvgIconPath'  => ! $is_custom ? $this->default_dark_svg_icon_path() : '',
+			'manifestPath'     => $manifest_path,
+			'mimeType'         => 'image/png',
+			'sizes'            => $this->manifest->get_icon_sizes( $icon ),
+			'version'          => $this->manifest->get_version_token( $icon, $icon_path ),
 		);
 	}
 
@@ -560,6 +577,54 @@ class Favicon {
 	}
 
 	/**
+	 * Return the bundled adaptive SVG fallback favicon file path.
+	 *
+	 * @return string
+	 * @since 1.8.0
+	 */
+	private function default_svg_icon_path(): string {
+		$path = $this->paths->get_bundled_svg_icon_path();
+
+		return is_readable( $path ) ? $path : '';
+	}
+
+	/**
+	 * Return the bundled light-chrome SVG fallback favicon file path.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	private function default_light_svg_icon_path(): string {
+		$path = $this->paths->get_bundled_light_svg_icon_path();
+
+		return is_readable( $path ) ? $path : '';
+	}
+
+	/**
+	 * Return the bundled dark-chrome SVG fallback favicon file path.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	private function default_dark_svg_icon_path(): string {
+		$path = $this->paths->get_bundled_dark_svg_icon_path();
+
+		return is_readable( $path ) ? $path : '';
+	}
+
+	/**
+	 * Return the bundled fallback application icon file path.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	private function default_app_icon_path(): string {
+		$path = $this->paths->get_bundled_app_icon_path();
+
+		return is_readable( $path ) ? $path : '';
+	}
+
+	/**
 	 * Read icon metadata for an arbitrary favicon path.
 	 *
 	 * @param string $path Absolute favicon file path.
@@ -602,6 +667,9 @@ class Favicon {
 		return array(
 			'configured'      => false,
 			'isCustom'        => false,
+			'svgUrl'          => null,
+			'lightSvgUrl'     => null,
+			'darkSvgUrl'      => null,
 			'url'             => null,
 			'iconUrl'         => null,
 			'appleTouchUrl'   => null,

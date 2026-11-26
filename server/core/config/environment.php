@@ -336,6 +336,66 @@ class Environment {
 	}
 
 	/**
+	 * Return the absolute path to the bundled adaptive SVG fallback favicon.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	public function get_default_svg_favicon_path(): string {
+		return $this->is_development
+			? $this->source_root . '/server/public/default-favicon.svg'
+			: $this->source_root . '/assets/default-favicon.svg';
+	}
+
+	/**
+	 * Return the absolute path to the bundled light-chrome SVG favicon.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	public function get_default_light_svg_favicon_path(): string {
+		return $this->is_development
+			? $this->source_root . '/server/public/default-favicon-light.svg'
+			: $this->source_root . '/assets/default-favicon-light.svg';
+	}
+
+	/**
+	 * Return the absolute path to the bundled dark-chrome SVG favicon.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	public function get_default_dark_svg_favicon_path(): string {
+		return $this->is_development
+			? $this->source_root . '/server/public/default-favicon-dark.svg'
+			: $this->source_root . '/assets/default-favicon-dark.svg';
+	}
+
+	/**
+	 * Return the absolute path to the bundled fallback app icon asset.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	public function get_default_app_icon_path(): string {
+		return $this->is_development
+			? $this->source_root . '/server/public/default-app-icon.png'
+			: $this->source_root . '/assets/default-app-icon.png';
+	}
+
+	/**
+	 * Return the bundled Plus Jakarta Sans Bold (700) SVG wordmark path.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	public function get_wordmark_path(): string {
+		return $this->is_development
+			? $this->source_root . '/client/assets/logo/peakurl-wordmark.svg'
+			: $this->source_root . '/assets/peakurl-wordmark.svg';
+	}
+
+	/**
 	 * Return the bundled vector shared by the dashboard and server-rendered branding.
 	 *
 	 * @return string

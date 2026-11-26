@@ -10,9 +10,10 @@ declare(strict_types=1);
 
 use PeakURL\Core\Config\Constants;
 use PeakURL\Core\Config\Environment;
-use PeakURL\Services\Logo;
+use PeakURL\Services\Brand;
 use PeakURL\Services\Database\Connection;
-use PeakURL\Services\I18n;
+use PeakURL\Services\Illustration;
+use PeakURL\Services\Logo;
 
 // If this file is called directly, abort.
 if (
@@ -100,8 +101,8 @@ if ( ! function_exists( 'get_landing_page_data' ) ) {
 		);
 
 		$settings_path = sprintf(
-			'<strong class="text-white/80 font-medium">%s</strong>',
-			__( 'Settings → General', 'peakurl' ),
+			'<strong>%s</strong>',
+			esc_html__( 'Settings → General', 'peakurl' ),
 		);
 
 		$customize_note = sprintf(
@@ -147,35 +148,30 @@ if ( ! function_exists( 'get_landing_page_html' ) ) {
 	 * @param string|null              $landing_page_file Optional landing page HTML file path.
 	 * @param array<string, mixed>|null $config            Optional runtime config.
 	 * @param Connection|null          $connection        Optional reused connection.
+	 * @param string                   $login_path        Root-relative sign-in path for this installation.
 	 * @return string
 	 * @since 1.5.3
 	 */
 	function get_landing_page_html(
 		?string $landing_page_file = null,
 		?array $config = null,
-		?Connection $connection = null
+		?Connection $connection = null,
+		string $login_path = '/login'
 	): string {
-		$view_data = get_landing_page_data( $config, $connection );
-
-		$file_path = $landing_page_file ?? ( Environment::get_instance()->get_content_path() . '/landing-page.html' );
-		$html      = '';
-
-		if ( file_exists( $file_path ) ) {
-			$html = (string) file_get_contents( $file_path );
-		}
+		$environment   = Environment::get_instance();
+		$owner_file    = $environment->get_content_path() . '/landing-page.html';
+		$using_default = null === $landing_page_file && ! file_exists( $owner_file ) && ! is_link( $owner_file );
+		$file_path     = $landing_page_file ?? ( $using_default
+			? __DIR__ . '/default-landing-page.html'
+			: $owner_file );
+		$html          = is_file( $file_path ) ? (string) file_get_contents( $file_path ) : '';
 
 		if ( '' === trim( $html ) ) {
 			return '';
 		}
 
-		// Only templates that request the bundled logo receive PeakURL's artwork.
-		if ( str_contains( $html, '{{peakurl_logo_url}}' ) ) {
-			$html = str_replace(
-				'{{peakurl_logo_url}}',
-				htmlspecialchars( Logo::get_data_url(), ENT_QUOTES, 'UTF-8' ),
-				$html,
-			);
-		}
+		$view_data = get_landing_page_data( $config, $connection );
+		$escape    = static fn( string $value ): string => htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' );
 
 		$html_lang      = htmlspecialchars( (string) ( $view_data['htmlLang'] ?? 'en-US' ), ENT_QUOTES, 'UTF-8' );
 		$text_direction = 'rtl' === strtolower( (string) ( $view_data['textDirection'] ?? 'ltr' ) ) ? 'rtl' : 'ltr';
@@ -198,28 +194,31 @@ if ( ! function_exists( 'get_landing_page_html' ) ) {
 			}
 		}
 
-		// Replace html tag lang and dir attributes.
-		$html = preg_replace(
-			'/<html[^>]*>/i',
-			'<html lang="' . $html_lang . '" dir="' . $text_direction . '">',
+		// Localize the document while retaining owner-defined root attributes.
+		$html = preg_replace_callback(
+			'/<html\b((?:[^"\x27>]|"[^"]*"|\x27[^\x27]*\x27)*)>/i',
+			static function ( array $parts ) use ( $html_lang, $text_direction ): string {
+				$attributes = preg_replace( '/\s+(?:lang|dir)\s*=\s*(?:"[^"]*"|\x27[^\x27]*\x27|[^\s>]+)/i', '', $parts[1] );
+				return '<html lang="' . $html_lang . '" dir="' . $text_direction . '"' . $attributes . '>';
+			},
 			$html,
 			1
-		);
+		) ?? $html;
 
 		// Replace document title and meta description.
 		if ( ! empty( $view_data['title'] ) ) {
-			$html = preg_replace(
+			$html = preg_replace_callback(
 				'/<title>.*?<\/title>/is',
-				'<title>' . htmlspecialchars( (string) $view_data['title'], ENT_QUOTES, 'UTF-8' ) . '</title>',
+				static fn(): string => '<title>' . $escape( $view_data['title'] ) . '</title>',
 				$html,
 				1
 			);
 		}
 
 		if ( ! empty( $view_data['metaDescription'] ) ) {
-			$html = preg_replace(
+			$html = preg_replace_callback(
 				'/<meta\s+name="description"\s+content="[^"]*"/i',
-				'<meta name="description" content="' . htmlspecialchars( (string) $view_data['metaDescription'], ENT_QUOTES, 'UTF-8' ) . '"',
+				static fn(): string => '<meta name="description" content="' . $escape( $view_data['metaDescription'] ) . '"',
 				$html,
 				1
 			);
@@ -272,6 +271,29 @@ if ( ! function_exists( 'get_landing_page_html' ) ) {
 		$html = str_replace( 'Visit peakurl.org', htmlspecialchars( (string) $view_data['visitUpdatesLink'], ENT_QUOTES, 'UTF-8' ), $html );
 		$html = str_replace( 'for updates.', htmlspecialchars( (string) $view_data['forUpdates'], ENT_QUOTES, 'UTF-8' ), $html );
 
-		return $html;
+		// Assets are read only when the template requests the corresponding token.
+		return preg_replace_callback(
+			'/\{\{peakurl_([a-z_]+)\}\}/',
+			static fn( array $parts ): string => match ( $parts[1] ) {
+				'logo_url'              => $escape( Logo::get_data_url() ),
+				'brand_logo'            => Logo::get_inline_svg( 34 ) . Brand::get_wordmark_svg( 'brand-wordmark' ),
+				'brand_styles'          => file_get_contents( __DIR__ . '/brand-tokens.css' ) . Brand::get_badge_styles(),
+				'artwork_theme_script'  => Illustration::get_theme_script(),
+				'installation_artwork'  => $escape( Illustration::get_data_url( 'installation' ) ),
+				'powered_by'            => Brand::get_powered_by_badge(),
+				'login_url'             => $escape( $login_path ),
+				'tagline'               => $escape( Brand::get_tagline() ),
+				'resources'             => esc_attr__( 'Resources', 'peakurl' ),
+				'integrations'          => esc_html__( 'Integrations', 'peakurl' ),
+				'self_hosted'           => $escape( $view_data['selfHosted'] ),
+				'welcome'               => $escape( $view_data['welcomeMessage'] ),
+				'customize_description' => $using_default
+					? esc_html__( 'Copy services/default-landing-page.html to the path below and edit the copy to customize this page.', 'peakurl' )
+					: $escape( $view_data['customizeDesc'] ),
+				'customize_note'        => $view_data['customizeNote'],
+				default                 => $parts[0],
+			},
+			$html,
+		) ?? $html;
 	}
 }

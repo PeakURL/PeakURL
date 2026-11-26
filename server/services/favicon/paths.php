@@ -99,6 +99,46 @@ class Paths {
 	}
 
 	/**
+	 * Return the bundled adaptive SVG fallback favicon path.
+	 *
+	 * @return string
+	 * @since 1.8.0
+	 */
+	public function get_bundled_svg_icon_path(): string {
+		return \PeakURL\Core\Config\Environment::get_instance()->get_default_svg_favicon_path();
+	}
+
+	/**
+	 * Return the bundled light-chrome SVG fallback favicon path.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	public function get_bundled_light_svg_icon_path(): string {
+		return \PeakURL\Core\Config\Environment::get_instance()->get_default_light_svg_favicon_path();
+	}
+
+	/**
+	 * Return the bundled dark-chrome SVG fallback favicon path.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	public function get_bundled_dark_svg_icon_path(): string {
+		return \PeakURL\Core\Config\Environment::get_instance()->get_default_dark_svg_favicon_path();
+	}
+
+	/**
+	 * Return the bundled fallback application icon path.
+	 *
+	 * @return string
+	 * @since 1.9.0
+	 */
+	public function get_bundled_app_icon_path(): string {
+		return \PeakURL\Core\Config\Environment::get_instance()->get_default_app_icon_path();
+	}
+
+	/**
 	 * Return the bundled fallback manifest asset path.
 	 *
 	 * @return string

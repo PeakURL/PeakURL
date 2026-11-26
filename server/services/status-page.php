@@ -39,7 +39,7 @@ class StatusPage {
 		string $support_html = '',
 		?string $illustration = null
 	): string {
-		$content = '<p class="status-eyebrow">' . self::escape( $label ) . '</p>' .
+		$content = ( '' !== $label ? '<p class="status-eyebrow">' . self::escape( $label ) . '</p>' : '' ) .
 			'<h1 id="page-heading" class="status-title">' . self::escape( $title ) . '</h1>' .
 			'<p class="status-description">' . self::escape( $description ) . '</p>';
 
@@ -120,13 +120,15 @@ class StatusPage {
 		$language       = self::escape( $metadata['htmlLang'] ?? ( function_exists( 'get_html_lang_attribute' ) ? get_html_lang_attribute() : 'en' ) );
 		$direction      = 'rtl' === ( $metadata['textDirection'] ?? ( function_exists( 'get_text_direction' ) ? get_text_direction() : 'ltr' ) ) ? 'rtl' : 'ltr';
 		$generator      = function_exists( 'get_generator_tag' ) ? get_generator_tag( $metadata['version'] ?? null ) : '';
-		$logo           = self::escape( Logo::get_data_url() );
+		$logo           = Logo::get_inline_svg( 34, 'status-brand-mark' );
+		$wordmark       = Brand::get_wordmark_svg( 'status-brand-wordmark' );
 		$is_compact     = $compact || null === $illustration;
 		$page_class     = $is_compact ? 'status-page status-page-compact' : 'status-page';
 		$artwork_html   = self::format_illustration( $illustration, $is_compact );
 		$access_artwork = $is_compact ? $artwork_html : '';
 		$hero_artwork   = $is_compact ? '' : $artwork_html;
-		$styles         = file_get_contents( __DIR__ . '/status-page.css' ) . file_get_contents( __DIR__ . '/public-link-forms.css' ) . Brand::get_badge_styles();
+		$styles         = file_get_contents( __DIR__ . '/brand-tokens.css' ) . file_get_contents( __DIR__ . '/status-page.css' ) . file_get_contents( __DIR__ . '/public-link-forms.css' ) . Brand::get_badge_styles();
+		$artwork_script = Illustration::get_theme_script();
 		$powered        = Brand::get_powered_by_badge();
 		$tagline        = self::escape( Brand::get_tagline() );
 
@@ -140,12 +142,12 @@ class StatusPage {
 {$generator}
 <title>{$title} — PeakURL</title>
 <style>{$styles}</style>
-<script>try{const theme=localStorage.getItem('theme');if(theme==='light'||theme==='dark')document.documentElement.dataset.statusTheme=theme;}catch{}</script>
+<script>{$artwork_script}</script>
 </head>
 <body class="{$page_class}">
 <div class="status-container">
-<header class="status-header"><div class="status-brand"><img src="{$logo}" alt="" width="40" height="40"><span>PeakURL</span></div><span class="status-tagline">{$tagline}</span></header>
-<main class="status-main"><section class="status-hero"><div class="status-copy">{$access_artwork}{$content_html}</div>{$hero_artwork}</section>{$support_html}</main>
+<header class="status-header"><div class="status-brand">{$logo}{$wordmark}<span class="powered-by-sr">PeakURL</span></div><span class="status-tagline">{$tagline}</span></header>
+<main class="status-main"><section class="status-hero" aria-labelledby="page-heading"><div class="status-copy">{$access_artwork}{$content_html}</div>{$hero_artwork}</section>{$support_html}</main>
 <footer class="status-footer">{$powered}</footer>
 </div>
 </body>

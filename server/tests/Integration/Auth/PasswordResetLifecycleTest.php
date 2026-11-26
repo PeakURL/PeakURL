@@ -9,11 +9,13 @@ declare(strict_types=1);
 
 namespace PeakURL\Tests\Integration\Auth;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PeakURL\Api\UsersApi;
 use PeakURL\Core\Auth\Authorization;
 use PeakURL\Core\Auth\Roles;
 use PeakURL\Core\Config\Configuration;
+use PeakURL\Features\Auth\Controller as AuthController;
 use PeakURL\Features\Auth\Credentials;
 use PeakURL\Features\Auth\Service as AuthService;
 use PeakURL\Features\Auth\Validator as AuthValidator;
@@ -31,6 +33,7 @@ class PasswordResetLifecycleTest extends TestCase {
 	private Connection $connection;
 	private PeakURL_DB $db;
 	private AuthService $auth_service;
+	private Notifications&MockObject $notifications;
 	private string $table_prefix;
 
 	private array $test_user_ids    = array( '999101', '999102', '999103' );
@@ -45,8 +48,9 @@ class PasswordResetLifecycleTest extends TestCase {
 		$this->table_prefix = $this->connection->get_table_prefix();
 		$this->db           = new PeakURL_DB( $this->connection );
 
-		$roles         = new Roles();
-		$authorization = new Authorization( $roles );
+		$roles               = new Roles();
+		$authorization       = new Authorization( $roles );
+		$this->notifications = $this->createMock( Notifications::class );
 
 		$this->auth_service = new AuthService(
 			$this->db,
@@ -54,7 +58,7 @@ class PasswordResetLifecycleTest extends TestCase {
 			new Credentials( $this->db ),
 			new AuthValidator(),
 			new Totp(),
-			new Notifications(),
+			$this->notifications,
 			new Crypto( $config ),
 			$roles,
 			$authorization,
@@ -76,6 +80,36 @@ class PasswordResetLifecycleTest extends TestCase {
 
 		$this->pdo->exec( "DELETE FROM {$this->table_prefix}sessions WHERE user_id IN ('{$user_ids}') OR id IN ('{$sess_ids}')" );
 		$this->pdo->exec( "DELETE FROM {$this->table_prefix}users WHERE id IN ('{$user_ids}')" );
+	}
+
+	public function test_password_recovery_does_not_disclose_account_when_mail_fails(): void {
+		$this->db->insert(
+			'users',
+			array(
+				'id'                => $this->test_user_ids[0],
+				'username'          => 'smtp_failure_user',
+				'email'             => 'smtp-failure@example.test',
+				'first_name'        => 'SMTP',
+				'last_name'         => 'Fixture',
+				'password_hash'     => password_hash( 'unused-fixture-password', PASSWORD_DEFAULT ),
+				'role'              => 'editor',
+				'is_email_verified' => 1,
+				'created_at'        => '2026-01-01 00:00:00',
+				'updated_at'        => '2026-01-01 00:00:00',
+			)
+		);
+		$this->notifications->expects( $this->once() )->method( 'send_password_reset' )
+			->willThrowException( new \RuntimeException( 'SMTP unavailable' ) );
+
+		$controller = new AuthController( $this->auth_service );
+		$path       = '/api/v1/auth/forgot-password';
+		$known      = $controller->forgot_password( new Request( 'POST', $path, array(), array( 'identifier' => 'smtp-failure@example.test' ) ) );
+		$unknown    = $controller->forgot_password( new Request( 'POST', $path, array(), array( 'identifier' => 'unknown@example.test' ) ) );
+
+		$this->assertSame( 200, $known['status'] );
+		$this->assertSame( 200, $unknown['status'] );
+		unset( $known['body']['timestamp'], $unknown['body']['timestamp'] );
+		$this->assertSame( $unknown['body'], $known['body'] );
 	}
 
 	public function test_reset_password_updates_hash_and_clears_reset_token(): void {

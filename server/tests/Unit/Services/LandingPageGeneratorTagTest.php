@@ -80,6 +80,38 @@ class LandingPageGeneratorTagTest extends TestCase {
 		}
 	}
 
+	public function test_default_page_uses_local_brand_assets_and_prefixed_login(): void {
+		$html = \get_landing_page_html( login_path: '/tools/login' );
+
+		$this->assertStringContainsString( '<h1 id="page-heading">Shorten, track, and own every link.</h1>', $html );
+		$this->assertStringContainsString( 'href="/tools/login"', $html );
+		$this->assertStringContainsString( 'data-status-theme="auto"', $html );
+		$this->assertStringContainsString( 'data-status-illustration="installation" src="data:image/svg+xml;base64,', $html );
+		$this->assertStringContainsString( 'class="brand-wordmark"', $html );
+		$this->assertStringNotContainsString( '{{peakurl_', $html );
+		$this->assertStringNotContainsString( 'cdn.jsdelivr.net', $html );
+		$this->assertStringNotContainsString( 'fonts.googleapis.com', $html );
+	}
+
+	public function test_custom_template_keeps_attributes_and_existing_logo_token(): void {
+		$template  = '<html lang="fr" dir="rtl" class="custom" data-label="x > y"><head><title>Title</title></head><body><h1>My links</h1><img src="{{peakurl_logo_url}}">{{unrelated_token}}</body></html>';
+		$temp_file = tempnam( sys_get_temp_dir(), 'landing_test_' );
+		$this->assertNotFalse( $temp_file );
+
+		try {
+			file_put_contents( $temp_file, $template );
+			$html = \get_landing_page_html( $temp_file );
+
+			$this->assertMatchesRegularExpression( '/<html lang="[^"]+" dir="ltr" class="custom" data-label="x > y">/', $html );
+			$this->assertStringContainsString( '<h1>My links</h1><img src="data:image/svg+xml;base64,', $html );
+			$this->assertStringContainsString( '{{unrelated_token}}', $html );
+			$this->assertSame( $template, file_get_contents( $temp_file ) );
+			$this->assertStringNotContainsString( '--background', $html );
+		} finally {
+			unlink( $temp_file );
+		}
+	}
+
 	public function test_landing_page_data_does_not_contain_version(): void {
 		$data = \get_landing_page_data();
 		$this->assertArrayNotHasKey( 'version', $data );

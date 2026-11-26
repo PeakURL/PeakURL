@@ -281,11 +281,10 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 	}
 
 	public function test_scheduled_job_rotates_coverage_with_bounded_batch_selection(): void {
-		$time_now    = time();
-		$now_dt      = gmdate( 'Y-m-d H:i:s', $time_now );
-		$oldest_dt   = gmdate( 'Y-m-d H:i:s', $time_now - 10800 ); // 3 hours ago.
-		$recent_dt   = gmdate( 'Y-m-d H:i:s', $time_now - 3600 );  // 1 hour ago.
-		$newest_dt   = gmdate( 'Y-m-d H:i:s', $time_now - 300 );   // 5 minutes ago.
+		$now_dt      = '2026-01-01 06:00:00';
+		$oldest_dt   = '2026-01-01 03:00:00';
+		$recent_dt   = '2026-01-01 05:00:00';
+		$newest_dt   = '2026-01-01 05:55:00';
 		$fixed_order = '2026-01-01 00:00:00';
 
 		$id_never  = $this->test_prefix . 'rot_never';
@@ -400,10 +399,11 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 		$newest_dt   = gmdate( 'Y-m-d H:i:s', $time_now - 300 );   // 5 minutes ago.
 		$fixed_order = '2026-01-01 00:00:00';
 
-		$id_never  = $this->test_prefix . 'sg_never';
-		$id_oldest = $this->test_prefix . 'sg_oldest';
-		$id_recent = $this->test_prefix . 'sg_recent';
-		$id_newest = $this->test_prefix . 'sg_newest';
+		$id_never   = $this->test_prefix . 'sg_never';
+		$id_oldest  = $this->test_prefix . 'sg_oldest';
+		$id_recent  = $this->test_prefix . 'sg_recent';
+		$id_newest  = $this->test_prefix . 'sg_newest';
+		$id_checked = $this->test_prefix . 'sg_checked';
 
 		$paused_ids = $this->pdo->query( "SELECT id FROM {$this->table_prefix}urls WHERE status = 'active'" )->fetchAll( \PDO::FETCH_COLUMN );
 		if ( ! empty( $paused_ids ) ) {
@@ -417,7 +417,8 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 				('{$id_never}', 1, '{$id_never}', '{$id_never}', 'Never Checked', 'https://93.184.216.34/sg1', 'active', '{$fixed_order}', '{$fixed_order}'),
 				('{$id_oldest}', 1, '{$id_oldest}', '{$id_oldest}', 'Oldest Checked', 'https://93.184.216.34/sg2', 'active', '{$fixed_order}', '{$fixed_order}'),
 				('{$id_recent}', 1, '{$id_recent}', '{$id_recent}', 'Recent Checked', 'https://93.184.216.34/sg3', 'active', '{$fixed_order}', '{$fixed_order}'),
-				('{$id_newest}', 1, '{$id_newest}', '{$id_newest}', 'Newest Checked', 'https://93.184.216.34/sg4', 'active', '{$fixed_order}', '{$fixed_order}')"
+				('{$id_newest}', 1, '{$id_newest}', '{$id_newest}', 'Newest Checked', 'https://93.184.216.34/sg4', 'active', '{$fixed_order}', '{$fixed_order}'),
+				('{$id_checked}', 1, '{$id_checked}', '{$id_checked}', 'Checked At Start', 'https://93.184.216.34/sg5', 'active', '{$fixed_order}', '{$fixed_order}')"
 			);
 
 			$this->pdo->exec(
@@ -431,6 +432,10 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 			$this->pdo->exec(
 				"INSERT INTO {$this->table_prefix}link_health (link_id, status, checked_at, response_code, response_time_ms, error_message, redirect_count, created_at, updated_at)
 				VALUES ('{$id_newest}', 'healthy', '{$newest_dt}', 200, 100, NULL, 0, '{$newest_dt}', '{$newest_dt}')"
+			);
+			$this->pdo->exec(
+				"INSERT INTO {$this->table_prefix}link_health (link_id, status, checked_at, response_code, response_time_ms, error_message, redirect_count, created_at, updated_at)
+				VALUES ('{$id_checked}', 'healthy', '{$now_dt}', 200, 100, NULL, 0, '{$now_dt}', '{$now_dt}')"
 			);
 
 			$checked_urls = array();
@@ -455,9 +460,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 			$result_1  = $job_sg->execute( $context_1 );
 
 			$this->assertTrue( $result_1->is_success() );
-			$this->assertSame( 2, count( $checked_urls ) );
-			$this->assertContains( 'https://93.184.216.34/sg1', $checked_urls ); // Link A
-			$this->assertContains( 'https://93.184.216.34/sg2', $checked_urls ); // Link B
+			$this->assertSame( array( 'https://93.184.216.34/sg1', 'https://93.184.216.34/sg2' ), $checked_urls );
 
 			$meta_1 = $result_1->get_metadata();
 			$this->assertSame( 2, $meta_1['checked'] );
@@ -468,8 +471,7 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 			$recent_health_before_run2 = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_recent ) );
 			$this->assertSame( $recent_dt, $recent_health_before_run2['checked_at'] );
 
-			// RUN 2: Resumes from the oldest unchecked links (Link C and Link D).
-			// Must NOT re-check Link A or Link B.
+			// A continuation of the same sweep keeps its cutoff and starts with Link C.
 			$checked_urls = array();
 			$context_2    = new ExecutionContext( 'peakurl_link_health_check', 'run_sg_2', 1, false, $now_dt );
 			$result_2     = $job_sg->execute( $context_2 );
@@ -489,6 +491,9 @@ class LinkHealthMonitoringIntegrationTest extends TestCase {
 			// All remaining active links in the environment are now checked.
 			$this->assertTrue( $meta_2['completed'] );
 			$this->assertTrue( $meta_2['sweepCompleted'] );
+
+			$health_at_cutoff = $this->db->get_row_by( 'link_health', array( 'link_id' => $id_checked ) );
+			$this->assertSame( $now_dt, $health_at_cutoff['checked_at'] );
 		} finally {
 			if ( ! empty( $paused_ids ) ) {
 				$placeholders = implode( ',', array_fill( 0, count( $paused_ids ), '?' ) );

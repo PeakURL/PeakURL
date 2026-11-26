@@ -177,7 +177,7 @@ class LinkHealthCheckJob implements JobHandlerInterface {
 	 * @since 1.7.1
 	 */
 	private function execute_sweep( ExecutionContext $context ): ExecutionResult {
-		$sweep_start      = Date::now();
+		$sweep_start      = $context->get_started_at();
 		$start_time_float = microtime( true );
 
 		$category_counts = array(

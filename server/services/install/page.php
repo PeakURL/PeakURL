@@ -42,9 +42,10 @@ class Page {
 		);
 		$illustration  = $illustrations[ $step ];
 		$artwork       = Illustration::get_data_url( $illustration );
-		$logo          = Logo::get_data_url();
-		$styles        = file_get_contents( dirname( __DIR__ ) . '/status-page.css' ) . file_get_contents( __DIR__ . '/installer.css' ) . Brand::get_badge_styles();
-		$script        = file_get_contents( __DIR__ . '/installer.js' );
+		$logo_svg      = Logo::get_inline_svg( 34, 'status-brand-mark' );
+		$wordmark_svg  = Brand::get_wordmark_svg( 'status-brand-wordmark' );
+		$styles        = file_get_contents( dirname( __DIR__ ) . '/brand-tokens.css' ) . file_get_contents( dirname( __DIR__ ) . '/status-page.css' ) . file_get_contents( __DIR__ . '/installer.css' ) . Brand::get_badge_styles();
+		$script        = file_get_contents( __DIR__ . '/installer.js' ) . "\n" . Illustration::get_theme_script();
 		if ( 0 === $step ) {
 			$script .= "\n" . file_get_contents( __DIR__ . '/languagePicker.js' );
 		}

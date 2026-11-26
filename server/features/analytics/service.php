@@ -725,41 +725,27 @@ class Service {
 			$range_payload['to']   = $stats_period['end_date'];
 		}
 
+		$traffic = $this->data->query_traffic_series_range(
+			$url_id,
+			$stats_period['series_start_date'] ?? $stats_period['start_date'],
+			$stats_period['days'],
+			$stats_period['series_start_at'] ?? $period_start_at,
+			$period_end_at,
+			$stats_period['timezone'] ?? $this->data->get_analytics_timezone()->getName(),
+			null,
+			match ( $stats_period['key'] ) {
+				'24h' => 'hour',
+				'all', 'custom' => $this->data->get_traffic_series_granularity( $stats_period['days'] ),
+				default => 'day',
+			},
+		);
+
 		return array(
 			'totalClicks'        => (int) ( $totals['total_clicks'] ?? 0 ),
 			'uniqueClicks'       => (int) ( $totals['unique_clicks'] ?? 0 ),
 			'uniqueClickRate'    => $unique_click_rate,
 			'range'              => $range_payload,
-			'traffic'            => 'custom' === $stats_period['key']
-				? $this->data->query_traffic_series_range(
-					$url_id,
-					(string) $stats_period['start_date'],
-					(int) $stats_period['days'],
-					(string) $period_start_at,
-					(string) $period_end_at,
-					$this->data->get_analytics_timezone()->getName(),
-					null,
-					$this->data->get_traffic_series_granularity(
-						(int) $stats_period['days'],
-					),
-				)
-				: ( 'all' === $stats_period['key']
-					? $this->data->query_traffic_series_range(
-						$url_id,
-						(string) $stats_period['start_date'],
-						(int) $stats_period['days'],
-						(string) ( $stats_period['series_start_at'] ?? '1000-01-01 00:00:00' ),
-						null,
-						$this->data->get_analytics_timezone()->getName(),
-						null,
-						$this->data->get_traffic_series_granularity(
-							(int) $stats_period['days'],
-						),
-					)
-					: $this->data->query_traffic_series(
-						$url_id,
-						$stats_period['days'],
-					) ),
+			'traffic'            => $traffic,
 			'periodSummaries'    => $this->data->get_link_period_summaries(
 				$url_id,
 				$stats_period,

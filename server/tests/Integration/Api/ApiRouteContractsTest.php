@@ -3,7 +3,7 @@
  * Comprehensive API Route Contracts & Behavioral Hardening Tests derived from authoritative RouteInventoryTest.
  *
  * Verifies that:
- * 1. Every route in RouteInventoryTest (82 registered routes: 16 public, 66 protected) is accounted for and correctly dispatched.
+ * 1. Every registered method and route matches the authoritative inventory.
  * 2. Protected endpoints reject unauthenticated requests with 401 Unauthorized.
  * 3. Administrative endpoints enforce 403 Forbidden on Editor role (manage_users, manage_site_settings, etc.).
  * 4. Site-wide destructive link operations (Delete All, Empty Trash) permit both Admin and Editor.
@@ -32,6 +32,16 @@ use PDO;
 use PDOStatement;
 
 class ApiRouteContractsTest extends TestCase {
+
+	private const EDITOR_CAPABILITIES = array(
+		'public',
+		'authenticated',
+		'view_links',
+		'edit_links',
+		'trash_links',
+		'view_analytics',
+		'create_links',
+	);
 
 	private Application $app;
 	private Router $router;
@@ -232,39 +242,24 @@ class ApiRouteContractsTest extends TestCase {
 	}
 
 	public function test_authoritative_route_inventory_alignment(): void {
-		$inventory = RouteInventoryTest::ROUTE_INVENTORY;
-
-		// Verify complete route inventory size
-		$this->assertCount( 132, $inventory, 'Authoritative inventory must contain exactly 132 registered routes.' );
-
-		$public_routes    = array();
-		$protected_routes = array();
-		$admin_routes     = array();
-
-		$editor_capabilities = array(
-			'public',
-			'authenticated',
-			'view_links',
-			'edit_links',
-			'trash_links',
-			'view_analytics',
-			'create_links',
-		);
-
-		foreach ( $inventory as $route_key => $meta ) {
-			if ( 'public' === $meta['capability'] ) {
-				$public_routes[] = $route_key;
-			} else {
-				$protected_routes[] = $route_key;
-				if ( ! in_array( $meta['capability'], $editor_capabilities, true ) ) {
-					$admin_routes[] = $route_key;
-				}
+		$registered = array();
+		foreach ( $this->router->get_routes() as $method => $routes ) {
+			foreach ( $routes as $route ) {
+				$registered[] = $method . ' ' . $route['path'];
 			}
 		}
 
-		$this->assertCount( 26, $public_routes, 'Expected exactly 26 public routes.' );
-		$this->assertCount( 106, $protected_routes, 'Expected exactly 106 protected routes.' );
-		$this->assertCount( 70, $admin_routes, 'Expected exactly 70 admin-only routes.' );
+		$this->assertEqualsCanonicalizing( array_keys( RouteInventoryTest::ROUTE_INVENTORY ), $registered );
+	}
+
+	public function test_installing_plugins_from_the_directory_requires_post_and_update_permission(): void {
+		$path = '/api/v1/system/plugins/install';
+		$this->assertSame( 404, $this->dispatch( $this->admin_request( 'GET', $path ) )['status'] );
+		$this->assertSame( 401, $this->dispatch( new Request( 'POST', $path, array(), array() ) )['status'] );
+		$this->assertSame( 403, $this->dispatch( $this->editor_request( 'POST', $path ) )['status'] );
+		$invalid_request = $this->dispatch( $this->admin_request( 'POST', $path ) );
+		$this->assertSame( 400, $invalid_request['status'] );
+		$this->assertStringContainsString( 'slug and release version are required', $invalid_request['body']['message'] );
 	}
 
 	public function test_unauthenticated_requests_to_protected_endpoints_receive_401(): void {
@@ -273,12 +268,7 @@ class ApiRouteContractsTest extends TestCase {
 			fn( array $meta ): bool => 'public' !== $meta['capability']
 		);
 
-		$this->assertCount(
-			106,
-			$protected_routes,
-			'Authoritative inventory must contain exactly 106 protected routes.'
-		);
-
+		$this->assertArrayHasKey( 'GET /api/v1/users/me', $protected_routes );
 		foreach ( array_keys( $protected_routes ) as $route_key ) {
 			list( $method, $path ) = $this->route_key_to_request_target( (string) $route_key );
 			$req                   = new Request( $method, $path, array(), array() );
@@ -293,27 +283,12 @@ class ApiRouteContractsTest extends TestCase {
 	}
 
 	public function test_editor_is_denied_administrative_endpoints(): void {
-		$editor_capabilities = array(
-			'public',
-			'authenticated',
-			'view_links',
-			'edit_links',
-			'trash_links',
-			'view_analytics',
-			'create_links',
-		);
-
 		$admin_only_routes = array_filter(
 			RouteInventoryTest::ROUTE_INVENTORY,
-			fn( array $meta ): bool => ! in_array( $meta['capability'], $editor_capabilities, true )
+			static fn( array $meta ): bool => ! in_array( $meta['capability'], self::EDITOR_CAPABILITIES, true )
 		);
 
-		$this->assertCount(
-			70,
-			$admin_only_routes,
-			'Authoritative inventory must contain exactly 70 admin-only routes.'
-		);
-
+		$this->assertArrayHasKey( 'POST /api/v1/system/plugins/install', $admin_only_routes );
 		foreach ( array_keys( $admin_only_routes ) as $route_key ) {
 			list( $method, $path ) = $this->route_key_to_request_target( (string) $route_key );
 			$req                   = $this->editor_request( $method, $path );

@@ -1606,27 +1606,30 @@ class Service {
 		);
 
 		$ui_extensions = array();
-		foreach ( $extensions->get_ui_extensions() as $ext ) {
-			if ( ! $is_active( $ext['plugin_slug'] ) ) {
+		foreach ( $extensions->get_ui_extensions() as $extension ) {
+			if ( ! $is_active( $extension['plugin_slug'] ) ) {
 				continue;
 			}
 
-			if ( ! $this->authorization->has_capability( $user, $ext['capability'] ) ) {
+			$location = Extensions::UI_EXTENSION_LOCATIONS[ $extension['location'] ];
+			if (
+				! $this->authorization->has_capability( $user, $location['capability'] ) ||
+				! $this->authorization->has_capability( $user, $extension['capability'] )
+			) {
 				continue;
 			}
-
-			$assets = $extensions->get_assets( $ext['plugin_slug'], 'links_overview' );
 
 			$ui_extensions[] = array(
-				'id'         => $ext['id'],
-				'pluginSlug' => $ext['plugin_slug'],
-				'location'   => $ext['location'],
-				'label'      => $ext['label'],
-				'actionId'   => $ext['action_id'],
-				'capability' => $ext['capability'],
-				'icon'       => $ext['icon'],
-				'confirm'    => $ext['confirm'],
-				'assets'     => $assets,
+				'id'          => $extension['id'],
+				'pluginSlug'  => $extension['plugin_slug'],
+				'location'    => $extension['location'],
+				'label'       => $extension['label'],
+				'actionId'    => $extension['action_id'],
+				'capability'  => $extension['capability'],
+				'icon'        => $extension['icon'],
+				'confirm'     => $extension['confirm'],
+				'assets'      => $extensions->get_assets( $extension['plugin_slug'], $location['asset_scope'] ),
+				'invalidates' => $extension['invalidates'],
 			);
 		}
 
@@ -2024,10 +2027,6 @@ class Service {
 			throw new ApiException( __( 'Invalid plugin identifier.', 'peakurl' ), 400 );
 		}
 
-		if ( ! $this->authorization->has_capability( $user, 'access_dashboard' ) ) {
-			throw new ApiException( __( 'You do not have permission to access plugin assets.', 'peakurl' ), 403 );
-		}
-
 		// Inactive plugins cannot serve assets.
 		if ( ! $this->is_plugin_active( $slug ) ) {
 			throw new ApiException( __( 'Plugin is not active.', 'peakurl' ), 404 );
@@ -2054,17 +2053,16 @@ class Service {
 			throw new ApiException( __( 'Asset path cannot be empty.', 'peakurl' ), 400 );
 		}
 
-		// Verify asset is explicitly registered by the plugin.
-		$registered_assets = Extensions::get_instance()->get_assets( $slug );
-		$is_registered     = false;
-		foreach ( $registered_assets as $asset ) {
+		$extensions       = Extensions::get_instance();
+		$registered_asset = null;
+		foreach ( $extensions->get_assets( $slug ) as $asset ) {
 			if ( $asset['file'] === $clean_path ) {
-				$is_registered = true;
+				$registered_asset = $asset;
 				break;
 			}
 		}
 
-		if ( ! $is_registered ) {
+		if ( null === $registered_asset ) {
 			throw new ApiException( __( 'Asset is not registered for this plugin.', 'peakurl' ), 404 );
 		}
 
@@ -2072,6 +2070,10 @@ class Service {
 		$ext = strtolower( pathinfo( $clean_path, PATHINFO_EXTENSION ) );
 		if ( in_array( $ext, array( 'php', 'phtml', 'phar', 'json', 'env', 'config', 'lock', 'sql', 'sh', 'map', 'ts', 'tsx', 'md' ), true ) ) {
 			throw new ApiException( __( 'Access to executable, configuration, and source map files is forbidden.', 'peakurl' ), 403 );
+		}
+
+		if ( ! $this->can_access_plugin_asset( $user, $registered_asset, $extensions ) ) {
+			throw new ApiException( __( 'You do not have permission to access plugin assets.', 'peakurl' ), 403 );
 		}
 
 		$content_dir = (string) ( $this->config[ Constants::CONTENT_DIR ] ?? Environment::get_instance()->get_content_path() );
@@ -2133,7 +2135,7 @@ class Service {
 				'status'  => 304,
 				'headers' => array(
 					'ETag'          => $etag,
-					'Cache-Control' => 'private, no-transform, max-age=3600',
+					'Cache-Control' => 'private, no-transform, no-cache',
 				),
 				'body'    => '',
 			);
@@ -2144,11 +2146,51 @@ class Service {
 			'headers' => array(
 				'Content-Type'   => $content_type,
 				'ETag'           => $etag,
-				'Cache-Control'  => 'private, no-transform, max-age=3600',
+				'Cache-Control'  => 'private, no-transform, no-cache',
 				'Content-Length' => (string) strlen( $contents ),
 			),
 			'body'    => $contents,
 		);
+	}
+
+	/**
+	 * Authorize browser assets against the dashboard surface that uses them.
+	 *
+	 * @param array<string, mixed> $user       Authenticated user.
+	 * @param array<string, mixed> $asset      Registered asset descriptor.
+	 * @param Extensions           $extensions Dashboard extension registry.
+	 * @return bool Whether the user can access a dashboard surface using the asset.
+	 */
+	private function can_access_plugin_asset( array $user, array $asset, Extensions $extensions ): bool {
+		if ( 'page' === $asset['scope'] ) {
+			if ( null !== $asset['page_id'] ) {
+				$page = $extensions->get_page( $asset['plugin_slug'], $asset['page_id'] );
+				return null !== $page && $this->authorization->has_capability( $user, $page['capability'] );
+			}
+			$surfaces = $extensions->get_pages();
+		} else {
+			$surfaces = array();
+			foreach ( Extensions::UI_EXTENSION_LOCATIONS as $location => $definition ) {
+				if (
+					$definition['asset_scope'] === $asset['scope'] &&
+					$this->authorization->has_capability( $user, $definition['capability'] )
+				) {
+					$surfaces = $extensions->get_ui_extensions( $location );
+					break;
+				}
+			}
+		}
+
+		foreach ( $surfaces as $surface ) {
+			if (
+				$surface['plugin_slug'] === $asset['plugin_slug'] &&
+				$this->authorization->has_capability( $user, $surface['capability'] )
+			) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

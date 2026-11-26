@@ -1,20 +1,29 @@
 /* Shared by the dashboard and PHP public pages; dashboard theme tokens take precedence. */
 .status-page {
-	--status-bg: var(--color-bg, #f7f8fa);
-	--status-surface: var(--color-surface, #fff);
-	--status-ink: var(--color-heading, #2b3040);
-	--status-muted: var(--color-text-muted, #596579);
-	--status-line: var(--color-stroke, #d9dee7);
-	--status-accent: var(--color-accent, #3d4c6a);
-	--status-soft: var(--color-selected, #e9eef9);
-	--status-action: var(--color-action, #2b3040);
+	--status-bg: var(--color-bg, var(--background, #f3f8f7));
+	--status-surface: var(--color-surface, var(--surface, #ffffff));
+	--status-ink: var(--color-heading, var(--text-heading, #17373b));
+	--status-muted: var(--color-text-muted, var(--text-muted, #536c6a));
+	--status-line: var(--color-stroke, var(--border, #d5e4e0));
+	--status-accent: var(--color-accent, var(--primary, #126e68));
+	--status-soft: var(--color-selected, var(--selected-surface, #e1f3ee));
+	--status-action: var(--color-action, var(--primary, #126e68));
+	--status-action-ink: var(
+		--color-action-foreground,
+		var(--primary-foreground, #ffffff)
+	);
+	--status-action-hover: var(
+		--color-action-hover,
+		var(--primary-hover, #0e5c57)
+	);
 	background: var(--status-bg);
 	color: var(--status-ink);
 	font-family:
-		Inter,
+		system-ui,
 		-apple-system,
 		BlinkMacSystemFont,
 		"Segoe UI",
+		Roboto,
 		sans-serif;
 	line-height: 1.6;
 	min-height: 100dvh;
@@ -28,26 +37,6 @@ html[data-status-theme="light"] {
 }
 html[data-status-theme="dark"] {
 	color-scheme: dark;
-}
-html[data-status-theme="dark"] .status-page {
-	--status-bg: #151923;
-	--status-surface: #1c2230;
-	--status-ink: #f8fafc;
-	--status-muted: #b1bbcc;
-	--status-line: #364155;
-	--status-accent: #b5c8fa;
-	--status-soft: #333d54;
-}
-@media (prefers-color-scheme: dark) {
-	html[data-status-theme="auto"] .status-page {
-		--status-bg: #151923;
-		--status-surface: #1c2230;
-		--status-ink: #f8fafc;
-		--status-muted: #b1bbcc;
-		--status-line: #364155;
-		--status-accent: #b5c8fa;
-		--status-soft: #333d54;
-	}
 }
 .status-page *,
 .status-page *::before,
@@ -76,16 +65,22 @@ html[data-status-theme="dark"] .status-page {
 .status-brand {
 	display: inline-flex;
 	align-items: center;
-	gap: 12px;
+	gap: 11px;
 	color: var(--status-ink);
 	text-decoration: none;
-	font-size: 20px;
-	font-weight: 700;
-	letter-spacing: -0.03em;
 }
-.status-brand img {
-	width: 40px;
-	height: 40px;
+.status-brand img,
+.status-brand .status-brand-mark {
+	display: block;
+	flex: none;
+	width: 34px;
+	height: 34px;
+}
+.status-brand .status-brand-wordmark {
+	display: block;
+	flex: none;
+	width: auto;
+	height: 19px;
 }
 .status-tagline {
 	color: var(--status-muted);
@@ -165,7 +160,7 @@ html[data-status-theme="dark"] .status-page {
 	border: 1px solid transparent;
 	border-radius: 8px;
 	background: var(--status-action);
-	color: #fff;
+	color: var(--status-action-ink);
 	font: inherit;
 	font-size: 14px;
 	font-weight: 600;
@@ -173,7 +168,7 @@ html[data-status-theme="dark"] .status-page {
 	cursor: pointer;
 }
 .status-button:hover {
-	background: #333d54;
+	background: var(--status-action-hover);
 }
 .status-button:focus-visible,
 .status-page a:focus-visible {

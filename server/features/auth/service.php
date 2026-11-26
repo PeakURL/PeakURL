@@ -832,10 +832,13 @@ class Service {
 				),
 			);
 
-			$this->notifications->send_password_reset(
-				$user,
-				$reset_token['raw'],
-			);
+			try {
+				$this->notifications->send_password_reset( $user, $reset_token['raw'] );
+			} catch ( \Throwable $exception ) {
+				// Delivery errors must not change the public response for existing accounts.
+				// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+				\error_log( sprintf( 'PeakURL password reset email failed: %s', get_class( $exception ) ) );
+			}
 		}
 	}
 

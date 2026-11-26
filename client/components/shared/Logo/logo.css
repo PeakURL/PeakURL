@@ -40,3 +40,62 @@
 		@apply text-3xl;
 	}
 }
+
+/* Compression motion follows the canonical brand animated SVG. */
+@media (prefers-reduced-motion: no-preference) {
+	[data-compression-mark][data-motion="loop"] .compression-middle {
+		animation: compression-middle var(--compression-duration, 4s)
+			cubic-bezier(0.4, 0, 0.2, 1) var(--compression-delay, 0s) infinite;
+	}
+
+	[data-compression-mark][data-motion="loop"] .compression-bottom {
+		animation: compression-bottom var(--compression-duration, 4s)
+			cubic-bezier(0.4, 0, 0.2, 1) var(--compression-delay, 0s) infinite;
+	}
+
+	[data-compression-mark][data-motion="loop"] .compression-dot {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: compression-dot var(--compression-duration, 4s) ease
+			var(--compression-delay, 0s) infinite;
+	}
+}
+
+@keyframes compression-middle {
+	0%,
+	12%,
+	100% {
+		width: 59px;
+	}
+	35%,
+	85% {
+		width: 44px;
+	}
+}
+
+@keyframes compression-bottom {
+	0%,
+	12%,
+	100% {
+		width: 59px;
+	}
+	40%,
+	85% {
+		width: 29px;
+	}
+}
+
+@keyframes compression-dot {
+	0%,
+	40%,
+	85%,
+	100% {
+		opacity: 0;
+		transform: scale(0);
+	}
+	52%,
+	78% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}

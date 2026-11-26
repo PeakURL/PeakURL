@@ -8,27 +8,14 @@
 	}
 
 	.page-loader {
-		@apply fixed inset-0 z-50 flex items-center justify-center bg-bg/80;
+		@apply fixed inset-0 z-50 flex flex-col items-center justify-center gap-2 bg-bg/95 text-center;
 	}
 
-	.page-loader-content {
-		@apply flex flex-col items-center text-center;
-	}
-
-	.page-loader-visual {
-		@apply relative mx-auto mb-6 h-16 w-16 flex items-center justify-center;
-	}
-
-	.page-loader-ring {
-		@apply absolute inset-0 h-16 w-16 rounded-full border-4 border-stroke;
-	}
-
-	.page-loader-ring-active {
-		@apply absolute inset-0 h-16 w-16 animate-spin rounded-full border-4 border-transparent border-t-accent border-r-accent/30;
-	}
-
-	.page-loader-icon {
-		@apply relative flex items-center justify-center text-accent;
+	.page-loader-mark {
+		@apply size-22 sm:size-28;
+		--compression-duration: 1.7s;
+		/* Skip the opening hold while keeping the canonical keyframes. */
+		--compression-delay: -200ms;
 	}
 
 	.page-loader-label {

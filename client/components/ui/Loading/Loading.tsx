@@ -1,5 +1,6 @@
-import { Loader2, Zap } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
+import { CompressionMark } from "@/components/shared/Logo";
 import { __ } from "@/i18n";
 import { cn } from "@/shared/formatting";
 
@@ -54,23 +55,12 @@ export function LoadingSpinner({
 	);
 }
 
-/**
- * PageLoader Component
- * A full-screen loading overlay with a modern spinner and text.
- */
+/** Application-wide loading status for existing session and sign-in waits. */
 export function PageLoader() {
 	return (
-		<div className="page-loader">
-			<div className="page-loader-content">
-				<div className="page-loader-visual">
-					<div className="page-loader-ring"></div>
-					<div className="page-loader-ring-active"></div>
-					<div className="page-loader-icon">
-						<Zap size={24} />
-					</div>
-				</div>
-				<p className="page-loader-label">{__("Loading…")}</p>
-			</div>
+		<div className="page-loader" role="status">
+			<CompressionMark size={112} className="page-loader-mark" loop />
+			<p className="page-loader-label">{__("Loading…")}</p>
 		</div>
 	);
 }

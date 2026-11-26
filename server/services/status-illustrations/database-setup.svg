@@ -1,15 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#126e68">
-  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}</style>
-  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}@media(prefers-reduced-motion:no-preference){.halo{transform-box:fill-box;transform-origin:center;animation:halo-breathe 4.4s ease-in-out infinite}.sync-wire{animation:wire-flow 1.8s linear infinite}.check-badge{transform-box:fill-box;transform-origin:center;animation:badge-pop 2.8s ease-in-out infinite}.spark-a,.spark-b{transform-box:fill-box;transform-origin:center;animation:spark-twinkle 2.6s ease-in-out infinite}.spark-b{animation-delay:1.1s}@keyframes halo-breathe{0%,100%{transform:scale(.93);fill-opacity:.025}50%{transform:scale(1.06);fill-opacity:.065}}@keyframes wire-flow{to{stroke-dashoffset:-20}}@keyframes badge-pop{0%,100%{transform:scale(.96)}50%{transform:scale(1.08)}}@keyframes spark-twinkle{0%,100%{transform:scale(.7) rotate(0deg);opacity:.25}50%{transform:scale(1.2) rotate(45deg);opacity:.95}}}</style>
+  <circle class="halo" cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <path class="wash" d="M56 91v100c0 15 23 27 52 27s52-12 52-27V91"/>
     <ellipse class="solid" cx="108" cy="91" rx="52" ry="27"/>
     <path d="M56 125c0 15 23 27 52 27s52-12 52-27m-104 33c0 15 23 27 52 27s52-12 52-27"/>
-    <path d="M174 141h27" stroke-dasharray="4 6" opacity=".65"/>
+    <path class="sync-wire" d="M174 141h27" stroke-dasharray="4 6" opacity=".65"/>
     <rect class="wash" x="216" y="78" width="112" height="126" rx="16"/>
     <path d="M216 108h112m-94-15h1m9 0h1"/>
-    <circle class="solid" cx="272" cy="153" r="24"/>
-    <path d="m260 153 8 8 16-17" stroke-width="3.4"/>
-    <path d="M190 48v12m-6-6h12M32 175v10m-5-5h10" opacity=".5"/>
+    <g class="check-badge">
+      <circle class="solid" cx="272" cy="153" r="24"/>
+      <path d="m260 153 8 8 16-17" stroke-width="3.4"/>
+    </g>
+    <path class="spark-a" d="M190 48v12m-6-6h12" opacity=".5"/>
+    <path class="spark-b" d="M32 175v10m-5-5h10" opacity=".5"/>
   </g>
 </svg>

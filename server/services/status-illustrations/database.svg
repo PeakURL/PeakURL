@@ -1,13 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#126e68">
-  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
-  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}@media(prefers-reduced-motion:no-preference){.halo{transform-box:fill-box;transform-origin:center;animation:halo-breathe 4.4s ease-in-out infinite}.cable{animation:cable-flow 2s linear infinite}.plug{transform-box:fill-box;transform-origin:center;animation:plug-bob 2.8s ease-in-out infinite}.slash{transform-box:fill-box;transform-origin:center;animation:slash-pulse 2.8s ease-in-out infinite}@keyframes halo-breathe{0%,100%{transform:scale(.93);fill-opacity:.025}50%{transform:scale(1.06);fill-opacity:.065}}@keyframes cable-flow{to{stroke-dashoffset:-22}}@keyframes plug-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes slash-pulse{0%,100%{transform:scale(.96)}50%{transform:scale(1.06)}}}</style>
+  <circle class="halo" cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <ellipse class="wash" cx="149" cy="83" rx="72" ry="24"/>
     <path class="wash" d="M77 83v113c0 13 32 24 72 24s72-11 72-24V83"/>
     <path d="M77 121c0 13 32 24 72 24s72-11 72-24m-144 37c0 13 32 24 72 24s72-11 72-24"/>
-    <path d="M221 145h19m35 0h27v37" stroke-dasharray="5 6"/>
-    <rect class="solid" x="247" y="130" width="16" height="30" rx="5"/>
-    <path class="emphasis" d="m243 123 26 43m25 28v-12m16 12v-12"/>
-    <path class="wash" d="M288 194h28v13a14 14 0 0 1-28 0z"/>
+    <path class="cable" d="M221 145h19m35 0h27v37" stroke-dasharray="5 6"/>
+    <g class="slash">
+      <rect class="solid" x="247" y="130" width="16" height="30" rx="5"/>
+      <path class="emphasis" d="m243 123 26 43"/>
+    </g>
+    <g class="plug">
+      <path class="emphasis" d="M294 194v-12m16 12v-12"/>
+      <path class="wash" d="M288 194h28v13a14 14 0 0 1-28 0z"/>
+    </g>
   </g>
 </svg>

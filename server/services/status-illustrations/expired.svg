@@ -5,16 +5,16 @@
       <circle cx="242" cy="184" r="55" fill="black"/>
     </mask>
   </defs>
-  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
-  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}@media(prefers-reduced-motion:no-preference){.halo{transform-box:fill-box;transform-origin:center;animation:halo-breathe 4.4s ease-in-out infinite}.clock-hand{transform-origin:242px 184px;animation:hand-sweep 3s ease-in-out infinite}.clock-dial{transform-box:fill-box;transform-origin:center;animation:dial-pulse 3s ease-in-out infinite}@keyframes halo-breathe{0%,100%{transform:scale(.93);fill-opacity:.025}50%{transform:scale(1.06);fill-opacity:.065}}@keyframes hand-sweep{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(14deg)}}@keyframes dial-pulse{0%,100%{fill-opacity:.08}50%{fill-opacity:.18}}}</style>
+  <circle class="halo" cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <g mask="url(#foreground-clearance)">
       <rect class="wash" x="65" y="64" width="179" height="150" rx="19"/>
       <path d="M65 107h179m-143-57v28m108-28v28"/>
       <path d="M95 132h20m-20 27h20m-20 27h20m19-54h20m-20 27h20" opacity=".65"/>
     </g>
-    <circle class="wash" cx="242" cy="184" r="51"/>
-    <path class="emphasis" d="M242 153v31l21 12"/>
+    <circle class="wash clock-dial" cx="242" cy="184" r="51"/>
+    <path class="emphasis clock-hand" d="M242 153v31l21 12"/>
     <path d="M242 139v5m0 80v5m-45-45h5m80 0h5"/>
     <path d="m154 177 8-8a10 10 0 0 1 14 14l-8 8m-6-6-8 8a10 10 0 0 1-14-14l8-8"/>
   </g>

@@ -1,13 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#126e68">
-  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
-  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}@media(prefers-reduced-motion:no-preference){.halo{transform-box:fill-box;transform-origin:center;animation:halo-breathe 4.4s ease-in-out infinite}.wrench{transform-box:fill-box;transform-origin:center;animation:wrench-turn 3s ease-in-out infinite}.spark{transform-box:fill-box;transform-origin:center;animation:spark-twinkle 2.6s ease-in-out infinite}@keyframes halo-breathe{0%,100%{transform:scale(.93);fill-opacity:.025}50%{transform:scale(1.06);fill-opacity:.065}}@keyframes wrench-turn{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(8deg)}}@keyframes spark-twinkle{0%,100%{transform:scale(.7) rotate(0deg);opacity:.3}50%{transform:scale(1.2) rotate(45deg);opacity:.95}}}</style>
+  <circle class="halo" cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <rect class="wash" x="57" y="61" width="246" height="158" rx="20"/>
     <path d="M57 95h246m-217-17h1m12 0h1m12 0h1m-22 47h52m-52 23h34m-34 23h44"/>
     <g transform="translate(46 22) scale(.82)">
-      <path class="solid" d="M237 112a29 29 0 0 0-34 36l-47 47a12 12 0 0 0 17 17l47-47a29 29 0 0 0 36-34l-19 19-20-20z" vector-effect="non-scaling-stroke"/>
-      <path d="m165 202 1-1" vector-effect="non-scaling-stroke"/>
+      <g class="wrench">
+        <path class="solid" d="M237 112a29 29 0 0 0-34 36l-47 47a12 12 0 0 0 17 17l47-47a29 29 0 0 0 36-34l-19 19-20-20z" vector-effect="non-scaling-stroke"/>
+        <path d="m165 202 1-1" vector-effect="non-scaling-stroke"/>
+      </g>
     </g>
-    <path d="M292 234h20m-10-10v20" opacity=".5"/>
+    <path class="spark" d="M292 234h20m-10-10v20" opacity=".5"/>
   </g>
 </svg>

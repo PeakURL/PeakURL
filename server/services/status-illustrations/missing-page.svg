@@ -5,15 +5,18 @@
       <circle cx="235" cy="177" r="47" fill="black"/>
     </mask>
   </defs>
-  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
-  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}@media(prefers-reduced-motion:no-preference){.halo{transform-box:fill-box;transform-origin:center;animation:halo-breathe 4.4s ease-in-out infinite}.lens-group{transform-box:fill-box;transform-origin:center;animation:lens-scan 3.4s ease-in-out infinite}.spark-a,.spark-b{transform-box:fill-box;transform-origin:center;animation:spark-twinkle 2.8s ease-in-out infinite}.spark-b{animation-delay:1.2s}@keyframes halo-breathe{0%,100%{transform:scale(.93);fill-opacity:.025}50%{transform:scale(1.06);fill-opacity:.065}}@keyframes lens-scan{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(-3px,-5px) rotate(-4deg)}}@keyframes spark-twinkle{0%,100%{transform:scale(.7) rotate(0deg);opacity:.25}50%{transform:scale(1.2) rotate(45deg);opacity:.95}}}</style>
+  <circle class="halo" cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <g mask="url(#foreground-clearance)">
       <path class="wash" d="M93 59h110l37 37v104a18 18 0 0 1-18 18H93a18 18 0 0 1-18-18V77a18 18 0 0 1 18-18z"/>
       <path d="M203 59v25a12 12 0 0 0 12 12h25m-132 23h57m-57 23h37m-37 23h22"/>
     </g>
-    <circle class="wash" cx="235" cy="177" r="43"/>
-    <path class="emphasis" d="m266 208 32 32m-75-75 24 24m0-24-24 24"/>
-    <path d="M53 92h-14m7-7v14m241 24h15m-7-7v14" opacity=".5"/>
+    <g class="lens-group">
+      <circle class="wash" cx="235" cy="177" r="43"/>
+      <path class="emphasis" d="m266 208 32 32m-75-75 24 24m0-24-24 24"/>
+    </g>
+    <path class="spark-a" d="M53 92H39m7-7v14" opacity=".5"/>
+    <path class="spark-b" d="M287 116h15m-7-7v14" opacity=".5"/>
   </g>
 </svg>

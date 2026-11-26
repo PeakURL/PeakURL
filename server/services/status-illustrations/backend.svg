@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#126e68">
-  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
-  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}@media(prefers-reduced-motion:no-preference){.halo{transform-box:fill-box;transform-origin:center;animation:halo-breathe 4.4s ease-in-out infinite}.signal-wire{animation:wire-flow 2s linear infinite}.plug-group{transform-box:fill-box;transform-origin:center;animation:plug-nudge 2.8s ease-in-out infinite}.node-a,.node-b{transform-box:fill-box;transform-origin:center;animation:node-blink 2.2s ease-in-out infinite}.node-b{animation-delay:1.1s}@keyframes halo-breathe{0%,100%{transform:scale(.93);fill-opacity:.025}50%{transform:scale(1.06);fill-opacity:.065}}@keyframes wire-flow{to{stroke-dashoffset:-22}}@keyframes plug-nudge{0%,100%{transform:translateX(-2px)}50%{transform:translateX(4px)}}@keyframes node-blink{0%,100%{transform:scale(.9);opacity:.35}50%{transform:scale(1.45);opacity:1}}}</style>
+  <circle class="halo" cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <rect class="wash" x="24" y="80" width="120" height="122" rx="16"/>
     <path d="M24 108h120"/>
@@ -8,11 +8,13 @@
     <path d="M52 94h18m2 44-11 11 11 11m25-22 11 11-11 11"/>
     <rect class="wash" x="238" y="80" width="86" height="50" rx="13"/>
     <rect class="wash" x="238" y="152" width="86" height="50" rx="13"/>
-    <circle cx="255" cy="105" r="3"/>
-    <circle cx="255" cy="177" r="3"/>
+    <circle class="node-a" cx="255" cy="105" r="3"/>
+    <circle class="node-b" cx="255" cy="177" r="3"/>
     <path d="M270 105h35m-35 72h35"/>
-    <path d="M144 141h17m46 0h31" stroke-dasharray="5 6" opacity=".65"/>
-    <path class="solid" d="M166 132h9a6 6 0 0 1 6 6v6a6 6 0 0 1-6 6h-9z"/>
-    <path d="M192 132h8v18h-8m-11-11h5m-5 5h5"/>
+    <path class="signal-wire" d="M144 141h17m46 0h31" stroke-dasharray="5 6" opacity=".65"/>
+    <g class="plug-group">
+      <path class="solid" d="M166 132h9a6 6 0 0 1 6 6v6a6 6 0 0 1-6 6h-9z"/>
+      <path d="M192 132h8v18h-8m-11-11h5m-5 5h5"/>
+    </g>
   </g>
 </svg>

@@ -5,15 +5,18 @@
       <circle cx="244" cy="179" r="47" fill="black"/>
     </mask>
   </defs>
-  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
-  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}@media(prefers-reduced-motion:no-preference){.halo{transform-box:fill-box;transform-origin:center;animation:halo-breathe 4.4s ease-in-out infinite}.alert-group{transform-box:fill-box;transform-origin:center;animation:alert-pulse 2.8s ease-in-out infinite}.spark-a,.spark-b{transform-box:fill-box;transform-origin:center;animation:spark-twinkle 2.6s ease-in-out infinite}.spark-b{animation-delay:1.1s}@keyframes halo-breathe{0%,100%{transform:scale(.93);fill-opacity:.025}50%{transform:scale(1.06);fill-opacity:.065}}@keyframes alert-pulse{0%,100%{transform:translateY(0) scale(.97)}50%{transform:translateY(-4px) scale(1.04)}}@keyframes spark-twinkle{0%,100%{transform:scale(.7) rotate(0deg);opacity:.25}50%{transform:scale(1.2) rotate(45deg);opacity:.95}}}</style>
+  <circle class="halo" cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <g mask="url(#foreground-clearance)">
       <path class="wash" d="M96 54h103l37 37v123a16 16 0 0 1-16 16H96a16 16 0 0 1-16-16V70a16 16 0 0 1 16-16z"/>
       <path d="M199 54v25a12 12 0 0 0 12 12h25m-127 28h55m-55 23h35m-35 23h19"/>
     </g>
-    <circle class="solid" cx="244" cy="179" r="43"/>
-    <path class="emphasis" d="M244 154v27m0 16v1"/>
-    <path d="M55 89H39m8-8v16m234 27h18m-9-9v18" opacity=".5"/>
+    <g class="alert-group">
+      <circle class="solid" cx="244" cy="179" r="43"/>
+      <path class="emphasis" d="M244 154v27m0 16v1"/>
+    </g>
+    <path class="spark-a" d="M55 89H39m8-8v16" opacity=".5"/>
+    <path class="spark-b" d="M281 116h18m-9-9v18" opacity=".5"/>
   </g>
 </svg>

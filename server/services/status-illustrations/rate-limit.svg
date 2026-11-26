@@ -1,11 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#126e68">
-  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
-  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}@media(prefers-reduced-motion:no-preference){.halo{transform-box:fill-box;transform-origin:center;animation:halo-breathe 4.4s ease-in-out infinite}.sand-flow{animation:sand-drop 1.4s linear infinite}.sand-fill{animation:sand-pulse 2.8s ease-in-out infinite}.speed-left{animation:speed-shift-l 2.4s ease-in-out infinite}.speed-right{animation:speed-shift-r 2.4s ease-in-out infinite}@keyframes halo-breathe{0%,100%{transform:scale(.93);fill-opacity:.025}50%{transform:scale(1.06);fill-opacity:.065}}@keyframes sand-drop{to{stroke-dashoffset:-16}}@keyframes sand-pulse{0%,100%{fill-opacity:.14}50%{fill-opacity:.32}}@keyframes speed-shift-l{0%,100%{transform:translateX(0);opacity:.4}50%{transform:translateX(-4px);opacity:.9}}@keyframes speed-shift-r{0%,100%{transform:translateX(0);opacity:.4}50%{transform:translateX(4px);opacity:.9}}}</style>
+  <circle class="halo" cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <path class="wash" d="M122 57h116v29c0 27-13 42-37 55 24 14 37 29 37 56v26H122v-26c0-27 13-42 37-56-24-13-37-28-37-55z"/>
     <path class="emphasis" d="M112 57h136M112 223h136"/>
-    <path d="M139 89h82l-41 38zm0 110 41-38 41 38z" fill="currentColor" fill-opacity=".17"/>
-    <path d="M180 135v16" stroke-dasharray="2 6"/>
-    <path d="M61 104h27m-38 30h38m-27 30h27m183-30h28m-28 30h39" opacity=".6"/>
+    <path class="sand-fill" d="M139 89h82l-41 38zm0 110 41-38 41 38z" fill="currentColor" fill-opacity=".17"/>
+    <path class="sand-flow" d="M180 135v16" stroke-dasharray="2 6"/>
+    <path class="speed-left" d="M61 104h27m-38 30h38m-27 30h27" opacity=".6"/>
+    <path class="speed-right" d="M271 134h28m-28 30h39" opacity=".6"/>
   </g>
 </svg>

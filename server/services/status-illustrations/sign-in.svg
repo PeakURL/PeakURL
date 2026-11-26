@@ -1,12 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#126e68">
-  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
-  <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}@media(prefers-reduced-motion:no-preference){.halo{transform-box:fill-box;transform-origin:center;animation:halo-breathe 4.4s ease-in-out infinite}.user-group{transform-box:fill-box;transform-origin:center;animation:user-float 3.2s ease-in-out infinite}.arrow{animation:sign-in-arrow 2.4s cubic-bezier(.4,0,.2,1) infinite}.door{animation:door-glow 2.4s cubic-bezier(.4,0,.2,1) infinite}@keyframes halo-breathe{0%,100%{transform:scale(.93);fill-opacity:.025}50%{transform:scale(1.06);fill-opacity:.065}}@keyframes user-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}@keyframes sign-in-arrow{0%,100%{transform:translateX(-1px)}50%{transform:translateX(10px)}}@keyframes door-glow{0%,100%{fill-opacity:.07}50%{fill-opacity:.24}}}</style>
+  <circle class="halo" cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <rect class="wash" x="44" y="58" width="272" height="164" rx="20"/>
     <path d="M44 94h272m-244-18h1m12 0h1m12 0h1"/>
-    <circle class="solid" cx="118" cy="134" r="16"/>
-    <path d="M88 187v-8a30 30 0 0 1 60 0v8"/>
-    <path class="wash" d="M220 145v-17a10 10 0 0 1 10-10h34a10 10 0 0 1 10 10v60a10 10 0 0 1-10 10h-34a10 10 0 0 1-10-10v-17"/>
-    <path class="emphasis" d="M174 158h70m-11-11 11 11-11 11"/>
+    <g class="user-group">
+      <circle class="solid" cx="118" cy="134" r="16"/>
+      <path d="M88 187v-8a30 30 0 0 1 60 0v8"/>
+    </g>
+    <path class="wash door" d="M220 145v-17a10 10 0 0 1 10-10h34a10 10 0 0 1 10 10v60a10 10 0 0 1-10 10h-34a10 10 0 0 1-10-10v-17"/>
+    <path class="emphasis arrow" d="M174 158h70m-11-11 11 11-11 11"/>
   </g>
 </svg>

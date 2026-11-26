@@ -166,7 +166,10 @@ test("settings inputs and selects share sizing and custom values remain editable
 		exact: false,
 	});
 	await expect(input).toBeEnabled();
-	const appearance = await input.evaluate((element) => {
+	const appearance = await input.evaluate(async (element) => {
+		await Promise.all(
+			element.getAnimations().map((animation) => animation.finished)
+		);
 		const style = getComputedStyle(element);
 		return {
 			height: style.height,

@@ -88,19 +88,27 @@ verify_release_package() {
 		CREDITS.txt \
 		api/index.php \
 		assets/peakurl.svg \
+		assets/peakurl-wordmark.svg \
+		assets/LICENSE-PlusJakartaSans.txt \
 		assets/LICENSE-Lucide.txt \
 		assets/LICENSE-Devicons.txt \
+		assets/default-favicon.svg \
+		assets/default-favicon-light.svg \
+		assets/default-favicon-dark.svg \
 		assets/default-favicon.png \
+		assets/default-app-icon.png \
 		assets/default-site.webmanifest \
 		content/index.php \
-		content/landing-page.html \
+		services/default-landing-page.html \
 		database/schema.sql \
 		core \
 		features \
 		features/links/publicCaptcha.js \
 		http \
 		services \
+		services/brand-tokens.css \
 		services/illustration.php \
+		services/status-artwork.js \
 		services/status-illustrations/manifest.json \
 		services/install/page.php \
 		services/install/installer.css \
@@ -201,6 +209,21 @@ verify_release_archive() {
 		exit 1
 	fi
 
+	if ! printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'assets/default-app-icon.png'; then
+		printf 'Verification failure: archive missing assets/default-app-icon.png\n' >&2
+		exit 1
+	fi
+
+	if ! printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'assets/default-favicon.svg'; then
+		printf 'Verification failure: archive missing assets/default-favicon.svg\n' >&2
+		exit 1
+	fi
+
+	if ! printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'assets/peakurl-wordmark.svg'; then
+		printf 'Verification failure: archive missing assets/peakurl-wordmark.svg\n' >&2
+		exit 1
+	fi
+
 	if ! printf '%s\n' "$ARCHIVE_ENTRIES" | grep -qx 'content/uploads/geoip/.htaccess'; then
 		printf 'Verification failure: archive missing content/uploads/geoip/.htaccess\n' >&2
 		exit 1
@@ -231,10 +254,17 @@ trap restore_composer_dependencies EXIT HUP INT TERM
 cd "$ROOT_DIR"
 
 require_file "$ROOT_DIR/client/assets/logo/peakurl.svg"
+require_file "$ROOT_DIR/client/assets/logo/peakurl-wordmark.svg"
+require_file "$ROOT_DIR/client/assets/logo/LICENSE-PlusJakartaSans.txt"
 require_file "$ROOT_DIR/client/assets/logo/LICENSE-Lucide.txt"
 require_file "$ROOT_DIR/client/assets/mcp/LICENSE-Devicons.txt"
+require_file "$ROOT_DIR/server/public/default-favicon.svg"
+require_file "$ROOT_DIR/server/public/default-favicon-light.svg"
+require_file "$ROOT_DIR/server/public/default-favicon-dark.svg"
 require_file "$ROOT_DIR/server/public/default-favicon.png"
+require_file "$ROOT_DIR/server/public/default-app-icon.png"
 require_file "$ROOT_DIR/server/public/default-site.webmanifest"
+require_file "$ROOT_DIR/server/services/brand-tokens.css"
 require_file "$ROOT_DIR/server/features/links/publicCaptcha.js"
 require_file "$ROOT_DIR/server/services/status-illustrations/manifest.json"
 
@@ -264,7 +294,10 @@ cp "$ROOT_DIR/config-sample.php" "$RELEASE_DIR/config-sample.php"
 cp "$ROOT_DIR/install.php" "$RELEASE_DIR/install.php"
 cp "$ROOT_DIR/setup-config.php" "$RELEASE_DIR/setup-config.php"
 cp "$ROOT_DIR/database-error.php" "$RELEASE_DIR/database-error.php"
-cp "$ROOT_DIR/readme.html" "$RELEASE_DIR/readme.html"
+# The source readme links to the same local assets before and after packaging.
+sed -e 's#client/assets/logo/#assets/#g' \
+	-e 's#server/services/brand-tokens.css#services/brand-tokens.css#g' \
+	"$ROOT_DIR/readme.html" > "$RELEASE_DIR/readme.html"
 cp "$ROOT_DIR/.version" "$RELEASE_DIR/.version"
 cp "$ROOT_DIR/LICENSE" "$RELEASE_DIR/LICENSE"
 cp "$ROOT_DIR/CREDITS.txt" "$RELEASE_DIR/CREDITS.txt"
@@ -274,9 +307,15 @@ cp "$UI_BUILD_DIR/index.html" "$RELEASE_DIR/app.html"
 copy_release_tree "$UI_BUILD_DIR/assets" "$RELEASE_DIR/assets" \
 	--exclude='.DS_Store'
 cp "$ROOT_DIR/client/assets/logo/peakurl.svg" "$RELEASE_DIR/assets/peakurl.svg"
+cp "$ROOT_DIR/client/assets/logo/peakurl-wordmark.svg" "$RELEASE_DIR/assets/peakurl-wordmark.svg"
+cp "$ROOT_DIR/client/assets/logo/LICENSE-PlusJakartaSans.txt" "$RELEASE_DIR/assets/LICENSE-PlusJakartaSans.txt"
 cp "$ROOT_DIR/client/assets/logo/LICENSE-Lucide.txt" "$RELEASE_DIR/assets/LICENSE-Lucide.txt"
 cp "$ROOT_DIR/client/assets/mcp/LICENSE-Devicons.txt" "$RELEASE_DIR/assets/LICENSE-Devicons.txt"
+cp "$ROOT_DIR/server/public/default-favicon.svg" "$RELEASE_DIR/assets/default-favicon.svg"
+cp "$ROOT_DIR/server/public/default-favicon-light.svg" "$RELEASE_DIR/assets/default-favicon-light.svg"
+cp "$ROOT_DIR/server/public/default-favicon-dark.svg" "$RELEASE_DIR/assets/default-favicon-dark.svg"
 cp "$ROOT_DIR/server/public/default-favicon.png" "$RELEASE_DIR/assets/default-favicon.png"
+cp "$ROOT_DIR/server/public/default-app-icon.png" "$RELEASE_DIR/assets/default-app-icon.png"
 cp "$ROOT_DIR/server/public/default-site.webmanifest" "$RELEASE_DIR/assets/default-site.webmanifest"
 
 # 3. Server Runtime Allowlist (Flattened into release root, excluding dev tests & caches)
@@ -286,6 +325,8 @@ for server_dir in api bin core database features http services templates utils v
 			--exclude='.DS_Store' \
 			--exclude='.git*' \
 			--exclude='.gitkeep' \
+			--exclude='.composer-state.hash' \
+			--exclude='phpunit.xml*' \
 			--exclude='tests' \
 			--exclude='Tests' \
 			--exclude='*.cache'
@@ -311,7 +352,8 @@ cp "$ROOT_DIR/content/uploads/index.php" "$RELEASE_DIR/content/uploads/index.php
 cp "$ROOT_DIR/content/uploads/geoip/index.php" "$RELEASE_DIR/content/uploads/geoip/index.php"
 cp "$ROOT_DIR/content/uploads/geoip/.htaccess" "$RELEASE_DIR/content/uploads/geoip/.htaccess"
 copy_release_language_packs "$ROOT_DIR/content/languages" "$RELEASE_DIR/content/languages"
-cp "$ROOT_DIR/content/landing-page.html" "$RELEASE_DIR/content/landing-page.html"
+# Older updaters copy packaged content entries over user files.
+cp "$ROOT_DIR/content/landing-page.html" "$RELEASE_DIR/services/default-landing-page.html"
 
 remove_release_placeholder_files "$RELEASE_DIR"
 verify_release_package

@@ -51,6 +51,8 @@ class StatusPageTest extends TestCase {
 			$this->assertStringContainsString( Brand::get_tagline(), $html );
 			$this->assertStringNotContainsString( '<img src=x', $html );
 			$this->assertStringContainsString( 'data-status-illustration="' . $illustration . '"', $html );
+			$this->assertStringContainsString( 'data-theme-toggle', $html );
+			$this->assertStringContainsString( 'class="status-theme-toggle"', $html );
 
 			if ( str_starts_with( $state, 'password_' ) || 'captcha_invalid' === $state ) {
 				$this->assertStringContainsString( 'method="post" action="/folder/protected"', $html );

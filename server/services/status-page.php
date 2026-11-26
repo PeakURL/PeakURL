@@ -131,6 +131,7 @@ class StatusPage {
 		$artwork_script = Illustration::get_theme_script();
 		$powered        = Brand::get_powered_by_badge();
 		$tagline        = self::escape( Brand::get_tagline() );
+		$theme_toggle   = Brand::get_theme_toggle();
 
 		return <<<HTML
 <!doctype html>
@@ -146,7 +147,7 @@ class StatusPage {
 </head>
 <body class="{$page_class}">
 <div class="status-container">
-<header class="status-header"><div class="status-brand">{$logo}{$wordmark}<span class="powered-by-sr">PeakURL</span></div><span class="status-tagline">{$tagline}</span></header>
+<header class="status-header"><div class="status-brand-group"><div class="status-brand">{$logo}{$wordmark}<span class="powered-by-sr">PeakURL</span></div><span class="status-tagline">{$tagline}</span></div>{$theme_toggle}</header>
 <main class="status-main"><section class="status-hero" aria-labelledby="page-heading"><div class="status-copy">{$access_artwork}{$content_html}</div>{$hero_artwork}</section>{$support_html}</main>
 <footer class="status-footer">{$powered}</footer>
 </div>

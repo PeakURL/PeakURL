@@ -9,7 +9,7 @@ export function AboutHeader() {
 	return (
 		<header className="about-header">
 			<div className="about-identity">
-				<Logo size="xl" showName={false} />
+				<Logo size="xl" showName={false} loop />
 				<div className="about-identity-copy">
 					<h1>
 						<Wordmark className="about-wordmark" />

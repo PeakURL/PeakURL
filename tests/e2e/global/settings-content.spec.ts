@@ -377,19 +377,57 @@ for (const width of [1440, 390]) {
 		).toHaveCount(0);
 		const sections = page.locator(".settings-security > section");
 		await expect(sections).toHaveCount(3);
-		const sectionWidths = () =>
+		const sectionMetrics = () =>
 			sections.evaluateAll((panels) =>
-				panels.map((panel) => panel.getBoundingClientRect().width)
+				panels.map((panel) => {
+					const rect = panel.getBoundingClientRect();
+					return {
+						width: rect.width,
+						height: rect.height,
+						top: rect.top,
+					};
+				})
 			);
-		const originalWidths = await sectionWidths();
+		const originalMetrics = await sectionMetrics();
+		const originalWidths = originalMetrics.map((metric) => metric.width);
 		expect(new Set(originalWidths).size).toBe(1);
+		if (width >= 1024) {
+			expect(originalMetrics[0].top).toBeCloseTo(
+				originalMetrics[1].top,
+				1
+			);
+			expect(originalMetrics[2].top).toBeCloseTo(
+				originalMetrics[0].top + originalMetrics[0].height + 20,
+				1
+			);
+		} else {
+			expect(originalMetrics[1].top).toBeGreaterThan(
+				originalMetrics[0].top
+			);
+			expect(originalMetrics[2].top).toBeGreaterThan(
+				originalMetrics[1].top
+			);
+		}
 		await page
 			.getByRole("button", { name: "Enable 2FA", exact: true })
 			.click();
 		await expect(
 			page.getByRole("img", { name: "TOTP QR code" })
 		).toBeVisible();
-		expect(await sectionWidths()).toEqual(originalWidths);
+		const expandedMetrics = await sectionMetrics();
+		expect(expandedMetrics.map((metric) => metric.width)).toEqual(
+			originalWidths
+		);
+		if (width >= 1024) {
+			expect(expandedMetrics[0].height).toBeCloseTo(
+				originalMetrics[0].height,
+				1
+			);
+			expect(expandedMetrics[2].top).toBeCloseTo(
+				originalMetrics[2].top,
+				1
+			);
+		}
 		await expect(
 			page.getByRole("button", { name: "Enable 2FA", exact: true })
 		).toHaveCount(0);

@@ -103,3 +103,40 @@ test("reset password reports mismatches once and accepts a corrected submission"
 	await expect(page.getByRole("status")).toContainText("Password updated");
 	expect(submitted).toBe(1);
 });
+
+test("auth pages expose a working theme toggle across login, recovery, and reset routes", async ({
+	page,
+}) => {
+	await page.route("**/api/v1/users/me", (route) =>
+		route.fulfill({ status: 401, json: {} })
+	);
+	await page.route("**/api/v1/auth/reset-password/review-token", (route) =>
+		route.fulfill({ json: { data: { valid: true } } })
+	);
+
+	for (const routePath of [
+		"/login",
+		"/forgot-password",
+		"/reset-password/review-token",
+	]) {
+		await page.goto(routePath);
+		const toggle = page.getByRole("button", { name: "Toggle theme" });
+		await expect(toggle).toBeVisible();
+		await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
+
+		await toggle.click();
+		await expect(page.locator("html")).toHaveClass(/\bdark\b/);
+		expect(
+			await page.evaluate(() => window.localStorage.getItem("theme"))
+		).toBe("dark");
+
+		await page.reload();
+		await expect(page.locator("html")).toHaveClass(/\bdark\b/);
+
+		await toggle.click();
+		await expect(page.locator("html")).not.toHaveClass(/\bdark\b/);
+		expect(
+			await page.evaluate(() => window.localStorage.getItem("theme"))
+		).toBe("light");
+	}
+});

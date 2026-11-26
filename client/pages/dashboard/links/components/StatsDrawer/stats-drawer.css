@@ -116,7 +116,6 @@
 
 	.links-drawer-tabs {
 		@apply mb-4 flex gap-2 overflow-x-auto overscroll-x-contain border-b border-stroke;
-		scrollbar-width: thin;
 	}
 
 	.links-drawer-tab {

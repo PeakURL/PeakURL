@@ -347,99 +347,194 @@ function GeneralTab({
 				aria-busy={isLoading}
 			>
 				<fieldset className="settings-general-row" disabled={isLoading}>
-					<section
-						className="settings-section settings-general-profile"
-						aria-busy={isLoadingProfile}
-					>
-						<SectionTitle>{__("Profile Information")}</SectionTitle>
+					<div className="settings-general-primary">
+						<section
+							className="settings-section settings-general-profile"
+							aria-busy={isLoadingProfile}
+						>
+							<SectionTitle>
+								{__("Profile Information")}
+							</SectionTitle>
 
-						<div className="settings-grid">
-							<Input
-								label={__("First Name")}
-								name="firstName"
-								value={generalForm.firstName}
-								onChange={handleChange}
-								required
-							/>
-							<Input
-								label={__("Last Name")}
-								name="lastName"
-								value={generalForm.lastName}
-								onChange={handleChange}
-								required
-							/>
-							<Input
-								label={__("Display Name")}
-								name="displayName"
-								value={generalForm.displayName}
-								onChange={handleChange}
-								placeholder={`${generalForm.firstName} ${generalForm.lastName}`}
-							/>
-							<div className="form-field">
-								<label
-									htmlFor="settings-general-username"
-									className="form-field-label settings-general-readonly-label"
-								>
-									<span>{__("Username")}</span>
-									<span className="settings-general-readonly-note">
-										{__("Cannot be changed")}
-									</span>
-								</label>
-								<div className="form-field-control">
-									<input
-										id="settings-general-username"
-										type="text"
-										dir="ltr"
-										value={username || ""}
-										disabled
-										autoCapitalize="off"
-										spellCheck={false}
-										className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
+							<div className="settings-grid">
+								<Input
+									label={__("First Name")}
+									name="firstName"
+									value={generalForm.firstName}
+									onChange={handleChange}
+									required
+								/>
+								<Input
+									label={__("Last Name")}
+									name="lastName"
+									value={generalForm.lastName}
+									onChange={handleChange}
+									required
+								/>
+								<Input
+									label={__("Display Name")}
+									name="displayName"
+									value={generalForm.displayName}
+									onChange={handleChange}
+									placeholder={`${generalForm.firstName} ${generalForm.lastName}`}
+								/>
+								<div className="form-field">
+									<label
+										htmlFor="settings-general-username"
+										className="form-field-label settings-general-readonly-label"
+									>
+										<span>{__("Username")}</span>
+										<span className="settings-general-readonly-note">
+											{__("Cannot be changed")}
+										</span>
+									</label>
+									<div className="form-field-control">
+										<input
+											id="settings-general-username"
+											type="text"
+											dir="ltr"
+											value={username || ""}
+											disabled
+											autoCapitalize="off"
+											spellCheck={false}
+											className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
+										/>
+									</div>
+								</div>
+								<Input
+									label={__("Email Address")}
+									type="email"
+									name="email"
+									valueDirection="ltr"
+									autoCapitalize="off"
+									spellCheck={false}
+									value={generalForm.email}
+									onChange={handleChange}
+									required
+								/>
+								<Input
+									label={__("Phone Number")}
+									type="tel"
+									name="phoneNumber"
+									value={generalForm.phoneNumber}
+									onChange={handleChange}
+								/>
+								<Input
+									label={__("Company")}
+									name="company"
+									value={generalForm.company}
+									onChange={handleChange}
+								/>
+								<Input
+									label={__("Job Title")}
+									name="jobTitle"
+									value={generalForm.jobTitle}
+									onChange={handleChange}
+								/>
+								<div className="settings-general-bio-field">
+									<TextArea
+										label={__("Bio")}
+										name="bio"
+										rows={3}
+										className="settings-general-bio-input"
+										value={generalForm.bio}
+										onChange={handleChange}
 									/>
 								</div>
 							</div>
-							<Input
-								label={__("Email Address")}
-								type="email"
-								name="email"
-								valueDirection="ltr"
-								autoCapitalize="off"
-								spellCheck={false}
-								value={generalForm.email}
-								onChange={handleChange}
-								required
-							/>
-							<Input
-								label={__("Phone Number")}
-								type="tel"
-								name="phoneNumber"
-								value={generalForm.phoneNumber}
-								onChange={handleChange}
-							/>
-							<Input
-								label={__("Company")}
-								name="company"
-								value={generalForm.company}
-								onChange={handleChange}
-							/>
-							<Input
-								label={__("Job Title")}
-								name="jobTitle"
-								value={generalForm.jobTitle}
-								onChange={handleChange}
-							/>
-							<div className="settings-general-bio-field">
-								<TextArea
-									label={__("Bio")}
-									name="bio"
-									rows={3}
-									className="settings-general-bio-input"
-									value={generalForm.bio}
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-					</section>
+						</section>
+						{canManageSiteSettings && (
+							<section className="settings-section settings-general-branding">
+								<div className="settings-section-copy settings-section-heading">
+									<SectionTitle>
+										{__("Branding")}
+									</SectionTitle>
+									<p className="settings-group-description">
+										{__(
+											"Choose how PeakURL appears in browser tabs and shared links."
+										)}
+									</p>
+								</div>
+								<div className="settings-branding-fields">
+									<ImageUploadField
+										id="settings-favicon-upload"
+										siteName={siteName}
+										title={__("Site Favicon")}
+										description={__(
+											"Used in browser tabs, Apple touch icons, and the site web manifest."
+										)}
+										hint={sprintf(
+											__(
+												"Square PNG, ideally %s. Minimum 180 × 180 pixels."
+											),
+											siteSettings?.favicon
+												?.recommendedSize || "512 × 512"
+										)}
+										accept="image/png"
+										buttonLabel={chooserLabel}
+										removeLabel={__("Remove Favicon")}
+										previewLabel={__(
+											"Current favicon preview"
+										)}
+										preview={faviconPreviewSource || null}
+										pending={isLoadingSiteSettings}
+										fileName={faviconFile?.name}
+										disabled={
+											!canManageSiteSettings ||
+											isLoading ||
+											isUpdating
+										}
+										inputRef={fileInputRef}
+										onChange={handleFaviconChange}
+										onRemove={
+											showRemoveButton
+												? handleRemoveFavicon
+												: undefined
+										}
+									/>
+									<ImageUploadField
+										id="settings-social-preview-upload"
+										landscape
+										title={__("Social Preview")}
+										description={__(
+											"The default image for shared links. Individual links can override it."
+										)}
+										hint={sprintf(
+											__(
+												"PNG, JPG, or WebP, ideally %s."
+											),
+											siteSettings?.socialPreview
+												?.recommendedSize ||
+												"1200 × 630"
+										)}
+										accept="image/png,image/jpeg,image/webp"
+										buttonLabel={socialPreviewChooserLabel}
+										removeLabel={__("Remove Preview Image")}
+										previewLabel={__(
+											"Default social preview image"
+										)}
+										preview={
+											socialPreviewImageSource || null
+										}
+										pending={isLoadingSiteSettings}
+										fileName={socialPreviewFile?.name}
+										disabled={
+											!canManageSiteSettings ||
+											isLoading ||
+											isUpdating
+										}
+										inputRef={socialPreviewInputRef}
+										onChange={handleSocialPreviewChange}
+										onRemove={
+											showSocialPreviewRemove
+												? handleRemoveSocialPreview
+												: undefined
+										}
+									/>
+								</div>
+							</section>
+						)}
+					</div>
 					{canManageSiteSettings && (
 						<div
 							className="settings-general-column"
@@ -521,98 +616,6 @@ function GeneralTab({
 									/>
 								</div>
 							</section>
-						</div>
-					)}
-				</fieldset>
-				{canManageSiteSettings && (
-					<fieldset
-						className="settings-general-row"
-						disabled={isLoading}
-					>
-						<section className="settings-section settings-general-branding">
-							<div className="settings-section-copy settings-section-heading">
-								<SectionTitle>{__("Branding")}</SectionTitle>
-								<p className="settings-group-description">
-									{__(
-										"Choose how PeakURL appears in browser tabs and shared links."
-									)}
-								</p>
-							</div>
-							<div className="settings-branding-fields">
-								<ImageUploadField
-									id="settings-favicon-upload"
-									siteName={siteName}
-									title={__("Site Favicon")}
-									description={__(
-										"Used in browser tabs, Apple touch icons, and the site web manifest."
-									)}
-									hint={sprintf(
-										__(
-											"Square PNG, ideally %s. Minimum 180 × 180 pixels."
-										),
-										siteSettings?.favicon
-											?.recommendedSize || "512 × 512"
-									)}
-									accept="image/png"
-									buttonLabel={chooserLabel}
-									removeLabel={__("Remove Favicon")}
-									previewLabel={__("Current favicon preview")}
-									preview={faviconPreviewSource || null}
-									pending={isLoadingSiteSettings}
-									fileName={faviconFile?.name}
-									disabled={
-										!canManageSiteSettings ||
-										isLoading ||
-										isUpdating
-									}
-									inputRef={fileInputRef}
-									onChange={handleFaviconChange}
-									onRemove={
-										showRemoveButton
-											? handleRemoveFavicon
-											: undefined
-									}
-								/>
-								<ImageUploadField
-									id="settings-social-preview-upload"
-									landscape
-									title={__("Social Preview")}
-									description={__(
-										"The default image for shared links. Individual links can override it."
-									)}
-									hint={sprintf(
-										__("PNG, JPG, or WebP, ideally %s."),
-										siteSettings?.socialPreview
-											?.recommendedSize || "1200 × 630"
-									)}
-									accept="image/png,image/jpeg,image/webp"
-									buttonLabel={socialPreviewChooserLabel}
-									removeLabel={__("Remove Preview Image")}
-									previewLabel={__(
-										"Default social preview image"
-									)}
-									preview={socialPreviewImageSource || null}
-									pending={isLoadingSiteSettings}
-									fileName={socialPreviewFile?.name}
-									disabled={
-										!canManageSiteSettings ||
-										isLoading ||
-										isUpdating
-									}
-									inputRef={socialPreviewInputRef}
-									onChange={handleSocialPreviewChange}
-									onRemove={
-										showSocialPreviewRemove
-											? handleRemoveSocialPreview
-											: undefined
-									}
-								/>
-							</div>
-						</section>
-						<div
-							className="settings-general-column"
-							aria-busy={isLoadingSiteSettings}
-						>
 							<section className="settings-section">
 								<SectionTitle>
 									{__("Data Retention")}
@@ -716,8 +719,8 @@ function GeneralTab({
 								</div>
 							</section>
 						</div>
-					</fieldset>
-				)}
+					)}
+				</fieldset>
 				<div
 					className={cn(
 						"settings-general-actions",

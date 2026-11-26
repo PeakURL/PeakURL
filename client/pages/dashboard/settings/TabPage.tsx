@@ -70,15 +70,17 @@ export default function TabPage() {
 			<PageHeader
 				className="settings-page-header"
 				title={getSettingsLabels()[tab]}
+				titleBadge={
+					tab === "mcp" ? (
+						<span className="page-header-badge-preview">
+							{__("Preview")}
+						</span>
+					) : undefined
+				}
 				description={<bdi>{getSettingsDescriptions()[tab]}</bdi>}
 				actions={
 					documentationHref && (
 						<div className="settings-page-actions">
-							{tab === "mcp" && (
-								<span className="mcp-badge mcp-badge-neutral">
-									{__("Preview")}
-								</span>
-							)}
 							<DocumentationLink
 								href={documentationHref}
 								label={

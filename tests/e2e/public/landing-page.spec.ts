@@ -56,3 +56,42 @@ for (const [locale, colorScheme, direction] of [
 		expect(attemptedRequests).toEqual([]);
 	});
 }
+
+test("the landing page theme toggle switches between light and dark mode", async ({
+	browser,
+}) => {
+	const context = await browser.newContext({
+		javaScriptEnabled: true,
+		colorScheme: "light",
+	});
+	try {
+		const page = await context.newPage();
+		const html = execFileSync(
+			"php",
+			["tests/e2e/fixtures/public-landing-page.php", "en_US"],
+			{ encoding: "utf8" }
+		);
+		await page.route("**/*", (route) => {
+			if (route.request().url() === `${origin}/installed/`) {
+				return route.fulfill({ contentType: "text/html", body: html });
+			}
+			return route.abort();
+		});
+		await page.goto(`${origin}/installed/`);
+		const toggle = page.getByRole("button", { name: "Toggle theme" });
+		await expect(toggle).toHaveAttribute("aria-pressed", "false");
+		await toggle.click();
+		await expect(page.locator("html")).toHaveAttribute(
+			"data-status-theme",
+			"dark"
+		);
+		await expect(toggle).toHaveAttribute("aria-pressed", "true");
+		await page.reload();
+		await expect(page.locator("html")).toHaveAttribute(
+			"data-status-theme",
+			"dark"
+		);
+	} finally {
+		await context.close();
+	}
+});

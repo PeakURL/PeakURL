@@ -431,9 +431,9 @@ test("delayed General settings use the real page title and permitted section lay
 		await expect(form).toHaveAttribute("aria-busy", "true");
 		await expect(form.getByRole("heading", { level: 2 })).toHaveText([
 			"Profile Information",
+			"Branding",
 			"Site Configuration",
 			"Regional Preferences",
-			"Branding",
 			"Data Retention",
 			"Homepage Configuration",
 		]);

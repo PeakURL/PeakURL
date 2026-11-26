@@ -97,7 +97,14 @@ test("Settings destinations expose one localized page heading and preserve direc
 				"href",
 				`/dashboard/settings/${route}`
 			);
-			if (route === "mcp") await expect(active).toContainText("New");
+			if (route === "mcp") {
+				await expect(active).toContainText("New");
+				await expect(
+					page.locator(
+						".settings-page-header .page-header-badge-preview"
+					)
+				).toHaveText("Preview");
+			}
 			const navBox = await navigation.boundingBox();
 			const headingBox = await heading.boundingBox();
 			expect(navBox!.y + navBox!.height).toBeLessThan(headingBox!.y);

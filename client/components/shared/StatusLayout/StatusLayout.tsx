@@ -8,6 +8,7 @@ import { getBrandTagline } from "@/shared/branding";
 import { Logo } from "../Logo";
 import { PageIllustration } from "../PageIllustration";
 import { PoweredBy } from "../PoweredBy";
+import { ThemeToggle } from "../ThemeToggle";
 
 interface StatusLayoutProps {
 	title: string;
@@ -56,8 +57,13 @@ export function StatusLayout({
 		<div ref={pageRef} className="status-page">
 			<div className="status-container">
 				<header className="status-header">
-					<Logo size="lg" />
-					<span className="status-tagline">{getBrandTagline()}</span>
+					<div className="status-brand-group">
+						<Logo size="lg" />
+						<span className="status-tagline">
+							{getBrandTagline()}
+						</span>
+					</div>
+					<ThemeToggle />
 				</header>
 				<main className="status-main">
 					<section

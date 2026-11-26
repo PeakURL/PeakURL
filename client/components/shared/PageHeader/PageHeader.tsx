@@ -5,6 +5,7 @@ import { cn } from "@/shared/formatting";
 export interface PageHeaderProps {
 	title: string;
 	description: ReactNode;
+	titleBadge?: ReactNode;
 	actions?: ReactNode;
 	docsLink?: ReactNode;
 	/** Optional page-specific layout classes. */
@@ -17,6 +18,7 @@ export interface PageHeaderProps {
 export function PageHeader({
 	title,
 	description,
+	titleBadge,
 	actions,
 	docsLink,
 	className,
@@ -26,9 +28,15 @@ export function PageHeader({
 		<header className={cn("page-header", className)}>
 			<div className="page-header-copy">
 				<div className="page-header-text">
-					<h1 className="page-header-title" aria-label={titleLabel}>
-						{title}
-					</h1>
+					<div className="page-header-title-row">
+						<h1
+							className="page-header-title"
+							aria-label={titleLabel}
+						>
+							{title}
+						</h1>
+						{titleBadge}
+					</div>
 					<p className="page-header-description">{description}</p>
 					{docsLink && (
 						<div className="page-header-docs-row">{docsLink}</div>

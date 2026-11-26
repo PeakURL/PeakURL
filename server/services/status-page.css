@@ -82,10 +82,60 @@ html[data-status-theme="dark"] {
 	width: auto;
 	height: 19px;
 }
+.status-brand-group {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	min-width: 0;
+}
 .status-tagline {
 	color: var(--status-muted);
 	font-size: 13px;
 	text-decoration: none;
+}
+.status-theme-toggle {
+	display: grid;
+	place-items: center;
+	flex: none;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	border: 1px solid var(--status-line);
+	border-radius: 12px;
+	background: var(--status-surface);
+	color: var(--status-ink);
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		background-color 0.2s ease,
+		transform 0.15s ease;
+}
+.status-theme-toggle:hover {
+	border-color: var(--border-strong, var(--status-muted));
+	background: var(--surface-muted, var(--status-soft));
+}
+.status-theme-toggle:active {
+	transform: scale(0.95);
+}
+.status-theme-toggle:focus-visible {
+	outline: 2px solid var(--status-accent);
+	outline-offset: 2px;
+}
+.status-theme-icon-moon,
+html[data-status-theme="dark"] .status-theme-icon-sun {
+	display: none;
+}
+html[data-status-theme="dark"] .status-theme-icon-moon {
+	display: block;
+}
+@media (prefers-color-scheme: dark) {
+	html[data-status-theme="auto"] .status-theme-icon-sun {
+		display: none;
+	}
+	html[data-status-theme="auto"] .status-theme-icon-moon {
+		display: block;
+	}
 }
 
 .status-main {

@@ -252,13 +252,27 @@ test("protected links retain password submission and validation in the shared la
 		});
 	});
 	await page.goto(`${origin}/installed/protected`);
-	await page.getByLabel("Password", { exact: true }).fill("wrong-password");
+	const password = page.getByLabel("Password", { exact: true });
+	await password.focus();
+	await expect(password).toHaveCSS("outline-style", "none");
+	await expect(password).toHaveCSS("border-color", "rgb(18, 110, 104)");
+	await expect(password).toHaveCSS(
+		"box-shadow",
+		"rgb(18, 110, 104) 0px 0px 0px 1px inset"
+	);
+	await password.fill("wrong-password");
 	await page.getByRole("button", { name: "Continue" }).click();
 	await expect(
 		page.getByText("Incorrect password. Please try again.")
 	).toBeVisible();
-	const password = page.getByLabel("Password", { exact: true });
 	await expect(password).toHaveAttribute("aria-invalid", "true");
+	await password.focus();
+	await expect(password).toHaveCSS("outline-style", "none");
+	await expect(password).toHaveCSS("border-color", "rgb(185, 28, 28)");
+	await expect(password).toHaveCSS(
+		"box-shadow",
+		"rgb(185, 28, 28) 0px 0px 0px 1px inset"
+	);
 	await expect(password).toHaveAccessibleDescription(
 		"Incorrect password. Please try again."
 	);
@@ -269,3 +283,53 @@ test("protected links retain password submission and validation in the shared la
 	).toBeVisible();
 	expect(submissions).toEqual(["wrong-password", "correct-password"]);
 });
+
+for (const theme of ["light", "dark"] as const) {
+	test(`public status and error pages toggle between light and dark mode from ${theme}`, async ({
+		page,
+	}) => {
+		await page.emulateMedia({ colorScheme: theme });
+		await page.route("**/*", (route) => route.abort());
+		const html = execFileSync(
+			"php",
+			["tests/e2e/fixtures/public-status-page.php", "missing-link"],
+			{ encoding: "utf8" }
+		);
+		await page.route(`${origin}/**`, (route) =>
+			route.fulfill({ contentType: "text/html", body: html })
+		);
+		await page.goto(`${origin}/missing-link`);
+
+		const toggle = page.getByRole("button", { name: "Toggle theme" });
+		const expectedNext = theme === "dark" ? "light" : "dark";
+		await expect(toggle).toHaveAttribute(
+			"aria-pressed",
+			String(theme === "dark")
+		);
+		await toggle.click();
+		await expect(page.locator("html")).toHaveAttribute(
+			"data-status-theme",
+			expectedNext
+		);
+		await expect(toggle).toHaveAttribute(
+			"aria-pressed",
+			String(expectedNext === "dark")
+		);
+		await expect(
+			page.locator(
+				`.status-theme-icon-${expectedNext === "dark" ? "moon" : "sun"}`
+			)
+		).toBeVisible();
+
+		await page.reload();
+		await expect(page.locator("html")).toHaveAttribute(
+			"data-status-theme",
+			expectedNext
+		);
+		await toggle.click();
+		await expect(page.locator("html")).toHaveAttribute(
+			"data-status-theme",
+			theme
+		);
+	});
+}

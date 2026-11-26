@@ -30,6 +30,9 @@ test("wide General settings keep a 60:40 content area and remain contained on ph
 		const profile = element
 			.querySelector(".settings-general-profile")!
 			.getBoundingClientRect();
+		const branding = element
+			.querySelector(".settings-general-branding")!
+			.getBoundingClientRect();
 		const sidebar = element
 			.querySelector(".settings-general-column")!
 			.getBoundingClientRect();
@@ -44,6 +47,7 @@ test("wide General settings keep a 60:40 content area and remain contained on ph
 			profile: profile.width,
 			sidebar: sidebar.width,
 			gap: sidebar.x - profile.right,
+			verticalGap: branding.top - profile.bottom,
 			firstTop: first.top,
 			lastTop: last.top,
 		};
@@ -52,12 +56,30 @@ test("wide General settings keep a 60:40 content area and remain contained on ph
 	expect(sizes.profile / sizes.sidebar).toBeCloseTo(1.5, 1);
 	expect(sizes.gap).toBeGreaterThanOrEqual(16);
 	expect(sizes.gap).toBeLessThanOrEqual(24);
+	expect(sizes.verticalGap).toBeGreaterThanOrEqual(16);
+	expect(sizes.verticalGap).toBeLessThanOrEqual(24);
 	expect(sizes.firstTop).toBe(sizes.lastTop);
+
+	await page.getByRole("button", { name: "Site timezone" }).click();
+	const listbox = page.locator(".select-options");
+	await expect(listbox).toBeVisible();
+	await expect(listbox).toHaveCSS("scrollbar-width", "thin");
+	await expect(listbox).toHaveCSS(
+		"scrollbar-color",
+		"rgb(18, 110, 104) rgb(230, 239, 237)"
+	);
+	await page.keyboard.press("Escape");
 
 	await page.setViewportSize({ width: 320, height: 850 });
 	await expect
 		.poll(() => page.evaluate(() => document.documentElement.scrollWidth))
 		.toBe(320);
+	const settingsNav = page.locator(".settings-navigation");
+	await expect(settingsNav).toHaveCSS("scrollbar-width", "thin");
+	await expect(settingsNav).toHaveCSS(
+		"scrollbar-color",
+		"rgb(18, 110, 104) rgb(230, 239, 237)"
+	);
 	await expect(form.getByLabel("First Name")).toBeVisible();
 	await expect(form.getByLabel("Username")).toBeDisabled();
 });

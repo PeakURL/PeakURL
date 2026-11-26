@@ -9,6 +9,8 @@ type LogoAppearance = {
 	tone?: LogoTone;
 	/** Hide the wordmark when the adjacent heading already names PeakURL. */
 	showName?: boolean;
+	/** Enable the continuous bar compression loop on showcase surfaces. */
+	loop?: boolean;
 	className?: string;
 };
 

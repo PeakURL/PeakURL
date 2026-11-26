@@ -13,6 +13,10 @@
 		min-height: calc(100dvh - 3rem);
 	}
 
+	.auth-page-topbar {
+		@apply mb-4 flex w-full max-w-lg items-center justify-end lg:max-w-none;
+	}
+
 	.auth-page-layout {
 		@apply grid w-full max-w-lg overflow-hidden rounded-3xl border border-stroke bg-surface lg:max-w-none lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)];
 		box-shadow:

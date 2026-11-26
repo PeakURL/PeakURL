@@ -10,8 +10,14 @@
 	.page-header-text {
 		@apply min-w-0;
 	}
+	.page-header-title-row {
+		@apply flex flex-wrap items-center gap-2.5;
+	}
 	.page-header-title {
 		@apply text-[1.75rem] font-semibold leading-[1.2] tracking-tight text-heading sm:text-[1.875rem];
+	}
+	.page-header-badge-preview {
+		@apply inline-flex shrink-0 items-center rounded border border-stroke bg-surface-alt px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-wider text-text-muted;
 	}
 	.page-header-description {
 		@apply mt-1.5 max-w-3xl text-sm leading-6 text-text-muted;

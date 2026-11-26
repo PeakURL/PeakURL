@@ -30,6 +30,54 @@
 		outline: 2px solid var(--color-focus);
 		outline-offset: 2px;
 	}
+
+	:root,
+	* {
+		--scrollbar-thumb: var(--color-accent);
+		--scrollbar-track: var(--color-surface-alt);
+		scrollbar-width: thin;
+		scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+	}
+
+	@media (prefers-contrast: more) {
+		:root,
+		* {
+			--scrollbar-thumb: #000000;
+			--scrollbar-track: #ffffff;
+		}
+
+		html.dark,
+		html.dark * {
+			--scrollbar-thumb: #ffffff;
+			--scrollbar-track: #0e1312;
+		}
+	}
+
+	@supports not (scrollbar-color: auto) {
+		:root,
+		* {
+			scrollbar-width: auto;
+		}
+
+		::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+		}
+
+		::-webkit-scrollbar-track {
+			background: var(--scrollbar-track);
+			border-radius: 9999px;
+		}
+
+		::-webkit-scrollbar-thumb {
+			background-color: var(--scrollbar-thumb);
+			border-radius: 9999px;
+		}
+
+		::-webkit-scrollbar-thumb:hover {
+			background-color: var(--color-action-hover);
+		}
+	}
 }
 
 * {

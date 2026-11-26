@@ -1,10 +1,32 @@
 @layer components {
 	.settings-security {
-		@apply grid min-w-0 gap-5;
+		@apply grid min-w-0 items-start gap-5;
 	}
 
 	.settings-security > .settings-section {
 		container: settings-content / inline-size;
+	}
+
+	@container settings-content (min-width: 56rem) {
+		.settings-security {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-rows: auto 1fr;
+		}
+
+		.settings-security > .settings-section:nth-child(1) {
+			grid-column: 1;
+			grid-row: 1;
+		}
+
+		.settings-security > .settings-section:nth-child(2) {
+			grid-column: 2;
+			grid-row: 1 / span 2;
+		}
+
+		.settings-security > .settings-section:nth-child(3) {
+			grid-column: 1;
+			grid-row: 2;
+		}
 	}
 
 	.settings-password-fields > .form-field:first-child {

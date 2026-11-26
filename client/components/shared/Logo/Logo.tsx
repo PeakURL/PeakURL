@@ -10,6 +10,7 @@ export function Logo({
 	size = "md",
 	tone = "light",
 	showName = true,
+	loop = false,
 	className,
 	to,
 	href,
@@ -18,7 +19,7 @@ export function Logo({
 	const label = showName ? undefined : PEAKURL_NAME;
 	const artwork = (
 		<>
-			<LogoIcon size={72} className="logo-mark" />
+			<LogoIcon size={72} className="logo-mark" loop={loop} />
 			{showName && (
 				<span className="logo-name">
 					<Wordmark />

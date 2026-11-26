@@ -132,27 +132,7 @@
 	/* ─── Table Container ─── */
 	.scheduled-jobs-table-container {
 		@apply overflow-x-auto;
-		scrollbar-width: thin;
-		scrollbar-color: var(--color-stroke-strong) transparent;
 		-webkit-overflow-scrolling: touch;
-	}
-
-	.scheduled-jobs-table-container::-webkit-scrollbar {
-		height: 7px;
-	}
-
-	.scheduled-jobs-table-container::-webkit-scrollbar-track {
-		background: var(--color-surface-alt);
-		border-radius: 0 0 0.5rem 0.5rem;
-	}
-
-	.scheduled-jobs-table-container::-webkit-scrollbar-thumb {
-		background-color: var(--color-stroke-strong);
-		border-radius: 9999px;
-	}
-
-	.scheduled-jobs-table-container::-webkit-scrollbar-thumb:hover {
-		background-color: var(--color-text-muted);
 	}
 
 	.scheduled-jobs-table,
@@ -378,27 +358,7 @@
 
 	.scheduled-jobs-drawer-table-wrap {
 		@apply overflow-x-auto rounded-xl border border-stroke;
-		scrollbar-width: thin;
-		scrollbar-color: var(--color-stroke-strong) transparent;
 		-webkit-overflow-scrolling: touch;
-	}
-
-	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar {
-		height: 7px;
-	}
-
-	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar-track {
-		background: var(--color-surface-alt);
-		border-radius: 0 0 0.75rem 0.75rem;
-	}
-
-	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar-thumb {
-		background-color: var(--color-stroke-strong);
-		border-radius: 9999px;
-	}
-
-	.scheduled-jobs-drawer-table-wrap::-webkit-scrollbar-thumb:hover {
-		background-color: var(--color-text-muted);
 	}
 
 	.scheduled-jobs-drawer-table,

@@ -42,6 +42,18 @@ test("one logo serves the sidebar, About, and collapsed navigation", async ({
 	await expect(sidebar).toHaveAccessibleName("PeakURL");
 	await expect(sidebar.locator(".logo-mark")).toHaveCSS("width", "32px");
 	await expect(aboutMark).toHaveCSS("width", "88px");
+	await expect(aboutMark).toHaveAttribute("data-motion", "loop");
+	const identityTopOffset = await page.evaluate(() => {
+		const bar = document
+			.querySelector(".about-identity .logo-mark rect")
+			?.getBoundingClientRect();
+		const wordmark = document
+			.querySelector(".about-wordmark")
+			?.getBoundingClientRect();
+		if (!bar || !wordmark) throw new Error("About identity is missing");
+		return Math.abs(bar.top - wordmark.top);
+	});
+	expect(identityTopOffset).toBeLessThanOrEqual(4);
 	await expect(sidebar.locator(".logo-mark")).toHaveAttribute(
 		"viewBox",
 		(await aboutMark.getAttribute("viewBox")) ?? ""

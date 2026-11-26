@@ -3,7 +3,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 
 import { DEFAULT_AUTH_LOGO_URL } from "@constants";
-import { Logo, PageIllustration, PoweredBy } from "@/components";
+import { Logo, PageIllustration, PoweredBy, ThemeToggle } from "@/components";
 import { useFloatingArtwork, useRevealSequence } from "@/hooks";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -59,6 +59,9 @@ function AuthLayout({
 	return (
 		<main id="page-container" className="auth-page">
 			<div ref={containerRef} className="auth-page-container">
+				<div className="auth-page-topbar">
+					<ThemeToggle />
+				</div>
 				<div className="auth-page-layout">
 					<aside className="auth-page-showcase" aria-hidden="true">
 						<div className="auth-page-showcase-header">

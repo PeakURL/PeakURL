@@ -281,6 +281,7 @@ if ( ! function_exists( 'get_landing_page_html' ) ) {
 				'artwork_theme_script'  => Illustration::get_theme_script(),
 				'installation_artwork'  => $escape( Illustration::get_data_url( 'installation' ) ),
 				'powered_by'            => Brand::get_powered_by_badge(),
+				'theme_toggle'          => Brand::get_theme_toggle( 'landing-theme-toggle' ),
 				'login_url'             => $escape( $login_path ),
 				'tagline'               => $escape( Brand::get_tagline() ),
 				'resources'             => esc_attr__( 'Resources', 'peakurl' ),

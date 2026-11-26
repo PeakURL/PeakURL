@@ -6,7 +6,18 @@
 		@apply px-1 pb-6 pt-0;
 	}
 	.about-identity {
-		@apply flex flex-wrap items-center gap-x-5 gap-y-4;
+		@apply flex flex-wrap items-start gap-x-5 gap-y-4;
+	}
+	.about-identity .logo-mark {
+		/* Trim internal SVG viewBox padding so the visible bars align flush with the wordmark without enlarging the mark. */
+		margin-top: -0.8125rem;
+		margin-bottom: -0.75rem;
+	}
+	@media (min-width: 640px) {
+		.about-identity .logo-mark {
+			margin-top: -1rem;
+			margin-bottom: -0.875rem;
+		}
 	}
 	.about-identity-copy {
 		@apply min-w-0 flex-1;

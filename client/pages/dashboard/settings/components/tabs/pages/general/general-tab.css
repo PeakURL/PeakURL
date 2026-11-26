@@ -9,6 +9,7 @@
 	}
 
 	.settings-general-row,
+	.settings-general-primary,
 	.settings-general-column {
 		@apply grid min-w-0 items-start gap-5;
 	}

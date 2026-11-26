@@ -19,12 +19,36 @@
 		}
 		.page-width { width: min(72rem, 100% - 2 * clamp(1rem, 4vw, 3rem)); margin-inline: auto; }
 		.site-header { border-bottom: 1px solid var(--border); background: var(--surface); }
-		.header-content, .site-links, .brand-logo, .actions, .integration-links {
+		.header-content, .header-actions, .site-links, .brand-logo, .actions, .integration-links {
 			display: flex;
 			flex-wrap: wrap;
 			align-items: center;
 		}
 		.header-content { justify-content: space-between; gap: 0.5rem 1.75rem; padding-block: 1rem; }
+		.header-actions { gap: 0.75rem 1.25rem; margin-inline-start: auto; }
+		.status-theme-toggle {
+			display: grid;
+			place-items: center;
+			flex: none;
+			width: 40px;
+			height: 40px;
+			padding: 0;
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			background: var(--surface);
+			color: var(--text-heading);
+			cursor: pointer;
+			transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+		}
+		.status-theme-toggle:hover { border-color: var(--border-strong); background: var(--surface-muted); }
+		.status-theme-toggle:active { transform: scale(0.95); }
+		.status-theme-toggle:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+		.status-theme-icon-moon, html[data-status-theme="dark"] .status-theme-icon-sun { display: none; }
+		html[data-status-theme="dark"] .status-theme-icon-moon { display: block; }
+		@media (prefers-color-scheme: dark) {
+			html[data-status-theme="auto"] .status-theme-icon-sun { display: none; }
+			html[data-status-theme="auto"] .status-theme-icon-moon { display: block; }
+		}
 		.brand-logo { gap: 0.6rem; color: var(--text-heading); text-decoration: none; }
 		.brand-logo svg { display: block; }
 		.brand-logo .brand-wordmark { width: auto; height: 1.4rem; }
@@ -100,10 +124,13 @@
 			<a class="brand-logo" href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page" aria-label="PeakURL">
 				{{peakurl_brand_logo}}
 			</a>
-			<nav class="site-links" aria-label="{{peakurl_resources}}">
-				<a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page">Website</a>
-				<a href="https://go.peakurl.org/repo">GitHub</a>
-			</nav>
+			<div class="header-actions">
+				<nav class="site-links" aria-label="{{peakurl_resources}}">
+					<a href="https://peakurl.org?utm_source=peakurl_app&amp;utm_medium=landing_page">Website</a>
+					<a href="https://go.peakurl.org/repo">GitHub</a>
+				</nav>
+				{{peakurl_theme_toggle}}
+			</div>
 		</div>
 	</header>
 	<main>

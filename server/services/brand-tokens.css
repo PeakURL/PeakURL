@@ -212,3 +212,55 @@ html[data-status-theme="dark"] {
 		--chart-8: #a8b8ce;
 	}
 }
+
+html[data-status-theme],
+html[data-status-theme] * {
+	--scrollbar-thumb: var(--primary);
+	--scrollbar-track: var(--surface-subtle);
+	scrollbar-width: thin;
+	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+@media (prefers-contrast: more) {
+	html[data-status-theme],
+	html[data-status-theme] * {
+		--scrollbar-thumb: #000000;
+		--scrollbar-track: #ffffff;
+	}
+
+	html[data-status-theme="dark"],
+	html[data-status-theme="dark"] * {
+		--scrollbar-thumb: #ffffff;
+		--scrollbar-track: #0e1312;
+	}
+}
+
+@supports not (scrollbar-color: auto) {
+	html[data-status-theme],
+	html[data-status-theme] * {
+		scrollbar-width: auto;
+	}
+
+	html[data-status-theme]::-webkit-scrollbar,
+	html[data-status-theme] *::-webkit-scrollbar {
+		width: 8px;
+		height: 8px;
+	}
+
+	html[data-status-theme]::-webkit-scrollbar-track,
+	html[data-status-theme] *::-webkit-scrollbar-track {
+		background: var(--scrollbar-track);
+		border-radius: 9999px;
+	}
+
+	html[data-status-theme]::-webkit-scrollbar-thumb,
+	html[data-status-theme] *::-webkit-scrollbar-thumb {
+		background-color: var(--scrollbar-thumb);
+		border-radius: 9999px;
+	}
+
+	html[data-status-theme]::-webkit-scrollbar-thumb:hover,
+	html[data-status-theme] *::-webkit-scrollbar-thumb:hover {
+		background-color: var(--primary-hover);
+	}
+}

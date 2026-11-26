@@ -60,21 +60,33 @@ if ( PHP_VERSION_ID < 80300 ) {
 
 	header( 'Content-Type: text/html; charset=utf-8' );
 
-	$css_file   = is_readable( $peakurl_runtime_root . '/services/status-page.css' )
+	$tokens_file = is_readable( $peakurl_runtime_root . '/services/brand-tokens.css' )
+		? $peakurl_runtime_root . '/services/brand-tokens.css'
+		: $peakurl_source_root . '/server/services/brand-tokens.css';
+	$css_file    = is_readable( $peakurl_runtime_root . '/services/status-page.css' )
 		? $peakurl_runtime_root . '/services/status-page.css'
 		: $peakurl_source_root . '/server/services/status-page.css';
-	$badge_file = is_readable( $peakurl_runtime_root . '/services/powered-by.css' )
+	$badge_file  = is_readable( $peakurl_runtime_root . '/services/powered-by.css' )
 		? $peakurl_runtime_root . '/services/powered-by.css'
 		: $peakurl_source_root . '/server/services/powered-by.css';
-	$styles     = ( is_readable( $css_file ) ? (string) file_get_contents( $css_file ) : '' ) .
+	$styles      = ( is_readable( $tokens_file ) ? (string) file_get_contents( $tokens_file ) : '' ) .
+		( is_readable( $css_file ) ? (string) file_get_contents( $css_file ) : '' ) .
 		( is_readable( $badge_file ) ? (string) file_get_contents( $badge_file ) : '' );
 
-	$logo_path = is_readable( $peakurl_source_root . '/client/assets/logo/peakurl.svg' )
+	$logo_path     = is_readable( $peakurl_source_root . '/client/assets/logo/peakurl.svg' )
 		? $peakurl_source_root . '/client/assets/logo/peakurl.svg'
 		: $peakurl_source_root . '/assets/peakurl.svg';
-	$logo_data = is_readable( $logo_path )
+	$logo_data     = is_readable( $logo_path )
 		? 'data:image/svg+xml;base64,' . base64_encode( (string) file_get_contents( $logo_path ) )
 		: '';
+	$wordmark_path = is_readable( $peakurl_source_root . '/client/assets/logo/peakurl-wordmark.svg' )
+		? $peakurl_source_root . '/client/assets/logo/peakurl-wordmark.svg'
+		: $peakurl_source_root . '/assets/peakurl-wordmark.svg';
+	$wordmark_svg  = is_readable( $wordmark_path ) ? (string) file_get_contents( $wordmark_path ) : '';
+	if ( '' !== $wordmark_svg ) {
+		$wordmark_svg = preg_replace( '/<title>.*?<\/title>\s*/s', '', $wordmark_svg ) ?? $wordmark_svg;
+		$wordmark_svg = preg_replace( '/<svg\b[^>]*>/', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="72 0 4013 769" fill="none" class="status-brand-wordmark" aria-hidden="true" focusable="false">', $wordmark_svg, 1 ) ?? $wordmark_svg;
+	}
 
 	$artwork_path = is_readable( $peakurl_runtime_root . '/services/status-illustrations/server-error.svg' )
 		? $peakurl_runtime_root . '/services/status-illustrations/server-error.svg'
@@ -100,9 +112,13 @@ if ( PHP_VERSION_ID < 80300 ) {
 <header class="status-header">
 	<div class="status-brand">
 		<?php if ( '' !== $logo_data ) : ?>
-			<img src="<?php echo htmlspecialchars( $logo_data, ENT_QUOTES, 'UTF-8' ); ?>" alt="" width="40" height="40">
+			<img src="<?php echo htmlspecialchars( $logo_data, ENT_QUOTES, 'UTF-8' ); ?>" alt="" width="34" height="34">
 		<?php endif; ?>
-		<span>PeakURL</span>
+		<?php if ( '' !== $wordmark_svg ) : ?>
+			<?php echo $wordmark_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static bundled wordmark SVG. ?><span class="powered-by-sr">PeakURL</span>
+		<?php else : ?>
+			<span>PeakURL</span>
+		<?php endif; ?>
 	</div>
 	<span class="status-tagline">Self-hosted link management platform</span>
 </header>

@@ -56,11 +56,11 @@ http_response_code( 503 );
 header( 'Content-Type: text/html; charset=utf-8' );
 
 echo \PeakURL\Services\StatusPage::render(
-	'Unable to connect to the database',
-	'PeakURL couldn’t establish a connection to its database. Please try again. If the problem persists, contact your site administrator.',
-	'503 · Database connection error',
-	'For your security, database credentials and connection details are never displayed here.',
+	__( 'Unable to connect to the database', 'peakurl' ),
+	__( 'PeakURL couldn’t establish a connection to its database. Please try again. If the problem persists, contact your site administrator.', 'peakurl' ),
+	__( '503 · Database connection error', 'peakurl' ),
+	'',
 	$retry_url,
-	'Retry connection',
+	__( 'Retry connection', 'peakurl' ),
 	illustration: 'database',
 );

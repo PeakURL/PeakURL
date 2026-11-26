@@ -73,7 +73,11 @@
 	}
 
 	.world-map-overlay-error {
-		@apply bg-bg/90;
+		@apply flex-col gap-2 bg-bg/90 p-4 text-center;
+	}
+
+	.world-map-retry {
+		@apply rounded-lg border border-field-border bg-surface px-3 py-1.5 font-medium text-accent hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
 
 	.world-map-overlay-loading {

@@ -3,7 +3,6 @@ import { memo, useEffect, useRef, useState } from "react";
 import type { GeoPermissibleObjects } from "@visx/geo";
 import { Zoom } from "@visx/zoom";
 import type { TransformMatrix } from "@visx/zoom";
-import { feature as topojsonFeature } from "topojson-client";
 import { scaleLinear } from "d3-scale";
 import { iso31661Alpha2ToNumeric } from "iso-3166/1-a2-to-1-n.js";
 
@@ -25,8 +24,8 @@ import {
 	WorldMapTooltip,
 	type WorldMapTooltipPosition,
 } from "./components";
+import { loadGeographies } from "./loadGeographies";
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json";
 const MAP_WIDTH = 960;
 const MAP_HEIGHT = 500;
 const MIN_ZOOM = 1;
@@ -161,48 +160,23 @@ const WorldMap = ({
 		useState<WorldMapTooltipPosition | null>(null);
 	const [geographies, setGeographies] = useState<GeoPermissibleObjects[]>([]);
 	const [loadError, setLoadError] = useState(false);
+	const [loadAttempt, setLoadAttempt] = useState(0);
 	const [isFullscreen, setIsFullscreen] = useState(false);
 
 	useEffect(() => {
-		const controller = new AbortController();
-
-		const loadMap = async () => {
-			try {
-				setLoadError(false);
-
-				const response = await fetch(geoUrl, {
-					signal: controller.signal,
-				});
-
-				if (!response.ok) {
-					throw new Error("Failed to load world map data");
-				}
-
-				const topology = await response.json();
-				const countries = topology.objects?.countries;
-
-				if (!countries) {
-					throw new Error("World map data is missing countries");
-				}
-
-				const world = topojsonFeature(topology, countries) as {
-					features?: GeoPermissibleObjects[];
-				};
-				setGeographies(world.features || []);
-			} catch (error) {
-				if (!(error instanceof Error) || error.name !== "AbortError") {
-					setLoadError(true);
-				}
+		let mounted = true;
+		void loadGeographies().then(
+			(countries) => {
+				if (mounted) setGeographies(countries);
+			},
+			() => {
+				if (mounted) setLoadError(true);
 			}
-		};
-
-		loadMap();
-
+		);
 		return () => {
-			// Stop the atlas request when the map unmounts or React re-runs the effect.
-			controller.abort();
+			mounted = false;
 		};
-	}, []);
+	}, [loadAttempt]);
 
 	useEffect(() => {
 		const handleFullscreenChange = () => {
@@ -469,9 +443,23 @@ const WorldMap = ({
 
 							{loadError && (
 								<div className="world-map-overlay world-map-overlay-error">
-									{__(
-										"Unable to load the world map right now."
-									)}
+									<p role="status">
+										{__(
+											"Unable to load the world map right now."
+										)}
+									</p>
+									<button
+										type="button"
+										className="world-map-retry"
+										onClick={() => {
+											setLoadError(false);
+											setLoadAttempt(
+												(attempt) => attempt + 1
+											);
+										}}
+									>
+										{__("Try again")}
+									</button>
 								</div>
 							)}
 

@@ -26,7 +26,11 @@ PHP runtime libraries shipped in the release
   https://github.com/PHPMailer/PHPMailer
 
 Bundled dashboard and frontend components
-- PeakURL logo link artwork — Lucide/Feather, ISC/MIT
+- Plus Jakarta Sans (Bold 700 vector wordmark outlines) — The Plus Jakarta Sans Project Authors, SIL Open Font License 1.1
+  Full license notice: assets/LICENSE-PlusJakartaSans.txt in releases;
+  client/assets/logo/LICENSE-PlusJakartaSans.txt in the source repository.
+  https://github.com/tokotype/PlusJakartaSans
+- UI and installer icons — Lucide/Feather, ISC/MIT
   Full license notices: assets/LICENSE-Lucide.txt in releases;
   client/assets/logo/LICENSE-Lucide.txt in the source repository.
 - Model Context Protocol (MCP) icon — Devicon, MIT
@@ -67,6 +71,10 @@ Bundled dashboard and frontend components
   https://tailwindcss.com
 - topojson-client 3.1.0 — ISC
   https://github.com/topojson/topojson-client
+- World Atlas 2.0.2, countries at 1:50m — ISC. The full notice is distributed as
+  WORLD-ATLAS-LICENSE.txt. Map data from Natural Earth is in the public domain.
+  https://github.com/topojson/world-atlas/tree/v2.0.2
+  https://www.naturalearthdata.com/about/terms-of-use/
 
 Source and lockfile references
 - PHP package metadata: app/composer.json and app/composer.lock

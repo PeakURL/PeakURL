@@ -166,7 +166,7 @@ $send_maintenance = static function (
 		echo render_maintenance_page( $maintenance_view_data );
 	} else {
 		$runtime = \PeakURL\Core\Config\Environment::get_instance()->get_runtime_root();
-		foreach ( array( 'logo', 'brand', 'status-page' ) as $service ) {
+		foreach ( array( 'logo', 'brand', 'illustration', 'status-page' ) as $service ) {
 			require_once $runtime . '/services/' . $service . '.php';
 		}
 		echo \PeakURL\Services\StatusPage::render(
@@ -591,6 +591,7 @@ if ( ! file_exists( $autoload ) ) {
 	require_once $runtime_path . '/services/logo.php';
 	require_once $runtime_path . '/services/status-page.php';
 	require_once $runtime_path . '/services/brand.php';
+	require_once $runtime_path . '/services/illustration.php';
 	echo \PeakURL\Services\StatusPage::render(
 		'PeakURL couldn’t start',
 		'The server couldn’t complete this request. Please contact your site administrator.',
@@ -765,14 +766,11 @@ if ( '/' === $relative_path && InstallationState::READY === $install_state ) {
 			exit();
 		}
 	} elseif ( 'html' === $landing_page_mode ) {
-		$landing_page_file = ABSPATH . 'content/landing-page.html';
-		if ( file_exists( $landing_page_file ) ) {
+		$landing_page_file = $environment->get_content_path() . '/landing-page.html';
+		$landing_page_html = get_landing_page_html( null, $app_config, $connection, $app_url( $base_path, '/login' ) );
+		if ( '' !== $landing_page_html || is_file( $landing_page_file ) ) {
 			header( 'Content-Type: text/html; charset=utf-8' );
-			if ( function_exists( 'get_landing_page_html' ) ) {
-				echo get_landing_page_html( $landing_page_file, $app_config, $connection );
-			} else {
-				readfile( $landing_page_file );
-			}
+			echo $landing_page_html;
 			exit();
 		}
 	}

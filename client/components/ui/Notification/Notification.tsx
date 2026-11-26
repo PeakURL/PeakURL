@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useRef } from "react";
 import { createPortal } from "react-dom";
-import type { LucideIcon } from "lucide-react";
-import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from "lucide-react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from "lucide-react";
 
-import { isDocumentRtl } from "@/i18n/direction";
+import { __ } from "@/i18n";
 import { cn } from "@/shared/formatting";
 
 import type {
@@ -20,177 +21,173 @@ export type {
 	NotificationType,
 } from "../types";
 
-// Notification types with solid colors
-const notificationTypes: Record<
-	NotificationType,
-	{
-		icon: LucideIcon;
-		className: string;
-	}
-> = {
-	success: {
-		icon: CheckCircle,
-		className: "notification-card-success",
-	},
-	error: {
-		icon: AlertCircle,
-		className: "notification-card-error",
-	},
-	warning: {
-		icon: AlertTriangle,
-		className: "notification-card-warning",
-	},
-	info: {
-		icon: Info,
-		className: "notification-card-info",
-	},
-};
+gsap.registerPlugin(useGSAP);
 
-/**
- * Notification Component
- * A single notification with different types, auto-close, and progress bar.
- * @param {Object} props
- * @param {string} props.id - Unique identifier for the notification
- * @param {('success'|'error'|'warning'|'info')} [props.type='info'] - Notification type
- * @param {string} props.title - Notification title
- * @param {string} props.message - Notification message
- * @param {number} [props.duration=3000] - Duration in ms to show the notification
- * @param {Function} props.onClose - Callback when notification is closed
- * @param {string} [props.className=''] - Additional class names
- */
+const notificationIcons = {
+	success: CheckCircle,
+	error: AlertCircle,
+	warning: AlertTriangle,
+	info: Info,
+} satisfies Record<NotificationType, typeof Info>;
+
+const DEFAULT_NOTIFICATION_DURATION = 4500;
+const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
+
+/** A dismissible notification that pauses while the user interacts with it. */
 export function Notification({
 	id,
 	type = "info",
 	title,
 	message,
-	duration = 3000,
+	duration = DEFAULT_NOTIFICATION_DURATION,
 	onClose,
 	className = "",
 }: NotificationProps) {
-	const [isPaused, setIsPaused] = useState(false);
-	const [isExiting, setIsExiting] = useState(false);
-	const isRtl = isDocumentRtl();
+	const cardRef = useRef<HTMLDivElement>(null);
+	const progressRef = useRef<HTMLDivElement>(null);
+	const expiryRef = useRef<gsap.core.Animation | null>(null);
+	const dismissRef = useRef<() => void>(undefined);
+	const hovering = useRef(false);
+	const focused = useRef(false);
+	const Icon = notificationIcons[type];
 
-	// Timer refs
-	const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-	const startTimeRef = useRef(0);
-	const remainingTimeRef = useRef(duration);
+	useGSAP(
+		(_context, contextSafe) => {
+			const card = cardRef.current;
+			if (!card || !contextSafe) return;
+			const reducedMotion = window.matchMedia(REDUCED_MOTION);
+			let entrance: gsap.core.Tween | undefined;
+			let exit: gsap.core.Tween | undefined;
+			let dismissing = false;
+			const remove = () => onClose?.(id);
+			const dismiss = contextSafe(() => {
+				if (dismissing) return;
+				dismissing = true;
+				expiryRef.current?.kill();
+				entrance?.kill();
+				card.inert = true;
+				if (reducedMotion.matches) {
+					remove();
+					return;
+				}
+				exit = gsap.to(card, {
+					y: -6,
+					opacity: 0,
+					duration: 0.18,
+					ease: "power2.in",
+					onComplete: remove,
+				});
+			});
 
-	const config = notificationTypes[type];
-	const IconComponent = config.icon;
-
-	const handleClose = useCallback(() => {
-		setIsExiting(true);
-		// Small delay for exit animation
-		setTimeout(() => {
-			onClose?.(id);
-		}, 300);
-	}, [id, onClose]);
-
-	const startTimer = useCallback(() => {
-		// Clear any existing timer
-		if (timerRef.current) {
-			clearTimeout(timerRef.current);
-		}
-
-		timerRef.current = setTimeout(() => {
-			handleClose();
-		}, remainingTimeRef.current);
-
-		startTimeRef.current = Date.now();
-	}, [handleClose]);
-
-	const pauseTimer = useCallback(() => {
-		if (timerRef.current) {
-			clearTimeout(timerRef.current);
-			timerRef.current = null;
-		}
-
-		const elapsed = Date.now() - startTimeRef.current;
-		remainingTimeRef.current = Math.max(
-			0,
-			remainingTimeRef.current - elapsed
-		);
-	}, []);
-
-	useEffect(() => {
-		remainingTimeRef.current = duration;
-	}, [duration]);
-
-	useEffect(() => {
-		if (duration > 0 && !isPaused) {
-			startTimer();
-		}
-
-		return () => {
-			if (timerRef.current) {
-				clearTimeout(timerRef.current);
+			dismissRef.current = dismiss;
+			if (!reducedMotion.matches) {
+				entrance = gsap.fromTo(
+					card,
+					{ y: -10, opacity: 0 },
+					{
+						y: 0,
+						opacity: 1,
+						duration: 0.26,
+						ease: "power2.out",
+						clearProps: "transform,opacity",
+					}
+				);
 			}
-		};
-	}, [duration, isPaused, startTimer]);
 
-	const handleMouseEnter = () => {
-		setIsPaused(true);
-		pauseTimer();
+			if (duration > 0) {
+				const seconds = duration / 1000;
+				const progress = progressRef.current;
+				expiryRef.current =
+					progress && !reducedMotion.matches
+						? gsap.fromTo(
+								progress,
+								{ scaleX: 1 },
+								{
+									scaleX: 0,
+									duration: seconds,
+									ease: "none",
+									onComplete: dismiss,
+								}
+							)
+						: gsap.delayedCall(seconds, dismiss);
+				expiryRef.current.paused(hovering.current || focused.current);
+			}
+
+			const settleMotion = () => {
+				if (!reducedMotion.matches) return;
+				if (exit) exit.progress(1);
+				else entrance?.progress(1);
+			};
+			reducedMotion.addEventListener("change", settleMotion);
+			return () => {
+				reducedMotion.removeEventListener("change", settleMotion);
+				card.inert = false;
+				expiryRef.current = null;
+				dismissRef.current = undefined;
+			};
+		},
+		{
+			scope: cardRef,
+			dependencies: [duration, id, onClose],
+			revertOnUpdate: true,
+		}
+	);
+
+	const updateExpiry = () => {
+		expiryRef.current?.paused(hovering.current || focused.current);
 	};
-
-	const handleMouseLeave = () => {
-		setIsPaused(false);
-		// Effect will restart timer
-	};
-
-	if (!config) return null;
 
 	return (
 		<div
+			ref={cardRef}
 			className={cn(
 				"notification-card",
-				config.className,
-				isExiting
-					? isRtl
-						? "notification-card-exiting-rtl"
-						: "notification-card-exiting-ltr"
-					: isRtl
-						? "notification-card-entering-rtl"
-						: "notification-card-entering-ltr",
+				`notification-card-${type}`,
 				className
 			)}
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}
+			onPointerEnter={(event) => {
+				if (event.pointerType === "touch") return;
+				hovering.current = true;
+				updateExpiry();
+			}}
+			onPointerLeave={() => {
+				hovering.current = false;
+				updateExpiry();
+			}}
+			onFocus={() => {
+				focused.current = true;
+				updateExpiry();
+			}}
+			onBlur={(event) => {
+				if (event.currentTarget.contains(event.relatedTarget)) return;
+				focused.current = false;
+				updateExpiry();
+			}}
 		>
 			<div className="notification-content">
-				<IconComponent className="notification-icon" />
-
+				<div className="notification-icon" aria-hidden="true">
+					<Icon size={18} />
+				</div>
 				<div className="notification-body">
-					{title && <h4 className="notification-title">{title}</h4>}
+					{title && <p className="notification-title">{title}</p>}
 					{message && (
 						<p className="notification-message">{message}</p>
 					)}
 				</div>
-
 				<button
 					type="button"
-					onClick={handleClose}
+					onClick={() => dismissRef.current?.()}
 					className="notification-close"
+					aria-label={__("Dismiss notification")}
 				>
-					<X className="notification-close-icon" />
+					<X size={16} aria-hidden="true" />
 				</button>
 			</div>
-
 			{duration > 0 && (
-				<div className="notification-progress">
+				<div className="notification-progress" aria-hidden="true">
 					<div
-						className={cn(
-							"notification-progress-bar",
-							isRtl
-								? "notification-progress-rtl"
-								: "notification-progress-ltr"
-						)}
-						style={{
-							width: "100%",
-							animation: `progress ${duration}ms linear forwards`,
-							animationPlayState: isPaused ? "paused" : "running",
-						}}
+						ref={progressRef}
+						className="notification-progress-bar"
 					/>
 				</div>
 			)}
@@ -198,33 +195,53 @@ export function Notification({
 	);
 }
 
-/**
- * NotificationContainer Component
- * Renders a list of notifications in a fixed position on the screen.
- * @param {Object} props
- * @param {Array} props.notifications - Array of notification objects to display
- * @param {Function} props.onRemoveNotification - Callback to remove a notification by its ID
- */
+/** Portals the toast stack and announces new notifications without moving focus. */
 export function NotificationContainer({
 	notifications = [],
 	onRemoveNotification,
 }: NotificationContainerProps) {
-	if (typeof document === "undefined") {
-		return null;
-	}
+	if (typeof document === "undefined") return null;
+
+	const announce = (urgent: boolean) =>
+		notifications
+			.filter(({ type }) => (type === "error") === urgent)
+			.map(({ id, title, message }) => (
+				<div key={id}>
+					{title}
+					{message && ` ${message}`}
+				</div>
+			));
 
 	return createPortal(
-		<div className="notification-container">
-			{/* pointer-events-none on container to let clicks pass through, but pointer-events-auto on notifications */}
-			{notifications.map((notification) => (
-				<div key={notification.id} className="notification-item">
-					<Notification
-						{...notification}
-						onClose={onRemoveNotification}
-					/>
+		<>
+			<div
+				className="notification-announcement sr-only"
+				aria-live="polite"
+				aria-atomic="false"
+				aria-relevant="additions"
+			>
+				{announce(false)}
+			</div>
+			<div
+				className="notification-announcement sr-only"
+				aria-live="assertive"
+				aria-atomic="false"
+				aria-relevant="additions"
+			>
+				{announce(true)}
+			</div>
+			{notifications.length > 0 && (
+				<div className="notification-container">
+					{notifications.map((notification) => (
+						<Notification
+							key={notification.id}
+							{...notification}
+							onClose={onRemoveNotification}
+						/>
+					))}
 				</div>
-			))}
-		</div>,
+			)}
+		</>,
 		document.body
 	);
 }

@@ -30,8 +30,8 @@ test("one logo serves the sidebar, About, and collapsed navigation", async ({
 	await expect(
 		page.getByRole("heading", { name: "PeakURL", exact: true, level: 1 })
 	).toBeVisible();
-	await expect(page.locator(".dashboard-layout-wrapper")).toHaveCSS(
-		"margin-inline-start",
+	await expect(page.locator(".dashboard-sidebar")).toHaveCSS(
+		"width",
 		"240px"
 	);
 	await expect(
@@ -40,21 +40,20 @@ test("one logo serves the sidebar, About, and collapsed navigation", async ({
 	const sidebar = page.locator(".dashboard-sidebar-logo");
 	const aboutMark = page.locator(".about-identity .logo-mark");
 	await expect(sidebar).toHaveAccessibleName("PeakURL");
-	await expect(sidebar.locator("img")).toHaveCSS("width", "40px");
-	await expect(aboutMark).toHaveCSS("width", "96px");
-	await expect(aboutMark).toHaveJSProperty("naturalWidth", 72);
-	await expect(aboutMark).toHaveAttribute(
-		"src",
-		(await sidebar.locator("img").getAttribute("src")) ?? ""
+	await expect(sidebar.locator(".logo-mark")).toHaveCSS("width", "32px");
+	await expect(aboutMark).toHaveCSS("width", "88px");
+	await expect(sidebar.locator(".logo-mark")).toHaveAttribute(
+		"viewBox",
+		(await aboutMark.getAttribute("viewBox")) ?? ""
 	);
 	await page
-		.getByRole("button", { name: "Collapse Menu", exact: true })
+		.getByRole("button", { name: "Collapse sidebar", exact: true })
 		.click();
 	await expect(page.locator(".dashboard-sidebar")).toHaveClass(
 		/dashboard-sidebar-collapsed/
 	);
 	await expect(sidebar).toHaveAccessibleName("PeakURL");
-	await expect(sidebar.locator("img")).toBeVisible();
+	await expect(sidebar.locator(".logo-mark")).toBeVisible();
 });
 
 test("About tabs preserve browser history and support keyboard navigation in both directions", async ({
@@ -115,7 +114,9 @@ test("the logo palette stays legible in light and dark themes on a phone", async
 	await expect(page.locator("html")).toHaveClass(/dark/);
 	await expect(content).not.toHaveCSS("background-color", lightBackground);
 	await page.getByRole("button", { name: "Open menu" }).click();
-	await expect(page.locator(".dashboard-sidebar-logo img")).toBeVisible();
+	await expect(
+		page.locator(".dashboard-sidebar-logo .logo-mark")
+	).toBeVisible();
 	await page
 		.getByRole("complementary")
 		.first()
@@ -260,26 +261,36 @@ test("a missing installed release is an explicit empty state", async ({
 	).toHaveCount(0);
 });
 
-test("Settings and main navigation share the same soft selection palette", async ({
+test("Settings and main navigation use crisp Petrol & Jade selection palettes", async ({
 	page,
 }) => {
 	await page.goto("/dashboard/settings/general");
 	const navigation = page.locator(".dashboard-sidebar-link-active");
-	const settings = page.locator(".settings-sidebar-link-active");
+	const background = page.locator(".dashboard-sidebar-indicator");
+	const settings = page
+		.getByRole("navigation", { name: "Settings" })
+		.locator('[aria-current="page"]');
+	const underline = page.locator(".settings-navigation-indicator");
 	await expect(settings).toHaveAttribute("aria-current", "page");
-	for (const colors of [
-		{ background: "rgb(233, 238, 249)", text: "rgb(43, 48, 64)" },
-		{ background: "rgb(51, 61, 84)", text: "rgb(213, 223, 245)" },
+	for (const theme of [
+		{
+			mode: "light",
+			navBg: "rgb(255, 255, 255)",
+			jade: "rgb(18, 110, 104)",
+			text: "rgb(18, 93, 88)",
+		},
+		{
+			mode: "dark",
+			navBg: "rgb(37, 70, 65)",
+			jade: "rgb(131, 220, 204)",
+			text: "rgb(131, 220, 204)",
+		},
 	]) {
-		await expect(navigation).toHaveCSS(
-			"background-color",
-			colors.background
-		);
-		await expect(navigation).toHaveCSS("color", colors.text);
-		await expect(settings).toHaveCSS("background-color", colors.background);
-		await expect(settings).toHaveCSS("color", colors.text);
-		await expect(settings.locator("svg")).toHaveCSS("color", colors.text);
-		if (colors.background === "rgb(233, 238, 249)") {
+		await expect(background).toHaveCSS("background-color", theme.navBg);
+		await expect(navigation).toHaveCSS("color", theme.text);
+		await expect(underline).toHaveCSS("background-color", theme.jade);
+		await expect(settings.locator("svg")).toHaveCount(0);
+		if (theme.mode === "light") {
 			await page.getByRole("button", { name: "Toggle theme" }).click();
 		}
 	}
@@ -335,7 +346,7 @@ test("the footer uses a single year in the founding year and stays below long co
 	await expect(footer).toContainText("© 2025 PeakURL");
 	await expect(page.locator(".about-identity .logo-mark")).toHaveCSS(
 		"width",
-		"80px"
+		"72px"
 	);
 	expect(
 		await page.evaluate(() => {
@@ -399,7 +410,10 @@ test("long About tabs expand while the product header, tabs, and resources stay 
 	await expect(
 		page.getByRole("heading", { name: "Installed version notes" })
 	).toBeVisible();
-	await page.evaluate(() => window.scrollTo(0, 100));
+	await page.evaluate(() =>
+		window.scrollTo({ top: 100, behavior: "instant" })
+	);
+	await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(100);
 	const fixedPositions = () =>
 		page.evaluate(() =>
 			[".about-header", ".about-tabs", ".about-resources"].map(

@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { mockDashboardSession } from "../fixtures/dashboard.fixture";
 
+test.use({ reducedMotion: "reduce" });
+
 test.beforeEach(async ({ page }) => {
 	await page.route("**/api/v1/**", (route) =>
 		route.fulfill({ status: 503, json: { message: "Preview unavailable" } })
@@ -35,34 +37,96 @@ test.beforeEach(async ({ page }) => {
 	);
 });
 
-test("every Settings pane uses the available width on a large display", async ({
+test("an installation ahead of the published release has aligned Updates cards", async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 1440, height: 900 });
+	await page.route("**/api/v1/system/update", (route) =>
+		route.fulfill({
+			json: {
+				data: {
+					currentVersion: "1.9.0",
+					latestVersion: "1.8.0",
+					updateAvailable: false,
+					database: {
+						currentVersion: 11,
+						targetVersion: 11,
+						upgradeRequired: false,
+					},
+				},
+			},
+		})
+	);
+	await page.goto("/dashboard/settings/updates");
+	await expect(
+		page.getByRole("heading", {
+			name: "PeakURL 1.9.0 is newer than the published release",
+		})
+	).toBeVisible();
+	await expect(
+		page.getByText("Latest Published Version", { exact: true })
+	).toBeVisible();
+	const sectionHeadings = page.getByRole("heading", {
+		level: 2,
+		name: /^(Application Updates|Database Schema)$/,
+	});
+	await expect(sectionHeadings).toHaveCount(2);
+	const insets = await sectionHeadings.evaluateAll((headings) =>
+		headings.map((heading) => {
+			const section = heading.closest("section");
+			if (!section) throw new Error("Missing Updates card");
+			return (
+				heading.getBoundingClientRect().left -
+				section.getBoundingClientRect().left
+			);
+		})
+	);
+	expect(insets[0]).toBeGreaterThanOrEqual(16);
+	expect(insets[1]).toBeCloseTo(insets[0], 1);
+});
+
+for (const [theme, fill, ink] of [
+	["light", "rgb(18, 110, 104)", "rgb(255, 255, 255)"],
+	["dark", "rgb(131, 220, 204)", "rgb(16, 35, 33)"],
+] as const) {
+	test(`text selection uses the ${theme} action colors`, async ({ page }) => {
+		await page.addInitScript((selectedTheme) => {
+			localStorage.setItem("theme", selectedTheme);
+		}, theme);
+		await page.goto("/dashboard/settings/general");
+		const heading = page.getByRole("heading", {
+			level: 1,
+			name: "General",
+		});
+		await expect(heading).toBeVisible();
+		const colors = await heading.evaluate((element) => {
+			const selection = getComputedStyle(element, "::selection");
+			return { fill: selection.backgroundColor, ink: selection.color };
+		});
+		expect(colors).toEqual({ fill, ink });
+	});
+}
+
+test("standalone forms are narrower than Settings tables and technical panels", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 1920, height: 1000 });
-	for (const tab of [
-		"general",
-		"security",
-		"api",
-		"integrations",
-		"performance",
-		"email",
-		"location",
-		"updates",
-	]) {
-		await test.step(tab, async () => {
-			await page.goto(`/dashboard/settings/${tab}`);
-			await expect(page).toHaveURL(new RegExp(`/settings/${tab}$`));
-			await expect(
-				page.locator(".settings-section").first()
-			).toBeVisible();
-			const grid = await page
-				.locator(".settings-layout-grid")
-				.boundingBox();
-			const pane = await page.locator(".settings-tab-page").boundingBox();
-			if (!grid || !pane) throw new Error("Settings content is missing");
-			expect(pane.x + pane.width).toBeCloseTo(grid.x + grid.width, 0);
-		});
-	}
+	await page.goto("/dashboard/settings/email");
+	await expect(page.locator(".settings-email form")).toBeVisible();
+	const email = await page.locator(".settings-email").boundingBox();
+	expect(email!.width).toBeLessThanOrEqual(48 * 16);
+
+	await page
+		.getByRole("navigation", { name: "Settings" })
+		.getByRole("link", { name: "API Keys" })
+		.click();
+	await expect(
+		page
+			.locator(".settings-api")
+			.getByRole("heading", { name: "API Keys", exact: true, level: 2 })
+	).toBeVisible();
+	const api = await page.locator(".settings-api").boundingBox();
+	expect(api!.width).toBeGreaterThan(email!.width);
 });
 
 for (const width of [1440, 390]) {
@@ -89,14 +153,19 @@ for (const width of [1440, 390]) {
 			1
 		);
 		expect(second.y).toBeGreaterThanOrEqual(first.y + first.height);
-		expect(socialPreview.width).toBeLessThanOrEqual(448);
-		if (width === 1440) expect(socialPreview.width).toBeGreaterThan(400);
+		expect(socialPreview.width).toBeLessThanOrEqual(256);
 		const faviconFrame = await uploads
 			.first()
 			.locator(".settings-image-preview")
 			.boundingBox();
 		if (!faviconFrame) throw new Error("Favicon frame is missing");
-		expect(faviconFrame.height).toBeLessThanOrEqual(120);
+		expect(faviconFrame.height).toBeLessThanOrEqual(52);
+		await expect(
+			page.getByRole("img", {
+				name: "Current favicon preview",
+				exact: true,
+			})
+		).toBeVisible();
 		const png = await page.evaluate(() => {
 			const canvas = document.createElement("canvas");
 			canvas.width = canvas.height = 512;
@@ -149,9 +218,19 @@ for (const width of [1440, 390]) {
 				})
 			).toBeVisible();
 			await removeButton.click();
-			await expect(
-				page.getByRole("img", { name: preview, exact: true })
-			).toHaveCount(0);
+			const previewImage = page.getByRole("img", {
+				name: preview,
+				exact: true,
+			});
+			if (title === "Site Favicon") {
+				await expect(previewImage).toBeVisible();
+				await expect(previewImage).toHaveCSS(
+					"background-image",
+					/default-favicon-light|asset-[\w-]+\.svg/
+				);
+			} else {
+				await expect(previewImage).toHaveCount(0);
+			}
 			expect(await input.inputValue()).toBe("");
 			await input.setInputFiles(image);
 			await expect(
@@ -278,7 +357,7 @@ for (const width of [1440, 390]) {
 		await expect(
 			page.getByRole("heading", {
 				level: 1,
-				name: "Settings",
+				name: "Security",
 				exact: true,
 			})
 		).toBeVisible();
@@ -288,12 +367,21 @@ for (const width of [1440, 390]) {
 		await expect(
 			page.getByRole("button", { name: /Download/ })
 		).toHaveCount(0);
+		const sections = page.locator(".settings-security > section");
+		await expect(sections).toHaveCount(3);
+		const sectionWidths = () =>
+			sections.evaluateAll((panels) =>
+				panels.map((panel) => panel.getBoundingClientRect().width)
+			);
+		const originalWidths = await sectionWidths();
+		expect(new Set(originalWidths).size).toBe(1);
 		await page
 			.getByRole("button", { name: "Enable 2FA", exact: true })
 			.click();
 		await expect(
 			page.getByRole("img", { name: "TOTP QR code" })
 		).toBeVisible();
+		expect(await sectionWidths()).toEqual(originalWidths);
 		await expect(
 			page.getByRole("button", { name: "Enable 2FA", exact: true })
 		).toHaveCount(0);
@@ -414,13 +502,32 @@ for (const width of [1440, 390]) {
 	test(`API endpoint stays read-only and copies from its field at ${width}px`, async ({
 		page,
 		context,
+		browserName,
 	}) => {
-		await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+		if (browserName === "webkit") {
+			await page.addInitScript(() => {
+				// Playwright cannot grant OS clipboard access to WebKit.
+				let copiedText = "";
+				Object.defineProperty(navigator, "clipboard", {
+					value: {
+						writeText: async (value: string) => {
+							copiedText = value;
+						},
+						readText: async () => copiedText,
+					},
+				});
+			});
+		} else {
+			await context.grantPermissions([
+				"clipboard-read",
+				"clipboard-write",
+			]);
+		}
 		await page.setViewportSize({ width, height: 900 });
 		await page.goto("/dashboard/settings/general");
-		const normalField = await page
-			.getByRole("textbox", { name: "First Name" })
-			.boundingBox();
+		const firstName = page.getByRole("textbox", { name: "First Name" });
+		await expect(firstName).toBeEnabled();
+		const normalField = await firstName.boundingBox();
 		await page.goto("/dashboard/settings/api");
 		const endpoint = page.getByRole("textbox", {
 			name: "Base API URL",
@@ -432,6 +539,7 @@ for (const width of [1440, 390]) {
 			name: "Copy API URL",
 			exact: true,
 		});
+		await expect(copy).toBeVisible();
 		const copyBounds = await copy.boundingBox();
 		if (!normalField || !endpointBounds || !copyBounds)
 			throw new Error("API endpoint controls are missing");
@@ -583,7 +691,7 @@ for (const width of [1440, 390]) {
 		).toBeEnabled();
 	});
 
-	test(`location notice shows ready state without warning when database ready even without credentials at ${width}px`, async ({
+	test(`location shows a ready database and recommends credentials for future updates at ${width}px`, async ({
 		page,
 	}) => {
 		await page.route("**/api/v1/system/geoip", (route) =>
@@ -603,10 +711,14 @@ for (const width of [1440, 390]) {
 
 		await expect(
 			page.getByRole("heading", {
-				name: "Location analytics is enabled",
+				name: "MaxMind credentials recommended",
 				exact: true,
 			})
 		).toBeVisible();
+		await expect(page.getByText("Ready", { exact: true })).toBeVisible();
+		await expect(
+			page.getByRole("heading", { name: "Database download required" })
+		).toHaveCount(0);
 	});
 
 	test(`location download button is disabled when management is disabled at ${width}px`, async ({
@@ -753,3 +865,53 @@ for (const width of [1440, 390]) {
 		});
 	}
 }
+
+test("SMTP preserves required-field validation, dirty-state protection, and a single save", async ({
+	page,
+}) => {
+	let saves = 0;
+	const mailStatus = {
+		driver: "smtp",
+		canManageFromDashboard: true,
+		canSendTestEmail: true,
+		smtpAuth: false,
+		smtpHost: "smtp.example.com",
+		smtpPort: 587,
+		smtpEncryption: "tls",
+	};
+	await page.route("**/api/v1/system/mail", (route) => {
+		if (route.request().method() === "POST") {
+			saves++;
+			mailStatus.smtpHost = route.request().postDataJSON().smtpHost;
+		}
+		return route.fulfill({ json: { data: mailStatus } });
+	});
+
+	await page.goto("/dashboard/settings/email");
+	const testEmail = page.getByRole("button", { name: "Send Test Email" });
+	const save = page.getByRole("button", { name: "Save Email Configuration" });
+	const host = page.getByRole("textbox", { name: "SMTP Host" });
+	await expect(host).toHaveValue("smtp.example.com");
+	await expect(testEmail).toBeEnabled();
+	await host.clear();
+	await expect(testEmail).toBeDisabled();
+	await expect(
+		page.getByText(
+			"Save the current email settings before sending a test email."
+		)
+	).toBeVisible();
+	await save.click();
+	expect(
+		await host.evaluate(
+			(node) => (node as HTMLInputElement).validity.valueMissing
+		)
+	).toBe(true);
+	expect(saves).toBe(0);
+
+	await host.fill("relay.example.com");
+	await save.click();
+	await expect(testEmail).toBeEnabled();
+	await expect(save).toHaveCount(0);
+	await expect(host).toHaveValue("relay.example.com");
+	expect(saves).toBe(1);
+});

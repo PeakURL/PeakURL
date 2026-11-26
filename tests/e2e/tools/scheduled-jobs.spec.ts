@@ -55,12 +55,12 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 			waitUntil: "commit",
 		});
 
-		// Page Heading & Hero Badge
+		// Page heading and description
 		await expect(
 			page.getByRole("heading", { name: /^scheduled jobs$/i, level: 1 })
 		).toBeVisible({ timeout: 25000 });
 		await expect(
-			page.getByText(/system automation/i).first()
+			page.getByText(/inspect recurring background tasks/i)
 		).toBeVisible();
 
 		// KPI Cards
@@ -70,7 +70,9 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 		).toBeVisible();
 
 		// Action buttons
-		const refreshButton = page.getByRole("button", { name: /^refresh$/i });
+		const refreshButton = page.getByRole("button", {
+			name: "Refresh scheduled jobs status",
+		});
 		await expect(refreshButton).toBeVisible();
 
 		const runDueButton = page.getByRole("button", {
@@ -218,30 +220,33 @@ test.describe("Scheduled Jobs Admin Journeys", () => {
 		await manageBtn.click();
 
 		// Drawer heading
-		const drawerHeading = page.getByRole("heading", {
+		const drawer = page.getByRole("dialog", {
+			name: /manage schedules & retention/i,
+		});
+		const drawerHeading = drawer.getByRole("heading", {
 			name: /manage schedules & retention/i,
 		});
 		await expect(drawerHeading).toBeVisible({ timeout: 10000 });
 
 		// Sections
 		await expect(
-			page.getByRole("heading", {
+			drawer.getByRole("heading", {
 				name: /execution history retention/i,
 			})
 		).toBeVisible();
 		await expect(
-			page.getByRole("heading", {
+			drawer.getByRole("heading", {
 				name: /registered background tasks/i,
 			})
 		).toBeVisible();
 
 		// Save retention button
 		await expect(
-			page.getByRole("button", { name: /save retention/i })
+			drawer.getByRole("button", { name: /save retention/i })
 		).toBeVisible();
 
 		// Close drawer
-		const closeBtn = page.getByRole("button", { name: /^close$/i });
+		const closeBtn = drawer.getByRole("button", { name: /^close$/i });
 		await closeBtn.click();
 		await expect(drawerHeading).not.toBeVisible();
 	});

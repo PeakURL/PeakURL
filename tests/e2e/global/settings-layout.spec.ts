@@ -1,106 +1,127 @@
 import { test, expect } from "@playwright/test";
+import type { Locator } from "@playwright/test";
 import { mockDashboardSession } from "../fixtures/dashboard.fixture";
 
 const capabilities = {
 	view_links: true,
+	manage_site_settings: true,
 	manage_api_keys: true,
 	manage_integrations: true,
+	manage_mcp: true,
 	manage_performance: true,
 	manage_mail_delivery: true,
 	manage_location_data: true,
 	manage_updates: true,
 };
 
-for (const direction of ["ltr", "rtl"] as const) {
-	test(`Settings uses a compact navigation column and matching active markers in ${direction}`, async ({
-		page,
-	}) => {
-		await mockDashboardSession(page, { capabilities, direction });
-		await page.setViewportSize({ width: 1440, height: 1000 });
-		await page.goto("/dashboard/settings/general");
-		const settings = page.locator(".settings-sidebar-link-active");
-		const main = page.locator(".dashboard-sidebar-link-active");
-		await expect(settings).toHaveAttribute("aria-current", "page");
-		await expect(main).toHaveAttribute("aria-current", "page");
-		const sidebar = await page.locator(".settings-sidebar").boundingBox();
-		const content = await page.locator(".settings-tab-page").boundingBox();
-		if (!sidebar || !content) throw new Error("Settings layout is missing");
-		expect(sidebar.width).toBeLessThanOrEqual(240);
-		expect(content.width).toBeGreaterThan(sidebar.width * 2);
-		await expect(settings).toHaveCSS("height", "36px");
-		for (const color of ["rgb(43, 48, 64)", "rgb(181, 200, 250)"]) {
-			for (const link of [settings, main]) {
-				const marker = await link.evaluate((element) => {
-					const style = getComputedStyle(element, "::before");
-					return {
-						color: style.backgroundColor,
-						edge: style.insetInlineStart,
-						width: style.width,
-					};
-				});
-				expect(marker).toEqual({ color, edge: "0px", width: "3px" });
-			}
-			if (color === "rgb(43, 48, 64)")
-				await page
-					.getByRole("button", { name: "Toggle theme" })
-					.click();
-		}
+const tabs = [
+	["general", "General"],
+	["security", "Security"],
+	["api", "API Keys"],
+	["integrations", "Integrations"],
+	["mcp", "MCP Server"],
+	["performance", "Performance"],
+	["email", "Email SMTP"],
+	["location", "Location Data"],
+	["updates", "Updates"],
+] as const;
+
+async function horizontalEdges(element: Locator) {
+	return element.evaluate((node) => {
+		const { left, right } = node.getBoundingClientRect();
+		return [Math.round(left), Math.round(right)];
 	});
 }
 
-test("phone settings navigation scrolls horizontally without widening the page", async ({
+for (const direction of ["ltr", "rtl"] as const) {
+	test(`Settings navigation keeps the active link and underline in view at 320px (${direction})`, async ({
+		page,
+	}) => {
+		await mockDashboardSession(page, { capabilities, direction });
+		await page.setViewportSize({ width: 320, height: 844 });
+		await page.goto("/dashboard/settings/updates");
+
+		const navigation = page.getByRole("navigation", { name: "Settings" });
+		const active = navigation.locator('[aria-current="page"]');
+		const line = navigation.locator(".settings-navigation-indicator");
+		await expect(active).toHaveText("Updates");
+		await expect(active).toBeInViewport({ ratio: 1 });
+		await expect
+			.poll(() => horizontalEdges(line))
+			.toEqual(await horizontalEdges(active));
+		await expect(navigation.getByRole("link")).toHaveCount(9);
+		await expect(navigation.getByRole("tab")).toHaveCount(0);
+		expect(
+			await navigation.evaluate(
+				(nav) => nav.scrollWidth > nav.clientWidth
+			)
+		).toBe(true);
+		expect(
+			await page.evaluate(() => document.documentElement.scrollWidth)
+		).toBe(320);
+
+		await page.keyboard.press("Tab");
+		await navigation.getByRole("link", { name: "General" }).click();
+		await expect(active).toHaveText("General");
+		await expect(active).toBeInViewport({ ratio: 1 });
+		await expect
+			.poll(() => horizontalEdges(line))
+			.toEqual(await horizontalEdges(active));
+		await page.goBack();
+		await expect(active).toHaveText("Updates");
+		await expect(active).toBeInViewport({ ratio: 1 });
+		await page.goForward();
+		await expect(active).toHaveText("General");
+	});
+}
+
+test("Settings destinations expose one localized page heading and preserve direct access and breadcrumbs", async ({
 	page,
 }) => {
 	await mockDashboardSession(page, { capabilities });
-	await page.setViewportSize({ width: 390, height: 844 });
-	await page.goto("/dashboard/settings/general");
-	const navigation = page.locator(".settings-sidebar-nav");
-	await expect(navigation).toHaveCSS("flex-direction", "row");
-	await page
-		.locator(".settings-sidebar-link")
-		.last()
-		.scrollIntoViewIfNeeded();
-	expect(
-		await page.evaluate(
-			() => document.documentElement.scrollWidth <= innerWidth
-		)
-	).toBe(true);
-	const panel = await page.locator(".settings-sidebar-panel").boundingBox();
-	expect(panel?.height).toBeLessThanOrEqual(70);
+	const navigation = page.getByRole("navigation", { name: "Settings" });
+	const breadcrumb = page.getByRole("navigation", { name: "Breadcrumb" });
+	for (const [route, title] of tabs) {
+		await test.step(title, async () => {
+			await page.goto(`/dashboard/settings/${route}`);
+			const heading = page.getByRole("heading", { level: 1 });
+			await expect(heading).toHaveText(title);
+			await expect(
+				page.locator(".settings-page-header .page-header-description")
+			).not.toBeEmpty();
+			await expect(
+				breadcrumb.locator('[aria-current="page"]')
+			).toHaveText(title);
+			const active = navigation.locator('[aria-current="page"]');
+			await expect(active).toHaveAttribute(
+				"href",
+				`/dashboard/settings/${route}`
+			);
+			if (route === "mcp") await expect(active).toContainText("New");
+			const navBox = await navigation.boundingBox();
+			const headingBox = await heading.boundingBox();
+			expect(navBox!.y + navBox!.height).toBeLessThan(headingBox!.y);
+		});
+	}
 });
 
-test("Settings navigation remains below its heading while long forms scroll", async ({
+test("permission-filtered links and direct navigation use the same access rules", async ({
 	page,
 }) => {
-	await mockDashboardSession(page, { capabilities });
-	await page.setViewportSize({ width: 1440, height: 900 });
-	await page.goto("/dashboard/settings/general");
-	await expect(page.locator(".settings-sidebar-link-active")).toBeVisible();
-	const heading = page.locator(".settings-page-header");
-	const initialHeading = await heading.boundingBox();
-	// A long form makes the sticky containing block larger than the navigation list.
-	await page
-		.locator(".settings-tab-page")
-		.evaluate((element) => (element.style.minHeight = "1800px"));
-	await page.evaluate(() => window.scrollTo(0, 600));
-	const navigation = page.locator(".settings-sidebar-panel");
-	const scrolledHeading = await heading.boundingBox();
-	expect(scrolledHeading?.y).toBe(initialHeading?.y);
-	expect(scrolledHeading?.height).toBe(initialHeading?.height);
+	await mockDashboardSession(page, {
+		role: "editor",
+		capabilities: { view_links: true, manage_api_keys: true },
+	});
+	await page.goto("/dashboard/settings/email");
+	await expect(page).toHaveURL(/\/dashboard\/settings\/general$/);
+	const navigation = page.getByRole("navigation", { name: "Settings" });
+	await expect(navigation.getByRole("link")).toHaveText([
+		"General",
+		"Security",
+		"API Keys",
+	]);
+	await navigation.getByRole("link", { name: "API Keys" }).click();
 	await expect(
-		page.locator(".settings-sidebar-link-active")
-	).toBeInViewport();
-	const headingBottom = await heading.evaluate(
-		(element) => element.getBoundingClientRect().bottom
-	);
-	const navigationTop = await navigation.evaluate(
-		(element) => element.getBoundingClientRect().top
-	);
-	expect(navigationTop).toBeGreaterThanOrEqual(headingBottom);
-	await page.evaluate(() => window.scrollBy(0, 200));
-	expect(
-		await navigation.evaluate(
-			(element) => element.getBoundingClientRect().top
-		)
-	).toBe(navigationTop);
+		page.getByRole("heading", { name: "API Keys", level: 1 })
+	).toBeVisible();
 });

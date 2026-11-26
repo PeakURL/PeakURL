@@ -44,6 +44,20 @@ for (const { width, direction } of [
 					})
 					.toBe(true);
 				await assertViewportBounds(page, drawer.panel);
+				const inset = width >= 640 ? 12 : 8;
+				const bounds = await panel.boundingBox();
+				if (!bounds) throw new Error("Drawer panel is missing");
+				expect(bounds.y).toBeCloseTo(inset, 0);
+				expect(844 - bounds.y - bounds.height).toBeCloseTo(inset, 0);
+				expect(
+					direction === "rtl"
+						? bounds.x
+						: width - bounds.x - bounds.width
+				).toBeCloseTo(inset, 0);
+				await expect(panel).toHaveCSS(
+					"border-start-end-radius",
+					width >= 640 ? "24px" : "16px"
+				);
 				const header = panel.locator(".drawer-header");
 				const footer = panel.locator(".drawer-footer");
 				await expect(header).toBeInViewport();

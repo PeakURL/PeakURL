@@ -8,7 +8,7 @@ test.describe("Settings Workflows", () => {
 
 		// General tab
 		await expect(
-			page.getByRole("heading", { name: /account settings/i })
+			page.getByRole("heading", { name: "General", level: 1 })
 		).toBeVisible({ timeout: 25000 });
 		await expect(
 			page.getByRole("heading", { name: /profile information/i })
@@ -32,10 +32,14 @@ test.describe("Settings Workflows", () => {
 			timeout: 15000,
 		});
 		await expect(
-			page.getByRole("heading", { name: /application updates|updates/i })
+			page.getByRole("button", { name: "Check for Updates" })
 		).toBeVisible();
 		await expect(
-			page.getByRole("heading", { name: /database schema/i })
+			page.getByRole("heading", {
+				name: "Database Schema",
+				exact: true,
+				level: 2,
+			})
 		).toBeVisible();
 
 		// API Keys tab
@@ -51,7 +55,7 @@ test.describe("Settings Workflows", () => {
 			timeout: 15000,
 		});
 		await expect(
-			page.getByRole("heading", { name: /performance & caching/i })
+			page.getByRole("heading", { name: "Performance", level: 1 })
 		).toBeVisible();
 		await expect(page.getByText(/active engine/i).first()).toBeVisible();
 		await expect(page.getByText(/cache footprint/i).first()).toBeVisible();

@@ -5,6 +5,7 @@ const searchName = "Search the dashboard";
 const inputName = "Search links, people, and pages";
 const capabilityFlags = {
 	view_links: true,
+	view_analytics: true,
 	manage_users: true,
 	manage_api_keys: true,
 	manage_integrations: true,
@@ -17,7 +18,9 @@ const capabilityFlags = {
 async function openSearch(page: Page) {
 	await page.getByRole("button", { name: searchName, exact: true }).click();
 	await expect(page.getByRole("dialog", { name: searchName })).toBeVisible();
-	return page.getByRole("combobox", { name: inputName });
+	const input = page.getByRole("combobox", { name: inputName });
+	await expect(input).toBeFocused();
+	return input;
 }
 
 test.beforeEach(async ({ page }) => {
@@ -29,6 +32,7 @@ test.beforeEach(async ({ page }) => {
 
 test("search lives beside the theme toggle and supports shortcuts, focus trapping, and dismissal", async ({
 	page,
+	browserName,
 }) => {
 	await page.goto("/dashboard/about");
 	const trigger = page.getByRole("button", { name: searchName, exact: true });
@@ -43,11 +47,12 @@ test("search lives beside the theme toggle and supports shortcuts, focus trappin
 	const input = await openSearch(page);
 	await expect(input).toBeFocused();
 	await expect(page.getByRole("option", { name: /Overview/ })).toBeVisible();
-	await page.keyboard.press("Shift+Tab");
+	const tab = browserName === "webkit" ? "Alt+Tab" : "Tab";
+	await page.keyboard.press(`Shift+${tab}`);
 	await expect(
 		page.getByRole("button", { name: "Close search" })
 	).toBeFocused();
-	await page.keyboard.press("Tab");
+	await page.keyboard.press(tab);
 	await expect(input).toBeFocused();
 	await page.keyboard.press("Escape");
 	await expect(page.getByRole("dialog")).toHaveCount(0);
@@ -144,6 +149,23 @@ test("global search combines links, people, tools, and the full links search", a
 test("a link result opens its statistics and API failures can be retried", async ({
 	page,
 }) => {
+	const guide = {
+		id: "guide",
+		alias: "guide",
+		shortCode: "guide",
+		title: "Team guide",
+		destinationUrl: "https://example.test/guide",
+		shortUrl: "https://preview.example.test/guide",
+		status: "active",
+	};
+	const details = Promise.withResolvers<void>();
+	await page.route("**/api/v1/urls/guide", async (route) => {
+		await details.promise;
+		await route.fulfill({ json: { data: guide } });
+	});
+	await page.route("**/api/v1/analytics/url/guide/stats*", (route) =>
+		route.fulfill({ json: { data: {} } })
+	);
 	let requests = 0;
 	await page.route("**/api/v1/urls?*", (route) => {
 		if (!new URL(route.request().url()).searchParams.get("search"))
@@ -156,15 +178,7 @@ test("a link result opens its statistics and API failures can be retried", async
 			: route.fulfill({
 					json: {
 						data: {
-							items: [
-								{
-									id: "guide",
-									alias: "guide",
-									title: "Team guide",
-									destinationUrl:
-										"https://example.test/guide",
-								},
-							],
+							items: [guide],
 							meta: { totalItems: 1 },
 						},
 					},
@@ -179,7 +193,13 @@ test("a link result opens its statistics and API failures can be retried", async
 	);
 	await links.getByRole("button", { name: "Try again" }).click();
 	await page.getByRole("option", { name: /Team guide/ }).click();
-	await expect(page).toHaveURL(/\/dashboard\/links\?stats=guide$/);
+	try {
+		await expect(page).toHaveURL(/\/dashboard\/links\?stats=guide$/);
+	} finally {
+		details.resolve();
+	}
+	await expect(page.getByRole("dialog")).toContainText("Team guide");
+	await expect(page).toHaveURL(/\/dashboard\/links$/);
 });
 
 test("permissions hide restricted destinations and prevent restricted API requests", async ({
@@ -288,6 +308,9 @@ for (const width of [390, 568, 1440]) {
 					page.locator(".dashboard-search-panel")
 				).toHaveAttribute("dir", direction);
 				await page.keyboard.press("Escape");
+				await expect(
+					page.getByRole("dialog", { name: searchName })
+				).toHaveCount(0);
 			}
 		}
 	});
@@ -362,7 +385,12 @@ test("browser navigation dismisses search without reopening it on return", async
 	page,
 }) => {
 	await page.goto("/dashboard/about");
-	await page.getByRole("tab", { name: "Contributors", exact: true }).click();
+	const contributors = page.getByRole("tab", {
+		name: "Contributors",
+		exact: true,
+	});
+	await contributors.click();
+	await expect(contributors).toHaveAttribute("aria-selected", "true");
 	await openSearch(page);
 	await page.goBack();
 	await expect(page.getByRole("dialog")).toHaveCount(0);

@@ -25,10 +25,10 @@ const paths = [
 	...settings.map((tab) => `/dashboard/settings/${tab}`),
 ];
 
-async function expectBlueFocus(
+async function expectFieldFocus(
 	field: Locator,
 	color: string,
-	minimumBorderContrast = 1.2
+	minimumBorderContrast = 3
 ) {
 	await field.evaluate(async (element) => {
 		if (element instanceof HTMLElement) element.blur();
@@ -86,19 +86,15 @@ for (const theme of ["light", "dark"] as const) {
 		expect(headerBounds.y + headerBounds.height).toBe(
 			sidebarBounds.y + sidebarBounds.height
 		);
-		if (theme === "light")
-			await expect(
-				page.getByLabel("First Name", { exact: false })
-			).toHaveCSS(
-				"border-color",
-				await header.evaluate(
-					(node) => getComputedStyle(node).borderBottomColor
-				)
-			);
-		const divider = await header.evaluate(
-			(node) => getComputedStyle(node).borderBottomColor
+		const firstName = page.getByLabel("First Name", { exact: false });
+		await expect(firstName).toHaveCSS(
+			"border-color",
+			theme === "light" ? "rgb(119, 141, 135)" : "rgb(99, 123, 116)"
 		);
-		await expect(sidebarHeader).toHaveCSS("border-bottom-color", divider);
+		await expect(firstName).toHaveCSS(
+			"background-color",
+			theme === "light" ? "rgb(241, 246, 243)" : "rgb(28, 38, 36)"
+		);
 		const username = page.getByLabel("Username", { exact: false });
 		await expect(username).toBeDisabled();
 		await expect(username).toHaveCSS("opacity", "1");
@@ -122,12 +118,12 @@ for (const theme of ["light", "dark"] as const) {
 			for (const field of await dialog
 				.locator("input, .select-trigger")
 				.all())
-				await expectBlueFocus(
+				await expectFieldFocus(
 					field,
 					theme === "dark"
-						? "rgb(181, 200, 250)"
-						: "rgb(92, 113, 159)",
-					theme === "dark" ? 2.5 : 1.2
+						? "rgb(131, 220, 204)"
+						: "rgb(18, 110, 104)",
+					3
 				);
 			await dialog
 				.getByRole("button", { name: "Show password" })
@@ -185,12 +181,12 @@ for (const theme of ["light", "dark"] as const) {
 				for (const control of await page
 					.locator(".form-control-base")
 					.all()) {
-					await expectBlueFocus(
+					await expectFieldFocus(
 						control,
 						theme === "dark"
-							? "rgb(181, 200, 250)"
-							: "rgb(92, 113, 159)",
-						theme === "dark" ? 2.5 : 1.2
+							? "rgb(131, 220, 204)"
+							: "rgb(18, 110, 104)",
+						3
 					);
 				}
 				await field.evaluate((node) => node.blur());
@@ -207,7 +203,7 @@ for (const theme of ["light", "dark"] as const) {
 		}
 	});
 
-	test(`dashboard fields and drawer controls share the logo blue focus ring in ${theme} mode`, async ({
+	test(`dashboard fields and drawer controls share the Jade focus stroke in ${theme} mode`, async ({
 		page,
 	}) => {
 		await page.addInitScript(
@@ -249,7 +245,7 @@ for (const theme of ["light", "dark"] as const) {
 				route.fulfill({ json: { data: payload } })
 			);
 		const color =
-			theme === "dark" ? "rgb(181, 200, 250)" : "rgb(92, 113, 159)";
+			theme === "dark" ? "rgb(131, 220, 204)" : "rgb(18, 110, 104)";
 		const fieldsSelector =
 			"input:visible:not([disabled],[type=checkbox],[type=radio],[type=file],[type=hidden]), textarea:visible:not([disabled]), select:visible:not([disabled]), .select-trigger:visible:not([disabled])";
 		let focusedCount = 0;
@@ -263,11 +259,7 @@ for (const theme of ["light", "dark"] as const) {
 						page.locator(".settings-tab-page h2").first()
 					).toBeVisible();
 				for (const field of await page.locator(fieldsSelector).all()) {
-					await expectBlueFocus(
-						field,
-						color,
-						theme === "dark" ? 2.5 : 1.2
-					);
+					await expectFieldFocus(field, color, 3);
 					focusedCount++;
 				}
 			});
@@ -279,17 +271,13 @@ for (const theme of ["light", "dark"] as const) {
 			const panel = page.locator(drawer.panel);
 			await expect(panel).toBeVisible();
 			for (const field of await panel.locator(fieldsSelector).all())
-				await expectBlueFocus(
-					field,
-					color,
-					theme === "dark" ? 2.5 : 1.2
-				);
+				await expectFieldFocus(field, color, 3);
 			await page.keyboard.press("Escape");
 			await expect(panel).toHaveCount(0);
 		}
 		await page.goto("/dashboard/settings/general");
 		const name = page.getByLabel("First Name", { exact: false });
-		await expectBlueFocus(name, color);
+		await expectFieldFocus(name, color);
 		if (process.env.PEAKURL_UI_PREVIEW)
 			await page
 				.locator(".form-field")
@@ -308,15 +296,19 @@ for (const theme of ["light", "dark"] as const) {
 		await page
 			.getByRole("button", { name: "Search the dashboard", exact: true })
 			.click();
-		await expect(page.locator(".dashboard-search-field")).toHaveCSS(
-			"box-shadow",
-			"none"
-		);
+		const searchField = page.locator(".dashboard-search-field");
 		const searchInput = page.getByRole("combobox", {
 			name: "Search links, people, and pages",
 		});
 		await expect(searchInput).toBeFocused();
+		await expect(searchField).toHaveCSS("border-bottom-color", color);
+		await expect(searchField).toHaveCSS(
+			"box-shadow",
+			`${color} 0px -1px 0px 0px inset`
+		);
 		await expect(searchInput).toHaveCSS("box-shadow", "none");
 		await expect(searchInput).toHaveCSS("outline-style", "none");
+		await page.getByRole("button", { name: "Close search" }).focus();
+		await expect(searchField).toHaveCSS("box-shadow", "none");
 	});
 }

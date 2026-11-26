@@ -48,11 +48,11 @@ test("installed release notes open in About instead of a modal", async ({
 	await expect(
 		page.getByRole("heading", {
 			name: "PeakURL 4.2.0 is the latest version",
-			level: 2,
+			level: 3,
 		})
 	).toBeVisible();
 	await expect(
-		page.locator(".settings-update-status-prominent .lucide-package-check")
+		page.locator(".settings-updates-release .lucide-package-check")
 	).toBeVisible();
 	const notes = page.getByRole("link", {
 		name: "Release notes",
@@ -92,13 +92,11 @@ for (const releaseNotesUrl of ["https://peakurl.org/releases/4.3.0", ""]) {
 		await expect(
 			page.getByRole("heading", {
 				name: "PeakURL 4.3.0 is available",
-				level: 2,
+				level: 3,
 			})
 		).toBeVisible();
 		await expect(
-			page.locator(
-				".settings-update-status-prominent .lucide-package-plus"
-			)
+			page.locator(".settings-updates-release .lucide-package-plus")
 		).toBeVisible();
 		const notes = page.getByRole("link", {
 			name: "Release notes",

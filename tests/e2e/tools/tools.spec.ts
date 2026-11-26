@@ -6,11 +6,13 @@ test.describe("Tools & Utilities Journeys", () => {
 	}) => {
 		await page.goto("/dashboard/tools/export", { waitUntil: "commit" });
 
-		// Page heading & badge
+		// Page heading and export section
 		await expect(
 			page.getByRole("heading", { name: /^export$/i })
 		).toBeVisible({ timeout: 25000 });
-		await expect(page.getByText(/data export/i).first()).toBeVisible();
+		await expect(
+			page.getByRole("heading", { name: "Bulk Link Export" })
+		).toBeVisible();
 
 		// Export format cards
 		await expect(

@@ -629,7 +629,9 @@ test.describe("Webhooks Settings and Management Workflows", () => {
 			expect(putRes.status()).toBe(200);
 
 			await expect(
-				page.getByText(/Delivery retention period updated/i)
+				page
+					.locator(".notification-message")
+					.filter({ hasText: /Delivery retention period updated/i })
 			).toBeVisible({ timeout: 10000 });
 			await expect(saveButton).toBeHidden();
 			await expect(retentionSelect).toContainText("7 days");
@@ -702,9 +704,10 @@ test.describe("Webhooks Settings and Management Workflows", () => {
 
 			await saveButton.click();
 			await expect(
-				page.getByText(
-					/Simulated internal server error|Failed to update delivery retention/i
-				)
+				page.locator(".notification-message").filter({
+					hasText:
+						/Simulated internal server error|Failed to update delivery retention/i,
+				})
 			).toBeVisible({ timeout: 5000 });
 			await expect(retentionSelect).toContainText("7 days");
 			await expect(saveButton).toBeVisible();
@@ -714,7 +717,9 @@ test.describe("Webhooks Settings and Management Workflows", () => {
 			await saveButton.click();
 			simulatedRetention = 7;
 			await expect(
-				page.getByText(/Delivery retention period updated/i)
+				page
+					.locator(".notification-message")
+					.filter({ hasText: /Delivery retention period updated/i })
 			).toBeVisible({ timeout: 10000 });
 			await expect(saveButton).toBeHidden();
 			await expect(retentionSelect).toContainText("7 days");
@@ -876,7 +881,9 @@ test.describe("Webhooks Settings and Management Workflows", () => {
 			await deleteBtn.click();
 			await page.getByRole("button", { name: "Delete Delivery" }).click();
 			await expect(
-				page.getByText(/Active webhook deliveries cannot be deleted/i)
+				page.locator(".notification-message").filter({
+					hasText: /Active webhook deliveries cannot be deleted/i,
+				})
 			).toBeVisible({ timeout: 5000 });
 			await expect(drawer.getByText("del_item_p2_last")).toBeVisible();
 			await page.getByRole("button", { name: "Cancel" }).click();
@@ -903,7 +910,9 @@ test.describe("Webhooks Settings and Management Workflows", () => {
 			await deleteBtn.click();
 			await page.getByRole("button", { name: "Delete Delivery" }).click();
 			await expect(
-				page.getByText(/Delivery record deleted/i)
+				page
+					.locator(".notification-message")
+					.filter({ hasText: /Delivery record deleted/i })
 			).toBeVisible({ timeout: 10000 });
 
 			await expect(drawer.getByText("del_item_active")).toBeVisible({
@@ -1086,7 +1095,9 @@ test.describe("Webhooks Settings and Management Workflows", () => {
 				.getByRole("button", { name: "Clear Completed History" })
 				.click();
 			await expect(
-				page.getByText(/Active webhook deliveries cannot be deleted/i)
+				page.locator(".notification-message").filter({
+					hasText: /Active webhook deliveries cannot be deleted/i,
+				})
 			).toBeVisible({ timeout: 5000 });
 			await page.getByRole("button", { name: "Cancel" }).click();
 			await expect(
@@ -1114,7 +1125,9 @@ test.describe("Webhooks Settings and Management Workflows", () => {
 				.getByRole("button", { name: "Clear Completed History" })
 				.click();
 			await expect(
-				page.getByText(/Cleared 16 completed delivery records/i)
+				page.locator(".notification-message").filter({
+					hasText: /Cleared 16 completed delivery records/i,
+				})
 			).toBeVisible({ timeout: 10000 });
 
 			await expect(drawer.getByText("del_clr_active")).toBeVisible({

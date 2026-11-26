@@ -6,6 +6,7 @@ const tabs = [
 	"security",
 	"api",
 	"integrations",
+	"mcp",
 	"performance",
 	"email",
 	"location",
@@ -22,6 +23,7 @@ test.beforeEach(async ({ page }) => {
 			manage_site_settings: true,
 			manage_api_keys: true,
 			manage_integrations: true,
+			manage_mcp: true,
 			manage_performance: true,
 			manage_mail_delivery: true,
 			manage_location_data: true,
@@ -99,7 +101,7 @@ test.beforeEach(async ({ page }) => {
 	}
 });
 
-for (const width of [320, 640, 768, 1024, 1280, 1920]) {
+for (const width of [320, 390, 768, 1024, 1440, 1920]) {
 	test(`all Settings tabs keep their controls inside the content at ${width}px`, async ({
 		page,
 	}) => {

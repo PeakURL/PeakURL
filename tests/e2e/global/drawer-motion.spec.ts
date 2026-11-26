@@ -1,69 +1,93 @@
 import { test, expect, type Page } from "@playwright/test";
 import { drawerScenarios, mockDrawerPages } from "../fixtures/drawer.fixture";
 
-/** Record actual travel on animation frames, including the very first mount. */
+/** Inspect the browser's running translation without depending on frame delivery. */
 async function recordDrawerMotion(
 	page: Page,
 	trigger: string,
 	panel: string,
 	phase: "enter" | "leave"
 ) {
+	await expect(page.locator(trigger).first()).toBeEnabled();
 	return page
 		.locator(trigger)
 		.first()
 		.evaluate(
 			(button, { panel, phase }) =>
-				new Promise<
-					Array<{
-						progress: number;
-						easing: string;
-						duration: string;
-					}>
-				>((resolve, reject) => {
-					if (!(button instanceof HTMLButtonElement))
-						return reject(
-							new Error("Drawer control must be a button")
+				new Promise<{
+					progress: number[];
+					easing: string;
+					duration: string;
+				}>((resolve, reject) => {
+					if (!(button instanceof HTMLButtonElement)) {
+						throw new Error("Drawer control must be a button");
+					}
+					const controller = new AbortController();
+					const timeout = window.setTimeout(() => {
+						controller.abort();
+						reject(
+							new Error(
+								`Drawer did not start its ${phase} transition: ${panel}`
+							)
 						);
-					const frames: Array<{
-						progress: number;
-						easing: string;
-						duration: string;
-					}> = [];
-					const startedAt = performance.now();
-					button.click();
-					const sample = () => {
-						const element =
-							document.querySelector<HTMLElement>(panel);
-						if (
-							element &&
-							(element.hasAttribute(`data-${phase}`) ||
-								frames.length > 0)
-						) {
-							const rect = element.getBoundingClientRect();
+					}, 3000);
+
+					document.addEventListener(
+						"transitionrun",
+						(event) => {
+							const element = event.target;
+							if (
+								!(element instanceof HTMLElement) ||
+								!element.matches(panel) ||
+								!element.hasAttribute(`data-${phase}`) ||
+								event.propertyName !== "translate"
+							)
+								return;
+							const animation = element
+								.getAnimations()
+								.find(
+									(candidate) =>
+										candidate instanceof CSSTransition &&
+										candidate.transitionProperty ===
+											"translate"
+								);
+							if (!animation?.effect) return;
+
+							controller.abort();
+							window.clearTimeout(timeout);
+							const style = getComputedStyle(element);
+							const easing = style.transitionTimingFunction;
+							const duration = style.transitionDuration;
+							const milliseconds = Number(
+								animation.effect.getTiming().duration
+							);
+							const { width } = element.getBoundingClientRect();
+							const inset = parseFloat(style.marginInlineEnd);
 							const finalX =
-								element.dir === "rtl" ||
-								document.documentElement.dir === "rtl"
-									? 0
-									: innerWidth - rect.width;
-							frames.push({
-								progress:
-									1 - Math.abs(rect.x - finalX) / rect.width,
-								duration:
-									getComputedStyle(element)
-										.transitionDuration,
-								easing: getComputedStyle(element)
-									.transitionTimingFunction,
-							});
-						}
-						if (
-							(frames.length > 0 &&
-								!element?.hasAttribute(`data-${phase}`)) ||
-							performance.now() - startedAt > 2000
-						)
-							return resolve(frames);
-						requestAnimationFrame(sample);
-					};
-					requestAnimationFrame(sample);
+								style.direction === "rtl"
+									? inset
+									: innerWidth - width - inset;
+							animation.pause();
+							const progress = [0, 0.25, 0.5, 0.75, 0.99].map(
+								(fraction) => {
+									animation.currentTime =
+										milliseconds * fraction;
+									return (
+										1 -
+										Math.abs(
+											element.getBoundingClientRect().x -
+												finalX
+										) /
+											(width + inset)
+									);
+								}
+							);
+							animation.finish();
+							resolve({ progress, easing, duration });
+						},
+						{ signal: controller.signal, capture: true }
+					);
+					button.click();
 				}),
 			{ panel, phase }
 		);
@@ -86,41 +110,40 @@ for (const direction of ["ltr", "rtl"] as const) {
 						phase === "enter"
 							? drawer.trigger
 							: `${drawer.panel} ${drawer.close}`;
-					const frames = await recordDrawerMotion(
-						page,
-						trigger,
-						drawer.panel,
-						phase
-					);
+					const { progress, easing, duration } =
+						await recordDrawerMotion(
+							page,
+							trigger,
+							drawer.panel,
+							phase
+						);
 					expect(
-						frames.length,
+						progress.length,
 						`${drawer.name} ${phase} must animate`
 					).toBeGreaterThan(3);
 					expect(
-						frames.some(
-							(frame) =>
-								frame.progress > 0.1 && frame.progress < 0.9
+						progress.some(
+							(position) => position > 0.1 && position < 0.9
 						),
-						"must pass through an intermediate position"
+						`${drawer.name} ${phase} must pass through an intermediate position: ${progress.join(", ")}`
 					).toBe(true);
-					const first = frames[0];
-					const last = frames.at(-1);
-					if (!first || !last)
-						throw new Error("Drawer motion was not recorded");
-					expect(first.easing).toBe(
+					const first = progress[0];
+					const last = progress.at(-1);
+					expect(easing).toBe(
 						phase === "enter"
-							? "cubic-bezier(0.4, 0, 1, 1)"
-							: "cubic-bezier(0, 0, 0.2, 1)"
+							? "cubic-bezier(0.2, 0.75, 0.25, 1)"
+							: "cubic-bezier(0.4, 0, 1, 1)"
 					);
-					expect(first.duration).toBe(
-						phase === "enter" ? "0.5s" : "0.4s"
-					);
+					expect(duration).toBe(phase === "enter" ? "0.3s" : "0.22s");
 					if (phase === "enter") {
-						expect(first.progress).toBeLessThan(0.25);
-						expect(last.progress).toBeGreaterThan(0.9);
+						await expect(
+							page.locator(drawer.panel)
+						).not.toHaveAttribute("data-enter");
+						expect(first).toBeLessThan(0.25);
+						expect(last).toBeGreaterThan(0.9);
 					} else {
-						expect(first.progress).toBeGreaterThan(0.75);
-						expect(last.progress).toBeLessThan(0.1);
+						expect(first).toBeGreaterThan(0.75);
+						expect(last).toBeLessThan(0.1);
 					}
 				}
 				await expect(page.locator(drawer.panel)).toHaveCount(0);

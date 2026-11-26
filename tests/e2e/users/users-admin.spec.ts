@@ -97,9 +97,9 @@ test.describe("Users & Roles Admin Journeys", () => {
 		await expect(editTitle).toBeVisible();
 
 		// Role dropdown is disabled for self
-		const roleButton = page.locator(
-			".users-page-dialog-field button.select-trigger"
-		);
+		const roleButton = page
+			.getByRole("dialog", { name: "Edit User" })
+			.getByRole("button", { name: "User role" });
 		await expect(roleButton).toBeDisabled();
 		await expect(
 			page.getByText(/your own role is locked here/i)
@@ -245,34 +245,37 @@ test.describe("Users & Roles Admin Journeys", () => {
 		await manageRolesBtn.click();
 
 		// Drawer heading
-		const drawerTitle = page.getByRole("heading", {
+		const drawer = page.getByRole("dialog", {
+			name: /manage roles & capabilities/i,
+		});
+		const drawerTitle = drawer.getByRole("heading", {
 			name: /manage roles & capabilities/i,
 		});
 		await expect(drawerTitle).toBeVisible();
 
 		// Role tabs: immutable administrator is not configurable; Editor and Create Role are available
 		await expect(
-			page.getByRole("button", { name: /administrator/i })
+			drawer.getByRole("button", { name: /administrator/i })
 		).not.toBeVisible();
-		const editorTab = page.getByRole("button", { name: /editor/i });
+		const editorTab = drawer.getByRole("button", { name: /editor/i });
 		await expect(editorTab).toBeVisible();
 		await expect(
-			page.getByRole("button", { name: /create role/i })
+			drawer.getByRole("button", { name: /create role/i })
 		).toBeVisible();
 
 		// Group headers
-		await expect(page.getByText(/user & access/i).first()).toBeVisible();
+		await expect(drawer.getByText(/user & access/i).first()).toBeVisible();
 		await expect(
-			page.getByText(/site & integrations/i).first()
+			drawer.getByText(/site & integrations/i).first()
 		).toBeVisible();
-		await expect(page.getByText(/^links$/i).first()).toBeVisible();
-		await expect(page.getByText(/^analytics$/i).first()).toBeVisible();
+		await expect(drawer.getByText(/^links$/i).first()).toBeVisible();
+		await expect(drawer.getByText(/^analytics$/i).first()).toBeVisible();
 
 		// Editor tab displays Admin only badge for reserved capabilities
-		await expect(page.getByText(/admin only/i).first()).toBeVisible();
+		await expect(drawer.getByText(/admin only/i).first()).toBeVisible();
 
 		// Protected badges are not displayed (immutable superuser is not configurable)
-		await expect(page.getByText(/protected/i)).not.toBeVisible();
+		await expect(drawer.getByText(/protected/i)).not.toBeVisible();
 
 		// Close drawer without edits closes cleanly
 		await page.keyboard.press("Escape");
@@ -294,18 +297,24 @@ test.describe("Users & Roles Admin Journeys", () => {
 			})
 			.click();
 
-		const drawerTitle = page.getByRole("heading", {
+		const drawer = page.getByRole("dialog", {
+			name: /manage roles & capabilities/i,
+		});
+		const drawerTitle = drawer.getByRole("heading", {
 			name: /manage roles & capabilities/i,
 		});
 		await expect(drawerTitle).toBeVisible();
 
 		// Switch to Editor tab
-		await page.getByRole("button", { name: /editor/i }).click();
+		await drawer.getByRole("button", { name: /editor/i }).click();
 
 		// Find an editable capability toggle (e.g. Delete Links)
 		const deleteLinksToggle = page.locator("#cap-toggle-delete_links");
 		await expect(deleteLinksToggle).toBeAttached();
-		await deleteLinksToggle.click({ force: true });
+		await deleteLinksToggle.press("Space");
+		await expect(
+			drawer.getByRole("button", { name: "Save Changes" })
+		).toBeEnabled();
 
 		// Press Escape - should trigger discard confirmation dialog
 		await page.keyboard.press("Escape");
@@ -373,13 +382,16 @@ test.describe("Users & Roles Admin Journeys", () => {
 				})
 				.click();
 
-			const drawerTitle = page.getByRole("heading", {
+			const drawer = page.getByRole("dialog", {
+				name: /manage roles & capabilities/i,
+			});
+			const drawerTitle = drawer.getByRole("heading", {
 				name: /manage roles & capabilities/i,
 			});
 			await expect(drawerTitle).toBeVisible();
 
 			// Switch to Editor tab
-			const editorTab = page.getByRole("button", { name: /editor/i });
+			const editorTab = drawer.getByRole("button", { name: /editor/i });
 			await editorTab.click();
 
 			// Verify admin-only controls are disabled on Editor tab
@@ -394,7 +406,7 @@ test.describe("Users & Roles Admin Journeys", () => {
 			} else {
 				await expect(deleteLinksToggle).not.toBeChecked();
 			}
-			await deleteLinksToggle.click({ force: true });
+			await deleteLinksToggle.press("Space");
 			if (targetDeleteLinks) {
 				await expect(deleteLinksToggle).toBeChecked();
 			} else {
@@ -410,7 +422,9 @@ test.describe("Users & Roles Admin Journeys", () => {
 
 			// Verify success notification
 			await expect(
-				page.getByText(/role capabilities updated/i)
+				page.locator(".notification-title").filter({
+					hasText: /role capabilities updated/i,
+				})
 			).toBeVisible();
 
 			// Reload page to verify server persistence
@@ -428,7 +442,7 @@ test.describe("Users & Roles Admin Journeys", () => {
 			await expect(drawerTitle).toBeVisible();
 
 			// Switch to Editor tab
-			await page.getByRole("button", { name: /editor/i }).click();
+			await drawer.getByRole("button", { name: /editor/i }).click();
 
 			// Verify Delete Links persisted target value and Customized badge is shown
 			if (targetDeleteLinks) {
@@ -462,7 +476,9 @@ test.describe("Users & Roles Admin Journeys", () => {
 
 			// Verify success notification and default state
 			await expect(
-				page.getByText(/role reset to defaults/i)
+				page.locator(".notification-title").filter({
+					hasText: /role reset to defaults/i,
+				})
 			).toBeVisible();
 			await expect(
 				page.locator("#cap-toggle-delete_links")
@@ -480,7 +496,7 @@ test.describe("Users & Roles Admin Journeys", () => {
 				})
 				.click();
 			await expect(drawerTitle).toBeVisible();
-			await page.getByRole("button", { name: /editor/i }).click();
+			await drawer.getByRole("button", { name: /editor/i }).click();
 
 			// Assert baseline defaults restored
 			await expect(
@@ -577,7 +593,10 @@ test.describe("Users & Roles Admin Journeys", () => {
 					name: /manage roles & capabilities/i,
 				})
 				.click();
-			await page.getByRole("button", { name: /editor/i }).click();
+			const drawer = page.getByRole("dialog", {
+				name: /manage roles & capabilities/i,
+			});
+			await drawer.getByRole("button", { name: /editor/i }).click();
 
 			// Confirm Delete Links is currently enabled from our customized setup
 			await expect(
@@ -591,7 +610,7 @@ test.describe("Users & Roles Admin Journeys", () => {
 			);
 			await expect(webhooksToggle).toBeVisible();
 			await expect(webhooksToggle).toBeEnabled();
-			await webhooksToggle.click({ force: true });
+			await webhooksToggle.press("Space");
 
 			const saveBtn = page.locator(".users-roles-drawer-footer button", {
 				hasText: /save changes/i,
@@ -599,7 +618,9 @@ test.describe("Users & Roles Admin Journeys", () => {
 			await expect(saveBtn).toBeEnabled();
 			await saveBtn.click();
 			await expect(
-				page.getByText(/role capabilities updated/i)
+				page.locator(".notification-title").filter({
+					hasText: /role capabilities updated/i,
+				})
 			).toBeVisible();
 
 			// Close drawer

@@ -14,6 +14,55 @@ const states = [
 	["password", "Password required", "password"],
 ] as const;
 
+test("the standalone readme loads local artwork and wraps long links at 320px", async ({
+	browser,
+}) => {
+	const context = await browser.newContext({
+		javaScriptEnabled: false,
+		colorScheme: "dark",
+		viewport: { width: 320, height: 900 },
+	});
+	try {
+		const page = await context.newPage();
+		await page.route("**/*", (route) => {
+			const url = new URL(route.request().url());
+			if (
+				url.origin === origin &&
+				[
+					"/readme.html",
+					"/server/services/brand-tokens.css",
+					"/client/assets/logo/peakurl.svg",
+					"/client/assets/logo/peakurl-wordmark.svg",
+				].includes(url.pathname)
+			) {
+				return route.fulfill({ path: `.${url.pathname}` });
+			}
+			return route.abort();
+		});
+		await page.goto(`${origin}/readme.html`);
+		await expect(
+			page.getByRole("heading", { level: 1 })
+		).toHaveAccessibleName("PeakURL");
+		await expect(page.locator("body")).toHaveCSS(
+			"background-color",
+			"rgb(14, 19, 18)"
+		);
+		expect(
+			await page.evaluate(() => document.documentElement.scrollWidth)
+		).toBe(320);
+		expect(
+			await page
+				.locator(".header-wordmark")
+				.evaluate(
+					(image: HTMLImageElement) =>
+						image.complete && image.naturalWidth > 0
+				)
+		).toBe(true);
+	} finally {
+		await context.close();
+	}
+});
+
 for (const theme of ["light", "dark"] as const) {
 	test(`public recovery pages balance illustrations and stay readable in ${theme} mode`, async ({
 		page,
@@ -208,7 +257,12 @@ test("protected links retain password submission and validation in the shared la
 	await expect(
 		page.getByText("Incorrect password. Please try again.")
 	).toBeVisible();
-	await page.getByLabel("Password", { exact: true }).fill("correct-password");
+	const password = page.getByLabel("Password", { exact: true });
+	await expect(password).toHaveAttribute("aria-invalid", "true");
+	await expect(password).toHaveAccessibleDescription(
+		"Incorrect password. Please try again."
+	);
+	await password.fill("correct-password");
 	await page.getByRole("button", { name: "Continue" }).click();
 	await expect(
 		page.getByRole("heading", { name: "Link opened" })

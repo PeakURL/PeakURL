@@ -19,7 +19,7 @@ async function drawerMotion(
 	phase: "enter" | "leave",
 	trigger: string
 ) {
-	await expect(page.locator(trigger)).toBeVisible();
+	await expect(page.locator(trigger)).toBeEnabled();
 	return page.evaluate(
 		({ phase, trigger }) =>
 			new Promise<string>((resolve, reject) => {
@@ -70,10 +70,10 @@ test("search, user dialogs, and role drawers share a sharp dim overlay", async (
 	await page
 		.getByRole("button", { name: "Close dialog", exact: true })
 		.click();
+	await expect(backdrop).toHaveCount(0);
 	await page
 		.getByRole("button", {
-			name: "Manage Roles & Capabilities",
-			exact: true,
+			name: /^Manage Roles & Capabilities(?: New)?$/,
 		})
 		.click();
 	await expect(page.locator(".users-roles-drawer-panel")).toBeVisible();
@@ -82,7 +82,7 @@ test("search, user dialogs, and role drawers share a sharp dim overlay", async (
 });
 
 for (const direction of ["ltr", "rtl"] as const) {
-	test(`drawers ease in, ease out, and honor reduced motion in ${direction}`, async ({
+	test(`drawers decelerate on entry and honor reduced motion in ${direction}`, async ({
 		page,
 	}) => {
 		await mockDashboardSession(page, { capabilities, direction });
@@ -93,19 +93,18 @@ for (const direction of ["ltr", "rtl"] as const) {
 				"enter",
 				".users-page-hero-actions button:first-child"
 			)
-		).toBe("cubic-bezier(0.4, 0, 1, 1)");
+		).toBe("cubic-bezier(0.2, 0.75, 0.25, 1)");
 		await expect(
 			page.locator(".users-roles-drawer-panel")
 		).not.toHaveAttribute("data-enter");
 		expect(
 			await drawerMotion(page, "leave", ".users-roles-drawer-close")
-		).toBe("cubic-bezier(0, 0, 0.2, 1)");
+		).toBe("cubic-bezier(0.4, 0, 1, 1)");
 		await expect(page.locator(".users-roles-drawer-panel")).toHaveCount(0);
 		await page.emulateMedia({ reducedMotion: "reduce" });
 		await page
 			.getByRole("button", {
-				name: "Manage Roles & Capabilities",
-				exact: true,
+				name: /^Manage Roles & Capabilities(?: New)?$/,
 			})
 			.click();
 		await expect(page.locator(".users-roles-drawer-panel")).toHaveCSS(
@@ -123,7 +122,7 @@ test("the mobile sidebar uses the same overlay and easing directions", async ({
 	await page.getByRole("button", { name: "Open menu", exact: true }).click();
 	await expect(page.locator(".dashboard-sidebar")).toHaveCSS(
 		"transition-timing-function",
-		"cubic-bezier(0.4, 0, 1, 1)"
+		"cubic-bezier(0.2, 0.75, 0.25, 1)"
 	);
 	await expect(page.locator(".dashboard-sidebar-overlay")).toHaveCSS(
 		"backdrop-filter",
@@ -136,6 +135,6 @@ test("the mobile sidebar uses the same overlay and easing directions", async ({
 	await page.locator(".dashboard-sidebar-close").click();
 	await expect(page.locator(".dashboard-sidebar")).toHaveCSS(
 		"transition-timing-function",
-		"cubic-bezier(0, 0, 0.2, 1)"
+		"cubic-bezier(0.4, 0, 1, 1)"
 	);
 });

@@ -6,7 +6,10 @@ test.describe("Authentication Journeys", () => {
 	}) => {
 		await page.goto("/login", { waitUntil: "domcontentloaded" });
 
-		await expect(page).toHaveTitle(/PeakURL/);
+		await expect(page).toHaveTitle(/^Login • .+$/);
+		await expect(
+			page.getByRole("link", { name: "PeakURL", exact: true })
+		).toBeVisible();
 		await expect(
 			page.getByRole("heading", { name: /sign in/i })
 		).toBeVisible();
@@ -91,7 +94,10 @@ test.describe("Authentication Journeys", () => {
 		// Should navigate to dashboard
 		await page.waitForURL("**/dashboard", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /dashboard/i })
+			page.getByRole("heading", {
+				name: /^Good (morning|afternoon|evening)(, .+)?$/i,
+				level: 1,
+			})
 		).toBeVisible();
 
 		// Header displays authenticated user trigger

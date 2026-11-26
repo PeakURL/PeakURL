@@ -43,8 +43,10 @@ test.beforeEach(async ({ page }) => {
 	);
 });
 
+test.use({ reducedMotion: "reduce" });
+
 const pages = [
-	["/dashboard", "Dashboard"],
+	["/dashboard", /^Good (morning|afternoon|evening), Preview$/],
 	["/dashboard/links", "All Links"],
 	["/dashboard/plugins", "Plugins"],
 	["/dashboard/users", "Users"],
@@ -53,7 +55,6 @@ const pages = [
 	["/dashboard/tools/export", "Export"],
 	["/dashboard/tools/scheduled-jobs", "Scheduled Jobs"],
 	["/dashboard/tools/system-status", "System Status"],
-	["/dashboard/settings/general", "Settings"],
 ] as const;
 
 for (const width of [1440, 390]) {
@@ -63,7 +64,8 @@ for (const width of [1440, 390]) {
 		await page.setViewportSize({ width, height: 900 });
 		let firstTitleTop: number | undefined;
 		for (const [url, title] of pages) {
-			await test.step(title, async () => {
+			const stepLabel = typeof title === "string" ? title : "Dashboard";
+			await test.step(stepLabel, async () => {
 				await page.goto(url);
 				const heading = page.getByRole("heading", {
 					name: title,
@@ -71,15 +73,25 @@ for (const width of [1440, 390]) {
 					level: 1,
 				});
 				await expect(heading).toBeVisible();
-				await expect(heading).toHaveCSS("font-size", "24px");
+				await expect(heading).toHaveCSS(
+					"font-size",
+					width >= 640 ? "30px" : "28px"
+				);
 				const top = await heading.evaluate(
 					(element) => element.getBoundingClientRect().top
 				);
 				firstTitleTop ??= top;
 				expect(top).toBeCloseTo(firstTitleTop, 0);
-				await expect(
-					page.locator(".page-header-icon svg")
-				).toBeVisible();
+				if (width >= 1024) {
+					const headerBottom = await page
+						.locator(".dashboard-header")
+						.evaluate(
+							(element) => element.getBoundingClientRect().bottom
+						);
+					expect(top - headerBottom).toBeGreaterThanOrEqual(30);
+					expect(top - headerBottom).toBeLessThanOrEqual(42);
+				}
+				await expect(page.locator(".page-header-icon")).toHaveCount(0);
 				expect(
 					await page.evaluate(
 						() => document.documentElement.scrollWidth <= innerWidth
@@ -111,23 +123,7 @@ for (const width of [1440, 390]) {
 				const headings = page.locator(".settings-tab-page h2");
 				await expect(headings.first()).toBeVisible();
 				for (const heading of await headings.all()) {
-					const expectedFontSize = await heading.evaluate(
-						(element) => {
-							if (element.closest(".settings-tab-header"))
-								return "20px";
-							if (
-								element.closest(
-									".settings-update-status-prominent"
-								)
-							)
-								return "22px";
-							return "18px";
-						}
-					);
-					await expect(heading).toHaveCSS(
-						"font-size",
-						expectedFontSize
-					);
+					await expect(heading).toHaveCSS("font-size", "16px");
 				}
 				expect(
 					await page.evaluate(
@@ -169,7 +165,7 @@ test("settings inputs and selects share sizing and custom values remain editable
 		name: "First Name",
 		exact: false,
 	});
-	await expect(input).toBeVisible();
+	await expect(input).toBeEnabled();
 	const appearance = await input.evaluate((element) => {
 		const style = getComputedStyle(element);
 		return {
@@ -184,7 +180,7 @@ test("settings inputs and selects share sizing and custom values remain editable
 		name: "Redirect Cache TTL",
 		exact: true,
 	});
-	await expect(ttl).toBeVisible();
+	await expect(ttl).toBeEnabled();
 	await expect(ttl).toHaveCSS("height", appearance.height);
 	await expect(ttl).toHaveCSS("background-color", appearance.background);
 	await expect(ttl).toHaveCSS("border-radius", appearance.radius);

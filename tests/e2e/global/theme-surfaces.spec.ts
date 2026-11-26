@@ -1,4 +1,5 @@
 import { test, expect, type Locator, type Page } from "@playwright/test";
+import { mockDashboardBootstrap } from "../fixtures/dashboard.fixture";
 import { mockDrawerPages } from "../fixtures/drawer.fixture";
 import { getContrastRatio } from "../fixtures/theme.fixture";
 
@@ -31,6 +32,7 @@ for (const theme of ["light", "dark"] as const) {
 	test(`tables, plugins and system status remain readable and fit in ${theme} mode`, async ({
 		page,
 	}) => {
+		test.setTimeout(180_000);
 		await page.addInitScript(
 			(theme) => localStorage.setItem("theme", theme),
 			theme
@@ -50,6 +52,34 @@ for (const theme of ["light", "dark"] as const) {
 							createdAt: "2026-10-01T12:00:00Z",
 						},
 					],
+				},
+			})
+		);
+		const plugin = {
+			id: "fixture-plugin",
+			type: "regular",
+			typeLabel: "Regular",
+			name: "Sample reporting plugin",
+			version: "1.0.0",
+			requires: "1.9.0",
+			testedUpTo: "1.9.0",
+			php: "8.3",
+			license: "MIT",
+			valid: true,
+			compatible: true,
+			active: true,
+			errors: [],
+			warnings: [],
+		};
+		await page.route("**/api/v1/system/plugins", (route) =>
+			route.fulfill({
+				json: {
+					data: {
+						items: [plugin],
+						regular: [plugin],
+						mustUse: [],
+						total: 1,
+					},
 				},
 			})
 		);
@@ -104,7 +134,7 @@ for (const theme of ["light", "dark"] as const) {
 				["/dashboard/users", ".users-page-table-heading"],
 				["/dashboard/tools/scheduled-jobs", ".scheduled-jobs-table th"],
 			] as const) {
-				await page.goto(path);
+				await page.goto(path, { waitUntil: "domcontentloaded" });
 				const label = page
 					.locator(heading)
 					.filter({ hasText: /\S/ })
@@ -116,26 +146,33 @@ for (const theme of ["light", "dark"] as const) {
 						path: `/tmp/peakurl-sweep-${path.split("/").pop()}-${theme}-${width}.png`,
 					});
 			}
-			await page.goto("/dashboard/plugins");
+			await page.goto("/dashboard/plugins", {
+				waitUntil: "domcontentloaded",
+			});
 			await expect(
-				page.getByText("Coming Soon", { exact: true }).first()
+				page
+					.getByText(plugin.name, { exact: true })
+					.filter({ visible: true })
 			).toBeVisible();
-			await page
-				.getByRole("button", { name: "List view", exact: true })
-				.click();
 			await expect(
-				page.getByRole("button", { name: "List view", exact: true })
-			).toHaveAttribute("aria-pressed", "true");
-			await expectReadableTableHeading(
-				page.locator(".plugins-table-head-cell").first()
-			);
+				page.getByRole("button", { name: "Deactivate", exact: true })
+			).toBeVisible();
+			if (width >= 768) {
+				await expectReadableTableHeading(
+					page.locator(".plugins-table-head-cell").first()
+				);
+			} else {
+				await expect(page.locator(".plugins-table-grid")).toBeHidden();
+			}
 			await expectPageFits(page);
 			if (process.env.PEAKURL_UI_PREVIEW)
 				await page.screenshot({
 					path: `/tmp/peakurl-sweep-plugins-${theme}-${width}.png`,
 				});
 
-			await page.goto("/dashboard/tools/system-status");
+			await page.goto("/dashboard/tools/system-status", {
+				waitUntil: "domcontentloaded",
+			});
 			await expect(
 				page.locator(".system-status-page-banner-warning")
 			).toBeVisible();
@@ -161,24 +198,29 @@ for (const theme of ["light", "dark"] as const) {
 			theme
 		);
 		await mockDrawerPages(page, theme === "dark" ? "rtl" : "ltr");
+		await mockDashboardBootstrap(page, { debug: true });
+		let sessionRequests = 0;
 		let available = false;
-		await page.route("**/api/v1/users/me", (route) =>
-			route.fulfill(
+		const retry = Promise.withResolvers<void>();
+		await page.route("**/api/v1/users/me", async (route) => {
+			if (++sessionRequests === 2) await retry.promise;
+			return route.fulfill(
 				available
 					? {
 							json: {
 								data: {
 									id: "preview",
 									username: "preview",
+									firstName: "Preview",
 									role: "admin",
 									capabilities: { view_links: true },
 								},
 							},
 						}
 					: { status: 500, json: { message: "Service unavailable" } }
-			)
-		);
-		await page.goto("/dashboard");
+			);
+		});
+		await page.goto("/dashboard", { waitUntil: "domcontentloaded" });
 		await expect(
 			page.getByRole("heading", {
 				name: "Unable to connect to the backend",
@@ -204,15 +246,27 @@ for (const theme of ["light", "dark"] as const) {
 					fullPage: true,
 				});
 		}
-		await page
-			.getByRole("button", { name: "Retry connection", exact: true })
-			.click();
-		await expect(
-			page.getByRole("button", {
+		try {
+			await page
+				.getByRole("button", { name: "Retry connection", exact: true })
+				.click();
+			const checking = page.getByRole("button", {
 				name: "Checking connection",
 				exact: true,
-			})
-		).toBeDisabled();
+			});
+			await expect(checking).toBeDisabled();
+			await expect(
+				page.getByText("HTTP 500", { exact: true })
+			).toBeVisible();
+			await expect(page.locator(".page-loader")).toHaveCount(0);
+			await expect.poll(() => sessionRequests).toBe(2);
+			await checking.evaluate((button: HTMLButtonElement) =>
+				button.click()
+			);
+			expect(sessionRequests).toBe(2);
+		} finally {
+			retry.resolve();
+		}
 		await expect(
 			page.getByRole("button", { name: "Retry connection", exact: true })
 		).toBeEnabled();
@@ -221,7 +275,9 @@ for (const theme of ["light", "dark"] as const) {
 			.getByRole("button", { name: "Retry connection", exact: true })
 			.click();
 		await expect(
-			page.getByRole("heading", { name: "Dashboard", exact: true })
+			page.getByRole("heading", {
+				name: /^Good (morning|afternoon|evening), Preview$/,
+			})
 		).toBeVisible();
 	});
 }

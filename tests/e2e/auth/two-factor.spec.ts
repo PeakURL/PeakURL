@@ -58,7 +58,7 @@ test.describe("Two-Factor Authentication Lifecycle Browser Journeys", () => {
 
 		// 2. Start 2FA Setup
 		const startSetupBtn = page.getByRole("button", {
-			name: /set up (two-factor|2fa)/i,
+			name: "Enable 2FA",
 		});
 		await expect(startSetupBtn).toBeVisible();
 		await startSetupBtn.click();
@@ -70,8 +70,8 @@ test.describe("Two-Factor Authentication Lifecycle Browser Journeys", () => {
 			page.locator(".settings-security-two-factor-qr")
 		).toBeVisible();
 
-		const secretElement = page
-			.locator(".settings-security-two-factor-secret-value")
+		const secretElement = setupPanel
+			.locator(".settings-security-two-factor-secret-value-text")
 			.first();
 		await expect(secretElement).toBeVisible();
 		const secretText = (await secretElement.innerText()).trim();
@@ -79,7 +79,7 @@ test.describe("Two-Factor Authentication Lifecycle Browser Journeys", () => {
 
 		// 3. Enter valid TOTP code to verify & enable
 		const totpCode = calculateTotp(secretText);
-		const codeInput = page.getByPlaceholder("123456");
+		const codeInput = setupPanel.getByLabel("6-digit code");
 		await expect(codeInput).toBeVisible();
 		await codeInput.fill(totpCode);
 
@@ -134,7 +134,10 @@ test.describe("Two-Factor Authentication Lifecycle Browser Journeys", () => {
 
 		await page.waitForURL("**/dashboard", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /dashboard/i, level: 1 })
+			page.getByRole("heading", {
+				name: /^Good (morning|afternoon|evening)(, .+)?$/i,
+				level: 1,
+			})
 		).toBeVisible();
 
 		// 8. Logout again
@@ -164,7 +167,10 @@ test.describe("Two-Factor Authentication Lifecycle Browser Journeys", () => {
 
 		await page.waitForURL("**/dashboard", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /dashboard/i, level: 1 })
+			page.getByRole("heading", {
+				name: /^Good (morning|afternoon|evening)(, .+)?$/i,
+				level: 1,
+			})
 		).toBeVisible();
 
 		// 10. Logout again

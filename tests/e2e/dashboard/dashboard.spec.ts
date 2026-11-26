@@ -6,15 +6,20 @@ test.describe("Dashboard & Layout Journeys", () => {
 	}) => {
 		// Heading and subtitle
 		await expect(
-			page.getByRole("heading", { name: /^dashboard$/i })
+			page.getByRole("heading", {
+				name: /^Good (morning|afternoon|evening)(, .+)?$/i,
+				level: 1,
+			})
 		).toBeVisible();
 		await expect(
-			page.getByText(/here's what's happening with your links/i)
+			page.getByText(/here's an overview of your link activity\./i)
 		).toBeVisible();
 
 		// Primary metric cards
 		await expect(page.getByText(/total clicks/i).first()).toBeVisible();
-		await expect(page.getByText(/active links/i).first()).toBeVisible();
+		await expect(
+			page.getByText("Total Links", { exact: true })
+		).toBeVisible();
 		await expect(
 			page.getByText(/unique click rate/i).first()
 		).toBeVisible();
@@ -113,7 +118,11 @@ test.describe("Dashboard & Layout Journeys", () => {
 		await page.locator("a[href*='/settings']").first().click();
 		await page.waitForURL("**/dashboard/settings/**", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /account settings/i })
+			page.getByRole("heading", {
+				name: "General",
+				exact: true,
+				level: 1,
+			})
 		).toBeVisible();
 
 		// Navigate to Users
@@ -127,7 +136,10 @@ test.describe("Dashboard & Layout Journeys", () => {
 		await page.locator("a[href='/dashboard']").first().click();
 		await page.waitForURL("**/dashboard", { timeout: 15000 });
 		await expect(
-			page.getByRole("heading", { name: /^dashboard$/i })
+			page.getByRole("heading", {
+				name: /^Good (morning|afternoon|evening)(, .+)?$/i,
+				level: 1,
+			})
 		).toBeVisible();
 	});
 
@@ -155,7 +167,10 @@ test.describe("Dashboard & Layout Journeys", () => {
 		// User remains authenticated on dashboard and is NOT kicked to /login
 		await expect(page).toHaveURL(/\/dashboard$/);
 		await expect(
-			page.getByRole("heading", { name: /^dashboard$/i })
+			page.getByRole("heading", {
+				name: /^Good (morning|afternoon|evening)(, .+)?$/i,
+				level: 1,
+			})
 		).toBeVisible();
 
 		// Remove route mock
@@ -180,7 +195,10 @@ test.describe("Dashboard & Layout Journeys", () => {
 		// 1. Editor lands cleanly on /dashboard without 404
 		await expect(page).toHaveURL(/\/dashboard$/);
 		await expect(
-			page.getByRole("heading", { name: /^dashboard$/i, level: 1 })
+			page.getByRole("heading", {
+				name: /^Good (morning|afternoon|evening)(, .+)?$/i,
+				level: 1,
+			})
 		).toBeVisible();
 
 		// 2. Activity Feed widget is NOT rendered for Editor
@@ -229,7 +247,11 @@ test.describe("Dashboard & Layout Journeys", () => {
 			timeout: 15000,
 		});
 		await expect(
-			page.getByRole("heading", { name: /account settings/i })
+			page.getByRole("heading", {
+				name: "General",
+				exact: true,
+				level: 1,
+			})
 		).toBeVisible();
 		await expect(page.getByText(/page not found/i)).not.toBeVisible();
 	});

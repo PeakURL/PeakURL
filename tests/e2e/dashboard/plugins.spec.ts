@@ -447,7 +447,9 @@ test.describe("Dashboard Installed Plugins UI & Add New Directory", () => {
 		});
 		await directoryInstall.click();
 		await expect(
-			page.getByText("The plugin directory could not be reached.")
+			page.locator(".notification-title").filter({
+				hasText: /^The plugin directory could not be reached\.$/,
+			})
 		).toBeVisible();
 		await directoryInstall.click();
 		const activateButton = page.getByRole("button", {

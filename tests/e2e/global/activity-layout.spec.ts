@@ -80,9 +80,11 @@ for (const { width, direction, dark } of [
 			);
 		await page.goto("/dashboard/activity");
 		if (dark) await expect(page.locator("html")).toHaveClass(/dark/);
-		await expect(page.locator("article.activity-page-event")).toHaveCount(
-			3
-		);
+		const history = page.getByRole("table", { name: "Activity history" });
+		await expect(
+			history.getByRole("columnheader", { name: "Time" })
+		).toHaveCount(1);
+		await expect(page.getByRole("rowheader")).toHaveCount(3);
 		if (process.env.PEAKURL_UI_PREVIEW) {
 			await page.screenshot({
 				path: `/tmp/peakurl-activity-initial-${width}.png`,
@@ -127,9 +129,7 @@ for (const { width, direction, dark } of [
 		).toBeEnabled();
 		await page.getByRole("tab", { name: "Users", exact: true }).click();
 		await expect(page).toHaveURL(/category=users/);
-		await expect(page.locator("article.activity-page-event")).toHaveCount(
-			1
-		);
+		await expect(page.getByRole("rowheader")).toHaveCount(1);
 		await expect(
 			page.getByText('Updated user "Campaign Editor"', { exact: true })
 		).toBeVisible();
@@ -162,7 +162,7 @@ test("activity remains restricted to administrators", async ({ page }) => {
 	await mockActivity(page);
 	await page.goto("/dashboard/activity");
 	await expect(page).toHaveURL(/\/dashboard\/links$/);
-	await expect(page.locator("article.activity-page-event")).toHaveCount(0);
+	await expect(page.getByRole("rowheader")).toHaveCount(0);
 	await expect(page.getByRole("checkbox")).toHaveCount(0);
 	await expect(
 		page.getByRole("button", { name: "Delete activity log", exact: true })

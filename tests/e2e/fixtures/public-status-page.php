@@ -38,7 +38,7 @@ if ( 'database' === $state ) {
 $controller = ( new ReflectionClass( \PeakURL\Features\Links\Controller::class ) )->newInstanceWithoutConstructor();
 if ( 'password' === $state ) {
 	$request = new \PeakURL\Http\Request( 'GET', '/protected', array(), array(), array(), array(), array( 'SCRIPT_NAME' => '/installed/index.php' ) );
-	echo ( new ReflectionMethod( $controller, 'format_password_page' ) )->invoke( $controller, $request, 'protected', $debug );
+	echo ( new ReflectionMethod( $controller, 'format_password_page' ) )->invoke( $controller, $request, $debug );
 	exit;
 }
 echo ( new ReflectionMethod( $controller, 'format_status_page' ) )->invoke(

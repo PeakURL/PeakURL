@@ -177,16 +177,14 @@ export function TrafficChart({
 							}
 						: stroke,
 					fill,
-					// Keep the jade edges visible underneath an identical Visitors line.
-					order: line && primary ? 1 : 0,
-					borderWidth: line ? (primary ? 3.5 : 2) : 0,
+					order: line && primary ? 0 : 1,
+					borderWidth: line ? 2 : 0,
 					borderRadius: 3,
-					pointRadius:
-						dates.axis.length === 1 ? (primary ? 5 : 3) : 0,
+					pointRadius: dates.axis.length === 1 ? 4 : 0,
 					pointBackgroundColor: stroke,
-					pointHoverRadius: primary ? 6 : 4,
+					pointHoverRadius: 5,
 					pointHoverBorderColor: palette.surface,
-					pointHoverBorderWidth: 1,
+					pointHoverBorderWidth: 2,
 					cubicInterpolationMode: "monotone",
 				};
 			}

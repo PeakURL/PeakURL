@@ -39,6 +39,7 @@ export interface ManageSchedulesModalProps {
 }
 
 export interface JobsTableProps {
+	isLoading: boolean;
 	jobs: CronJob[];
 	runningJobId: string | null;
 	onViewHistory: (job: CronJob) => void;

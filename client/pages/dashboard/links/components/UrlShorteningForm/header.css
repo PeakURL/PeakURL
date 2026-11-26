@@ -1,21 +1,11 @@
 @layer components {
 	.links-form-header {
-		@apply mb-6 flex items-center gap-4;
+		@apply mb-4 space-y-1;
 	}
-
-	.links-form-header-icon {
-		@apply flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-action shadow-md;
-	}
-
-	.links-form-header-copy {
-		text-align: start;
-	}
-
 	.links-form-header-title {
-		@apply text-lg font-bold text-heading;
+		@apply text-base font-semibold text-heading;
 	}
-
 	.links-form-header-description {
-		@apply text-sm text-text-muted;
+		@apply text-sm leading-6 text-text-muted;
 	}
 }

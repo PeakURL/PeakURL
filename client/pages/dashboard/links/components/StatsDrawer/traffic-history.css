@@ -4,7 +4,7 @@
 	}
 
 	.links-traffic-history-header {
-		@apply mb-4 flex flex-col gap-3 sm:gap-4 xl:flex-row xl:items-start xl:justify-between;
+		@apply mb-4 flex flex-col gap-3 sm:gap-4;
 	}
 
 	.links-traffic-history-heading {
@@ -32,28 +32,28 @@
 	}
 
 	.links-traffic-history-legend-dot-clicks {
-		@apply bg-blue-600;
+		@apply bg-chart-1;
 	}
 
 	.links-traffic-history-legend-dot-unique {
-		@apply bg-emerald-600;
+		@apply bg-chart-2;
 	}
 
 	.links-traffic-history-toolbar {
-		@apply flex flex-wrap items-center gap-2 xl:flex-nowrap xl:justify-end;
+		@apply flex flex-wrap items-center gap-2;
 	}
 
 	.links-traffic-history-tools,
 	.links-traffic-history-series {
-		@apply flex grow gap-1 rounded-lg bg-surface p-1 sm:grow-0;
+		@apply flex min-w-0 grow flex-wrap gap-1 rounded-lg bg-surface p-1;
 	}
 
 	.links-traffic-history-tool-button {
-		@apply inline-flex flex-1 h-8 items-center justify-center gap-1.5 rounded px-2.5 text-xs font-medium transition-all sm:flex-initial;
+		@apply inline-flex flex-1 h-8 items-center justify-center gap-1.5 rounded px-2.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent sm:flex-initial;
 	}
 
 	.links-traffic-history-tool-button-current {
-		@apply bg-action text-white shadow-sm;
+		@apply bg-action text-action-foreground shadow-sm;
 	}
 
 	.links-traffic-history-tool-button-idle {
@@ -65,15 +65,15 @@
 	}
 
 	.links-traffic-history-ranges {
-		@apply flex grow gap-1 rounded-lg bg-surface p-1 sm:grow-0;
+		@apply flex min-w-0 grow flex-wrap gap-1 rounded-lg bg-surface p-1;
 	}
 
 	.links-traffic-history-range {
-		@apply inline-flex flex-1 items-center justify-center gap-1.5 rounded px-3 py-1 text-xs font-medium transition-all sm:flex-initial;
+		@apply inline-flex flex-1 items-center justify-center gap-1.5 rounded px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent sm:flex-initial;
 	}
 
 	.links-traffic-history-range-current {
-		@apply bg-action text-white;
+		@apply bg-action text-action-foreground;
 	}
 
 	.links-traffic-history-range-idle {
@@ -110,7 +110,7 @@
 	}
 
 	.links-traffic-history-date-field input {
-		@apply px-3;
+		@apply min-w-0 w-full px-3;
 	}
 
 	.links-traffic-history-custom-summary {
@@ -122,7 +122,7 @@
 	}
 
 	.links-traffic-history-custom-apply {
-		@apply inline-flex h-8 items-center justify-center rounded bg-action px-3 text-xs font-medium text-white transition-all hover:bg-action/90;
+		@apply inline-flex h-8 items-center justify-center rounded bg-action px-3 text-xs font-medium text-action-foreground transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent hover:bg-action-hover;
 	}
 
 	.links-traffic-history-canvas-wrap {

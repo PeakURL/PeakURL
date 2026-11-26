@@ -309,20 +309,21 @@ export interface PluginPageDescriptor {
 	readonly assets?: readonly PluginAssetDescriptor[];
 }
 
-/**
- * Native UI extension point descriptor.
- */
+/** Cache entries a plugin action can refresh. */
+export type PluginActionInvalidationTarget = "Plugins" | "Analytics" | "Urls";
+
+/** Native UI extension point descriptor. */
 export interface PluginUIExtensionDescriptor {
 	readonly id: string;
 	readonly pluginSlug: string;
-	readonly location: "links_overview_actions";
+	readonly location: "links_overview_actions" | "link_stats_actions";
 	readonly label: string;
 	readonly actionId: string;
 	readonly capability: string;
 	readonly icon?: string;
 	readonly confirm?: string | null;
 	readonly assets?: readonly PluginAssetDescriptor[];
-	readonly invalidates?: readonly ("Plugins" | "Analytics" | "Urls")[];
+	readonly invalidates?: readonly PluginActionInvalidationTarget[];
 }
 
 /**

@@ -1,4 +1,4 @@
-import { Globe, X } from "lucide-react";
+import { X } from "lucide-react";
 
 import { PreviewImage } from "@/components";
 import type { ImageSource } from "@/shared/links";
@@ -9,7 +9,7 @@ interface FaviconPreviewProps {
 	siteName: string;
 }
 
-/** Shows the selected favicon at its asset size and in a browser tab. */
+/** Show the effective favicon both on its own and at browser-tab size. */
 export function FaviconPreview({
 	source,
 	label,
@@ -17,40 +17,25 @@ export function FaviconPreview({
 }: FaviconPreviewProps) {
 	return (
 		<>
-			<div className="settings-favicon-asset">
-				{source ? (
+			{source && (
+				<div className="settings-favicon-asset">
 					<PreviewImage
 						source={source}
 						alt={label}
 						className="settings-image-thumbnail"
 					/>
-				) : (
-					<Globe size={30} aria-hidden="true" />
-				)}
-			</div>
-			<div className="settings-browser-preview" aria-hidden="true">
-				<div className="settings-browser-toolbar">
-					<div className="settings-browser-controls">
-						<span />
-						<span />
-						<span />
-					</div>
-					<div className="settings-browser-tab">
-						{source ? (
-							<PreviewImage
-								source={source}
-								alt=""
-								className="settings-browser-favicon"
-							/>
-						) : (
-							<Globe size={16} />
-						)}
-						<span className="settings-browser-title">
-							{siteName}
-						</span>
-						<X size={14} className="settings-browser-close" />
-					</div>
 				</div>
+			)}
+			<div className="settings-browser-preview" aria-hidden="true">
+				{source && (
+					<PreviewImage
+						source={source}
+						alt=""
+						className="settings-browser-favicon"
+					/>
+				)}
+				<span className="settings-browser-title">{siteName}</span>
+				<X size={13} className="settings-browser-close" />
 			</div>
 		</>
 	);

@@ -13,7 +13,7 @@
 	}
 
 	.select-options {
-		@apply z-50 max-h-64 w-(--button-width) overflow-auto rounded-lg border border-stroke bg-surface p-1 shadow-xl transition duration-150 ease-out focus:outline-none data-closed:scale-95 data-closed:opacity-0;
+		@apply z-50 max-h-64 w-(--button-width) overflow-auto rounded-lg border border-stroke bg-surface p-1 shadow-xl transition-[opacity,scale] duration-150 ease-out motion-reduce:transition-none focus:outline-none data-closed:scale-[0.98] data-closed:opacity-0;
 	}
 
 	.select-option-reset {

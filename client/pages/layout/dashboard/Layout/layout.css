@@ -1,8 +1,15 @@
 @layer components {
+	:root:has(.dashboard-layout) {
+		--dashboard-header-height: 4rem;
+		scroll-padding-block-start: var(--dashboard-header-height);
+	}
+
+	.dashboard-skip-link {
+		@apply sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-3 focus:z-60 focus:rounded-lg focus:bg-action focus:px-4 focus:py-2 focus:text-action-foreground;
+	}
+
 	.dashboard-layout {
-		@apply min-h-screen bg-bg;
-		/* The 4rem toolbar also has a one-pixel bottom border. */
-		--dashboard-header-height: calc(4rem + 1px);
+		@apply min-h-screen bg-dashboard-bg;
 	}
 
 	.dashboard-layout-wrapper {
@@ -10,22 +17,38 @@
 	}
 
 	@media (min-width: 1024px) {
-		.dashboard-layout-wrapper {
-			margin-inline-start: 15rem;
-			transition: margin-inline-start 300ms cubic-bezier(0.4, 0, 0.2, 1);
+		.dashboard-layout {
+			--dashboard-sidebar-width: 15rem;
+			--dashboard-sidebar-duration: 320ms;
+			--dashboard-sidebar-ease: cubic-bezier(0.2, 0.75, 0.25, 1);
+			display: grid;
+			grid-template-columns: var(--dashboard-sidebar-width) minmax(0, 1fr);
+			transition: grid-template-columns var(--dashboard-sidebar-duration)
+				var(--dashboard-sidebar-ease);
 		}
 
-		.dashboard-layout-wrapper-collapsed {
-			margin-inline-start: 4.5rem;
+		.dashboard-layout-collapsed {
+			--dashboard-sidebar-width: 4.5rem;
 		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.dashboard-layout {
+			transition: none;
+		}
+	}
+
+	.dashboard-page-content {
+		@apply flex min-w-0 flex-1 flex-col;
 	}
 
 	.dashboard-layout-content {
-		@apply flex min-h-[calc(100vh-4rem)] flex-col;
+		@apply flex flex-col;
+		min-block-size: calc(100dvh - var(--dashboard-header-height));
 	}
 
 	.dashboard-layout-main {
-		@apply flex min-w-0 flex-1 flex-col p-4 sm:p-6;
+		@apply flex min-w-0 flex-1 flex-col px-4 pt-5 pb-4 sm:px-6 sm:pt-6 sm:pb-6 lg:pt-8;
 	}
 
 	.dashboard-layout-footer {

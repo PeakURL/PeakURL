@@ -4,7 +4,7 @@
 	}
 
 	.verification-code-input-field {
-		@apply h-12 w-0 min-w-0 flex-1 rounded-xl border text-center text-lg font-semibold tabular-nums text-heading outline-none transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60 sm:h-14 sm:text-xl;
+		@apply h-12 w-0 min-w-0 flex-1 rounded-lg border text-center text-lg font-semibold tabular-nums text-heading outline-none transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60 sm:h-14 sm:text-xl;
 	}
 
 	.verification-code-input-field:focus {
@@ -14,7 +14,7 @@
 	}
 
 	.verification-code-input-field-filled {
-		border-color: var(--color-selected-border);
+		border-color: var(--color-field-border);
 		background-color: var(--color-selected);
 		box-shadow: none;
 	}

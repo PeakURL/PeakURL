@@ -13,6 +13,7 @@ import {
 import { LOGIN_LOGO_URL, LOGIN_POWERED_BY_URL } from "@constants";
 import {
 	ApiErrorPage,
+	Button,
 	CaptchaWidget,
 	Input,
 	PageLoader,
@@ -91,9 +92,9 @@ function LoginPage() {
 		captchaRef,
 		currentUser,
 		error,
-		isRetryingApiCheck,
+		isRetrying,
 		isPending,
-		isApiError,
+		connectionError,
 		installRecovery,
 		submitPending,
 		redirectTo,
@@ -115,11 +116,11 @@ function LoginPage() {
 		return <Navigate replace to={redirectTo} />;
 	}
 
-	if (isApiError) {
+	if (connectionError !== undefined) {
 		return (
 			<ApiErrorPage
-				error={error}
-				isRetrying={isRetryingApiCheck}
+				error={connectionError}
+				isRetrying={isRetrying}
 				onRetry={refetch}
 			/>
 		);
@@ -172,73 +173,84 @@ function LoginPage() {
 			}
 		>
 			{formError ? (
-				<div className="login-page-alert">
-					<span className="login-page-alert-marker">!</span>
+				<div className="login-page-alert" role="alert">
+					<span
+						className="login-page-alert-marker"
+						aria-hidden="true"
+					>
+						!
+					</span>
 					<p className="login-page-alert-text">{formError}</p>
 				</div>
 			) : null}
 
-			<form className="login-page-form" onSubmit={handleSubmit}>
-				<Input
-					label={__("Email or username")}
-					icon={UserRound}
-					valueDirection="ltr"
-					value={identifier}
-					name="identifier"
-					onChange={(event) => setIdentifier(event.target.value)}
-					autoComplete="username"
-					autoCapitalize="none"
-					spellCheck={false}
-					disabled={submitPending || twoFactorRequired}
-					placeholder={__("you@company.com")}
-					required
-				/>
+			<form
+				className="auth-page-form"
+				onSubmit={handleSubmit}
+				aria-busy={submitPending}
+			>
+				<div hidden={twoFactorRequired}>
+					<div className="login-page-credentials">
+						<Input
+							label={__("Email or username")}
+							icon={UserRound}
+							valueDirection="ltr"
+							value={identifier}
+							name="identifier"
+							onChange={(event) =>
+								setIdentifier(event.target.value)
+							}
+							autoComplete="username"
+							autoCapitalize="none"
+							spellCheck={false}
+							disabled={submitPending || twoFactorRequired}
+							placeholder={__("you@company.com")}
+							required
+						/>
 
-				<Input
-					label={__("Password")}
-					type="password"
-					icon={LockKeyhole}
-					value={password}
-					name="password"
-					onChange={(event) => setPassword(event.target.value)}
-					onKeyDown={submitFormOnEnter}
-					enterKeyHint="go"
-					autoComplete="current-password"
-					disabled={submitPending || twoFactorRequired}
-					placeholder="••••••••"
-					required
-				/>
+						<Input
+							label={__("Password")}
+							type="password"
+							icon={LockKeyhole}
+							value={password}
+							name="password"
+							onChange={(event) =>
+								setPassword(event.target.value)
+							}
+							onKeyDown={submitFormOnEnter}
+							enterKeyHint="go"
+							autoComplete="current-password"
+							disabled={submitPending || twoFactorRequired}
+							placeholder="••••••••"
+							required
+						/>
 
-				{!twoFactorRequired ? (
-					<div className="login-page-remember-me">
-						<label className="login-page-remember-me-label">
-							<input
-								type="checkbox"
-								className="login-page-remember-me-checkbox"
-								checked={rememberMe}
-								onChange={(e) =>
-									setRememberMe(e.target.checked)
-								}
-								disabled={submitPending}
-							/>
-							<span className="login-page-remember-me-text">
-								{__("Remember me")}
-							</span>
-						</label>
+						<div className="login-page-credentials-actions">
+							<label className="login-page-remember-me-label">
+								<input
+									type="checkbox"
+									className="login-page-remember-me-checkbox"
+									checked={rememberMe}
+									onChange={(event) =>
+										setRememberMe(event.target.checked)
+									}
+									disabled={
+										submitPending || twoFactorRequired
+									}
+								/>
+								<span className="login-page-remember-me-text">
+									{__("Remember me")}
+								</span>
+							</label>
+							<Link
+								to="/forgot-password"
+								className="login-page-link"
+							>
+								{__("Forgot your password?")}
+							</Link>
+						</div>
 					</div>
-				) : null}
-
-				{!twoFactorRequired ? (
-					<div
-						className={`login-page-link-row ${
-							isRtl ? "login-page-link-row-rtl" : ""
-						}`}
-					>
-						<Link to="/forgot-password" className="login-page-link">
-							{__("Forgot your password?")}
-						</Link>
-					</div>
-				) : null}
+				</div>
 
 				{twoFactorRequired ? (
 					<div className="login-page-two-factor">
@@ -262,7 +274,8 @@ function LoginPage() {
 								/>
 								<button
 									type="button"
-									className="login-page-secondary-link"
+									className="login-page-link login-page-code-link"
+									disabled={submitPending}
 									onClick={() => {
 										setUseBackupMode(false);
 										setBackupCode("");
@@ -284,7 +297,8 @@ function LoginPage() {
 								</div>
 								<button
 									type="button"
-									className="login-page-muted-link"
+									className="login-page-link login-page-code-link"
+									disabled={submitPending}
 									onClick={() => {
 										setUseBackupMode(true);
 										setToken("");
@@ -300,53 +314,29 @@ function LoginPage() {
 
 				{!twoFactorRequired ? <CaptchaWidget ref={captchaRef} /> : null}
 
-				<button
+				<Button
 					type="submit"
-					disabled={submitPending}
-					className="login-page-submit"
+					size="lg"
+					loading={submitPending}
+					className="auth-page-submit"
+					icon={ForwardArrow}
+					iconPosition="right"
 				>
-					<span className="login-page-submit-content">
-						{submitPending ? (
-							<>
-								<svg
-									className="login-page-spinner"
-									fill="none"
-									viewBox="0 0 24 24"
-								>
-									<circle
-										className="opacity-25"
-										cx="12"
-										cy="12"
-										r="10"
-										stroke="currentColor"
-										strokeWidth="4"
-									/>
-									<path
-										className="opacity-75"
-										fill="currentColor"
-										d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-									/>
-								</svg>
-								{twoFactorRequired
-									? __("Verifying…")
-									: __("Signing in…")}
-							</>
-						) : (
-							<>
-								{twoFactorRequired
-									? __("Verify & continue")
-									: __("Sign in")}
-								<ForwardArrow size={15} />
-							</>
-						)}
-					</span>
-				</button>
+					{submitPending
+						? twoFactorRequired
+							? __("Verifying…")
+							: __("Signing in…")
+						: twoFactorRequired
+							? __("Verify & continue")
+							: __("Sign in")}
+				</Button>
 
 				{twoFactorRequired ? (
 					<div className="login-page-actions">
 						<button
 							type="button"
-							className="login-page-back-action"
+							className="login-page-link login-page-back-action"
+							disabled={submitPending}
 							onClick={handleBackToSignIn}
 						>
 							<BackArrow size={13} />

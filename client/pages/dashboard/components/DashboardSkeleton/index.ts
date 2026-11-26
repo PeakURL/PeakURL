@@ -1,2 +1,1 @@
-export * from "./DashboardSkeleton";
-export { default } from "./DashboardSkeleton";
+export { DashboardPanelSkeleton } from "./DashboardSkeleton";

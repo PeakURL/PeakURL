@@ -322,13 +322,6 @@
 	}
 
 	/* Skeleton */
-	.activity-page-skeleton-heading {
-		@apply h-3.5 w-24;
-	}
-
-	.activity-page-skeleton-copy {
-		@apply mt-2 h-4 w-44;
-	}
 
 	.activity-page-skeleton-icon {
 		@apply h-8.5 w-8.5 rounded-lg;
@@ -363,8 +356,8 @@
 		@apply h-2.5 w-24;
 	}
 
-	.activity-page-table-head > span:nth-child(n + 3) {
-		display: none;
+	.activity-page-table-head-detail {
+		@apply sr-only;
 	}
 
 	.activity-page-event-title {
@@ -391,8 +384,8 @@
 				148px 72px;
 		}
 
-		.activity-page-table-head > span:nth-child(n + 3) {
-			display: block;
+		.activity-page-table-head-detail {
+			@apply not-sr-only;
 		}
 
 		.activity-page-event-identity {

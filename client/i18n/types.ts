@@ -64,6 +64,15 @@ export interface FaviconData {
 	/** Whether the active favicon comes from a user-uploaded override. */
 	isCustom?: boolean;
 
+	/** Default adaptive SVG favicon URL when no custom override is active. */
+	svgUrl?: string | null;
+
+	/** Default light-chrome SVG favicon URL when no custom override is active. */
+	lightSvgUrl?: string | null;
+
+	/** Default dark-chrome SVG favicon URL when no custom override is active. */
+	darkSvgUrl?: string | null;
+
 	/** Primary PNG favicon URL. */
 	url?: string | null;
 

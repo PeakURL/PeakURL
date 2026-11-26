@@ -1,6 +1,6 @@
 @layer components {
 	.theme-toggle {
-		@apply relative rounded-xl bg-surface-alt p-2.5 transition-all duration-200 active:scale-95 hover:bg-stroke;
+		@apply relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-stroke/80 bg-surface shadow-2xs transition-all duration-200 active:scale-95 hover:border-stroke-strong hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:h-9 sm:w-9;
 	}
 
 	.theme-toggle-icon-wrapper {

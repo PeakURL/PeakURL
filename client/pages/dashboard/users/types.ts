@@ -53,6 +53,7 @@ export interface UsersOverviewItem {
 
 export interface UsersOverviewProps {
 	items: UsersOverviewItem[];
+	isLoading: boolean;
 	onAddUserClick: () => void;
 	onManageRolesClick?: () => void;
 }

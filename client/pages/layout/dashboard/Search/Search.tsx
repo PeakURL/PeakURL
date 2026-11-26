@@ -9,15 +9,16 @@ const SearchDialog = lazy(() => import("./SearchDialog"));
 
 /** One global search entry point shared by the header button and Cmd/Ctrl+K. */
 export function Search() {
-	const location = useLocation();
-	const [openedAtLocation, setOpenedAtLocation] = useState<string | null>(
-		null
-	);
-	// Route changes dismiss search, including navigation through browser history.
-	if (openedAtLocation !== null && openedAtLocation !== location.key) {
+	const { key: locationKey } = useLocation();
+	const [openedAtLocation, setOpenedAtLocation] = useState<string | null>();
+	// Forget the previous entry so history navigation cannot reopen search.
+	if (
+		typeof openedAtLocation === "string" &&
+		openedAtLocation !== locationKey
+	) {
 		setOpenedAtLocation(null);
 	}
-	const isOpen = openedAtLocation === location.key;
+	const isOpen = openedAtLocation === locationKey;
 	const shortcut = getSearchShortcutLabel();
 
 	useEffect(() => {
@@ -30,12 +31,12 @@ export function Search() {
 				event.key.toLowerCase() === "k"
 			) {
 				event.preventDefault();
-				setOpenedAtLocation(location.key);
+				setOpenedAtLocation(locationKey);
 			}
 		};
 		window.addEventListener("keydown", openWithShortcut);
 		return () => window.removeEventListener("keydown", openWithShortcut);
-	}, [location.key]);
+	}, [locationKey]);
 
 	return (
 		<>
@@ -46,13 +47,16 @@ export function Search() {
 				aria-haspopup="dialog"
 				aria-expanded={isOpen}
 				title={`${__("Search the dashboard")} (${shortcut})`}
-				onClick={() => setOpenedAtLocation(location.key)}
+				onClick={() => setOpenedAtLocation(locationKey)}
 			>
 				<SearchIcon size={20} aria-hidden="true" />
 			</button>
-			{isOpen && (
+			{openedAtLocation !== undefined && (
 				<Suspense fallback={null}>
-					<SearchDialog onClose={() => setOpenedAtLocation(null)} />
+					<SearchDialog
+						open={isOpen}
+						onClose={() => setOpenedAtLocation(null)}
+					/>
 				</Suspense>
 			)}
 		</>

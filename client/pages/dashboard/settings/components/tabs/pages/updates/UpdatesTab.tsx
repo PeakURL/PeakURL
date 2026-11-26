@@ -1,4 +1,3 @@
-import { __ } from "@/i18n";
 import { getDocumentDirection } from "@/i18n/direction";
 import { ApplicationUpdates, DatabaseSchema } from "./components";
 import {
@@ -38,14 +37,6 @@ function UpdatesTab({
 	const databaseState = formatDatabaseStatus(databaseStatus);
 	// Keep status derivation here so child components stay presentational.
 	const visibleDatabaseIssues = getVisibleDatabaseIssues(databaseStatus);
-
-	if (isLoading && !status && !errorMessage) {
-		return (
-			<div className="settings-updates-loading">
-				{__("Loading update status...")}
-			</div>
-		);
-	}
 
 	return (
 		<div className="settings-updates">

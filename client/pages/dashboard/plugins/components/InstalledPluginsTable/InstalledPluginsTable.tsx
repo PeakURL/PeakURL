@@ -8,7 +8,7 @@ import {
 	RefreshCw,
 } from "lucide-react";
 
-import { Button, ConfirmDialog, useNotification } from "@/components";
+import { Button, ConfirmDialog, Skeleton, useNotification } from "@/components";
 import { SUBMIT_PLUGIN_URL } from "@/constants";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -121,16 +121,7 @@ export function InstalledPluginsTable({
 	};
 
 	if (isLoading) {
-		return (
-			<div className="py-16 text-center" aria-live="polite">
-				<div className="flex items-center justify-center gap-3 text-text-muted">
-					<RefreshCw size={18} className="animate-spin text-accent" />
-					<span className="text-sm font-medium">
-						{__("Loading plugins…")}
-					</span>
-				</div>
-			</div>
-		);
+		return <InstalledPluginsSkeleton direction={direction} />;
 	}
 
 	if (isError) {
@@ -225,16 +216,7 @@ export function InstalledPluginsTable({
 			{/* Desktop & Tablet Table (Two-Column Layout) */}
 			<div className="plugins-table-wrap hidden md:block">
 				<table className="plugins-table-grid">
-					<thead>
-						<tr className="plugins-table-head-row">
-							<th className="plugins-table-head-cell w-5/12 min-w-[280px]">
-								{__("Plugin")}
-							</th>
-							<th className="plugins-table-head-cell w-7/12 min-w-[340px]">
-								{__("Description")}
-							</th>
-						</tr>
-					</thead>
+					<InstalledPluginsTableHead />
 					<tbody className="divide-y divide-stroke/60 bg-surface">
 						{plugins.map((plugin) => {
 							const isActive = Boolean(plugin.active);
@@ -798,3 +780,72 @@ function sprintf(format: string, ...args: string[]): string {
 }
 
 export default InstalledPluginsTable;
+
+function InstalledPluginsTableHead() {
+	return (
+		<thead>
+			<tr className="plugins-table-head-row">
+				<th className="plugins-table-head-cell w-5/12 min-w-[280px]">
+					{__("Plugin")}
+				</th>
+				<th className="plugins-table-head-cell w-7/12 min-w-[340px]">
+					{__("Description")}
+				</th>
+			</tr>
+		</thead>
+	);
+}
+
+function InstalledPluginsSkeleton({ direction }: { direction: "ltr" | "rtl" }) {
+	const rows = [1, 2, 3];
+
+	return (
+		<div className="plugins-table" dir={direction} aria-busy="true">
+			<span className="sr-only" role="status">
+				{__("Loading plugins…")}
+			</span>
+			<div className="plugins-table-wrap hidden md:block">
+				<table className="plugins-table-grid">
+					<InstalledPluginsTableHead />
+					<tbody
+						className="divide-y divide-stroke/60 bg-surface"
+						aria-hidden="true"
+					>
+						{rows.map((row) => (
+							<tr className="plugins-table-row" key={row}>
+								<td className="plugins-table-cell py-4 ps-4">
+									<div className="flex items-start gap-3">
+										<Skeleton className="h-8 w-8 shrink-0" />
+										<div className="grow space-y-2">
+											<Skeleton className="h-4 w-32 max-w-full" />
+											<Skeleton className="h-3 w-24" />
+										</div>
+									</div>
+								</td>
+								<td className="plugins-table-cell space-y-2 py-4 pe-4">
+									<Skeleton className="h-4 w-3/4" />
+									<Skeleton className="h-3 w-20" />
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+			<div
+				className="divide-y divide-stroke border-y border-stroke md:hidden"
+				aria-hidden="true"
+			>
+				{rows.map((row) => (
+					<div className="space-y-2.5 p-4" key={row}>
+						<div className="flex items-center gap-3">
+							<Skeleton className="h-8 w-8" />
+							<Skeleton className="h-4 w-36" />
+						</div>
+						<Skeleton className="h-4 w-3/4" />
+						<Skeleton className="h-3 w-24" />
+					</div>
+				))}
+			</div>
+		</div>
+	);
+}

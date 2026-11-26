@@ -1,4 +1,4 @@
-import type { GeoPermissibleObjects } from "@visx/geo";
+import type { GeoPermissibleObjects } from "d3-geo";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 

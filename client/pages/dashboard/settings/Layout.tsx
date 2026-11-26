@@ -1,90 +1,21 @@
-import { useParams } from "react-router";
+import type { ReactNode } from "react";
+import { useLocation, matchPath } from "react-router";
 
-import { useAdminAccess } from "@/hooks";
-import { __ } from "@/i18n";
+import { isValidSettingsTab } from "@/router/tabs";
 
-import { Header, Sidebar } from "./components";
-import type {
-	SettingsLayoutProps,
-	SettingsTabId,
-	SettingsTabItem,
-} from "./components/layout/types";
+import { SettingsNavigation, useSettingsAccess } from "./components/layout";
 
-function Layout({ children }: SettingsLayoutProps) {
-	const params = useParams();
-	const activeTab = (params.tab as SettingsTabId | undefined) || "general";
-	const {
-		canManageApiKeys,
-		canManageIntegrations,
-		canManageMcp,
-		canManageMailDelivery,
-		canManageLocationData,
-		canManagePerformance,
-		canManageUpdates,
-	} = useAdminAccess();
-
-	const tabs: SettingsTabItem[] = [
-		{ id: "general", name: __("General"), icon: "settings" },
-		{ id: "security", name: __("Security"), icon: "shield" },
-	];
-
-	if (canManageApiKeys) {
-		tabs.push({ id: "api", name: __("API Keys"), icon: "key" });
-	}
-
-	if (canManageIntegrations) {
-		tabs.push({
-			id: "integrations",
-			name: __("Integrations"),
-			icon: "plug",
-		});
-	}
-
-	if (canManageMcp) {
-		tabs.push({
-			id: "mcp",
-			name: __("MCP Server"),
-			icon: "mcp",
-			badge: __("New"),
-			badgeVariant: "new",
-		});
-	}
-
-	if (canManagePerformance) {
-		tabs.push({
-			id: "performance",
-			name: __("Performance"),
-			icon: "zap",
-		});
-	}
-
-	if (canManageMailDelivery) {
-		tabs.push({ id: "email", name: __("Email SMTP"), icon: "mail" });
-	}
-
-	if (canManageLocationData) {
-		tabs.push({
-			id: "location",
-			name: __("Location Data"),
-			icon: "mapPin",
-		});
-	}
-
-	if (canManageUpdates) {
-		tabs.push({ id: "updates", name: __("Updates"), icon: "download" });
-	}
+export default function Layout({ children }: { children: ReactNode }) {
+	const { pathname } = useLocation();
+	const routeTab = matchPath("/dashboard/settings/:tab", pathname)?.params
+		.tab;
+	const activeTab = isValidSettingsTab(routeTab) ? routeTab : "general";
+	const { allowed } = useSettingsAccess();
 
 	return (
 		<div className="settings-layout">
-			<Header />
-
-			<div className="settings-layout-grid">
-				<Sidebar tabs={tabs} activeTab={activeTab} />
-
-				{children}
-			</div>
+			<SettingsNavigation activeTab={activeTab} allowed={allowed} />
+			{children}
 		</div>
 	);
 }
-
-export default Layout;

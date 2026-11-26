@@ -1,4 +1,5 @@
 import { Trash2 } from "lucide-react";
+import { useId } from "react";
 
 import { SearchInput } from "@/components";
 import { __, sprintf } from "@/i18n";
@@ -50,12 +51,13 @@ export function ActivityTable({
 	const selectedCount = selectedActivityIds.length;
 	const hasSelection = selectedCount > 0;
 	const totalCount = totalItemsCount ?? items.length;
+	const titleId = useId();
 
 	return (
 		<div className="activity-page-panel">
 			<div className="activity-page-panel-header">
 				<div className="flex items-center gap-2.5">
-					<h2 className="activity-page-panel-title">
+					<h2 id={titleId} className="activity-page-panel-title">
 						{__("Activity history")}
 					</h2>
 					{totalCount > 0 ? (
@@ -107,43 +109,64 @@ export function ActivityTable({
 			<div className="activity-page-table">
 				{hasItems ? (
 					<div className="activity-page-table-scroll">
-						<div className="activity-page-table-element">
+						<div
+							className="activity-page-table-element"
+							role="table"
+							aria-labelledby={titleId}
+						>
 							<div
+								role="row"
 								className={cn(
 									"activity-page-table-head",
 									isAdmin && "activity-page-table-head-admin"
 								)}
 							>
-								{isAdmin && hasItems ? (
-									<input
-										type="checkbox"
-										checked={isAllSelected}
-										onChange={onToggleSelectAll}
-										ref={(node) => {
-											if (node) {
-												node.indeterminate =
-													isIndeterminate;
-											}
-										}}
-										className="links-checkbox"
-										aria-label={__(
-											"Select all events on this page"
-										)}
-									/>
-								) : (
-									<span aria-hidden="true"></span>
-								)}
-								<span>{__("Event")}</span>
-								<span>{__("Details")}</span>
-								<span>{__("Time")}</span>
+								<span role="columnheader">
+									{isAdmin ? (
+										<input
+											type="checkbox"
+											checked={isAllSelected}
+											onChange={onToggleSelectAll}
+											ref={(node) => {
+												if (node) {
+													node.indeterminate =
+														isIndeterminate;
+												}
+											}}
+											className="links-checkbox"
+											aria-label={__(
+												"Select all events on this page"
+											)}
+										/>
+									) : null}
+								</span>
+								<span role="columnheader">{__("Event")}</span>
+								<span
+									role="columnheader"
+									className="activity-page-table-head-detail"
+								>
+									{__("Details")}
+								</span>
+								<span
+									role="columnheader"
+									className="activity-page-table-head-detail"
+								>
+									{__("Time")}
+								</span>
 								{isAdmin ? (
-									<span className="activity-page-table-head-actions">
+									<span
+										role="columnheader"
+										className="activity-page-table-head-detail activity-page-table-head-actions"
+									>
 										{__("Actions")}
 									</span>
 								) : null}
 							</div>
 
-							<div className="activity-page-events">
+							<div
+								className="activity-page-events"
+								role="rowgroup"
+							>
 								{items.map((activity, index) => (
 									<ActivityRow
 										key={activity.id || `activity-${index}`}

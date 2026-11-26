@@ -1,6 +1,6 @@
 @layer components {
 	.dashboard-search-trigger {
-		@apply inline-flex h-10 w-10 items-center justify-center rounded-xl bg-surface-alt text-heading transition-colors hover:bg-stroke focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+		@apply inline-flex h-10 w-10 items-center justify-center rounded-xl border border-stroke/80 bg-surface text-heading shadow-2xs transition-colors hover:border-stroke-strong hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:h-9 sm:w-9;
 	}
 	.dashboard-search-dialog {
 		@apply fixed inset-0 z-50;
@@ -11,17 +11,22 @@
 		padding-top: var(--search-top);
 	}
 	.dashboard-search-panel {
+		@apply transition-[opacity,scale,translate] duration-260 ease-[cubic-bezier(0.2,0.75,0.25,1)] data-closed:opacity-0 data-closed:scale-[0.98] data-closed:-translate-y-1.5 data-leave:duration-180 motion-reduce:transition-none;
 		@apply flex w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-stroke bg-surface shadow-[0_20px_70px_-15px_rgba(0,0,0,0.35)];
 		max-height: calc(100dvh - var(--search-top) - 1.5rem);
 	}
 	.dashboard-search-field {
-		@apply flex shrink-0 items-center gap-3 border-b border-stroke px-4 py-5 text-text-muted sm:px-5;
+		@apply flex shrink-0 items-center gap-3 border-b border-field-border bg-field-bg px-4 py-5 text-text-muted sm:px-5;
+	}
+	.dashboard-search-field:has(.dashboard-search-input:focus-visible) {
+		border-color: var(--color-field-focus);
+		box-shadow: inset 0 -1px 0 var(--color-field-focus);
 	}
 	.dashboard-search-field > svg {
 		@apply shrink-0;
 	}
 	.dashboard-search-input {
-		@apply min-w-0 flex-1 border-0 bg-transparent py-1 text-base text-heading outline-none placeholder:text-text-muted sm:text-xl;
+		@apply min-w-0 flex-1 border-0 bg-transparent py-1 text-base text-heading outline-none placeholder:text-field-placeholder sm:text-xl;
 		text-align: start;
 	}
 	.dashboard-search-shortcut {
@@ -67,7 +72,7 @@
 		@apply flex flex-wrap items-center gap-2 px-3 py-3 text-sm text-text-muted;
 	}
 	.dashboard-search-loading {
-		@apply animate-spin;
+		@apply motion-safe:animate-spin;
 	}
 	.dashboard-search-retry {
 		@apply ms-auto inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs text-accent hover:bg-surface-alt focus-visible:outline-2 focus-visible:outline-accent;

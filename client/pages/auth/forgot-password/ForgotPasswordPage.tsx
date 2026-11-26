@@ -1,4 +1,4 @@
-import type { KeyboardEvent, SubmitEvent } from "react";
+import type { KeyboardEvent } from "react";
 import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { ArrowLeft, ArrowRight, KeyRound, Mail } from "lucide-react";
@@ -17,6 +17,8 @@ import { __, sprintf } from "@/i18n";
 import { getErrorMessage } from "@/shared/errors";
 import { requestControlFormSubmit } from "@/shared/browser";
 
+import { useFormSubmission } from "../useFormSubmission";
+
 const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 	if ("Enter" !== event.key) {
 		return;
@@ -34,10 +36,9 @@ function ForgotPasswordPage() {
 	const [formError, setFormError] = useState("");
 	const [isSubmitted, setIsSubmitted] = useState(false);
 	const captchaRef = useRef<CaptchaWidgetRef>(null);
-	const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+	const [forgotPassword] = useForgotPasswordMutation();
 
-	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
-		event.preventDefault();
+	const { handleSubmit, isSubmitting } = useFormSubmission(async () => {
 		setFormError("");
 
 		if (!identifier.trim()) {
@@ -65,7 +66,7 @@ function ForgotPasswordPage() {
 				)
 			);
 		}
-	};
+	});
 
 	return (
 		<AuthLayout
@@ -87,7 +88,7 @@ function ForgotPasswordPage() {
 			)}
 		>
 			{isSubmitted ? (
-				<div className="auth-page-status">
+				<div className="auth-page-status" role="status">
 					<p className="auth-page-status-title">
 						{__("Check your inbox")}
 					</p>
@@ -121,13 +122,14 @@ function ForgotPasswordPage() {
 						enterKeyHint="go"
 						onKeyDown={submitFormOnEnter}
 						required
+						disabled={isSubmitting}
 						error={formError}
 					/>
 					<CaptchaWidget ref={captchaRef} />
 					<Button
 						type="submit"
 						size="md"
-						loading={isLoading}
+						loading={isSubmitting}
 						className="auth-page-submit"
 					>
 						{__("Send reset link")}

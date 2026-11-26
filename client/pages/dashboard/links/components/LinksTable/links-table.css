@@ -1,30 +1,57 @@
 @layer components {
-	.links-table-search-input {
-		@apply ps-9 pe-8;
-	}
-
 	.links-table {
-		@apply overflow-hidden rounded-xl border border-stroke bg-surface shadow-xs;
+		@apply min-w-0 overflow-hidden rounded-xl border border-stroke bg-surface;
+		container: links-table / inline-size;
 	}
 
 	.links-table-panel-header {
-		@apply flex flex-col gap-3 border-b border-stroke bg-surface px-4 py-3 sm:px-5 sm:py-3.5 sm:flex-row sm:items-center sm:justify-between;
+		@apply flex flex-wrap items-center justify-between gap-3 border-b border-stroke px-4 py-3;
 	}
 
 	.links-table-panel-title {
-		@apply text-sm font-semibold text-heading;
+		@apply text-base font-semibold text-heading;
 	}
 
 	.links-table-panel-badge {
-		@apply inline-flex items-center justify-center rounded-full bg-surface-alt px-2 py-0.5 text-xs font-semibold text-text-muted border border-stroke/60;
+		@apply inline-flex items-center rounded-md bg-surface-alt px-2 py-0.5 text-xs font-semibold tabular-nums text-text-muted;
+	}
+
+	.links-table-search {
+		@apply w-full min-w-0;
+	}
+
+	@container links-table (min-width: 32rem) {
+		.links-table-search {
+			@apply w-64;
+		}
 	}
 
 	.links-table-scroll {
-		@apply overflow-x-auto overscroll-x-contain;
+		@apply overflow-x-auto overscroll-x-contain focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent;
 	}
 
 	.links-table-element {
-		@apply min-w-220 w-full;
+		@apply w-full table-fixed;
+		min-inline-size: 61rem;
+	}
+
+	.links-table-col-select {
+		inline-size: 2.75rem;
+	}
+	.links-table-col-link {
+		inline-size: 10.5rem;
+	}
+	.links-table-col-health {
+		inline-size: 8rem;
+	}
+	.links-table-col-performance {
+		inline-size: 7.5rem;
+	}
+	.links-table-col-created {
+		inline-size: 7rem;
+	}
+	.links-table-col-actions {
+		inline-size: 9rem;
 	}
 
 	.links-table-head {
@@ -33,5 +60,14 @@
 
 	.links-table-body {
 		@apply divide-y divide-stroke;
+	}
+
+	.links-table-placeholder {
+		@apply my-1 h-5 w-3/4 max-w-28;
+	}
+
+	.links-table-placeholder-select,
+	.links-table-selection-placeholder {
+		@apply inline-block size-4 rounded-sm bg-surface-alt;
 	}
 }

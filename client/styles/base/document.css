@@ -1,6 +1,8 @@
 @layer base {
-	html {
-		scroll-behavior: smooth;
+	@media (prefers-reduced-motion: no-preference) {
+		html {
+			scroll-behavior: smooth;
+		}
 	}
 
 	a,
@@ -47,6 +49,11 @@ html[dir="rtl"] .mr-auto {
 html {
 	height: 100%;
 	overflow-x: hidden;
+	color-scheme: light;
+}
+
+html.dark {
+	color-scheme: dark;
 }
 
 body {
@@ -67,28 +74,28 @@ body {
 		color 0.3s ease;
 }
 
+body.page-dashboard {
+	background-color: var(--color-dashboard-bg);
+}
+
 ::-moz-selection {
-	color: white;
-	background-color: #2b3140;
+	color: var(--color-selection-ink);
+	background-color: var(--color-selection-fill);
 }
 
 ::selection {
-	color: white;
-	background-color: #2b3140;
+	color: var(--color-selection-ink);
+	background-color: var(--color-selection-fill);
 }
 
-.dark ::-moz-selection,
 .code-panel ::-moz-selection,
-[class*="bg-night"] ::-moz-selection,
-[class*="bg-[#111827]"] ::-moz-selection {
-	color: #151922;
-	background-color: #b5c8fa;
+[class*="bg-night"] ::-moz-selection {
+	color: #102321;
+	background-color: #83dccc;
 }
 
-.dark ::selection,
 .code-panel ::selection,
-[class*="bg-night"] ::selection,
-[class*="bg-[#111827]"] ::selection {
-	color: #151922;
-	background-color: #b5c8fa;
+[class*="bg-night"] ::selection {
+	color: #102321;
+	background-color: #83dccc;
 }

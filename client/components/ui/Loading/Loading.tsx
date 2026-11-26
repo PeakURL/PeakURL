@@ -1,6 +1,6 @@
 import { Loader2 } from "lucide-react";
 
-import { CompressionMark } from "@/components/shared/Logo";
+import { LogoIcon } from "@/components/shared/Logo";
 import { __ } from "@/i18n";
 import { cn } from "@/shared/formatting";
 
@@ -59,7 +59,7 @@ export function LoadingSpinner({
 export function PageLoader() {
 	return (
 		<div className="page-loader" role="status">
-			<CompressionMark size={112} className="page-loader-mark" loop />
+			<LogoIcon size={112} className="page-loader-mark" loop />
 			<p className="page-loader-label">{__("Loading…")}</p>
 		</div>
 	);

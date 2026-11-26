@@ -1,2 +1,3 @@
-export { default as Header } from "./Header";
-export { default as Sidebar } from "./Sidebar";
+/** Shared Settings navigation and route access. */
+export { SettingsNavigation } from "./SettingsNavigation";
+export { useSettingsAccess } from "./useSettingsAccess";

@@ -15,6 +15,14 @@
 		@apply max-h-none;
 	}
 
+	@media (min-width: 1280px) {
+		.dashboard-recent-clicks-list:not(.dashboard-recent-clicks-list-empty) {
+			max-block-size: none;
+			min-block-size: 0;
+			contain: size;
+		}
+	}
+
 	.dashboard-recent-clicks-empty {
 		@apply py-8 text-center;
 	}

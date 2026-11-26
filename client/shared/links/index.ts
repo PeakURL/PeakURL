@@ -1,4 +1,8 @@
-export { getFaviconPreviewUrl, getManagedFaviconUrl } from "./favicon";
+export {
+	getDefaultFaviconPreviewUrl,
+	getFaviconAsset,
+	getManagedFaviconUrl,
+} from "./favicon";
 export type { ManagedFaviconAsset } from "./favicon";
 export {
 	getShortUrl,

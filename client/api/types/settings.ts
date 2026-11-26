@@ -84,6 +84,9 @@ export interface MailTestResult {
 export interface SiteFavicon {
 	configured?: boolean;
 	isCustom?: boolean;
+	svgUrl?: string | null;
+	lightSvgUrl?: string | null;
+	darkSvgUrl?: string | null;
 	url?: string | null;
 	iconUrl?: string | null;
 	appleTouchUrl?: string | null;

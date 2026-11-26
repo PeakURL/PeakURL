@@ -1,7 +1,7 @@
 import type { ChangeEventHandler, RefObject } from "react";
 import { Image, Upload, Trash2 } from "lucide-react";
 
-import { Button, PreviewImage } from "@/components";
+import { Button, PreviewImage, Skeleton } from "@/components";
 import type { ImageSource } from "@/shared/links";
 
 import { FaviconPreview } from "./FaviconPreview";
@@ -16,6 +16,7 @@ interface ImageUploadFieldProps {
 	removeLabel: string;
 	previewLabel: string;
 	preview: ImageSource | null;
+	pending: boolean;
 	landscape?: boolean;
 	siteName?: string;
 	fileName?: string;
@@ -36,6 +37,7 @@ export function ImageUploadField({
 	removeLabel,
 	previewLabel,
 	preview,
+	pending,
 	landscape = false,
 	siteName = "PeakURL",
 	fileName,
@@ -56,8 +58,13 @@ export function ImageUploadField({
 				<h3 className="settings-image-title">{title}</h3>
 				<p className="settings-group-description">{description}</p>
 			</div>
-			<div className="settings-image-preview">
-				{landscape ? (
+			<div className="settings-image-preview" aria-busy={pending}>
+				{pending ? (
+					<Skeleton
+						className={landscape ? "size-full" : "my-2 h-4 w-24"}
+						aria-hidden="true"
+					/>
+				) : landscape ? (
 					preview ? (
 						<PreviewImage
 							source={preview}
@@ -74,7 +81,7 @@ export function ImageUploadField({
 						siteName={siteName}
 					/>
 				)}
-				{onRemove && (
+				{!pending && onRemove && (
 					<button
 						type="button"
 						className="settings-image-remove"

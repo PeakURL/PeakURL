@@ -1,5 +1,3 @@
-import { ShieldCheck } from "lucide-react";
-
 import { Button, Input, ReadOnlyValueBlock } from "@/components";
 import { __ } from "@/i18n";
 
@@ -20,27 +18,16 @@ function TwoFactorSetup({
 	onVerificationCodeChange,
 }: TwoFactorSetupProps) {
 	return (
-		<div className="settings-security-two-factor-setup">
-			<div
-				dir={direction}
-				className="settings-security-two-factor-setup-header"
-			>
-				<div className="settings-security-two-factor-setup-icon-panel">
-					<ShieldCheck
-						size={18}
-						className="settings-security-two-factor-setup-icon"
-					/>
-				</div>
-				<div className="settings-security-two-factor-setup-copy">
-					<p className="settings-security-two-factor-setup-title">
-						{__("Connect your authenticator app")}
-					</p>
-					<p className="settings-security-two-factor-setup-description">
-						{__(
-							"Scan the QR code or enter the setup key in your authenticator app. Verify a code below to finish enabling 2FA."
-						)}
-					</p>
-				</div>
+		<div dir={direction} className="settings-security-two-factor-setup">
+			<div>
+				<p className="settings-security-two-factor-setup-title">
+					{__("Connect your authenticator app")}
+				</p>
+				<p className="settings-security-two-factor-setup-description">
+					{__(
+						"Scan the QR code or enter the setup key in your authenticator app. Verify a code below to finish enabling 2FA."
+					)}
+				</p>
 			</div>
 			<div className="settings-security-two-factor-setup-grid">
 				<div className="settings-security-two-factor-qr">
@@ -62,24 +49,22 @@ function TwoFactorSetup({
 					)}
 				</div>
 				<div className="settings-security-two-factor-secret-stack">
-					<div className="settings-security-two-factor-secret-card">
+					<div>
 						<p className="settings-security-two-factor-secret-label">
 							{__("Setup key")}
 						</p>
 						<ReadOnlyValueBlock
 							value={secret}
-							className="settings-security-two-factor-secret-value"
 							valueClassName="settings-security-two-factor-secret-value-text"
 						/>
 					</div>
 					{otpauthUrl ? (
-						<div className="settings-security-two-factor-secret-card">
+						<div>
 							<p className="settings-security-two-factor-secret-label">
 								{__("Authenticator URI")}
 							</p>
 							<ReadOnlyValueBlock
 								value={otpauthUrl}
-								className="settings-security-two-factor-secret-value"
 								valueClassName="settings-security-two-factor-secret-value-text"
 							/>
 						</div>
@@ -102,7 +87,6 @@ function TwoFactorSetup({
 							size="sm"
 							onClick={onVerify}
 							loading={isVerifying}
-							className="settings-security-two-factor-verify-submit"
 						>
 							{__("Verify & Enable")}
 						</Button>

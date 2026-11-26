@@ -1,4 +1,4 @@
-import type { KeyboardEvent, SubmitEvent } from "react";
+import type { KeyboardEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { CheckCircle2, KeyRound, LockKeyhole } from "lucide-react";
@@ -18,6 +18,8 @@ import {
 import { __ } from "@/i18n";
 import { getErrorMessage } from "@/shared/errors";
 import { requestControlFormSubmit } from "@/shared/browser";
+
+import { useFormSubmission } from "../useFormSubmission";
 
 const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 	if ("Enter" !== event.key) {
@@ -54,12 +56,11 @@ function ResetPasswordPage() {
 	} = useCheckPasswordResetTokenQuery(resetToken, {
 		skip: !resetToken,
 	});
-	const [resetPassword, { isLoading }] = useResetPasswordMutation();
+	const [resetPassword] = useResetPasswordMutation();
 	const isTokenInvalid = !resetToken || isTokenError;
 	const isCheckingResetLink = isCheckingToken || isLoadingToken;
 
-	const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
-		event.preventDefault();
+	const { handleSubmit, isSubmitting } = useFormSubmission(async () => {
 		setFormError("");
 
 		if (isCheckingResetLink || isTokenInvalid) {
@@ -100,7 +101,7 @@ function ResetPasswordPage() {
 				)
 			);
 		}
-	};
+	});
 
 	return (
 		<AuthLayout
@@ -122,7 +123,7 @@ function ResetPasswordPage() {
 			)}
 		>
 			{isCheckingResetLink ? (
-				<div className="auth-page-status">
+				<div className="auth-page-status" role="status">
 					<div className="reset-password-page-status">
 						<LockKeyhole
 							size={18}
@@ -139,7 +140,7 @@ function ResetPasswordPage() {
 					</div>
 				</div>
 			) : isTokenInvalid ? (
-				<div className="auth-page-status">
+				<div className="auth-page-status auth-page-status-error">
 					<div className="reset-password-page-status">
 						<LockKeyhole
 							size={18}
@@ -166,7 +167,7 @@ function ResetPasswordPage() {
 					</div>
 				</div>
 			) : isCompleted ? (
-				<div className="auth-page-status">
+				<div className="auth-page-status" role="status">
 					<div className="reset-password-page-status">
 						<CheckCircle2
 							size={18}
@@ -195,9 +196,9 @@ function ResetPasswordPage() {
 						onChange={(event) => setPassword(event.target.value)}
 						placeholder={__("Enter your new password")}
 						autoComplete="new-password"
+						helperText={__("Use at least 8 characters.")}
 						required
-						error={formError}
-						disabled={isCheckingResetLink}
+						disabled={isSubmitting || isCheckingResetLink}
 					/>
 					<Input
 						label={__("Confirm new password")}
@@ -213,13 +214,18 @@ function ResetPasswordPage() {
 						placeholder={__("Confirm your new password")}
 						autoComplete="new-password"
 						required
-						disabled={isCheckingResetLink}
+						disabled={isSubmitting || isCheckingResetLink}
 					/>
+					{formError && (
+						<p className="form-field-error" role="alert">
+							{formError}
+						</p>
+					)}
 					<CaptchaWidget ref={captchaRef} />
 					<Button
 						type="submit"
 						size="md"
-						loading={isLoading || isCheckingResetLink}
+						loading={isSubmitting || isCheckingResetLink}
 						className="auth-page-submit"
 					>
 						{__("Reset password")}

@@ -1,0 +1,29 @@
+@layer components {
+	.settings-navigation {
+		@apply min-w-0 overflow-x-auto border-b border-stroke;
+		scrollbar-width: thin;
+		overscroll-behavior-inline: contain;
+	}
+
+	.settings-navigation-track {
+		@apply relative flex w-max min-w-full items-stretch gap-4 sm:gap-5;
+		padding-inline: 2px;
+	}
+
+	.settings-navigation-link {
+		@apply inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap px-1 py-3 text-sm font-medium text-text-muted transition-colors hover:text-heading focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent;
+	}
+
+	.settings-navigation-link[aria-current="page"] {
+		@apply font-semibold text-heading;
+	}
+
+	.settings-navigation-indicator {
+		@apply pointer-events-none invisible absolute bottom-0 left-0 h-0.5 w-px rounded-full bg-accent;
+		transform-origin: left center;
+	}
+
+	.settings-navigation-badge {
+		@apply text-xs font-medium text-accent;
+	}
+}

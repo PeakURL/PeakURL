@@ -7,7 +7,6 @@ import {
 	ManageRolesDrawer,
 	UserDialog,
 	UsersOverview,
-	UsersOverviewSkeleton,
 	UsersTable,
 } from "./components";
 import { useUsersManager } from "./hooks";
@@ -59,15 +58,12 @@ function UsersPage() {
 
 	return (
 		<div className="users-page">
-			{isUsersLoading && !users.length ? (
-				<UsersOverviewSkeleton />
-			) : (
-				<UsersOverview
-					items={overviewItems}
-					onAddUserClick={openCreateDialog}
-					onManageRolesClick={isAdmin ? openRolesDrawer : undefined}
-				/>
-			)}
+			<UsersOverview
+				items={overviewItems}
+				isLoading={isUsersLoading}
+				onAddUserClick={openCreateDialog}
+				onManageRolesClick={isAdmin ? openRolesDrawer : undefined}
+			/>
 
 			<UsersTable
 				users={users}

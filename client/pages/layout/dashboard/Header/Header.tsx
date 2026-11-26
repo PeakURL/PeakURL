@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
 	Menu as MenuIcon,
 	ChevronDown,
@@ -6,7 +7,7 @@ import {
 	Settings,
 	LogOut,
 } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
@@ -15,6 +16,7 @@ import {
 	useLogoutMutation,
 	baseApi,
 } from "@/state/slices/api";
+import { useGetPluginExtensionsQuery } from "@/state/slices/api/system";
 import { authApi } from "@/state/slices";
 import { useAdminAccess } from "@/hooks";
 import { Avatar, ThemeToggle } from "@/components";
@@ -24,17 +26,43 @@ import { cn } from "@/shared/formatting";
 
 import { Search } from "../Search";
 import type { HeaderProps } from "../types";
+import { Breadcrumbs } from "./Breadcrumbs";
+import { getBreadcrumbs } from "./getBreadcrumbs";
 
-export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
+export const Header = ({ onMobileMenuToggle, mobileMenuOpen }: HeaderProps) => {
 	const direction = getDocumentDirection();
 	const { useAuthCheckQuery } = authApi;
 	const { data: sessionData } = useAuthCheckQuery(undefined);
 	const user = selectSessionUser(sessionData);
-	const { canManageUsers } = useAdminAccess();
+	const { canManageUsers, canManagePlugins, hasCapability } =
+		useAdminAccess();
+	const { data: extensionsResponse } = useGetPluginExtensionsQuery(
+		undefined,
+		{
+			skip: !user,
+		}
+	);
+	const pluginPages = useMemo(() => {
+		const rawPages = extensionsResponse?.data?.pages ?? [];
+		return rawPages.filter(
+			(page) => !page.capability || hasCapability(page.capability)
+		);
+	}, [extensionsResponse?.data?.pages, hasCapability]);
 	const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
 	const navigate = useNavigate();
+	const { pathname } = useLocation();
 	const dispatch = useDispatch();
 	const basePath = "/dashboard";
+	const breadcrumbs = useMemo(
+		() =>
+			getBreadcrumbs({
+				pathname,
+				basePath,
+				canManagePlugins,
+				pluginPages,
+			}),
+		[pathname, canManagePlugins, pluginPages]
+	);
 
 	const getRoleLabel = (role?: string | null, roleName?: string | null) => {
 		if (roleName) return roleName;
@@ -62,16 +90,25 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 	return (
 		<div className="dashboard-header">
 			<div className="dashboard-header-inner">
-				<button
-					onClick={onMobileMenuToggle}
-					aria-label={__("Open menu")}
-					className="dashboard-header-menu-button"
-				>
-					<MenuIcon
-						size={20}
-						className="dashboard-header-menu-icon"
-					/>
-				</button>
+				<div className="dashboard-header-leading">
+					<button
+						type="button"
+						onClick={(event) => {
+							event.currentTarget.focus({ preventScroll: true });
+							onMobileMenuToggle();
+						}}
+						aria-label={__("Open menu")}
+						aria-haspopup="dialog"
+						aria-expanded={mobileMenuOpen}
+						className="dashboard-header-menu-button"
+					>
+						<MenuIcon
+							size={20}
+							className="dashboard-header-menu-icon"
+						/>
+					</button>
+					<Breadcrumbs items={breadcrumbs} />
+				</div>
 
 				<div className="dashboard-header-actions">
 					<Search />
@@ -106,6 +143,7 @@ export const Header = ({ onMobileMenuToggle }: HeaderProps) => {
 						</MenuButton>
 
 						<MenuItems
+							transition
 							dir={direction}
 							className="dashboard-header-user-panel"
 						>

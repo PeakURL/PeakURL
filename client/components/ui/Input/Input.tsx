@@ -1,6 +1,7 @@
 import { forwardRef, useId, useState } from "react";
 import { Info, Eye, EyeOff } from "lucide-react";
 
+import { __ } from "@/i18n";
 import { getDocumentDirection, getFieldDirection } from "@/i18n/direction";
 import { cn } from "@/shared/formatting";
 
@@ -38,6 +39,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 		type = "text",
 		helperText,
 		valueDirection,
+		"aria-describedby": describedBy,
+		"aria-invalid": ariaInvalid,
 		...props
 	},
 	ref
@@ -60,10 +63,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 		explicitDirection: props.dir,
 	});
 	const inputId = props.id || generatedId;
-	const helperId = helperText ? `${inputId}-helper` : undefined;
+	const helperId = helperText && !error ? `${inputId}-helper` : undefined;
 	const errorId = error ? `${inputId}-error` : undefined;
-	const describedBy =
-		[errorId, helperId].filter(Boolean).join(" ") || undefined;
+	const descriptionIds =
+		[errorId, helperId, describedBy].filter(Boolean).join(" ") || undefined;
 	const hasInlineStartIcon = Boolean(IconComponent);
 	const placeholderFollowsPageDirection =
 		Boolean(preferredValueDirection) &&
@@ -75,7 +78,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 				<label htmlFor={inputId} className="form-field-label">
 					{label}
 					{props.required && (
-						<span className="field-required-indicator">*</span>
+						<span
+							className="field-required-indicator"
+							aria-hidden="true"
+						>
+							*
+						</span>
 					)}
 				</label>
 			)}
@@ -90,8 +98,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					id={inputId}
 					type={actualType}
 					dir={contentDirection}
-					aria-invalid={Boolean(error)}
-					aria-describedby={describedBy}
+					aria-invalid={error ? true : ariaInvalid}
+					aria-describedby={descriptionIds}
 					className={cn(
 						"form-control-base",
 						"text-page-start",
@@ -112,9 +120,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 					<button
 						type="button"
 						className="form-field-icon form-field-password-toggle inline-end-icon-slot"
+						disabled={props.disabled}
 						onClick={() => setShowPassword(!showPassword)}
+						aria-controls={inputId}
 						aria-label={
-							showPassword ? "Hide password" : "Show password"
+							showPassword
+								? __("Hide password")
+								: __("Show password")
 						}
 						aria-pressed={showPassword}
 					>
@@ -127,7 +139,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
 				)}
 			</div>
 			{error && (
-				<p id={errorId} className="form-field-error">
+				<p id={errorId} className="form-field-error" role="alert">
 					<Info size={14} />
 					{error}
 				</p>

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 
 import { __ } from "@/i18n";
 import { formatCount } from "@/shared/formatting";
+import { getActiveLocale } from "@/shared/dates";
 import { MetricDonutChart, PlatformIcon } from "@/components";
 
 import type { DeviceBreakdownProps, MetricItem } from "../types";
@@ -10,19 +11,16 @@ const EMPTY_METRICS: MetricItem[] = [];
 const MAX_SECONDARY_METRICS = 3;
 
 const DEVICE_COLORS = {
-	desktop: "#6366f1",
-	mobile: "#0ea5e9",
-	tablet: "#10b981",
-	default: "#94a3b8",
+	desktop: "var(--chart-primary)",
+	mobile: "var(--chart-secondary)",
+	tablet: "var(--chart-3)",
+	default: "var(--chart-8)",
 };
 
 function getMetricTotal(metrics: MetricItem[]): number {
 	return metrics.reduce((total, metric) => total + metric.count, 0);
 }
 
-function getMetricPercentage(count: number, total: number): number {
-	return total > 0 ? Math.round((count / total) * 100) : 0;
-}
 function formatMetricName(name: string): string {
 	const normalizedName = name.trim();
 
@@ -65,24 +63,23 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 	const browsers = deviceData?.browsers ?? EMPTY_METRICS;
 	const operatingSystems = deviceData?.operatingSystems ?? EMPTY_METRICS;
 	const totalDeviceClicks = getMetricTotal(devices);
+	const locale = getActiveLocale();
 	const noData =
 		devices.length === 0 &&
 		browsers.length === 0 &&
 		operatingSystems.length === 0;
 
-	const deviceRows = useMemo(
-		() =>
-			devices.map((device) => ({
-				name: formatMetricName(device.name),
-				count: device.count,
-				percentage: getMetricPercentage(
-					device.count,
-					totalDeviceClicks
-				),
-				color: getDeviceColor(device.name),
-			})),
-		[devices, totalDeviceClicks]
-	);
+	const deviceRows = useMemo(() => {
+		const percentage = new Intl.NumberFormat(locale, { style: "percent" });
+		return devices.map((device) => ({
+			name: formatMetricName(device.name),
+			count: device.count,
+			percentage: percentage.format(
+				totalDeviceClicks > 0 ? device.count / totalDeviceClicks : 0
+			),
+			color: getDeviceColor(device.name),
+		}));
+	}, [devices, locale, totalDeviceClicks]);
 
 	const deviceSegments = useMemo(
 		() =>
@@ -143,7 +140,7 @@ const DeviceBreakdown = ({ deviceData }: DeviceBreakdownProps) => {
 												{device.name}
 											</span>
 											<span className="dashboard-devices-legend-value">
-												{device.percentage}%
+												{device.percentage}
 											</span>
 											<span className="dashboard-devices-legend-count">
 												{formatCount(device.count)}

@@ -41,6 +41,8 @@ export interface GeneralTabProps {
 	isUpdating: boolean;
 	siteSettings?: SiteSettings | null;
 	isLoadingSiteSettings: boolean;
+	isLoadingProfile: boolean;
+	canEditSite: boolean;
 }
 
 /**
@@ -54,6 +56,7 @@ export interface ApiUser {
  * Props for the API keys and API docs tab.
  */
 export interface ApiTabProps {
+	isLoading: boolean;
 	user?: ApiUser | null;
 	baseApiUrl?: string | null;
 	copyToClipboard: (
@@ -118,6 +121,7 @@ export interface EmailDeliveryTabProps {
  * Props for a selectable mail delivery method card.
  */
 export interface MethodButtonProps {
+	disabled?: boolean;
 	isActive: boolean;
 	title: string;
 	description: string;

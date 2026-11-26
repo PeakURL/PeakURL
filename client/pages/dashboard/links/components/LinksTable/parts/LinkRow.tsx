@@ -14,7 +14,11 @@ import {
 
 import { __, sprintf } from "@/i18n";
 import { formatLocalizedDateTime, formatRelativeTime } from "@/shared/dates";
-import { getLinkDisplayTitle, getLinkExpirationState } from "@/shared/links";
+import {
+	getLinkDisplayTitle,
+	getLinkExpirationState,
+	sanitizeUrl,
+} from "@/shared/links";
 
 import {
 	formatHealthDuration,
@@ -101,6 +105,9 @@ function LinkRow({
 				? "bg-success"
 				: "bg-stroke";
 
+	const title = getLinkDisplayTitle(link.title, __("Untitled Link"));
+	const shortCode = `/${link.alias || link.shortCode || ""}`;
+	const destination = sanitizeUrl(link.destinationUrl);
 	const health = link.health;
 	const healthStatus = health?.status;
 	const healthStatusDisplay = getHealthStatusDisplay(healthStatus);
@@ -139,6 +146,7 @@ function LinkRow({
 					checked={selected}
 					onChange={() => onSelectRow(link.id)}
 					className="links-checkbox"
+					aria-label={sprintf(__("Select %s"), title)}
 				/>
 			</td>
 			<td className="links-row-cell">
@@ -146,49 +154,61 @@ function LinkRow({
 					<div className="links-row-link-icon">
 						<Link2 className="h-3 w-3 text-accent" />
 					</div>
-					<div className="min-w-0">
-						<div className="flex items-center gap-1.5">
-							<code className="links-row-short-link links-short-url preserve-ltr-value">
-								/{link.alias || link.shortCode}
-							</code>
-							<button
-								onClick={() => onCopy(link)}
-								className="links-row-link-copy"
-								title={
-									copiedId === link.id
-										? __("Copied!")
-										: __("Copy")
-								}
-							>
-								{copiedId === link.id ? (
-									<Check size={12} className="text-success" />
-								) : (
-									<Copy size={12} />
-								)}
-							</button>
-						</div>
-					</div>
+					<code
+						className="links-row-short-link links-short-url preserve-ltr-value"
+						title={shortCode}
+					>
+						{shortCode}
+					</code>
+					<button
+						type="button"
+						onClick={() => onCopy(link)}
+						className="links-row-link-copy"
+						aria-label={
+							copiedId === link.id
+								? __("Copied!")
+								: __("Copy short URL")
+						}
+						title={
+							copiedId === link.id ? __("Copied!") : __("Copy")
+						}
+					>
+						{copiedId === link.id ? (
+							<Check size={14} className="text-success" />
+						) : (
+							<Copy size={14} />
+						)}
+					</button>
 				</div>
 			</td>
 			<td className="links-row-cell">
-				<div className="links-row-title">
-					{getLinkDisplayTitle(link.title, __("Untitled Link"))}
+				<div className="links-row-title" title={title}>
+					{title}
 				</div>
 			</td>
 			<td className="links-row-cell">
 				<div className="links-row-destination">
-					<div
-						className="links-row-destination-value preserve-ltr-value"
-						title={link.destinationUrl}
-					>
-						{link.destinationUrl}
-					</div>
+					{destination ? (
+						<a
+							href={destination}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="links-row-destination-value preserve-ltr-value"
+							title={link.destinationUrl}
+						>
+							{link.destinationUrl}
+						</a>
+					) : (
+						<span
+							className="links-row-destination-value preserve-ltr-value"
+							title={link.destinationUrl}
+						>
+							{link.destinationUrl}
+						</span>
+					)}
 					<div className="links-row-meta">
 						{link.hasPassword && (
-							<div
-								key="password"
-								className="flex items-center gap-1.5"
-							>
+							<div key="password" className="inline-flex">
 								<span className="links-row-badge links-row-badge-warning">
 									<Lock size={10} />
 									{__("Protected")}

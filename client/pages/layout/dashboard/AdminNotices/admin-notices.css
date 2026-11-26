@@ -1,6 +1,7 @@
 @layer components {
 	.dashboard-notices {
-		@apply mb-5 space-y-4 lg:sticky lg:top-16 lg:z-25 lg:-mt-6 lg:mb-0 lg:bg-bg lg:pt-6 lg:pb-5;
+		@apply mb-5 space-y-4 lg:sticky lg:z-25 lg:-mt-8 lg:mb-0 lg:bg-dashboard-bg lg:pt-8 lg:pb-5;
+		inset-block-start: var(--dashboard-header-height);
 	}
 
 	.dashboard-notice {
@@ -65,10 +66,10 @@
 	}
 
 	.dashboard-notice-info {
-		@apply border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-200;
+		@apply border-info/25 bg-info-soft text-info dark:border-info/30;
 	}
 
 	.dashboard-notice-action-info {
-		@apply border-blue-300/50 hover:bg-blue-100/70 dark:border-blue-500/30 dark:hover:bg-blue-500/10;
+		@apply border-info/30 hover:bg-info/10;
 	}
 }

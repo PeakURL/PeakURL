@@ -1,45 +1,21 @@
 @layer components {
 	.integrations-tab,
-	.settings-general,
 	.settings-api,
 	.settings-email,
 	.settings-location,
 	.settings-performance,
-	.settings-security,
 	.settings-updates {
-		@apply space-y-6;
+		@apply space-y-5;
 	}
 
 	.settings-form {
-		@apply flex flex-col gap-6;
+		@apply flex flex-col gap-5;
 	}
 
 	.settings-section {
-		@apply flex min-w-0 flex-col gap-5 border-b border-stroke/80 pb-6;
+		@apply flex min-w-0 flex-col gap-4 rounded-xl border border-stroke bg-surface p-4 sm:p-5;
 	}
 
-	.settings-section:last-child {
-		@apply border-b-0 pb-0;
-	}
-
-	.settings-section:has(+ .settings-general-actions),
-	.settings-section:has(+ .settings-email-actions) {
-		@apply border-b-0 pb-0;
-	}
-
-	.settings-tab-header {
-		@apply flex min-w-0 flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between;
-	}
-	.settings-tab-header-copy {
-		@apply min-w-0 flex-1 space-y-2;
-		min-width: min(100%, 18rem);
-	}
-	.settings-tab-header .settings-section-title {
-		@apply text-xl;
-	}
-	.settings-tab-header-actions {
-		@apply flex flex-wrap items-center gap-2;
-	}
 	.settings-documentation-link {
 		@apply inline-flex h-9 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-stroke bg-surface px-3 text-xs font-medium text-accent transition-colors hover:bg-selected focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
@@ -76,25 +52,13 @@
 	}
 
 	.settings-section-title {
-		@apply flex w-full min-w-0 items-center gap-2.5 text-lg font-semibold leading-7 text-heading;
+		@apply flex w-full min-w-0 items-center gap-2 text-base font-semibold leading-6 text-heading;
 	}
 
-	.settings-section-icon {
-		@apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-selected-border/70 bg-selected text-accent;
-	}
-	.settings-section-heading {
-		@apply rounded-lg bg-surface-alt/60 p-3 sm:p-4;
-	}
-	.settings-section-heading .settings-group-description {
-		@apply leading-6;
-	}
 	.settings-section-heading
 		.settings-section-title
 		+ .settings-group-description {
 		@apply mt-2;
-	}
-	.settings-section > .settings-section-title {
-		@apply rounded-lg bg-surface-alt/60 p-3 sm:p-4;
 	}
 
 	.settings-group-description {
@@ -102,7 +66,13 @@
 	}
 
 	.settings-grid {
-		@apply grid grid-cols-1 gap-4 md:grid-cols-2;
+		@apply grid grid-cols-1 gap-4;
+	}
+
+	@container settings-content (min-width: 30rem) {
+		.settings-grid {
+			@apply grid-cols-2;
+		}
 	}
 
 	.settings-section-label {

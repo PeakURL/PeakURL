@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useSyncExternalStore } from "react";
+import { useCallback, useLayoutEffect, useSyncExternalStore } from "react";
 
 import type { Theme, ThemeProviderProps } from "../types";
 import { ThemeContext } from "./context";
@@ -62,9 +62,12 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 		() => DEFAULT_THEME
 	);
 
-	useEffect(() => {
+	// Update the document before canvas charts read the shared CSS colors.
+	useLayoutEffect(() => {
 		const root = window.document.documentElement;
-		root.classList.toggle("dark", "dark" === theme);
+		const isDark = "dark" === theme;
+		root.classList.toggle("dark", isDark);
+		root.style.colorScheme = theme;
 	}, [theme]);
 
 	const toggleTheme = useCallback(() => {

@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import { Logo } from "@/components";
+import { Logo, Wordmark } from "@/components";
 import { getPeakURLData } from "@/data";
 import { __ } from "@/i18n";
 import { getBrandTagline } from "@/shared/branding";
@@ -11,7 +11,10 @@ export function AboutHeader() {
 			<div className="about-identity">
 				<Logo size="xl" showName={false} />
 				<div className="about-identity-copy">
-					<h1>PeakURL</h1>
+					<h1>
+						<Wordmark className="about-wordmark" />
+						<span className="sr-only">PeakURL</span>
+					</h1>
 					<p>{getBrandTagline()}</p>
 					<span className="about-version">
 						{__("Version")} <bdi>{version}</bdi>

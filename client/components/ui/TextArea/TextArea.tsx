@@ -17,6 +17,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 			helperText,
 			valueDirection,
 			rows = 3,
+			"aria-describedby": describedBy,
+			"aria-invalid": ariaInvalid,
 			...props
 		},
 		ref
@@ -29,10 +31,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 			explicitDirection: props.dir,
 		});
 		const textAreaId = props.id || generatedId;
-		const helperId = helperText ? `${textAreaId}-helper` : undefined;
+		const helperId =
+			helperText && !error ? `${textAreaId}-helper` : undefined;
 		const errorId = error ? `${textAreaId}-error` : undefined;
-		const describedBy =
-			[errorId, helperId].filter(Boolean).join(" ") || undefined;
+		const descriptionIds =
+			[errorId, helperId, describedBy].filter(Boolean).join(" ") ||
+			undefined;
 		const placeholderFollowsPageDirection =
 			Boolean(valueDirection) && valueDirection !== chromeDirection;
 
@@ -42,7 +46,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 					<label htmlFor={textAreaId} className="form-field-label">
 						{label}
 						{props.required && (
-							<span className="field-required-indicator">*</span>
+							<span
+								className="field-required-indicator"
+								aria-hidden="true"
+							>
+								*
+							</span>
 						)}
 					</label>
 				)}
@@ -52,8 +61,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 						id={textAreaId}
 						rows={rows}
 						dir={contentDirection}
-						aria-invalid={Boolean(error)}
-						aria-describedby={describedBy}
+						aria-invalid={error ? true : ariaInvalid}
+						aria-describedby={descriptionIds}
 						className={cn(
 							"form-control-base",
 							"text-page-start",

@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import type { SerializedError } from "@reduxjs/toolkit";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
@@ -45,34 +44,6 @@ export type {
 import type { SettingsTabId } from "@/router/tabs";
 
 export type { SettingsTabId };
-
-export type SettingsTabIcon =
-	| "settings"
-	| "activity"
-	| "shield"
-	| "key"
-	| "mail"
-	| "mapPin"
-	| "globe"
-	| "plug"
-	| "mcp"
-	| "zap"
-	| "download";
-
-export interface SettingsTabItem {
-	id: SettingsTabId;
-	name: string;
-	icon: SettingsTabIcon;
-}
-
-export interface SettingsLayoutProps {
-	children: ReactNode;
-}
-
-export interface SidebarProps {
-	tabs: SettingsTabItem[];
-	activeTab: SettingsTabId;
-}
 
 export type QueryError = FetchBaseQueryError | SerializedError | undefined;
 

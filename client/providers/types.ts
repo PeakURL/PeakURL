@@ -23,11 +23,6 @@ export interface ThemeContextValue {
 export type ThemeProviderProps = PropsWithChildren;
 
 /**
- * Props for the auth initializer wrapper.
- */
-export type AuthInitializerProps = PropsWithChildren;
-
-/**
  * Props for the top-level client provider composition.
  */
 export type ClientProvidersProps = PropsWithChildren;

@@ -1,7 +1,6 @@
 @import "./links-page.css";
 @import "./components/shared.css";
 @import "./components/Header/header.css";
-@import "./components/LinksSkeleton/links-skeleton.css";
 @import "./components/TableFooter/table-footer.css";
 @import "./components/Pagination/pagination.css";
 @import "./components/DeleteLinkModal/delete-link-modal.css";

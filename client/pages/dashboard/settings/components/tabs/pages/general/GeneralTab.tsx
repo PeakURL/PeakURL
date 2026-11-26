@@ -1,4 +1,3 @@
-import { UserRound, Settings2, House, Palette } from "lucide-react";
 import type { ChangeEvent, SubmitEvent } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -12,10 +11,16 @@ import {
 	type SelectOption,
 } from "@/components";
 import { __, sprintf } from "@/i18n";
+import { useTheme } from "@/providers/ThemeProvider";
 import { isDocumentRtl } from "@/i18n/direction";
 import { getInstalledLanguageLabel } from "@/i18n/languages";
 import { cn } from "@/shared/formatting";
-import { getFaviconPreviewUrl, sanitizeImageUrl } from "@/shared/links";
+import {
+	getDefaultFaviconPreviewUrl,
+	getFaviconAsset,
+	getManagedFaviconUrl,
+	sanitizeImageUrl,
+} from "@/shared/links";
 import { getTimeZoneOptions, normalizeSiteTimeFormat } from "./lib";
 import type { SiteTimeFormat } from "@/api";
 import { ImageUploadField } from "./ImageUploadField";
@@ -40,7 +45,11 @@ function GeneralTab({
 	isUpdating,
 	siteSettings,
 	isLoadingSiteSettings,
+	isLoadingProfile,
+	canEditSite,
 }: GeneralTabProps) {
+	const { theme } = useTheme();
+	const isLoading = isLoadingProfile || isLoadingSiteSettings;
 	const isRtl = isDocumentRtl();
 	const availableLanguages = siteSettings?.availableLanguages || [];
 	const defaultSiteTagline = __(
@@ -143,6 +152,7 @@ function GeneralTab({
 
 	const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
+		if (isLoading || isUpdating) return;
 		onSubmit({
 			...generalForm,
 			siteName,
@@ -211,13 +221,6 @@ function GeneralTab({
 		{ value: "login", label: __("Login Page") },
 	];
 	const hasCustomFavicon = Boolean(siteSettings?.favicon?.isCustom);
-	const storedPreviewUrl = useMemo(
-		() =>
-			hasCustomFavicon
-				? getFaviconPreviewUrl(siteSettings?.favicon?.updatedAt)
-				: "",
-		[hasCustomFavicon, siteSettings?.favicon?.updatedAt]
-	);
 
 	const uploadedPreviewUrl = useMemo(
 		() =>
@@ -234,16 +237,15 @@ function GeneralTab({
 		};
 	}, [uploadedPreviewUrl]);
 
-	const faviconPreviewUrl = useMemo(() => {
-		if (removeFavicon) {
-			return "";
-		}
-
-		return uploadedPreviewUrl || storedPreviewUrl;
-	}, [removeFavicon, storedPreviewUrl, uploadedPreviewUrl]);
-	const faviconPreviewSource = useMemo(
-		() => sanitizeImageUrl(faviconPreviewUrl),
-		[faviconPreviewUrl]
+	const useCustomFavicon = hasCustomFavicon && !removeFavicon;
+	const faviconPreviewSource = sanitizeImageUrl(
+		uploadedPreviewUrl ||
+			(useCustomFavicon
+				? getManagedFaviconUrl(
+						getFaviconAsset(true),
+						siteSettings?.favicon?.updatedAt
+					)
+				: getDefaultFaviconPreviewUrl(theme))
 	);
 
 	const uploadedSocialPreviewUrl = useMemo(
@@ -307,15 +309,12 @@ function GeneralTab({
 	};
 
 	const canManageSiteSettings =
-		siteSettings?.canManageSiteSettings && !isLoadingSiteSettings;
-	const hasConfiguredFavicon = hasCustomFavicon;
-	const hasFaviconPreview = Boolean(faviconPreviewSource);
-	const showRemoveButton =
-		Boolean(faviconFile) || (!removeFavicon && hasCustomFavicon);
-	const chooserLabel =
-		hasFaviconPreview || hasConfiguredFavicon
-			? __("Replace Favicon")
-			: __("Choose Favicon");
+		siteSettings?.canManageSiteSettings ??
+		(isLoadingSiteSettings && canEditSite);
+	const showRemoveButton = Boolean(faviconFile) || useCustomFavicon;
+	const chooserLabel = showRemoveButton
+		? __("Replace Favicon")
+		: __("Choose Favicon");
 	const storedSocialPreviewUrl = hasConfiguredSocialPreview
 		? siteSettings?.socialPreview?.url || ""
 		: "";
@@ -336,261 +335,203 @@ function GeneralTab({
 
 	return (
 		<div className="settings-general">
-			<form onSubmit={handleSubmit} className="settings-form">
-				<section className="settings-section">
-					<SectionTitle icon={UserRound}>
-						{__("Profile Information")}
-					</SectionTitle>
+			<span className="sr-only" role="status">
+				{isLoading ? __("Loading…") : ""}
+			</span>
+			<form
+				onSubmit={handleSubmit}
+				className={cn(
+					"settings-form settings-general-form",
+					canManageSiteSettings && "settings-general-with-site"
+				)}
+				aria-busy={isLoading}
+			>
+				<fieldset className="settings-general-row" disabled={isLoading}>
+					<section
+						className="settings-section settings-general-profile"
+						aria-busy={isLoadingProfile}
+					>
+						<SectionTitle>{__("Profile Information")}</SectionTitle>
 
-					<div className="settings-grid">
-						<Input
-							label={__("First Name")}
-							name="firstName"
-							value={generalForm.firstName}
-							onChange={handleChange}
-							required
-						/>
-						<Input
-							label={__("Last Name")}
-							name="lastName"
-							value={generalForm.lastName}
-							onChange={handleChange}
-							required
-						/>
-						<Input
-							label={__("Display Name")}
-							name="displayName"
-							value={generalForm.displayName}
-							onChange={handleChange}
-							placeholder={`${generalForm.firstName} ${generalForm.lastName}`}
-						/>
-						<div className="form-field">
-							<label
-								htmlFor="settings-general-username"
-								className="form-field-label settings-general-readonly-label"
-							>
-								<span>{__("Username")}</span>
-								<span className="settings-general-readonly-note">
-									{__("Cannot be changed")}
-								</span>
-							</label>
-							<div className="form-field-control">
-								<input
-									id="settings-general-username"
-									type="text"
-									dir="ltr"
-									value={username || ""}
-									disabled
-									autoCapitalize="off"
-									spellCheck={false}
-									className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
-								/>
+						<div className="settings-grid">
+							<Input
+								label={__("First Name")}
+								name="firstName"
+								value={generalForm.firstName}
+								onChange={handleChange}
+								required
+							/>
+							<Input
+								label={__("Last Name")}
+								name="lastName"
+								value={generalForm.lastName}
+								onChange={handleChange}
+								required
+							/>
+							<Input
+								label={__("Display Name")}
+								name="displayName"
+								value={generalForm.displayName}
+								onChange={handleChange}
+								placeholder={`${generalForm.firstName} ${generalForm.lastName}`}
+							/>
+							<div className="form-field">
+								<label
+									htmlFor="settings-general-username"
+									className="form-field-label settings-general-readonly-label"
+								>
+									<span>{__("Username")}</span>
+									<span className="settings-general-readonly-note">
+										{__("Cannot be changed")}
+									</span>
+								</label>
+								<div className="form-field-control">
+									<input
+										id="settings-general-username"
+										type="text"
+										dir="ltr"
+										value={username || ""}
+										disabled
+										autoCapitalize="off"
+										spellCheck={false}
+										className="form-control-base form-field-input form-field-input-no-icon settings-general-readonly-input"
+									/>
+								</div>
 							</div>
-						</div>
-						<Input
-							label={__("Email Address")}
-							type="email"
-							name="email"
-							valueDirection="ltr"
-							autoCapitalize="off"
-							spellCheck={false}
-							value={generalForm.email}
-							onChange={handleChange}
-							required
-						/>
-						<Input
-							label={__("Phone Number")}
-							type="tel"
-							name="phoneNumber"
-							value={generalForm.phoneNumber}
-							onChange={handleChange}
-						/>
-						<Input
-							label={__("Company")}
-							name="company"
-							value={generalForm.company}
-							onChange={handleChange}
-						/>
-						<Input
-							label={__("Job Title")}
-							name="jobTitle"
-							value={generalForm.jobTitle}
-							onChange={handleChange}
-						/>
-						<div className="settings-general-bio-field">
-							<TextArea
-								label={__("Bio")}
-								name="bio"
-								rows={3}
-								className="settings-general-bio-input"
-								value={generalForm.bio}
+							<Input
+								label={__("Email Address")}
+								type="email"
+								name="email"
+								valueDirection="ltr"
+								autoCapitalize="off"
+								spellCheck={false}
+								value={generalForm.email}
+								onChange={handleChange}
+								required
+							/>
+							<Input
+								label={__("Phone Number")}
+								type="tel"
+								name="phoneNumber"
+								value={generalForm.phoneNumber}
 								onChange={handleChange}
 							/>
+							<Input
+								label={__("Company")}
+								name="company"
+								value={generalForm.company}
+								onChange={handleChange}
+							/>
+							<Input
+								label={__("Job Title")}
+								name="jobTitle"
+								value={generalForm.jobTitle}
+								onChange={handleChange}
+							/>
+							<div className="settings-general-bio-field">
+								<TextArea
+									label={__("Bio")}
+									name="bio"
+									rows={3}
+									className="settings-general-bio-input"
+									value={generalForm.bio}
+									onChange={handleChange}
+								/>
+							</div>
 						</div>
-					</div>
-				</section>
-				{canManageSiteSettings && (
-					<>
-						<section className="settings-section">
-							<SectionTitle icon={Settings2}>
-								{__("Site Configuration")}
-							</SectionTitle>
-
-							<div className="settings-grid">
-								<Input
-									label={__("Site title")}
-									value={siteName}
-									onChange={(event) =>
-										setSiteName(event.target.value)
-									}
-									disabled={
-										!canManageSiteSettings || isUpdating
-									}
-								/>
-								<Input
-									label={__("Tagline")}
-									value={siteTagline}
-									onChange={(event) =>
-										setSiteTagline(event.target.value)
-									}
-									disabled={
-										!canManageSiteSettings || isUpdating
-									}
-								/>
-								<SelectField
-									label={__("Site Language")}
-									value={siteLanguage}
-									onChange={setSiteLanguage}
-									options={languageOptions}
-									disabled={
-										isLoadingSiteSettings ||
-										!siteSettings?.canManageSiteSettings ||
-										isUpdating
-									}
-									ariaLabel={__("Site language")}
-								/>
-								<SelectField
-									label={__("Site Timezone")}
-									value={siteTimezone}
-									onChange={setSiteTimezone}
-									options={timezoneOptions}
-									disabled={
-										isLoadingSiteSettings ||
-										!siteSettings?.canManageSiteSettings ||
-										isUpdating
-									}
-									ariaLabel={__("Site timezone")}
-									optionsClassName="settings-general-timezone-options"
-								/>
-								<SelectField
-									label={__("Time Format")}
-									value={siteTimeFormat}
-									onChange={setSiteTimeFormat}
-									options={timeFormatOptions}
-									disabled={
-										isLoadingSiteSettings ||
-										!siteSettings?.canManageSiteSettings ||
-										isUpdating
-									}
-									ariaLabel={__("Time format")}
-								/>
-								<SelectField
-									label={__("Trash Retention Period")}
-									value={String(trashRetentionDays)}
-									onChange={(val) =>
-										setTrashRetentionDays(Number(val))
-									}
-									options={trashRetentionOptions}
-									disabled={
-										isLoadingSiteSettings ||
-										!siteSettings?.canManageSiteSettings ||
-										isUpdating
-									}
-									ariaLabel={__("Trash retention period")}
-								/>
-								<SelectField
-									label={__(
-										"Analytics Click Retention Period"
-									)}
-									value={String(analyticsRetentionDays)}
-									onChange={(val) =>
-										setAnalyticsRetentionDays(Number(val))
-									}
-									options={analyticsRetentionOptions}
-									disabled={
-										isLoadingSiteSettings ||
-										!siteSettings?.canManageSiteSettings ||
-										isUpdating
-									}
-									ariaLabel={__(
-										"Analytics click retention period"
-									)}
-								/>
-							</div>
-						</section>
-						<section className="settings-section">
-							<SectionTitle icon={House}>
-								{__("Homepage Configuration")}
-							</SectionTitle>
-
-							<div className="settings-grid">
-								<SelectField
-									className="settings-general-field-full"
-									label={__("Root URL Behavior")}
-									value={landingPageMode}
-									onChange={setLandingPageMode}
-									options={landingPageModeOptions}
-									disabled={
-										isLoadingSiteSettings ||
-										!siteSettings?.canManageSiteSettings ||
-										isUpdating
-									}
-									ariaLabel={__("Root URL Behavior")}
-									helperText={
-										landingPageMode === "html"
-											? sprintf(
-													__(
-														"Customize your landing page by editing %s. You can include HTML, styles, and scripts."
-													),
-													siteSettings?.contentDirectory
-														? `${siteSettings.contentDirectory}/landing-page.html`
-														: "content/landing-page.html"
-												)
-											: undefined
-									}
-								/>
-								{landingPageMode === "url" && (
-									<div className="settings-general-field-full">
-										<Input
-											label={__("Custom Redirect URL")}
-											value={landingPageUrl}
-											onChange={(event) =>
-												setLandingPageUrl(
-													event.target.value
-												)
-											}
-											disabled={
-												!canManageSiteSettings ||
-												isUpdating
-											}
-											placeholder="https://example.com"
-											type="url"
-											valueDirection="ltr"
-										/>
-										<p className="settings-group-description settings-general-help-text">
-											{__(
-												"Visitors to the root domain will be redirected to this URL."
-											)}
-										</p>
-									</div>
-								)}
-							</div>
-						</section>
-						<section className="settings-section">
-							<div className="settings-section-copy settings-section-heading">
-								<SectionTitle icon={Palette}>
-									{__("Branding")}
+					</section>
+					{canManageSiteSettings && (
+						<div
+							className="settings-general-column"
+							aria-busy={isLoadingSiteSettings}
+						>
+							<section className="settings-section">
+								<SectionTitle>
+									{__("Site Configuration")}
 								</SectionTitle>
+
+								<div className="settings-grid">
+									<Input
+										label={__("Site title")}
+										value={siteName}
+										onChange={(event) =>
+											setSiteName(event.target.value)
+										}
+										disabled={
+											!canManageSiteSettings ||
+											isLoading ||
+											isUpdating
+										}
+									/>
+									<Input
+										label={__("Tagline")}
+										value={siteTagline}
+										onChange={(event) =>
+											setSiteTagline(event.target.value)
+										}
+										disabled={
+											!canManageSiteSettings ||
+											isLoading ||
+											isUpdating
+										}
+									/>
+								</div>
+							</section>
+							<section className="settings-section">
+								<SectionTitle>
+									{__("Regional Preferences")}
+								</SectionTitle>
+								<div className="settings-grid">
+									<SelectField
+										label={__("Site Language")}
+										value={siteLanguage}
+										onChange={setSiteLanguage}
+										options={languageOptions}
+										disabled={
+											isLoadingSiteSettings ||
+											!siteSettings?.canManageSiteSettings ||
+											isUpdating
+										}
+										ariaLabel={__("Site language")}
+									/>
+									<SelectField
+										label={__("Site Timezone")}
+										value={siteTimezone}
+										onChange={setSiteTimezone}
+										options={timezoneOptions}
+										disabled={
+											isLoadingSiteSettings ||
+											!siteSettings?.canManageSiteSettings ||
+											isUpdating
+										}
+										ariaLabel={__("Site timezone")}
+										optionsClassName="settings-general-timezone-options"
+									/>
+									<SelectField
+										label={__("Time Format")}
+										value={siteTimeFormat}
+										onChange={setSiteTimeFormat}
+										options={timeFormatOptions}
+										disabled={
+											isLoadingSiteSettings ||
+											!siteSettings?.canManageSiteSettings ||
+											isUpdating
+										}
+										ariaLabel={__("Time format")}
+									/>
+								</div>
+							</section>
+						</div>
+					)}
+				</fieldset>
+				{canManageSiteSettings && (
+					<fieldset
+						className="settings-general-row"
+						disabled={isLoading}
+					>
+						<section className="settings-section settings-general-branding">
+							<div className="settings-section-copy settings-section-heading">
+								<SectionTitle>{__("Branding")}</SectionTitle>
 								<p className="settings-group-description">
 									{__(
 										"Choose how PeakURL appears in browser tabs and shared links."
@@ -617,9 +558,12 @@ function GeneralTab({
 									removeLabel={__("Remove Favicon")}
 									previewLabel={__("Current favicon preview")}
 									preview={faviconPreviewSource || null}
+									pending={isLoadingSiteSettings}
 									fileName={faviconFile?.name}
 									disabled={
-										!canManageSiteSettings || isUpdating
+										!canManageSiteSettings ||
+										isLoading ||
+										isUpdating
 									}
 									inputRef={fileInputRef}
 									onChange={handleFaviconChange}
@@ -648,9 +592,12 @@ function GeneralTab({
 										"Default social preview image"
 									)}
 									preview={socialPreviewImageSource || null}
+									pending={isLoadingSiteSettings}
 									fileName={socialPreviewFile?.name}
 									disabled={
-										!canManageSiteSettings || isUpdating
+										!canManageSiteSettings ||
+										isLoading ||
+										isUpdating
 									}
 									inputRef={socialPreviewInputRef}
 									onChange={handleSocialPreviewChange}
@@ -662,7 +609,114 @@ function GeneralTab({
 								/>
 							</div>
 						</section>
-					</>
+						<div
+							className="settings-general-column"
+							aria-busy={isLoadingSiteSettings}
+						>
+							<section className="settings-section">
+								<SectionTitle>
+									{__("Data Retention")}
+								</SectionTitle>
+								<div className="settings-grid">
+									<SelectField
+										label={__("Trash Retention Period")}
+										value={String(trashRetentionDays)}
+										onChange={(val) =>
+											setTrashRetentionDays(Number(val))
+										}
+										options={trashRetentionOptions}
+										disabled={
+											isLoadingSiteSettings ||
+											!siteSettings?.canManageSiteSettings ||
+											isUpdating
+										}
+										ariaLabel={__("Trash retention period")}
+									/>
+									<SelectField
+										label={__(
+											"Analytics Click Retention Period"
+										)}
+										value={String(analyticsRetentionDays)}
+										onChange={(val) =>
+											setAnalyticsRetentionDays(
+												Number(val)
+											)
+										}
+										options={analyticsRetentionOptions}
+										disabled={
+											isLoadingSiteSettings ||
+											!siteSettings?.canManageSiteSettings ||
+											isUpdating
+										}
+										ariaLabel={__(
+											"Analytics click retention period"
+										)}
+									/>
+								</div>
+							</section>
+							<section className="settings-section">
+								<SectionTitle>
+									{__("Homepage Configuration")}
+								</SectionTitle>
+
+								<div className="settings-grid">
+									<SelectField
+										className="settings-general-field-full"
+										label={__("Root URL Behavior")}
+										value={landingPageMode}
+										onChange={setLandingPageMode}
+										options={landingPageModeOptions}
+										disabled={
+											isLoadingSiteSettings ||
+											!siteSettings?.canManageSiteSettings ||
+											isUpdating
+										}
+										ariaLabel={__("Root URL Behavior")}
+										helperText={
+											!isLoadingSiteSettings &&
+											landingPageMode === "html"
+												? sprintf(
+														__(
+															"Customize your landing page by editing %s. You can include HTML, styles, and scripts."
+														),
+														siteSettings?.contentDirectory
+															? `${siteSettings.contentDirectory}/landing-page.html`
+															: "content/landing-page.html"
+													)
+												: undefined
+										}
+									/>
+									{landingPageMode === "url" && (
+										<div className="settings-general-field-full">
+											<Input
+												label={__(
+													"Custom Redirect URL"
+												)}
+												value={landingPageUrl}
+												onChange={(event) =>
+													setLandingPageUrl(
+														event.target.value
+													)
+												}
+												disabled={
+													!canManageSiteSettings ||
+													isUpdating
+												}
+												placeholder="https://example.com"
+												type="url"
+												valueDirection="ltr"
+											/>
+											<p className="settings-group-description settings-general-help-text">
+												{__(
+													"Visitors to the root domain will be redirected to this URL."
+												)}
+											</p>
+										</div>
+									)}
+								</div>
+							</section>
+						</div>
+					</fieldset>
 				)}
 				<div
 					className={cn(
@@ -672,7 +726,11 @@ function GeneralTab({
 							: "settings-general-actions-end"
 					)}
 				>
-					<Button size="sm" type="submit" disabled={isUpdating}>
+					<Button
+						size="sm"
+						type="submit"
+						disabled={isLoading || isUpdating}
+					>
 						{isUpdating ? __("Saving...") : __("Save Changes")}
 					</Button>
 				</div>

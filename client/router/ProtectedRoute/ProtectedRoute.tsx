@@ -2,29 +2,22 @@ import { Navigate, useLocation } from "react-router";
 
 import { ApiErrorPage } from "@/components/shared";
 import { PageLoader } from "@/components/ui";
-import { selectSessionUser, useAuthCheckQuery } from "@/state/slices/api";
-import { getErrorStatus } from "@/shared/errors";
-import {
-	getInstallRecovery,
-	redirectToInstallRecovery,
-} from "@/shared/install";
+import { useSessionCheck } from "@/hooks";
+import { redirectToInstallRecovery } from "@/shared/install";
 
 import type { ProtectedRouteProps } from "./types";
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
 	const location = useLocation();
-	const { data, error, isFetching, isLoading, isError, refetch } =
-		useAuthCheckQuery(undefined);
-	const user = selectSessionUser(data);
-	const hasResolvedSession = undefined !== data || undefined !== error;
-	const isPending = !hasResolvedSession && (isLoading || isFetching);
-	const errorStatus = getErrorStatus(error);
-	const isAuthError = 401 === errorStatus || 403 === errorStatus;
-	const isRetryingConnection =
-		isFetching && !isLoading && undefined === data && !isAuthError;
-	const hasConnectionError =
-		(isError || isRetryingConnection) && !isAuthError;
-	const installRecovery = getInstallRecovery(error);
+	const {
+		user,
+		error,
+		installRecovery,
+		connectionError,
+		isRetrying,
+		isPending,
+		refetch,
+	} = useSessionCheck();
 
 	if (isPending) {
 		return <PageLoader />;
@@ -35,17 +28,17 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 		return <PageLoader />;
 	}
 
-	if (hasConnectionError) {
+	if (connectionError !== undefined) {
 		return (
 			<ApiErrorPage
-				error={error}
-				isRetrying={isRetryingConnection}
+				error={connectionError}
+				isRetrying={isRetrying}
 				onRetry={refetch}
 			/>
 		);
 	}
 
-	if (!user || isAuthError) {
+	if (!user) {
 		return <Navigate to="/login" replace state={{ from: location }} />;
 	}
 

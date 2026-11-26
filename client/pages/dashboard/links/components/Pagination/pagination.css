@@ -1,6 +1,6 @@
 @layer components {
 	.links-pagination {
-		@apply rounded-xl border border-stroke bg-surface px-4 py-3 shadow-2xs;
+		@apply rounded-xl border border-stroke bg-surface px-4 py-3;
 	}
 
 	.links-pagination-inner {
@@ -16,18 +16,27 @@
 	}
 
 	.links-pagination-nav {
-		@apply inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm font-medium text-text-muted transition-all hover:bg-surface-alt hover:text-heading disabled:cursor-not-allowed disabled:opacity-40;
+		@apply inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm font-medium text-text-muted transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent hover:bg-surface-alt hover:text-heading disabled:cursor-not-allowed disabled:opacity-40;
 	}
 
 	.links-pagination-pages {
-		@apply mx-1 sm:mx-2 flex items-center gap-1;
+		@apply mx-1 sm:mx-2 flex max-w-full flex-wrap items-center justify-center gap-1;
 	}
 
 	.links-pagination-page {
-		@apply h-8 w-8 rounded-lg text-xs sm:text-sm font-medium transition-all text-text-muted hover:bg-surface-alt hover:text-heading inline-flex items-center justify-center;
+		@apply h-8 w-8 rounded-lg text-xs sm:text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent text-text-muted hover:bg-surface-alt hover:text-heading inline-flex items-center justify-center;
 	}
 
 	.links-pagination-page-current {
-		@apply bg-action text-white font-semibold hover:bg-action hover:text-white shadow-xs;
+		@apply bg-action text-action-foreground font-semibold hover:bg-action-hover hover:text-action-foreground;
+	}
+
+	@container links-page (max-width: 22rem) {
+		.links-pagination-nav {
+			@apply size-8 justify-center p-0;
+		}
+		.links-pagination-nav > span {
+			@apply sr-only;
+		}
 	}
 }

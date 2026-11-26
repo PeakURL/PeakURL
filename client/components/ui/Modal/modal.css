@@ -3,12 +3,13 @@
 		@apply relative z-50;
 	}
 
-	.modal-shell {
+	.modal-position {
 		@apply fixed inset-0 z-50 flex items-center justify-center p-4;
 	}
 
 	.modal-panel {
-		@apply relative w-full max-h-[90vh] overflow-hidden rounded-2xl border border-stroke bg-surface shadow-2xl;
+		@apply relative flex w-full flex-col overflow-hidden rounded-2xl border border-stroke bg-surface shadow-2xl;
+		max-block-size: calc(100dvh - 2rem);
 		text-align: start;
 	}
 
@@ -29,7 +30,7 @@
 	}
 
 	.modal-header {
-		@apply flex items-center justify-between border-b border-stroke px-6 py-4;
+		@apply flex shrink-0 items-center justify-between gap-3 border-b border-stroke px-6 py-4;
 	}
 
 	.modal-title {
@@ -37,10 +38,10 @@
 	}
 
 	.modal-close {
-		@apply rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading;
+		@apply shrink-0 rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
 
 	.modal-content {
-		@apply max-h-[70vh] overflow-y-auto p-6;
+		@apply min-h-0 overflow-y-auto overscroll-contain p-6;
 	}
 }

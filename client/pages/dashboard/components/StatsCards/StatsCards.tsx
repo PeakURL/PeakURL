@@ -1,210 +1,143 @@
-import {
-	ArrowDown,
-	ArrowUp,
-	ChartLine,
-	Link2,
-	MousePointerClick,
-	Users,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-
 import { __, sprintf } from "@/i18n";
-import { cn, formatNumber } from "@/shared/formatting";
+import { formatDateOnly, getActiveLocale } from "@/shared/dates";
+import { formatCount, formatNumber } from "@/shared/formatting";
 
 import type { StatsCardsProps } from "../types";
+import { StatCard } from "./StatCard";
 
-type DashboardStatTone = "clicks" | "links" | "rate" | "users";
-type DashboardStatChangeType = "positive" | "negative";
-
-interface DashboardStatChange {
-	text: string;
-	type: DashboardStatChangeType;
+function isMetric(value: number | undefined): value is number {
+	return typeof value === "number" && Number.isFinite(value) && value >= 0;
 }
 
-interface DashboardStatCard {
-	title: string;
-	value: string;
-	change: DashboardStatChange | null;
-	icon: LucideIcon;
-	tone: DashboardStatTone;
+function getPeriodLabel(
+	period: NonNullable<StatsCardsProps["stats"]>["lastMonth"]
+) {
+	if (!period?.startDate || !period.endDate) return;
+	const start = formatDateOnly(period.startDate, { dateStyle: "medium" });
+	const end = formatDateOnly(period.endDate, { dateStyle: "medium" });
+	if (!start || !end) return;
+	return sprintf(__("Compared with %1$s to %2$s."), start, end);
 }
 
-/**
- * Format a dashboard-card delta against the last-month value.
- *
- * Count cards show percentage movement. Rate cards show percentage-point
- * movement while keeping the compact percent badge style.
- */
-function getLastMonthChange(
-	current: number,
-	lastMonth?: number,
-	isRate = false
-): DashboardStatChange | null {
-	if (lastMonth === undefined) {
-		return null;
-	}
-
-	const delta = current - lastMonth;
-	let formatted: string;
-
-	if (isRate) {
-		formatted = `${Math.abs(delta).toFixed(1)}%`;
-	} else if (lastMonth === 0) {
-		if (current === 0) {
-			return null;
-		}
-
-		formatted = "100%";
-	} else {
-		formatted = `${Math.abs((delta / lastMonth) * 100).toFixed(1)}%`;
-	}
-
-	return {
-		text: `${delta >= 0 ? "+" : "-"}${formatted}`,
-		type: delta >= 0 ? "positive" : "negative",
-	};
-}
-
-/**
- * Return hover copy for the last-month date window.
- */
-function getLastMonthTitle(
-	lastMonth: StatsCardsProps["stats"]["lastMonth"]
-): string {
-	if (!lastMonth?.startDate || !lastMonth?.endDate) {
-		return __("Compares with the same selected day range from last month.");
-	}
-
-	return sprintf(__("Compared with %1$s to %2$s."), [
-		lastMonth.startDate,
-		lastMonth.endDate,
-	]);
-}
-
-const StatsCards = ({ stats }: StatsCardsProps) => {
-	const uniqueClickRate = Number(stats.uniqueClickRate ?? 0);
-	const lastMonthUniqueClickRate =
-		stats.lastMonthUniqueClickRate === undefined
-			? undefined
-			: Number(stats.lastMonthUniqueClickRate);
-
-	const clicksChange = getLastMonthChange(
-		stats.totalClicks,
-		stats.lastMonthTotalClicks
-	);
-	const linksChange = getLastMonthChange(
-		stats.totalLinks,
-		stats.lastMonthTotalLinks
-	);
-	const rateChange = getLastMonthChange(
-		uniqueClickRate,
-		lastMonthUniqueClickRate,
-		true
-	);
-	const uniqueChange = getLastMonthChange(
-		stats.uniqueClicks,
-		stats.lastMonthUniqueClicks
-	);
-	const lastMonthTitle = getLastMonthTitle(stats.lastMonth);
-
-	const statsData: DashboardStatCard[] = [
+/** Render counts and rate changes using the comparison window supplied by analytics. */
+export default function StatsCards({
+	stats,
+	isLoading = false,
+}: StatsCardsProps) {
+	const rate =
+		isMetric(stats?.totalClicks) && stats.totalClicks > 0
+			? stats.uniqueClickRate
+			: undefined;
+	const priorRate =
+		isMetric(stats?.lastMonthTotalClicks) && stats.lastMonthTotalClicks > 0
+			? stats.lastMonthUniqueClickRate
+			: undefined;
+	const metrics = [
 		{
-			title: __("Total Clicks"),
-			value: formatNumber(stats.totalClicks),
-			change: clicksChange,
-			icon: MousePointerClick,
-			tone: "clicks",
+			id: "clicks",
+			label: __("Total Clicks"),
+			current: stats?.totalClicks,
+			previous: stats?.lastMonthTotalClicks,
 		},
 		{
-			title: __("Active Links"),
-			value: formatNumber(stats.totalLinks),
-			change: linksChange,
-			icon: Link2,
-			tone: "links",
+			id: "links",
+			label: __("Total Links"),
+			current: stats?.totalLinks,
+			previous: stats?.lastMonthTotalLinks,
 		},
 		{
-			title: __("Unique Click Rate"),
-			value: `${uniqueClickRate.toFixed(1)}%`,
-			change: rateChange,
-			icon: ChartLine,
-			tone: "rate",
+			id: "rate",
+			label: __("Unique Click Rate"),
+			current: rate,
+			previous: priorRate,
+			isRate: true,
 		},
 		{
-			title: __("Visitors"),
-			value: formatNumber(stats.uniqueClicks),
-			change: uniqueChange,
-			icon: Users,
-			tone: "users",
+			id: "visitors",
+			label: __("Visitors"),
+			current: stats?.uniqueClicks,
+			previous: stats?.lastMonthUniqueClicks,
 		},
 	];
-
-	const getIconClassName = (tone: DashboardStatTone) =>
-		cn("dashboard-stats-card-icon", `dashboard-stats-card-icon-${tone}`);
-
-	const getIconGlyphClassName = (tone: DashboardStatTone) =>
-		cn(
-			"dashboard-stats-card-icon-glyph",
-			`dashboard-stats-card-icon-glyph-${tone}`
-		);
-
-	const getChangeBadgeClassName = (changeType: DashboardStatChangeType) =>
-		cn(
-			"dashboard-stats-card-change-badge",
-			changeType === "positive"
-				? "dashboard-stats-card-change-badge-positive"
-				: "dashboard-stats-card-change-badge-negative"
-		);
+	const locale = getActiveLocale();
+	const decimal = new Intl.NumberFormat(locale, {
+		maximumFractionDigits: 1,
+		signDisplay: "exceptZero",
+	});
+	const percentage = new Intl.NumberFormat(locale, {
+		style: "percent",
+		maximumFractionDigits: 1,
+	});
+	const percentageChange = new Intl.NumberFormat(locale, {
+		style: "percent",
+		maximumFractionDigits: 1,
+		signDisplay: "exceptZero",
+	});
+	const periodLabel = getPeriodLabel(stats?.lastMonth);
 
 	return (
-		<div className="dashboard-stats-grid">
-			{statsData.map((stat) => {
-				const StatIcon = stat.icon;
+		<dl className="dashboard-stats-grid" aria-busy={isLoading}>
+			{metrics.map(({ id, label, current, previous, isRate }) => {
+				const currentValue = isMetric(current) ? current : undefined;
+				const change =
+					currentValue !== undefined && isMetric(previous)
+						? isRate
+							? currentValue - previous
+							: previous > 0
+								? (currentValue - previous) / previous
+								: currentValue === 0
+									? 0
+									: undefined
+						: undefined;
+				// Match the semantic direction to the precision shown in the badge.
+				const rounded =
+					change === undefined
+						? undefined
+						: Number((change * (isRate ? 1 : 100)).toFixed(1));
+				const tone = !rounded
+					? "neutral"
+					: rounded > 0
+						? "positive"
+						: "negative";
+
+				const changeLabel =
+					rounded === undefined
+						? undefined
+						: isRate
+							? sprintf(__("%s pp"), decimal.format(rounded))
+							: percentageChange.format(rounded / 100);
+				const value =
+					currentValue === undefined
+						? "—"
+						: isRate
+							? percentage.format(currentValue / 100)
+							: formatNumber(currentValue);
 
 				return (
-					<div key={stat.title} className="dashboard-stats-card">
-						<div className="dashboard-stats-card-header">
-							<div className="dashboard-stats-card-copy">
-								<p className="dashboard-stats-card-title">
-									{stat.title}
-								</p>
-								<p className="dashboard-stats-card-value">
-									{stat.value}
-								</p>
-							</div>
-							<div className={getIconClassName(stat.tone)}>
-								<StatIcon
-									className={getIconGlyphClassName(stat.tone)}
-								/>
-							</div>
-						</div>
-
-						{stat.change && (
-							<div className="dashboard-stats-card-change">
-								<span
-									className={getChangeBadgeClassName(
-										stat.change.type
-									)}
-								>
-									{stat.change.type === "positive" ? (
-										<ArrowUp className="dashboard-stats-card-change-icon" />
-									) : (
-										<ArrowDown className="dashboard-stats-card-change-icon" />
-									)}
-									{stat.change.text}
-								</span>
-								<span
-									className="dashboard-stats-card-change-note"
-									title={lastMonthTitle}
-								>
-									{__("vs last month")}
-								</span>
-							</div>
-						)}
-					</div>
+					<StatCard
+						key={id}
+						label={label}
+						value={value}
+						valueTitle={
+							currentValue !== undefined && !isRate
+								? formatCount(currentValue)
+								: undefined
+						}
+						change={
+							changeLabel === undefined
+								? undefined
+								: { text: changeLabel, tone }
+						}
+						note={
+							changeLabel === undefined
+								? __("Comparison unavailable")
+								: __("vs last month")
+						}
+						noteTitle={periodLabel}
+						isLoading={isLoading}
+					/>
 				);
 			})}
-		</div>
+		</dl>
 	);
-};
-
-export default StatsCards;
+}

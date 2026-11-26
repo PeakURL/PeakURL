@@ -1,6 +1,7 @@
 @layer components {
 	.dashboard-devices {
 		@apply min-w-0 overflow-hidden rounded-lg border border-stroke bg-surface p-4 sm:p-5;
+		container: device-breakdown / inline-size;
 	}
 
 	.dashboard-devices-title {
@@ -20,7 +21,13 @@
 	}
 
 	.dashboard-devices-chart-panel {
-		@apply grid min-w-0 items-center gap-3 overflow-hidden rounded-lg border border-stroke bg-bg/60 p-3 sm:grid-cols-[minmax(8rem,12rem)_minmax(0,1fr)] sm:p-4;
+		@apply grid min-w-0 items-center gap-3 overflow-hidden rounded-lg border border-stroke bg-bg/60 p-3 sm:p-4;
+	}
+
+	@container device-breakdown (min-width: 24rem) {
+		.dashboard-devices-chart-panel {
+			grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
+		}
 	}
 
 	.dashboard-devices-chart {

@@ -1,6 +1,6 @@
-import { peakurlLogoUrl } from "@/assets/logo";
 import { PEAKURL_NAME } from "@/constants";
 import { __ } from "@/i18n";
+import { LogoIcon, Wordmark } from "../Logo";
 
 interface PoweredByProps {
 	href?: string;
@@ -21,8 +21,9 @@ export function PoweredBy({
 		>
 			<span>{__("Powered by")}</span>
 			<span className="powered-by-brand">
-				<img src={peakurlLogoUrl} alt="" width="22" height="22" />
-				{PEAKURL_NAME}
+				<LogoIcon size={20} className="powered-by-mark" />
+				<Wordmark className="powered-by-wordmark" />
+				<span className="sr-only">{PEAKURL_NAME}</span>
 			</span>
 		</a>
 	);

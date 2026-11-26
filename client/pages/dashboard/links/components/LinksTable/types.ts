@@ -13,12 +13,17 @@ import type {
  */
 export interface LinksTableProps {
 	filterContextKey?: string;
+	isLoading?: boolean;
+	isRefreshing?: boolean;
+	hasError?: boolean;
+	onRetry?: () => void;
 	links: LinkRecord[];
 	totalCount: number;
 	searchQuery: string;
 	onSearchChange: (query: string) => void;
 	statsShortId: string | null;
 	statsLink: LinkRecord | null;
+	isStatsLookupPending: boolean;
 	sortBy?: LinksSortBy;
 	sortOrder?: LinksSortOrder;
 	onSortChange?: (sortBy: LinksSortBy, sortOrder: LinksSortOrder) => void;
@@ -70,7 +75,7 @@ export interface LinkRowProps {
  */
 export interface TableHeaderRowProps {
 	selectedCount?: number;
-	onSelectAll: (event: ChangeEvent<HTMLInputElement>) => void;
+	onSelectAll?: (event: ChangeEvent<HTMLInputElement>) => void;
 	onBulkDelete?: () => void;
 	onDeleteAll?: () => void;
 	onBulkRestore?: () => void;

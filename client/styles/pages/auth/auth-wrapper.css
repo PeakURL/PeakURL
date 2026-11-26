@@ -1,15 +1,3 @@
-@-webkit-keyframes auth-page-fade-up {
-	from {
-		opacity: 0;
-		transform: translateY(14px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
 @keyframes auth-page-fade-up {
 	from {
 		opacity: 0;
@@ -33,47 +21,41 @@
 	}
 
 	.auth-page-layout {
-		@apply grid w-full max-w-lg overflow-hidden rounded-3xl border border-stroke bg-surface shadow-xl shadow-primary-950/5 lg:max-w-none lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)];
-		-webkit-animation: auth-page-fade-up 0.4s ease-out both;
+		@apply grid w-full max-w-lg overflow-hidden rounded-3xl border border-stroke bg-surface shadow-xl shadow-primary-950/5 lg:max-w-none lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)];
 		animation: auth-page-fade-up 0.4s ease-out both;
 	}
 
 	.auth-page-showcase {
-		@apply hidden min-w-0 flex-col justify-center gap-6 p-10 text-white lg:flex;
-		background: linear-gradient(
-			145deg,
-			var(--color-primary-900),
-			var(--color-primary-950)
-		);
+		@apply hidden min-w-0 flex-col justify-center gap-5 border-e border-stroke bg-surface-muted p-9 text-heading lg:flex;
 	}
 
 	.auth-page-badge {
-		@apply mb-5 inline-flex items-center gap-2 text-xs font-medium text-primary-300;
+		@apply mb-5 inline-flex items-center gap-2 text-xs font-medium text-accent;
 	}
 
 	.auth-page-showcase-title {
-		@apply text-4xl font-semibold leading-tight tracking-tight text-white;
+		@apply text-4xl font-semibold leading-tight tracking-tight text-heading;
 		text-wrap: balance;
 	}
 
 	.auth-page-showcase-copy {
-		@apply mt-4 max-w-md text-sm leading-6 text-slate-400;
+		@apply mt-4 max-w-md text-sm leading-6 text-text-muted;
 	}
 
 	.auth-page-illustration {
-		@apply mx-auto block h-auto w-full max-w-90 shrink-0;
+		@apply mx-auto block h-auto w-full max-w-80 shrink-0;
 	}
 
 	.auth-page-showcase-footer {
-		@apply border-t border-white/10 pt-5;
+		@apply border-t border-stroke pt-5;
 	}
 
 	.auth-page-note-title {
-		@apply text-sm font-medium text-white;
+		@apply text-sm font-medium text-heading;
 	}
 
 	.auth-page-note-copy {
-		@apply mt-2 text-sm leading-6 text-slate-400;
+		@apply mt-2 text-sm leading-6 text-text-muted;
 	}
 
 	.auth-page-card {
@@ -87,7 +69,7 @@
 	}
 
 	.auth-page-card-header {
-		@apply mb-8 flex flex-wrap items-center justify-between gap-x-4 gap-y-3;
+		@apply mb-7 flex flex-wrap items-center justify-between gap-x-4 gap-y-3;
 	}
 
 	.auth-page-logo {
@@ -107,14 +89,14 @@
 	}
 
 	.auth-page-back-link {
-		@apply inline-flex items-center gap-2 text-sm font-medium text-blue-600 underline-offset-4 transition hover:text-blue-700 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent dark:text-blue-400 dark:hover:text-blue-300;
+		@apply inline-flex items-center gap-2 text-sm font-medium text-accent underline-offset-4 transition-colors hover:text-heading hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent;
 	}
 	.auth-page-back-link > svg {
 		@apply text-accent shrink-0;
 	}
 
 	.auth-page-card-title {
-		@apply text-3xl font-semibold tracking-tight text-heading;
+		@apply text-2xl font-semibold tracking-tight text-heading sm:text-3xl;
 	}
 
 	.auth-page-card-copy {
@@ -122,15 +104,21 @@
 	}
 
 	.auth-page-form {
-		@apply mt-7 w-full max-w-82 space-y-5 mx-auto lg:ms-0 lg:me-auto;
+		@apply mt-6 grid w-full min-w-0 gap-4;
 	}
 
 	.auth-page-submit {
-		@apply w-full rounded-xl py-3.5 text-sm font-semibold shadow-none;
+		@apply min-h-11 w-full rounded-xl text-sm font-semibold shadow-none;
 	}
 
 	.auth-page-status {
-		@apply mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-sm text-emerald-900 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200;
+		@apply mt-6 rounded-xl border border-stroke bg-surface-muted p-4 text-sm text-heading;
+	}
+
+	.auth-page-status-error {
+		border-color: var(--status-error-border);
+		background: var(--status-error-bg);
+		color: var(--status-error);
 	}
 
 	.auth-page-status-title {
@@ -138,11 +126,12 @@
 	}
 
 	.auth-page-status-copy {
-		@apply mt-2 leading-6 opacity-80;
+		@apply mt-2 leading-6;
+		overflow-wrap: anywhere;
 	}
 
 	.auth-page-status-link {
-		@apply mt-4 inline-flex items-center gap-2 text-sm font-medium text-emerald-700 transition hover:text-emerald-900 dark:text-emerald-300 dark:hover:text-emerald-200;
+		@apply mt-4 inline-flex items-center gap-2 text-sm font-medium text-accent underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent;
 	}
 
 	.auth-page-powered {
@@ -153,5 +142,11 @@
 @media (min-width: 640px) {
 	.auth-page-container {
 		min-height: calc(100dvh - 5rem);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.auth-page-layout {
+		animation: none;
 	}
 }

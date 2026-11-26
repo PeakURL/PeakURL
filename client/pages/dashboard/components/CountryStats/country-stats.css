@@ -16,7 +16,8 @@
 	}
 
 	.dashboard-countries-map {
-		@apply mb-4 h-52 overflow-hidden rounded-lg border border-stroke bg-bg/60;
+		@apply mb-4 overflow-hidden rounded-lg border border-stroke bg-bg/60;
+		height: clamp(11rem, 27vw, 21rem);
 	}
 
 	.dashboard-countries-map .world-map {
@@ -45,7 +46,7 @@
 	}
 
 	.dashboard-countries-row {
-		@apply grid grid-cols-[2rem_auto_minmax(0,1fr)_auto_auto] items-center gap-3 px-3 py-2.5 text-sm;
+		@apply grid grid-cols-[1rem_auto_minmax(0,1fr)_auto_auto] items-center gap-2 px-2.5 py-2.5 text-sm sm:grid-cols-[2rem_auto_minmax(0,1fr)_auto_auto] sm:gap-3 sm:px-3;
 	}
 
 	.dashboard-countries-row-rank {
@@ -57,7 +58,8 @@
 	}
 
 	.dashboard-countries-row-name {
-		@apply truncate text-sm font-medium text-heading;
+		@apply min-w-0 text-sm font-medium text-heading;
+		overflow-wrap: anywhere;
 	}
 
 	.dashboard-countries-row-percentage {
@@ -65,6 +67,6 @@
 	}
 
 	.dashboard-countries-row-count {
-		@apply min-w-12 text-end font-semibold tabular-nums text-heading;
+		@apply text-end sm:min-w-12 font-semibold tabular-nums text-heading;
 	}
 }

@@ -8,7 +8,7 @@
 	}
 
 	.import-layout-tab-active {
-		@apply bg-action text-white shadow-sm;
+		@apply bg-action text-action-foreground shadow-sm;
 	}
 
 	.import-layout-tab-inactive {

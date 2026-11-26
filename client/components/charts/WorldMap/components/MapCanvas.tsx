@@ -1,6 +1,12 @@
-import type { MouseEventHandler, ReactNode, WheelEventHandler } from "react";
-import { Mercator } from "@visx/geo";
-import type { GeoPermissibleObjects } from "@visx/geo";
+import { geoMercator, geoPath } from "d3-geo";
+import type { GeoPermissibleObjects } from "d3-geo";
+import {
+	useMemo,
+	type MouseEventHandler,
+	type ReactNode,
+	type WheelEventHandler,
+} from "react";
+
 import { cn } from "@/shared/formatting";
 import type { GeographyFeature } from "../../types";
 
@@ -73,46 +79,49 @@ const WorldMapCanvas = ({
 	onWheel,
 	onMouseLeave,
 	renderCountryPath,
-}: WorldMapCanvasProps) => (
-	<svg
-		viewBox={`0 0 ${width} ${height}`}
-		className={cn("world-map-svg", isDragging && "world-map-svg-dragging")}
-		onMouseDown={onDragStart}
-		onMouseMove={onDragMove}
-		onMouseUp={onDragEnd}
-		onWheel={onWheel}
-		onMouseLeave={onMouseLeave}
-	>
-		<rect width={width} height={height} fill="transparent" />
-		<g transform={transform}>
-			{geographies.length > 0 && (
-				<Mercator
-					data={geographies}
-					scale={147}
-					translate={[width / 2, height / 2]}
-					center={[0, 20]}
-				>
-					{({ features }) =>
-						mapCopyOffsets.map((mapOffset) => (
-							<g
-								key={`world-copy-${mapOffset}`}
-								transform={`translate(${mapOffset} 0)`}
-							>
-								{(features as RenderedMapFeature[]).map(
-									(feature, index) =>
-										renderCountryPath(
-											feature,
-											index,
-											isDragging
-										)
-								)}
-							</g>
-						))
-					}
-				</Mercator>
+}: WorldMapCanvasProps) => {
+	const features = useMemo(() => {
+		const projection = geoMercator()
+			.scale(147)
+			.translate([width / 2, height / 2])
+			.center([0, 20]);
+		const path = geoPath(projection);
+
+		return geographies.map((feature) => ({
+			feature: feature as GeographyFeature,
+			path: path(feature),
+		}));
+	}, [geographies, width, height]);
+
+	return (
+		<svg
+			viewBox={`0 0 ${width} ${height}`}
+			className={cn(
+				"world-map-svg",
+				isDragging && "world-map-svg-dragging"
 			)}
-		</g>
-	</svg>
-);
+			onMouseDown={onDragStart}
+			onMouseMove={onDragMove}
+			onMouseUp={onDragEnd}
+			onWheel={onWheel}
+			onMouseLeave={onMouseLeave}
+		>
+			<rect width={width} height={height} fill="transparent" />
+			<g transform={transform}>
+				{features.length > 0 &&
+					mapCopyOffsets.map((mapOffset) => (
+						<g
+							key={mapOffset}
+							transform={`translate(${mapOffset} 0)`}
+						>
+							{features.map((feature, index) =>
+								renderCountryPath(feature, index, isDragging)
+							)}
+						</g>
+					))}
+			</g>
+		</svg>
+	);
+};
 
 export default WorldMapCanvas;

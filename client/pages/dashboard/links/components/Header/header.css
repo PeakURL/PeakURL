@@ -1,22 +1,54 @@
 @layer components {
+	.links-page > .page-header {
+		@apply flex-wrap;
+	}
+
+	.links-page > .page-header .page-header-actions {
+		@apply w-full justify-start;
+	}
+
 	.links-header-actions {
-		@apply flex w-full sm:w-auto shrink-0 flex-wrap items-center gap-2 sm:justify-end;
+		@apply flex w-full min-w-0 flex-wrap items-center gap-2;
 	}
 
 	.links-date-range {
-		@apply flex flex-1 sm:flex-initial min-w-0 gap-1 overflow-x-auto rounded-lg bg-surface p-1;
+		@apply grid min-w-0 max-w-full flex-1 gap-0.5 rounded-lg border border-stroke bg-surface p-0.5;
+		grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.7fr);
 	}
 
 	.links-date-range-button {
-		@apply inline-flex h-8 flex-1 sm:flex-none items-center justify-center gap-1.5 rounded px-2 text-xs sm:px-2.5 font-medium transition-all;
+		@apply inline-flex min-h-8 min-w-0 items-center justify-center gap-1 rounded-md px-1.5 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent;
+		overflow-wrap: anywhere;
 	}
 
 	.links-date-range-button-current {
-		@apply bg-action text-white shadow-sm;
+		@apply bg-action text-action-foreground;
 	}
 
 	.links-date-range-button-idle {
 		@apply text-text-muted hover:bg-surface-alt hover:text-heading;
+	}
+
+	@container links-page (min-width: 30rem) {
+		.links-date-range {
+			@apply flex flex-none flex-wrap;
+		}
+		.links-date-range-button {
+			@apply px-2.5;
+		}
+	}
+
+	@container links-page (min-width: 48rem) {
+		.links-page > .page-header .page-header-actions,
+		.links-header-actions {
+			@apply w-auto justify-end;
+		}
+	}
+
+	@container links-page (max-width: 22rem) {
+		.links-date-range {
+			flex-basis: 100%;
+		}
 	}
 
 	.links-date-range-icon {
@@ -24,7 +56,7 @@
 	}
 
 	.links-date-range-custom {
-		@apply relative flex flex-1 sm:flex-none;
+		@apply flex min-w-0;
 	}
 
 	.links-date-range-custom .links-date-range-button {
@@ -49,7 +81,7 @@
 	}
 
 	.links-date-range-field input {
-		@apply px-3;
+		@apply min-w-0 w-full px-3;
 	}
 
 	.links-date-range-summary {
@@ -61,6 +93,6 @@
 	}
 
 	.links-date-range-apply {
-		@apply inline-flex h-8 items-center justify-center rounded bg-action px-3 text-xs font-medium text-white transition-all hover:bg-action/90 disabled:cursor-not-allowed disabled:opacity-60;
+		@apply inline-flex h-8 items-center justify-center rounded bg-action px-3 text-xs font-medium text-action-foreground transition-colors hover:bg-action-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-60;
 	}
 }

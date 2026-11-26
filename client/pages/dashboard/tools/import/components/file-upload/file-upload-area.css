@@ -4,11 +4,11 @@
 	}
 
 	.import-file-dropzone {
-		@apply rounded-xl border-2 border-dashed p-8 text-center transition-all;
+		@apply rounded-lg border border-dashed p-8 text-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
 
 	.import-file-dropzone-idle {
-		@apply cursor-pointer border-stroke hover:border-accent hover:bg-accent/[0.02];
+		@apply cursor-pointer border-field-border bg-field-bg hover:border-field-border-hover;
 	}
 
 	.import-file-dropzone-active {

@@ -1,5 +1,13 @@
 @layer components {
 	.settings-content {
-		@apply space-y-5;
+		min-width: 0;
+		max-inline-size: 70rem;
+		container: settings-content / inline-size;
+	}
+
+	.settings-email,
+	.settings-location,
+	.settings-security {
+		max-inline-size: 48rem;
 	}
 }

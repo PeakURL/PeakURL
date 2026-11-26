@@ -5,8 +5,30 @@
 
 	/* Shared appearance; each feature owns its width and content layout. */
 	.drawer-panel {
-		@apply pointer-events-auto flex h-full min-h-0 w-screen max-w-full flex-col overflow-hidden bg-surface shadow-2xl;
-		border-inline-start: 1px solid var(--color-stroke);
+		@apply pointer-events-auto flex min-h-0 max-w-full flex-col overflow-hidden rounded-2xl border border-stroke bg-surface shadow-2xl sm:rounded-3xl;
+		--drawer-gap: 0.5rem;
+		--drawer-top-gap: max(var(--drawer-gap), env(safe-area-inset-top));
+		--drawer-bottom-gap: max(
+			var(--drawer-gap),
+			env(safe-area-inset-bottom)
+		);
+		--drawer-end-gap: max(var(--drawer-gap), env(safe-area-inset-right));
+		inline-size: calc(100dvw - var(--drawer-gap) - var(--drawer-end-gap));
+		block-size: calc(
+			100% - var(--drawer-top-gap) - var(--drawer-bottom-gap)
+		);
+		margin-block: var(--drawer-top-gap) var(--drawer-bottom-gap);
+		margin-inline-end: var(--drawer-end-gap);
+	}
+
+	.drawer-panel:dir(rtl) {
+		--drawer-end-gap: max(var(--drawer-gap), env(safe-area-inset-left));
+	}
+
+	@media (width >= 40rem) {
+		.drawer-panel {
+			--drawer-gap: 0.75rem;
+		}
 	}
 
 	.drawer-header {
@@ -57,5 +79,16 @@
 
 	.drawer-footer > div {
 		@apply flex-wrap;
+	}
+}
+
+@layer utilities {
+	/* Include the inset so the trailing corner clears the viewport on exit. */
+	.drawer-panel[data-closed]:dir(ltr) {
+		translate: calc(100% + var(--drawer-end-gap)) 0;
+	}
+
+	.drawer-panel[data-closed]:dir(rtl) {
+		translate: calc(-100% - var(--drawer-end-gap)) 0;
 	}
 }

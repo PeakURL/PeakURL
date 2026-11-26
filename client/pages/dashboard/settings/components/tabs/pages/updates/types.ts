@@ -99,10 +99,9 @@ export interface UpdateSectionProps {
  * Props for section headers in the updates tab.
  */
 export interface SectionHeaderProps {
-	icon: IconComponent;
 	direction: UpdatesDirection;
 	title: string;
-	description: string;
+	description?: string;
 	badge?: BadgeState | null;
 }
 
@@ -141,7 +140,6 @@ export interface UpdateStatusProps {
 	title: string;
 	description: string;
 	tone?: StatusTone;
-	prominent?: boolean;
 	details?: ReactNode;
 }
 

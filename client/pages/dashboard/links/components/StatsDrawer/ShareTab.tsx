@@ -62,9 +62,9 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 						copiedUrl === shortUrl ? __("Copied!") : __("Copy")
 					}
 					copyButtonClassName={cn(
-						"rounded-lg bg-action p-2 text-white hover:bg-action/90 hover:text-white",
+						"rounded-lg bg-action p-2 text-action-foreground hover:bg-action-hover hover:text-action-foreground",
 						copiedUrl === shortUrl &&
-							"bg-emerald-500 hover:bg-emerald-600"
+							"bg-emerald-500 text-white hover:bg-emerald-600"
 					)}
 					copyButtonContent={
 						copiedUrl === shortUrl ? (
@@ -79,7 +79,7 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 						<button
 							type="button"
 							onClick={() => handleOpen(shortUrl)}
-							className="rounded-lg border border-accent/20 bg-accent/5 p-2 text-accent transition-colors hover:bg-action hover:text-white"
+							className="rounded-lg border border-accent/20 bg-accent/5 p-2 text-accent transition-colors hover:bg-action hover:text-action-foreground"
 							title={__("Open Link")}
 						>
 							<ExternalLink className="h-4 w-4" />
@@ -106,9 +106,9 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 							: __("Copy")
 					}
 					copyButtonClassName={cn(
-						"rounded-lg bg-action p-2 text-white hover:bg-action/90 hover:text-white",
+						"rounded-lg bg-action p-2 text-action-foreground hover:bg-action-hover hover:text-action-foreground",
 						copiedUrl === link.destinationUrl &&
-							"bg-emerald-500 hover:bg-emerald-600"
+							"bg-emerald-500 text-white hover:bg-emerald-600"
 					)}
 					copyButtonContent={
 						copiedUrl === link.destinationUrl ? (
@@ -125,7 +125,7 @@ function ShareTab({ link, shortUrl }: ShareTabProps) {
 							<button
 								type="button"
 								onClick={() => handleOpen(link.destinationUrl!)}
-								className="rounded-lg border border-accent/20 bg-accent/5 p-2 text-accent transition-colors hover:bg-action hover:text-white"
+								className="rounded-lg border border-accent/20 bg-accent/5 p-2 text-accent transition-colors hover:bg-action hover:text-action-foreground"
 								title={__("Open Link")}
 							>
 								<ExternalLink className="h-4 w-4" />

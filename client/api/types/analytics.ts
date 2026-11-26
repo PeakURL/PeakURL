@@ -222,7 +222,7 @@ export interface StatsTrafficSeries {
 	labels?: string[];
 	clicks?: number[];
 	unique?: number[];
-	granularity?: "day" | "month";
+	granularity?: "hour" | "day" | "month";
 }
 
 /**

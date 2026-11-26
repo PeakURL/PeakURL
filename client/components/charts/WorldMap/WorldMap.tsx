@@ -1,6 +1,6 @@
 import type { MouseEvent, WheelEvent } from "react";
 import { memo, useEffect, useRef, useState } from "react";
-import type { GeoPermissibleObjects } from "@visx/geo";
+import type { GeoPermissibleObjects } from "d3-geo";
 import { Zoom } from "@visx/zoom";
 import type { TransformMatrix } from "@visx/zoom";
 import { scaleLinear } from "d3-scale";
@@ -73,19 +73,19 @@ function getFeatureCountryKey(feature: GeographyFeature): string | null {
 }
 
 const LIGHT_MAP_COLORS = {
-	defaultFill: "#e5e7eb",
-	stroke: "#cbd5e1",
-	activeStroke: "#0f172a",
-	scale: ["#e0f2fe", "#0ea5e9", "#0369a1"],
-	legend: ["#e0f2fe", "#7dd3fc", "#38bdf8", "#0ea5e9", "#0284c7", "#0369a1"],
+	defaultFill: "#e1ebe7",
+	stroke: "#a9bfb8",
+	activeStroke: "#17373b",
+	scale: ["#c5e4da", "#4aa699", "#126e68"],
+	legend: ["#c5e4da", "#a0d2c7", "#73bdae", "#4aa699", "#298c81", "#126e68"],
 };
 
 const DARK_MAP_COLORS = {
-	defaultFill: "#1f2937",
-	stroke: "#374151",
-	activeStroke: "#f8fafc",
-	scale: ["#172554", "#0284c7", "#7dd3fc"],
-	legend: ["#172554", "#0c4a6e", "#075985", "#0284c7", "#38bdf8", "#7dd3fc"],
+	defaultFill: "#273833",
+	stroke: "#405b52",
+	activeStroke: "#edf5f2",
+	scale: ["#254641", "#44998b", "#83dccc"],
+	legend: ["#254641", "#32635b", "#3d7e73", "#44998b", "#64baa9", "#83dccc"],
 };
 
 /**

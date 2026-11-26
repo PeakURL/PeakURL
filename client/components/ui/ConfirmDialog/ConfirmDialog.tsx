@@ -1,10 +1,11 @@
 import { Fragment } from "react";
 import {
 	Dialog,
+	DialogBackdrop,
+	DialogDescription,
 	DialogPanel,
 	DialogTitle,
 	Transition,
-	TransitionChild,
 } from "@headlessui/react";
 
 import { __ } from "@/i18n";
@@ -41,69 +42,52 @@ export function ConfirmDialog({
 	return (
 		<Transition appear show={open} as={Fragment}>
 			<Dialog as="div" className="confirm-dialog-root" onClose={onClose}>
-				<TransitionChild
-					as={Fragment}
-					enter="ease-out duration-200"
-					enterFrom="opacity-0"
-					enterTo="opacity-100"
-					leave="ease-in duration-150"
-					leaveFrom="opacity-100"
-					leaveTo="opacity-0"
-				>
-					<div className="dialog-backdrop" />
-				</TransitionChild>
+				<DialogBackdrop transition className="dialog-backdrop" />
 
 				<div className="confirm-dialog-viewport">
 					<div className="confirm-dialog-shell">
-						<TransitionChild
-							as={Fragment}
-							enter="ease-out duration-200"
-							enterFrom="opacity-0 scale-95"
-							enterTo="opacity-100 scale-100"
-							leave="ease-in duration-150"
-							leaveFrom="opacity-100 scale-100"
-							leaveTo="opacity-0 scale-95"
+						<DialogPanel
+							transition
+							inert={!open}
+							dir={direction}
+							className="confirm-dialog-panel dialog-transition"
 						>
-							<DialogPanel
-								dir={direction}
-								className="confirm-dialog-panel"
-							>
-								{title ? (
-									<DialogTitle className="confirm-dialog-title">
-										{title}
-									</DialogTitle>
-								) : null}
-								{description && (
-									<p className="confirm-dialog-description">
-										{description}
-									</p>
-								)}
-								{children}
-								{!hideActions ? (
-									<div
-										dir={direction}
-										className="confirm-dialog-actions"
+							{title ? (
+								<DialogTitle className="confirm-dialog-title">
+									{title}
+								</DialogTitle>
+							) : null}
+							{description && (
+								<DialogDescription className="confirm-dialog-description">
+									{description}
+								</DialogDescription>
+							)}
+							{children}
+							{!hideActions ? (
+								<div
+									dir={direction}
+									className="confirm-dialog-actions"
+								>
+									<Button
+										data-autofocus
+										variant="secondary"
+										onClick={onClose}
+										disabled={loading}
 									>
-										<Button
-											variant="secondary"
-											onClick={onClose}
-											disabled={loading}
-										>
-											{cancelText}
-										</Button>
-										<Button
-											variant={confirmVariant}
-											onClick={onConfirm}
-											disabled={loading}
-										>
-											{loading
-												? __("Working...")
-												: confirmText}
-										</Button>
-									</div>
-								) : null}
-							</DialogPanel>
-						</TransitionChild>
+										{cancelText}
+									</Button>
+									<Button
+										variant={confirmVariant}
+										onClick={onConfirm}
+										disabled={loading}
+									>
+										{loading
+											? __("Working...")
+											: confirmText}
+									</Button>
+								</div>
+							) : null}
+						</DialogPanel>
 					</div>
 				</div>
 			</Dialog>

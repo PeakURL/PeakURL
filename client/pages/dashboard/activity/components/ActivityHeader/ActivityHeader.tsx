@@ -1,8 +1,7 @@
 import { Clock, History, Link2, Users } from "lucide-react";
 
-import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __ } from "@/i18n";
-import { PageHeader, RefreshButton } from "@/components";
+import { PageHeader, RefreshButton, Skeleton } from "@/components";
 import { cn, formatCount, formatDate } from "@/shared/formatting";
 
 import { formatExactTimestamp } from "../../lib";
@@ -11,12 +10,14 @@ import type { ActivitySummaryCounts } from "../../types";
 interface ActivityHeaderProps {
 	summaryCounts: ActivitySummaryCounts;
 	isRefreshing: boolean;
+	isLoading: boolean;
 	onRefresh: () => void | Promise<unknown>;
 }
 
 export function ActivityHeader({
 	summaryCounts,
 	isRefreshing,
+	isLoading,
 	onRefresh,
 }: ActivityHeaderProps) {
 	const mostRecentTimestamp = summaryCounts.latest?.timestamp;
@@ -62,7 +63,6 @@ export function ActivityHeader({
 	return (
 		<>
 			<PageHeader
-				icon={dashboardPageIcons["activity"]}
 				title={__("Activity")}
 				titleLabel={__("Activity Log")}
 				description={__(
@@ -79,7 +79,7 @@ export function ActivityHeader({
 				}
 			/>
 
-			<div className="activity-page-overview">
+			<div className="activity-page-overview" aria-busy={isLoading}>
 				<div className="activity-page-overview-grid">
 					{overviewItems.map((item) => {
 						const Icon = item.icon;
@@ -103,7 +103,14 @@ export function ActivityHeader({
 											)}
 											dir="auto"
 										>
-											{item.value}
+											{isLoading ? (
+												<Skeleton
+													className="h-6 w-16"
+													aria-hidden="true"
+												/>
+											) : (
+												item.value
+											)}
 										</p>
 									</div>
 									<div className="activity-page-overview-icon">

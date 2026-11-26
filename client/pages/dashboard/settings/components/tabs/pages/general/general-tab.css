@@ -1,6 +1,34 @@
 @layer components {
+	.settings-general-form {
+		@apply grid items-start gap-5;
+		max-inline-size: 48rem;
+	}
+
+	.settings-general-with-site {
+		max-inline-size: 70rem;
+	}
+
+	.settings-general-row,
+	.settings-general-column {
+		@apply grid min-w-0 items-start gap-5;
+	}
+
+	.settings-general-row .settings-section {
+		container: settings-content / inline-size;
+	}
+
+	@container settings-content (min-width: 56rem) {
+		.settings-general-with-site .settings-general-row {
+			grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+		}
+
+		.settings-general-profile > .settings-grid {
+			@apply grid-cols-2;
+		}
+	}
+
 	.settings-general-field-full {
-		@apply space-y-2 md:col-span-2;
+		@apply space-y-2 col-span-full;
 	}
 
 	.settings-general-help-text {
@@ -12,7 +40,7 @@
 	}
 
 	.settings-general-bio-field {
-		@apply space-y-2 md:col-span-2;
+		@apply space-y-2 col-span-full;
 	}
 
 	.settings-general-bio-input {
@@ -50,76 +78,33 @@
 		@apply border-t border-stroke/70 pt-6;
 	}
 	.settings-image-preview {
-		@apply relative flex w-full max-w-80 items-center justify-center overflow-hidden rounded-2xl border border-stroke bg-surface-alt text-muted;
-		aspect-ratio: 1200 / 630;
-	}
-	.settings-image-upload:not(.settings-image-upload-landscape)
-		.settings-image-preview {
-		@apply h-30 justify-start gap-3 p-3;
-		aspect-ratio: auto;
+		@apply relative flex min-w-0 items-center gap-2 rounded-lg border border-stroke bg-surface-alt p-2 text-text-muted;
 	}
 	.settings-image-upload-landscape .settings-image-preview {
-		@apply max-w-md;
-	}
-	.settings-image-upload-landscape
-		.settings-image-preview:has(.settings-image-thumbnail) {
-		@apply bg-[#111620] p-2;
+		@apply w-full max-w-64 justify-center overflow-hidden p-0;
+		aspect-ratio: 1200 / 630;
 	}
 	.settings-image-remove {
-		@apply absolute bottom-3 start-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-stroke/70 bg-surface text-heading shadow-sm transition-colors hover:bg-red-50 hover:text-red-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50 dark:hover:bg-red-950;
+		@apply inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-stroke bg-surface text-heading transition-colors hover:text-error focus-visible:outline-2 focus-visible:outline-accent disabled:opacity-50;
+	}
+	.settings-image-upload-landscape .settings-image-remove {
+		@apply absolute bottom-2 end-2;
 	}
 	.settings-favicon-asset {
-		@apply mb-10 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-stroke bg-surface text-accent shadow-sm;
+		@apply h-8 w-8 shrink-0;
 	}
 	.settings-browser-preview {
-		@apply flex h-full min-w-0 flex-1 items-start overflow-hidden rounded-t-2xl border border-white/15 bg-[#15171c] shadow-xl;
-	}
-	.settings-browser-toolbar {
-		@apply flex w-full min-w-0 items-center gap-3 px-3 pt-3;
-	}
-	.settings-browser-controls {
-		@apply hidden shrink-0 items-center gap-1.5;
-	}
-	.settings-browser-controls span {
-		@apply h-2 w-2 rounded-full bg-[#ff5f57];
-	}
-	.settings-browser-controls span:nth-child(2) {
-		background: #febc2e;
-	}
-	.settings-browser-controls span:nth-child(3) {
-		background: #28c840;
-	}
-	.settings-browser-tab {
-		@apply flex min-w-0 flex-1 items-center gap-2 rounded-t-xl bg-[#303640] px-3 py-3 text-white;
+		@apply flex min-w-0 flex-1 items-center gap-2 rounded-md border border-stroke bg-surface px-2 py-1.5;
 	}
 	.settings-browser-favicon {
-		@apply block h-5 w-5 shrink-0 rounded bg-contain bg-center bg-no-repeat;
+		@apply block h-4 w-4 shrink-0 bg-contain bg-center bg-no-repeat;
 		background-image: var(--preview-image-url);
 	}
 	.settings-browser-title {
-		@apply min-w-0 flex-1 truncate text-xs font-medium;
+		@apply min-w-0 flex-1 truncate text-xs font-medium text-heading;
 	}
 	.settings-browser-close {
-		@apply shrink-0 text-white/70;
-	}
-	@container settings-content (min-width: 36rem) {
-		.settings-image-upload {
-			grid-template-columns: minmax(0, 1fr) 20rem;
-			@apply gap-x-6 gap-y-3;
-		}
-		.settings-image-upload-landscape {
-			grid-template-columns: minmax(0, 1fr) clamp(20rem, 50cqw, 28rem);
-		}
-		.settings-image-preview {
-			grid-column: 2;
-			grid-row: 1 / span 2;
-		}
-		.settings-image-upload > .settings-image-content {
-			@apply col-start-1;
-		}
-		.settings-browser-controls {
-			@apply flex;
-		}
+		@apply shrink-0 text-text-muted;
 	}
 
 	.settings-image-thumbnail {
@@ -140,5 +125,33 @@
 	}
 	.settings-image-input {
 		@apply sr-only;
+	}
+}
+
+@layer utilities {
+	.settings-general-form
+		[aria-busy="true"]
+		:is(.form-field-input, .form-field-textarea, .select-trigger) {
+		@apply border-stroke bg-surface-muted opacity-100;
+		color: transparent;
+		-webkit-text-fill-color: transparent;
+	}
+
+	.settings-general-form
+		[aria-busy="true"]
+		:is(.form-field-control, .select-trigger) {
+		position: relative;
+	}
+
+	.settings-general-form
+		[aria-busy="true"]
+		:is(.form-field-control, .select-trigger)::after {
+		@apply pointer-events-none absolute start-4 top-3.5 h-3 w-2/5 max-w-28 rounded-sm bg-stroke-strong/65;
+		content: "";
+	}
+
+	.settings-general-form [aria-busy="true"] :is(input, textarea)::placeholder,
+	.settings-general-form [aria-busy="true"] .select-chevron {
+		visibility: hidden;
 	}
 }

@@ -1,7 +1,7 @@
-import { Plus, Info, Key, Copy, Globe, KeyRound } from "lucide-react";
+import { Plus, Info, Key, Copy } from "lucide-react";
 
-import { Button, Input } from "@/components";
-import { DocumentationLink } from "@/pages/dashboard/settings/components/TabHeader";
+import { Skeleton, Button, Input } from "@/components";
+import { DocumentationLink } from "@/pages/dashboard/settings/components/DocumentationLink";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -10,6 +10,7 @@ import { ApiKeyItem } from "./ApiKeyItem";
 import type { ApiTabProps } from "../types";
 
 function ApiTab({
+	isLoading,
 	user,
 	baseApiUrl,
 	copyToClipboard,
@@ -20,14 +21,12 @@ function ApiTab({
 }: ApiTabProps) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	return (
-		<div className="settings-api">
+		<div className="settings-api" aria-busy={isLoading}>
 			{baseApiUrl && (
 				<section className="settings-section settings-api-endpoint-section">
 					<div className="settings-section-header settings-section-heading">
 						<div className="settings-section-copy">
-							<SectionTitle icon={Globe}>
-								{__("Base API URL")}
-							</SectionTitle>
+							<SectionTitle>{__("Base API URL")}</SectionTitle>
 							<p className="settings-group-description">
 								{__(
 									"Use this endpoint with WordPress, browser extensions, scripts, and other API clients."
@@ -65,9 +64,7 @@ function ApiTab({
 			<section className="settings-section">
 				<div className="settings-section-header settings-section-heading">
 					<div className="settings-section-copy">
-						<SectionTitle icon={KeyRound}>
-							{__("API Keys")}
-						</SectionTitle>
+						<SectionTitle>{__("API Keys")}</SectionTitle>
 						<p className="settings-group-description">
 							{__(
 								"Create separate keys for your scripts and integrations."
@@ -79,12 +76,15 @@ function ApiTab({
 						icon={Plus}
 						loading={isGeneratingKey}
 						onClick={() => setShowCreateModal(true)}
+						disabled={isLoading}
 					>
 						{__("Create New Key")}
 					</Button>
 				</div>
 
-				{user?.apiKeys && user.apiKeys.length > 0 ? (
+				{isLoading ? (
+					<Skeleton className="h-12 w-full" aria-hidden="true" />
+				) : user?.apiKeys && user.apiKeys.length > 0 ? (
 					<div className="settings-api-list-wrap">
 						<ul
 							className="settings-api-keys-list"

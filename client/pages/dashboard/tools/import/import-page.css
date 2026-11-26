@@ -1,5 +1,5 @@
 @layer components {
 	.import-page {
-		@apply min-w-0;
+		@apply min-w-0 space-y-5 pb-8;
 	}
 }

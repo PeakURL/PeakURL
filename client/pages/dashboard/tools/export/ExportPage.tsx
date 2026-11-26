@@ -12,7 +12,6 @@ import {
 import { API_ROUTES } from "@/api";
 import { Button, PageHeader, useNotification } from "@/components";
 import { API_SERVER_BASE_URL } from "@/constants";
-import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __, sprintf } from "@/i18n";
 import { useGetUrlsQuery, useLazyGetUrlsExportQuery } from "@/state/slices/api";
 import { formatCount } from "@/shared/formatting";
@@ -147,7 +146,6 @@ function ExportPage() {
 	return (
 		<div className="export-page">
 			<PageHeader
-				icon={dashboardPageIcons["tools-export"]}
 				title={__("Export")}
 				description={__(
 					"Export your short links dataset in CSV, JSON, or XML formats for offline analysis, migration, or programmatic backups."

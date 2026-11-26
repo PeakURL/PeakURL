@@ -110,3 +110,9 @@
 		@apply flex-1;
 	}
 }
+
+@media (prefers-reduced-motion: reduce) {
+	.world-map-country {
+		transition: none;
+	}
+}

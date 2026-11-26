@@ -21,21 +21,25 @@ const SEARCH_DELAY_MS = 250;
 const MIN_QUERY_LENGTH = 2;
 const RESULT_LIMIT = 5;
 /** Permission-aware local navigation and debounced API results for the open dialog. */
-export function useSearchResults(query: string) {
+export function useSearchResults(query: string, open: boolean) {
 	const access = useAdminAccess();
 	const trimmedQuery = query.trim();
 	const [remoteQuery, setRemoteQuery] = useState("");
 	useEffect(() => {
+		if (!open) return;
 		const timeout = window.setTimeout(
 			() => setRemoteQuery(trimmedQuery),
 			SEARCH_DELAY_MS
 		);
 		return () => window.clearTimeout(timeout);
-	}, [trimmedQuery]);
+	}, [trimmedQuery, open]);
 	const isPending = remoteQuery !== trimmedQuery;
 	const canSearch = trimmedQuery.length >= MIN_QUERY_LENGTH;
 	const canFetch =
-		canSearch && remoteQuery.length >= MIN_QUERY_LENGTH && !isPending;
+		open &&
+		canSearch &&
+		remoteQuery.length >= MIN_QUERY_LENGTH &&
+		!isPending;
 	const {
 		currentData: links,
 		isFetching: loadingLinks,

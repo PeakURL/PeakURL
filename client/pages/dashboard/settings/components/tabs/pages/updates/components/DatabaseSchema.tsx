@@ -1,6 +1,6 @@
-import { AlertCircle, CheckCircle2, Database, DatabaseZap } from "lucide-react";
+import { AlertCircle, CheckCircle2, DatabaseZap } from "lucide-react";
 
-import { Button } from "@/components";
+import { Button, Skeleton } from "@/components";
 import { __ } from "@/i18n";
 import { formatRelativeTime } from "@/shared/dates";
 
@@ -35,83 +35,96 @@ function DatabaseSchema({
 	return (
 		<UpdateSection>
 			<SectionHeader
-				icon={Database}
 				direction={direction}
 				title={__("Database Schema")}
 				description={__(
 					"Keep the database structure compatible with this PeakURL release."
 				)}
-				badge={databaseState}
+				badge={isLoading && !databaseStatus ? undefined : databaseState}
 			/>
-			<div className="settings-updates-maintenance">
-				<UpdateStatus
-					direction={direction}
-					icon={noticeIcon}
-					title={databaseState.title}
-					description={databaseState.description}
-					tone={databaseState.tone}
-				/>
-				<Button
-					variant={
-						databaseStatus?.upgradeRequired ? "primary" : "outline"
-					}
-					size="sm"
-					className="settings-updates-repair-button"
-					icon={DatabaseZap}
-					onClick={onRepair}
-					loading={isRepairing}
-					disabled={isLoading || isChecking || isApplying}
-				>
-					{__("Run Database Upgrade")}
-				</Button>
-			</div>
-			<MetricGrid
-				direction={direction}
-				items={[
-					{
-						label: __("Recorded Schema"),
-						value: String(
-							databaseStatus?.currentVersion ?? __("Unknown")
-						),
-						valueDirection: "ltr",
-					},
-					{
-						label: __("Required Schema"),
-						value: String(
-							databaseStatus?.targetVersion ?? __("Unknown")
-						),
-						valueDirection: "ltr",
-					},
-					{
-						label: __("Last Database Upgrade"),
-						value: databaseStatus?.lastUpgradedAt
-							? formatRelativeTime(databaseStatus.lastUpgradedAt)
-							: __("Never"),
-						valueDirection: "ltr",
-					},
-				]}
-			/>
-			{showDatabaseDetails ? (
-				<div className="settings-updates-divider">
-					{databaseStatus?.lastError ? (
-						<div className="settings-updates-error-card">
-							<p className="settings-updates-error-title">
-								{__("Last database error")}
-							</p>
-							<p className="settings-updates-error-text">
-								{databaseStatus.lastError}
-							</p>
+			{isLoading && !databaseStatus ? (
+				<div className="settings-updates-loading">
+					<Skeleton className="h-20 w-full" aria-hidden="true" />
+				</div>
+			) : (
+				<>
+					<div className="settings-updates-maintenance">
+						<UpdateStatus
+							direction={direction}
+							icon={noticeIcon}
+							title={databaseState.title}
+							description={databaseState.description}
+							tone={databaseState.tone}
+						/>
+						<Button
+							variant={
+								databaseStatus?.upgradeRequired
+									? "primary"
+									: "outline"
+							}
+							size="sm"
+							className="settings-updates-repair-button"
+							icon={DatabaseZap}
+							onClick={onRepair}
+							loading={isRepairing}
+							disabled={isLoading || isChecking || isApplying}
+						>
+							{__("Run Database Upgrade")}
+						</Button>
+					</div>
+					<MetricGrid
+						direction={direction}
+						items={[
+							{
+								label: __("Recorded Schema"),
+								value: String(
+									databaseStatus?.currentVersion ??
+										__("Unknown")
+								),
+								valueDirection: "ltr",
+							},
+							{
+								label: __("Required Schema"),
+								value: String(
+									databaseStatus?.targetVersion ??
+										__("Unknown")
+								),
+								valueDirection: "ltr",
+							},
+							{
+								label: __("Last Database Upgrade"),
+								value: databaseStatus?.lastUpgradedAt
+									? formatRelativeTime(
+											databaseStatus.lastUpgradedAt
+										)
+									: __("Never"),
+								valueDirection: "ltr",
+							},
+						]}
+					/>
+					{showDatabaseDetails ? (
+						<div className="settings-updates-divider">
+							{databaseStatus?.lastError ? (
+								<div className="settings-updates-error-card">
+									<p className="settings-updates-error-title">
+										{__("Last database error")}
+									</p>
+									<p className="settings-updates-error-text">
+										{databaseStatus.lastError}
+									</p>
+								</div>
+							) : null}
+							{visibleDatabaseIssues.length > 0 ? (
+								<IssueList
+									direction={direction}
+									title={__("Recent database findings")}
+									issues={visibleDatabaseIssues}
+								/>
+							) : null}
 						</div>
 					) : null}
-					{visibleDatabaseIssues.length > 0 ? (
-						<IssueList
-							direction={direction}
-							title={__("Recent database findings")}
-							issues={visibleDatabaseIssues}
-						/>
-					) : null}
-				</div>
-			) : null}
+				</>
+			)}
 		</UpdateSection>
 	);
 }

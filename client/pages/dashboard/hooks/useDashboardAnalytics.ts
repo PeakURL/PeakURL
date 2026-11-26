@@ -3,7 +3,6 @@ import { useMemo, useState } from "react";
 import type {
 	CountryMetric,
 	DashboardDeviceData,
-	DashboardStats,
 	RecentActivity,
 	RecentClick,
 	TrafficSeries,
@@ -18,13 +17,6 @@ import { useAdminAccess } from "@/hooks";
 const RECENT_CLICKS_LIMIT = 8;
 const RECENT_ACTIVITIES_LIMIT = 6;
 const DEFAULT_TIME_RANGE_DAYS = 7;
-
-const EMPTY_STATS: DashboardStats = {
-	totalClicks: 0,
-	totalLinks: 0,
-	uniqueClicks: 0,
-	uniqueClickRate: 0,
-};
 
 function normalizeTrafficSeries(
 	traffic:
@@ -97,10 +89,11 @@ export function useDashboardAnalytics() {
 	const { canViewAnalytics, canManageUsers } = useAdminAccess();
 
 	const {
-		data: analyticsRes,
+		currentData: analyticsRes,
+		data: previousAnalyticsRes,
 		refetch: refetchAnalytics,
 		isFetching: isAnalyticsFetching,
-		isLoading: isAnalyticsLoading,
+		isError: isAnalyticsError,
 	} = useGetAnalyticsQuery(timeRange, { skip: !canViewAnalytics });
 
 	const {
@@ -127,7 +120,9 @@ export function useDashboardAnalytics() {
 		]);
 	};
 
-	const stats: DashboardStats = analyticsRes?.data ?? EMPTY_STATS;
+	const stats = analyticsRes?.data;
+	const chartData =
+		stats ?? (isAnalyticsFetching ? previousAnalyticsRes?.data : undefined);
 	const activities: RecentActivity[] = canManageUsers
 		? (activityRes?.data ?? [])
 		: [];
@@ -135,21 +130,17 @@ export function useDashboardAnalytics() {
 	const recentActivities = activities.slice(0, RECENT_ACTIVITIES_LIMIT);
 
 	const deviceData: DashboardDeviceData = {
-		devices: analyticsRes?.data?.devices ?? [],
-		browsers: analyticsRes?.data?.browsers ?? [],
-		operatingSystems: analyticsRes?.data?.operatingSystems ?? [],
+		devices: chartData?.devices ?? [],
+		browsers: chartData?.browsers ?? [],
+		operatingSystems: chartData?.operatingSystems ?? [],
 	};
 
-	const countryData: CountryMetric[] = analyticsRes?.data?.countries ?? [];
+	const countryData: CountryMetric[] = chartData?.countries ?? [];
 
 	const trafficData = useMemo(
-		() => normalizeTrafficSeries(analyticsRes?.data?.traffic),
-		[analyticsRes?.data?.traffic]
+		() => normalizeTrafficSeries(chartData?.traffic),
+		[chartData?.traffic]
 	);
-
-	const isLoading =
-		(canViewAnalytics && (isAnalyticsLoading || isRecentClicksLoading)) ||
-		(canManageUsers && isActivityLoading);
 
 	const isBusy =
 		(canViewAnalytics && (isAnalyticsFetching || isRecentClicksFetching)) ||
@@ -168,6 +159,10 @@ export function useDashboardAnalytics() {
 		deviceData,
 		countryData,
 		trafficData,
-		isLoading,
+		isAnalyticsLoading: isAnalyticsFetching && !analyticsRes,
+		isChartLoading: isAnalyticsFetching && !chartData,
+		isAnalyticsError: isAnalyticsError && !analyticsRes,
+		isRecentClicksLoading,
+		isActivityLoading,
 	};
 }

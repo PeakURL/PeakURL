@@ -5,16 +5,11 @@ import {
 	CheckCircle2,
 	Pencil,
 	CloudDownload,
-	MapPin,
-	KeyRound,
 	Trash2,
 } from "lucide-react";
 
-import { Button, ConfirmDialog, Input } from "@/components";
-import {
-	DocumentationLink,
-	TabHeader,
-} from "@/pages/dashboard/settings/components/TabHeader";
+import { Button, ConfirmDialog, Input, Skeleton } from "@/components";
+import { DocumentationLink } from "@/pages/dashboard/settings/components/DocumentationLink";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -68,6 +63,7 @@ function LocationDataTab({
 }: LocationDataTabProps) {
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
+	const isPending = isLoading && !status;
 	const [accountIdInput, setAccountIdInput] = useState<string | null>(null);
 	const [licenseKey, setLicenseKey] = useState("");
 	const [isEditingCredentials, setIsEditingCredentials] = useState(false);
@@ -205,60 +201,54 @@ function LocationDataTab({
 	};
 
 	return (
-		<div className="settings-location">
-			<div className="settings-section">
-				<TabHeader
-					icon={MapPin}
-					title={__("Location Database")}
-					description={__(
-						"Enable country and city analytics with a local MaxMind GeoLite2 City database stored in your persistent content folder."
-					)}
-					actions={
-						<Button
-							size="sm"
-							className="settings-location-download-button"
-							onClick={onDownload}
-							loading={isDownloading}
-							icon={CloudDownload}
-							disabled={
-								isLoading || isSaving || !canDownloadDatabase
-							}
-						>
-							{isReady
-								? __("Update Database")
-								: __("Download Database")}
-						</Button>
-					}
-				/>
-			</div>
-
-			<div className="settings-stat-grid">
-				<StatCard
-					label={__("Status")}
-					value={isReady ? __("Ready") : __("Setup Required")}
-				/>
-				<StatCard
-					label={__("Database Updated")}
-					value={
-						effectiveStatus?.lastDownloadedAt ||
-						effectiveStatus?.databaseUpdatedAt
-							? formatRelativeTime(
-									effectiveStatus.lastDownloadedAt ||
-										effectiveStatus.databaseUpdatedAt
-								)
-							: __("Never")
-					}
-					valueDirection="ltr"
-				/>
-				<StatCard
-					label={__("Database Size")}
-					value={formatByteSize(
-						effectiveStatus?.databaseSizeBytes,
-						__("Not available")
-					)}
-					valueDirection="ltr"
-				/>
-			</div>
+		<div className="settings-location" aria-busy={isPending}>
+			<section className="settings-section">
+				<div className="settings-section-header">
+					<SectionTitle>{__("Location Database")}</SectionTitle>
+					<Button
+						size="sm"
+						className="settings-location-download-button"
+						onClick={onDownload}
+						loading={isDownloading}
+						icon={CloudDownload}
+						disabled={isLoading || isSaving || !canDownloadDatabase}
+					>
+						{isReady
+							? __("Update Database")
+							: __("Download Database")}
+					</Button>
+				</div>
+				<div className="settings-stat-grid">
+					<StatCard
+						label={__("Status")}
+						isPending={isPending}
+						value={isReady ? __("Ready") : __("Setup Required")}
+					/>
+					<StatCard
+						label={__("Database Updated")}
+						isPending={isPending}
+						value={
+							effectiveStatus?.lastDownloadedAt ||
+							effectiveStatus?.databaseUpdatedAt
+								? formatRelativeTime(
+										effectiveStatus.lastDownloadedAt ||
+											effectiveStatus.databaseUpdatedAt
+									)
+								: __("Never")
+						}
+						valueDirection="ltr"
+					/>
+					<StatCard
+						label={__("Database Size")}
+						isPending={isPending}
+						value={formatByteSize(
+							effectiveStatus?.databaseSizeBytes,
+							__("Not available")
+						)}
+						valueDirection="ltr"
+					/>
+				</div>
+			</section>
 
 			{errorMessage && (
 				<StateCard
@@ -283,9 +273,7 @@ function LocationDataTab({
 			<section className="settings-section">
 				<div className="settings-section-header settings-section-heading">
 					<div className="settings-section-copy">
-						<SectionTitle icon={KeyRound}>
-							{__("MaxMind Credentials")}
-						</SectionTitle>
+						<SectionTitle>{__("MaxMind Credentials")}</SectionTitle>
 
 						<p className="settings-group-description mb-0!">
 							{__(
@@ -299,7 +287,9 @@ function LocationDataTab({
 					/>
 				</div>
 
-				{hasSavedCredentials && !isEditingCredentials ? (
+				{isPending ? (
+					<Skeleton className="h-20 w-full" aria-hidden="true" />
+				) : hasSavedCredentials && !isEditingCredentials ? (
 					<div className="settings-location-credentials-view">
 						<div className="settings-location-credentials-panel">
 							<div className="settings-location-credentials-status">
@@ -468,25 +458,34 @@ function LocationDataTab({
 	);
 }
 
-function StatCard({ label, value, valueDirection = "auto" }: StatCardProps) {
+function StatCard({
+	label,
+	value,
+	valueDirection = "auto",
+	isPending,
+}: StatCardProps & { isPending: boolean }) {
 	const direction = isDocumentRtl() ? "rtl" : "ltr";
 
 	return (
 		<div dir={direction} className="settings-statistic">
 			<p className="settings-stat-label">{label}</p>
-			<p className="settings-stat-value">
-				{"ltr" === valueDirection ? (
-					<span className="preserve-ltr-value inline-block">
-						{value}
-					</span>
-				) : "rtl" === valueDirection ? (
-					<span dir="rtl" className="inline-block">
-						{value}
-					</span>
-				) : (
-					<bdi dir="auto">{value}</bdi>
-				)}
-			</p>
+			{isPending ? (
+				<Skeleton className="mt-2 h-6 w-24" aria-hidden="true" />
+			) : (
+				<p className="settings-stat-value">
+					{"ltr" === valueDirection ? (
+						<span className="preserve-ltr-value inline-block">
+							{value}
+						</span>
+					) : "rtl" === valueDirection ? (
+						<span dir="rtl" className="inline-block">
+							{value}
+						</span>
+					) : (
+						<bdi dir="auto">{value}</bdi>
+					)}
+				</p>
+			)}
 		</div>
 	);
 }

@@ -1,16 +1,8 @@
 import type { SubmitEvent } from "react";
 import { useState } from "react";
-import {
-	AlertCircle,
-	Check,
-	Mail,
-	MailCheck,
-	Send,
-	Server,
-} from "lucide-react";
+import { AlertCircle, Check, MailCheck } from "lucide-react";
 
 import { Button, Input, SelectField, type SelectOption } from "@/components";
-import { TabHeader } from "@/pages/dashboard/settings/components/TabHeader";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -26,6 +18,7 @@ import type { SmtpEncryption } from "../../types";
 
 function MethodButton({
 	isActive,
+	disabled,
 	title,
 	description,
 	onClick,
@@ -36,7 +29,8 @@ function MethodButton({
 		<button
 			type="button"
 			onClick={onClick}
-			aria-pressed={isActive}
+			aria-pressed={disabled ? undefined : isActive}
+			disabled={disabled}
 			dir={direction}
 			className={cn(
 				"settings-email-method-button",
@@ -168,17 +162,6 @@ function EmailDeliveryTab({
 
 	return (
 		<div className="settings-email">
-			<section className="settings-section">
-				<TabHeader
-					icon={Mail}
-					title={__("Email Delivery")}
-					description={__(
-						"PeakURL uses this mail transport for password-reset emails and other account recovery notifications."
-					)}
-					documentationHref="https://go.peakurl.org/d80593"
-				/>
-			</section>
-
 			{errorMessage && (
 				<div className="settings-notice settings-notice-error">
 					<div dir={direction} className="settings-notice-layout">
@@ -217,14 +200,17 @@ function EmailDeliveryTab({
 				</div>
 			)}
 
-			<form onSubmit={handleSubmit} className="settings-form">
+			<form
+				onSubmit={handleSubmit}
+				className="settings-form"
+				aria-busy={isLoading}
+			>
 				<section className="settings-section">
-					<SectionTitle icon={Send}>
-						{__("Delivery method")}
-					</SectionTitle>
+					<SectionTitle>{__("Delivery method")}</SectionTitle>
 					<div className="settings-email-method-grid">
 						<MethodButton
-							isActive={"mail" === form.driver}
+							disabled={isLoading}
+							isActive={!isLoading && "mail" === form.driver}
 							title={__("PHP mail()")}
 							description={__(
 								"Use the hosting server’s built-in PHP mail transport."
@@ -237,7 +223,8 @@ function EmailDeliveryTab({
 							}
 						/>
 						<MethodButton
-							isActive={"smtp" === form.driver}
+							disabled={isLoading}
+							isActive={!isLoading && "smtp" === form.driver}
 							title={__("SMTP")}
 							description={__(
 								"Send through your own SMTP server with optional authentication."
@@ -254,9 +241,7 @@ function EmailDeliveryTab({
 
 				{usingSmtp && (
 					<section className="settings-section">
-						<SectionTitle icon={Server}>
-							{__("SMTP Configuration")}
-						</SectionTitle>
+						<SectionTitle>{__("SMTP Configuration")}</SectionTitle>
 						<div className="settings-grid">
 							<Input
 								label={__("From Name")}

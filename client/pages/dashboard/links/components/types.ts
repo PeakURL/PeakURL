@@ -170,6 +170,7 @@ export interface BulkDeleteModalProps {
 	canPermanentlyDelete?: boolean;
 	onConfirm?: (ids: string[], permanent: boolean) => Promise<void> | void;
 	onSuccess?: () => void;
+	afterLeave?: () => void;
 }
 
 /**

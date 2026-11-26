@@ -12,6 +12,12 @@
 	}
 
 	.links-form-section-grid {
-		@apply grid grid-cols-1 gap-3 md:grid-cols-2;
+		@apply grid grid-cols-1 gap-3;
+	}
+
+	@container links-form (min-width: 31rem) {
+		.links-form-section-grid {
+			@apply grid-cols-2;
+		}
 	}
 }

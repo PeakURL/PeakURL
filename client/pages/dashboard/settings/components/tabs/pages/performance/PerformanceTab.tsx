@@ -1,11 +1,5 @@
 import { useMemo, useState, type SubmitEvent } from "react";
-import {
-	AlertCircle,
-	CheckCircle2,
-	Trash2,
-	Zap,
-	SlidersHorizontal,
-} from "lucide-react";
+import { AlertCircle, CheckCircle2, Trash2, Zap } from "lucide-react";
 
 import {
 	Button,
@@ -14,7 +8,6 @@ import {
 	SelectField,
 	type SelectOption,
 } from "@/components";
-import { TabHeader } from "@/pages/dashboard/settings/components/TabHeader";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __, sprintf } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -266,67 +259,58 @@ export function PerformanceTab({
 
 	return (
 		<div className="settings-performance">
-			{/* Intro & Overview Header */}
-			<div className="settings-section">
-				<TabHeader
-					icon={Zap}
-					title={__("Performance & Caching")}
-					description={__(
-						"Configure object caching backends and Time-to-Live (TTL) policies to optimize link redirection latency and throughput."
-					)}
-					documentationHref="https://go.peakurl.org/227c49"
-					actions={
-						<Button
-							size="sm"
-							variant="danger"
-							className="settings-performance-purge-button"
-							onClick={() => setIsPurgeModalOpen(true)}
-							loading={isPurging}
-							icon={Trash2}
-							disabled={isLoading || isSaving}
-						>
-							{__("Purge Cache")}
-						</Button>
-					}
-				/>
-			</div>
-
 			{/* Health & Metrics Stats Grid */}
-			<div className="settings-stat-grid">
-				<StatCard
-					label={__("Active Engine")}
-					value={activeDriverLabel}
-				/>
-				<StatCard
-					label={__("Cache Footprint")}
-					value={
-						status?.fileCount !== undefined &&
-						status?.fileCount !== null
-							? sprintf(
-									status?.activeDriver === "redis" ||
-										status?.activeDriver === "apcu"
-										? __("%s cached items")
-										: __("%s cached files"),
-									formatCount(status.fileCount)
-								)
-							: formatByteSize(status?.sizeBytes, __("0 B"))
-					}
-					helperText={
-						status?.fileCount !== undefined &&
-						status?.fileCount !== null &&
-						status?.sizeBytes
-							? formatByteSize(status?.sizeBytes, __("0 B"))
-							: undefined
-					}
-					valueDirection="ltr"
-				/>
-				<StatCard
-					label={__("Default TTL")}
-					value={formatTtlDuration(defaultTtl)}
-					helperText={`${formatCount(defaultTtl)}s`}
-					valueDirection="ltr"
-				/>
-			</div>
+			<section className="settings-section">
+				<div className="settings-section-header">
+					<SectionTitle>{__("Cache Status")}</SectionTitle>
+					<Button
+						size="sm"
+						variant="danger"
+						className="settings-performance-purge-button"
+						onClick={() => setIsPurgeModalOpen(true)}
+						loading={isPurging}
+						icon={Trash2}
+						disabled={isLoading || isSaving}
+					>
+						{__("Purge Cache")}
+					</Button>
+				</div>
+				<div className="settings-stat-grid">
+					<StatCard
+						label={__("Active Engine")}
+						value={activeDriverLabel}
+					/>
+					<StatCard
+						label={__("Cache Footprint")}
+						value={
+							status?.fileCount !== undefined &&
+							status?.fileCount !== null
+								? sprintf(
+										status?.activeDriver === "redis" ||
+											status?.activeDriver === "apcu"
+											? __("%s cached items")
+											: __("%s cached files"),
+										formatCount(status.fileCount)
+									)
+								: formatByteSize(status?.sizeBytes, __("0 B"))
+						}
+						helperText={
+							status?.fileCount !== undefined &&
+							status?.fileCount !== null &&
+							status?.sizeBytes
+								? formatByteSize(status?.sizeBytes, __("0 B"))
+								: undefined
+						}
+						valueDirection="ltr"
+					/>
+					<StatCard
+						label={__("Default TTL")}
+						value={formatTtlDuration(defaultTtl)}
+						helperText={`${formatCount(defaultTtl)}s`}
+						valueDirection="ltr"
+					/>
+				</div>
+			</section>
 
 			{errorMessage && (
 				<StateCard
@@ -380,7 +364,7 @@ export function PerformanceTab({
 			<form onSubmit={handleSubmit} className="settings-form">
 				<section className="settings-section">
 					<div className="settings-section-copy settings-section-heading">
-						<SectionTitle icon={SlidersHorizontal}>
+						<SectionTitle>
 							{__("Cache Engine Settings")}
 						</SectionTitle>
 

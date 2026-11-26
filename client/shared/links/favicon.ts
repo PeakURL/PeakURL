@@ -4,7 +4,10 @@ import { PEAKURL_BASENAME } from "@constants";
  * Valid managed favicon asset filenames.
  */
 export type ManagedFaviconAsset =
-	| "favicon.png" //
+	| "favicon.svg"
+	| "favicon-light.svg"
+	| "favicon-dark.svg"
+	| "favicon.png"
 	| "favicon.ico"
 	| "apple-touch-icon.png"
 	| "site.webmanifest";
@@ -116,12 +119,24 @@ export function getManagedFaviconUrl(
 	return assetPath;
 }
 
-/**
- * Return the managed PNG favicon URL used for dashboard previews.
- *
- * @param updatedAt - Optional timestamp for cache busting.
- * @return The preview favicon URL.
- */
-export function getFaviconPreviewUrl(updatedAt?: string | null): string {
-	return getManagedFaviconUrl("favicon.png", updatedAt);
+/** Select the custom favicon or a bundled variant for the given theme. */
+export function getFaviconAsset(
+	custom: boolean,
+	theme?: "light" | "dark"
+): ManagedFaviconAsset {
+	if (custom) return "favicon.png";
+	return theme ? `favicon-${theme}.svg` : "favicon.svg";
+}
+
+/** Preview the fallback even while a custom icon is still saved on the server. */
+export function getDefaultFaviconPreviewUrl(theme: "light" | "dark"): string {
+	return theme === "dark"
+		? new URL(
+				"../../../server/public/default-favicon-dark.svg?no-inline",
+				import.meta.url
+			).href
+		: new URL(
+				"../../../server/public/default-favicon-light.svg?no-inline",
+				import.meta.url
+			).href;
 }

@@ -1,5 +1,11 @@
 export { ApiErrorPage } from "./ApiErrorPage";
-export { Logo } from "./Logo";
+export {
+	LogoIcon,
+	Logo,
+	Wordmark,
+	type LogoIconProps,
+	type WordmarkProps,
+} from "./Logo";
 export { McpIcon, type McpIconProps } from "./McpIcon";
 export { PlatformIcon } from "./PlatformIcon";
 export { PreviewImage } from "./PreviewImage";

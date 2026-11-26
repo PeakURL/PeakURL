@@ -1,2 +1,3 @@
 @import "./layout.css";
-@import "./components/layout/index.css";
+@import "./components/layout/settings-navigation.css";
+@import "./tab-page.css";

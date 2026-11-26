@@ -13,6 +13,7 @@
 
 	.links-edit-drawer-panel {
 		@apply max-w-2xl;
+		container: link-editor / inline-size;
 	}
 
 	.links-edit-drawer-form {
@@ -37,7 +38,7 @@
 	}
 
 	.links-edit-drawer-section {
-		@apply space-y-5 border-b border-stroke py-6 last:border-0;
+		@apply min-w-0 space-y-4 border-b border-stroke py-5 last:border-0;
 	}
 
 	.links-edit-drawer-section-heading {
@@ -57,7 +58,13 @@
 	}
 
 	.links-edit-drawer-field-grid {
-		@apply grid grid-cols-1 gap-3 md:grid-cols-2;
+		@apply grid grid-cols-1 gap-3;
+	}
+
+	@container link-editor (min-width: 33rem) {
+		.links-edit-drawer-field-grid {
+			@apply grid-cols-2;
+		}
 	}
 
 	.links-edit-drawer-social-fields {
@@ -154,7 +161,7 @@
 
 	.links-edit-drawer-action,
 	.links-edit-drawer-footer-button {
-		@apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-all disabled:cursor-not-allowed disabled:opacity-50;
+		@apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent disabled:cursor-not-allowed disabled:opacity-50;
 	}
 
 	.links-edit-drawer-action-secondary {
@@ -166,7 +173,7 @@
 	}
 
 	.links-edit-drawer-footer-button-primary {
-		@apply bg-action text-white shadow-sm hover:bg-action/90;
+		@apply bg-action text-action-foreground shadow-sm hover:bg-action-hover;
 	}
 
 	html[dir="rtl"] .links-edit-drawer-footer {

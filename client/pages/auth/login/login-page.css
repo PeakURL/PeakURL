@@ -1,12 +1,10 @@
 @layer components {
 	.login-page-heading-accent {
-		@apply text-primary-300;
+		@apply text-accent;
 	}
 
 	.login-page-highlight-list {
 		@apply grid grid-cols-3 gap-4;
-		-webkit-animation: auth-page-fade-up 0.5s ease-out 0.18s both;
-		animation: auth-page-fade-up 0.5s ease-out 0.18s both;
 	}
 
 	.login-page-highlight {
@@ -14,19 +12,21 @@
 	}
 
 	.login-page-highlight-icon {
-		@apply shrink-0 text-primary-300;
+		@apply shrink-0 text-accent;
 	}
 
 	.login-page-highlight-title {
-		@apply text-[13px] font-medium text-white;
+		@apply text-[13px] font-medium text-heading;
 	}
 
 	.login-page-highlight-copy {
-		@apply mt-1 text-xs leading-5 text-slate-400;
+		@apply mt-1 text-xs leading-5 text-text-muted;
 	}
 
 	.login-page-alert {
-		@apply mt-5 flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 dark:border-red-500/30 dark:bg-red-500/10;
+		@apply mt-5 flex items-start gap-2.5 rounded-xl border px-4 py-3;
+		border-color: var(--status-error-border);
+		background: var(--status-error-bg);
 	}
 
 	.login-page-alert-marker {
@@ -34,74 +34,44 @@
 	}
 
 	.login-page-alert-text {
-		@apply text-sm leading-relaxed text-red-700 dark:text-red-300;
+		@apply text-sm leading-relaxed break-words;
+		color: var(--status-error);
 	}
 
-	.login-page-form {
-		@apply mt-7 w-full max-w-[20.5rem] space-y-5 mx-auto lg:ms-0 lg:me-auto;
+	.login-page-credentials {
+		@apply grid gap-4;
 	}
 
-	.login-page-link-row {
-		@apply -mt-1 flex justify-end;
+	.login-page-credentials-actions {
+		@apply flex flex-wrap items-center justify-between gap-x-3 gap-y-2;
 	}
 
-	.login-page-link-row-rtl {
-		@apply justify-start;
+	.login-page-link {
+		@apply rounded-sm text-sm font-medium text-accent underline-offset-4 transition-colors hover:text-heading hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent disabled:opacity-60;
 	}
 
-	.login-page-link,
-	.login-page-secondary-link {
-		@apply text-sm font-medium text-blue-600 underline-offset-4 transition-colors duration-150 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300;
-	}
-
-	.login-page-secondary-link {
-		@apply text-xs;
-	}
-
-	.login-page-two-factor {
-		@apply space-y-4;
+	.login-page-code-link {
+		@apply text-start;
 	}
 
 	.login-page-two-factor-panel {
-		@apply space-y-3;
+		@apply grid min-w-0 justify-items-start gap-3;
 	}
 
 	.login-page-code-panel {
-		@apply rounded-2xl border border-stroke bg-surface-alt p-4;
-	}
-
-	.login-page-muted-link {
-		@apply text-xs font-medium text-blue-600 underline-offset-4 transition-colors duration-150 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300;
-	}
-
-	.login-page-submit {
-		@apply w-full rounded-xl bg-action px-5 py-3.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-action-hover disabled:pointer-events-none disabled:opacity-60;
-	}
-
-	.login-page-submit-content {
-		@apply inline-flex items-center justify-center gap-2;
-	}
-
-	.login-page-spinner {
-		@apply h-4 w-4 animate-spin;
+		@apply w-full rounded-xl border border-stroke bg-surface-muted p-3 sm:p-4;
 	}
 
 	.login-page-actions {
-		@apply pt-1 text-center;
+		@apply text-center;
 	}
 
 	.login-page-back-action {
-		@apply inline-flex items-center gap-1.5 text-xs font-medium text-blue-600 underline-offset-4 transition-colors duration-150 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300;
-	}
-	.login-page-back-action > svg {
-		@apply text-accent shrink-0;
-	}
-	.login-page-remember-me {
-		@apply mb-4;
+		@apply inline-flex items-center gap-1.5;
 	}
 
 	.login-page-remember-me-label {
-		@apply mt-3 flex cursor-pointer items-center gap-2;
+		@apply flex cursor-pointer items-center gap-2;
 	}
 
 	.login-page-remember-me-checkbox {

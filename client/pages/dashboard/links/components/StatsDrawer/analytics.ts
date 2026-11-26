@@ -18,7 +18,7 @@ export interface NormalizedTrafficSeries {
 	labels: string[];
 	clicks: number[];
 	unique: number[];
-	granularity?: "day" | "month";
+	granularity?: "hour" | "day" | "month";
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;

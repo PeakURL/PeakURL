@@ -1,4 +1,10 @@
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import {
+	Dialog,
+	DialogBackdrop,
+	DialogPanel,
+	DialogTitle,
+	Transition,
+} from "@headlessui/react";
 import { X } from "lucide-react";
 
 import { __ } from "@/i18n";
@@ -25,6 +31,8 @@ export function Modal({
 	title,
 	children,
 	size = "md",
+	panelClassName,
+	afterLeave,
 }: ModalProps) {
 	const direction = getDocumentDirection();
 
@@ -36,32 +44,44 @@ export function Modal({
 	};
 
 	return (
-		<Dialog open={isOpen} onClose={onClose} className="modal-root">
-			<div className="dialog-backdrop" aria-hidden="true" />
+		<Transition appear show={isOpen} afterLeave={afterLeave}>
+			<Dialog onClose={onClose} className="modal-root">
+				<DialogBackdrop transition className="dialog-backdrop" />
 
-			<div className="modal-shell">
-				<DialogPanel
-					dir={direction}
-					className={cn("modal-panel", sizes[size])}
-				>
-					{title && (
-						<div className="modal-header">
-							<DialogTitle className="modal-title">
-								{title}
-							</DialogTitle>
-							<button
-								type="button"
-								onClick={onClose}
-								className="modal-close"
-								aria-label={__("Close modal")}
-							>
-								<X size={20} />
-							</button>
-						</div>
-					)}
-					<div className="modal-content">{children}</div>
-				</DialogPanel>
-			</div>
-		</Dialog>
+				<div className="modal-position">
+					<DialogPanel
+						transition
+						inert={!isOpen}
+						dir={direction}
+						className={cn(
+							"modal-panel dialog-transition",
+							sizes[size],
+							panelClassName
+						)}
+					>
+						{title && (
+							<div className="modal-header">
+								<DialogTitle className="modal-title">
+									{title}
+								</DialogTitle>
+								<button
+									type="button"
+									onClick={onClose}
+									className="modal-close"
+									aria-label={__("Close modal")}
+								>
+									<X size={20} />
+								</button>
+							</div>
+						)}
+						{title ? (
+							<div className="modal-content">{children}</div>
+						) : (
+							children
+						)}
+					</DialogPanel>
+				</div>
+			</Dialog>
+		</Transition>
 	);
 }

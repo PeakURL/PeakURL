@@ -185,6 +185,7 @@ function ActivityPage() {
 		<div className="activity-page">
 			<ActivityHeader
 				summaryCounts={summaryCounts}
+				isLoading={isLoading}
 				isRefreshing={isFetching}
 				onRefresh={refetch}
 			/>

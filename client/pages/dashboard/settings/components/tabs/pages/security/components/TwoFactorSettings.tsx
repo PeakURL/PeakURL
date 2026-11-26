@@ -43,7 +43,7 @@ function TwoFactorSettings({
 				className="settings-security-two-factor-header settings-section-heading"
 			>
 				<div className="settings-section-copy">
-					<SectionTitle icon={ShieldCheck}>
+					<SectionTitle>
 						{__("Two-Factor Authentication")}
 					</SectionTitle>
 					<p className="settings-group-description">

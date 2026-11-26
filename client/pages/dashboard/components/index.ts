@@ -5,7 +5,7 @@ export { default as ActivityFeed } from "./ActivityFeed";
 export { default as RecentClicks } from "./RecentClicks";
 export { default as CountryStats } from "./CountryStats";
 export { default as DeviceBreakdown } from "./DeviceBreakdown";
-export { default as DashboardSkeleton } from "./DashboardSkeleton";
+export { DashboardPanelSkeleton } from "./DashboardSkeleton";
 export type {
 	CountryMetric,
 	DashboardDeviceData,

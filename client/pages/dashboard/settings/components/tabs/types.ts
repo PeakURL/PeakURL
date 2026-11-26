@@ -1,7 +1,7 @@
 import type { SerializedError } from "@reduxjs/toolkit";
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
-import type { SettingsTabId } from "../layout/types";
+import type { SettingsTabId } from "@/router/tabs";
 
 export type {
 	ApiKeySummary,

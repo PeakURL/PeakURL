@@ -1,6 +1,11 @@
 import type { ChangeEvent, SubmitEvent } from "react";
 import { useMemo, useState } from "react";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import {
+	Dialog,
+	DialogBackdrop,
+	DialogPanel,
+	DialogTitle,
+} from "@headlessui/react";
 import { UserRound, UserRoundPlus, X } from "lucide-react";
 
 import { Button, Input, SelectField, type SelectOption } from "@/components";
@@ -117,9 +122,12 @@ export function UserDialog({
 
 	return (
 		<Dialog open={open} onClose={onClose} className="users-page-dialog">
-			<div className="dialog-backdrop" aria-hidden="true" />
+			<DialogBackdrop transition className="dialog-backdrop" />
 			<div className="users-page-dialog-wrapper">
-				<DialogPanel className="users-page-dialog-panel">
+				<DialogPanel
+					transition
+					className="users-page-dialog-panel dialog-transition"
+				>
 					<div className="users-page-dialog-header">
 						<div className="users-page-dialog-heading">
 							<span

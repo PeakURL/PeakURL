@@ -1,4 +1,3 @@
-import { LockKeyhole } from "lucide-react";
 import { Button, Input } from "@/components";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __ } from "@/i18n";
@@ -29,7 +28,7 @@ function PasswordSettings({
 	return (
 		<section className="settings-section">
 			<div className="settings-section-copy settings-section-heading">
-				<SectionTitle icon={LockKeyhole}>{__("Password")}</SectionTitle>
+				<SectionTitle>{__("Password")}</SectionTitle>
 				<p className="settings-group-description">
 					{__(
 						"Use a strong, unique password to protect your account."

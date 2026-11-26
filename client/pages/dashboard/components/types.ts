@@ -84,7 +84,8 @@ export interface HeaderProps {
  */
 export interface StatsCardsProps {
 	/** Aggregate dashboard stats rendered in the cards. */
-	stats: DashboardStats;
+	stats?: DashboardStats;
+	isLoading?: boolean;
 }
 
 /**

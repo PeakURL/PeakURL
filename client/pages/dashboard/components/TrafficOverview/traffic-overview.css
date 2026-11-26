@@ -4,7 +4,7 @@
 	}
 
 	.dashboard-traffic-header {
-		@apply mb-5 flex items-center justify-between gap-4;
+		@apply mb-5 flex flex-wrap items-center justify-between gap-3;
 	}
 
 	.dashboard-traffic-title {
@@ -12,7 +12,7 @@
 	}
 
 	.dashboard-traffic-toolbar {
-		@apply flex items-center gap-6;
+		@apply flex flex-wrap items-center gap-3;
 	}
 
 	.dashboard-traffic-chart-toggle {
@@ -20,7 +20,7 @@
 	}
 
 	.dashboard-traffic-chart-button {
-		@apply rounded-md p-1.5 transition-all;
+		@apply rounded-md p-1.5 transition-colors focus-visible:outline-2 focus-visible:outline-accent;
 	}
 
 	.dashboard-traffic-chart-button-active {
@@ -44,11 +44,11 @@
 	}
 
 	.dashboard-traffic-legend-dot-clicks {
-		@apply bg-primary-600 dark:bg-primary-400;
+		background: var(--chart-primary);
 	}
 
 	.dashboard-traffic-legend-dot-unique {
-		@apply bg-emerald-600 dark:bg-emerald-500;
+		background: var(--chart-secondary);
 	}
 
 	.dashboard-traffic-legend-text {

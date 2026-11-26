@@ -46,14 +46,15 @@ export function ActivityRow({
 	const hasTargetUser = Boolean(userName && userName !== actorName);
 
 	return (
-		<article
+		<div
+			role="row"
 			className={cn(
 				"activity-page-event",
 				activity.id && isSelected && "activity-page-event-selected",
 				isAdmin && "activity-page-event-admin"
 			)}
 		>
-			<div className="activity-page-event-identity">
+			<div className="activity-page-event-identity" role="cell">
 				{isAdmin && activity.id ? (
 					<input
 						type="checkbox"
@@ -71,11 +72,11 @@ export function ActivityRow({
 						`activity-page-event-icon-${visual.tone}`
 					)}
 				>
-					<Icon size={17} />
+					<Icon size={17} aria-hidden="true" />
 				</div>
 			</div>
 
-			<div className="activity-page-event-primary">
+			<div className="activity-page-event-primary" role="rowheader">
 				<p className="activity-page-event-title" dir="auto">
 					{message}
 				</p>
@@ -86,7 +87,7 @@ export function ActivityRow({
 				) : null}
 			</div>
 
-			<div className="activity-page-event-context">
+			<div className="activity-page-event-context" role="cell">
 				{actorName ? (
 					<div
 						className="activity-page-detail-item"
@@ -159,7 +160,7 @@ export function ActivityRow({
 				) : null}
 			</div>
 
-			<div className="activity-page-event-time">
+			<div className="activity-page-event-time" role="cell">
 				<p className="activity-page-event-time-relative" dir="auto">
 					{formatDate(activity.timestamp)}
 				</p>
@@ -171,7 +172,7 @@ export function ActivityRow({
 			</div>
 
 			{isAdmin ? (
-				<div className="activity-page-event-actions">
+				<div className="activity-page-event-actions" role="cell">
 					{activity.id &&
 					activity.link?.destinationUrl &&
 					("link_deleted" === activity.type ||
@@ -233,6 +234,6 @@ export function ActivityRow({
 					) : null}
 				</div>
 			) : null}
-		</article>
+		</div>
 	);
 }

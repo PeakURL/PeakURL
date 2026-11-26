@@ -392,7 +392,7 @@
 	}
 
 	.mcp-guide-step-num {
-		@apply flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-white shrink-0 mt-0.5;
+		@apply flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-action-foreground shrink-0 mt-0.5;
 	}
 
 	.mcp-guide-step-body {

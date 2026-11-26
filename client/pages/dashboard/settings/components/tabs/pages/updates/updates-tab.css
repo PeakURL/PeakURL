@@ -3,22 +3,14 @@
 		@apply gap-0 overflow-hidden rounded-2xl border border-stroke bg-surface p-0;
 	}
 	.settings-updates-section-header {
-		@apply flex min-w-0 flex-wrap items-start justify-between gap-3 border-b border-stroke/70 p-4 sm:px-5;
+		@apply grid min-w-0 gap-1 border-b border-stroke/70 p-4 sm:p-5;
 	}
-	.settings-updates-intro {
-		@apply min-w-0 flex-1;
-		min-width: min(100%, 15rem);
+	.settings-updates-release,
+	.settings-updates-maintenance {
+		@apply grid min-w-0 grid-cols-1 items-center gap-4 p-4 sm:p-5;
 	}
-	.settings-updates-section-header .settings-group-description {
-		@apply mt-2 text-xs leading-5;
-	}
-	.settings-updates-release {
-		@apply grid min-w-0 grid-cols-1 items-center gap-5 p-4 sm:p-6;
-		background: linear-gradient(
-			125deg,
-			color-mix(in srgb, var(--color-selected) 55%, var(--color-surface)),
-			var(--color-surface)
-		);
+	.settings-updates-loading {
+		@apply p-4 sm:p-5;
 	}
 	.settings-update-status {
 		@apply flex min-w-0 items-start gap-3;
@@ -46,21 +38,6 @@
 	}
 	.settings-update-status-details {
 		@apply pt-2;
-	}
-	.settings-update-status-prominent {
-		@apply flex-col gap-4;
-	}
-	.settings-update-status-prominent .settings-update-status-icon {
-		@apply h-14 w-14 rounded-2xl;
-	}
-	.settings-update-status-prominent .settings-update-status-title {
-		@apply text-[22px] leading-8;
-	}
-	.settings-update-status-prominent .settings-update-status-description {
-		@apply text-sm leading-6;
-	}
-	.settings-updates-maintenance {
-		@apply flex min-w-0 flex-col items-start gap-4 p-4 sm:p-5;
 	}
 	.settings-updates-status-badge {
 		@apply inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-semibold;
@@ -118,9 +95,6 @@
 	.settings-updates-issues-list {
 		@apply mt-3 list-disc space-y-2 ps-5 text-sm leading-6 text-text-muted;
 	}
-	.settings-updates-loading {
-		@apply rounded-xl border border-stroke bg-surface p-5 text-sm text-text-muted;
-	}
 	.settings-updates-error-card {
 		@apply rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-900 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200;
 	}
@@ -133,20 +107,12 @@
 	.settings-updates-section .settings-updates-divider {
 		@apply m-0 border-t border-stroke/70 p-4 sm:p-5;
 	}
-	@container settings-content (min-width: 36rem) {
-		.settings-update-status-prominent {
-			@apply flex-row items-start;
-		}
-		.settings-update-status-prominent .settings-update-status-icon {
-			@apply mt-1;
-		}
-	}
 	@container settings-content (min-width: 42rem) {
 		.settings-updates-release {
 			grid-template-columns: minmax(0, 1fr) 15rem;
 		}
 		.settings-updates-maintenance {
-			@apply flex-row items-center justify-between;
+			grid-template-columns: minmax(0, 1fr) auto;
 		}
 		.settings-updates-metric-grid {
 			@apply grid-cols-4;

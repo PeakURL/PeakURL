@@ -45,7 +45,7 @@ const Pagination = ({
 	};
 
 	return (
-		<div className="links-pagination">
+		<nav className="links-pagination" aria-label={__("Link pagination")}>
 			<div className="links-pagination-inner">
 				{/* Results Info */}
 				<div className="links-pagination-summary">
@@ -110,7 +110,7 @@ const Pagination = ({
 					</button>
 				</div>
 			</div>
-		</div>
+		</nav>
 	);
 };
 

@@ -1,12 +1,16 @@
 @layer components {
-	/* Dialogs and drawers dim the workspace without blurring its content. */
+	/* Headless UI controls the lifecycle, including which overlay owns focus. */
 	.dialog-backdrop {
-		@apply fixed inset-0 bg-overlay transition-opacity duration-300 data-leave:duration-250 data-enter:ease-in data-leave:ease-out data-closed:opacity-0 motion-reduce:transition-none;
+		@apply fixed inset-0 bg-overlay transition-opacity duration-260 ease-out data-leave:duration-180 data-closed:opacity-0 motion-reduce:transition-none;
 	}
 
-	/* data-closed controls position; enter/leave identify the direction of motion. */
+	.dialog-transition {
+		@apply transition-[opacity,scale] duration-240 ease-out data-leave:duration-170 data-closed:scale-[0.985] data-closed:opacity-0 motion-reduce:transition-none;
+	}
+
+	/* The drawer owns its directional offset. These timings work for either edge. */
 	.drawer-transition {
-		@apply transition-transform duration-500 data-leave:duration-400 data-enter:ease-in data-leave:ease-out motion-reduce:transition-none;
+		@apply transition-transform duration-300 ease-[cubic-bezier(0.2,0.75,0.25,1)] data-leave:duration-220 data-leave:ease-in motion-reduce:transition-none;
 	}
 
 	.navigation-active-indicator {
@@ -44,19 +48,19 @@
 	}
 
 	.icon-brand-slack {
-		color: var(--brand-slack);
+		color: var(--slack-color);
 	}
 
 	.icon-brand-discord {
-		color: var(--brand-discord);
+		color: var(--discord-color);
 	}
 
 	.icon-brand-zapier {
-		color: var(--brand-zapier);
+		color: var(--zapier-color);
 	}
 
 	.icon-brand-google {
-		color: var(--brand-google);
+		color: var(--google-color);
 	}
 
 	.glass {

@@ -41,11 +41,16 @@ export function UsersTable({
 	const hasFilteredUsers = filteredUsers.length > 0;
 
 	return (
-		<div className="users-page-panel">
+		<div className="users-page-panel" aria-busy={isLoading}>
 			<div className="users-page-panel-header">
 				<div className="users-page-panel-header-main">
 					<h2 className="users-page-panel-title">{__("Accounts")}</h2>
-					{!isLoading && hasUsers ? (
+					{isLoading ? (
+						<span
+							aria-hidden="true"
+							className="skeleton users-page-panel-count users-skeleton-count"
+						/>
+					) : hasUsers ? (
 						<span className="users-page-panel-count">
 							{isSearchActive
 								? sprintf(
@@ -58,10 +63,11 @@ export function UsersTable({
 					) : null}
 				</div>
 
-				{!isLoading && (hasUsers || isSearchActive) ? (
+				{isLoading || hasUsers || isSearchActive ? (
 					<div className="w-full sm:w-64">
 						<SearchInput
 							value={searchQuery}
+							disabled={isLoading}
 							onChange={setSearchQuery}
 							placeholder={__("Search users...")}
 							aria-label={__("Search users")}
@@ -74,7 +80,9 @@ export function UsersTable({
 				<div className="users-page-panel-error">
 					{getErrorMessage(usersError, __("Unable to load users."))}
 				</div>
-			) : !isLoading && !hasFilteredUsers ? (
+			) : null}
+			{usersError && !hasUsers ? null : !isLoading &&
+			  !hasFilteredUsers ? (
 				<UsersEmptyState
 					searchQuery={isSearchActive ? searchQuery : undefined}
 					onClearSearch={() => setSearchQuery("")}

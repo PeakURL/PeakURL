@@ -15,26 +15,18 @@ export default function UpdateStatus({
 	title,
 	description,
 	tone = "info",
-	prominent = false,
 	details,
 }: UpdateStatusProps) {
-	const Heading = prominent ? "h2" : "h3";
 	return (
 		<div
 			dir={direction}
-			className={cn(
-				"settings-update-status",
-				statusStyles[tone],
-				prominent && "settings-update-status-prominent"
-			)}
+			className={cn("settings-update-status", statusStyles[tone])}
 		>
 			<span className="settings-update-status-icon" aria-hidden="true">
-				<Icon size={prominent ? 28 : 20} />
+				<Icon size={20} />
 			</span>
 			<div className="settings-update-status-copy">
-				<Heading className="settings-update-status-title">
-					{title}
-				</Heading>
+				<h3 className="settings-update-status-title">{title}</h3>
 				<p className="settings-update-status-description">
 					{description}
 				</p>

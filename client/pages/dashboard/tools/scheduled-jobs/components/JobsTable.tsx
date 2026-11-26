@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { History, Play, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 
-import { Button } from "@/components";
+import { Button, TableRowSkeleton } from "@/components";
 import { __ } from "@/i18n";
 import { cn } from "@/shared/formatting";
 import type { JobsTableProps } from "../types";
@@ -16,6 +16,7 @@ import { JobStatusBadge } from "./JobStatusBadge";
 
 export function JobsTable({
 	jobs,
+	isLoading,
 	runningJobId,
 	onViewHistory,
 	onRunJob,
@@ -37,7 +38,7 @@ export function JobsTable({
 		}
 	}, [runningJobId]);
 
-	if (0 === jobs.length) {
+	if (!isLoading && jobs.length === 0) {
 		return (
 			<div className="scheduled-jobs-empty-state">
 				<Clock size={36} className="text-text-muted" />
@@ -58,6 +59,7 @@ export function JobsTable({
 			ref={tableContainerRef}
 			onScroll={handleTableScroll}
 			className="scheduled-jobs-table-container"
+			aria-busy={isLoading}
 		>
 			<table className="scheduled-jobs-table">
 				<thead>
@@ -83,199 +85,214 @@ export function JobsTable({
 						</th>
 					</tr>
 				</thead>
-				<tbody>
-					{jobs.map((job) => {
-						const lastRun = formatLastRun(job);
-						const nextRun = formatNextRun(job.nextRunAt);
-						const isJobRunning = runningJobId === job.id;
-						const isExclusiveRunning = "running" === job.status;
+				<tbody aria-hidden={isLoading || undefined}>
+					{isLoading
+						? [1, 2, 3].map((row) => (
+								<TableRowSkeleton key={row} columns={7} />
+							))
+						: jobs.map((job) => {
+								const lastRun = formatLastRun(job);
+								const nextRun = formatNextRun(job.nextRunAt);
+								const isJobRunning = runningJobId === job.id;
+								const isExclusiveRunning =
+									"running" === job.status;
 
-						const latestRun = job.recentRuns[0];
-						const hasError = Boolean(job.lastError);
+								const latestRun = job.recentRuns[0];
+								const hasError = Boolean(job.lastError);
 
-						return (
-							<tr
-								key={job.id}
-								className="scheduled-jobs-table-row"
-							>
-								{/* Job Title */}
-								<td className="scheduled-jobs-cell-job">
-									<div className="scheduled-jobs-job-title">
-										{__(job.title)}
-									</div>
-								</td>
-
-								{/* Status Badge */}
-								<td className="scheduled-jobs-cell-status">
-									<JobStatusBadge
-										status={job.status}
-										attempts={job.attempts}
-										maxAttempts={job.maxAttempts}
-										isEnabled={job.isEnabled}
-									/>
-								</td>
-
-								{/* Schedule Recurrence */}
-								<td className="scheduled-jobs-cell-schedule">
-									<div className="flex flex-col">
-										<span className="text-xs font-medium text-heading">
-											{formatSchedule(
-												job.intervalSeconds,
-												job.preferredRunTime
-											)}
-										</span>
-										<span
-											className={cn(
-												"text-[10px] mt-0.5",
-												job.isCustomized
-													? "font-medium text-amber-600 dark:text-amber-400"
-													: "text-text-muted"
-											)}
-										>
-											{job.isCustomized
-												? __("Customized")
-												: __("Recommended")}
-										</span>
-									</div>
-								</td>
-
-								{/* Last Run */}
-								<td className="scheduled-jobs-cell-last-run">
-									<div className="text-xs text-heading">
-										{lastRun.text}
-									</div>
-									{lastRun.sub ? (
-										<div className="text-[11px] font-mono text-text-muted">
-											{lastRun.sub}
-										</div>
-									) : null}
-								</td>
-
-								{/* Next Run */}
-								<td className="scheduled-jobs-cell-next-run">
-									<span
-										className={cn(
-											"text-xs",
-											nextRun.isDue
-												? "font-semibold text-amber-600 dark:text-amber-400"
-												: "text-heading"
-										)}
+								return (
+									<tr
+										key={job.id}
+										className="scheduled-jobs-table-row"
 									>
-										{nextRun.text}
-									</span>
-								</td>
+										{/* Job Title */}
+										<td className="scheduled-jobs-cell-job">
+											<div className="scheduled-jobs-job-title">
+												{__(job.title)}
+											</div>
+										</td>
 
-								{/* Last Result / Failure */}
-								<td className="scheduled-jobs-cell-result">
-									{hasError ? (
-										<div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
-											<AlertCircle
-												size={13}
-												className="shrink-0"
+										{/* Status Badge */}
+										<td className="scheduled-jobs-cell-status">
+											<JobStatusBadge
+												status={job.status}
+												attempts={job.attempts}
+												maxAttempts={job.maxAttempts}
+												isEnabled={job.isEnabled}
 											/>
-											<span
-												className="text-xs font-medium truncate max-w-xs"
-												title={formatJobErrorMessage(
-													job.lastError as string
-												)}
-											>
-												{formatJobErrorMessage(
-													job.lastError as string
-												)}
-											</span>
-										</div>
-									) : "running" === latestRun?.status ? (
-										<span className="text-xs text-amber-600 dark:text-amber-400">
-											{__("Executing now...")}
-										</span>
-									) : "success" === latestRun?.status ? (
-										<div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-											<CheckCircle2
-												size={13}
-												className="shrink-0"
-											/>
-											<span
-												className="text-xs font-medium truncate max-w-xs"
-												title={
-													formatJobOutputSummary(
-														latestRun?.outputSummary
-													) || __("Success")
-												}
-											>
-												{formatJobOutputSummary(
-													latestRun?.outputSummary
-												) || __("Success")}
-											</span>
-										</div>
-									) : "skipped" === latestRun?.status ? (
-										<span className="text-xs text-text-muted">
-											{__("Skipped")}
-										</span>
-									) : (
-										<span className="text-xs text-text-muted">
-											—
-										</span>
-									)}
-								</td>
+										</td>
 
-								{/* Actions */}
-								<td className="scheduled-jobs-cell-actions">
-									<div className="flex items-center justify-start gap-2">
-										<button
-											type="button"
-											onClick={() => onViewHistory(job)}
-											className="scheduled-jobs-action-history"
-											title={__("View Execution History")}
-										>
-											<History
-												size={13}
-												className="shrink-0"
-											/>
-											<span>{__("History")}</span>
-										</button>
-
-										{canManage ? (
-											<Button
-												variant="secondary"
-												size="xs"
-												icon={
-													!isJobRunning
-														? Play
-														: undefined
-												}
-												onClick={(e) => {
-													e.currentTarget.blur();
-													onRunJob(job);
-												}}
-												loading={isJobRunning}
-												disabled={
-													isJobRunning ||
-													isExclusiveRunning ||
-													null !== runningJobId
-												}
-												className="scheduled-jobs-action-run"
-												title={
-													isJobRunning
-														? __(
-																"Job is currently executing..."
-															)
-														: __(
-																"Execute Job Immediately"
-															)
-												}
-											>
-												<span>
-													{isJobRunning
-														? __("Running...")
-														: __("Run Now")}
+										{/* Schedule Recurrence */}
+										<td className="scheduled-jobs-cell-schedule">
+											<div className="flex flex-col">
+												<span className="text-xs font-medium text-heading">
+													{formatSchedule(
+														job.intervalSeconds,
+														job.preferredRunTime
+													)}
 												</span>
-											</Button>
-										) : null}
-									</div>
-								</td>
-							</tr>
-						);
-					})}
+												<span
+													className={cn(
+														"text-[10px] mt-0.5",
+														job.isCustomized
+															? "font-medium text-amber-600 dark:text-amber-400"
+															: "text-text-muted"
+													)}
+												>
+													{job.isCustomized
+														? __("Customized")
+														: __("Recommended")}
+												</span>
+											</div>
+										</td>
+
+										{/* Last Run */}
+										<td className="scheduled-jobs-cell-last-run">
+											<div className="text-xs text-heading">
+												{lastRun.text}
+											</div>
+											{lastRun.sub ? (
+												<div className="text-[11px] font-mono text-text-muted">
+													{lastRun.sub}
+												</div>
+											) : null}
+										</td>
+
+										{/* Next Run */}
+										<td className="scheduled-jobs-cell-next-run">
+											<span
+												className={cn(
+													"text-xs",
+													nextRun.isDue
+														? "font-semibold text-amber-600 dark:text-amber-400"
+														: "text-heading"
+												)}
+											>
+												{nextRun.text}
+											</span>
+										</td>
+
+										{/* Last Result / Failure */}
+										<td className="scheduled-jobs-cell-result">
+											{hasError ? (
+												<div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400">
+													<AlertCircle
+														size={13}
+														className="shrink-0"
+													/>
+													<span
+														className="text-xs font-medium truncate max-w-xs"
+														title={formatJobErrorMessage(
+															job.lastError as string
+														)}
+													>
+														{formatJobErrorMessage(
+															job.lastError as string
+														)}
+													</span>
+												</div>
+											) : "running" ===
+											  latestRun?.status ? (
+												<span className="text-xs text-amber-600 dark:text-amber-400">
+													{__("Executing now...")}
+												</span>
+											) : "success" ===
+											  latestRun?.status ? (
+												<div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+													<CheckCircle2
+														size={13}
+														className="shrink-0"
+													/>
+													<span
+														className="text-xs font-medium truncate max-w-xs"
+														title={
+															formatJobOutputSummary(
+																latestRun?.outputSummary
+															) || __("Success")
+														}
+													>
+														{formatJobOutputSummary(
+															latestRun?.outputSummary
+														) || __("Success")}
+													</span>
+												</div>
+											) : "skipped" ===
+											  latestRun?.status ? (
+												<span className="text-xs text-text-muted">
+													{__("Skipped")}
+												</span>
+											) : (
+												<span className="text-xs text-text-muted">
+													—
+												</span>
+											)}
+										</td>
+
+										{/* Actions */}
+										<td className="scheduled-jobs-cell-actions">
+											<div className="flex items-center justify-start gap-2">
+												<button
+													type="button"
+													onClick={() =>
+														onViewHistory(job)
+													}
+													className="scheduled-jobs-action-history"
+													title={__(
+														"View Execution History"
+													)}
+												>
+													<History
+														size={13}
+														className="shrink-0"
+													/>
+													<span>{__("History")}</span>
+												</button>
+
+												{canManage ? (
+													<Button
+														variant="secondary"
+														size="xs"
+														icon={
+															!isJobRunning
+																? Play
+																: undefined
+														}
+														onClick={(e) => {
+															e.currentTarget.blur();
+															onRunJob(job);
+														}}
+														loading={isJobRunning}
+														disabled={
+															isJobRunning ||
+															isExclusiveRunning ||
+															null !==
+																runningJobId
+														}
+														className="scheduled-jobs-action-run"
+														title={
+															isJobRunning
+																? __(
+																		"Job is currently executing..."
+																	)
+																: __(
+																		"Execute Job Immediately"
+																	)
+														}
+													>
+														<span>
+															{isJobRunning
+																? __(
+																		"Running..."
+																	)
+																: __("Run Now")}
+														</span>
+													</Button>
+												) : null}
+											</div>
+										</td>
+									</tr>
+								);
+							})}
 				</tbody>
 			</table>
 		</div>

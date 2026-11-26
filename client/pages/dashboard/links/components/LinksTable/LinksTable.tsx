@@ -1,7 +1,13 @@
 import type { ChangeEvent } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
-import { ConfirmDialog, SearchInput, useNotification } from "@/components";
+import {
+	Button,
+	ConfirmDialog,
+	SearchInput,
+	Skeleton,
+	useNotification,
+} from "@/components";
 import { __ } from "@/i18n";
 import { useAdminAccess } from "@/hooks";
 import { copyToClipboard } from "@/shared/browser";
@@ -33,14 +39,30 @@ import {
 import type { LinkRecord } from "../types";
 import type { LinksTableProps } from "./types";
 
+const columns = [
+	"select",
+	"link",
+	"title",
+	"destination",
+	"health",
+	"performance",
+	"created",
+	"actions",
+] as const;
+
 const LinksTable = ({
 	filterContextKey,
+	isLoading = false,
+	isRefreshing = false,
+	hasError = false,
+	onRetry,
 	links,
 	totalCount,
 	searchQuery,
 	onSearchChange,
 	statsShortId,
 	statsLink,
+	isStatsLookupPending,
 	sortBy,
 	sortOrder,
 	onSortChange,
@@ -59,6 +81,7 @@ const LinksTable = ({
 	const [qrModalOpen, setQrModalOpen] = useState(false);
 	const [editDrawerOpen, setEditDrawerOpen] = useState(false);
 	const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+	const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
 	const [bulkDeleteConfirmation, setBulkDeleteConfirmation] =
 		useState<BulkDeleteConfirmationSnapshot | null>(null);
 	const snapshotCounterRef = useRef<number>(0);
@@ -114,6 +137,7 @@ const LinksTable = ({
 					linkItem.shortCode === statsShortId ||
 					linkItem.alias === statsShortId
 			) || statsLink;
+		if (!link && isStatsLookupPending) return;
 
 		const params = new URLSearchParams(searchParams.toString());
 		params.delete("stats");
@@ -132,6 +156,7 @@ const LinksTable = ({
 		statsShortId,
 		links,
 		statsLink,
+		isStatsLookupPending,
 		isTrashTab,
 		searchParams,
 		setSearchParams,
@@ -281,12 +306,14 @@ const LinksTable = ({
 
 	// Asynchronously clear invalidated confirmation state so no state mutation happens during render
 	useEffect(() => {
-		if (bulkDeleteConfirmation && !isConfirmationValid) {
+		if (bulkDeleteOpen && bulkDeleteConfirmation && !isConfirmationValid) {
 			queueMicrotask(() => {
-				setBulkDeleteConfirmation(null);
+				setBulkDeleteConfirmation((current) =>
+					current?.id === bulkDeleteConfirmation.id ? null : current
+				);
 			});
 		}
-	}, [bulkDeleteConfirmation, isConfirmationValid]);
+	}, [bulkDeleteOpen, bulkDeleteConfirmation, isConfirmationValid]);
 
 	const handleBulkDelete = () => {
 		if (!hasCompleteSelection || !canBulkDelete) return;
@@ -302,6 +329,14 @@ const LinksTable = ({
 		if (!snapshot) return;
 		cancelledSnapshotIdRef.current = null;
 		setBulkDeleteConfirmation(snapshot);
+		setBulkDeleteOpen(true);
+	};
+
+	const closeBulkDelete = () => {
+		if (bulkDeleteConfirmation) {
+			cancelledSnapshotIdRef.current = bulkDeleteConfirmation.id;
+		}
+		setBulkDeleteOpen(false);
 	};
 
 	const handleBulkDeleteConfirm = async (
@@ -363,10 +398,6 @@ const LinksTable = ({
 
 	const handleBulkDeleteSuccess = () => {
 		setSelectedIds([]);
-		if (bulkDeleteConfirmation) {
-			cancelledSnapshotIdRef.current = bulkDeleteConfirmation.id;
-		}
-		setBulkDeleteConfirmation(null);
 	};
 
 	const handleBulkRestoreAction = async () => {
@@ -379,27 +410,37 @@ const LinksTable = ({
 		} catch {}
 	};
 
+	const titleId = useId();
 	const hasLinks = links.length > 0;
 	const isSearchActive = Boolean(searchQuery.trim());
-	const displayCount = totalCount;
 
 	return (
-		<div className="links-table">
+		<section
+			className="links-table"
+			aria-labelledby={titleId}
+			aria-busy={isLoading || isRefreshing}
+		>
 			<div className="links-table-panel-header">
 				<div className="flex items-center gap-2">
-					<h2 className="links-table-panel-title">
+					<h2 id={titleId} className="links-table-panel-title">
 						{isTrashTab
 							? __("Trashed Links")
 							: statusFilter === "expired"
 								? __("Expired Links")
 								: __("All Links")}
 					</h2>
-					<span className="links-table-panel-badge">
-						{formatCount(displayCount)}
-					</span>
+					{isLoading ? (
+						<Skeleton className="h-5 w-8" aria-hidden="true" />
+					) : (
+						!hasError && (
+							<span className="links-table-panel-badge">
+								{formatCount(totalCount)}
+							</span>
+						)
+					)}
 				</div>
 
-				<div className="w-full sm:w-64">
+				<div className="links-table-search">
 					<SearchInput
 						value={searchQuery}
 						onChange={onSearchChange}
@@ -409,7 +450,21 @@ const LinksTable = ({
 				</div>
 			</div>
 
-			{!hasLinks ? (
+			{hasError ? (
+				<div className="links-empty-state">
+					<p role="status" className="links-empty-state-title">
+						{__("Links could not be loaded.")}
+					</p>
+					<Button
+						variant="secondary"
+						size="sm"
+						onClick={onRetry}
+						loading={isRefreshing}
+					>
+						{__("Try again")}
+					</Button>
+				</div>
+			) : !hasLinks && !isLoading ? (
 				<EmptyState
 					isSearchActive={isSearchActive}
 					searchQuery={searchQuery}
@@ -417,12 +472,31 @@ const LinksTable = ({
 					statusFilter={statusFilter}
 				/>
 			) : (
-				<div className="links-table-scroll">
-					<table className="links-table-element">
+				<div
+					className="links-table-scroll"
+					role="region"
+					aria-label={__("Link results")}
+					// eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- Keyboard users need to scroll wide tables.
+					tabIndex={0}
+				>
+					<table
+						className="links-table-element"
+						aria-labelledby={titleId}
+					>
+						<colgroup>
+							{columns.map((column) => (
+								<col
+									key={column}
+									className={`links-table-col-${column}`}
+								/>
+							))}
+						</colgroup>
 						<thead className="links-table-head">
 							<TableHeaderRow
 								selectedCount={validSelectedIds.length}
-								onSelectAll={handleSelectAll}
+								onSelectAll={
+									isLoading ? undefined : handleSelectAll
+								}
 								onBulkDelete={
 									canBulkDelete ? handleBulkDelete : undefined
 								}
@@ -446,49 +520,69 @@ const LinksTable = ({
 								trashedCount={trashedCount}
 								sortBy={sortBy}
 								sortOrder={sortOrder}
-								onSortChange={onSortChange}
+								onSortChange={
+									isLoading ? undefined : onSortChange
+								}
 								canTrashSelected={canTrashAllSelected}
 								canViewAnalytics={canViewAnalytics}
 								isAdmin={effectiveIsAdmin}
 							/>
 						</thead>
 						<tbody className="links-table-body">
-							{links.map((link: LinkRecord) => (
-								<LinkRow
-									key={link.id}
-									link={link}
-									selected={validSelectedIds.includes(
-										link.id
-									)}
-									onSelectRow={handleSelectRow}
-									onCopy={handleCopy}
-									copiedId={copiedId}
-									onOpenStats={handleOpenStats}
-									onOpenHealthModal={handleOpenHealthModal}
-									onCheckHealth={handleCheckHealth}
-									isCheckingHealth={
-										checkingHealthId === link.id
-									}
-									isAnyCheckingHealth={Boolean(
-										checkingHealthId
-									)}
-									onEdit={handleEdit}
-									onDelete={handleDelete}
-									onRestore={onRestore}
-									onQRCode={handleQRCode}
-									formatNumber={formatNumber}
-									isTrashTab={isTrashTab}
-									sortBy={sortBy}
-									canDeleteLinks={canDeleteLinks}
-									canDeleteAnyLink={canDeleteAnyLink}
-									canTrashLinks={canTrashLinks}
-									canEditLinks={canEditLinks}
-									canEditAnyLink={canEditAnyLink}
-									canViewAnalytics={canViewAnalytics}
-									isAdmin={effectiveIsAdmin}
-									currentUserId={user?.id}
-								/>
-							))}
+							{isLoading
+								? Array.from({ length: 5 }, (_, index) => (
+										<tr key={index} aria-hidden="true">
+											{columns.map((column) => (
+												<td
+													key={column}
+													className="links-row-cell"
+												>
+													<Skeleton
+														className={`links-table-placeholder links-table-placeholder-${column}`}
+														aria-hidden="true"
+													/>
+												</td>
+											))}
+										</tr>
+									))
+								: links.map((link: LinkRecord) => (
+										<LinkRow
+											key={link.id}
+											link={link}
+											selected={validSelectedIds.includes(
+												link.id
+											)}
+											onSelectRow={handleSelectRow}
+											onCopy={handleCopy}
+											copiedId={copiedId}
+											onOpenStats={handleOpenStats}
+											onOpenHealthModal={
+												handleOpenHealthModal
+											}
+											onCheckHealth={handleCheckHealth}
+											isCheckingHealth={
+												checkingHealthId === link.id
+											}
+											isAnyCheckingHealth={Boolean(
+												checkingHealthId
+											)}
+											onEdit={handleEdit}
+											onDelete={handleDelete}
+											onRestore={onRestore}
+											onQRCode={handleQRCode}
+											formatNumber={formatNumber}
+											isTrashTab={isTrashTab}
+											sortBy={sortBy}
+											canDeleteLinks={canDeleteLinks}
+											canDeleteAnyLink={canDeleteAnyLink}
+											canTrashLinks={canTrashLinks}
+											canEditLinks={canEditLinks}
+											canEditAnyLink={canEditAnyLink}
+											canViewAnalytics={canViewAnalytics}
+											isAdmin={effectiveIsAdmin}
+											currentUserId={user?.id}
+										/>
+									))}
 						</tbody>
 					</table>
 				</div>
@@ -508,12 +602,7 @@ const LinksTable = ({
 			/>
 			<HealthDetailModal
 				open={healthModalOpen && Boolean(healthModalLink)}
-				setOpen={(isOpen) => {
-					setHealthModalOpen(isOpen);
-					if (!isOpen) {
-						setHealthModalLinkId(null);
-					}
-				}}
+				setOpen={setHealthModalOpen}
 				link={healthModalLink}
 				onCheckNow={handleCheckHealth}
 				isChecking={checkingHealthId === healthModalLink?.id}
@@ -525,25 +614,15 @@ const LinksTable = ({
 			/>
 			<DeleteLinkModal
 				open={deleteModalOpen && Boolean(selectedLink)}
-				setOpen={(isOpen) => {
-					setDeleteModalOpen(isOpen);
-					if (!isOpen) {
-						setSelectedLink(null);
-					}
-				}}
+				setOpen={setDeleteModalOpen}
 				link={selectedLink}
 				isTrashTab={isTrashTab}
 			/>
 			<BulkDeleteModal
-				open={Boolean(bulkDeleteConfirmation && isConfirmationValid)}
-				setOpen={(isOpen) => {
-					if (!isOpen) {
-						if (bulkDeleteConfirmation) {
-							cancelledSnapshotIdRef.current =
-								bulkDeleteConfirmation.id;
-						}
-						setBulkDeleteConfirmation(null);
-					}
+				open={bulkDeleteOpen && isConfirmationValid}
+				setOpen={closeBulkDelete}
+				afterLeave={() => {
+					if (!bulkDeleteOpen) setBulkDeleteConfirmation(null);
 				}}
 				selectedIds={
 					bulkDeleteConfirmation
@@ -585,7 +664,7 @@ const LinksTable = ({
 					}
 				}}
 			/>
-		</div>
+		</section>
 	);
 };
 

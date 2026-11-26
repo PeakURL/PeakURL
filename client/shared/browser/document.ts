@@ -1,7 +1,7 @@
 import { getPeakURLData } from "@/data";
 import { getLocaleDirection } from "@/i18n/direction";
 import type { FaviconData, TextDirection } from "@/i18n/types";
-import { getManagedFaviconUrl } from "@/shared/links";
+import { getFaviconAsset, getManagedFaviconUrl } from "@/shared/links";
 
 /**
  * Apply the active locale metadata to the document root.
@@ -86,7 +86,34 @@ export function applyDocumentFavicon(favicon?: FaviconData | null): void {
 		"string" === typeof favicon.sizes && favicon.sizes.trim()
 			? favicon.sizes.trim()
 			: "";
-	const iconUrl = getManagedFaviconUrl("favicon.png", favicon.updatedAt);
+	const svgIconLinks = !favicon.isCustom
+		? [
+				{
+					href: getManagedFaviconUrl(
+						getFaviconAsset(false),
+						favicon.updatedAt
+					),
+				},
+				{
+					href: getManagedFaviconUrl(
+						getFaviconAsset(false, "light"),
+						favicon.updatedAt
+					),
+					media: "(prefers-color-scheme: light)",
+				},
+				{
+					href: getManagedFaviconUrl(
+						getFaviconAsset(false, "dark"),
+						favicon.updatedAt
+					),
+					media: "(prefers-color-scheme: dark)",
+				},
+			]
+		: [];
+	const iconUrl = getManagedFaviconUrl(
+		getFaviconAsset(true),
+		favicon.updatedAt
+	);
 	const shortcutIconUrl = getManagedFaviconUrl(
 		"favicon.ico",
 		favicon.updatedAt
@@ -103,6 +130,20 @@ export function applyDocumentFavicon(favicon?: FaviconData | null): void {
 	if (!iconUrl) {
 		return;
 	}
+
+	svgIconLinks.forEach(({ href, media }) => {
+		if (!href) {
+			return;
+		}
+
+		appendManagedHeadTag("link", {
+			rel: "icon",
+			type: "image/svg+xml",
+			sizes: "any",
+			...(media ? { media } : {}),
+			href,
+		});
+	});
 
 	appendManagedHeadTag("link", {
 		rel: "icon",

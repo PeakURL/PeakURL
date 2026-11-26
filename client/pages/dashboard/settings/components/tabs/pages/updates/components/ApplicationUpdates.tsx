@@ -6,6 +6,7 @@ import {
 	PackagePlus,
 } from "lucide-react";
 
+import { Skeleton } from "@/components";
 import { __ } from "@/i18n";
 import { formatRelativeTime } from "@/shared/dates";
 import { sanitizeUrl } from "@/shared/links";
@@ -14,6 +15,7 @@ import type { ApplicationUpdatesProps } from "../types";
 import UpdateStatus from "./UpdateStatus";
 import MetricGrid from "./MetricGrid";
 import UpdateActions from "./UpdateActions";
+import SectionHeader from "./SectionHeader";
 import UpdateSection from "./UpdateSection";
 
 /**
@@ -52,84 +54,98 @@ function ApplicationUpdates({
 
 	return (
 		<UpdateSection>
-			<div className="settings-updates-release">
-				<UpdateStatus
-					direction={direction}
-					icon={noticeIcon}
-					title={appState.title}
-					description={appState.description}
-					tone={appState.tone}
-					prominent
-					details={
-						releaseNotesUrl ? (
-							<a
-								href={releaseNotesUrl}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="settings-updates-detail-link"
-							>
-								{__("Release notes")}{" "}
-								<ExternalLink size={13} aria-hidden="true" />
-							</a>
-						) : (
-							<Link
-								to="/dashboard/about?tab=releases"
-								className="settings-updates-detail-link"
-							>
-								{__("Release notes")}
-							</Link>
-						)
-					}
-				/>
-				<UpdateActions
-					direction={direction}
-					updateAvailable={updateAvailable}
-					reinstallAvailable={reinstallAvailable}
-					canApply={canApply}
-					isLoading={isLoading}
-					isChecking={isChecking}
-					isApplying={isApplying}
-					isReinstalling={isReinstalling}
-					isRepairing={isRepairing}
-					disabledReason={status?.applyDisabledReason || ""}
-					onCheck={onCheck}
-					onApply={onApply}
-					onReinstall={onReinstall}
-				/>
-			</div>
-			<MetricGrid
+			<SectionHeader
 				direction={direction}
-				items={[
-					{
-						label: __("Installed Version"),
-						value: status?.currentVersion || __("Unknown"),
-						valueDirection: "ltr",
-					},
-					{
-						label: __("Latest Version"),
-						value: status?.latestVersion || __("Unknown"),
-						valueDirection: "ltr",
-					},
-					...(showReleaseMeta && status?.releasedAt
-						? [
-								{
-									label: __("Released"),
-									value: formatRelativeTime(
-										status.releasedAt
-									),
-									valueDirection: "ltr" as const,
-								},
-							]
-						: []),
-					{
-						label: __("Last Checked"),
-						value: status?.lastCheckedAt
-							? formatRelativeTime(status.lastCheckedAt)
-							: __("Never"),
-						valueDirection: "ltr",
-					},
-				]}
+				title={__("Application Updates")}
 			/>
+			{isLoading && !status ? (
+				<div className="settings-updates-loading">
+					<Skeleton className="h-20 w-full" aria-hidden="true" />
+				</div>
+			) : (
+				<>
+					<div className="settings-updates-release">
+						<UpdateStatus
+							direction={direction}
+							icon={noticeIcon}
+							title={appState.title}
+							description={appState.description}
+							tone={appState.tone}
+							details={
+								releaseNotesUrl ? (
+									<a
+										href={releaseNotesUrl}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="settings-updates-detail-link"
+									>
+										{__("Release notes")}{" "}
+										<ExternalLink
+											size={13}
+											aria-hidden="true"
+										/>
+									</a>
+								) : (
+									<Link
+										to="/dashboard/about?tab=releases"
+										className="settings-updates-detail-link"
+									>
+										{__("Release notes")}
+									</Link>
+								)
+							}
+						/>
+						<UpdateActions
+							direction={direction}
+							updateAvailable={updateAvailable}
+							reinstallAvailable={reinstallAvailable}
+							canApply={canApply}
+							isLoading={isLoading}
+							isChecking={isChecking}
+							isApplying={isApplying}
+							isReinstalling={isReinstalling}
+							isRepairing={isRepairing}
+							disabledReason={status?.applyDisabledReason || ""}
+							onCheck={onCheck}
+							onApply={onApply}
+							onReinstall={onReinstall}
+						/>
+					</div>
+					<MetricGrid
+						direction={direction}
+						items={[
+							{
+								label: __("Installed Version"),
+								value: status?.currentVersion || __("Unknown"),
+								valueDirection: "ltr",
+							},
+							{
+								label: __("Latest Published Version"),
+								value: status?.latestVersion || __("Unknown"),
+								valueDirection: "ltr",
+							},
+							...(showReleaseMeta && status?.releasedAt
+								? [
+										{
+											label: __("Released"),
+											value: formatRelativeTime(
+												status.releasedAt
+											),
+											valueDirection: "ltr" as const,
+										},
+									]
+								: []),
+							{
+								label: __("Last Checked"),
+								value: status?.lastCheckedAt
+									? formatRelativeTime(status.lastCheckedAt)
+									: __("Never"),
+								valueDirection: "ltr",
+							},
+						]}
+					/>
+				</>
+			)}
 		</UpdateSection>
 	);
 }

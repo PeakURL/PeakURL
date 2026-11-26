@@ -22,7 +22,6 @@ import {
 	useNotification,
 } from "@/components";
 import { useAdminAccess } from "@/hooks";
-import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __, _n, sprintf } from "@/i18n";
 import { extractErrorMessage } from "@/shared/errors";
 import { cn } from "@/shared/formatting";
@@ -210,7 +209,6 @@ export function ScheduledJobsPage() {
 			    PAGE HERO (Matching Activity Page)
 			   ════════════════════════════════════ */}
 			<PageHeader
-				icon={dashboardPageIcons["tools-scheduled-jobs"]}
 				title={__("Scheduled Jobs")}
 				description={__(
 					"Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
@@ -468,15 +466,9 @@ export function ScheduledJobsPage() {
 							</Button>
 						</div>
 					</div>
-				) : isCronLoading ? (
-					<div className="p-12 text-center">
-						<div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-stroke border-t-accent" />
-						<p className="mt-3 text-xs text-text-muted">
-							{__("Loading scheduled jobs...")}
-						</p>
-					</div>
 				) : (
 					<JobsTable
+						isLoading={isCronLoading}
 						jobs={filteredJobs}
 						runningJobId={runningJobId}
 						onViewHistory={(job) => {

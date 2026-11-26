@@ -1,114 +1,111 @@
+@import "../../server/services/brand-tokens.css";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-	--color-overlay: rgb(0 0 0 / 30%);
-	--color-navigation-indicator: var(--color-primary-900);
-	--color-primary-50: #f5f7fc;
-	--color-primary-100: #e9eef9;
-	--color-primary-200: #d5dff5;
-	--color-primary-300: #b5c8fa;
-	--color-primary-400: #8b9fc9;
-	--color-primary-500: #5c719f;
-	--color-primary-600: #4b5e88;
-	--color-primary-700: #3d4c6a;
-	--color-primary-800: #333d54;
-	--color-primary-900: #2b3040;
-	--color-primary-950: #191d29;
+	--color-overlay: var(--overlay);
+	--color-navigation-indicator: var(--primary);
 
-	/* Charcoal actions keep white labels legible; the blue accent is for text and details. */
-	--color-action: var(--color-primary-900);
-	--color-action-hover: var(--color-primary-800);
-	--color-selected: var(--color-primary-100);
-	--color-selected-ink: var(--color-primary-900);
-	--color-selected-border: var(--color-primary-200);
+	/* Approved Jade & Petrol brand scales */
+	--color-primary-50: #f0faf7;
+	--color-primary-100: #e1f3ee;
+	--color-primary-200: #bce9de;
+	--color-primary-300: #83dccc;
+	--color-primary-400: #55c3b2;
+	--color-primary-500: #319d90;
+	--color-primary-600: #18877b;
+	--color-primary-700: #126e68;
+	--color-primary-800: #0e5c57;
+	--color-primary-900: #17373b;
+	--color-primary-950: #102321;
 
-	--color-success: var(--color-green-500);
-	--color-success-50: var(--color-green-50);
-	--color-success-100: var(--color-green-100);
-	--color-error: var(--color-red-500);
-	--color-error-50: var(--color-red-50);
-	--color-error-100: var(--color-red-100);
-	--color-warning: var(--color-yellow-500);
-	--color-warning-50: var(--color-yellow-50);
-	--color-warning-100: var(--color-yellow-100);
-	--color-info: var(--color-blue-500);
-	--color-info-50: var(--color-blue-50);
-	--color-info-100: var(--color-blue-100);
+	--color-action: var(--primary);
+	--color-action-foreground: var(--primary-foreground);
+	--color-action-hover: var(--primary-hover);
+	--color-action-pressed: var(--primary-pressed);
+	--color-selected: var(--selected-surface);
+	--color-selected-ink: var(--selected-foreground);
+	--color-selected-border: var(--selected-border);
+	--color-disabled: var(--disabled-surface);
+	--color-disabled-foreground: var(--disabled-foreground);
 
-	--color-bg: #f7f8fa;
-	--color-bg-alt: var(--color-gray-950);
-	--color-text: var(--color-gray-900);
-	--color-text-muted: var(--color-gray-600);
-	--color-text-subtle: var(--color-gray-500);
-	--color-muted: var(--color-text-muted);
-	--color-accent: var(--color-primary-700);
-	--color-field-focus: var(--color-primary-500);
-	--color-field-bg: var(--color-surface);
-	--color-field-border: var(--color-navigation-stroke);
-	--color-field-border-hover: #aeb8ca;
-	--color-field-placeholder: #596579;
-	--color-field-readonly-bg: var(--color-surface-alt);
-	--color-field-disabled-text: var(--color-field-placeholder);
-	--color-navigation-stroke: #d5dce7;
-	--color-table-head: var(--color-surface-alt);
-	--color-table-head-text: #475569;
-	--color-heading: var(--color-primary-900);
-	--color-surface: var(--color-white);
-	--color-surface-alt: #f0f3f8;
-	--color-stroke: #d9dee7;
-	--color-stroke-strong: #b8c2d0;
-	--color-stroke-subtle: #edf0f5;
+	--color-success: var(--status-success);
+	--color-success-foreground: var(--status-success-foreground);
+	--color-success-hover: var(--status-success-hover);
+	--color-success-soft: var(--status-success-bg);
+	--color-success-50: #e9f7ee;
+	--color-success-100: #e9f7ee;
 
-	--color-success-soft: var(--color-green-100);
-	--color-error-soft: var(--color-red-100);
-	--color-warning-soft: var(--color-yellow-100);
-	--color-info-soft: var(--color-blue-100);
+	--color-error: var(--status-error);
+	--color-danger: var(--status-error);
+	--color-danger-foreground: var(--status-error-foreground);
+	--color-danger-hover: var(--status-error-hover);
+	--color-error-soft: var(--status-error-bg);
+	--color-error-50: #fdecec;
+	--color-error-100: #fdecec;
 
-	--brand-slack: var(--color-blue-600);
-	--brand-discord: var(--color-indigo-500);
-	--brand-zapier: var(--color-orange-600);
-	--brand-google: var(--color-red-600);
-}
+	--color-warning: var(--status-warning);
+	--color-warning-foreground: var(--status-warning-foreground);
+	--color-warning-hover: var(--status-warning-hover);
+	--color-warning-soft: var(--status-warning-bg);
+	--color-warning-50: #fef3db;
+	--color-warning-100: #fef3db;
 
-.dark {
-	--color-navigation-indicator: var(--color-primary-300);
-	--color-selected: var(--color-primary-800);
-	--color-selected-ink: var(--color-primary-200);
-	--color-selected-border: var(--color-primary-700);
-	--color-bg: #151923;
-	--color-bg-alt: var(--color-gray-900);
-	--color-text: var(--color-gray-100);
-	--color-text-muted: #b1bbcc;
-	--color-text-subtle: #8c99af;
-	--color-muted: var(--color-text-muted);
-	--color-accent: var(--color-primary-300);
-	--color-field-focus: var(--color-primary-300);
-	--color-field-bg: #151b27;
-	--color-field-border: var(--color-stroke-strong);
-	--color-field-border-hover: #6d7c94;
-	--color-field-placeholder: #a1adc2;
-	--color-field-readonly-bg: var(--color-surface-alt);
-	--color-field-disabled-text: var(--color-field-placeholder);
-	--color-navigation-stroke: #3b465c;
-	--color-table-head: var(--color-surface-alt);
-	--color-table-head-text: #d0d8e8;
-	--color-heading: var(--color-white);
-	--color-surface: #1c2230;
-	--color-surface-alt: #252d3e;
-	--color-stroke: #364155;
-	--color-stroke-strong: #536078;
-	--color-stroke-subtle: #2b3446;
+	--color-info: var(--status-info);
+	--color-info-soft: var(--status-info-bg);
+	--color-info-50: #e8f0ff;
+	--color-info-100: #e8f0ff;
 
-	--color-success-soft: color-mix(
-		in srgb,
-		var(--color-success) 25%,
-		transparent
-	);
-	--color-error-soft: color-mix(in srgb, var(--color-error) 25%, transparent);
-	--color-warning-soft: color-mix(
-		in srgb,
-		var(--color-warning) 25%,
-		transparent
-	);
-	--color-info-soft: color-mix(in srgb, var(--color-info) 25%, transparent);
+	--color-neutral: var(--status-neutral);
+	--color-neutral-soft: var(--status-neutral-bg);
+
+	--color-bg: var(--background);
+	--color-dashboard-bg: var(--dashboard-background);
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-hover: var(--sidebar-hover);
+	--color-nav-selected: var(--navigation-selected);
+	--color-nav-selected-ink: var(--navigation-selected-foreground);
+	--color-nav-selected-border: var(--navigation-selected-border);
+	--color-surface-muted: var(--surface-muted);
+	--color-bg-alt: #102321;
+	--color-text: var(--text);
+	--color-text-muted: var(--text-muted);
+	--color-text-subtle: var(--text-subtle);
+	--color-muted: var(--text-muted);
+	--color-accent: var(--primary);
+	--color-focus: var(--focus-ring);
+	--color-field-focus: var(--focus-ring);
+	--color-field-bg: var(--field-surface);
+	--color-field-border: var(--field-border);
+	--color-field-border-hover: var(--field-border-hover);
+	--color-field-placeholder: var(--text-muted);
+	--color-field-readonly-bg: var(--surface-subtle);
+	--color-field-disabled-text: var(--disabled-foreground);
+	--color-navigation-stroke: var(--border);
+	--color-table-head: var(--surface-subtle);
+	--color-table-head-text: var(--table-heading);
+	--color-heading: var(--text-heading);
+	--color-surface: var(--surface);
+	--color-surface-raised: var(--surface-raised);
+	--color-surface-alt: var(--surface-subtle);
+	--color-stroke: var(--border);
+	--color-stroke-strong: var(--border-strong);
+	--color-stroke-subtle: var(--border-subtle);
+	--color-selection-fill: var(--selection-background);
+	--color-selection-ink: var(--selection-foreground);
+
+	--color-chart-1: var(--chart-primary);
+	--color-chart-2: var(--chart-secondary);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+	--color-chart-6: var(--chart-6);
+	--color-chart-7: var(--chart-7);
+	--color-chart-8: var(--chart-8);
+
+	--slack-color: var(--color-blue-600);
+	--discord-color: var(--color-indigo-500);
+	--zapier-color: var(--color-orange-600);
+	--google-color: var(--color-red-600);
 }

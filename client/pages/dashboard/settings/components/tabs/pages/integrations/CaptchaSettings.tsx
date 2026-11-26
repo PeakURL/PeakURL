@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 import { Button, Input, SelectField, type SelectOption } from "@/components";
-import { DocumentationLink } from "@/pages/dashboard/settings/components/TabHeader";
+import { DocumentationLink } from "@/pages/dashboard/settings/components/DocumentationLink";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import {
 	useGetCaptchaStatusQuery,
@@ -275,9 +275,7 @@ function CaptchaSettingsContent({
 		<div dir={direction} className="settings-section">
 			<div className="settings-section-header settings-section-heading">
 				<div className="settings-section-copy">
-					<SectionTitle icon={ShieldCheck}>
-						{__("CAPTCHA Protection")}
-					</SectionTitle>
+					<SectionTitle>{__("CAPTCHA Protection")}</SectionTitle>
 					<p className="settings-group-description">
 						{__(
 							"Require a verification challenge on the authentication pages and before public short links redirect."

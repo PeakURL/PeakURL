@@ -15,7 +15,7 @@ interface SortableHeaderButtonProps {
 	align?: "start" | "center";
 }
 
-function WordPressSortIndicator({
+function SortIndicator({
 	isActive,
 	sortOrder,
 }: {
@@ -74,8 +74,9 @@ function SortableHeaderButton({
 			? activeSort === "createdAt" || activeSort === "updatedAt"
 			: activeSort === targetSort;
 
+	if (!onSort) return <span>{label}</span>;
+
 	const handleClick = () => {
-		if (!onSort) return;
 		if (isActive) {
 			const nextOrder = sortOrder === "asc" ? "desc" : "asc";
 			const nextSort =
@@ -103,7 +104,7 @@ function SortableHeaderButton({
 			)}
 		>
 			<span>{label}</span>
-			<WordPressSortIndicator isActive={isActive} sortOrder={sortOrder} />
+			<SortIndicator isActive={isActive} sortOrder={sortOrder} />
 		</button>
 	);
 }
@@ -124,6 +125,7 @@ function TableHeaderRow({
 	canViewAnalytics = false,
 	isAdmin = false,
 }: TableHeaderRowProps) {
+	const appliedSort = sortOrder === "asc" ? "ascending" : "descending";
 	const hasSelection = selectedCount > 0;
 	if (hasSelection) {
 		return (
@@ -212,16 +214,26 @@ function TableHeaderRow({
 	return (
 		<tr className="links-table-header-row">
 			<th className="links-table-header-cell links-table-header-cell-select">
-				<input
-					type="checkbox"
-					checked={false}
-					onChange={onSelectAll}
-					className="links-checkbox"
-					aria-label={__("Select all links")}
-				/>
+				{onSelectAll ? (
+					<input
+						type="checkbox"
+						checked={false}
+						onChange={onSelectAll}
+						className="links-checkbox"
+						aria-label={__("Select all links")}
+					/>
+				) : (
+					<span
+						className="links-table-selection-placeholder"
+						aria-hidden="true"
+					/>
+				)}
 			</th>
 			<th className="links-table-header-cell">{__("Link")}</th>
-			<th className="links-table-header-cell">
+			<th
+				className="links-table-header-cell"
+				aria-sort={sortBy === "title" ? appliedSort : undefined}
+			>
 				<SortableHeaderButton
 					label={__("Title")}
 					targetSort="title"
@@ -231,7 +243,10 @@ function TableHeaderRow({
 				/>
 			</th>
 			<th className="links-table-header-cell">{__("Destination")}</th>
-			<th className="links-table-header-cell links-table-header-cell-health">
+			<th
+				className="links-table-header-cell links-table-header-cell-health"
+				aria-sort={sortBy === "health" ? appliedSort : undefined}
+			>
 				<SortableHeaderButton
 					label={__("Health")}
 					targetSort="health"
@@ -240,7 +255,10 @@ function TableHeaderRow({
 					onSort={onSortChange}
 				/>
 			</th>
-			<th className="links-table-header-cell links-table-header-cell-performance text-center">
+			<th
+				className="links-table-header-cell links-table-header-cell-performance text-center"
+				aria-sort={sortBy === "clicks" ? appliedSort : undefined}
+			>
 				{canViewAnalytics && isAdmin ? (
 					<SortableHeaderButton
 						label={__("Performance")}
@@ -257,7 +275,14 @@ function TableHeaderRow({
 					</span>
 				)}
 			</th>
-			<th className="links-table-header-cell links-table-header-cell-created">
+			<th
+				className="links-table-header-cell links-table-header-cell-created"
+				aria-sort={
+					sortBy === "createdAt" || sortBy === "updatedAt"
+						? appliedSort
+						: undefined
+				}
+			>
 				<SortableHeaderButton
 					label={
 						"updatedAt" === sortBy ? __("Modified") : __("Created")

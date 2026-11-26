@@ -103,10 +103,10 @@ export function McpConnectedClients({
 		<div className="mcp-connected-clients-section">
 			<div className="mcp-connected-clients-header">
 				<div className="mcp-clients-title-group">
-					<h3 className="mcp-clients-heading">
+					<h2 className="mcp-clients-heading">
 						<McpIcon size={18} className="text-accent shrink-0" />
 						{__("Authorized Client Applications")}
-					</h3>
+					</h2>
 					<span className="mcp-badge mcp-badge-neutral">
 						{sprintf(
 							/* translators: %d: count */

@@ -1,50 +1,26 @@
 @layer components {
 	.users-skeleton-stat-label {
-		@apply h-3 w-20;
-	}
-
-	.users-skeleton-stat-icon {
-		@apply h-10 w-10 rounded-lg;
+		@apply mb-2 h-4 w-20;
 	}
 
 	.users-skeleton-stat-value {
-		@apply mt-1.5 h-6 w-14;
+		@apply h-8 w-14;
 	}
 
 	.users-skeleton-stat-note {
-		@apply mt-2 h-3 w-28;
+		@apply h-4 w-28;
 	}
 
-	.users-skeleton-row {
-		@apply border-b border-stroke/60 last:border-0;
-	}
-
-	.users-skeleton-cell {
-		@apply p-4;
-	}
-
-	.users-skeleton-user {
-		@apply flex items-center gap-3;
-	}
-
-	.users-skeleton-user-avatar {
-		@apply h-9 w-9 shrink-0 rounded-full;
-	}
-
-	.users-skeleton-user-copy {
-		@apply flex-1 space-y-1.5;
+	.users-skeleton-count {
+		@apply h-5 w-8;
 	}
 
 	.users-skeleton-user-name {
-		@apply h-4 w-32;
+		@apply h-5 w-32 max-w-full;
 	}
 
 	.users-skeleton-user-email {
-		@apply h-3 w-40;
-	}
-
-	.users-skeleton-user-role {
-		@apply h-3 w-24;
+		@apply mt-0.5 h-4 w-40 max-w-full;
 	}
 
 	.users-skeleton-badge {
@@ -52,54 +28,14 @@
 	}
 
 	.users-skeleton-date {
-		@apply h-3.5 w-20;
+		@apply h-4 w-20;
 	}
 
 	.users-skeleton-date-sub {
-		@apply mt-1 h-2.5 w-24;
+		@apply mt-1 h-4 w-24;
 	}
 
-	.users-skeleton-actions {
-		@apply flex justify-end gap-1.5;
-	}
-
-	.users-skeleton-action {
-		@apply h-7.5 w-7.5 rounded-lg;
-	}
-
-	.users-skeleton-hero-copy {
-		@apply flex-1 space-y-2;
-	}
-
-	.users-skeleton-kicker {
-		@apply h-6 w-32;
-	}
-
-	.users-skeleton-title {
-		@apply h-8 w-48;
-	}
-
-	.users-skeleton-copy-wide {
-		@apply h-4 w-3/4 max-w-150;
-	}
-
-	.users-skeleton-copy {
-		@apply h-4 w-1/2 max-w-100;
-	}
-
-	.users-skeleton-button {
-		@apply h-10 w-32 rounded-md;
-	}
-
-	.users-skeleton-table {
-		@apply mt-6;
-	}
-
-	.users-skeleton-table-header {
-		@apply h-14 rounded-none border-b border-stroke bg-surface;
-	}
-
-	.users-skeleton-table-inner {
-		@apply w-full text-left;
+	.users-page-action-button.users-skeleton-action {
+		@apply bg-stroke/80 dark:bg-stroke/40;
 	}
 }

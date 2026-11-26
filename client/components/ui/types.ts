@@ -237,6 +237,8 @@ export interface ModalProps {
 	title?: string;
 	children: ReactNode;
 	size?: ModalSize;
+	panelClassName?: string;
+	afterLeave?: () => void;
 }
 
 /**

@@ -1,18 +1,59 @@
 @layer components {
 	.dashboard-header {
-		@apply sticky top-0 z-30 w-full border-b border-navigation-stroke bg-surface;
+		@apply sticky top-0 z-30 w-full bg-dashboard-bg;
 	}
 
 	.dashboard-header-inner {
-		@apply flex h-16 min-w-0 items-center justify-between gap-2 px-3 sm:gap-4 sm:px-4;
+		@apply flex min-w-0 items-center justify-between gap-3 px-4 sm:px-6;
+		block-size: var(--dashboard-header-height);
+	}
+
+	.dashboard-header-leading {
+		@apply flex min-w-0 flex-1 items-center gap-2;
 	}
 
 	.dashboard-header-menu-button {
-		@apply rounded-lg p-2 transition-colors hover:bg-surface-alt lg:hidden;
+		@apply inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-stroke/80 bg-surface text-heading shadow-2xs transition-colors hover:border-stroke-strong hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:hidden;
 	}
 
 	.dashboard-header-menu-icon {
 		@apply text-heading;
+	}
+
+	.dashboard-breadcrumbs {
+		@apply min-w-0 flex-1 overflow-hidden;
+	}
+
+	.dashboard-breadcrumbs-list {
+		@apply flex min-w-0 items-center gap-1.5 text-sm;
+	}
+
+	.dashboard-breadcrumbs-item {
+		@apply flex min-w-0 items-center gap-1.5;
+	}
+
+	.dashboard-breadcrumbs-item:not(:last-child) {
+		@apply hidden shrink-0 sm:flex;
+	}
+
+	.dashboard-breadcrumbs-item:last-child {
+		@apply min-w-0;
+	}
+
+	.dashboard-breadcrumbs-separator {
+		@apply hidden shrink-0 select-none text-text-subtle/70 sm:inline;
+	}
+
+	.dashboard-breadcrumbs-link {
+		@apply whitespace-nowrap rounded-md px-1 py-0.5 text-text-muted transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
+	}
+
+	.dashboard-breadcrumbs-ancestor {
+		@apply whitespace-nowrap text-text-muted;
+	}
+
+	.dashboard-breadcrumbs-current {
+		@apply truncate font-medium text-heading;
 	}
 
 	.dashboard-header-actions {
@@ -24,28 +65,29 @@
 	}
 
 	.dashboard-header-user-trigger {
-		@apply flex items-center gap-2 rounded-lg px-1.5 py-2 transition-colors hover:bg-surface-alt sm:px-3;
+		@apply flex items-center gap-2 rounded-xl border border-stroke/80 bg-surface px-1.5 py-1 shadow-2xs transition-colors hover:border-stroke-strong hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:px-2.5 sm:py-1.5;
 	}
 
 	.dashboard-header-user-details {
-		@apply hidden sm:block;
+		@apply hidden min-w-0 max-w-36 sm:block lg:max-w-44;
 		text-align: start;
 	}
 
 	.dashboard-header-user-name {
-		@apply text-sm font-semibold text-heading;
+		@apply truncate text-sm font-semibold text-heading leading-tight;
 	}
 
 	.dashboard-header-user-role {
-		@apply text-xs text-text-muted;
+		@apply truncate text-xs text-text-muted leading-tight;
 	}
 
 	.dashboard-header-user-caret {
-		@apply hidden text-text-muted sm:block;
+		@apply hidden shrink-0 text-text-muted sm:block;
 	}
 
 	.dashboard-header-user-panel {
-		@apply absolute z-50 mt-2 w-56 rounded-lg border border-stroke bg-surface shadow-lg focus:outline-none;
+		@apply absolute z-50 mt-2 w-56 rounded-xl border border-stroke bg-surface shadow-lg focus:outline-none;
+		@apply transition-[opacity,scale] duration-150 ease-out data-closed:scale-[0.98] data-closed:opacity-0 motion-reduce:transition-none;
 		inset-inline-end: 0;
 		transform-origin: top right;
 	}
@@ -59,11 +101,11 @@
 	}
 
 	.dashboard-header-user-item {
-		@apply flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-heading transition-colors;
+		@apply flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-heading transition-colors;
 	}
 
 	.dashboard-header-user-item-active {
-		@apply bg-surface-alt;
+		@apply bg-surface-muted;
 	}
 
 	.dashboard-header-user-item-icon {

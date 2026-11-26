@@ -1,54 +1,55 @@
 @layer components {
 	.links-row {
-		@apply transition-colors hover:bg-surface-alt/50;
+		@apply transition-colors hover:bg-surface-alt/50 motion-reduce:transition-none;
 	}
 
 	.links-row-selected {
-		@apply bg-accent/5;
+		@apply bg-selected hover:bg-selected;
 	}
 
 	.links-row-cell {
-		@apply px-4 py-3 align-middle;
+		@apply px-3 py-2.5 align-middle;
 	}
 
 	.links-row-cell-select {
-		@apply w-12 pl-4 pr-2 align-middle;
+		@apply w-12 ps-4 pe-2 align-middle;
 	}
 
 	.links-row-link {
-		@apply flex items-center gap-2;
+		@apply flex min-w-0 items-center gap-1.5;
 	}
 
 	.links-row-short-link {
-		@apply font-mono text-sm font-semibold;
+		@apply min-w-0 flex-1 truncate font-mono text-sm font-medium;
 	}
 
 	.links-row-link-icon {
-		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10;
+		@apply flex size-7 shrink-0 items-center justify-center rounded-lg bg-accent/10;
 	}
 
-	.links-row-link-copy {
-		@apply text-text-muted transition-all hover:text-accent opacity-0;
-	}
-
-	.group:hover .links-row-link-copy {
-		@apply opacity-100;
+	.links-row-link-copy,
+	.links-row-action {
+		@apply grid size-7 shrink-0 cursor-pointer place-items-center rounded-md text-text-muted transition-colors hover:bg-selected hover:text-accent focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent;
 	}
 
 	.links-row-title {
-		@apply max-w-37.5 truncate text-sm font-medium text-heading;
-	}
-
-	.links-row-destination {
-		@apply max-w-xs;
+		@apply truncate text-sm font-medium text-heading;
 	}
 
 	.links-row-destination-value {
-		@apply truncate text-sm text-text-muted;
+		@apply block truncate rounded-sm text-sm text-text-muted;
+	}
+
+	a.links-row-destination-value {
+		@apply hover:text-accent hover:underline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent;
 	}
 
 	.links-row-meta {
-		@apply mt-1 flex flex-row items-start gap-1;
+		@apply flex flex-wrap items-center gap-1;
+	}
+
+	.links-row-meta:not(:empty) {
+		@apply mt-1;
 	}
 
 	.links-row-badge {
@@ -101,7 +102,7 @@
 	}
 
 	.links-row-cell-health {
-		@apply align-middle whitespace-nowrap;
+		@apply align-middle;
 	}
 
 	.links-row-health {
@@ -121,11 +122,11 @@
 	}
 
 	.links-row-health-subline {
-		@apply block text-[11px] leading-tight text-text-muted mt-0.5 text-center;
+		@apply block text-[11px] leading-tight text-text-muted mt-0.5 text-start;
 	}
 
 	.links-row-health-check {
-		@apply flex h-5 w-5 shrink-0 items-center justify-center rounded text-text-muted transition-all hover:bg-accent/10 hover:text-accent disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-accent -mt-0.5;
+		@apply flex h-5 w-5 shrink-0 items-center justify-center rounded text-text-muted transition-colors hover:bg-accent/10 hover:text-accent disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-accent -mt-0.5;
 	}
 
 	.links-row-cell-performance {
@@ -141,7 +142,7 @@
 	}
 
 	.links-row-status {
-		@apply mt-0.5 flex items-center justify-center gap-1.5;
+		@apply mx-auto mt-1 flex w-fit items-center justify-center gap-1 rounded-md bg-surface-alt px-1.5 py-0.5;
 	}
 
 	.links-row-status-dot {
@@ -157,23 +158,7 @@
 	}
 
 	.links-row-actions {
-		@apply flex items-center gap-1;
-	}
-
-	.links-row-action {
-		@apply flex h-7 w-7 items-center justify-center rounded-lg text-text-muted transition-all;
-	}
-
-	.links-row-action-qr {
-		@apply hover:bg-accent/10 hover:text-accent;
-	}
-
-	.links-row-action-stats {
-		@apply hover:bg-info/10 hover:text-info;
-	}
-
-	.links-row-action-edit {
-		@apply hover:bg-warning/10 hover:text-warning;
+		@apply flex flex-wrap items-center gap-0.5;
 	}
 
 	.links-row-action-delete {

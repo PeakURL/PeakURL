@@ -1,155 +1,184 @@
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { X, Download, Copy, Check } from "lucide-react";
-import { useState, useEffect } from "react";
+import { DialogDescription, DialogTitle } from "@headlessui/react";
+import { Check, Copy, Download, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 
-import { ReadOnlyValueBlock } from "@/components";
+import {
+	Button,
+	ReadOnlyValueBlock,
+	Skeleton,
+	useNotification,
+} from "@/components";
+import { useTemporaryState } from "@/hooks";
+import { __ } from "@/i18n";
 import { copyToClipboard } from "@/shared/browser";
 import { getShortUrl } from "@/shared/links";
-import { __ } from "@/i18n";
-import { isDocumentRtl } from "@/i18n/direction";
 
+import { Modal } from "@/components/ui";
 import type { QRCodeModalProps } from "../types";
 
+const QR_EXPORT_SIZE = 400;
+const QR_QUIET_ZONE = 4;
+
 function QRCodeModal({ open, setOpen, link }: QRCodeModalProps) {
-	const direction = isDocumentRtl() ? "rtl" : "ltr";
-	const [qrDataUrl, setQrDataUrl] = useState("");
-	const [copied, setCopied] = useState(false);
+	const [result, setResult] = useState<{
+		url: string;
+		dataUrl: string | null;
+	}>();
+	const [attempt, setAttempt] = useState(0);
+	const [copiedUrl, setCopiedUrl] = useTemporaryState("");
+	const notification = useNotification();
 	const shortUrl = link ? getShortUrl(link) : "";
+	const current = result?.url === shortUrl ? result : undefined;
+	const qrDataUrl = current?.dataUrl;
+	const generationFailed = !shortUrl || current?.dataUrl === null;
+	const copied = Boolean(shortUrl) && copiedUrl === shortUrl;
 
 	useEffect(() => {
-		if (link && open && shortUrl) {
-			QRCode.toDataURL(
-				shortUrl,
-				{
-					width: 400,
-					margin: 2,
-					color: {
-						dark: "#000000",
-						light: "#FFFFFF",
-					},
-				},
-				(err: Error | null | undefined, url: string) => {
-					if (err) {
-						console.error("QR Code generation error:", err);
-						return;
-					}
-					setQrDataUrl(url);
-				}
-			);
-		}
-	}, [link, open, shortUrl]);
+		if (!open || !shortUrl) return;
 
-	const handleDownload = () => {
-		if (!qrDataUrl) return;
+		let cancelled = false;
+		void QRCode.toDataURL(shortUrl, {
+			width: QR_EXPORT_SIZE,
+			margin: QR_QUIET_ZONE,
+		})
+			.then((dataUrl) => {
+				if (!cancelled) setResult({ url: shortUrl, dataUrl });
+			})
+			.catch(() => {
+				if (!cancelled) setResult({ url: shortUrl, dataUrl: null });
+			});
 
-		const downloadLink = document.createElement("a");
-		downloadLink.href = qrDataUrl;
-		downloadLink.download = `qr-code-${link?.alias || link?.shortCode || "download"}.png`;
-		document.body.appendChild(downloadLink);
-		downloadLink.click();
-		document.body.removeChild(downloadLink);
+		return () => {
+			cancelled = true;
+		};
+	}, [open, shortUrl, attempt]);
+
+	const close = () => {
+		setOpen(false);
+		setCopiedUrl("", 0);
 	};
 
-	const handleCopyUrl = async () => {
+	const download = () => {
+		if (!qrDataUrl) return;
+		const anchor = document.createElement("a");
+		anchor.href = qrDataUrl;
+		anchor.download = `qr-code-${link?.alias || link?.shortCode || "download"}.png`;
+		anchor.click();
+	};
+
+	const copy = async () => {
 		try {
 			await copyToClipboard(shortUrl);
-			setCopied(true);
-			setTimeout(() => setCopied(false), 2000);
-		} catch (err) {
-			console.error("Failed to copy URL:", err);
+			setCopiedUrl(shortUrl, 2000);
+		} catch {
+			notification.error(__("Could not copy the short URL."));
 		}
 	};
 
 	if (!link) return null;
 
 	return (
-		<Dialog open={open} onClose={setOpen} className="relative z-50">
-			<div className="dialog-backdrop" aria-hidden="true" />
-
-			<div className="links-modal-shell">
-				<DialogPanel
-					dir={direction}
-					className="links-modal-panel links-modal-panel-medium"
+		<Modal
+			isOpen={open}
+			onClose={close}
+			panelClassName="links-modal-panel links-modal-panel-medium"
+		>
+			<div className="links-modal-header">
+				<div className="min-w-0 space-y-1">
+					<DialogTitle className="links-modal-title">
+						{__("QR Code")}
+					</DialogTitle>
+					<DialogDescription className="text-sm text-text-muted">
+						{__("Scan the code to open this short link.")}
+					</DialogDescription>
+				</div>
+				<button
+					type="button"
+					onClick={close}
+					className="links-modal-close"
+					aria-label={__("Close")}
 				>
-					{/* Header */}
-					<div className="links-modal-header">
-						<DialogTitle className="links-modal-title">
-							{__("QR Code")}
-						</DialogTitle>
-						<button
-							onClick={() => setOpen(false)}
-							className="links-modal-close"
-						>
-							<X className="links-modal-close-icon" />
-						</button>
-					</div>
+					<X className="links-modal-close-icon" aria-hidden="true" />
+				</button>
+			</div>
 
-					{/* Content */}
-					<div className="links-modal-content">
-						{/* QR Code Display */}
-						<div className="links-qr-modal-code-wrap">
-							{qrDataUrl ? (
-								<img
-									src={qrDataUrl}
-									alt="QR Code"
-									width={256}
-									height={256}
-									loading="lazy"
-									className="links-qr-modal-code"
-								/>
-							) : (
-								<div className="links-qr-modal-loading">
-									<div className="links-qr-modal-spinner"></div>
-								</div>
+			<div className="links-modal-content">
+				<div className="links-qr-modal-preview">
+					{qrDataUrl ? (
+						<img
+							src={qrDataUrl}
+							alt={__("QR Code")}
+							width={256}
+							height={256}
+							className="links-qr-modal-code"
+						/>
+					) : generationFailed ? (
+						<div className="links-qr-modal-error">
+							<p role="status">
+								{__("The QR code could not be generated.")}
+							</p>
+							{shortUrl && (
+								<Button
+									size="sm"
+									variant="secondary"
+									onClick={() => {
+										setResult(undefined);
+										setAttempt((value) => value + 1);
+									}}
+								>
+									{__("Try again")}
+								</Button>
 							)}
 						</div>
-
-						{/* Link Info */}
-						<div className="links-qr-modal-summary">
-							<p className="links-qr-modal-summary-label">
-								{__("Short URL")}
-							</p>
-							<ReadOnlyValueBlock
-								value={shortUrl}
-								className="links-readonly-reset"
-								valueClassName="text-accent"
+					) : (
+						<div
+							className="links-qr-modal-placeholder"
+							role="status"
+						>
+							<Skeleton
+								className="size-full"
+								aria-hidden="true"
 							/>
+							<span className="sr-only">
+								{__("Generating QR code…")}
+							</span>
 						</div>
+					)}
+				</div>
 
-						{/* Action Buttons */}
-						<div className="links-qr-modal-actions">
-							<button
-								onClick={handleDownload}
-								disabled={!qrDataUrl}
-								className="links-modal-button links-modal-button-primary"
-							>
-								<span className="links-modal-button-content">
-									<Download className="links-modal-button-icon" />
-									{__("Download")}
-								</span>
-							</button>
-							<button
-								onClick={handleCopyUrl}
-								className="links-modal-button links-modal-button-secondary"
-							>
-								{copied ? (
-									<span className="links-modal-button-content">
-										<Check className="links-modal-button-icon links-qr-modal-copy-success" />
-										{__("Copied!")}
-									</span>
-								) : (
-									<span className="links-modal-button-content">
-										<Copy className="links-modal-button-icon" />
-										{__("Copy")}
-									</span>
-								)}
-							</button>
-						</div>
-					</div>
-				</DialogPanel>
+				<div className="links-qr-modal-summary">
+					<p className="links-qr-modal-summary-label">
+						{__("Short URL")}
+					</p>
+					<ReadOnlyValueBlock
+						value={shortUrl}
+						className="links-readonly-reset"
+						valueClassName="text-accent"
+					/>
+				</div>
+
+				<div className="links-qr-modal-actions">
+					<Button
+						size="sm"
+						icon={Download}
+						disabled={!qrDataUrl}
+						onClick={download}
+					>
+						{__("Download")}
+					</Button>
+					<Button
+						size="sm"
+						variant="secondary"
+						icon={copied ? Check : Copy}
+						disabled={!shortUrl}
+						onClick={copy}
+					>
+						{copied ? __("Copied!") : __("Copy")}
+					</Button>
+				</div>
 			</div>
-		</Dialog>
+		</Modal>
 	);
 }
 

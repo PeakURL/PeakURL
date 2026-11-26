@@ -1,10 +1,10 @@
 @layer components {
 	.links-stat-cards {
-		@apply grid grid-cols-2 gap-2.5 sm:grid-cols-4;
+		@apply grid grid-cols-2 gap-2.5;
 	}
 
 	.links-stat-card {
-		@apply rounded-lg border border-stroke bg-surface-alt p-2.5 transition-all duration-200 hover:border-accent/30 hover:shadow-md;
+		@apply min-w-0 rounded-lg border border-stroke bg-surface-alt p-3;
 	}
 
 	.links-stat-card-row {
@@ -12,11 +12,7 @@
 	}
 
 	.links-stat-card-icon {
-		@apply flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-transform duration-200;
-	}
-
-	.links-stat-card:hover .links-stat-card-icon {
-		transform: scale(1.1);
+		@apply flex h-7 w-7 shrink-0 items-center justify-center rounded-lg;
 	}
 
 	.links-stat-card-label {
@@ -24,6 +20,12 @@
 	}
 
 	.links-stat-card-value {
-		@apply text-lg font-bold text-heading;
+		@apply text-lg font-semibold tabular-nums text-heading;
+	}
+
+	@container link-analytics (min-width: 42rem) {
+		.links-stat-cards {
+			@apply grid-cols-4;
+		}
 	}
 }

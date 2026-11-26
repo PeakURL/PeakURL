@@ -1,23 +1,20 @@
 @layer components {
 	.page-header {
-		@apply flex min-w-0 flex-col gap-4 border-b border-stroke/60 pb-5 sm:flex-row sm:items-center sm:justify-between;
+		@apply flex min-w-0 flex-col gap-4 pb-1 sm:flex-row sm:items-center sm:justify-between;
 		text-align: start;
 	}
 	.page-header-copy {
-		@apply flex min-w-0 flex-1 items-start gap-3;
+		@apply flex min-w-0 flex-1 items-start;
 		min-width: min(100%, 20rem);
-	}
-	.page-header-icon {
-		@apply mt-1 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-selected-border bg-selected text-accent;
 	}
 	.page-header-text {
 		@apply min-w-0;
 	}
 	.page-header-title {
-		@apply text-2xl font-semibold leading-8 tracking-tight text-heading;
+		@apply text-[1.75rem] font-semibold leading-[1.2] tracking-tight text-heading sm:text-[1.875rem];
 	}
 	.page-header-description {
-		@apply mt-1 max-w-3xl text-sm leading-6 text-text-muted;
+		@apply mt-1.5 max-w-3xl text-sm leading-6 text-text-muted;
 	}
 	.page-header-actions {
 		@apply flex w-full min-w-0 max-w-full shrink-0 flex-wrap items-center gap-2 sm:w-auto sm:justify-end sm:self-center;
@@ -32,7 +29,7 @@
 		@apply mt-2;
 	}
 	.page-header-docs-link {
-		@apply inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 underline-offset-4 transition-colors hover:text-blue-700 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent dark:text-blue-400 dark:hover:text-blue-300;
+		@apply inline-flex items-center gap-1.5 text-sm font-medium text-accent underline-offset-4 transition-colors hover:text-action-hover hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
 	.page-header-docs-link > svg {
 		@apply text-accent shrink-0;

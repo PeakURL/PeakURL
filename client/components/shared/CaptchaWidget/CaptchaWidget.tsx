@@ -8,8 +8,8 @@ import {
 import { getPeakURLData } from "@/data";
 import { useTheme } from "@/providers/ThemeProvider";
 
-// Flexible Turnstile widgets have a 300px minimum; narrower forms use compact mode.
-const TURNSTILE_MIN_FLEXIBLE_WIDTH = 300;
+// The regular Turnstile iframe is fixed at 300px.
+const TURNSTILE_NORMAL_WIDTH = 300;
 
 export interface CaptchaWidgetRef {
 	/**
@@ -98,7 +98,7 @@ export const CaptchaWidget = forwardRef<CaptchaWidgetRef>((_, ref) => {
 		let widgetRevision = 0;
 		const renderWidget = () => {
 			const size =
-				container.clientWidth < TURNSTILE_MIN_FLEXIBLE_WIDTH
+				container.clientWidth < TURNSTILE_NORMAL_WIDTH
 					? "compact"
 					: "normal";
 			if (size === currentSize) return;

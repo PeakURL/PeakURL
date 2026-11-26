@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 import { Link, useLocation } from "react-router";
 import {
-	Wrench,
 	ChevronDown,
 	X,
 	Info,
@@ -14,147 +14,21 @@ import {
 	PanelRightOpen,
 } from "lucide-react";
 
-import { dashboardPageIcons } from "@/pages/dashboard/navigation";
+import type { NavigationItem } from "@/pages/dashboard/navigation";
+import {
+	getDashboardBasePath,
+	getNavigationGroups,
+} from "@/pages/dashboard/navigation";
 import { useGetUrlsQuery } from "@/state/slices/api";
 import { useGetPluginExtensionsQuery } from "@/state/slices/api/system";
-import { useAdminAccess } from "@/hooks";
+import { useActiveIndicator, useAdminAccess } from "@/hooks";
 import { Logo } from "@/components";
 import { isDocumentRtl } from "@/i18n/direction";
 import { __ } from "@/i18n";
 import { SPONSOR_URL } from "@/constants";
 import { cn, formatCount } from "@/shared/formatting";
-import type { PluginPageDescriptor } from "@/api/types/plugins";
 
-import type { NavItem, SidebarProps } from "../types";
-
-const getNavItems = (
-	basePath = "/dashboard",
-	canManageUsers = false,
-	pluginPages: readonly PluginPageDescriptor[] = [],
-	canManagePlugins = false
-): NavItem[] => {
-	const base =
-		basePath === "/"
-			? ""
-			: basePath.endsWith("/") && basePath.length > 1
-				? basePath.slice(0, -1)
-				: basePath || "/dashboard";
-	const navigation: NavItem[] = [
-		{
-			name: __("Overview"),
-			href: base || "/",
-			icon: dashboardPageIcons.overview,
-		},
-		{
-			name: __("Links"),
-			href: `${base || ""}/links`,
-			icon: dashboardPageIcons.links,
-		},
-		{
-			name: __("Users"),
-			href: `${base || ""}/users`,
-			icon: dashboardPageIcons.users,
-			adminOnly: true,
-		},
-		{
-			name: __("Plugins"),
-			href: canManagePlugins
-				? `${base || ""}/plugins`
-				: pluginPages.length > 0 && pluginPages[0]
-					? `${base || ""}/plugins/page/${pluginPages[0].pluginSlug}/${pluginPages[0].pageId}`
-					: `${base || ""}/plugins`,
-			icon: dashboardPageIcons.plugins,
-			isVisible: canManagePlugins || pluginPages.length > 0,
-			badge: __("Preview"),
-			badgeVariant: "preview",
-			children:
-				pluginPages.length > 0
-					? [
-							...(canManagePlugins
-								? [
-										{
-											name: __("Installed Plugins"),
-											href: `${base || ""}/plugins`,
-											activeBasePath: `${base || ""}/plugins`,
-										},
-										{
-											name: __("Add New"),
-											href: `${base || ""}/plugins/add`,
-										},
-									]
-								: []),
-							...pluginPages.map((page) => ({
-								name: page.menuTitle || page.title,
-								href: `${base || ""}/plugins/page/${page.pluginSlug}/${page.pageId}`,
-							})),
-						]
-					: undefined,
-		},
-		{
-			name: __("Tools"),
-			icon: Wrench,
-			adminOnly: true,
-			children: [
-				{
-					name: __("Import"),
-					href: `${base || ""}/tools/import/file`,
-					activeBasePath: `${base || ""}/tools/import`,
-					adminOnly: true,
-				},
-				{
-					name: __("Export"),
-					href: `${base || ""}/tools/export`,
-				},
-				{
-					name: __("Activity"),
-					href: `${base || ""}/activity`,
-					adminOnly: true,
-				},
-				{
-					name: __("Scheduled Jobs"),
-					href: `${base || ""}/tools/scheduled-jobs`,
-					adminOnly: true,
-				},
-				{
-					name: __("System Status"),
-					href: `${base || ""}/tools/system-status`,
-					adminOnly: true,
-				},
-			],
-		},
-		{
-			name: __("Settings"),
-			href: `${base || ""}/settings/general`,
-			activeBasePath: `${base || ""}/settings`,
-			icon: dashboardPageIcons.settings,
-		},
-	];
-
-	return navigation
-		.map((item) => {
-			if (!item.children?.length) {
-				return item;
-			}
-
-			return {
-				...item,
-				children: item.children.filter(
-					(child) => !child.adminOnly || canManageUsers
-				),
-			};
-		})
-		.filter((item) => {
-			if (item.isVisible !== undefined) {
-				return item.isVisible;
-			}
-
-			if (item.adminOnly && !canManageUsers) {
-				return false;
-			}
-
-			return !item.children || item.children.length > 0;
-		});
-};
+import type { SidebarProps } from "../types";
 
 const getSectionToggleClassName = (isActive: boolean): string =>
 	cn(
@@ -180,15 +54,11 @@ const getSubmenuClassName = (isOpen: boolean): string =>
 const getSubmenuLinkClassName = (isActive: boolean): string =>
 	cn(
 		"dashboard-sidebar-submenu-link",
-		isActive &&
-			"dashboard-sidebar-submenu-link-active navigation-active-indicator"
+		isActive && "dashboard-sidebar-submenu-link-active"
 	);
 
 const getLinkClassName = (isActive: boolean): string =>
-	cn(
-		"dashboard-sidebar-link",
-		isActive && "dashboard-sidebar-link-active navigation-active-indicator"
-	);
+	cn("dashboard-sidebar-link", isActive && "dashboard-sidebar-link-active");
 
 const getLinkIconClassName = (isActive: boolean): string =>
 	cn(
@@ -215,14 +85,116 @@ const getAboutLinkClassName = (isActive: boolean): string =>
 			"dashboard-sidebar-about-link-active navigation-active-indicator"
 	);
 
-const getSidebarTargetHref = (href: string | undefined, base: string): string =>
-	href || base || "/dashboard";
+function matchesNavigationPath(pathname: string, basePath: string | undefined) {
+	return Boolean(
+		basePath &&
+		(pathname === basePath || pathname.startsWith(`${basePath}/`))
+	);
+}
 
-const getSidebarSectionStateKey = (item: NavItem, index: number): string =>
-	item.href || item.children?.[0]?.href || `section-${index}`;
+interface SidebarSectionProps {
+	item: NavigationItem;
+	pathname: string;
+	isRail: boolean;
+	open?: boolean;
+	onOpenChange: (open: boolean) => void;
+	onNavigate: () => void;
+}
+
+function SidebarSection({
+	item,
+	pathname,
+	isRail,
+	open,
+	onOpenChange,
+	onNavigate,
+}: SidebarSectionProps) {
+	const toggleRef = useRef<HTMLButtonElement>(null);
+	const children = item.children ?? [];
+	const activeChild =
+		children.find((child) => pathname === child.href) ??
+		children.find((child) =>
+			matchesNavigationPath(pathname, child.activeBasePath ?? child.href)
+		);
+	const active =
+		Boolean(activeChild) || matchesNavigationPath(pathname, item.href);
+	const isOpen = open ?? (!isRail && active);
+	const indicatorOnToggle = active && (isRail || !isOpen || !activeChild);
+	const Icon = item.icon;
+
+	return (
+		<div className="dashboard-sidebar-section">
+			<button
+				ref={toggleRef}
+				type="button"
+				onClick={() => onOpenChange(!isOpen)}
+				aria-expanded={isOpen}
+				aria-current={indicatorOnToggle ? "location" : undefined}
+				data-sidebar-indicator-target={
+					indicatorOnToggle ? "" : undefined
+				}
+				className={getSectionToggleClassName(active)}
+				title={isRail ? item.name : undefined}
+			>
+				<Icon size={18} className={getSectionIconClassName(active)} />
+				<span className="dashboard-sidebar-section-label">
+					{item.name}
+				</span>
+				{item.badge && (
+					<span
+						className={cn(
+							getLinkBadgeClassName(active),
+							"dashboard-sidebar-link-badge-preview"
+						)}
+					>
+						{item.badge}
+					</span>
+				)}
+				<ChevronDown
+					size={16}
+					className={getSectionCaretClassName(isOpen)}
+				/>
+			</button>
+			<div className={getSubmenuClassName(isOpen)} inert={!isOpen}>
+				<div className="dashboard-sidebar-submenu-list">
+					{children.map((child) => (
+						<Link
+							key={child.href}
+							to={child.href}
+							aria-current={
+								child === activeChild ? "page" : undefined
+							}
+							data-sidebar-indicator-target={
+								child === activeChild && !isRail && isOpen
+									? ""
+									: undefined
+							}
+							className={getSubmenuLinkClassName(
+								child === activeChild
+							)}
+							onClick={() => {
+								if (isRail) onOpenChange(false);
+								onNavigate();
+							}}
+							onKeyDown={(event) => {
+								if (event.key !== "Escape") return;
+								event.preventDefault();
+								onOpenChange(false);
+								toggleRef.current?.focus();
+							}}
+						>
+							{child.name}
+						</Link>
+					))}
+				</div>
+			</div>
+		</div>
+	);
+}
 
 export const Sidebar = ({
 	basePath = "",
+	isDesktop,
 	isMobileOpen,
 	onMobileClose,
 	isCollapsed = false,
@@ -231,7 +203,9 @@ export const Sidebar = ({
 	const isRtl = isDocumentRtl();
 	const direction = isRtl ? "rtl" : "ltr";
 	const location = useLocation();
-	const pathname = location.pathname;
+	const pathname = location.pathname.replace(/\/+$/, "") || "/";
+	const closeButton = useRef<HTMLButtonElement>(null);
+	const isRail = isDesktop && isCollapsed;
 	const { data: urlsRes } = useGetUrlsQuery(undefined);
 	const { canManageUsers, canManagePlugins, hasCapability, user } =
 		useAdminAccess();
@@ -259,27 +233,29 @@ export const Sidebar = ({
 		);
 	}, [extensionsResponse?.data?.pages, hasCapability]);
 
-	const navigation = useMemo(
-		() =>
-			getNavItems(
-				basePath,
-				canManageUsers,
-				pluginPages,
-				canManagePlugins
-			),
-		[basePath, canManageUsers, pluginPages, canManagePlugins]
+	const base = getDashboardBasePath(basePath);
+	const navigation = getNavigationGroups(
+		base,
+		canManageUsers,
+		canManagePlugins,
+		pluginPages
 	);
-	const base =
-		basePath === "/"
-			? ""
-			: basePath.endsWith("/") && basePath.length > 1
-				? basePath.slice(0, -1)
-				: basePath || "";
 	const [openSections, setOpenSections] = useState<Record<string, boolean>>(
 		{}
 	);
 	const [isAboutOpen, setIsAboutOpen] = useState(false);
-	const aboutRef = useRef<HTMLDivElement | null>(null);
+	const aboutRef = useRef<HTMLDivElement>(null);
+	const desktopTrack = useRef<HTMLDivElement>(null);
+	const desktopIndicator = useRef<HTMLSpanElement>(null);
+	const mobileTrack = useRef<HTMLDivElement>(null);
+	const mobileIndicator = useRef<HTMLSpanElement>(null);
+	const navigationTrack = isDesktop ? desktopTrack : mobileTrack;
+	const activeIndicator = isDesktop ? desktopIndicator : mobileIndicator;
+	useActiveIndicator(navigationTrack, activeIndicator, {
+		duration: 0.26,
+		enabled: isDesktop || isMobileOpen,
+		selector: "[data-sidebar-indicator-target]",
+	});
 
 	// Close when clicking anywhere outside the about panel
 	useEffect(() => {
@@ -297,344 +273,281 @@ export const Sidebar = ({
 		return () => document.removeEventListener("mousedown", handler);
 	}, [isAboutOpen]);
 
-	const getSectionBasePath = (href?: string) =>
-		href ? href.replace(/\/[^/]+$/, "") : "";
+	const Panel = isDesktop ? "aside" : DialogPanel;
+	const sidebar = (
+		<Panel
+			{...(!isDesktop && { as: "aside" as const })}
+			inert={!isDesktop && !isMobileOpen}
+			className={cn(
+				"dashboard-sidebar",
+				isRtl && "dashboard-sidebar-rtl",
+				isMobileOpen && "dashboard-sidebar-open",
+				isCollapsed && "dashboard-sidebar-collapsed"
+			)}
+		>
+			<div className="dashboard-sidebar-header">
+				<Logo to={base} size="lg" className="dashboard-sidebar-logo" />
+				{onToggleCollapse && (
+					<button
+						type="button"
+						onClick={onToggleCollapse}
+						className="dashboard-sidebar-collapse-button"
+						dir={direction}
+						aria-expanded={!isCollapsed}
+						title={
+							isCollapsed
+								? __("Expand sidebar")
+								: __("Collapse sidebar")
+						}
+						aria-label={
+							isCollapsed
+								? __("Expand sidebar")
+								: __("Collapse sidebar")
+						}
+					>
+						<CollapseIcon size={17} strokeWidth={1.9} />
+					</button>
+				)}
+				<button
+					ref={closeButton}
+					type="button"
+					onClick={onMobileClose}
+					aria-label={__("Close sidebar")}
+					className="dashboard-sidebar-close"
+				>
+					<X size={20} />
+				</button>
+			</div>
+
+			<nav className="dashboard-sidebar-nav" aria-label={__("Dashboard")}>
+				<div ref={navigationTrack} className="dashboard-sidebar-list">
+					<span
+						ref={activeIndicator}
+						className="dashboard-sidebar-indicator"
+						aria-hidden="true"
+					/>
+					{navigation.map((group) => {
+						const Group = group.name ? "section" : "div";
+						return (
+							<Group
+								key={group.id}
+								aria-label={group.name}
+								className="dashboard-sidebar-group"
+							>
+								{group.name && (
+									<p
+										className="dashboard-sidebar-group-label"
+										aria-hidden="true"
+									>
+										{group.name}
+									</p>
+								)}
+								{group.items.map((item) => {
+									const Icon = item.icon;
+									const itemHref = item.href ?? base;
+									if (item.children?.length) {
+										return (
+											<SidebarSection
+												key={item.id}
+												item={item}
+												pathname={pathname}
+												isRail={isRail}
+												open={openSections[item.id]}
+												onOpenChange={(open) =>
+													setOpenSections(
+														(current) => ({
+															...current,
+															[item.id]: open,
+														})
+													)
+												}
+												onNavigate={onMobileClose}
+											/>
+										);
+									}
+
+									const active =
+										pathname === itemHref ||
+										matchesNavigationPath(
+											pathname,
+											item.activeBasePath
+										) ||
+										(itemHref !== base &&
+											matchesNavigationPath(
+												pathname,
+												itemHref
+											));
+
+									return (
+										<Link
+											key={itemHref}
+											to={itemHref}
+											onClick={onMobileClose}
+											className={getLinkClassName(active)}
+											data-sidebar-indicator-target={
+												active ? "" : undefined
+											}
+											aria-current={
+												active ? "page" : undefined
+											}
+											title={
+												isRail ? item.name : undefined
+											}
+										>
+											<Icon
+												size={18}
+												className={getLinkIconClassName(
+													active
+												)}
+											/>
+											<span className="dashboard-sidebar-link-label">
+												{item.name}
+											</span>
+											{item.id === "links" &&
+												totalLinks > 0 && (
+													<span
+														className={getLinkBadgeClassName(
+															active
+														)}
+													>
+														{formatCount(
+															totalLinks
+														)}
+													</span>
+												)}
+											{item.badge && (
+												<span
+													className={cn(
+														getLinkBadgeClassName(
+															active
+														),
+														"dashboard-sidebar-link-badge-preview"
+													)}
+												>
+													{item.badge}
+												</span>
+											)}
+										</Link>
+									);
+								})}
+							</Group>
+						);
+					})}
+				</div>
+			</nav>
+
+			<div ref={aboutRef} className="dashboard-sidebar-footer">
+				<div
+					className={getAboutPanelClassName(isAboutOpen)}
+					inert={!isAboutOpen}
+				>
+					<div className="dashboard-sidebar-about-panel-list">
+						<Link
+							to={`${base}/about`}
+							aria-current={
+								pathname === `${base}/about`
+									? "page"
+									: undefined
+							}
+							onClick={onMobileClose}
+							className={getAboutLinkClassName(
+								pathname === `${base}/about`
+							)}
+						>
+							<Info
+								size={15}
+								className="dashboard-sidebar-about-link-icon"
+							/>
+							<span className="dashboard-sidebar-about-link-label">
+								{__("About PeakURL")}
+							</span>
+						</Link>
+						<a
+							href={SPONSOR_URL}
+							target="_blank"
+							rel="noreferrer"
+							className="dashboard-sidebar-about-link"
+							dir={direction}
+						>
+							<Heart
+								size={15}
+								className="dashboard-sidebar-about-link-icon"
+							/>
+							<span className="dashboard-sidebar-about-link-label">
+								{__("Sponsor")}
+							</span>
+							<ExternalLink
+								size={12}
+								className="dashboard-sidebar-about-link-meta"
+							/>
+						</a>
+						<a
+							href="https://buymeacoffee.com/PeakURL"
+							target="_blank"
+							rel="noreferrer"
+							className="dashboard-sidebar-about-link"
+							dir={direction}
+						>
+							<Coffee
+								size={15}
+								className="dashboard-sidebar-about-link-icon"
+							/>
+							<span className="dashboard-sidebar-about-link-label">
+								{__("Buy Me a Coffee")}
+							</span>
+							<ExternalLink
+								size={12}
+								className="dashboard-sidebar-about-link-meta"
+							/>
+						</a>
+					</div>
+				</div>
+
+				<button
+					type="button"
+					onClick={() => setIsAboutOpen((prev) => !prev)}
+					aria-expanded={isAboutOpen}
+					className={getSectionToggleClassName(isAboutOpen)}
+					dir={direction}
+					title={isRail ? __("About PeakURL") : undefined}
+				>
+					<Info
+						size={18}
+						className={getSectionIconClassName(isAboutOpen)}
+					/>
+					<span className="dashboard-sidebar-section-label">
+						{__("About PeakURL")}
+					</span>
+					<ChevronDown
+						size={16}
+						className={getSectionCaretClassName(isAboutOpen)}
+					/>
+				</button>
+			</div>
+		</Panel>
+	);
+	if (isDesktop) return sidebar;
 
 	return (
-		<>
-			<button
-				type="button"
-				tabIndex={-1}
-				aria-label={__("Close sidebar")}
+		<Dialog
+			static
+			open={isMobileOpen}
+			onClose={onMobileClose}
+			initialFocus={closeButton}
+			aria-label={__("Dashboard")}
+			aria-hidden={!isMobileOpen || undefined}
+			className="drawer-dialog"
+		>
+			<DialogBackdrop
 				className={cn(
 					"dashboard-sidebar-overlay",
 					isMobileOpen
 						? "dashboard-sidebar-overlay-open"
 						: "dashboard-sidebar-overlay-closed"
 				)}
-				onClick={onMobileClose}
 			/>
-
-			<aside
-				className={cn(
-					"dashboard-sidebar",
-					isRtl && "dashboard-sidebar-rtl",
-					isMobileOpen && "dashboard-sidebar-open",
-					isCollapsed && "dashboard-sidebar-collapsed"
-				)}
-			>
-				<div className="dashboard-sidebar-header">
-					<Logo
-						to={base || "/dashboard"}
-						size="lg"
-						className="dashboard-sidebar-logo"
-					/>
-					<button
-						onClick={onMobileClose}
-						aria-label={__("Close sidebar")}
-						className="dashboard-sidebar-close"
-					>
-						<X size={20} />
-					</button>
-				</div>
-
-				<nav className="dashboard-sidebar-nav">
-					<div className="dashboard-sidebar-list">
-						{navigation.map((item, index) => {
-							const IconComponent = item.icon;
-							const childHrefBase = getSectionBasePath(
-								item.children?.[0]?.href
-							);
-							const itemHref = getSidebarTargetHref(
-								item.href,
-								base
-							);
-							const sectionStateKey = getSidebarSectionStateKey(
-								item,
-								index
-							);
-							const isChildActive = item.children?.some(
-								(child) =>
-									pathname === child.href ||
-									(Boolean(child.activeBasePath) &&
-										(pathname === child.activeBasePath ||
-											pathname.startsWith(
-												`${child.activeBasePath}/`
-											))) ||
-									pathname.startsWith(`${child.href}/`)
-							);
-							const isSectionActive =
-								Boolean(isChildActive) ||
-								(Boolean(childHrefBase) &&
-									(pathname === childHrefBase ||
-										pathname.startsWith(
-											`${childHrefBase}/`
-										)));
-							const isOpen =
-								isSectionActive ||
-								Boolean(openSections[sectionStateKey]);
-							const activeBasePath = item.activeBasePath;
-							const isActive =
-								pathname === itemHref ||
-								(Boolean(activeBasePath) &&
-									(pathname === activeBasePath ||
-										pathname.startsWith(
-											`${activeBasePath}/`
-										))) ||
-								(itemHref !== base &&
-									pathname.startsWith(`${itemHref}/`));
-
-							if (item.children?.length) {
-								return (
-									<div
-										key={sectionStateKey}
-										className="dashboard-sidebar-section"
-									>
-										<button
-											type="button"
-											onClick={() =>
-												setOpenSections((current) => ({
-													...current,
-													[sectionStateKey]:
-														!current[
-															sectionStateKey
-														],
-												}))
-											}
-											aria-expanded={isOpen}
-											className={getSectionToggleClassName(
-												isSectionActive
-											)}
-											dir={direction}
-											title={
-												isCollapsed
-													? item.name
-													: undefined
-											}
-										>
-											<IconComponent
-												size={18}
-												className={getSectionIconClassName(
-													isSectionActive
-												)}
-											/>
-											<span className="dashboard-sidebar-section-label">
-												{item.name}
-											</span>
-											<ChevronDown
-												size={16}
-												className={getSectionCaretClassName(
-													isOpen
-												)}
-											/>
-										</button>
-
-										<div
-											className={getSubmenuClassName(
-												isOpen
-											)}
-										>
-											<div className="dashboard-sidebar-submenu-list">
-												{item.children.map((child) => {
-													const isChildLinkActive =
-														pathname ===
-															child.href ||
-														(Boolean(
-															child.activeBasePath
-														) &&
-															(pathname ===
-																child.activeBasePath ||
-																pathname.startsWith(
-																	`${child.activeBasePath}/`
-																))) ||
-														pathname.startsWith(
-															`${child.href}/`
-														);
-
-													return (
-														<Link
-															key={child.href}
-															to={child.href}
-															aria-current={
-																isChildLinkActive
-																	? "page"
-																	: undefined
-															}
-															onClick={
-																onMobileClose
-															}
-															className={getSubmenuLinkClassName(
-																isChildLinkActive
-															)}
-														>
-															{child.name}
-														</Link>
-													);
-												})}
-											</div>
-										</div>
-									</div>
-								);
-							}
-
-							return (
-								<Link
-									key={itemHref}
-									to={itemHref}
-									onClick={onMobileClose}
-									className={getLinkClassName(isActive)}
-									aria-current={isActive ? "page" : undefined}
-									dir={direction}
-									title={isCollapsed ? item.name : undefined}
-								>
-									<IconComponent
-										size={18}
-										className={getLinkIconClassName(
-											isActive
-										)}
-									/>
-									<span className="dashboard-sidebar-link-label">
-										{item.name}
-									</span>
-									{item.name === __("Links") &&
-										totalLinks > 0 && (
-											<span
-												className={getLinkBadgeClassName(
-													isActive
-												)}
-											>
-												{formatCount(totalLinks)}
-											</span>
-										)}
-									{item.badge && (
-										<span
-											className={cn(
-												getLinkBadgeClassName(isActive),
-												item.badgeVariant ===
-													"preview" &&
-													"dashboard-sidebar-link-badge-preview"
-											)}
-										>
-											{item.badge}
-										</span>
-									)}
-								</Link>
-							);
-						})}
-
-						{onToggleCollapse && (
-							<button
-								type="button"
-								onClick={onToggleCollapse}
-								className="dashboard-sidebar-toggle-button"
-								dir={direction}
-								title={
-									isCollapsed
-										? __("Expand Menu")
-										: __("Collapse Menu")
-								}
-								aria-label={
-									isCollapsed
-										? __("Expand Menu")
-										: __("Collapse Menu")
-								}
-							>
-								<CollapseIcon
-									size={16}
-									className="dashboard-sidebar-toggle-icon"
-								/>
-								<span className="dashboard-sidebar-toggle-label">
-									{isCollapsed
-										? __("Expand Menu")
-										: __("Collapse Menu")}
-								</span>
-							</button>
-						)}
-					</div>
-				</nav>
-
-				<div ref={aboutRef} className="dashboard-sidebar-footer">
-					<div className={getAboutPanelClassName(isAboutOpen)}>
-						<div className="dashboard-sidebar-about-panel-list">
-							<Link
-								to={`${base || "/dashboard"}/about`}
-								onClick={onMobileClose}
-								className={getAboutLinkClassName(
-									pathname === `${base || "/dashboard"}/about`
-								)}
-							>
-								<Info
-									size={15}
-									className="dashboard-sidebar-about-link-icon"
-								/>
-								<span className="dashboard-sidebar-about-link-label">
-									{__("About PeakURL")}
-								</span>
-							</Link>
-							<a
-								href={SPONSOR_URL}
-								target="_blank"
-								rel="noreferrer"
-								className="dashboard-sidebar-about-link"
-								dir={direction}
-							>
-								<Heart
-									size={15}
-									className="dashboard-sidebar-about-link-icon"
-								/>
-								<span className="dashboard-sidebar-about-link-label">
-									{__("Sponsor")}
-								</span>
-								<ExternalLink
-									size={12}
-									className="dashboard-sidebar-about-link-meta"
-								/>
-							</a>
-							<a
-								href="https://buymeacoffee.com/PeakURL"
-								target="_blank"
-								rel="noreferrer"
-								className="dashboard-sidebar-about-link"
-								dir={direction}
-							>
-								<Coffee
-									size={15}
-									className="dashboard-sidebar-about-link-icon"
-								/>
-								<span className="dashboard-sidebar-about-link-label">
-									{__("Buy Me a Coffee")}
-								</span>
-								<ExternalLink
-									size={12}
-									className="dashboard-sidebar-about-link-meta"
-								/>
-							</a>
-						</div>
-					</div>
-
-					<button
-						type="button"
-						onClick={() => setIsAboutOpen((prev) => !prev)}
-						aria-expanded={isAboutOpen}
-						className={getSectionToggleClassName(isAboutOpen)}
-						dir={direction}
-						title={isCollapsed ? __("About PeakURL") : undefined}
-					>
-						<Info
-							size={18}
-							className={getSectionIconClassName(isAboutOpen)}
-						/>
-						<span className="dashboard-sidebar-section-label">
-							{__("About PeakURL")}
-						</span>
-						<ChevronDown
-							size={16}
-							className={getSectionCaretClassName(isAboutOpen)}
-						/>
-					</button>
-				</div>
-			</aside>
-		</>
+			{sidebar}
+		</Dialog>
 	);
 };
 

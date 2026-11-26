@@ -18,10 +18,7 @@ import {
 
 import { Button, ConfirmDialog, Modal, ReadOnlyValueBlock } from "@/components";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
-import {
-	DocumentationLink,
-	TabHeader,
-} from "@/pages/dashboard/settings/components/TabHeader";
+import { DocumentationLink } from "@/pages/dashboard/settings/components/DocumentationLink";
 import {
 	useDeleteWebhookMutation,
 	useGetWebhookEventsQuery,
@@ -295,21 +292,10 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 
 	return (
 		<div className="integrations-tab">
-			<section className="settings-section">
-				<TabHeader
-					icon={WebhookIcon}
-					title={__("Integrations")}
-					description={__(
-						"Connect PeakURL to your automations with outbound webhooks for link activity."
-					)}
-				/>
-			</section>
 			<section dir={direction} className="settings-section">
 				<div className="settings-section-header settings-section-heading">
 					<div className="settings-section-copy">
-						<SectionTitle icon={WebhookIcon}>
-							{__("Webhooks")}
-						</SectionTitle>
+						<SectionTitle>{__("Webhooks")}</SectionTitle>
 						<p className="settings-group-description">
 							{__(
 								"PeakURL sends HMAC-SHA256 signed POST requests to your endpoint when selected link events occur."

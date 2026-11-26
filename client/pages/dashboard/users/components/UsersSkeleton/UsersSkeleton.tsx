@@ -1,28 +1,11 @@
 import { Skeleton } from "@/components";
 
-export const UsersOverviewSkeleton = () => (
-	<div className="users-page-overview-grid">
-		{Array.from({ length: 4 }).map((_, index) => (
-			<div key={index} className="users-page-overview-item">
-				<div className="users-page-overview-header">
-					<div className="users-page-overview-copy">
-						<Skeleton className="users-skeleton-stat-label" />
-						<Skeleton className="users-skeleton-stat-value" />
-					</div>
-					<Skeleton className="users-skeleton-stat-icon" />
-				</div>
-				<Skeleton className="users-skeleton-stat-note" />
-			</div>
-		))}
-	</div>
-);
-
 const UserRowSkeleton = () => (
-	<tr className="users-page-table-row">
+	<tr className="users-page-table-row" aria-hidden="true">
 		<td className="users-page-table-cell users-page-col-user">
-			<div className="users-skeleton-user">
-				<Skeleton className="users-skeleton-user-avatar" />
-				<div className="users-skeleton-user-copy">
+			<div className="users-page-user">
+				<Skeleton className="avatar-md users-page-avatar" />
+				<div className="users-page-user-copy">
 					<Skeleton className="users-skeleton-user-name" />
 					<Skeleton className="users-skeleton-user-email" />
 				</div>
@@ -36,9 +19,9 @@ const UserRowSkeleton = () => (
 			<Skeleton className="users-skeleton-date-sub" />
 		</td>
 		<td className="users-page-table-cell-actions users-page-col-actions">
-			<div className="users-skeleton-actions">
-				<Skeleton className="users-skeleton-action" />
-				<Skeleton className="users-skeleton-action" />
+			<div className="users-page-actions">
+				<Skeleton className="users-skeleton-action users-page-action-button" />
+				<Skeleton className="users-skeleton-action users-page-action-button" />
 			</div>
 		</td>
 	</tr>
@@ -55,5 +38,3 @@ export const UsersTableSkeletonRows = ({
 		<UserRowSkeleton key={index} />
 	));
 };
-
-export default UsersTableSkeletonRows;

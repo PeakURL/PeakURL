@@ -1,6 +1,9 @@
 @layer components {
 	.settings-tab-page {
-		@apply flex min-w-0 w-full flex-col rounded-xl border border-stroke bg-surface p-4 sm:p-6;
-		container: settings-content / inline-size;
+		@apply flex w-full min-w-0 flex-col gap-5 sm:gap-6;
+	}
+
+	.settings-page-actions {
+		@apply flex flex-wrap items-center gap-2;
 	}
 }

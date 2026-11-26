@@ -6,62 +6,69 @@
 		@apply block shrink-0;
 	}
 	.logo-name {
-		@apply overflow-hidden whitespace-nowrap font-semibold tracking-tight transition-[max-width,opacity] duration-200;
+		@apply inline-flex items-center overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-200;
 		max-width: 200px;
+	}
+	.logo-wordmark-svg {
+		@apply block shrink-0 w-auto;
 	}
 	.logo-light {
 		@apply text-heading;
 	}
 	.logo-dark {
+		--logo-foreground: #83dccc;
+		--logo-dot: #ffffff;
 		@apply text-white;
 	}
 	.logo-sm .logo-mark {
-		@apply h-7 w-7;
+		@apply h-6 w-6;
 	}
-	.logo-sm .logo-name {
-		@apply text-sm;
+	.logo-sm .logo-wordmark-svg {
+		@apply h-3.5;
 	}
 	.logo-md .logo-mark {
-		@apply h-8 w-8;
+		@apply h-7 w-7;
 	}
-	.logo-md .logo-name {
-		@apply text-base;
+	.logo-md .logo-wordmark-svg {
+		@apply h-4;
 	}
 	.logo-lg .logo-mark {
-		@apply h-10 w-10;
+		@apply h-8 w-8;
 	}
-	.logo-lg .logo-name {
-		font-size: 17px;
+	.logo-lg .logo-wordmark-svg {
+		height: 17px;
 	}
 	.logo-xl .logo-mark {
-		@apply h-20 w-20 sm:h-24 sm:w-24;
+		@apply h-18 w-18 sm:h-22 sm:w-22;
 	}
-	.logo-xl .logo-name {
-		@apply text-3xl;
+	.logo-xl .logo-wordmark-svg {
+		@apply h-7;
 	}
 }
 
 /* Compression motion follows the canonical brand animated SVG. */
 @media (prefers-reduced-motion: no-preference) {
-	[data-compression-mark][data-motion="loop"] .compression-middle {
-		animation: compression-middle var(--compression-duration, 4s)
-			cubic-bezier(0.4, 0, 0.2, 1) var(--compression-delay, 0s) infinite;
+	[data-logo-icon][data-motion="loop"] .logo-icon-middle {
+		animation: logo-icon-middle var(--logo-animation-duration, 4s)
+			cubic-bezier(0.4, 0, 0.2, 1) var(--logo-animation-delay, 0s)
+			infinite;
 	}
 
-	[data-compression-mark][data-motion="loop"] .compression-bottom {
-		animation: compression-bottom var(--compression-duration, 4s)
-			cubic-bezier(0.4, 0, 0.2, 1) var(--compression-delay, 0s) infinite;
+	[data-logo-icon][data-motion="loop"] .logo-icon-bottom {
+		animation: logo-icon-bottom var(--logo-animation-duration, 4s)
+			cubic-bezier(0.4, 0, 0.2, 1) var(--logo-animation-delay, 0s)
+			infinite;
 	}
 
-	[data-compression-mark][data-motion="loop"] .compression-dot {
+	[data-logo-icon][data-motion="loop"] .logo-icon-dot {
 		transform-box: fill-box;
 		transform-origin: center;
-		animation: compression-dot var(--compression-duration, 4s) ease
-			var(--compression-delay, 0s) infinite;
+		animation: logo-icon-dot var(--logo-animation-duration, 4s) ease
+			var(--logo-animation-delay, 0s) infinite;
 	}
 }
 
-@keyframes compression-middle {
+@keyframes logo-icon-middle {
 	0%,
 	12%,
 	100% {
@@ -73,7 +80,7 @@
 	}
 }
 
-@keyframes compression-bottom {
+@keyframes logo-icon-bottom {
 	0%,
 	12%,
 	100% {
@@ -85,7 +92,7 @@
 	}
 }
 
-@keyframes compression-dot {
+@keyframes logo-icon-dot {
 	0%,
 	40%,
 	85%,

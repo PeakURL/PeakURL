@@ -1,13 +1,11 @@
 import { ExternalLink } from "lucide-react";
 
 import { PageHeader } from "@/components";
-import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __ } from "@/i18n";
 
 export default function Header() {
 	return (
 		<PageHeader
-			icon={dashboardPageIcons["tools-import"]}
 			title={__("Import")}
 			description={__(
 				"Bulk import short links into PeakURL from CSV, JSON, or XML files, pasted URL lists, or automated API payloads."

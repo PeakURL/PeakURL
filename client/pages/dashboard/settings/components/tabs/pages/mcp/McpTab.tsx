@@ -8,17 +8,12 @@ import {
 	Layers,
 	PenTool,
 	Plus,
-	Shield,
 	ShieldCheck,
 	Trash2,
 } from "lucide-react";
 
-import { Button, Input, McpIcon } from "@/components";
+import { Button, Input } from "@/components";
 import type { NotificationContextValue } from "@/components";
-import {
-	DocumentationLink,
-	TabHeader,
-} from "@/pages/dashboard/settings/components/TabHeader";
 import { useTemporaryState } from "@/hooks";
 import {
 	useGetMcpSettingsQuery,
@@ -235,39 +230,14 @@ export function McpTab({ notification }: McpTabProps) {
 
 	return (
 		<div className="mcp-tab-container">
-			<section className="settings-section">
-				<TabHeader
-					icon={McpIcon}
-					title={__("Model Context Protocol (MCP)")}
-					badge={
-						<span className="mcp-badge mcp-badge-neutral text-[11px] font-medium">
-							{__("Preview")}
-						</span>
-					}
-					description={__(
-						"Connect AI clients directly to PeakURL using Model Context Protocol (MCP) and OAuth 2.0 PKCE."
-					)}
-					actions={
-						<DocumentationLink
-							href="https://peakurl.org/docs/mcp"
-							label={__("MCP Documentation")}
-						/>
-					}
-				/>
-			</section>
-
 			{/* Server Configuration Card */}
 			<div className="mcp-card">
 				<div className="mcp-card-header">
 					<div className="mcp-card-title-group">
 						<div className="mcp-card-title-row">
-							<McpIcon
-								size={18}
-								className="text-accent shrink-0"
-							/>
-							<h3 className="mcp-card-title">
+							<h2 className="mcp-card-title">
 								{__("PeakURL MCP Server")}
-							</h3>
+							</h2>
 						</div>
 						<p className="mcp-card-description">
 							{__(
@@ -425,13 +395,9 @@ export function McpTab({ notification }: McpTabProps) {
 				<div className="mcp-card-header">
 					<div className="mcp-card-title-group">
 						<div className="mcp-card-title-row">
-							<Shield
-								size={18}
-								className="text-accent shrink-0"
-							/>
-							<h3 className="mcp-card-title">
+							<h2 className="mcp-card-title">
 								{__("Allowed OAuth Redirect URIs")}
-							</h3>
+							</h2>
 						</div>
 						<p className="mcp-card-description">
 							{__(

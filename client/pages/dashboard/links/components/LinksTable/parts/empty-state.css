@@ -1,14 +1,14 @@
 @layer components {
 	.links-empty-state {
-		@apply p-12 text-center;
+		@apply px-4 py-8 text-center sm:py-10;
 	}
 
 	.links-empty-state-icon-wrap {
-		@apply mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-accent/10;
+		@apply mx-auto mb-4 flex size-10 items-center justify-center rounded-full bg-accent/10;
 	}
 
 	.links-empty-state-title {
-		@apply mb-1 text-base font-semibold text-heading;
+		@apply mb-2 text-base font-semibold text-heading;
 	}
 
 	.links-empty-state-description {

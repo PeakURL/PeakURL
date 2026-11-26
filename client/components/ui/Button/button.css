@@ -1,6 +1,6 @@
 @layer components {
 	.button {
-		@apply relative inline-flex items-center justify-center rounded-md font-semibold transition-all duration-200 select-none focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60;
+		@apply relative inline-flex items-center justify-center rounded-md font-semibold transition-all duration-200 select-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:bg-disabled disabled:text-disabled-foreground;
 	}
 
 	.button-disabled {
@@ -8,23 +8,23 @@
 	}
 
 	.button-primary {
-		@apply bg-action text-white shadow-sm hover:bg-action-hover hover:shadow-md active:scale-[0.98];
+		@apply bg-action text-action-foreground shadow-sm hover:bg-action-hover active:bg-action-pressed hover:shadow-md active:scale-[0.98];
 	}
 
 	.button-secondary {
-		@apply border border-stroke bg-surface text-heading hover:bg-surface-alt hover:shadow-sm active:scale-[0.98];
+		@apply border border-stroke-strong bg-surface text-heading hover:bg-selected hover:border-focus hover:shadow-sm active:scale-[0.98];
 	}
 
 	.button-danger {
-		@apply bg-red-600 text-white shadow-sm hover:bg-red-700 hover:shadow-md active:scale-[0.98];
+		@apply bg-danger text-danger-foreground shadow-sm hover:bg-danger-hover hover:shadow-md active:scale-[0.98];
 	}
 
 	.button-success {
-		@apply bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 hover:shadow-md active:scale-[0.98];
+		@apply bg-success text-success-foreground shadow-sm hover:bg-success-hover hover:shadow-md active:scale-[0.98];
 	}
 
 	.button-warning {
-		@apply bg-amber-600 text-white shadow-sm hover:bg-amber-700 hover:shadow-md active:scale-[0.98];
+		@apply bg-warning text-warning-foreground shadow-sm hover:bg-warning-hover hover:shadow-md active:scale-[0.98];
 	}
 
 	.button-ghost {

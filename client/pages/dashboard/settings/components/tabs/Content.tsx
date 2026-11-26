@@ -60,7 +60,6 @@ import {
 	type SecurityFormState,
 	useReleaseInstallProgress,
 } from "./pages";
-import SettingsSkeleton from "../SettingsSkeleton";
 
 const createGeneralForm = (user?: ProfileUser | null): GeneralFormState => ({
 	firstName: user?.firstName || "",
@@ -131,7 +130,6 @@ const Content = ({ activeTab }: ContentProps) => {
 	const {
 		data: geoipStatusResponse,
 		error: geoipError,
-		isLoading: isLoadingGeoipStatus,
 		isFetching: isFetchingGeoipStatus,
 	} = useGetGeoipStatusQuery(undefined, {
 		skip: activeTab !== "location",
@@ -165,7 +163,6 @@ const Content = ({ activeTab }: ContentProps) => {
 	const {
 		data: updateStatus,
 		error: updateError,
-		isLoading: isLoadingUpdateStatus,
 		isFetching: isFetchingUpdateStatus,
 	} = useGetUpdateStatusQuery(undefined, {
 		skip: activeTab !== "updates",
@@ -612,20 +609,6 @@ const Content = ({ activeTab }: ContentProps) => {
 		}
 	};
 
-	if (
-		isLoadingUser ||
-		isLoadingGeneralSettings ||
-		isLoadingGeoipStatus ||
-		isLoadingMailStatus ||
-		isLoadingUpdateStatus
-	) {
-		return (
-			<div className="settings-content">
-				<SettingsSkeleton />
-			</div>
-		);
-	}
-
 	const runReleaseInstall = async (action: ReleaseAction) => {
 		const isReinstall = action === "reinstall";
 		const installRelease = isReinstall ? reinstallUpdate : applyUpdate;
@@ -747,6 +730,10 @@ const Content = ({ activeTab }: ContentProps) => {
 					isUpdating={isUpdating || isSavingGeneralSettings}
 					siteSettings={generalSettingsResponse?.data || null}
 					isLoadingSiteSettings={isLoadingGeneralSettings}
+					isLoadingProfile={isLoadingUser}
+					canEditSite={
+						user?.capabilities?.manageSiteSettings ?? false
+					}
 				/>
 			)}
 
@@ -762,6 +749,7 @@ const Content = ({ activeTab }: ContentProps) => {
 
 			{activeTab === "api" && (
 				<ApiTab
+					isLoading={isLoadingUser}
 					user={user}
 					baseApiUrl={formatBaseApiUrl(user)}
 					copyToClipboard={copyToClipboard}

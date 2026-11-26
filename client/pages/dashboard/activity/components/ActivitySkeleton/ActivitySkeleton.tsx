@@ -1,4 +1,5 @@
-import { Skeleton } from "@/components";
+import { __ } from "@/i18n";
+import { SearchInput, Skeleton } from "@/components";
 import { cn } from "@/shared/formatting";
 
 interface ActivitySkeletonProps {
@@ -7,14 +8,22 @@ interface ActivitySkeletonProps {
 
 export function ActivitySkeleton({ isAdmin = false }: ActivitySkeletonProps) {
 	return (
-		<div className="activity-page-panel">
+		<div className="activity-page-panel" aria-busy="true">
 			<div className="activity-page-panel-header">
-				<div>
-					<Skeleton className="activity-page-skeleton-heading" />
-					<Skeleton className="activity-page-skeleton-copy" />
+				<h2 className="activity-page-panel-title">
+					{__("Activity history")}
+				</h2>
+				<div className="w-full sm:w-64">
+					<SearchInput
+						value=""
+						onChange={() => {}}
+						placeholder={__("Search activity...")}
+						aria-label={__("Search activity history")}
+						disabled
+					/>
 				</div>
 			</div>
-			<div className="activity-page-table">
+			<div className="activity-page-table" aria-hidden="true">
 				<div className="activity-page-table-scroll">
 					<div className="activity-page-table-element">
 						<div className="activity-page-events">

@@ -21,6 +21,7 @@ import type {
 	UpdateCronJobPayload,
 	InstalledPlugin,
 	InstalledPluginsPayload,
+	PluginActionInvalidationTarget,
 	PluginExtensionsPayload,
 	PluginPageDescriptor,
 	PublishedPluginsQueryParams,
@@ -77,8 +78,6 @@ const MCP_CONNECTIONS_TAGS = ["McpConnections"] as const;
 const PLUGINS_TAGS = ["Plugins"] as const;
 const MCP_TOOLS_TAGS = ["McpTools"] as const;
 const MCP_SETTINGS_CHANGE_TAGS = ["McpSettings", "McpTools"] as const;
-
-export type PluginActionInvalidationTarget = "Plugins" | "Analytics" | "Urls";
 
 export interface DispatchPluginActionArgs {
 	slug: string;

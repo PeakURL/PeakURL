@@ -3,7 +3,7 @@
 		@apply mx-auto flex w-full max-w-7xl flex-1 flex-col;
 	}
 	.about-header {
-		@apply px-1 pb-6 pt-3 sm:pt-4;
+		@apply px-1 pb-6 pt-0;
 	}
 	.about-identity {
 		@apply flex flex-wrap items-center gap-x-5 gap-y-4;
@@ -12,7 +12,10 @@
 		@apply min-w-0 flex-1;
 	}
 	.about-identity h1 {
-		@apply text-3xl font-semibold tracking-tight text-heading;
+		@apply inline-flex items-center text-heading;
+	}
+	.about-wordmark {
+		@apply block h-6 w-auto sm:h-7;
 	}
 	.about-identity-copy p {
 		@apply mt-1 text-sm leading-6 text-text-muted;
@@ -132,7 +135,7 @@
 		@apply mt-4 flex flex-wrap items-center gap-x-5 gap-y-3;
 	}
 	.about-primary-link {
-		@apply inline-flex items-center justify-center gap-2 rounded-lg bg-action px-3.5 py-2.5 text-xs font-medium text-white transition-colors hover:bg-action-hover;
+		@apply inline-flex items-center justify-center gap-2 rounded-lg bg-action px-3.5 py-2.5 text-xs font-medium text-action-foreground transition-colors hover:bg-action-hover;
 	}
 	.about-secondary-link {
 		@apply inline-flex items-center justify-center gap-2 rounded-lg border border-stroke bg-surface px-3.5 py-2.5 text-xs font-medium text-heading transition-colors hover:bg-surface-alt;
@@ -250,7 +253,7 @@
 		top: 4rem;
 		z-index: 20;
 		min-height: var(--about-header-height);
-		background: var(--color-bg);
+		background: var(--color-dashboard-bg);
 	}
 	.about-content {
 		overflow: clip;

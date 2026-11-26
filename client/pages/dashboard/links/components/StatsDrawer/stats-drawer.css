@@ -17,6 +17,7 @@
 
 	.links-drawer-panel {
 		max-width: 60rem;
+		container: link-analytics / inline-size;
 	}
 
 	.links-drawer-header {
@@ -48,7 +49,7 @@
 	}
 
 	.links-drawer-short-link {
-		@apply inline-flex shrink-0 items-center gap-1 font-mono font-semibold;
+		@apply inline-flex min-w-0 max-w-full items-center gap-1 font-mono font-semibold;
 	}
 
 	.links-drawer-destination-link {
@@ -64,15 +65,29 @@
 	}
 
 	.links-drawer-destination-value {
-		@apply max-w-37.5 truncate sm:max-w-75;
+		@apply min-w-0 truncate;
+	}
+
+	.links-drawer-short-link > span {
+		@apply min-w-0;
+		overflow-wrap: anywhere;
+	}
+
+	.links-drawer-short-action,
+	.links-drawer-destination-action {
+		@apply grid size-7 shrink-0 place-items-center rounded-md transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent;
+	}
+
+	.links-drawer-destination-link {
+		max-inline-size: 100%;
 	}
 
 	.links-drawer-short-action {
-		@apply cursor-pointer text-text-muted transition-colors hover:text-accent;
+		@apply text-text-muted hover:text-accent;
 	}
 
 	.links-drawer-destination-action {
-		@apply shrink-0 text-text-muted transition-colors;
+		@apply text-text-muted;
 	}
 
 	.links-drawer-destination-action:not(:disabled) {
@@ -100,13 +115,8 @@
 	}
 
 	.links-drawer-tabs {
-		@apply mb-6 flex gap-2 overflow-x-auto border-b border-stroke;
-		-ms-overflow-style: none;
-		scrollbar-width: none;
-	}
-
-	.links-drawer-tabs::-webkit-scrollbar {
-		display: none;
+		@apply mb-4 flex gap-2 overflow-x-auto overscroll-x-contain border-b border-stroke;
+		scrollbar-width: thin;
 	}
 
 	.links-drawer-tab {
@@ -126,7 +136,7 @@
 	}
 
 	.links-drawer-panel-stack {
-		@apply space-y-4;
+		@apply min-w-0 space-y-4;
 	}
 
 	.links-drawer-footer {
@@ -142,6 +152,6 @@
 	}
 
 	.links-drawer-footer-button {
-		@apply rounded-lg border border-stroke bg-surface px-4 py-2 text-sm font-medium text-heading transition-all hover:bg-surface-alt;
+		@apply rounded-lg border border-stroke bg-surface px-4 py-2 text-sm font-medium text-heading transition-colors hover:bg-surface-alt focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent;
 	}
 }

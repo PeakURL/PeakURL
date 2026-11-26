@@ -1,6 +1,6 @@
 @layer components {
 	.links-short-url {
-		@apply text-blue-600 dark:text-blue-400;
+		@apply text-accent;
 	}
 
 	.links-checkbox {
@@ -44,21 +44,12 @@
 		@apply border-0 bg-transparent p-0;
 	}
 
-	.links-modal-shell {
-		@apply fixed inset-0 flex items-center justify-center p-4;
-	}
-
 	.links-modal-panel {
-		@apply mx-auto w-full overflow-hidden rounded-lg bg-surface shadow-xl;
-		text-align: start;
+		@apply block overflow-y-auto overscroll-contain shadow-xl;
 	}
 
 	.links-modal-panel-medium {
 		@apply max-w-lg;
-	}
-
-	.links-modal-panel-large {
-		@apply max-w-2xl;
 	}
 
 	.links-modal-header {
@@ -78,7 +69,7 @@
 	}
 
 	.links-modal-close {
-		@apply -mr-1 rounded-lg p-1.5 text-text-muted transition-all hover:bg-surface-alt hover:text-heading cursor-pointer;
+		@apply -me-1 shrink-0 rounded-lg p-1.5 text-text-muted transition-colors hover:bg-surface-alt hover:text-heading cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent;
 	}
 
 	.links-modal-close-icon {
@@ -138,7 +129,7 @@
 	}
 
 	.links-modal-button-danger {
-		@apply bg-red-600 text-white hover:bg-red-700 disabled:bg-gray-400;
+		@apply bg-danger text-danger-foreground hover:bg-danger-hover disabled:bg-disabled disabled:text-disabled-foreground;
 	}
 
 	.links-modal-button-danger-outline {
@@ -146,7 +137,7 @@
 	}
 
 	.links-modal-button-primary {
-		@apply bg-action text-white hover:bg-action/90 disabled:bg-gray-400;
+		@apply bg-action text-action-foreground hover:bg-action-hover disabled:bg-disabled disabled:text-disabled-foreground;
 	}
 
 	.links-modal-button-content {

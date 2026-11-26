@@ -1,5 +1,5 @@
 import { Database, RefreshCw, Route, ServerCog } from "lucide-react";
-import { useState } from "react";
+import { useRef } from "react";
 
 import { API_CLIENT_BASE_URL, PEAKURL_DEBUG } from "@constants";
 import { Button } from "@/components/ui";
@@ -8,9 +8,6 @@ import { extractErrorMessage, getErrorStatus } from "@/shared/errors";
 
 import { StatusLayout } from "../StatusLayout";
 import type { ApiErrorPageProps } from "../types";
-
-// Keep retry feedback visible long enough to avoid a flicker on fast failures.
-const RETRY_FEEDBACK_MS = 800;
 
 function getStatusText(error: unknown): string {
 	const status = getErrorStatus(error);
@@ -88,36 +85,20 @@ export function ApiErrorPage({
 		"PeakURL couldn’t complete the connection to your server. Please try again."
 	),
 }: ApiErrorPageProps) {
-	const [localRetrying, setLocalRetrying] = useState(false);
-	const retrying = isRetrying || localRetrying;
-	const [prevError, setPrevError] = useState(error);
-	const [lastError, setLastError] = useState(error);
-
-	if (error !== undefined && error !== prevError) {
-		setPrevError(error);
-		setLastError(error);
-	}
-
-	const visibleError = error ?? lastError;
-	const statusText = getStatusText(visibleError);
-	const detailText = getDetailText(visibleError);
+	const retryInFlight = useRef(false);
+	const statusText = getStatusText(error);
+	const detailText = getDetailText(error);
 	const checks = getChecks();
 	const handleRetry = async () => {
-		if (retrying) {
+		if (isRetrying || retryInFlight.current) {
 			return;
 		}
 
-		setLocalRetrying(true);
-
-		// Match the spinner cycle while the session check retries.
-		const minRotationTime = new Promise((resolve) =>
-			setTimeout(resolve, RETRY_FEEDBACK_MS)
-		);
-
+		retryInFlight.current = true;
 		try {
-			await Promise.all([onRetry(), minRotationTime]);
+			await onRetry();
 		} finally {
-			setLocalRetrying(false);
+			retryInFlight.current = false;
 		}
 	};
 
@@ -135,10 +116,10 @@ export function ApiErrorPage({
 					size="md"
 					icon={RefreshCw}
 					onClick={handleRetry}
-					disabled={retrying}
-					className={`api-error-retry ${retrying ? "api-error-retry-checking" : ""}`}
+					disabled={isRetrying}
+					className={`api-error-retry ${isRetrying ? "api-error-retry-checking" : ""}`}
 				>
-					{retrying
+					{isRetrying
 						? __("Checking connection")
 						: __("Retry connection")}
 				</Button>

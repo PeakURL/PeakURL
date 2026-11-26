@@ -1,4 +1,3 @@
-import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
 import type { NoticeActionLink } from "@/api";
@@ -25,6 +24,7 @@ export interface NoticeActionProps {
  * Props for the dashboard header.
  */
 export interface HeaderProps {
+	mobileMenuOpen: boolean;
 	/** Opens the mobile navigation drawer. */
 	onMobileMenuToggle: () => void;
 }
@@ -38,58 +38,10 @@ export interface LayoutProps {
 }
 
 /**
- * Child navigation entry nested under a sidebar section.
- */
-export interface NavChild {
-	/** Visible label for the child link. */
-	name: string;
-
-	/** Router destination for the child link. */
-	href: string;
-
-	/** Optional parent route prefix used to mark nested routes as active. */
-	activeBasePath?: string;
-
-	/** Whether the child requires admin access. */
-	adminOnly?: boolean;
-}
-
-/**
- * Top-level dashboard sidebar item.
- */
-export interface NavItem {
-	/** Visible label for the navigation item. */
-	name: string;
-
-	/** Optional direct destination when the item is not a section. */
-	href?: string;
-
-	/** Optional parent route prefix used to mark nested routes as active. */
-	activeBasePath?: string;
-
-	/** Lucide icon rendered beside the item label. */
-	icon: LucideIcon;
-
-	/** Whether the item requires admin access. */
-	adminOnly?: boolean;
-
-	/** Explicit visibility override controlling whether the item is rendered. */
-	isVisible?: boolean;
-
-	/** Nested child links for collapsible sections. */
-	children?: NavChild[];
-
-	/** Optional badge label rendered beside the item label. */
-	badge?: string;
-
-	/** Visual styling variant for the badge. */
-	badgeVariant?: "neutral" | "preview" | "accent";
-}
-
-/**
  * Props for the responsive dashboard sidebar.
  */
 export interface SidebarProps {
+	isDesktop: boolean;
 	/** Base path used when the dashboard is mounted below root. */
 	basePath?: string;
 

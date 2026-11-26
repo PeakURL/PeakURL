@@ -1,22 +1,32 @@
 @layer components {
-	.links-qr-modal-code-wrap {
-		@apply flex justify-center rounded-lg bg-surface p-6;
+	.links-qr-modal-preview {
+		@apply grid justify-items-center rounded-lg border border-stroke bg-surface-alt p-3 sm:p-5;
+	}
+
+	.links-qr-modal-code,
+	.links-qr-modal-placeholder,
+	.links-qr-modal-error {
+		inline-size: min(100%, 16rem);
+		min-inline-size: 0;
+		block-size: auto;
+		aspect-ratio: 1;
 	}
 
 	.links-qr-modal-code {
-		@apply h-64 w-64;
+		display: block;
+		background-color: white;
 	}
 
-	.links-qr-modal-loading {
-		@apply flex h-64 w-64 items-center justify-center;
+	.links-qr-modal-placeholder {
+		@apply overflow-hidden rounded-lg;
 	}
 
-	.links-qr-modal-spinner {
-		@apply h-12 w-12 animate-spin rounded-full border-b-2 border-accent;
+	.links-qr-modal-error {
+		@apply flex flex-col items-center justify-center gap-3 text-center text-sm text-text-muted;
 	}
 
 	.links-qr-modal-summary {
-		@apply rounded-lg border border-stroke bg-surface-alt p-4;
+		@apply rounded-lg border border-stroke bg-surface-alt p-3;
 	}
 
 	.links-qr-modal-summary-label {
@@ -24,10 +34,11 @@
 	}
 
 	.links-qr-modal-actions {
-		@apply flex gap-3;
+		@apply grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-end;
 	}
 
-	.links-qr-modal-copy-success {
-		@apply text-success;
+	.links-qr-modal-actions .button {
+		@apply min-w-0 px-2 sm:px-3;
+		overflow-wrap: anywhere;
 	}
 }

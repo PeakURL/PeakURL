@@ -1,6 +1,6 @@
 @layer components {
 	.system-status-page {
-		@apply space-y-5 pb-8 sm:space-y-6;
+		@apply space-y-4 pb-8 sm:space-y-5;
 	}
 
 	/* Hero Section */
@@ -13,6 +13,10 @@
 	.system-status-page-banner {
 		@apply relative overflow-hidden rounded-xl border p-4 sm:p-6 shadow-xs transition-all duration-200;
 		text-align: start;
+	}
+
+	.system-status-page-banner-pending {
+		@apply border-stroke bg-surface;
 	}
 
 	.system-status-page-banner-ok {
@@ -216,7 +220,7 @@
 	}
 
 	.system-status-page-tab-active {
-		@apply bg-action text-white shadow-sm;
+		@apply bg-action text-action-foreground shadow-sm;
 	}
 
 	.system-status-page-tab-inactive {

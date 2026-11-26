@@ -18,7 +18,6 @@ import {
 } from "@/components";
 import { useAdminAccess, usePluginAssets } from "@/hooks";
 import { __ } from "@/i18n";
-import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import {
 	useDispatchPluginActionMutation,
 	useGetPluginPageQuery,
@@ -245,7 +244,6 @@ export default function PluginAdminPageView() {
 
 			{/* Page Header */}
 			<PageHeader
-				icon={dashboardPageIcons.plugins}
 				title={page.title}
 				description={__(
 					"Manage settings and extension actions for this plugin."

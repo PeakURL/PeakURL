@@ -25,22 +25,30 @@ export function BackgroundJobsSummary() {
 
 	if (isLoading) {
 		return (
-			<div className="background-jobs-summary-card animate-pulse">
+			<div className="background-jobs-summary-card" aria-busy="true">
 				<div className="background-jobs-summary-header">
 					<div className="background-jobs-summary-header-left">
-						<div className="h-9 w-9 rounded-lg bg-surface-alt" />
-						<div className="space-y-1.5">
-							<div className="h-4 w-32 rounded bg-surface-alt" />
-							<div className="h-3 w-48 rounded bg-surface-alt" />
+						<div className="background-jobs-summary-icon">
+							<CalendarClock size={16} />
+						</div>
+						<div className="background-jobs-summary-title-wrap">
+							<h3 className="background-jobs-summary-title">
+								{__("Background Jobs")}
+							</h3>
+							<p className="background-jobs-summary-subtitle">
+								{__(
+									"Automated scheduler & recurring system tasks"
+								)}
+							</p>
 						</div>
 					</div>
-					<div className="h-6 w-24 rounded bg-surface-alt" />
 				</div>
 				<div className="background-jobs-summary-grid">
 					{Array.from({ length: 6 }).map((_, idx) => (
 						<div
 							key={idx}
-							className="h-16 rounded-lg bg-surface-alt/60"
+							className="skeleton h-16"
+							aria-hidden="true"
 						/>
 					))}
 				</div>

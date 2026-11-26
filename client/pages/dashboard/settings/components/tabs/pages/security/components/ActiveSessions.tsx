@@ -1,4 +1,3 @@
-import { Monitor } from "lucide-react";
 import { Button } from "@/components";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __, sprintf } from "@/i18n";
@@ -20,15 +19,13 @@ function ActiveSessions({
 	onRevokeSession,
 }: ActiveSessionsProps) {
 	return (
-		<section className="settings-section">
+		<section className="settings-section settings-security-sessions">
 			<div
 				dir={direction}
 				className="settings-security-sessions-header settings-section-heading"
 			>
 				<div className="settings-section-copy">
-					<SectionTitle icon={Monitor}>
-						{__("Active Sessions")}
-					</SectionTitle>
+					<SectionTitle>{__("Active Sessions")}</SectionTitle>
 					<p className="settings-group-description">
 						{sessions.length === 1
 							? __("1 active session")

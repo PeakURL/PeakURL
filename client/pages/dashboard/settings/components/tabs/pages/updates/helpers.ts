@@ -48,28 +48,25 @@ function compareVersionStrings(
 	return 0;
 }
 
+function comparePublishedVersion(
+	status?: UpdateStatusPayload | null
+): number | null {
+	const currentVersion = status?.currentVersion?.trim().replace(/^v/i, "");
+	const latestVersion = status?.latestVersion?.trim().replace(/^v/i, "");
+	return currentVersion && latestVersion
+		? compareVersionStrings(currentVersion, latestVersion)
+		: null;
+}
+
 /**
  * Returns whether the manifest or version comparison indicates an update.
  */
 export function hasUpdateAvailable(
 	status?: UpdateStatusPayload | null
 ): boolean {
-	if (status?.updateAvailable) {
-		return true;
-	}
-
-	const currentVersion = String(status?.currentVersion || "")
-		.trim()
-		.replace(/^v/i, "");
-	const latestVersion = String(status?.latestVersion || "")
-		.trim()
-		.replace(/^v/i, "");
-
-	if (!currentVersion || !latestVersion || currentVersion === latestVersion) {
-		return false;
-	}
-
-	return compareVersionStrings(currentVersion, latestVersion) > 0;
+	return Boolean(
+		status?.updateAvailable || (comparePublishedVersion(status) ?? 0) > 0
+	);
 }
 
 /**
@@ -88,7 +85,9 @@ export function formatAppStatus(
 	status: UpdateStatusPayload | null | undefined,
 	errorMessage?: string | null
 ): BadgeState {
-	const updateAvailable = hasUpdateAvailable(status);
+	const versionComparison = comparePublishedVersion(status);
+	const updateAvailable =
+		status?.updateAvailable || (versionComparison ?? 0) > 0;
 	const reinstallAvailable = hasReinstallAvailable(status);
 
 	if (errorMessage || status?.lastError) {
@@ -118,6 +117,31 @@ export function formatAppStatus(
 				: __(
 						"A newer PeakURL version is available, but this install cannot apply it automatically from the dashboard."
 					),
+		};
+	}
+
+	if (versionComparison !== null && versionComparison < 0) {
+		return {
+			tone: "info",
+			label: __("Ahead of release"),
+			title: sprintf(
+				__("PeakURL %s is newer than the published release"),
+				status?.currentVersion || __("Unknown")
+			),
+			description: __(
+				"The installed version is ahead of the version currently published on the release channel."
+			),
+		};
+	}
+
+	if (versionComparison === null) {
+		return {
+			tone: "info",
+			label: __("Not checked"),
+			title: __("Published version unavailable"),
+			description: __(
+				"Check for updates to see the latest published release."
+			),
 		};
 	}
 

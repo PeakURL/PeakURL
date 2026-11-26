@@ -40,9 +40,9 @@ function AuthLayout({
 									{badgeLabel}
 								</div>
 							)}
-							<h1 className="auth-page-showcase-title">
+							<p className="auth-page-showcase-title">
 								{showcaseTitle}
-							</h1>
+							</p>
 							<p className="auth-page-showcase-copy">
 								{showcaseCopy}
 							</p>
@@ -88,9 +88,9 @@ function AuthLayout({
 							)}
 						</header>
 
-						<h2 id="page-heading" className="auth-page-card-title">
+						<h1 id="page-heading" className="auth-page-card-title">
 							{cardTitle}
-						</h2>
+						</h1>
 						<p className="auth-page-card-copy">{cardCopy}</p>
 
 						{children}

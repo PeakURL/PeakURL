@@ -24,10 +24,11 @@ import { useGetLinkStatsQuery } from "@/state/slices/api";
 import { isDocumentRtl } from "@/i18n/direction";
 import { copyToClipboard } from "@/shared/browser";
 import { getLinkDisplayTitle, getShortUrl } from "@/shared/links";
-import { getLocalDateValue } from "../../lib";
 import { __ } from "@/i18n";
 import { useTemporaryState, usePerLinkState, useAdminAccess } from "@/hooks";
 
+import { getLocalDateValue } from "../../lib";
+import { PluginActions } from "../PluginActions";
 import {
 	BestDay,
 	ClickHistory,
@@ -222,12 +223,15 @@ export default function StatsDrawer({
 		canViewStats,
 	});
 
-	const { data: statsData, isLoading } = useGetLinkStatsQuery(
+	const { currentData: statsData, isFetching } = useGetLinkStatsQuery(
 		statsQueryArgs,
 		{
 			skip: shouldSkip,
+			refetchOnMountOrArgChange: timeRange === "24h" ? 60 : false,
 		}
 	);
+
+	const isLoading = isFetching && !statsData;
 
 	if (!link || !canViewStats) return null;
 
@@ -462,6 +466,7 @@ export default function StatsDrawer({
 
 												{/* Traffic History */}
 												<TrafficHistory
+													key={linkId}
 													link={link}
 													stats={statsPayload}
 													isLoading={isLoading}
@@ -491,6 +496,13 @@ export default function StatsDrawer({
 												/>
 
 												{/* Click History */}
+												{open && (
+													<PluginActions
+														key={linkId}
+														location="link_stats_actions"
+														linkId={linkId}
+													/>
+												)}
 												<ClickHistory
 													link={link}
 													stats={statsPayload}

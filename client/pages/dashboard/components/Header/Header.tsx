@@ -4,7 +4,8 @@ import {
 	Select,
 	type SelectOption,
 } from "@/components";
-import { dashboardPageIcons } from "@/pages/dashboard/navigation";
+import { useAdminAccess } from "@/hooks";
+import { getOverviewGreeting } from "@/pages/dashboard/lib/getGreeting";
 import { __ } from "@/i18n";
 
 import type { HeaderProps } from "../types";
@@ -16,6 +17,11 @@ const Header = ({
 	isRefreshing = false,
 	canViewAnalytics = true,
 }: HeaderProps) => {
+	const { user } = useAdminAccess();
+	const greeting = getOverviewGreeting({
+		firstName: user?.firstName,
+		displayName: user?.displayName,
+	});
 	const timeRangeOptions: SelectOption<number>[] = [
 		{ value: 7, label: __("Last 7 days") },
 		{ value: 30, label: __("Last 30 days") },
@@ -24,11 +30,8 @@ const Header = ({
 
 	return (
 		<PageHeader
-			icon={dashboardPageIcons["overview"]}
-			title={__("Dashboard")}
-			description={__(
-				"Welcome back! Here's what's happening with your links."
-			)}
+			title={greeting}
+			description={__("Here's an overview of your link activity.")}
 			actions={
 				<div className="dashboard-overview-header-actions">
 					<RefreshButton

@@ -1,14 +1,5 @@
 import { useDispatch } from "react-redux";
-import {
-	ArrowDown,
-	ArrowUp,
-	CircleCheckBig,
-	Link2,
-	MousePointerClick,
-	Trash2,
-	Users,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 import { useNotification } from "@/components";
 import { __, sprintf } from "@/i18n";
@@ -22,9 +13,10 @@ import {
 	useGetUrlsQuery,
 	useRestoreUrlMutation,
 } from "@/state/slices/api";
-import { cn, formatCount } from "@/shared/formatting";
+import { formatCount, formatNumber } from "@/shared/formatting";
 import { getErrorMessage } from "@/shared/errors";
 import { useAdminAccess } from "@/hooks";
+import { StatCard } from "@/pages/dashboard/components/StatsCards";
 
 import {
 	Header,
@@ -32,7 +24,6 @@ import {
 	LinksTable,
 	TableFooter,
 	Pagination,
-	LinksSkeleton,
 } from "./components";
 import { computeFilterContextKey } from "./components/LinksTable/lib";
 import { useLinksFilter } from "./hooks";
@@ -45,15 +36,11 @@ interface LinkStatChange {
 	type: LinkStatChangeType;
 }
 
-type LinkStatTone = "clicks" | "visitors" | "links" | "active";
-
 interface LinkStatCardData {
 	title: string;
-	value: string;
+	value: number;
 	change: LinkStatChange | null;
-	note?: string;
-	icon: LucideIcon;
-	tone: LinkStatTone;
+	note: string;
 }
 
 function getPeriodChange(
@@ -152,9 +139,11 @@ function LinksPage() {
 		data: urlsRes,
 		refetch: refetchUrls,
 		isLoading: isUrlsLoading,
+		isError: isUrlsError,
 		isFetching: isRefreshing,
 	} = useGetUrlsQuery(urlsQueryArgs, { skip: !canViewLinks });
 
+	const linksUnavailable = isUrlsError && !urlsRes;
 	const apiItems: LinkRecord[] = urlsRes?.data?.items ?? [];
 	const apiMeta: LinksMeta = {
 		page: urlsRes?.data?.meta?.page ?? currentPage,
@@ -169,16 +158,13 @@ function LinksPage() {
 		lastPeriodTotalClicks: urlsRes?.data?.meta?.lastPeriodTotalClicks,
 		lastPeriodUniqueClicks: urlsRes?.data?.meta?.lastPeriodUniqueClicks,
 	};
-	const { data: statsLinkRes, refetch: refetchStatsLookup } = useGetUrlQuery(
-		statsShortId || "",
-		{
-			skip:
-				!statsShortId ||
-				isTrashTab ||
-				!canViewLinks ||
-				!canViewAnalytics,
-		}
-	);
+	const {
+		currentData: statsLinkRes,
+		isFetching: isStatsLookupPending,
+		refetch: refetchStatsLookup,
+	} = useGetUrlQuery(statsShortId || "", {
+		skip: !statsShortId || isTrashTab || !canViewLinks || !canViewAnalytics,
+	});
 	const statsLink = statsLinkRes?.data ?? null;
 	const { data: siteSettingsRes } = useGetGeneralSettingsQuery();
 	const trashRetentionDays = siteSettingsRes?.data?.trashRetentionDays ?? 30;
@@ -281,24 +267,6 @@ function LinksPage() {
 		);
 	}
 
-	if (isLoading) {
-		return (
-			<div className="links-page">
-				<Header
-					onRefresh={handleRefresh}
-					isRefreshing={true}
-					clickRange={clickRange}
-					customClickRange={customClickRange}
-					onClickRangeChange={setClickRange}
-					onCustomClickRangeChange={setCustomClickRange}
-					canViewLinks={canViewLinks}
-					canViewAnalytics={canViewAnalytics}
-				/>
-				<LinksSkeleton />
-			</div>
-		);
-	}
-
 	const totalClicks = apiMeta.totalClicks ?? 0;
 	const totalUniqueClicks = apiMeta.uniqueClicks ?? 0;
 	const activeLinks = apiMeta.activeLinks ?? 0;
@@ -341,19 +309,15 @@ function LinksPage() {
 		statsData.push(
 			{
 				title: __("Total Clicks"),
-				value: formatCount(totalClicks),
+				value: totalClicks,
 				change: clicksChange,
 				note: getClicksFallbackNote(),
-				icon: MousePointerClick,
-				tone: "clicks",
 			},
 			{
 				title: __("Visitors"),
-				value: formatCount(totalUniqueClicks),
+				value: totalUniqueClicks,
 				change: visitorsChange,
 				note: getVisitorsFallbackNote(),
-				icon: Users,
-				tone: "visitors",
 			}
 		);
 	}
@@ -362,19 +326,15 @@ function LinksPage() {
 		statsData.push(
 			{
 				title: __("Total Links"),
-				value: formatCount(totalItems),
+				value: totalItems,
 				change: null,
 				note: __("Total created links"),
-				icon: Link2,
-				tone: "links",
 			},
 			{
 				title: __("Active Links"),
-				value: formatCount(activeLinks),
+				value: activeLinks,
 				change: null,
 				note: __("Currently active"),
-				icon: CircleCheckBig,
-				tone: "active",
 			}
 		);
 	}
@@ -392,75 +352,37 @@ function LinksPage() {
 				canViewAnalytics={canViewAnalytics}
 			/>
 
-			{/* Quick Stats Grid */}
 			{statsData.length > 0 && (
-				<div className="links-page-stats">
-					{statsData.map((stat) => {
-						const StatIcon = stat.icon;
-
-						return (
-							<div
-								key={stat.title}
-								className="links-page-stat-card"
-							>
-								<div className="links-page-stat-header">
-									<div className="links-page-stat-copy">
-										<p className="links-page-stat-title">
-											{stat.title}
-										</p>
-										<p className="links-page-stat-value">
-											{stat.value}
-										</p>
-									</div>
-									<div
-										className={cn(
-											"links-page-stat-icon",
-											`links-page-stat-icon-${stat.tone}`
-										)}
-									>
-										<StatIcon
-											className={cn(
-												"links-page-stat-icon-glyph",
-												`links-page-stat-icon-glyph-${stat.tone}`
-											)}
-										/>
-									</div>
-								</div>
-
-								<div className="links-page-stat-footer">
-									{stat.change ? (
-										<div className="links-page-stat-change">
-											<span
-												className={cn(
-													"links-page-stat-change-badge",
-													stat.change.type ===
-														"positive"
-														? "links-page-stat-change-badge-positive"
-														: "links-page-stat-change-badge-negative"
-												)}
-											>
-												{stat.change.type ===
-												"positive" ? (
-													<ArrowUp className="links-page-stat-change-icon" />
-												) : (
-													<ArrowDown className="links-page-stat-change-icon" />
-												)}
-												{stat.change.text}
-											</span>
-											<span className="links-page-stat-change-note">
-												{periodNote}
-											</span>
-										</div>
-									) : (
-										<span className="links-page-stat-change-note">
-											{stat.note}
-										</span>
-									)}
-								</div>
-							</div>
-						);
-					})}
-				</div>
+				<dl
+					className="dashboard-stats-grid links-page-stats"
+					aria-busy={isLoading}
+				>
+					{statsData.map(({ title, value, change, note }) => (
+						<StatCard
+							key={title}
+							label={title}
+							value={linksUnavailable ? "—" : formatNumber(value)}
+							valueTitle={
+								isLoading || linksUnavailable
+									? undefined
+									: formatCount(value)
+							}
+							change={
+								change
+									? { text: change.text, tone: change.type }
+									: undefined
+							}
+							note={
+								linksUnavailable
+									? null
+									: change
+										? periodNote
+										: note
+							}
+							isLoading={isLoading}
+						/>
+					))}
+				</dl>
 			)}
 
 			{canCreateLinks && <UrlShorteningForm />}
@@ -490,12 +412,17 @@ function LinksPage() {
 
 					<LinksTable
 						filterContextKey={filterContextKey}
+						isLoading={isLoading}
+						isRefreshing={isRefreshing}
+						hasError={linksUnavailable}
+						onRetry={() => void refetchUrls()}
 						links={paginatedLinks}
 						totalCount={totalItems}
 						searchQuery={searchQuery}
 						onSearchChange={setSearchQuery}
 						statsShortId={statsShortId}
 						statsLink={statsLink}
+						isStatsLookupPending={isStatsLookupPending}
 						sortBy={sortBy}
 						sortOrder={sortOrder}
 						onSortChange={(newSortBy, newSortOrder) => {
@@ -514,22 +441,24 @@ function LinksPage() {
 						isAdmin={isAdmin}
 					/>
 
-					<TableFooter
-						totalLinks={totalItems}
-						totalClicks={totalClicks}
-						sortBy={sortBy}
-						setSortBy={setSortBy}
-						sortOrder={sortOrder}
-						setSortOrder={setSortOrder}
-						limit={limit}
-						setLimit={setLimit}
-						statusFilter={statusFilter}
-						setStatusFilter={setStatusFilter}
-						trashedCount={trashedLinksCount}
-						expiredCount={expiredLinksCount}
-						canViewAnalytics={canViewAnalytics}
-						isAdmin={isAdmin}
-					/>
+					{!isLoading && !linksUnavailable && (
+						<TableFooter
+							totalLinks={totalItems}
+							totalClicks={totalClicks}
+							sortBy={sortBy}
+							setSortBy={setSortBy}
+							sortOrder={sortOrder}
+							setSortOrder={setSortOrder}
+							limit={limit}
+							setLimit={setLimit}
+							statusFilter={statusFilter}
+							setStatusFilter={setStatusFilter}
+							trashedCount={trashedLinksCount}
+							expiredCount={expiredLinksCount}
+							canViewAnalytics={canViewAnalytics}
+							isAdmin={isAdmin}
+						/>
+					)}
 
 					{totalPages > 1 && (
 						<Pagination

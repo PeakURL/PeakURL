@@ -32,6 +32,10 @@ interface HistoricalStatsProps extends LinkStatsViewProps {
 function getActiveHistoricalPeriodKey(
 	timeRange: StatsFilterRange
 ): HistoricalPeriodRow["key"] {
+	if ("all" === timeRange) {
+		return "allTime";
+	}
+
 	if ("24h" === timeRange) {
 		return "last24Hours";
 	}

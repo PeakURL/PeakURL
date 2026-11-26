@@ -7,7 +7,6 @@ import StatusBadge from "./StatusBadge";
  * Renders the title, description, and status badge for an update section.
  */
 function SectionHeader({
-	icon: Icon,
 	direction,
 	title,
 	description,
@@ -15,20 +14,13 @@ function SectionHeader({
 }: SectionHeaderProps) {
 	return (
 		<div dir={direction} className="settings-updates-section-header">
-			<div className="settings-updates-intro">
-				<div className="settings-section-copy">
-					<div className="settings-section-title-row">
-						<SectionTitle icon={Icon}>{title}</SectionTitle>
-						{badge ? (
-							<StatusBadge
-								tone={badge.tone}
-								label={badge.label}
-							/>
-						) : null}
-					</div>
-					<p className="settings-group-description">{description}</p>
-				</div>
+			<div className="settings-section-title-row">
+				<SectionTitle>{title}</SectionTitle>
+				{badge && <StatusBadge tone={badge.tone} label={badge.label} />}
 			</div>
+			{description && (
+				<p className="settings-group-description">{description}</p>
+			)}
 		</div>
 	);
 }

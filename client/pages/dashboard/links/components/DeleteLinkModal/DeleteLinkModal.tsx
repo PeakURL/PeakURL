@@ -1,4 +1,4 @@
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { DialogTitle } from "@headlessui/react";
 import { X, Trash2, AlertTriangle } from "lucide-react";
 import { useState } from "react";
 
@@ -8,8 +8,8 @@ import { useDeleteUrlMutation } from "@/state/slices/api";
 import { getErrorMessage } from "@/shared/errors";
 import { getShortUrl } from "@/shared/links";
 import { __ } from "@/i18n";
-import { isDocumentRtl } from "@/i18n/direction";
 
+import { Modal } from "@/components/ui";
 import type { DeleteLinkModalProps } from "../types";
 
 function DeleteLinkModal({
@@ -18,7 +18,6 @@ function DeleteLinkModal({
 	link,
 	isTrashTab = false,
 }: DeleteLinkModalProps) {
-	const direction = isDocumentRtl() ? "rtl" : "ltr";
 	const {
 		canDeleteLinks,
 		canTrashLinks,
@@ -101,169 +100,159 @@ function DeleteLinkModal({
 	if (!link) return null;
 
 	return (
-		<Dialog open={open} onClose={handleClose} className="relative z-50">
-			<div className="dialog-backdrop" aria-hidden="true" />
-
-			<div className="links-modal-shell">
-				<DialogPanel
-					dir={direction}
-					className="links-modal-panel links-modal-panel-large"
-				>
-					{/* Header */}
-					<div className="links-modal-header">
-						<DialogTitle className="links-modal-title links-modal-title-with-icon">
-							<div className="links-modal-title-icon links-delete-modal-title-icon">
-								<AlertTriangle className="links-delete-modal-title-icon-svg" />
-							</div>
-							{isPermanentMode
-								? __("Delete Link Permanently")
-								: __("Move to Trash")}
-						</DialogTitle>
-						<button
-							onClick={handleClose}
-							disabled={isLoading}
-							className="links-modal-close"
-						>
-							<X className="links-modal-close-icon" />
-						</button>
+		<Modal
+			isOpen={open}
+			onClose={handleClose}
+			panelClassName="links-modal-panel"
+		>
+			{/* Header */}
+			<div className="links-modal-header">
+				<DialogTitle className="links-modal-title links-modal-title-with-icon">
+					<div className="links-modal-title-icon links-delete-modal-title-icon">
+						<AlertTriangle className="links-delete-modal-title-icon-svg" />
 					</div>
+					{isPermanentMode
+						? __("Delete Link Permanently")
+						: __("Move to Trash")}
+				</DialogTitle>
+				<button
+					onClick={handleClose}
+					disabled={isLoading}
+					className="links-modal-close"
+					aria-label={__("Close")}
+				>
+					<X className="links-modal-close-icon" />
+				</button>
+			</div>
 
-					{/* Content */}
-					<div className="links-modal-content">
-						{error && (
-							<div className="links-modal-alert links-modal-alert-error">
-								<p className="links-modal-alert-error-text">
-									{error}
-								</p>
-							</div>
-						)}
+			{/* Content */}
+			<div className="links-modal-content">
+				{error && (
+					<div className="links-modal-alert links-modal-alert-error">
+						<p className="links-modal-alert-error-text">{error}</p>
+					</div>
+				)}
 
-						<p className="links-delete-modal-copy">
-							{isPermanentMode
-								? __(
-										"Are you sure you want to delete this link permanently? This action cannot be undone."
-									)
-								: __(
-										"Are you sure you want to move this link to the trash? You can restore it later."
-									)}
-						</p>
-
-						{/* Link Info */}
-						<div className="links-delete-modal-summary">
-							<div>
-								<p className="links-delete-modal-summary-label">
-									{__("Short URL")}
-								</p>
-								<ReadOnlyValueBlock
-									value={shortUrl}
-									className="links-readonly-reset"
-									valueClassName="text-accent"
-								/>
-							</div>
-							<div>
-								<p className="links-delete-modal-summary-label">
-									{__("Destination")}
-								</p>
-								<ReadOnlyValueBlock
-									value={link.destinationUrl}
-									className="links-readonly-reset"
-									monospace={false}
-									valueClassName="text-heading"
-								/>
-							</div>
-							{showMetrics && (
-								<div className="links-delete-modal-metrics">
-									<div>
-										<p className="links-delete-modal-metric-label">
-											{__("Total Clicks")}
-										</p>
-										<p className="links-delete-modal-metric-value">
-											{totalClicks}
-										</p>
-									</div>
-									<div>
-										<p className="links-delete-modal-metric-label">
-											{__("Visitors")}
-										</p>
-										<p className="links-delete-modal-metric-value">
-											{uniqueClicks}
-										</p>
-									</div>
-								</div>
+				<p className="links-delete-modal-copy">
+					{isPermanentMode
+						? __(
+								"Are you sure you want to delete this link permanently? This action cannot be undone."
+							)
+						: __(
+								"Are you sure you want to move this link to the trash? You can restore it later."
 							)}
-						</div>
+				</p>
 
-						{/* Action Buttons */}
-						<div className="links-modal-actions-responsive">
+				{/* Link Info */}
+				<div className="links-delete-modal-summary">
+					<div>
+						<p className="links-delete-modal-summary-label">
+							{__("Short URL")}
+						</p>
+						<ReadOnlyValueBlock
+							value={shortUrl}
+							className="links-readonly-reset"
+							valueClassName="text-accent"
+						/>
+					</div>
+					<div>
+						<p className="links-delete-modal-summary-label">
+							{__("Destination")}
+						</p>
+						<ReadOnlyValueBlock
+							value={link.destinationUrl}
+							className="links-readonly-reset"
+							monospace={false}
+							valueClassName="text-heading"
+						/>
+					</div>
+					{showMetrics && (
+						<div className="links-delete-modal-metrics">
+							<div>
+								<p className="links-delete-modal-metric-label">
+									{__("Total Clicks")}
+								</p>
+								<p className="links-delete-modal-metric-value">
+									{totalClicks}
+								</p>
+							</div>
+							<div>
+								<p className="links-delete-modal-metric-label">
+									{__("Visitors")}
+								</p>
+								<p className="links-delete-modal-metric-value">
+									{uniqueClicks}
+								</p>
+							</div>
+						</div>
+					)}
+				</div>
+
+				{/* Action Buttons */}
+				<div className="links-modal-actions-responsive">
+					<button
+						type="button"
+						onClick={handleClose}
+						disabled={isLoading}
+						className="links-modal-button links-modal-button-secondary"
+					>
+						{__("Cancel")}
+					</button>
+
+					<div className="links-modal-actions-group">
+						{!isPermanentMode && canPermanentlyDeleteThisLink && (
 							<button
 								type="button"
-								onClick={handleClose}
+								onClick={() => handleDelete(true)}
 								disabled={isLoading}
-								className="links-modal-button links-modal-button-secondary"
+								className="links-modal-button links-modal-button-danger-outline"
 							>
-								{__("Cancel")}
+								{isLoading && activeAction === "permanent" ? (
+									<span className="links-modal-button-content">
+										<div className="links-modal-spinner"></div>
+										{__("Deleting...")}
+									</span>
+								) : (
+									<span className="links-modal-button-content">
+										<Trash2 className="links-modal-button-icon" />
+										{__("Delete Permanently")}
+									</span>
+								)}
 							</button>
+						)}
 
-							<div className="links-modal-actions-group">
-								{!isPermanentMode &&
-									canPermanentlyDeleteThisLink && (
-										<button
-											type="button"
-											onClick={() => handleDelete(true)}
-											disabled={isLoading}
-											className="links-modal-button links-modal-button-danger-outline"
-										>
-											{isLoading &&
-											activeAction === "permanent" ? (
-												<span className="links-modal-button-content">
-													<div className="links-modal-spinner"></div>
-													{__("Deleting...")}
-												</span>
-											) : (
-												<span className="links-modal-button-content">
-													<Trash2 className="links-modal-button-icon" />
-													{__("Delete Permanently")}
-												</span>
-											)}
-										</button>
-									)}
-
-								<button
-									type="button"
-									onClick={() =>
-										handleDelete(isPermanentMode)
-									}
-									disabled={
-										isLoading ||
-										(isPermanentMode
-											? !canPermanentlyDeleteThisLink
-											: !canTrashThisLink)
-									}
-									className="links-modal-button links-modal-button-danger"
-								>
-									{isLoading &&
-									(activeAction === "trash" ||
-										(isPermanentMode &&
-											activeAction === "permanent")) ? (
-										<span className="links-modal-button-content">
-											<div className="links-modal-spinner"></div>
-											{__("Deleting...")}
-										</span>
-									) : (
-										<span className="links-modal-button-content">
-											<Trash2 className="links-modal-button-icon" />
-											{isPermanentMode
-												? __("Delete Permanently")
-												: __("Move to Trash")}
-										</span>
-									)}
-								</button>
-							</div>
-						</div>
+						<button
+							type="button"
+							onClick={() => handleDelete(isPermanentMode)}
+							disabled={
+								isLoading ||
+								(isPermanentMode
+									? !canPermanentlyDeleteThisLink
+									: !canTrashThisLink)
+							}
+							className="links-modal-button links-modal-button-danger"
+						>
+							{isLoading &&
+							(activeAction === "trash" ||
+								(isPermanentMode &&
+									activeAction === "permanent")) ? (
+								<span className="links-modal-button-content">
+									<div className="links-modal-spinner"></div>
+									{__("Deleting...")}
+								</span>
+							) : (
+								<span className="links-modal-button-content">
+									<Trash2 className="links-modal-button-icon" />
+									{isPermanentMode
+										? __("Delete Permanently")
+										: __("Move to Trash")}
+								</span>
+							)}
+						</button>
 					</div>
-				</DialogPanel>
+				</div>
 			</div>
-		</Dialog>
+		</Modal>
 	);
 }
 

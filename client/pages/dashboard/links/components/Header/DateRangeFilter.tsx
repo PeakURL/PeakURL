@@ -78,7 +78,11 @@ const DateRangeFilter = ({
 	};
 
 	return (
-		<div className="links-date-range">
+		<div
+			className="links-date-range"
+			role="group"
+			aria-label={__("Date range")}
+		>
 			{rangeOptions.map((range) => (
 				<button
 					key={range.value}
@@ -86,6 +90,7 @@ const DateRangeFilter = ({
 					className={getRangeButtonClassName(
 						clickRange === range.value
 					)}
+					aria-pressed={clickRange === range.value}
 					onClick={() => onClickRangeChange(range.value)}
 				>
 					{range.label}
@@ -100,6 +105,7 @@ const DateRangeFilter = ({
 							className={getRangeButtonClassName(
 								"custom" === clickRange
 							)}
+							aria-pressed={clickRange === "custom"}
 							onClick={() => setDraftRange(customClickRange)}
 						>
 							<CalendarDays className="links-date-range-icon" />
@@ -110,9 +116,9 @@ const DateRangeFilter = ({
 							portal
 							className="links-date-range-panel"
 						>
-							<h4 className="links-date-range-title">
+							<p className="links-date-range-title">
 								{__("Custom date range")}
-							</h4>
+							</p>
 							<div className="links-date-range-fields">
 								<label className="links-date-range-field">
 									<span>{__("From")}</span>

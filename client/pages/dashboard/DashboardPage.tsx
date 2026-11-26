@@ -1,8 +1,9 @@
 import { __ } from "@/i18n";
+
 import {
 	ActivityFeed,
 	CountryStats,
-	DashboardSkeleton,
+	DashboardPanelSkeleton,
 	DeviceBreakdown,
 	Header,
 	RecentClicks,
@@ -25,23 +26,19 @@ function DashboardPage() {
 		deviceData,
 		countryData,
 		trafficData,
-		isLoading,
+		isAnalyticsLoading,
+		isChartLoading,
+		isAnalyticsError,
+		isRecentClicksLoading,
+		isActivityLoading,
 	} = useDashboardAnalytics();
-
-	if (isLoading) {
-		return (
-			<div className="dashboard-page">
-				<Header
-					timeRange={timeRange}
-					onTimeRangeChange={setTimeRange}
-					onRefresh={handleRefresh}
-					isRefreshing={true}
-					canViewAnalytics={canViewAnalytics}
-				/>
-				<DashboardSkeleton />
-			</div>
-		);
-	}
+	const activity =
+		canManageUsers &&
+		(isActivityLoading ? (
+			<DashboardPanelSkeleton panel="activity" />
+		) : (
+			<ActivityFeed recentActivities={recentActivities} />
+		));
 
 	return (
 		<div className="dashboard-page">
@@ -55,49 +52,67 @@ function DashboardPage() {
 
 			{canViewAnalytics ? (
 				<>
-					<StatsCards stats={stats} />
+					{isAnalyticsError && (
+						<p className="dashboard-analytics-notice" role="alert">
+							{__(
+								"Unable to load analytics for this date range. Refresh to try again."
+							)}
+						</p>
+					)}
+					<StatsCards stats={stats} isLoading={isAnalyticsLoading} />
 
-					<div className="dashboard-page-traffic-grid">
-						<div className="dashboard-page-traffic-main">
-							<TrafficOverview trafficData={trafficData} />
-						</div>
-						<div className="dashboard-page-traffic-side">
+					<div
+						className="dashboard-page-traffic-grid"
+						aria-busy={isAnalyticsLoading}
+					>
+						{!isAnalyticsError &&
+							(isChartLoading ? (
+								<DashboardPanelSkeleton panel="traffic" />
+							) : (
+								<TrafficOverview trafficData={trafficData} />
+							))}
+						{isRecentClicksLoading ? (
+							<DashboardPanelSkeleton panel="recent-clicks" />
+						) : (
 							<RecentClicks recentClicks={recentClicks} />
-						</div>
+						)}
 					</div>
 
-					<div className="dashboard-page-summary-grid">
-						<div className="dashboard-page-summary-column">
-							<DeviceBreakdown deviceData={deviceData} />
-							{canManageUsers ? (
-								<ActivityFeed
-									recentActivities={recentActivities}
-								/>
-							) : null}
+					{!isAnalyticsError && (
+						<div
+							className="dashboard-page-summary-grid"
+							aria-busy={isAnalyticsLoading}
+						>
+							{isChartLoading ? (
+								<>
+									<DashboardPanelSkeleton panel="countries" />
+									<DashboardPanelSkeleton panel="devices" />
+								</>
+							) : (
+								<>
+									<CountryStats countryData={countryData} />
+									<DeviceBreakdown deviceData={deviceData} />
+								</>
+							)}
 						</div>
-						<div className="dashboard-page-summary-countries">
-							<CountryStats countryData={countryData} />
-						</div>
-					</div>
+					)}
 				</>
 			) : (
-				<div className="space-y-6">
-					<div className="rounded-xl border border-stroke bg-surface p-6 text-center max-w-lg mx-auto my-6">
-						<h2 className="text-base font-semibold text-heading mb-2">
+				<>
+					<div className="dashboard-analytics-notice">
+						<h2 className="mb-2 text-base font-semibold text-heading">
 							{__("Analytics Overview Hidden")}
 						</h2>
-						<p className="text-sm text-text-muted">
+						<p>
 							{__(
 								"Traffic statistics and click analytics are disabled for your role."
 							)}
 						</p>
 					</div>
-					{canManageUsers ? (
-						<div className="max-w-2xl mx-auto">
-							<ActivityFeed recentActivities={recentActivities} />
-						</div>
-					) : null}
-				</div>
+				</>
+			)}
+			{activity && (
+				<div className="dashboard-page-activity">{activity}</div>
 			)}
 		</div>
 	);

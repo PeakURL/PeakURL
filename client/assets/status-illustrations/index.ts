@@ -1,9 +1,6 @@
 import illustrations from "../../../server/services/status-illustrations/manifest.json" with { type: "json" };
 
-const artwork = import.meta.glob<string>(
-	"../../../server/services/status-illustrations/*.svg",
-	{ eager: true, query: "?raw", import: "default" }
-);
+let artwork: Record<string, string> | undefined;
 
 /** Semantic artwork names shared by React and PHP recovery pages. */
 export type StatusIllustrationName = keyof typeof illustrations;
@@ -13,6 +10,10 @@ export function getStatusIllustrationUrl(
 	name: StatusIllustrationName,
 	theme: "light" | "dark"
 ): string {
+	artwork ??= import.meta.glob<string>(
+		"../../../server/services/status-illustrations/*.svg",
+		{ eager: true, query: "?raw", import: "default" }
+	);
 	const filename = illustrations[name];
 	const svg =
 		artwork[`../../../server/services/status-illustrations/${filename}`];

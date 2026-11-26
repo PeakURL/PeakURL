@@ -188,6 +188,7 @@ function TrafficHistory({
 								"line" === chartType
 							)}
 							title={__("Line Chart")}
+							aria-pressed={chartType === "line"}
 						>
 							<LineChart className="links-traffic-history-tool-icon" />
 							<span>{__("Line")}</span>
@@ -199,6 +200,7 @@ function TrafficHistory({
 								"bar" === chartType
 							)}
 							title={__("Bar Chart")}
+							aria-pressed={chartType === "bar"}
 						>
 							<BarChart3 className="links-traffic-history-tool-icon" />
 							<span>{__("Bar")}</span>
@@ -217,6 +219,7 @@ function TrafficHistory({
 										series.value === seriesMode
 									)}
 									title={series.label}
+									aria-pressed={series.value === seriesMode}
 								>
 									<Icon className="links-traffic-history-tool-icon" />
 									<span>{series.label}</span>
@@ -231,6 +234,7 @@ function TrafficHistory({
 								key={range.value}
 								type="button"
 								onClick={() => setTimeRange(range.value)}
+								aria-pressed={timeRange === range.value}
 								className={getRangeButtonClassName(
 									timeRange === range.value
 								)}
@@ -340,17 +344,19 @@ function TrafficHistory({
 				</div>
 			</div>
 
-			<div className="links-traffic-history-canvas-wrap">
+			<div
+				className="links-traffic-history-canvas-wrap"
+				aria-busy={isLoading}
+			>
 				{isLoading ? (
 					<div className="links-traffic-history-loading">
 						<div className="links-traffic-history-spinner" />
 					</div>
 				) : null}
-				{hasData ? (
+				{hasData || isLoading ? (
 					<TrafficChart
-						data={trafficSeries}
+						data={hasData ? trafficSeries : undefined}
 						type={chartType}
-						timeRange={timeRange}
 						seriesMode={seriesMode}
 					/>
 				) : (

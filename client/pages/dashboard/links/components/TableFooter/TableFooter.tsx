@@ -2,7 +2,6 @@ import { Link2, MousePointerClick } from "lucide-react";
 
 import { PageSizeControl, Select, type SelectOption } from "@/components";
 import { __, sprintf } from "@/i18n";
-import { isDocumentRtl } from "@/i18n/direction";
 import { formatCount } from "@/shared/formatting";
 
 import type {
@@ -28,7 +27,6 @@ const TableFooter = ({
 	canViewAnalytics = true,
 	isAdmin = false,
 }: TableFooterProps) => {
-	const pageDirection = isDocumentRtl() ? "rtl" : "ltr";
 	const statusOptions: SelectOption<LinksStatusFilter>[] = [
 		{ value: "all", label: __("Status: All") },
 		{ value: "active", label: __("Status: Active") },
@@ -106,11 +104,9 @@ const TableFooter = ({
 
 				{/* Filters */}
 				<div
-					className={`links-table-footer-filters ${
-						"rtl" === pageDirection
-							? "links-table-footer-filters-start"
-							: "links-table-footer-filters-end"
-					}`}
+					className="links-table-footer-filters"
+					role="group"
+					aria-label={__("Link filters")}
 				>
 					{setStatusFilter && (
 						<Select
@@ -136,7 +132,6 @@ const TableFooter = ({
 						value={sortOrder}
 						onChange={setSortOrder}
 						options={sortOrderOptions}
-						className="links-table-footer-select"
 						ariaLabel={__("Sort order")}
 						buttonClassName="form-control-compact"
 					/>
@@ -144,7 +139,6 @@ const TableFooter = ({
 					<PageSizeControl
 						value={limit}
 						onChange={setLimit}
-						className="links-table-footer-select"
 						ariaLabel={__("Rows per page")}
 					/>
 				</div>

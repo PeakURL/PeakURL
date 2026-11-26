@@ -38,20 +38,24 @@ const TrafficOverview = ({ trafficData }: TrafficOverviewProps) => {
 					<div className="dashboard-traffic-toolbar">
 						<div className="dashboard-traffic-chart-toggle">
 							<button
+								type="button"
 								onClick={() => setChartType("line")}
 								className={getChartButtonClassName(
 									"line" === chartType
 								)}
 								title={__("Line Chart")}
+								aria-pressed={chartType === "line"}
 							>
 								<LineChart size={16} />
 							</button>
 							<button
+								type="button"
 								onClick={() => setChartType("bar")}
 								className={getChartButtonClassName(
 									"bar" === chartType
 								)}
 								title={__("Bar Chart")}
+								aria-pressed={chartType === "bar"}
 							>
 								<BarChart3 size={16} />
 							</button>

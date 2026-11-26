@@ -28,10 +28,10 @@ import {
 	ConfirmDialog,
 	PageHeader,
 	RefreshButton,
+	Skeleton,
 	useNotification,
 } from "@/components";
 import { useTemporaryState } from "@/hooks";
-import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { __, sprintf } from "@/i18n";
 import {
 	useGetSystemStatusQuery,
@@ -59,7 +59,7 @@ import type {
 	StatusView,
 	SystemCheck,
 } from "../types";
-import { BackgroundJobsSummary, SystemStatusSkeleton } from "./components";
+import { BackgroundJobsSummary } from "./components";
 
 function hasValue(value: unknown) {
 	return value !== undefined && value !== null && "" !== value;
@@ -343,7 +343,12 @@ function IssueSection({
 	);
 }
 
-function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
+function InfoSection({
+	section,
+	isOpen,
+	onToggle,
+	isPending,
+}: InfoSectionProps & { isPending: boolean }) {
 	return (
 		<div className="system-status-page-info-panel">
 			<button
@@ -385,31 +390,40 @@ function InfoSection({ section, isOpen, onToggle }: InfoSectionProps) {
 											{item.label}
 										</th>
 										<td className="system-status-page-info-value-cell">
-											<div className="flex items-center gap-3">
-												<div>
-													<p
-														className={cn(
-															"system-status-page-info-value",
-															item.monospace &&
-																"system-status-page-info-value-monospace"
-														)}
-													>
-														{displayValue(
-															item.value
-														)}
-													</p>
-													{item.helperText ? (
-														<p className="system-status-page-info-helper">
-															{item.helperText}
+											{isPending ? (
+												<Skeleton
+													className="h-4 w-28"
+													aria-hidden="true"
+												/>
+											) : (
+												<div className="flex items-center gap-3">
+													<div>
+														<p
+															className={cn(
+																"system-status-page-info-value",
+																item.monospace &&
+																	"system-status-page-info-value-monospace"
+															)}
+														>
+															{displayValue(
+																item.value
+															)}
 														</p>
+														{item.helperText ? (
+															<p className="system-status-page-info-helper">
+																{
+																	item.helperText
+																}
+															</p>
+														) : null}
+													</div>
+													{item.action ? (
+														<div className="shrink-0">
+															{item.action}
+														</div>
 													) : null}
 												</div>
-												{item.action ? (
-													<div className="shrink-0">
-														{item.action}
-													</div>
-												) : null}
-											</div>
+											)}
 										</td>
 									</tr>
 								)
@@ -464,20 +478,7 @@ function SystemStatusPage() {
 		}
 	};
 
-	if (isLoading && !status) {
-		return <SystemStatusSkeleton />;
-	}
-
-	if (!status) {
-		return (
-			<ErrorState
-				errorMessage={
-					errorMessage ||
-					__("System status data is not available right now.")
-				}
-			/>
-		);
-	}
+	const isPending = isLoading && !status;
 
 	const overallStatus = status?.summary?.overall || "warning";
 	const isHealthOk = "ok" === overallStatus;
@@ -1105,7 +1106,6 @@ function SystemStatusPage() {
 		<div className="system-status-page">
 			{/* Hero Header */}
 			<PageHeader
-				icon={dashboardPageIcons["tools-system-status"]}
 				title={__("System Status")}
 				description={__(
 					"Monitor installation health, check server environment diagnostics, and review technical configuration details."
@@ -1126,373 +1126,452 @@ function SystemStatusPage() {
 				}
 			/>
 
-			{errorMessage ? <ErrorState errorMessage={errorMessage} /> : null}
+			{!isPending && (errorMessage || !status) && (
+				<ErrorState
+					errorMessage={
+						errorMessage ||
+						__("System status data is not available right now.")
+					}
+				/>
+			)}
 
-			{"status" === activeView ? (
-				<div className="system-status-page-view">
-					{/* Status Overview Card */}
+			{(status || isPending) &&
+				("status" === activeView ? (
 					<div
-						className={cn(
-							"system-status-page-banner",
-							isHealthOk && "system-status-page-banner-ok",
-							!isHealthOk &&
-								errorChecks.length > 0 &&
-								"system-status-page-banner-error",
-							!isHealthOk &&
-								0 === errorChecks.length &&
-								"system-status-page-banner-warning"
-						)}
+						className="system-status-page-view"
+						aria-busy={isPending}
 					>
-						<div className="system-status-page-banner-main">
-							<div className="system-status-page-banner-indicator">
-								<span className="relative flex h-3.5 w-3.5 shrink-0">
-									<span
-										className={cn(
-											"animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
-											isHealthOk && "bg-emerald-400",
-											!isHealthOk &&
-												errorChecks.length > 0 &&
-												"bg-rose-400",
-											!isHealthOk &&
-												0 === errorChecks.length &&
-												"bg-amber-400"
-										)}
-									/>
-									<span
-										className={cn(
-											"relative inline-flex rounded-full h-3.5 w-3.5",
-											isHealthOk && "bg-emerald-500",
-											!isHealthOk &&
-												errorChecks.length > 0 &&
-												"bg-rose-500",
-											!isHealthOk &&
-												0 === errorChecks.length &&
-												"bg-amber-500"
-										)}
-									/>
-								</span>
-							</div>
-
-							<div className="system-status-page-banner-copy">
-								<h2 className="system-status-page-banner-title">
-									{isHealthOk
-										? __("Site Health: Good")
-										: errorChecks.length > 0
-											? formatHeadingCount(
-													errorChecks.length,
-													__(
-														"Site Health: 1 Critical Issue"
-													),
-													__(
-														"Site Health: %s Critical Issues"
-													)
-												)
-											: formatHeadingCount(
-													warningChecks.length,
-													__(
-														"Site Health: 1 Recommended Improvement"
-													),
-													__(
-														"Site Health: %s Recommended Improvements"
-													)
-												)}
-								</h2>
-
-								<p className="system-status-page-banner-description">
-									{isHealthOk
-										? __(
-												"PeakURL is configured properly and all environmental diagnostics are in good standing."
-											)
-										: errorChecks.length > 0
-											? __(
-													"Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
-												)
-											: __(
-													"All core features are active, with recommended improvements available below to optimize your install."
-												)}
-								</p>
-
-								<div className="system-status-page-banner-footer">
-									<div className="system-status-page-banner-pills">
-										<span className="system-status-page-pill system-status-page-pill-ok">
-											<CheckCircle2 size={12} />
-											<span>
-												{sprintf(
-													__("%s Passed"),
-													formatCount(
-														passingChecks.length
-													)
-												)}
-											</span>
-										</span>
-										{warningChecks.length > 0 && (
-											<span className="system-status-page-pill system-status-page-pill-warning">
-												<AlertCircle size={12} />
-												<span>
-													{sprintf(
-														__("%s Recommended"),
-														formatCount(
-															warningChecks.length
-														)
-													)}
-												</span>
-											</span>
-										)}
-										{errorChecks.length > 0 && (
-											<span className="system-status-page-pill system-status-page-pill-error">
-												<AlertTriangle size={12} />
-												<span>
-													{sprintf(
-														__("%s Critical"),
-														formatCount(
-															errorChecks.length
-														)
-													)}
-												</span>
-											</span>
-										)}
-									</div>
-
-									<div
-										className="system-status-page-banner-timestamp"
-										title={timeInfo.full || undefined}
-									>
-										<Clock
-											size={13}
-											className="system-status-page-banner-timestamp-icon"
+						{isPending ? (
+							<div className="system-status-page-banner system-status-page-banner-pending">
+								<div className="system-status-page-banner-main">
+									<div className="system-status-page-banner-indicator">
+										<Skeleton
+											className="size-3.5 rounded-full"
+											aria-hidden="true"
 										/>
-										<span>
-											{sprintf(
-												__("Checked %s"),
-												timeInfo.relative
-											)}
-										</span>
+									</div>
+									<div className="system-status-page-banner-copy">
+										<h2 className="system-status-page-banner-title">
+											{__("Site Health")}
+										</h2>
+										<Skeleton
+											className="h-4 w-full max-w-lg"
+											aria-hidden="true"
+										/>
+										<div className="system-status-page-banner-footer">
+											<Skeleton
+												className="h-5 w-24"
+												aria-hidden="true"
+											/>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
-
-					{/* Background Jobs Operational Summary */}
-					<BackgroundJobsSummary />
-
-					{/* Subsystems Component Grid */}
-					<div className="system-status-page-subsystems">
-						<div className="system-status-page-subsystems-header">
-							<h3 className="system-status-page-subsystems-title">
-								{__("System Checks")}
-							</h3>
-						</div>
-
-						<div className="system-status-page-subsystems-grid">
-							{subsystems.map((subsystem) => {
-								const Icon = subsystem.icon;
-								const isOk = "ok" === subsystem.status;
-								const isWarn = "warning" === subsystem.status;
-
-								return (
-									<div
-										key={subsystem.id}
-										className="system-status-page-subsystem-card"
-									>
-										<div className="system-status-page-subsystem-icon">
-											<Icon size={16} />
-										</div>
-										<div className="system-status-page-subsystem-info">
-											<p className="system-status-page-subsystem-name">
-												{subsystem.name}
-											</p>
-											<p className="system-status-page-subsystem-meta">
-												{subsystem.meta}
-											</p>
-										</div>
-										<div className="system-status-page-subsystem-badge-wrap">
+						) : (
+							<div
+								className={cn(
+									"system-status-page-banner",
+									isHealthOk &&
+										"system-status-page-banner-ok",
+									!isHealthOk &&
+										errorChecks.length > 0 &&
+										"system-status-page-banner-error",
+									!isHealthOk &&
+										0 === errorChecks.length &&
+										"system-status-page-banner-warning"
+								)}
+							>
+								<div className="system-status-page-banner-main">
+									<div className="system-status-page-banner-indicator">
+										<span className="relative flex h-3.5 w-3.5 shrink-0">
 											<span
 												className={cn(
-													"system-status-page-subsystem-badge",
-													isOk &&
-														"system-status-page-subsystem-badge-ok",
-													isWarn &&
-														"system-status-page-subsystem-badge-warning",
-													!isOk &&
-														!isWarn &&
-														"system-status-page-subsystem-badge-error"
+													"motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full opacity-75",
+													isHealthOk &&
+														"bg-emerald-400",
+													!isHealthOk &&
+														errorChecks.length >
+															0 &&
+														"bg-rose-400",
+													!isHealthOk &&
+														0 ===
+															errorChecks.length &&
+														"bg-amber-400"
 												)}
+											/>
+											<span
+												className={cn(
+													"relative inline-flex rounded-full h-3.5 w-3.5",
+													isHealthOk &&
+														"bg-emerald-500",
+													!isHealthOk &&
+														errorChecks.length >
+															0 &&
+														"bg-rose-500",
+													!isHealthOk &&
+														0 ===
+															errorChecks.length &&
+														"bg-amber-500"
+												)}
+											/>
+										</span>
+									</div>
+
+									<div className="system-status-page-banner-copy">
+										<h2 className="system-status-page-banner-title">
+											{isHealthOk
+												? __("Site Health: Good")
+												: errorChecks.length > 0
+													? formatHeadingCount(
+															errorChecks.length,
+															__(
+																"Site Health: 1 Critical Issue"
+															),
+															__(
+																"Site Health: %s Critical Issues"
+															)
+														)
+													: formatHeadingCount(
+															warningChecks.length,
+															__(
+																"Site Health: 1 Recommended Improvement"
+															),
+															__(
+																"Site Health: %s Recommended Improvements"
+															)
+														)}
+										</h2>
+
+										<p className="system-status-page-banner-description">
+											{isHealthOk
+												? __(
+														"PeakURL is configured properly and all environmental diagnostics are in good standing."
+													)
+												: errorChecks.length > 0
+													? __(
+															"Critical items require attention to restore optimal site security and performance. Resolving these should be prioritized."
+														)
+													: __(
+															"All core features are active, with recommended improvements available below to optimize your install."
+														)}
+										</p>
+
+										<div className="system-status-page-banner-footer">
+											<div className="system-status-page-banner-pills">
+												<span className="system-status-page-pill system-status-page-pill-ok">
+													<CheckCircle2 size={12} />
+													<span>
+														{sprintf(
+															__("%s Passed"),
+															formatCount(
+																passingChecks.length
+															)
+														)}
+													</span>
+												</span>
+												{warningChecks.length > 0 && (
+													<span className="system-status-page-pill system-status-page-pill-warning">
+														<AlertCircle
+															size={12}
+														/>
+														<span>
+															{sprintf(
+																__(
+																	"%s Recommended"
+																),
+																formatCount(
+																	warningChecks.length
+																)
+															)}
+														</span>
+													</span>
+												)}
+												{errorChecks.length > 0 && (
+													<span className="system-status-page-pill system-status-page-pill-error">
+														<AlertTriangle
+															size={12}
+														/>
+														<span>
+															{sprintf(
+																__(
+																	"%s Critical"
+																),
+																formatCount(
+																	errorChecks.length
+																)
+															)}
+														</span>
+													</span>
+												)}
+											</div>
+
+											<div
+												className="system-status-page-banner-timestamp"
+												title={
+													timeInfo.full || undefined
+												}
 											>
-												<span
-													className={cn(
-														"system-status-page-subsystem-dot",
-														isOk &&
-															"system-status-page-subsystem-dot-ok",
-														isWarn &&
-															"system-status-page-subsystem-dot-warning",
-														!isOk &&
-															!isWarn &&
-															"system-status-page-subsystem-dot-error"
-													)}
+												<Clock
+													size={13}
+													className="system-status-page-banner-timestamp-icon"
 												/>
 												<span>
-													{isOk
-														? __("Good")
-														: isWarn
-															? __("Review")
-															: __(
-																	"Action Required"
-																)}
+													{sprintf(
+														__("Checked %s"),
+														timeInfo.relative
+													)}
 												</span>
-											</span>
+											</div>
 										</div>
 									</div>
-								);
-							})}
+								</div>
+							</div>
+						)}
+
+						{/* Background Jobs Operational Summary */}
+						<BackgroundJobsSummary />
+
+						{/* Subsystems Component Grid */}
+						<div className="system-status-page-subsystems">
+							<div className="system-status-page-subsystems-header">
+								<h3 className="system-status-page-subsystems-title">
+									{__("System Checks")}
+								</h3>
+							</div>
+
+							<div className="system-status-page-subsystems-grid">
+								{subsystems.map((subsystem) => {
+									const Icon = subsystem.icon;
+									const isOk = "ok" === subsystem.status;
+									const isWarn =
+										"warning" === subsystem.status;
+
+									return (
+										<div
+											key={subsystem.id}
+											className="system-status-page-subsystem-card"
+										>
+											<div className="system-status-page-subsystem-icon">
+												<Icon size={16} />
+											</div>
+											<div className="system-status-page-subsystem-info">
+												<p className="system-status-page-subsystem-name">
+													{subsystem.name}
+												</p>
+												{isPending ? (
+													<Skeleton
+														className="mt-1 h-3 w-24"
+														aria-hidden="true"
+													/>
+												) : (
+													<p className="system-status-page-subsystem-meta">
+														{subsystem.meta}
+													</p>
+												)}
+											</div>
+											<div className="system-status-page-subsystem-badge-wrap">
+												{isPending ? (
+													<Skeleton
+														className="h-5 w-12"
+														aria-hidden="true"
+													/>
+												) : (
+													<span
+														className={cn(
+															"system-status-page-subsystem-badge",
+															isOk &&
+																"system-status-page-subsystem-badge-ok",
+															isWarn &&
+																"system-status-page-subsystem-badge-warning",
+															!isOk &&
+																!isWarn &&
+																"system-status-page-subsystem-badge-error"
+														)}
+													>
+														<span
+															className={cn(
+																"system-status-page-subsystem-dot",
+																isOk &&
+																	"system-status-page-subsystem-dot-ok",
+																isWarn &&
+																	"system-status-page-subsystem-dot-warning",
+																!isOk &&
+																	!isWarn &&
+																	"system-status-page-subsystem-dot-error"
+															)}
+														/>
+														<span>
+															{isOk
+																? __("Good")
+																: isWarn
+																	? __(
+																			"Review"
+																		)
+																	: __(
+																			"Action Required"
+																		)}
+														</span>
+													</span>
+												)}
+											</div>
+										</div>
+									);
+								})}
+							</div>
 						</div>
+
+						{/* Issue Sections or Passed Tests Accordion */}
+						{errorChecks.length > 0 ? (
+							<IssueSection
+								title={formatHeadingCount(
+									errorChecks.length,
+									__("1 critical issue"),
+									__("%s critical issues")
+								)}
+								description={__(
+									"Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
+								)}
+								checks={errorChecks}
+								expandedChecks={expandedChecks}
+								onToggleCheck={toggleCheck}
+								severity="error"
+							/>
+						) : null}
+
+						{warningChecks.length > 0 ? (
+							<IssueSection
+								title={formatHeadingCount(
+									warningChecks.length,
+									__("1 recommended improvement"),
+									__("%s recommended improvements")
+								)}
+								description={__(
+									"Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
+								)}
+								checks={warningChecks}
+								expandedChecks={expandedChecks}
+								onToggleCheck={toggleCheck}
+								severity="warning"
+							/>
+						) : null}
+
+						{passingChecks.length > 0 ? (
+							<div className="system-status-page-passed-panel">
+								<button
+									type="button"
+									onClick={() =>
+										setShowPassedChecks(
+											(current) => !current
+										)
+									}
+									className="system-status-page-passed-toggle"
+								>
+									<div className="system-status-page-passed-toggle-content">
+										<CheckCircle2
+											size={16}
+											className="text-emerald-600 dark:text-emerald-400"
+										/>
+										<span>
+											{showPassedChecks
+												? __("Hide passed tests")
+												: formatHeadingCount(
+														passingChecks.length,
+														__("1 passed test"),
+														__("%s passed tests")
+													)}
+										</span>
+									</div>
+									<div className="system-status-page-issue-chevron">
+										{showPassedChecks ? (
+											<ChevronUp size={16} />
+										) : (
+											<ChevronDown size={16} />
+										)}
+									</div>
+								</button>
+
+								{showPassedChecks ? (
+									<div className="system-status-page-passed-list">
+										{passingChecks.map((check, index) => {
+											const checkKey =
+												check?.id ||
+												check?.label ||
+												`passed-check-${index}`;
+
+											return (
+												<IssueRow
+													key={checkKey}
+													check={check}
+													isOpen={expandedChecks.has(
+														checkKey
+													)}
+													onToggle={() =>
+														toggleCheck(checkKey)
+													}
+													showBorder={index > 0}
+												/>
+											);
+										})}
+									</div>
+								) : null}
+							</div>
+						) : null}
 					</div>
-
-					{/* Issue Sections or Passed Tests Accordion */}
-					{errorChecks.length > 0 ? (
-						<IssueSection
-							title={formatHeadingCount(
-								errorChecks.length,
-								__("1 critical issue"),
-								__("%s critical issues")
-							)}
-							description={__(
-								"Critical issues are items that may have a high impact on your site performance or security. Resolving these issues should be prioritized."
-							)}
-							checks={errorChecks}
-							expandedChecks={expandedChecks}
-							onToggleCheck={toggleCheck}
-							severity="error"
-						/>
-					) : null}
-
-					{warningChecks.length > 0 ? (
-						<IssueSection
-							title={formatHeadingCount(
-								warningChecks.length,
-								__("1 recommended improvement"),
-								__("%s recommended improvements")
-							)}
-							description={__(
-								"Recommended improvements are beneficial for your site, though not as urgent as a critical issue. They may include improvements in areas such as security, performance, and user experience."
-							)}
-							checks={warningChecks}
-							expandedChecks={expandedChecks}
-							onToggleCheck={toggleCheck}
-							severity="warning"
-						/>
-					) : null}
-
-					{passingChecks.length > 0 ? (
-						<div className="system-status-page-passed-panel">
+				) : (
+					/* Info View */
+					<div
+						className="system-status-page-view"
+						aria-busy={isPending}
+					>
+						<div className="system-status-page-info-header">
+							<div className="system-status-page-info-header-copy">
+								<h2 className="system-status-page-info-header-title">
+									{__("System Information")}
+								</h2>
+								<p className="system-status-page-info-header-summary">
+									{__(
+										"Detailed technical environment, server configuration, storage, and database specifications."
+									)}
+								</p>
+							</div>
 							<button
 								type="button"
-								onClick={() =>
-									setShowPassedChecks((current) => !current)
-								}
-								className="system-status-page-passed-toggle"
+								onClick={handleCopyInfo}
+								disabled={isPending}
+								className="system-status-page-copy-button"
 							>
-								<div className="system-status-page-passed-toggle-content">
-									<CheckCircle2
-										size={16}
-										className="text-emerald-600 dark:text-emerald-400"
-									/>
-									<span>
-										{showPassedChecks
-											? __("Hide passed tests")
-											: formatHeadingCount(
-													passingChecks.length,
-													__("1 passed test"),
-													__("%s passed tests")
-												)}
-									</span>
-								</div>
-								<div className="system-status-page-issue-chevron">
-									{showPassedChecks ? (
-										<ChevronUp size={16} />
-									) : (
-										<ChevronDown size={16} />
-									)}
-								</div>
-							</button>
-
-							{showPassedChecks ? (
-								<div className="system-status-page-passed-list">
-									{passingChecks.map((check, index) => {
-										const checkKey =
-											check?.id ||
-											check?.label ||
-											`passed-check-${index}`;
-
-										return (
-											<IssueRow
-												key={checkKey}
-												check={check}
-												isOpen={expandedChecks.has(
-													checkKey
-												)}
-												onToggle={() =>
-													toggleCheck(checkKey)
-												}
-												showBorder={index > 0}
-											/>
-										);
-									})}
-								</div>
-							) : null}
-						</div>
-					) : null}
-				</div>
-			) : (
-				/* Info View */
-				<div className="system-status-page-view">
-					<div className="system-status-page-info-header">
-						<div className="system-status-page-info-header-copy">
-							<h2 className="system-status-page-info-header-title">
-								{__("System Information")}
-							</h2>
-							<p className="system-status-page-info-header-summary">
-								{__(
-									"Detailed technical environment, server configuration, storage, and database specifications."
+								{copiedInfo ? (
+									<>
+										<Check
+											size={14}
+											className="text-emerald-600 dark:text-emerald-400"
+										/>
+										<span>{__("Copied!")}</span>
+									</>
+								) : (
+									<>
+										<Copy size={14} />
+										<span>
+											{__("Copy site info to clipboard")}
+										</span>
+									</>
 								)}
-							</p>
+							</button>
 						</div>
-						<button
-							type="button"
-							onClick={handleCopyInfo}
-							className="system-status-page-copy-button"
-						>
-							{copiedInfo ? (
-								<>
-									<Check
-										size={14}
-										className="text-emerald-600 dark:text-emerald-400"
-									/>
-									<span>{__("Copied!")}</span>
-								</>
-							) : (
-								<>
-									<Copy size={14} />
-									<span>
-										{__("Copy site info to clipboard")}
-									</span>
-								</>
-							)}
-						</button>
-					</div>
 
-					<div className="system-status-page-info-list">
-						{infoSections.map((section) => (
-							<InfoSection
-								key={section.id}
-								section={section}
-								isOpen={expandedSections.has(section.id)}
-								onToggle={() => toggleSection(section.id)}
-							/>
-						))}
+						<div className="system-status-page-info-list">
+							{infoSections.map((section) => (
+								<InfoSection
+									key={section.id}
+									section={section}
+									isPending={isPending}
+									isOpen={expandedSections.has(section.id)}
+									onToggle={() => toggleSection(section.id)}
+								/>
+							))}
+						</div>
 					</div>
-				</div>
-			)}
+				))}
 
 			<ConfirmDialog
 				open={isPurgeModalOpen}

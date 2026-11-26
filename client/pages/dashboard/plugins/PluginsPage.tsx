@@ -4,7 +4,6 @@ import {
 	ExternalLink,
 	Package,
 	Plus,
-	RefreshCw,
 	ShieldCheck,
 	Upload,
 } from "lucide-react";
@@ -14,7 +13,6 @@ import { Button, PageHeader } from "@/components";
 import { SUBMIT_PLUGIN_URL } from "@/constants";
 import { useAdminAccess } from "@/hooks";
 import { __ } from "@/i18n";
-import { dashboardPageIcons } from "@/pages/dashboard/navigation";
 import { useGetInstalledPluginsQuery } from "@/state/slices/api/system";
 
 import {
@@ -110,7 +108,6 @@ function PluginsPage() {
 		<div className="plugins-page space-y-6">
 			{/* Page Header */}
 			<PageHeader
-				icon={dashboardPageIcons["plugins"]}
 				title={isAddNew ? __("Add New Plugin") : __("Plugins")}
 				description={
 					isAddNew
@@ -186,18 +183,11 @@ function PluginsPage() {
 					uploadLimit={pluginsPayload?.uploadLimit}
 				/>
 			) : isPluginsLoading ? (
-				/* Loading inventory state */
-				<div className="py-16 text-center" aria-live="polite">
-					<div className="flex items-center justify-center gap-3 text-text-muted">
-						<RefreshCw
-							size={18}
-							className="animate-spin text-accent"
-						/>
-						<span className="text-sm font-medium">
-							{__("Loading plugins…")}
-						</span>
-					</div>
-				</div>
+				<InstalledPluginsTable
+					plugins={regularPlugins}
+					type="regular"
+					isLoading
+				/>
 			) : isPluginsError ? (
 				/* Error state handled by table */
 				<InstalledPluginsTable

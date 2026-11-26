@@ -22,7 +22,7 @@ export interface TrafficChartData {
 	unique: number[];
 
 	/** Bucket size used by the traffic series. */
-	granularity?: "day" | "month";
+	granularity?: "hour" | "day" | "month";
 }
 
 /**
@@ -31,9 +31,6 @@ export interface TrafficChartData {
 export interface TrafficChartProps {
 	/** Optional traffic data rendered by the chart. */
 	data?: Partial<TrafficChartData> | null;
-
-	/** Active time-range token used for display logic. */
-	timeRange?: string;
 
 	/** Desired chart presentation mode. */
 	type?: TrafficChartType;

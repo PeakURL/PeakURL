@@ -7,40 +7,42 @@
 		<title>PeakURL — Self-Hosted Link Management &amp; MCP Server</title>
 		<style>
 			:root {
-				--bg: #f7f8fa;
+				color-scheme: light;
+				--bg: #f3f8f7;
 				--surface: #ffffff;
-				--surface-alt: #f0f3f8;
-				--ink: #2b3040;
-				--heading: #2b3040;
-				--muted: #596579;
-				--line: #d9dee7;
-				--line-subtle: #edf0f5;
-				--accent: #3d4c6a;
-				--accent-hover: #2b3040;
-				--soft: #e9eef9;
-				--code-bg: #edf1f7;
-				--code-border: #d0d8e4;
-				--badge-bg: #e9eef9;
-				--badge-text: #2b3040;
+				--surface-alt: #e6efed;
+				--ink: #17373b;
+				--heading: #17373b;
+				--muted: #536c6a;
+				--line: #d5e4e0;
+				--line-subtle: #e6efed;
+				--accent: #126e68;
+				--accent-hover: #0e5c57;
+				--soft: #e1f3ee;
+				--code-bg: #e6efed;
+				--code-border: #d5e4e0;
+				--badge-bg: #e1f3ee;
+				--badge-text: #125d58;
 			}
 
 			@media (prefers-color-scheme: dark) {
 				:root {
-					--bg: #151923;
-					--surface: #1c2230;
-					--surface-alt: #252d3e;
-					--ink: #f8fafc;
+					color-scheme: dark;
+					--bg: #0e1312;
+					--surface: #141d1b;
+					--surface-alt: #222e2b;
+					--ink: #edf5f2;
 					--heading: #ffffff;
-					--muted: #b1bbcc;
-					--line: #364155;
-					--line-subtle: #2b3446;
-					--accent: #b5c8fa;
-					--accent-hover: #ffffff;
-					--soft: #333d54;
-					--code-bg: #151b27;
-					--code-border: #364155;
-					--badge-bg: #333d54;
-					--badge-text: #f8fafc;
+					--muted: #a9c1bb;
+					--line: #2b3834;
+					--line-subtle: #222e2b;
+					--accent: #83dccc;
+					--accent-hover: #a3e9dc;
+					--soft: #254641;
+					--code-bg: #1c2624;
+					--code-border: #2b3834;
+					--badge-bg: #254641;
+					--badge-text: #83dccc;
 				}
 			}
 
@@ -56,7 +58,7 @@
 				background: var(--bg);
 				color: var(--ink);
 				font-family:
-					Inter,
+					system-ui,
 					-apple-system,
 					BlinkMacSystemFont,
 					"Segoe UI",
@@ -106,10 +108,27 @@
 
 			h1 {
 				margin: 0;
+				display: flex;
+				align-items: center;
 				color: var(--heading);
-				font-size: 24px;
-				font-weight: 700;
-				letter-spacing: -0.025em;
+			}
+
+			.header-wordmark {
+				display: block;
+				height: 20px;
+				width: auto;
+			}
+
+			.sr-only {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				padding: 0;
+				margin: -1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+				border: 0;
 			}
 
 			.version-badge {
@@ -312,8 +331,27 @@
 						height="36"
 					/>
 					<div class="header-title-group">
-						<h1>PeakURL</h1>
-						<span class="version-badge">v1.8.0</span>
+						<h1>
+							<svg
+								class="header-wordmark"
+								xmlns="http://www.w3.org/2000/svg"
+								viewBox="72 0 4013 769"
+								fill="none"
+								aria-hidden="true"
+								focusable="false"
+							>
+								<g
+									transform="translate(0 757) scale(1 -1)"
+									fill="currentColor"
+								>
+									<path
+										d="M72 0 L72 745 L350 745 Q426 745 484.5 717.5 Q543 690 576 637.5 Q609 585 609 510 Q609 435 575.5 382.5 Q542 330 483.5 302.5 Q425 275 350 275 L208 275 L208 0 L72 0 Z M208 395 L352 395 Q406 395 439.5 426.5 Q473 458 473 510 Q473 562 439.5 593.5 Q406 625 352 625 L208 625 L208 395 Z M911 -12 Q827 -12 764 26 Q701 64 666 128.5 Q631 193 631 273 Q631 354 666.5 418 Q702 482 763 519 Q824 556 901 556 Q985 556 1044 519.5 Q1103 483 1134.5 423 Q1166 363 1166 290 Q1166 275 1164.5 260.5 Q1163 246 1159 235 L767 235 Q773 174 813 138.5 Q853 103 912 103 Q957 103 988.5 122 Q1020 141 1038 173 L1144 121 Q1119 63 1056.5 25.5 Q994 -12 911 -12 Z M901 448 Q852 448 816.5 418.5 Q781 389 770 335 L1026 335 Q1022 385 987.5 416.5 Q953 448 901 448 Z M1392 -12 Q1307 -12 1256 30 Q1205 72 1205 144 Q1205 212 1251 257 Q1297 302 1393 318 L1555 344 L1555 362 Q1555 397 1527.5 420.5 Q1500 444 1455 444 Q1412 444 1380 421.5 Q1348 399 1333 362 L1226 414 Q1250 478 1314 517 Q1378 556 1460 556 Q1527 556 1577.5 531 Q1628 506 1657 462.5 Q1686 419 1686 362 L1686 0 L1562 0 L1562 57 Q1498 -12 1392 -12 Z M1341 149 Q1341 121 1362 104.5 Q1383 88 1416 88 Q1478 88 1516.5 126.5 Q1555 165 1555 222 L1555 244 L1418 221 Q1341 207 1341 149 Z M1771 0 L1771 757 L1902 757 L1902 328 L2108 544 L2271 544 L2070 325 L2275 0 L2125 0 L1973 242 L1902 165 L1902 0 L1771 0 Z M2610 -12 Q2524 -12 2457.5 24 Q2391 60 2353 123 Q2315 186 2315 266 L2315 745 L2451 745 L2451 273 Q2451 226 2471.5 189.5 Q2492 153 2528 132.5 Q2564 112 2610 112 Q2656 112 2692 132.5 Q2728 153 2748.5 189.5 Q2769 226 2769 273 L2769 745 L2905 745 L2905 266 Q2905 186 2867 123 Q2829 60 2762.5 24 Q2696 -12 2610 -12 Z M3005 0 L3005 745 L3282 745 Q3358 745 3416.5 717.5 Q3475 690 3508 637.5 Q3541 585 3541 510 Q3541 432 3504.5 378 Q3468 324 3406 299 L3577 0 L3423 0 L3269 275 L3141 275 L3141 0 L3005 0 Z M3141 395 L3284 395 Q3339 395 3372 426.5 Q3405 458 3405 510 Q3405 562 3372 593.5 Q3339 625 3284 625 L3141 625 L3141 395 Z M3630 0 L3630 745 L3766 745 L3766 120 L4085 120 L4085 0 L3630 0 Z"
+									/>
+								</g>
+							</svg>
+							<span class="sr-only">PeakURL</span>
+						</h1>
+						<span class="version-badge">v1.9.0</span>
 					</div>
 				</div>
 				<p class="lead">

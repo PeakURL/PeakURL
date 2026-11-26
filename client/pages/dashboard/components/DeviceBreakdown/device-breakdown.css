@@ -26,12 +26,12 @@
 
 	@container device-breakdown (min-width: 24rem) {
 		.dashboard-devices-chart-panel {
-			grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
+			grid-template-columns: minmax(7.5rem, 8.5rem) minmax(0, 1fr);
 		}
 	}
 
 	.dashboard-devices-chart {
-		@apply mx-auto w-full max-w-44;
+		@apply mx-auto w-full max-w-34;
 	}
 
 	.dashboard-devices-chart-panel .metric-donut-chart {

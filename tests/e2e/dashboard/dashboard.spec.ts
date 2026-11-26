@@ -12,7 +12,7 @@ test.describe("Dashboard & Layout Journeys", () => {
 			})
 		).toBeVisible();
 		await expect(
-			page.getByText(/here's an overview of your link activity\./i)
+			page.getByText(/here's an overview of your links activity\./i)
 		).toBeVisible();
 
 		// Primary metric cards

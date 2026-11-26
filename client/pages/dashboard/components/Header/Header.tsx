@@ -31,7 +31,7 @@ const Header = ({
 	return (
 		<PageHeader
 			title={greeting}
-			description={__("Here's an overview of your link activity.")}
+			description={__("Here's an overview of your links activity.")}
 			actions={
 				<div className="dashboard-overview-header-actions">
 					<RefreshButton

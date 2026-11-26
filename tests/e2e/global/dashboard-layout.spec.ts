@@ -90,7 +90,7 @@ test.describe("Stage 3.3 Dashboard Layout, Breadcrumbs & Overview Greeting", () 
 			})
 		).toBeVisible();
 		await expect(
-			page.getByText("Here's an overview of your link activity.")
+			page.getByText("Here's an overview of your links activity.")
 		).toBeVisible();
 
 		await page.goto("/dashboard/links");

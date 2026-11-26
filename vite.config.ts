@@ -84,6 +84,18 @@ export default defineConfig({
 				target: devProxyTarget,
 				changeOrigin: true,
 			},
+			"/favicon.svg": {
+				target: devProxyTarget,
+				changeOrigin: true,
+			},
+			"/favicon-light.svg": {
+				target: devProxyTarget,
+				changeOrigin: true,
+			},
+			"/favicon-dark.svg": {
+				target: devProxyTarget,
+				changeOrigin: true,
+			},
 			"/favicon.png": {
 				target: devProxyTarget,
 				changeOrigin: true,

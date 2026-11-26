@@ -17,7 +17,7 @@ $favicon_map  = array(
 	),
 	'/apple-touch-icon.png' => array(
 		'path'          => '/app/content/uploads/favicon/favicon.png',
-		'fallback_path' => '/app/server/public/default-favicon.png',
+		'fallback_path' => '/app/server/public/default-app-icon.png',
 		'content_type'  => 'image/png',
 	),
 	'/site.webmanifest'     => array(
@@ -30,6 +30,32 @@ $favicon_map  = array(
 if ( ! is_dir( $public_dir ) || ! is_file( $public_dir . '/index.php' ) ) {
 	http_response_code( 503 );
 	echo 'PeakURL server dev server is not ready.';
+	return true;
+}
+
+$svg_favicon_map = array(
+	'/favicon.svg'       => $public_dir . '/default-favicon.svg',
+	'/favicon-light.svg' => $public_dir . '/default-favicon-light.svg',
+	'/favicon-dark.svg'  => $public_dir . '/default-favicon-dark.svg',
+);
+
+if ( isset( $svg_favicon_map[ $request_path ] ) ) {
+	if ( is_file( '/app/content/uploads/favicon/favicon.png' ) ) {
+		http_response_code( 404 );
+		return true;
+	}
+
+	$svg_file = $svg_favicon_map[ $request_path ];
+
+	if ( ! is_file( $svg_file ) ) {
+		http_response_code( 404 );
+		return true;
+	}
+
+	header( 'Content-Type: image/svg+xml; charset=utf-8' );
+	header( 'Cache-Control: public, max-age=3600' );
+	header( 'Content-Length: ' . (string) filesize( $svg_file ) );
+	readfile( $svg_file );
 	return true;
 }
 

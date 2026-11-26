@@ -1,18 +1,11 @@
-@keyframes auth-page-fade-up {
-	from {
-		opacity: 0;
-		transform: translateY(14px);
-	}
-
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
 @layer components {
 	.auth-page {
 		@apply min-h-screen bg-bg px-4 py-6 text-heading sm:px-8 sm:py-10;
+		background-image: radial-gradient(
+			ellipse 80% 50% at 50% 0%,
+			color-mix(in srgb, var(--primary) 5%, transparent),
+			transparent 70%
+		);
 	}
 
 	.auth-page-container {
@@ -21,16 +14,26 @@
 	}
 
 	.auth-page-layout {
-		@apply grid w-full max-w-lg overflow-hidden rounded-3xl border border-stroke bg-surface shadow-xl shadow-primary-950/5 lg:max-w-none lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)];
-		animation: auth-page-fade-up 0.4s ease-out both;
+		@apply grid w-full max-w-lg overflow-hidden rounded-3xl border border-stroke bg-surface lg:max-w-none lg:grid-cols-[minmax(0,1.12fr)_minmax(0,1fr)];
+		box-shadow:
+			0 1px 2px rgb(16 35 33 / 0.04),
+			0 14px 32px -10px rgb(16 35 33 / 0.09),
+			0 32px 64px -18px rgb(16 35 33 / 0.08);
+	}
+
+	.dark .auth-page-layout {
+		box-shadow:
+			0 1px 2px rgb(0 0 0 / 0.3),
+			0 20px 44px -12px rgb(0 0 0 / 0.55),
+			0 0 0 1px rgb(131 220 204 / 0.08);
 	}
 
 	.auth-page-showcase {
-		@apply hidden min-w-0 flex-col justify-center gap-5 border-e border-stroke bg-surface-muted p-9 text-heading lg:flex;
+		@apply hidden min-w-0 flex-col justify-between gap-6 border-e border-stroke bg-surface-muted p-9 text-heading lg:flex;
 	}
 
 	.auth-page-badge {
-		@apply mb-5 inline-flex items-center gap-2 text-xs font-medium text-accent;
+		@apply mb-4 inline-flex items-center gap-1.5 rounded-full border border-stroke bg-surface px-2.5 py-1 text-xs font-medium text-accent shadow-2xs;
 	}
 
 	.auth-page-showcase-title {
@@ -100,15 +103,62 @@
 	}
 
 	.auth-page-card-copy {
-		@apply mt-3 text-sm leading-6 text-text-muted;
+		@apply mt-2.5 text-sm leading-6 text-text-muted;
 	}
 
 	.auth-page-form {
 		@apply mt-6 grid w-full min-w-0 gap-4;
 	}
 
+	.auth-page-form .form-control-base {
+		@apply h-11 rounded-xl;
+	}
+
+	.auth-page-form .field-with-inline-start-icon {
+		padding-left: 2.5rem;
+	}
+
+	html[dir="rtl"] .auth-page-form .field-with-inline-start-icon {
+		padding-left: 0.75rem;
+		padding-right: 2.5rem;
+	}
+
+	html[dir="rtl"]
+		.auth-page-form
+		.field-with-inline-start-icon.field-with-inline-end-icon {
+		padding-left: 2.5rem;
+	}
+
+	.auth-page-form .inline-start-icon-slot {
+		padding-left: 0.75rem;
+	}
+
+	html[dir="rtl"] .auth-page-form .inline-start-icon-slot {
+		padding-left: 0;
+		padding-right: 0.75rem;
+	}
+
+	.auth-page-form .field-required-indicator {
+		@apply font-normal text-text-subtle;
+	}
+
 	.auth-page-submit {
-		@apply min-h-11 w-full rounded-xl text-sm font-semibold shadow-none;
+		@apply min-h-12 w-full rounded-xl text-sm font-semibold shadow-none;
+	}
+
+	.auth-page-alert {
+		@apply mt-5 flex items-start gap-2.5 rounded-xl border px-3.5 py-3 text-sm leading-relaxed;
+		border-color: var(--status-error-border);
+		background: var(--status-error-bg);
+		color: var(--status-error);
+	}
+
+	.auth-page-alert-icon {
+		@apply mt-0.5 shrink-0;
+	}
+
+	.auth-page-alert-text {
+		@apply min-w-0 flex-1 break-words;
 	}
 
 	.auth-page-status {
@@ -121,13 +171,25 @@
 		color: var(--status-error);
 	}
 
+	.auth-page-status-row {
+		@apply flex items-start gap-3;
+	}
+
+	.auth-page-status-icon {
+		@apply mt-0.5 shrink-0;
+	}
+
 	.auth-page-status-title {
 		@apply font-semibold;
 	}
 
 	.auth-page-status-copy {
-		@apply mt-2 leading-6;
+		@apply mt-1.5 leading-6;
 		overflow-wrap: anywhere;
+	}
+
+	.auth-page-status-actions {
+		@apply mt-4;
 	}
 
 	.auth-page-status-link {
@@ -145,8 +207,8 @@
 	}
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (min-width: 1024px) {
 	.auth-page-layout {
-		animation: none;
+		min-height: 42.25rem;
 	}
 }

@@ -7,3 +7,4 @@ export * from "./usePluginAssets";
 export { useActiveIndicator } from "./useActiveIndicator";
 export { usePageTransition } from "./usePageTransition";
 export { useSessionCheck } from "./useSessionCheck";
+export { useFloatingArtwork, useRevealSequence } from "./useStatusMotion";

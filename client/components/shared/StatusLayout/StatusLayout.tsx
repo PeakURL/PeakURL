@@ -1,6 +1,7 @@
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 import type { StatusIllustrationName } from "@/assets/status-illustrations";
+import { useFloatingArtwork, useRevealSequence } from "@/hooks";
 import { __ } from "@/i18n";
 import { getBrandTagline } from "@/shared/branding";
 
@@ -18,6 +19,24 @@ interface StatusLayoutProps {
 	illustration?: StatusIllustrationName;
 }
 
+const STATUS_REVEAL_GROUPS = [
+	{
+		selector: ".status-header",
+		from: { y: -8, opacity: 0 },
+		to: { duration: 0.34 },
+	},
+	{
+		selector:
+			".status-eyebrow, .status-title, .status-description, .status-actions, .status-note",
+		to: { duration: 0.38, stagger: 0.05, delay: 0.06 },
+	},
+	{
+		selector: ".status-main > section + *",
+		from: { y: 14, opacity: 0 },
+		to: { duration: 0.4, delay: 0.16 },
+	},
+];
+
 /** Standalone branded recovery layout, independent of the dashboard layout. */
 export function StatusLayout({
 	title,
@@ -28,8 +47,13 @@ export function StatusLayout({
 	children,
 	illustration = "missing-page",
 }: StatusLayoutProps) {
+	const pageRef = useRef<HTMLDivElement>(null);
+
+	useRevealSequence(pageRef, STATUS_REVEAL_GROUPS);
+	useFloatingArtwork(pageRef, ".status-artwork", illustration);
+
 	return (
-		<div className="status-page">
+		<div ref={pageRef} className="status-page">
 			<div className="status-container">
 				<header className="status-header">
 					<Logo size="lg" />

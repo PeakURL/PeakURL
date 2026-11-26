@@ -1,6 +1,7 @@
 import type { KeyboardEvent } from "react";
 import { Link, Navigate } from "react-router";
 import {
+	AlertCircle,
 	ArrowLeft,
 	ArrowRight,
 	BarChart3,
@@ -129,6 +130,12 @@ function LoginPage() {
 	return (
 		<AuthLayout
 			backTo=""
+			badgeIcon={twoFactorRequired ? Shield : Link2}
+			badgeLabel={
+				twoFactorRequired
+					? __("Two-Factor Check")
+					: __("Link Management")
+			}
 			brandHref={LOGIN_LOGO_URL}
 			poweredByHref={LOGIN_POWERED_BY_URL}
 			illustration={twoFactorRequired ? "verification" : "sign-in"}
@@ -173,14 +180,13 @@ function LoginPage() {
 			}
 		>
 			{formError ? (
-				<div className="login-page-alert" role="alert">
-					<span
-						className="login-page-alert-marker"
+				<div className="auth-page-alert login-page-alert" role="alert">
+					<AlertCircle
+						size={16}
+						className="auth-page-alert-icon"
 						aria-hidden="true"
-					>
-						!
-					</span>
-					<p className="login-page-alert-text">{formError}</p>
+					/>
+					<p className="auth-page-alert-text">{formError}</p>
 				</div>
 			) : null}
 

@@ -513,3 +513,17 @@
 		font-size: 16px;
 	}
 }
+@media (prefers-reduced-motion: no-preference) {
+	.installer-artwork {
+		animation: installer-artwork-float 3.2s ease-in-out infinite;
+	}
+	@keyframes installer-artwork-float {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-6px);
+		}
+	}
+}

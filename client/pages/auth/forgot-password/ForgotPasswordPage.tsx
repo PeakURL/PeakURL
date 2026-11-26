@@ -1,7 +1,14 @@
 import type { KeyboardEvent } from "react";
 import { useRef, useState } from "react";
 import { Link } from "react-router";
-import { ArrowLeft, ArrowRight, KeyRound, Mail } from "lucide-react";
+import {
+	AlertCircle,
+	ArrowLeft,
+	ArrowRight,
+	CheckCircle2,
+	KeyRound,
+	Mail,
+} from "lucide-react";
 
 import { FORGOT_PASSWORD_LOGO_URL } from "@constants";
 import { isDocumentRtl } from "@/i18n/direction";
@@ -89,52 +96,77 @@ function ForgotPasswordPage() {
 		>
 			{isSubmitted ? (
 				<div className="auth-page-status" role="status">
-					<p className="auth-page-status-title">
-						{__("Check your inbox")}
-					</p>
-					<p className="auth-page-status-copy">
-						{sprintf(
-							__(
-								"If an account exists for %s, PeakURL has sent a password reset link."
-							),
-							submittedIdentifier
-						)}
-					</p>
-					<Link to="/login" className="auth-page-status-link">
-						{__("Return to login")}
-						<ReturnArrow size={15} />
-					</Link>
+					<div className="auth-page-status-row">
+						<CheckCircle2
+							size={18}
+							className="auth-page-status-icon text-accent"
+							aria-hidden="true"
+						/>
+						<div>
+							<p className="auth-page-status-title">
+								{__("Check your inbox")}
+							</p>
+							<p className="auth-page-status-copy">
+								{sprintf(
+									__(
+										"If an account exists for %s, PeakURL has sent a password reset link."
+									),
+									submittedIdentifier
+								)}
+							</p>
+							<Link to="/login" className="auth-page-status-link">
+								{__("Return to login")}
+								<ReturnArrow size={15} />
+							</Link>
+						</div>
+					</div>
 				</div>
 			) : (
-				<form className="auth-page-form" onSubmit={handleSubmit}>
-					<Input
-						label={__("Email or username")}
-						type="text"
-						icon={Mail}
-						valueDirection="ltr"
-						value={identifier}
-						name="identifier"
-						onChange={(event) => setIdentifier(event.target.value)}
-						placeholder={__("owner@example.com or admin")}
-						autoComplete="username"
-						autoCapitalize="none"
-						spellCheck={false}
-						enterKeyHint="go"
-						onKeyDown={submitFormOnEnter}
-						required
-						disabled={isSubmitting}
-						error={formError}
-					/>
-					<CaptchaWidget ref={captchaRef} />
-					<Button
-						type="submit"
-						size="md"
-						loading={isSubmitting}
-						className="auth-page-submit"
-					>
-						{__("Send reset link")}
-					</Button>
-				</form>
+				<>
+					{formError ? (
+						<div className="auth-page-alert" role="alert">
+							<AlertCircle
+								size={16}
+								className="auth-page-alert-icon"
+								aria-hidden="true"
+							/>
+							<p className="auth-page-alert-text">{formError}</p>
+						</div>
+					) : null}
+					<form className="auth-page-form" onSubmit={handleSubmit}>
+						<Input
+							label={__("Email or username")}
+							type="text"
+							icon={Mail}
+							valueDirection="ltr"
+							value={identifier}
+							name="identifier"
+							onChange={(event) =>
+								setIdentifier(event.target.value)
+							}
+							placeholder={__("owner@example.com or admin")}
+							autoComplete="username"
+							autoCapitalize="none"
+							spellCheck={false}
+							enterKeyHint="go"
+							onKeyDown={submitFormOnEnter}
+							required
+							disabled={isSubmitting}
+							aria-invalid={Boolean(formError) || undefined}
+						/>
+						<CaptchaWidget ref={captchaRef} />
+						<Button
+							type="submit"
+							size="lg"
+							loading={isSubmitting}
+							icon={ReturnArrow}
+							iconPosition="right"
+							className="auth-page-submit"
+						>
+							{__("Send reset link")}
+						</Button>
+					</form>
+				</>
 			)}
 		</AuthLayout>
 	);

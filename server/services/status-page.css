@@ -292,6 +292,20 @@ html[data-status-theme="dark"] {
 	margin-inline: auto;
 	margin-block-end: 20px;
 }
+@media (prefers-reduced-motion: no-preference) {
+	.status-access-artwork {
+		animation: status-artwork-float 3.2s ease-in-out infinite;
+	}
+	@keyframes status-artwork-float {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-6px);
+		}
+	}
+}
 @media (max-width: 700px) {
 	.status-access-artwork {
 		width: 112px;

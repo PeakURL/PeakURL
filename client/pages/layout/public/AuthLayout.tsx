@@ -1,12 +1,36 @@
+import { useRef } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 
 import { DEFAULT_AUTH_LOGO_URL } from "@constants";
 import { Logo, PageIllustration, PoweredBy } from "@/components";
+import { useFloatingArtwork, useRevealSequence } from "@/hooks";
 import { __ } from "@/i18n";
 import { isDocumentRtl } from "@/i18n/direction";
 
 import type { AuthLayoutProps } from "./types";
+
+const AUTH_REVEAL_GROUPS = [
+	{
+		selector: ".auth-page-layout",
+		from: { y: 14, scale: 0.992, opacity: 0 },
+		to: { scale: 1, duration: 0.42, ease: "power3.out" },
+	},
+	{
+		selector: ".auth-page-showcase-header, .auth-page-showcase-footer",
+		to: { duration: 0.36, stagger: 0.06, delay: 0.08 },
+	},
+	{
+		selector:
+			".auth-page-card-header, .auth-page-card-title, .auth-page-card-copy, .auth-page-form, .auth-page-status, .auth-page-alert, .auth-page-status-actions",
+		to: { duration: 0.34, stagger: 0.04, delay: 0.07 },
+	},
+	{
+		selector: ".auth-page-powered",
+		from: { y: 6, opacity: 0 },
+		to: { duration: 0.32, delay: 0.2 },
+	},
+];
 
 function AuthLayout({
 	backLabel = __("Back to login"),
@@ -25,12 +49,16 @@ function AuthLayout({
 	showcaseFooter,
 	showcaseTitle,
 }: AuthLayoutProps) {
+	const containerRef = useRef<HTMLDivElement>(null);
 	const isRtl = isDocumentRtl();
 	const BackArrow = isRtl ? ArrowRight : ArrowLeft;
 
+	useRevealSequence(containerRef, AUTH_REVEAL_GROUPS);
+	useFloatingArtwork(containerRef, ".auth-page-illustration", illustration);
+
 	return (
 		<main id="page-container" className="auth-page">
-			<div className="auth-page-container">
+			<div ref={containerRef} className="auth-page-container">
 				<div className="auth-page-layout">
 					<aside className="auth-page-showcase" aria-hidden="true">
 						<div className="auth-page-showcase-header">

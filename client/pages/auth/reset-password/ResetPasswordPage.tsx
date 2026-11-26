@@ -1,9 +1,18 @@
 import type { KeyboardEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { CheckCircle2, KeyRound, LockKeyhole } from "lucide-react";
+import {
+	AlertCircle,
+	ArrowLeft,
+	ArrowRight,
+	CheckCircle2,
+	KeyRound,
+	Loader2,
+	LockKeyhole,
+} from "lucide-react";
 
 import { RESET_PASSWORD_LOGO_URL } from "@constants";
+import { isDocumentRtl } from "@/i18n/direction";
 import { AuthLayout } from "@/pages/layout";
 import {
 	Button,
@@ -31,6 +40,8 @@ const submitFormOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
 };
 
 function ResetPasswordPage() {
+	const isRtl = isDocumentRtl();
+	const ReturnArrow = isRtl ? ArrowLeft : ArrowRight;
 	const navigate = useNavigate();
 	const { token = "" } = useParams();
 	const resetToken = token.trim();
@@ -124,54 +135,68 @@ function ResetPasswordPage() {
 		>
 			{isCheckingResetLink ? (
 				<div className="auth-page-status" role="status">
-					<div className="reset-password-page-status">
-						<LockKeyhole
+					<div className="auth-page-status-row">
+						<Loader2
 							size={18}
-							className="reset-password-page-status-icon"
+							className="auth-page-status-icon reset-password-page-spinner"
+							aria-hidden="true"
 						/>
 						<div>
 							<p className="auth-page-status-title">
-								{__("Loading")}
+								{__("Verifying reset link…")}
 							</p>
 							<p className="auth-page-status-copy">
-								{__("Reset your password")}
+								{__(
+									"Checking your password reset link so you can set a new password."
+								)}
 							</p>
 						</div>
 					</div>
 				</div>
 			) : isTokenInvalid ? (
-				<div className="auth-page-status auth-page-status-error">
-					<div className="reset-password-page-status">
-						<LockKeyhole
-							size={18}
-							className="reset-password-page-status-icon"
-						/>
-						<div>
-							<p className="auth-page-status-title">
-								{__("The password reset link is invalid.")}
-							</p>
-							<p className="auth-page-status-copy">
-								{__(
-									"Enter your account email or username and PeakURL will send a secure password reset link."
-								)}
-							</p>
-							<Button
-								type="button"
-								size="sm"
-								className="auth-page-submit"
-								onClick={() => navigate("/forgot-password")}
-							>
-								{__("Send reset link")}
-							</Button>
+				<>
+					<div
+						className="auth-page-status auth-page-status-error"
+						role="alert"
+					>
+						<div className="auth-page-status-row">
+							<AlertCircle
+								size={18}
+								className="auth-page-status-icon"
+								aria-hidden="true"
+							/>
+							<div>
+								<p className="auth-page-status-title">
+									{__("The password reset link is invalid.")}
+								</p>
+								<p className="auth-page-status-copy">
+									{__(
+										"This link may have expired or already been used. Request a new password reset link to continue."
+									)}
+								</p>
+							</div>
 						</div>
 					</div>
-				</div>
+					<div className="auth-page-status-actions">
+						<Button
+							type="button"
+							size="lg"
+							icon={ReturnArrow}
+							iconPosition="right"
+							className="auth-page-submit"
+							onClick={() => navigate("/forgot-password")}
+						>
+							{__("Send reset link")}
+						</Button>
+					</div>
+				</>
 			) : isCompleted ? (
 				<div className="auth-page-status" role="status">
-					<div className="reset-password-page-status">
+					<div className="auth-page-status-row">
 						<CheckCircle2
 							size={18}
-							className="reset-password-page-status-icon"
+							className="auth-page-status-icon text-accent"
+							aria-hidden="true"
 						/>
 						<div>
 							<p className="auth-page-status-title">
@@ -186,51 +211,62 @@ function ResetPasswordPage() {
 					</div>
 				</div>
 			) : (
-				<form className="auth-page-form" onSubmit={handleSubmit}>
-					<Input
-						label={__("New password")}
-						type="password"
-						icon={KeyRound}
-						value={password}
-						name="password"
-						onChange={(event) => setPassword(event.target.value)}
-						placeholder={__("Enter your new password")}
-						autoComplete="new-password"
-						helperText={__("Use at least 8 characters.")}
-						required
-						disabled={isSubmitting || isCheckingResetLink}
-					/>
-					<Input
-						label={__("Confirm new password")}
-						type="password"
-						icon={LockKeyhole}
-						value={confirmPassword}
-						name="confirmPassword"
-						onChange={(event) =>
-							setConfirmPassword(event.target.value)
-						}
-						onKeyDown={submitFormOnEnter}
-						enterKeyHint="go"
-						placeholder={__("Confirm your new password")}
-						autoComplete="new-password"
-						required
-						disabled={isSubmitting || isCheckingResetLink}
-					/>
-					{formError && (
-						<p className="form-field-error" role="alert">
-							{formError}
-						</p>
-					)}
-					<CaptchaWidget ref={captchaRef} />
-					<Button
-						type="submit"
-						size="md"
-						loading={isSubmitting || isCheckingResetLink}
-						className="auth-page-submit"
-					>
-						{__("Reset password")}
-					</Button>
-				</form>
+				<>
+					{formError ? (
+						<div className="auth-page-alert" role="alert">
+							<AlertCircle
+								size={16}
+								className="auth-page-alert-icon"
+								aria-hidden="true"
+							/>
+							<p className="auth-page-alert-text">{formError}</p>
+						</div>
+					) : null}
+					<form className="auth-page-form" onSubmit={handleSubmit}>
+						<Input
+							label={__("New password")}
+							type="password"
+							icon={KeyRound}
+							value={password}
+							name="password"
+							onChange={(event) =>
+								setPassword(event.target.value)
+							}
+							placeholder={__("Enter your new password")}
+							autoComplete="new-password"
+							helperText={__("Use at least 8 characters.")}
+							required
+							disabled={isSubmitting || isCheckingResetLink}
+						/>
+						<Input
+							label={__("Confirm new password")}
+							type="password"
+							icon={LockKeyhole}
+							value={confirmPassword}
+							name="confirmPassword"
+							onChange={(event) =>
+								setConfirmPassword(event.target.value)
+							}
+							onKeyDown={submitFormOnEnter}
+							enterKeyHint="go"
+							placeholder={__("Confirm your new password")}
+							autoComplete="new-password"
+							required
+							disabled={isSubmitting || isCheckingResetLink}
+						/>
+						<CaptchaWidget ref={captchaRef} />
+						<Button
+							type="submit"
+							size="lg"
+							icon={ReturnArrow}
+							iconPosition="right"
+							loading={isSubmitting || isCheckingResetLink}
+							className="auth-page-submit"
+						>
+							{__("Reset password")}
+						</Button>
+					</form>
+				</>
 			)}
 		</AuthLayout>
 	);

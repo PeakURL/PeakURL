@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#8b9fc9">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" fill="none" color="#126e68">
   <defs>
     <path id="warning" d="m253 147 48 81a8 8 0 0 1-7 12h-96a8 8 0 0 1-7-12l48-81a8 8 0 0 1 14 0z"/>
     <mask id="foreground-clearance" maskUnits="userSpaceOnUse" x="0" y="0" width="360" height="280">
@@ -6,7 +6,7 @@
       <use href="#warning" fill="black" stroke="black" stroke-width="8" stroke-linejoin="round"/>
     </mask>
   </defs>
-  <style>.wash{fill:currentColor;fill-opacity:.08}.solid{fill:#8b9fc9;fill-opacity:.2}.emphasis{stroke-width:4}</style>
+  <style>@media(prefers-color-scheme:dark){svg{color:#83dccc}}.wash{fill:currentColor;fill-opacity:.08}.solid{fill:currentColor;fill-opacity:.2}.emphasis{stroke-width:4}</style>
   <circle cx="180" cy="140" r="108" fill="currentColor" fill-opacity=".025"/>
   <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
     <g mask="url(#foreground-clearance)">

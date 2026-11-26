@@ -107,14 +107,22 @@ for (const [theme, fill, ink] of [
 	});
 }
 
-test("standalone forms are narrower than Settings tables and technical panels", async ({
+test("Settings tabs share a consistent content width across navigation", async ({
 	page,
 }) => {
 	await page.setViewportSize({ width: 1920, height: 1000 });
-	await page.goto("/dashboard/settings/email");
+	await page.goto("/dashboard/settings/general");
+	await expect(page.locator(".settings-general-form")).toBeVisible();
+	const general = await page.locator(".settings-general-form").boundingBox();
+	expect(general!.width).toBeLessThanOrEqual(70 * 16);
+
+	await page
+		.getByRole("navigation", { name: "Settings" })
+		.getByRole("link", { name: "Email SMTP" })
+		.click();
 	await expect(page.locator(".settings-email form")).toBeVisible();
 	const email = await page.locator(".settings-email").boundingBox();
-	expect(email!.width).toBeLessThanOrEqual(48 * 16);
+	expect(email!.width).toBeCloseTo(general!.width, 1);
 
 	await page
 		.getByRole("navigation", { name: "Settings" })
@@ -126,7 +134,7 @@ test("standalone forms are narrower than Settings tables and technical panels", 
 			.getByRole("heading", { name: "API Keys", exact: true, level: 2 })
 	).toBeVisible();
 	const api = await page.locator(".settings-api").boundingBox();
-	expect(api!.width).toBeGreaterThan(email!.width);
+	expect(api!.width).toBeCloseTo(general!.width, 1);
 });
 
 for (const width of [1440, 390]) {

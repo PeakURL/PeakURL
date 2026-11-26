@@ -428,7 +428,7 @@ export function McpTab({ notification }: McpTabProps) {
 							variant="primary"
 							onClick={handleAddRedirectUri}
 							disabled={isUpdating || !newRedirectUri.trim()}
-							className="shrink-0"
+							className="w-full shrink-0 sm:w-auto"
 						>
 							<Plus size={14} />
 							{__("Add URI")}

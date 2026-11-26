@@ -8,7 +8,7 @@
 	}
 
 	.settings-location-credentials-panel {
-		@apply space-y-4 bg-surface-alt/30 p-4;
+		@apply space-y-4 bg-surface-alt/30 p-4 sm:p-5;
 	}
 	.settings-location-credentials-status {
 		@apply inline-flex items-center gap-2 text-xs font-medium text-emerald-700 dark:text-emerald-300;
@@ -19,7 +19,7 @@
 	}
 
 	.settings-location-actions {
-		@apply flex flex-col sm:flex-row sm:flex-wrap w-full sm:w-auto gap-3;
+		@apply flex-col sm:flex-row sm:justify-end;
 	}
 
 	.settings-location-form {
@@ -30,6 +30,6 @@
 		@apply text-xs text-text-muted;
 	}
 	.settings-location-credentials-view > .settings-location-actions {
-		@apply m-0 w-full flex-row flex-wrap justify-end border-t border-stroke/70 bg-surface p-4;
+		@apply m-0 w-full flex-row flex-wrap justify-end border-t border-stroke/70 bg-surface p-4 sm:px-5;
 	}
 }

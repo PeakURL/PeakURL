@@ -368,7 +368,7 @@ export function PerformanceTab({
 							{__("Cache Engine Settings")}
 						</SectionTitle>
 
-						<p className="settings-group-description mb-0!">
+						<p className="settings-group-description">
 							{__(
 								"Select your preferred caching backend. PeakURL automatically selects the highest performance operational backend if the preferred driver is unavailable."
 							)}

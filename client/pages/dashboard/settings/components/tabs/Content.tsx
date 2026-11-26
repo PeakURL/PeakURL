@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 
 import { ConfirmDialog, useNotification } from "@/components";
 import { API_SERVER_BASE_URL } from "@/constants";
+import { useAdminAccess } from "@/hooks";
 import {
 	useGetUserProfileQuery,
 	useUpdateUserProfileMutation,
@@ -111,6 +112,7 @@ const formatBaseApiUrl = (
 
 const Content = ({ activeTab }: ContentProps) => {
 	const notification = useNotification();
+	const { user: authUser } = useAdminAccess();
 	const { data: userData, isLoading: isLoadingUser } =
 		useGetUserProfileQuery(undefined);
 	const [updateProfile, { isLoading: isUpdating }] =
@@ -178,7 +180,8 @@ const Content = ({ activeTab }: ContentProps) => {
 	const updateStatusData = updateStatus?.data || null;
 	const isInstallingRelease = isApplyingUpdate || isReinstallingUpdate;
 
-	const user = userData?.data || null;
+	const user = userData?.data || authUser || null;
+	const isLoadingProfile = isLoadingUser && !user;
 	const initialGeneralForm = useMemo(() => createGeneralForm(user), [user]);
 
 	const [securityForm, setSecurityForm] = useState<SecurityFormState>({
@@ -730,7 +733,7 @@ const Content = ({ activeTab }: ContentProps) => {
 					isUpdating={isUpdating || isSavingGeneralSettings}
 					siteSettings={generalSettingsResponse?.data || null}
 					isLoadingSiteSettings={isLoadingGeneralSettings}
-					isLoadingProfile={isLoadingUser}
+					isLoadingProfile={isLoadingProfile}
 					canEditSite={
 						user?.capabilities?.manageSiteSettings ?? false
 					}
@@ -749,7 +752,7 @@ const Content = ({ activeTab }: ContentProps) => {
 
 			{activeTab === "api" && (
 				<ApiTab
-					isLoading={isLoadingUser}
+					isLoading={isLoadingProfile}
 					user={user}
 					baseApiUrl={formatBaseApiUrl(user)}
 					copyToClipboard={copyToClipboard}

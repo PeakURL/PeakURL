@@ -16,7 +16,13 @@ import {
 	XCircle,
 } from "lucide-react";
 
-import { Button, ConfirmDialog, Modal, ReadOnlyValueBlock } from "@/components";
+import {
+	Button,
+	ConfirmDialog,
+	Modal,
+	ReadOnlyValueBlock,
+	Skeleton,
+} from "@/components";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { DocumentationLink } from "@/pages/dashboard/settings/components/DocumentationLink";
 import {
@@ -374,9 +380,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 				</div>
 
 				{isLoading ? (
-					<p className="integrations-tab-status-copy">
-						{__("Loading webhook configuration…")}
-					</p>
+					<Skeleton className="h-24 w-full" aria-hidden="true" />
 				) : error ? (
 					<div className="settings-notice settings-notice-error text-sm">
 						{getErrorMessage(
@@ -672,7 +676,7 @@ function IntegrationsTab({ notification }: IntegrationsTabProps) {
 							))}
 						</div>
 					) : (
-						<div className="integrations-tab-empty-card mt-4">
+						<div className="integrations-tab-empty-card">
 							<div className="integrations-tab-empty-icon">
 								<WebhookIcon size={24} />
 							</div>

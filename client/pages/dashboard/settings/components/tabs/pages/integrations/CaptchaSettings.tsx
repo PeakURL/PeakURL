@@ -11,7 +11,13 @@ import {
 	CheckCircle2,
 } from "lucide-react";
 
-import { Button, Input, SelectField, type SelectOption } from "@/components";
+import {
+	Button,
+	Input,
+	SelectField,
+	Skeleton,
+	type SelectOption,
+} from "@/components";
 import { DocumentationLink } from "@/pages/dashboard/settings/components/DocumentationLink";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import {
@@ -272,7 +278,7 @@ function CaptchaSettingsContent({
 	};
 
 	return (
-		<div dir={direction} className="settings-section">
+		<section dir={direction} className="settings-section">
 			<div className="settings-section-header settings-section-heading">
 				<div className="settings-section-copy">
 					<SectionTitle>{__("CAPTCHA Protection")}</SectionTitle>
@@ -328,9 +334,7 @@ function CaptchaSettingsContent({
 			</div>
 
 			{isLoading ? (
-				<p className="settings-group-description">
-					{__("Loading CAPTCHA settings…")}
-				</p>
+				<Skeleton className="h-20 w-full" aria-hidden="true" />
 			) : error ? (
 				<p className="settings-notice settings-notice-error text-sm">
 					{getErrorMessage(
@@ -340,18 +344,20 @@ function CaptchaSettingsContent({
 				</p>
 			) : providerEnabled ? (
 				<div className="integrations-tab-form integrations-tab-captcha-form">
-					<h4 className="integrations-tab-form-title">
-						{__("Provider Settings")}
-					</h4>
-					<p className="integrations-tab-form-description">
-						{showingSavedKeys
-							? __(
-									"Saved credentials are masked. Change or remove them when needed."
-								)
-							: __(
-									"Choose a CAPTCHA provider and enter your API keys."
-								)}
-					</p>
+					<div className="space-y-1">
+						<h4 className="integrations-tab-form-title">
+							{__("Provider Settings")}
+						</h4>
+						<p className="integrations-tab-form-description">
+							{showingSavedKeys
+								? __(
+										"Saved credentials are masked. Change or remove them when needed."
+									)
+								: __(
+										"Choose a CAPTCHA provider and enter your API keys."
+									)}
+						</p>
+					</div>
 
 					{showingSavedKeys ? (
 						<div className="integrations-tab-captcha-card">
@@ -576,7 +582,7 @@ function CaptchaSettingsContent({
 				</div>
 			) : (
 				showSaveButton && (
-					<div className="mt-4 flex justify-end">
+					<div className="flex justify-end">
 						<Button
 							size="sm"
 							icon={Save}
@@ -591,11 +597,11 @@ function CaptchaSettingsContent({
 			)}
 
 			{!canManage && status?.manageDisabledReason && (
-				<p className="mt-4 integrations-tab-status-copy integrations-tab-status-copy-error">
+				<p className="integrations-tab-status-copy integrations-tab-status-copy-error">
 					{status.manageDisabledReason}
 				</p>
 			)}
-		</div>
+		</section>
 	);
 }
 

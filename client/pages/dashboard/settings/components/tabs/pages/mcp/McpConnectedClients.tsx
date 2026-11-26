@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Clock, Key, Shield, Trash2, User } from "lucide-react";
 
-import { Button, ConfirmDialog, McpIcon } from "@/components";
+import { Button, ConfirmDialog, McpIcon, Skeleton } from "@/components";
 import type { NotificationContextValue } from "@/components";
 import {
 	useGetMcpConnectionsQuery,
@@ -100,20 +100,30 @@ export function McpConnectedClients({
 	};
 
 	return (
-		<div className="mcp-connected-clients-section">
+		<section className="mcp-connected-clients-section">
 			<div className="mcp-connected-clients-header">
-				<div className="mcp-clients-title-group">
-					<h2 className="mcp-clients-heading">
-						<McpIcon size={18} className="text-accent shrink-0" />
-						{__("Authorized Client Applications")}
-					</h2>
-					<span className="mcp-badge mcp-badge-neutral">
-						{sprintf(
-							/* translators: %d: count */
-							__("%d active"),
-							activeCount
+				<div className="mcp-card-title-group">
+					<div className="mcp-clients-title-group">
+						<h2 className="mcp-clients-heading">
+							<McpIcon
+								size={18}
+								className="text-accent shrink-0"
+							/>
+							{__("Authorized Client Applications")}
+						</h2>
+						<span className="mcp-badge mcp-badge-neutral">
+							{sprintf(
+								/* translators: %d: count */
+								__("%d active"),
+								activeCount
+							)}
+						</span>
+					</div>
+					<p className="mcp-clients-subtitle">
+						{__(
+							"AI clients and IDE extensions authorized to access PeakURL via OAuth 2.0 PKCE."
 						)}
-					</span>
+					</p>
 				</div>
 
 				{activeCount > 0 && (
@@ -130,17 +140,8 @@ export function McpConnectedClients({
 				)}
 			</div>
 
-			<p className="mcp-clients-subtitle">
-				{__(
-					"AI clients and IDE extensions authorized to access PeakURL via OAuth 2.0 PKCE."
-				)}
-			</p>
-
 			{isLoading ? (
-				<div className="mcp-clients-loading">
-					<span className="mcp-loading-spinner" />
-					<p>{__("Loading authorized clients...")}</p>
-				</div>
+				<Skeleton className="h-24 w-full" aria-hidden="true" />
 			) : connections.length === 0 ? (
 				<div className="mcp-clients-empty-card">
 					<McpIcon size={28} className="text-text-muted mb-2" />
@@ -345,7 +346,7 @@ export function McpConnectedClients({
 				loading={isRevokingAll}
 				onConfirm={handleConfirmRevokeAll}
 			/>
-		</div>
+		</section>
 	);
 }
 

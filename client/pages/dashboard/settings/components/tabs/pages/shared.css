@@ -28,7 +28,11 @@
 		@apply flex flex-wrap items-center gap-3;
 	}
 	.settings-section-copy {
-		@apply min-w-0 flex-1 space-y-1 text-start;
+		@apply min-w-0 flex-1 space-y-1.5 text-start;
+	}
+
+	.settings-section-header:not(.settings-section-heading) {
+		@apply sm:items-center;
 	}
 
 	.settings-section-header > .settings-section-copy {
@@ -58,7 +62,7 @@
 	.settings-section-heading
 		.settings-section-title
 		+ .settings-group-description {
-		@apply mt-2;
+		@apply mt-1.5;
 	}
 
 	.settings-group-description {
@@ -123,7 +127,7 @@
 		@apply mt-5 space-y-3 border-t border-stroke pt-5;
 	}
 	.settings-notice {
-		@apply rounded-lg border-s-2 p-3;
+		@apply rounded-lg border-s-2 p-4;
 	}
 	.settings-notice-layout {
 		@apply flex items-start gap-3;

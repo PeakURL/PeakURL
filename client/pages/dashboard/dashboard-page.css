@@ -4,17 +4,15 @@
 	}
 
 	.dashboard-page-traffic-grid,
-	.dashboard-page-summary-grid {
+	.dashboard-page-summary-grid,
+	.dashboard-page-activity {
 		@apply grid min-w-0 grid-cols-1 items-start gap-5;
 	}
 
 	.dashboard-page-traffic-grid > *,
-	.dashboard-page-summary-grid > * {
+	.dashboard-page-summary-grid > *,
+	.dashboard-page-activity > * {
 		min-inline-size: 0;
-	}
-
-	.dashboard-page-activity {
-		@apply max-w-3xl;
 	}
 
 	.dashboard-analytics-notice {
@@ -27,7 +25,8 @@
 		}
 
 		.dashboard-page-traffic-grid,
-		.dashboard-page-summary-grid {
+		.dashboard-page-summary-grid,
+		.dashboard-page-activity {
 			grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
 		}
 	}

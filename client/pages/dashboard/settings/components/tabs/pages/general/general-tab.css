@@ -1,7 +1,7 @@
 @layer components {
 	.settings-general-form {
 		@apply grid items-start gap-5;
-		max-inline-size: 48rem;
+		max-inline-size: 70rem;
 	}
 
 	.settings-general-with-site {
@@ -69,13 +69,13 @@
 	}
 
 	.settings-branding-fields {
-		@apply grid min-w-0 grid-cols-1 gap-6;
+		@apply grid min-w-0 grid-cols-1 gap-5;
 	}
 	.settings-image-upload {
 		@apply grid min-w-0 grid-cols-1 items-start gap-3;
 	}
 	.settings-image-upload + .settings-image-upload {
-		@apply border-t border-stroke/70 pt-6;
+		@apply border-t border-stroke/70 pt-5;
 	}
 	.settings-image-preview {
 		@apply relative flex min-w-0 items-center gap-2 rounded-lg border border-stroke bg-surface-alt p-2 text-text-muted;
@@ -112,7 +112,7 @@
 		background-image: var(--preview-image-url);
 	}
 	.settings-image-content {
-		@apply min-w-0 space-y-2;
+		@apply min-w-0 space-y-1.5;
 	}
 	.settings-image-title {
 		@apply text-sm font-semibold text-heading;
@@ -146,8 +146,19 @@
 	.settings-general-form
 		[aria-busy="true"]
 		:is(.form-field-control, .select-trigger)::after {
-		@apply pointer-events-none absolute start-4 top-3.5 h-3 w-2/5 max-w-28 rounded-sm bg-stroke-strong/65;
+		@apply pointer-events-none motion-safe:animate-pulse absolute start-4 top-3.5 h-3 w-2/5 max-w-28 rounded-sm bg-stroke-strong/55;
 		content: "";
+	}
+
+	.settings-general-form
+		[aria-busy="true"]
+		.settings-general-bio-field
+		.form-field-control::after {
+		@apply w-3/5 max-w-60;
+	}
+
+	.settings-general-form [aria-busy="true"] .settings-general-bio-input {
+		resize: none;
 	}
 
 	.settings-general-form [aria-busy="true"] :is(input, textarea)::placeholder,

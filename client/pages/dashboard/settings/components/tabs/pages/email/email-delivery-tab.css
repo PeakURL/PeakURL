@@ -39,7 +39,7 @@
 	}
 
 	.settings-email-auth-toggle {
-		@apply inline-flex w-full items-center justify-between rounded-md border px-4 py-2 text-sm font-medium transition;
+		@apply inline-flex min-h-10 w-full items-center justify-between rounded-lg border px-4 py-2 text-sm font-medium transition;
 	}
 
 	.settings-email-auth-toggle-active {

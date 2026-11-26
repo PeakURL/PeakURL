@@ -1,9 +1,9 @@
 @layer components {
 	.settings-updates .settings-updates-section {
-		@apply gap-0 overflow-hidden rounded-2xl border border-stroke bg-surface p-0;
+		@apply gap-0 overflow-hidden rounded-xl border border-stroke bg-surface p-0;
 	}
 	.settings-updates-section-header {
-		@apply grid min-w-0 gap-1 border-b border-stroke/70 p-4 sm:p-5;
+		@apply grid min-w-0 gap-1.5 border-b border-stroke/70 p-4 sm:p-5;
 	}
 	.settings-updates-release,
 	.settings-updates-maintenance {

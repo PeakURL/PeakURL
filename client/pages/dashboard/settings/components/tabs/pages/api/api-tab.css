@@ -17,10 +17,10 @@
 		@apply gap-0 overflow-hidden rounded-xl border border-stroke p-0;
 	}
 	.settings-api-endpoint-section > .settings-section-header {
-		@apply rounded-none border-b border-stroke/70 bg-surface p-4;
+		@apply rounded-none border-b border-stroke/70 bg-surface p-4 sm:p-5;
 	}
 	.settings-api-endpoint-section > .settings-api-endpoint {
-		@apply bg-surface-alt/30 p-4;
+		@apply bg-surface-alt/30 p-4 sm:p-5;
 	}
 	.settings-api-list-wrap {
 		@apply w-full overflow-hidden rounded-xl border border-stroke bg-surface shadow-2xs;

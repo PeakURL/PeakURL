@@ -49,8 +49,8 @@
 	@container links-page (min-width: 41rem) {
 		.links-table-footer-filters {
 			grid-template-columns:
-				minmax(0, 1.35fr) minmax(0, 1.45fr) minmax(0, 1fr)
-				minmax(0, 1fr);
+				minmax(0, 1.35fr) minmax(0, 1.45fr) minmax(0, 1.05fr)
+				minmax(10.75rem, 11.25rem);
 		}
 		.links-table-footer-select-wide {
 			grid-column: auto;
@@ -59,7 +59,7 @@
 
 	@container links-page (min-width: 68rem) {
 		.links-table-footer-inner {
-			grid-template-columns: max-content minmax(0, 47rem);
+			grid-template-columns: max-content minmax(0, 50rem);
 			align-items: center;
 			justify-content: space-between;
 		}

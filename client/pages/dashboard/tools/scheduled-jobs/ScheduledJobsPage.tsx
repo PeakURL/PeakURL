@@ -209,6 +209,7 @@ export function ScheduledJobsPage() {
 			    PAGE HERO (Matching Activity Page)
 			   ════════════════════════════════════ */}
 			<PageHeader
+				className="scheduled-jobs-page-header"
 				title={__("Scheduled Jobs")}
 				description={__(
 					"Inspect recurring background tasks, monitor execution health, review recent run logs, and manually trigger jobs where authorized."
@@ -265,7 +266,7 @@ export function ScheduledJobsPage() {
 										null !== runningJobId ||
 										isClearingHistory
 									}
-									className="scheduled-jobs-hero-btn text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-200 dark:border-rose-900/40 dark:hover:bg-rose-950/20"
+									className="scheduled-jobs-hero-btn text-rose-600 hover:text-rose-700 hover:bg-rose-50 border-rose-300 dark:border-rose-500/40 dark:hover:bg-rose-950/20"
 									title={__(
 										"Clear execution run history for all jobs"
 									)}

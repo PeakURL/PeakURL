@@ -20,7 +20,6 @@
 	}
 	.dashboard-search-field:has(.dashboard-search-input:focus-visible) {
 		border-color: var(--color-field-focus);
-		box-shadow: inset 0 -1px 0 var(--color-field-focus);
 	}
 	.dashboard-search-field > svg {
 		@apply shrink-0;

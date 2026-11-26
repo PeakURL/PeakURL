@@ -275,7 +275,7 @@ function LocationDataTab({
 					<div className="settings-section-copy">
 						<SectionTitle>{__("MaxMind Credentials")}</SectionTitle>
 
-						<p className="settings-group-description mb-0!">
+						<p className="settings-group-description">
 							{__(
 								"PeakURL stores these values encrypted in the database so it can refresh the GeoLite2 City database later without asking again."
 							)}
@@ -346,7 +346,7 @@ function LocationDataTab({
 								size="sm"
 								variant="outline"
 								icon={Trash2}
-								className="w-full sm:w-auto text-destructive hover:bg-destructive/10"
+								className="w-full sm:w-auto text-error border-red-300 hover:border-red-400 hover:bg-error-soft dark:border-red-500/40 dark:hover:bg-red-950/20"
 								onClick={() => setIsConfirmingClear(true)}
 								disabled={Boolean(
 									(effectiveStatus &&

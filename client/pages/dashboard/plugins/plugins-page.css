@@ -3,6 +3,22 @@
 		@apply space-y-4 pb-8 sm:space-y-5;
 	}
 
+	.plugins-page-header {
+		@apply sm:flex-col sm:items-stretch lg:flex-row lg:items-center lg:justify-between;
+	}
+
+	.plugins-page-header .page-header-actions {
+		@apply sm:w-full sm:justify-start lg:w-auto lg:justify-end;
+	}
+
+	.plugins-page-actions {
+		@apply flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center sm:justify-start sm:gap-2.5 lg:justify-end;
+	}
+
+	.plugins-page-action {
+		@apply w-full justify-center whitespace-nowrap sm:w-auto;
+	}
+
 	.plugins-page-loading {
 		@apply rounded-xl border border-stroke bg-surface p-10 text-center;
 	}

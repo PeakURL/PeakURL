@@ -1,10 +1,10 @@
 @layer components {
 	.mcp-tab-container {
-		@apply space-y-6;
+		@apply space-y-5;
 	}
 
 	.mcp-card {
-		@apply rounded-xl border border-stroke bg-surface p-4 sm:p-5 shadow-2xs transition-colors hover:border-stroke-strong;
+		@apply rounded-xl border border-stroke bg-surface p-4 sm:p-5;
 	}
 
 	.mcp-card-header {
@@ -12,7 +12,7 @@
 	}
 
 	.mcp-card-title-group {
-		@apply flex flex-col gap-1 min-w-0 flex-1;
+		@apply flex flex-col gap-1.5 min-w-0 flex-1;
 	}
 
 	.mcp-card-title-row {
@@ -20,11 +20,11 @@
 	}
 
 	.mcp-card-title {
-		@apply text-base font-semibold text-heading truncate m-0;
+		@apply text-base font-semibold leading-6 text-heading truncate m-0;
 	}
 
 	.mcp-card-description {
-		@apply text-xs text-text-muted m-0 leading-relaxed max-w-2xl;
+		@apply text-sm text-text-muted m-0 leading-6 max-w-2xl;
 	}
 
 	.mcp-card-actions {
@@ -111,7 +111,7 @@
 
 	/* Redirect URIs */
 	.mcp-uri-input-group {
-		@apply flex items-start gap-2 max-w-xl;
+		@apply flex flex-col gap-2 sm:flex-row sm:items-start;
 	}
 
 	.mcp-uri-list {
@@ -134,23 +134,23 @@
 
 	/* Connected Clients Section */
 	.mcp-connected-clients-section {
-		@apply rounded-xl border border-stroke bg-surface p-4 sm:p-5 shadow-2xs space-y-4;
+		@apply rounded-xl border border-stroke bg-surface p-4 sm:p-5 space-y-4;
 	}
 
 	.mcp-connected-clients-header {
-		@apply flex items-center justify-between gap-3 flex-wrap;
+		@apply flex flex-col gap-3.5 sm:gap-4 lg:flex-row lg:items-start lg:justify-between pb-4 border-b border-stroke/60;
 	}
 
 	.mcp-clients-title-group {
-		@apply flex items-center gap-2;
+		@apply flex flex-wrap items-center gap-2;
 	}
 
 	.mcp-clients-heading {
-		@apply text-base font-semibold text-heading m-0 flex items-center gap-2;
+		@apply text-base font-semibold leading-6 text-heading m-0 flex items-center gap-2;
 	}
 
 	.mcp-clients-subtitle {
-		@apply text-xs text-text-muted m-0;
+		@apply text-sm leading-6 text-text-muted m-0 max-w-2xl;
 	}
 
 	.mcp-revoke-all-btn {

@@ -1,4 +1,4 @@
-import { Button } from "@/components";
+import { Button, Skeleton } from "@/components";
 import { SectionTitle } from "@/pages/dashboard/settings/components/SectionTitle";
 import { __, sprintf } from "@/i18n";
 import type { SecuritySession } from "../../types";
@@ -49,9 +49,7 @@ function ActiveSessions({
 			</div>
 			<div className="settings-security-sessions-list">
 				{isLoading ? (
-					<div className="settings-security-sessions-empty">
-						{__("Loading security data...")}
-					</div>
+					<Skeleton className="h-20 w-full" aria-hidden="true" />
 				) : 0 === sessions.length ? (
 					<div className="settings-security-sessions-empty">
 						{__("No active sessions found.")}

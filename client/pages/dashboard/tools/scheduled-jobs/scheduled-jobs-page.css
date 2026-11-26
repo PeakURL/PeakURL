@@ -27,8 +27,16 @@
 
 	/* ─── Hero Header (Matching Activity Page) ─── */
 
+	.scheduled-jobs-page-header {
+		@apply sm:flex-col sm:items-stretch xl:flex-row xl:items-center xl:justify-between;
+	}
+
+	.scheduled-jobs-page-header .page-header-actions {
+		@apply sm:w-full sm:justify-start xl:w-auto xl:justify-end;
+	}
+
 	.scheduled-jobs-page-hero-actions {
-		@apply flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2.5 mt-1 shrink-0 w-full sm:w-auto;
+		@apply flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2.5 mt-1 shrink-0 w-full xl:w-auto;
 	}
 
 	.scheduled-jobs-hero-actions-primary {
@@ -36,7 +44,7 @@
 	}
 
 	.scheduled-jobs-hero-actions-secondary {
-		@apply grid grid-cols-2 gap-2 w-full sm:flex sm:w-auto sm:items-center sm:gap-2.5;
+		@apply grid grid-cols-1 gap-2 w-full sm:flex sm:w-auto sm:items-center sm:gap-2.5;
 	}
 
 	.scheduled-jobs-hero-btn {

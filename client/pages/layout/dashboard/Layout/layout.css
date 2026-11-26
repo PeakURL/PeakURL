@@ -48,7 +48,7 @@
 	}
 
 	.dashboard-layout-main {
-		@apply flex min-w-0 flex-1 flex-col px-4 pt-5 pb-4 sm:px-6 sm:pt-6 sm:pb-6 lg:pt-8;
+		@apply flex min-w-0 flex-1 flex-col px-4 pt-5 pb-4 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus sm:px-6 sm:pt-6 sm:pb-6 lg:pt-8;
 	}
 
 	.dashboard-layout-footer {

@@ -1,10 +1,10 @@
 @layer components {
 	.page-size-control {
-		@apply min-w-0 sm:min-w-44;
+		@apply min-w-0 sm:min-w-45;
 	}
 
 	.page-size-control-select {
-		@apply min-w-0 sm:min-w-44;
+		@apply min-w-0 sm:min-w-45;
 	}
 
 	.page-size-control-editor {

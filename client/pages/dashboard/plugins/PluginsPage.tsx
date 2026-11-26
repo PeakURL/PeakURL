@@ -108,6 +108,7 @@ function PluginsPage() {
 		<div className="plugins-page space-y-6">
 			{/* Page Header */}
 			<PageHeader
+				className="plugins-page-header"
 				title={isAddNew ? __("Add New Plugin") : __("Plugins")}
 				description={
 					isAddNew
@@ -118,11 +119,11 @@ function PluginsPage() {
 				}
 				actions={
 					isAddNew ? (
-						<div className="flex items-center gap-2.5">
+						<div className="plugins-page-actions">
 							<Button
 								variant="outline"
 								onClick={() => navigate("/dashboard/plugins")}
-								className="inline-flex items-center gap-1.5"
+								className="plugins-page-action inline-flex items-center gap-1.5"
 							>
 								<ArrowLeft size={16} />
 								<span>{__("Installed Plugins")}</span>
@@ -131,7 +132,7 @@ function PluginsPage() {
 								href={SUBMIT_PLUGIN_URL}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="button button-outline button-md inline-flex items-center gap-1.5"
+								className="button button-outline button-md plugins-page-action inline-flex items-center gap-1.5"
 							>
 								<ExternalLink size={16} />
 								<span>{__("Submit a Plugin")}</span>
@@ -139,7 +140,7 @@ function PluginsPage() {
 							<Button
 								variant={showUpload ? "secondary" : "primary"}
 								onClick={() => setShowUpload((prev) => !prev)}
-								className="inline-flex items-center gap-1.5"
+								className="plugins-page-action inline-flex items-center gap-1.5"
 							>
 								<Upload size={16} />
 								<span>
@@ -150,12 +151,12 @@ function PluginsPage() {
 							</Button>
 						</div>
 					) : (
-						<div className="flex items-center gap-2.5">
+						<div className="plugins-page-actions">
 							<a
 								href={SUBMIT_PLUGIN_URL}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="button button-outline button-md inline-flex items-center gap-1.5"
+								className="button button-outline button-md plugins-page-action inline-flex items-center gap-1.5"
 							>
 								<ExternalLink size={16} />
 								<span>{__("Submit a Plugin")}</span>
@@ -164,7 +165,7 @@ function PluginsPage() {
 								onClick={() =>
 									navigate("/dashboard/plugins/add")
 								}
-								className="inline-flex items-center gap-1.5"
+								className="plugins-page-action inline-flex items-center gap-1.5"
 							>
 								<Plus size={16} />
 								<span>{__("Add New")}</span>
@@ -215,10 +216,10 @@ function PluginsPage() {
 							"Browse available plugins or upload a ZIP file to get started."
 						)}
 					</p>
-					<div className="mt-5 flex flex-wrap items-center justify-center gap-2.5">
+					<div className="mt-5 flex flex-col items-stretch justify-center gap-2.5 sm:flex-row sm:flex-wrap sm:items-center">
 						<Button
 							onClick={() => navigate("/dashboard/plugins/add")}
-							className="inline-flex items-center gap-1.5"
+							className="plugins-page-action inline-flex items-center gap-1.5"
 						>
 							<Plus size={16} />
 							<span>{__("Add Plugin")}</span>
@@ -227,7 +228,7 @@ function PluginsPage() {
 							href={SUBMIT_PLUGIN_URL}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="button button-outline button-md inline-flex items-center gap-1.5"
+							className="button button-outline button-md plugins-page-action inline-flex items-center gap-1.5"
 						>
 							<ExternalLink size={16} />
 							<span>{__("Submit a Plugin")}</span>

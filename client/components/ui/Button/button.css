@@ -32,7 +32,7 @@
 	}
 
 	.button-outline {
-		@apply border border-stroke text-heading hover:border-accent hover:bg-accent/10 active:scale-[0.98];
+		@apply border border-stroke-strong bg-surface text-heading shadow-2xs hover:border-accent hover:bg-accent/10 active:scale-[0.98];
 	}
 
 	.button-xs {

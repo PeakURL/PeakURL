@@ -61,7 +61,9 @@ export function ImageUploadField({
 			<div className="settings-image-preview" aria-busy={pending}>
 				{pending ? (
 					<Skeleton
-						className={landscape ? "size-full" : "my-2 h-4 w-24"}
+						className={
+							landscape ? "size-full" : "h-8 w-full rounded-md"
+						}
 						aria-hidden="true"
 					/>
 				) : landscape ? (

@@ -302,10 +302,7 @@ for (const theme of ["light", "dark"] as const) {
 		});
 		await expect(searchInput).toBeFocused();
 		await expect(searchField).toHaveCSS("border-bottom-color", color);
-		await expect(searchField).toHaveCSS(
-			"box-shadow",
-			`${color} 0px -1px 0px 0px inset`
-		);
+		await expect(searchField).toHaveCSS("box-shadow", "none");
 		await expect(searchInput).toHaveCSS("box-shadow", "none");
 		await expect(searchInput).toHaveCSS("outline-style", "none");
 		await page.getByRole("button", { name: "Close search" }).focus();

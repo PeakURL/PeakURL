@@ -32,7 +32,7 @@
 	}
 
 	.dashboard-recent-clicks-item {
-		@apply grid w-full min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-2.5 rounded-lg border border-transparent px-2 py-2 text-start transition hover:border-stroke hover:bg-surface-alt disabled:cursor-not-allowed disabled:opacity-60 sm:grid-cols-[auto_minmax(0,1fr)_auto];
+		@apply grid w-full min-w-0 grid-cols-[auto_minmax(0,1fr)] gap-2.5 rounded-lg border border-transparent px-2 py-2 text-start transition hover:border-stroke hover:bg-surface-alt focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-60 sm:grid-cols-[auto_minmax(0,1fr)_auto];
 	}
 
 	.dashboard-recent-clicks-icon {

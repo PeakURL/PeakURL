@@ -190,6 +190,9 @@ $is_favicon = static function ( string $relative_path ): bool {
 	return in_array(
 		$relative_path,
 		array(
+			'/favicon.svg',
+			'/favicon-light.svg',
+			'/favicon-dark.svg',
 			'/favicon.ico',
 			'/favicon.png',
 			'/apple-touch-icon.png',
@@ -276,7 +279,43 @@ $favicon_markup = static function (
 		? ' sizes="' . htmlspecialchars( $sizes, ENT_QUOTES, 'UTF-8' ) . '"'
 		: '';
 
-	$markup = '<link data-peakurl-favicon="1" rel="icon" type="image/png" href="' . $icon_url . '"' . $sizes_attr . '>' .
+	$markup = '';
+
+	if ( empty( $favicon['isCustom'] ) ) {
+		$svg_links = array(
+			array(
+				'url'   => trim( (string) ( $favicon['svgUrl'] ?? '' ) ),
+				'media' => '',
+			),
+			array(
+				'url'   => trim( (string) ( $favicon['lightSvgUrl'] ?? '' ) ),
+				'media' => '(prefers-color-scheme: light)',
+			),
+			array(
+				'url'   => trim( (string) ( $favicon['darkSvgUrl'] ?? '' ) ),
+				'media' => '(prefers-color-scheme: dark)',
+			),
+		);
+
+		foreach ( $svg_links as $svg_link ) {
+			if ( '' === $svg_link['url'] ) {
+				continue;
+			}
+
+			$media_attr = '' !== $svg_link['media']
+				? ' media="' . htmlspecialchars( $svg_link['media'], ENT_QUOTES, 'UTF-8' ) . '"'
+				: '';
+
+			$markup .= '<link data-peakurl-favicon="1" rel="icon" type="image/svg+xml" sizes="any"' .
+				$media_attr .
+				' href="' .
+				htmlspecialchars( $svg_link['url'], ENT_QUOTES, 'UTF-8' ) .
+				'">' .
+				"\n";
+		}
+	}
+
+	$markup .= '<link data-peakurl-favicon="1" rel="icon" type="image/png" href="' . $icon_url . '"' . $sizes_attr . '>' .
 		"\n" .
 		'<link data-peakurl-favicon="1" rel="shortcut icon" type="image/png" href="' . $shortcut_url . '">';
 
@@ -587,11 +626,42 @@ if ( $is_favicon( $relative_path ) ) {
 		exit();
 	}
 
+	$svg_route_keys = array(
+		'/favicon.svg'       => 'svgIconPath',
+		'/favicon-light.svg' => 'lightSvgIconPath',
+		'/favicon-dark.svg'  => 'darkSvgIconPath',
+	);
+
+	if ( isset( $svg_route_keys[ $relative_path ] ) ) {
+		$svg_icon_path = trim(
+			(string) ( $favicon_assets[ $svg_route_keys[ $relative_path ] ] ?? '' )
+		);
+
+		if ( ! empty( $favicon_assets['isCustom'] ) || '' === $svg_icon_path ) {
+			http_response_code( 404 );
+			exit();
+		}
+
+		$send_file(
+			$svg_icon_path,
+			'image/svg+xml; charset=utf-8',
+			31536000,
+		);
+	}
+
 	if ( '/site.webmanifest' === $relative_path ) {
 		$send_file(
 			(string) $favicon_assets['manifestPath'],
 			'application/manifest+json; charset=utf-8',
 			3600,
+		);
+	}
+
+	if ( '/apple-touch-icon.png' === $relative_path ) {
+		$send_file(
+			(string) ( $favicon_assets['appIconPath'] ?? $favicon_assets['iconPath'] ),
+			'image/png',
+			31536000,
 		);
 	}
 

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="18.5 19 59 59" role="img" aria-label="PeakURL">
+ <title>PeakURL</title>
+ <g fill="#126e68">
+  <rect x="18.5" y="25.5" width="59" height="11" rx="5.5"/>
+  <rect x="18.5" y="42.5" width="44" height="11" rx="5.5"/>
+  <rect x="18.5" y="59.5" width="29" height="11" rx="5.5"/>
+ </g>
+ <circle cx="65" cy="65" r="6.5" fill="#17373b"/>
+</svg>

@@ -4,12 +4,18 @@
 	"start_url": "./dashboard",
 	"scope": "./",
 	"display": "standalone",
-	"background_color": "#ffffff",
-	"theme_color": "transparent",
+	"background_color": "#0E1312",
+	"theme_color": "#17373B",
 	"icons": [
 		{
+			"src": "./favicon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any"
+		},
+		{
 			"src": "./favicon.png",
-			"sizes": "1024x1024",
+			"sizes": "512x512",
 			"type": "image/png",
 			"purpose": "any"
 		},
